@@ -1,0 +1,18 @@
+	/**
+	 * @see wicket.markup.html.form.validation.IValidator#validate(java.io.Serializable, wicket.markup.html.form.FormComponent)
+	 */
+	public ValidationErrorMessage validate(Serializable input, FormComponent component)
+	{
+		ConversionUtils conversionUtils = getConversionUtils();
+		Locale localeForValidation = getLocaleForValidation();
+		try
+		{
+			conversionUtils.convert(input, type, localeForValidation);
+			return ValidationErrorMessage.NO_MESSAGE;
+		}
+		catch (ConversionException e)
+		{
+			return getError(input, component, e);
+		}
+	}
+
