@@ -8,28 +8,33 @@
 	private List getComponentData(final Page page)
 	{
 		final List data = new ArrayList();
+		final Component me = this;
 
 		page.visitChildren(new IVisitor()
 		{
-			public Object component(Component component)
+			public Object component(final Component component)
 			{
-				final ComponentData object = new ComponentData();
-
-				// anonymous class? Get the parent's class name
-				String name = component.getClass().getName();
-				if (name.indexOf("$") > 0)
-				{
-					name = component.getClass().getSuperclass().getName();
-				}
-
-				// remove the path component
-				name = Strings.lastPathComponent(name, '.');
-
-				object.path = component.getPageRelativePath();
-				object.type = name;
-				object.value = component.getModelObjectAsString();
-
-				data.add(object);
+			    if (!component.getPath().startsWith(me.getPath()))
+			    {
+					final ComponentData object = new ComponentData();
+	
+					// anonymous class? Get the parent's class name
+					String name = component.getClass().getName();
+					if (name.indexOf("$") > 0)
+					{
+						name = component.getClass().getSuperclass().getName();
+					}
+	
+					// remove the path component
+					name = Strings.lastPathComponent(name, '.');
+	
+					object.path = component.getPageRelativePath();
+					object.type = name;
+					object.value = component.getModelObjectAsString();
+	
+					data.add(object);
+			    }
+			    
 				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});

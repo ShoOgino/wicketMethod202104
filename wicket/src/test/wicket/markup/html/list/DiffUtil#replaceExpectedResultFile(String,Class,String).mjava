@@ -1,0 +1,26 @@
+	/**
+	 * Replace the expected result file with the current output.
+	 * 
+	 * @param document
+	 *            How the expected result should look like
+	 * @param clazz
+	 *            Used to load the file (relativ to clazz package)
+	 * @param file
+	 *            The name of the expected result file to be created
+	 * @throws IOException
+	 */
+	public final static void replaceExpectedResultFile(final String document, final Class clazz,
+			final String file) throws IOException
+	{
+		String filename = clazz.getPackage().getName();
+		filename = filename.replace('.', '/');
+		filename += "/" + file;
+
+		final URL url = clazz.getClassLoader().getResource(filename);
+		filename = url.getFile();
+		filename = filename.replaceAll("/build/test-classes/", "/src/test/");
+		PrintWriter out = new PrintWriter(new FileOutputStream(filename));
+		out.print(document);
+		out.close();
+	}
+
