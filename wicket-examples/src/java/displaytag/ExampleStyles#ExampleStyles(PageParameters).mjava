@@ -18,10 +18,12 @@
         styleList.add(new ExternalPageLink("mark", this.getClass()).setParameter("class", "mark").setAutoEnable(false));
 
         // Apply style on current tag
-        addAttributeModifier(new ComponentTagAttributeModifier("class", new Model(parameters.getString("class"))));
-
+        HtmlContainer htmlTable = new HtmlContainer("htmlTable");
+        htmlTable.addAttributeModifier(new ComponentTagAttributeModifier("class", new Model(parameters.getString("class"))));
+        add(htmlTable);
+        
         // Add table of existing comments
-        add(new MyTable("rows", data)
+        htmlTable.add(new MyTable("rows", data)
         {
             public boolean populateCell(final Cell cell, final Container tagClass)
             {
