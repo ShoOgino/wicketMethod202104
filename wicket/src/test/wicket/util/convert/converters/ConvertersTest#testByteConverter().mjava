@@ -1,0 +1,28 @@
+	/**
+	 * Test byte converter.
+	 */
+	public void testByteConverter()
+	{
+		ByteConverter conv = new ByteConverter();
+		assertEquals("1", conv.convert(Byte.valueOf("1"), String.class));
+		assertEquals(Byte.valueOf("1"), conv.convert("1", Byte.class));
+		try
+		{
+			conv.convert("true", Boolean.class);
+			fail("illegal conversion attempt should have thrown an exception");
+		}
+		catch(ConversionException e)
+		{
+			// this is correct
+		}
+		try
+		{
+			conv.convert("123456", Byte.class);
+			fail("illegal conversion attempt should have thrown an exception");
+		}
+		catch(ConversionException e)
+		{
+			// this is correct
+		}
+	}
+

@@ -1,0 +1,44 @@
+	/**
+	 * Converts the given value to class c.
+	 * @param value the value to convert
+	 * @param c the class to convert to
+	 * @return the converted value
+	 *
+	 * @see wicket.util.convert.IConverter#convert(java.lang.Object, java.lang.Class)
+	 */
+	public Object convert(Object value, Class c)
+	{
+		if(value == null)
+		{
+			return null;
+		}
+		if(c == null)
+		{
+			throw new IllegalArgumentException(
+					"parameter c(lass( must be not-null");
+		}
+		IConverter converter = get(c);
+		if(converter == null)
+		{
+			converter = fallThroughConverter;
+		}
+		if(converter instanceof ILocalizable)
+		{
+			((ILocalizable)converter).setLocale(locale);
+		}
+		try
+		{
+			return converter.convert(value, c);
+		}
+      catch (ConversionException e)
+      {
+          throw e.setConverter(converter).setLocale(locale)
+          	.setTargetType(c).setTriedValue(value);
+      }
+      catch (Exception e)
+      {
+          throw new ConversionException(e).setConverter(converter)
+          	.setLocale(locale).setTargetType(c).setTriedValue(value);
+      }
+	}
+

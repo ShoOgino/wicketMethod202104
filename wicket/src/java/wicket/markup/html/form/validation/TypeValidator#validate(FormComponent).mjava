@@ -1,7 +1,7 @@
 	/**
 	 * Validates input by trying it to convert to the given type using the
-	 * {@link wicket.util.convert.ConverterRegistry}instance of that can be found in the
-	 * application settings.
+	 * {@link wicket.util.convert.IStringConverter}instance of component that
+	 * does the validation.
 	 * @param component the component that wants to validate its input
 	 * @see wicket.markup.html.form.validation.IValidator#validate(wicket.markup.html.form.FormComponent)
 	 */
@@ -12,11 +12,11 @@
 		if (!isNullOrEmpty(value))
         {
     		// Check value by attempting to convert it
-    		final ConversionUtils conversionUtils = getConversionUtils();
+    		final IConverter converter = component.getConverter();
     		final Locale localeForValidation = getLocaleForValidation();
     		try
     		{
-    			conversionUtils.convert(component.getRequestString(), type, localeForValidation);
+    			converter.convert(value, type);
     		}
     		catch (ConversionException e)
     		{

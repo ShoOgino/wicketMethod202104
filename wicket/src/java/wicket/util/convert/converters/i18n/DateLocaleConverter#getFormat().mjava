@@ -1,0 +1,31 @@
+	/**
+	 * Gets the date format.
+	 * @return the date format object for the given pattern and locale
+	 */
+	private DateFormat getFormat()
+	{
+		DateFormat fmt = null;
+		final String pattern = getPattern();
+		final Locale locale = getLocale();
+		if (pattern == null)
+		{
+			fmt = DateFormat.getDateInstance(dateStyle, locale);
+			fmt.setLenient(lenient);
+		}
+		else
+		{
+			SimpleDateFormat simpleFmt = new SimpleDateFormat(pattern, locale);
+			simpleFmt.setLenient(lenient);
+			if (isLocPattern())
+			{
+				simpleFmt.applyLocalizedPattern(pattern);
+			}
+			else
+			{
+				simpleFmt.applyPattern(pattern);
+			}
+			fmt = simpleFmt;
+		}
+		return fmt;
+	}
+

@@ -1,0 +1,18 @@
+	/**
+	 * Registers a converter for use with class c.
+	 * @param converter the converter to add
+	 * @param c the class for which the converter should be used
+	 * @return the previous registered converter for class c or null if
+	 * none was registered yet for class c
+	 */
+	public IConverter add(IConverter converter, Class c)
+	{
+		if(converter == null || c == null)
+		{
+			throw new IllegalArgumentException(
+					"parameters converter and c(lass( must be not-null");
+		}
+		IConverter old = (IConverter)converters.put(c, converter);
+		return old;
+	}
+
