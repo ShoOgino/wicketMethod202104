@@ -8,14 +8,14 @@
         add(new CommentForm("commentForm"));
 
         // Add table of existing comments
-        add(table = new Table("comments", commentList)
+        add(table = new ListView("comments", commentList)
                 {
-                    public void populateCell(final Cell cell)
+                    public void populateItem(final ListItem listItem)
                     {
-                        final Comment comment = (Comment) cell.getModelObject();
+                        final Comment comment = (Comment) listItem.getModelObject();
 
-                        cell.add(new Label("date", comment.getDate()));
-                        cell.add(new MultiLineLabel("text", comment.getText()));
+                        listItem.add(new Label("date", comment.getDate()));
+                        listItem.add(new MultiLineLabel("text", comment.getText()));
                     }
                 });
     }
