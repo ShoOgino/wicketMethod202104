@@ -1,0 +1,26 @@
+	/**
+	 * @return Returns the isVersioned.
+	 */
+	public boolean isVersioned()
+	{
+		// Is the component itself versioned?
+		if (!isVersioned)
+		{
+			return false;
+		}
+		else
+		{
+			// If there's a parent and this component is versioned
+			if (parent != null)
+			{
+				// Check if the parent is unversioned. If any parent
+				// (recursively) is unversioned, then this component is too
+				if (!parent.isVersioned())
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+

@@ -1,15 +1,14 @@
 	/**
 	 * Called when this page is no longer being used in a request
 	 */
-	final void onInternalEndRequest()
+	final void internalOnEndRequest()
 	{
-		if (isVersioned)
+		if (isVersioned())
 		{
 			// Any changes to the page after this point will be tracked by the
 			// page's version manager. Since trackChanges is never set to false,
 			// this effectively means that change tracking begins after the
-			// first
-			// request to a page completes.
+			// first request to a page completes.
 			trackChanges = true;
 
 			// If there have been changes to the page
@@ -20,6 +19,9 @@
 				{
 					versionManager.endVersion();
 				}
+
+				// Reset change count for next time
+				changeCount = 0;
 			}
 		}
 	}

@@ -4,10 +4,13 @@
 	 */
 	final void componentRemoved(final Component component)
 	{
-		onChanged();
-		if (versionManager != null)
+		if (trackChanges && component.isVersioned())
 		{
-			versionManager.componentRemoved(component);
+			onChanged();
+			if (versionManager != null)
+			{
+				versionManager.componentRemoved(component);
+			}
 		}
 	}
 

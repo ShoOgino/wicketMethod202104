@@ -4,11 +4,16 @@
 	public final void render()
 	{
 		// Rendering is beginning
-		onInternalBeginRender();
+		internalOnBeginRender();
 		onBeginRender();
+		if (log.isDebugEnabled())
+		{
+			log.debug("Begin render " + this);
+		}
 
-		RuntimeException exception = null;
-		
+		// Any runtime exception that was thrown during rendering
+		RuntimeException renderException = null;
+
 		try
 		{
 			// Get request cycle to render to
@@ -39,36 +44,32 @@
 		}
 		catch (RuntimeException e)
 		{
-		    // Remember the exception until finally block is
-		    // done and then re-throw it.
-		    exception = e;    
+			// Remember exception in finally block
+			renderException = e;
+			throw e;
 		}
 		finally
 		{
-		    try
-		    {
+			if (log.isDebugEnabled())
+			{
+				log.debug("End render " + this);
+			}
+
+			try
+			{
 				// Rendering has completed
 				onEndRender();
-				onInternalEndRender();
-	
+				internalOnEndRender();
+
 				// Detach models now that rendering is fully completed
 				detachModels();
-		    }
-		    catch (RuntimeException ex)
-		    {
-		        // Prepare for re-throw only if another exception
-		        // is not yet registered
-		        if (exception == null)
-		        {
-		            exception = ex;
-		        }
-		    }
-		}
-		
-		// Ret-throw the exception
-		if (exception != null)
-		{
-		    throw exception;
+			}
+			catch (RuntimeException e)
+			{
+				throw new WicketRuntimeException(
+						"Exception thrown while cleaning up from the following exception which was thrown during rendering: "
+								+ Strings.toString(renderException), e);
+			}
 		}
 	}
 

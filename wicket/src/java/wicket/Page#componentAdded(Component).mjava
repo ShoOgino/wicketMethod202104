@@ -4,10 +4,13 @@
 	 */
 	final void componentAdded(final Component component)
 	{
-		onChanged();
-		if (versionManager != null)
+		if (trackChanges && component.isVersioned())
 		{
-		    versionManager.componentAdded(component);
+			onChanged();
+			if (versionManager != null)
+			{
+				versionManager.componentAdded(component);
+			}
 		}
 	}
 

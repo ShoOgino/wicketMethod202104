@@ -12,6 +12,11 @@
 	 */
 	public final Page getPage(final String path, final int versionNumber)
 	{
+		if (log.isDebugEnabled())
+		{
+			log.debug("Getting page [path = " + path + ", versionNumber = " + versionNumber + "]");
+		}
+
 		// Retrieve the page for the first path component from this session
 		Page page = getPage(Integer.parseInt(Strings.firstPathComponent(path,
 				componentPathSeparator)));
@@ -34,12 +39,7 @@
 					// Replaces old page entry
 					getPageMap().put(new Integer(page.getId()), page);
 					pageChanged(page);
-				}
-		
-				// Modifications to this page are potentially beginning
-				page.onInternalBeginRequest();
-				page.onBeginRequest();
-		
+				}				
 				return page;
 			}
 		}

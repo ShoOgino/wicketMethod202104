@@ -1,13 +1,12 @@
 	/**
-	 * Gets session from request, creating a new one if it doesn't already exist
+	 * Gets a WebSession object from the HttpServletRequest, creating a new one
+	 * if it doesn't already exist.
 	 * 
-	 * @param application
-	 *            The application object
 	 * @param request
 	 *            The http request object
 	 * @return The session object
 	 */
-	static WebSession getSession(final Application application, final HttpServletRequest request)
+	WebSession getSession(final HttpServletRequest request)
 	{
 		// Get session, creating if it doesn't exist
 		final HttpSession httpSession = request.getSession(true);
@@ -23,7 +22,7 @@
 		if (webSession == null)
 		{
 			// Create session using session factory
-			final Session session = application.getSessionFactory().newSession();
+			final Session session = getSessionFactory().newSession();
 			if (session instanceof WebSession)
 			{
 				webSession = (WebSession)session;

@@ -4,10 +4,13 @@
 	 */
 	final void componentModelChangeImpending(final Component component)
 	{
-		onChanged();
-		if (versionManager != null)
+		if (trackChanges && component.isVersioned())
 		{
-			versionManager.componentModelChangeImpending(component);
+			onChanged();
+			if (versionManager != null)
+			{
+				versionManager.componentModelChangeImpending(component);
+			}
 		}
 	}
 

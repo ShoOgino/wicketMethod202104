@@ -26,17 +26,32 @@
 		}
 		else
 		{
-			// Get page of desired version
-			final Page page = versionManager.getVersion(versionNumber);
-
-			// If we went all the way back to the original page
-			if (page != null && page.getCurrentVersionNumber() == 0)
+			// Save original change tracking state
+			final boolean originalTrackChanges = trackChanges;
+			try
 			{
-				// remove version info
-				page.versionManager = null;
-			}
+				// While the version manager is potentially playing around with
+				// the Page, it may change the page in order to undo changes and
+				// we don't want change tracking going on while its doing this.
+				trackChanges = false;
 
-			return page;
+				// Get page of desired version
+				final Page page = versionManager.getVersion(versionNumber);
+
+				// If we went all the way back to the original page
+				if (page != null && page.getCurrentVersionNumber() == 0)
+				{
+					// remove version info
+					page.versionManager = null;
+				}
+
+				return page;
+			}
+			finally
+			{
+				// Restore change tracking state
+				trackChanges = originalTrackChanges;
+			}
 		}
 	}
 

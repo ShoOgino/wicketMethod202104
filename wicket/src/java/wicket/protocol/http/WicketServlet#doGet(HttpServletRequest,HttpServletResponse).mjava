@@ -13,7 +13,7 @@
 			final HttpServletResponse servletResponse) throws ServletException, IOException
 	{
 		// Get session for request
-		final WebSession session = WebSession.getSession(webApplication, servletRequest);
+		final WebSession session = webApplication.getSession(servletRequest);
 		final WebRequest request = new WebRequest(servletRequest);
 		final WebResponse response = webApplication.getSettings().getBufferResponse()
 				? new BufferedWebResponse(servletResponse)
@@ -21,8 +21,8 @@
 
 		try
 		{
-			// Respond to request
-			new WebRequestCycle(webApplication, session, request, response).respond();
+			// Process request
+			webApplication.newRequestCycle(session, request, response).request();
 		}
 		finally
 		{

@@ -5,10 +5,11 @@
 	 * 
 	 * @throws ServletException
 	 */
-	public final void respond() throws ServletException
+	public final void request() throws ServletException
 	{
 		// Response is beginning
-		beginResponse();
+		internalOnBeginRequest();
+		onBeginRequest();
 
 		// Serialize renderings on the session object so that only one page
 		// can be rendered at a time for a given session.
@@ -43,10 +44,11 @@
 						finally
 						{
 							// Response is ending
-							endResponse();
+							internalOnEndRequest();
+							onEndRequest();
 
 							// The request is over
-							page.onInternalEndRequest();
+							page.internalOnEndRequest();
 							page.onEndRequest();
 						}
 					}
@@ -54,7 +56,8 @@
 				else
 				{
 					// Response is ending
-					endResponse();
+					internalOnEndRequest();
+					onEndRequest();
 				}
 			}
 			catch (RuntimeException e)
