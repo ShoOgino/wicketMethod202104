@@ -1,0 +1,34 @@
+	private void invokeInterface(final Page page, final String path, final String interfaceName)
+	{
+		// Set the page for the component as the response page
+		// and expire any pages in the session cache that are
+		// newer than the given page since they will no longer
+		// be accessible.
+		setPage(page);
+
+		// Invoke interface on the component at the given path on the page
+		final Component component = page.get(Strings.afterFirstPathComponent(path, '.'));
+		if (component != null)
+		{
+			// Invoke interface on component
+			invokeInterface(component, interfaceName);
+
+			// Set form component values from cookies
+			setFormComponentValuesFromCookies(page);
+
+			// If the current page is also the next page or we're redirecting
+			if (getPage() != page || getRedirect())
+			{
+				// detach any models loaded by the component listener
+				page.detachModels();
+			}
+		}
+		else
+		{
+			// Must be an internal error of some kind or someone is hacking
+			// around with URLs in their browser.
+			log.error("No component found for " + path);
+			setPage(newPage(application.getPages().getInternalErrorPage()));
+		}
+	}
+
