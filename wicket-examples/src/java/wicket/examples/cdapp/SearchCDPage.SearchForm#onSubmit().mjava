@@ -3,7 +3,13 @@
 		 */
 		public final void onSubmit()
 		{
-			searchModel.setSearchString(search);
+			searchModel.setSearchString(search); // set search query on model
+			setCurrentResultPageToFirst(); // start with first page
 			SearchCDPage.this.modelChangedStructure();
+
+			if(search != null && (!search.trim().equals("")))
+			{
+				info(getNumberOfResults() + " results found for query '" + search + "'");
+			}
 		}
 
