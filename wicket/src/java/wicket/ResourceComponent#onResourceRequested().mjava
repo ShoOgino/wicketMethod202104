@@ -1,0 +1,24 @@
+	/**
+	 * Called when a resource is requested.
+	 */
+	public void onResourceRequested()
+	{
+		// Get request cycle
+		final RequestCycle cycle = getRequestCycle();
+
+		// The cycle's page is set to null so that it won't be rendered back to
+		// the client since the resource being requested has nothing to do with
+		// pages
+		cycle.setPage((Page)null);
+
+		// Get servlet response to use when responding with resource
+		final HttpServletResponse httpServletResponse = ((WebResponse)getResponse())
+				.getHttpServletResponse();
+		
+		// Configure response header
+		configureResponse(httpServletResponse);
+		
+		// Respond with resource
+		respond(httpServletResponse);
+	}
+
