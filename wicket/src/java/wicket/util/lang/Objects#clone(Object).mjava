@@ -1,0 +1,26 @@
+	/**
+	 * Makes a deep clone of an object by serializing and deserializing it. The
+	 * object must be fully serializable to be cloned.
+	 * 
+	 * @param object
+	 *            The object to clone
+	 * @return A deep copy of the object
+	 */
+	public static Object clone(final Object object)
+	{
+		try
+		{
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			new ObjectOutputStream(out).writeObject(object);
+			return new ObjectInputStream(new ByteArrayInputStream(out.toByteArray())).readObject();
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new RuntimeException("Internal error cloning object", e);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Internal error cloning object", e);
+		}
+	}
+
