@@ -7,9 +7,6 @@
 	 */
 	protected final void onComponentTag(final ComponentTag tag)
 	{
-		// Can only attach links to anchor tags
-		checkComponentTag(tag, "a");
-
 		// Default handling for tag
 		super.onComponentTag(tag);
 
@@ -23,24 +20,59 @@
 		// If we're disabled
 		if (!enabled)
 		{
-			// Change anchor link to span tag
-			tag.setName("span");
+			// if the tag is an anchor proper
+			if(tag.getName().equalsIgnoreCase("a"))
+			{
+				// Change anchor link to span tag
+				tag.setName("span");
 
-			// Remove any href from the old link
-			tag.remove("href");
+				// Remove any href from the old link
+				tag.remove("href");
+
+				// if it generates a popupscript, remove the design time JS handler
+				if (popupSettings != null)
+				{
+					tag.remove("onclick");
+				}
+			}
+			else
+			{
+				// Remove any onclick design time code
+				tag.remove("onclick");
+			}
 		}
 		else
 		{
 			// Set href to link to this link's linkClicked method
-			tag.put("href", getURL().replaceAll("&", "&amp;"));
-		}
+			String url = getURL();
 
-		// Add any popup script
-		final PopupSettings popupSettings = getPopupSettings();
-		if (popupSettings != null)
-		{
-			// NOTE: don't encode to HTML as that is not valid JavaScript
-			tag.put("onClick", popupSettings.getPopupJavaScript());
+			// if the tag is an anchor proper
+			if(tag.getName().equalsIgnoreCase("a"))
+			{
+				// generate the href attribute
+				tag.put("href", url.replaceAll("&", "&amp;"));
+				// Add any popup script
+				if (popupSettings != null)
+				{
+					// NOTE: don't encode to HTML as that is not valid JavaScript
+					tag.put("onclick", popupSettings.getPopupJavaScript());
+				}
+			}
+			else
+			{
+				// generate either a popup script by asking popup settings for one
+				if (popupSettings != null)
+				{
+					popupSettings.setTarget("'" + url + "'");
+					String popupScript = popupSettings.getPopupJavaScript();
+					tag.put("onclick", popupScript);
+				}
+				else
+				{
+					// or generate an onclick JS handler directly
+					tag.put("onclick", "location.href='" + url + "';");
+				}
+			}
 		}
 	}
 
