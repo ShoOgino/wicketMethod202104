@@ -12,15 +12,13 @@
         }
         else
         {
-            windowTitle = windowTitle.replace('.', '_'); // Fix for IE bug. Are
-
-            // there more of these
-            // bugs?
+            windowTitle = windowTitle.replace('.', '_'); // Fix for IE bug.
         }
 
+        String target = getTarget();
         StringBuffer script = new StringBuffer(
-                "if (!window.focus) return true; window.open(href, '").append(windowTitle).append(
-                "', '");
+                "if (!window.focus) return true; window.open(" + target + ", '")
+                .append(windowTitle).append("', '");
 
         script.append("scrollbars=").append(isScrollBars() ? "yes" : "no");
         script.append(", location=").append(isLocationbar() ? "yes" : "no");
