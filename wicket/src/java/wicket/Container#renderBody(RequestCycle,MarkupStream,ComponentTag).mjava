@@ -1,0 +1,34 @@
+	/**
+	 * Renders markup until the closing tag for openTag is reached.
+	 * 
+	 * @param cycle
+	 *           The wicket.response to write to
+	 * @param markupStream
+	 *           The markup stream
+	 * @param openTag
+	 *           The open tag
+	 */
+	protected final void renderBody(final RequestCycle cycle, final MarkupStream markupStream,
+			final ComponentTag openTag)
+	{
+		// If the open tag requires a close tag
+		if (openTag.requiresCloseTag())
+		{
+			// Loop through the markup in this container
+			while (markupStream.hasMore() && !markupStream.get().closes(openTag))
+			{
+				// Render markup element. Doing so must advance the markup
+				// stream
+				final int index = markupStream.getCurrentIndex();
+
+				renderNext(cycle, markupStream);
+
+				if (index == markupStream.getCurrentIndex())
+				{
+					markupStream.throwMarkupException("Markup element at index " + index
+							+ " failed to advance the markup stream");
+				}
+			}
+		}
+	}
+

@@ -1,0 +1,69 @@
+	/**
+	 * Load markup and add a {@link Watcher}to the markup resource.
+	 * 
+	 * @param key
+	 *           The key for the resource
+	 * @param markupResource
+	 *           The markup file to load and begin to watch
+	 * @return The markup in the file
+	 */
+	private Markup loadMarkupAndWatchForChanges(final String key, final Resource markupResource)
+	{
+		final ApplicationSettings settings = getApplicationSettings();
+
+		try
+		{
+			// Watch file in the future
+			final Watcher watcher = settings.getResourceWatcher();
+
+			if (watcher != null)
+			{
+				watcher.add(markupResource, new IChangeListener()
+				{
+					public void changed()
+					{
+						synchronized (markupCache)
+						{
+							try
+							{
+								log.info("Reloading markup from " + markupResource);
+								loadMarkup(settings, key, markupResource);
+							}
+							catch (ParseException e)
+							{
+								log.error("Unable to parse markup from " + markupResource, e);
+							}
+							catch (ResourceNotFoundException e)
+							{
+								log.error("Unable to find markup from " + markupResource, e);
+							}
+							catch (IOException e)
+							{
+								log.error("Unable to read markup from " + markupResource, e);
+							}
+						}
+					}
+				});
+			}
+
+			log.info("Loading markup from " + markupResource);
+
+			return loadMarkup(settings, key, markupResource);
+		}
+		catch (ParseException e)
+		{
+			throw new MarkupException(markupResource, 
+			        exceptionMessage("Unable to parse markup from " + markupResource), e);
+		}
+		catch (ResourceNotFoundException e)
+		{
+			throw new MarkupException(markupResource, 
+			        exceptionMessage("Unable to find markup from " + markupResource), e);
+		}
+		catch (IOException e)
+		{
+			throw new MarkupException(markupResource, 
+			        exceptionMessage("Unable to read markup from " + markupResource), e);
+		}
+	}
+

@@ -1,0 +1,55 @@
+	/**
+	 * Replaces a child component of this container with another
+	 * 
+	 * @param child
+	 *           The child
+	 * @throws IllegalArgumentException
+	 *            Thrown if there was no child with the same name.
+	 * @return This
+	 */
+	public Container replace(final Component child)
+	{
+		// Get child name
+		final String childName = child.getName();
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Add " + childName + " to " + this);
+		}
+
+		if (child.getParent() != this)
+		{
+			// first reset the childs parent (can't set them at once with another)
+			child.setParent(null);
+			// Set child's parent
+			child.setParent(this);
+
+			// Are we using MicroMap optimization?
+			if (optimizeChildMapsForSpace)
+			{
+				if (childForName.size() == MicroMap.MAX_ENTRIES)
+				{
+					// Reallocate MicroMap as MiniMap
+					childForName = new MiniMap(childForName, MINIMAP_MAX_ENTRIES);
+				}
+				else if (childForName.size() == MINIMAP_MAX_ENTRIES)
+				{
+					// Reallocate MiniMap as full HashMap
+					childForName = new HashMap(childForName);
+				}
+			}
+
+			// Add to map
+			final Object replaced = childForName.put(childName, child);
+
+			// Look up to make sure it was already in the map
+			if (replaced == null)
+			{
+				throw new IllegalArgumentException(exceptionMessage("A child component with the name '"
+						+ childName + "' didn't exists"));
+			}
+			((Component) replaced).setParent(null);
+		}
+		return this;
+	}
+
