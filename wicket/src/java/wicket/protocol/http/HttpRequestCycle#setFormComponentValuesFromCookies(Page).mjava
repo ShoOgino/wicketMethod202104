@@ -4,17 +4,13 @@
 	 */
 	final void setFormComponentValuesFromCookies(final Page page)
 	{
-		// May be there is some other means I don't know. But I need access
-		// to 'this' from inside the anonymous inner class.
-		final RequestCycle cycle = this;
-
 		// Visit all Forms contained in the page
 		page.visitChildren(Form.class, new Component.IVisitor()
 		{
 			// For each FormComponent found on the Page (not Form)
 			public Object component(final Component component)
 			{
-				((Form)component).setFormComponentValuesFromPersister(cycle);
+				((Form)component).setFormComponentValuesFromPersister();
 				return CONTINUE_TRAVERSAL;
 			}
 		});

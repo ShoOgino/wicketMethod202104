@@ -4,23 +4,16 @@
      * @param input byte array to be crypted
      * @param mode crypt mode
      * @return the input crypted. Null in case of an error
+     * @throws GeneralSecurityException
      */
-    private final byte[] crypt(final byte[] input, final int mode)
+    private final byte[] crypt(final byte[] input, final int mode) throws GeneralSecurityException 
     {
         byte[] result = null;
-        try
-        {
             SecretKey key = generateKey();
             PBEParameterSpec spec = new PBEParameterSpec(salt, count);
             Cipher ciph = Cipher.getInstance(CRYPT_METHOD);
             ciph.init(mode, key, spec);
             result = ciph.doFinal(input);
-        } 
-        catch (Exception e)
-        {
-            return null;
-        }
-        
         return result;
     }
 

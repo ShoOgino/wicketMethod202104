@@ -1,0 +1,19 @@
+    /**
+     * @see wicket.Page#checkAccess()
+     */
+    protected boolean checkAccess()
+    {
+        // Is a user signed into this cycle's session?
+        boolean signedIn = getSession().getProperty("wicket.examples.signin.user") != null;
+
+        // If nobody is signed in
+        if (!signedIn)
+        {
+            // Redirect request to SignIn page
+            getRequestCycle().redirectToInterceptPage(SignIn.class);
+        }
+
+        // Return true if someone is signed in and access is okay
+        return signedIn;
+    }
+

@@ -1,0 +1,25 @@
+        /**
+         * @see wicket.markup.html.form.Form#handleSubmit()
+         */
+        public final void handleSubmit()
+        {
+            // Sign the user in
+            if (properties.getString("username").equals("jonathan")
+                && properties.getString("password").equals("password"))
+            {
+                final RequestCycle cycle = getRequestCycle();
+                
+                cycle.getSession().setProperty("wicket.examples.signin.user", "jonathan");
+
+                if (!cycle.continueToOriginalDestination())
+                {
+                    cycle.setPage(new Home(PageParameters.NULL));
+                }
+            }
+            else
+            {
+                // Form method that will notify feedback panel
+                handleError(new ValidationErrorMessage(this, "Couldn't sign you in"));
+            }
+        }
+

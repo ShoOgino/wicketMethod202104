@@ -1,0 +1,42 @@
+    /**
+     * Retrieves FormComponent values related to the page using the persister
+     * and assign the values to the FormComponent. Thus initializing them.
+     * NOTE: THIS METHOD IS FOR INTERNAL USE ONLY AND IS NOT MEANT TO BE USED BY
+     * FRAMEWORK CLIENTS. IT MAY BE REMOVED IN THE FUTURE.
+     */
+    final public void setFormComponentValuesFromPersister()
+    {
+		// Visit all FormComponent contained in the page
+        visitChildren(FormComponent.class, new Component.IVisitor()
+        {
+            // For each FormComponent found on the Page (not Form)
+            public Object component(final Component component)
+            {
+                // Component must implement persister interface and
+                // persistence for that component must be enabled.
+                // Else ignore the persisted value. It'll be deleted
+                // once the user submits the Form containing that FormComponent.
+                // Note: if that is true, values may remain persisted longer
+                // than really necessary
+                if (component instanceof FormComponent.ICookieValue
+                        && ((FormComponent)component).isPersistenceEnabled())
+                {
+                    // The persistence manager responsible to persist and retrieve
+                    // FormComponent data
+                    final IFormComponentPersistenceManager persister =
+                        getFormComponentPersistenceManager();
+
+                    // Retrieve persisted value
+                    final String persistedValue =
+                        persister.retrieveValue(component.getPageRelativePath());
+                    if (persistedValue != null)
+                    {
+                        // Assign the retrieved/persisted value to the component
+                        ((FormComponent.ICookieValue)component).setCookieValue(persistedValue);
+                    }
+                }
+                return CONTINUE_TRAVERSAL;
+            }
+        });
+    }
+

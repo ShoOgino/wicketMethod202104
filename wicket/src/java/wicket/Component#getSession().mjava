@@ -6,17 +6,16 @@
 	 */
 	public Session getSession()
 	{
-		Page page = getPage();
-		if (page == null)
-		{
-			throw new IllegalStateException(exceptionMessage("no Page for this component " + this));
-		}
+        // Get Session from Page object for this component
 		final Session session = getPage().getSession();
+        
+        // Did we find the session?
 		if (session == null)
 		{
 			// This should NEVER happen. But if it does, we'll want a nice error message.
 			throw new IllegalStateException(exceptionMessage("Page not attached to session"));
 		}
+        
 		return session;
 	}
 

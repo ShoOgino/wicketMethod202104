@@ -1,0 +1,20 @@
+    /**
+     * @see wicket.Page#checkAccess()
+     */
+    protected boolean checkAccess()
+    {
+        // Is user signed in?
+        if (Authenticator.forSession(getSession()).isSignedIn())
+        {
+            // okay to proceed
+            return true;
+        }
+        else
+        {
+            // Force sign in
+            getRequestCycle().redirectToInterceptPage(SignIn.class);
+
+            return false;
+        }
+    }
+

@@ -1,0 +1,20 @@
+    /**
+     * Update the model of all form components.
+     * @see wicket.markup.html.form.FormComponent#updateModel()
+     */
+    private void updateFormComponentModels()
+    {
+        visitChildren(FormComponent.class, new IVisitor()
+        {
+            public Object component(final Component component)
+            {
+                // Update model of form component
+                final FormComponent formComponent = (FormComponent)component;
+
+                formComponent.updateModel();
+
+                return CONTINUE_TRAVERSAL;
+            }
+        });
+    }
+

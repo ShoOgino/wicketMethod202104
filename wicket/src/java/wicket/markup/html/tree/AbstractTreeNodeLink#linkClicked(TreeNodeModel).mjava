@@ -1,0 +1,15 @@
+    /**
+     * Called when a link is clicked.
+     * @see ILinkListener
+     * @param node the node model
+     */
+    public void linkClicked(TreeNodeModel node)
+    {
+        TreeStateCache state = tree.getTreeState();
+        // note: get the - possibly wrapped - user object from the tree node; if we would
+        // use node.getUserObject here, we would get the non-unique 'real' user object
+        Object toFind = node.getTreeNode().getUserObject();
+		TreePath selection = state.findTreePath(toFind);
+        tree.setExpandedState(selection, (!node.isExpanded())); // inverse
+    }
+

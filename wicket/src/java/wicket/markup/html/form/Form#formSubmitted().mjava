@@ -1,0 +1,31 @@
+    /**
+     * Handles form submissions.
+     */
+    public final void formSubmitted()
+    {
+        // Redirect back to result to avoid postback warnings. But we turn
+        // redirecting on as the first thing because the user's handleSubmit
+        // implementation may wish to redirect somewhere else. In that case,
+        // they can simply call setRedirect(false) in handleSubmit.
+        getRequestCycle().setRedirect(true);
+
+        // Validate model
+        final FeedbackMessages messages = validate();
+
+        // Update model using form data
+        updateFormComponentModels();
+
+        // Persist FormComponents if requested
+        persistFormComponentData();
+
+        if (messages.hasErrorMessages())
+        {
+            // Handle any validation error
+            handleErrors(messages.getErrorMessages());
+        }
+        else
+        {
+            handleSubmit();
+        }
+    }
+

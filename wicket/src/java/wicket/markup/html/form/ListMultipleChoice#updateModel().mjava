@@ -1,0 +1,43 @@
+	/**
+     * @see FormComponent#updateModel()
+	 */
+	public final void updateModel()
+	{
+		// Get the list of selected values
+		Collection selectedValues = (Collection)getModelObject();
+
+		if (selectedValues != null)
+		{
+			selectedValues.clear();
+		}
+		else
+		{
+			selectedValues = new ArrayList();
+			setModelObject(selectedValues);
+		}
+
+		// Get indices selected from request
+		final String[] indicesOrIds = getRequestStrings();
+
+		if (indicesOrIds != null)
+		{
+			final List list = getValues();
+			
+			// Loop through selected indices
+			for (int i = 0; i < indicesOrIds.length; i++)
+			{
+				if(list instanceof IIdList)
+				{
+					selectedValues.add(((IIdList)list).getObjectById(indicesOrIds[i]));
+				}
+				else
+				{
+					final int index = Integer.parseInt(indicesOrIds[i]);
+					// Add the value at the given index to the collection of
+					// selected values
+					selectedValues.add(list.get(index));
+				}
+			}
+		}
+	}
+
