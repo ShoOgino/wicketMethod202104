@@ -17,12 +17,12 @@
         wicketParamTagHandler.setStripWicketTag(this.stripWicketTag);
 
         final PreviewComponentTagRemover previewComponentTagRemover = new PreviewComponentTagRemover(wicketParamTagHandler);
-        
+
         final AutolinkHandler autolinkHandler = new AutolinkHandler(previewComponentTagRemover);
         autolinkHandler.setAutomaticLinking(this.automaticLinking);
-        
+
         final IMarkupFilter parser = autolinkHandler;
-        
+
         // Loop through tags
         for (ComponentTag tag; null != (tag = (ComponentTag)parser.nextTag());)
         {
@@ -31,13 +31,13 @@
             {
                 add = ((tag.getOpenTag() != null) && (tag.getOpenTag().getComponentName() != null));
             }
-            
+
             // Add tag to list?
             if (add == true)
             {
-                final CharSequence text = 
+                final CharSequence text =
                     	xmlParser.getInputFromPositionMarker(tag.getPos());
-                
+
                 // Add text from last position to tag position
                 if (text.length() > 0)
                 {
@@ -63,19 +63,19 @@
 	                tag.makeImmutable();
 	                list.add(tag);
                 }
-                
+
                 // Position is after tag
                 xmlParser.setPositionMarker();
             }
         }
 
         // Add tail?
-        final CharSequence text = ((XmlPullParser)xmlParser).getInputFromPositionMarker(-1);
+        final CharSequence text = xmlParser.getInputFromPositionMarker(-1);
         if (text.length() > 0)
         {
             list.add(new RawMarkup(text));
         }
-        
+
         // Return immutable list of all MarkupElements
         return Collections.unmodifiableList(list);
     }
