@@ -5,12 +5,22 @@
 	 *            Tag to modify
 	 * @see wicket.Component#handleComponentTag(ComponentTag)
 	 */
-	protected final void handleComponentTag(final ComponentTag tag)
+	protected void handleComponentTag(final ComponentTag tag)
 	{
+        // Must be attached to an input tag
 		checkComponentTag(tag, "input");
-		checkComponentTagAttribute(tag, "type", "text");
+        
+        // If this is not a subclass (PasswordTextField)
+        if (getClass() == TextField.class)
+        {
+            // check for text type
+    		checkComponentTagAttribute(tag, "type", "text");
+        }
+        
+        // Default handling for component tag
 		super.handleComponentTag(tag);
-		if (invalidInput == null)
+        
+		if (getInvalidInput() == null)
 		{
 			// No validation errors
 			tag.put("value", getModelObjectAsString());
@@ -18,7 +28,7 @@
 		else
 		{
 			// Invalid input detected
-			tag.put("value", invalidInput);
+			tag.put("value", getInvalidInput());
 		}
 	}
 
