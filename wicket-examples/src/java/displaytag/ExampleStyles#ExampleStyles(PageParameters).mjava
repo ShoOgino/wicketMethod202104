@@ -1,6 +1,6 @@
     /**
      * Constructor.
-     * 
+     *
      * @param parameters Page parameters
      */
     public ExampleStyles(final PageParameters parameters)
@@ -9,7 +9,7 @@
 
         HtmlContainer styleList = new HtmlContainer("stylelist");
         add(styleList);
-        
+
         styleList.add(new ExternalPageLink("isis", this.getClass()).setParameter("class", "isis").setAutoEnable(false));
         styleList.add(new ExternalPageLink("its", this.getClass()).setParameter("class", "its").setAutoEnable(false));
         styleList.add(new ExternalPageLink("mars", this.getClass()).setParameter("class", "mars").setAutoEnable(false));
@@ -18,12 +18,10 @@
         styleList.add(new ExternalPageLink("mark", this.getClass()).setParameter("class", "mark").setAutoEnable(false));
 
         // Apply style on current tag
-        CascadingStyleSheetStyle htmlTable = new CascadingStyleSheetStyle("htmlTable", parameters.getString("class"));
-        htmlTable.setEnable(true);
-        add(htmlTable);
-        
+        addAttributeModifier(new ComponentTagAttributeModifier("class", new Model(parameters.getString("class"))));
+
         // Add table of existing comments
-        htmlTable.add(new MyTable("rows", data)
+        add(new MyTable("rows", data)
         {
             public boolean populateCell(final Cell cell, final Container tagClass)
             {
@@ -34,7 +32,7 @@
                 tagClass.add(new Label("email", value.getEmail()));
                 tagClass.add(new Label("status", value.getStatus()));
                 tagClass.add(new Label("comments", value.getDescription()));
-                
+
                 return true;
             }
         });
