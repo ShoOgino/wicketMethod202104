@@ -1,9 +1,17 @@
     /**
-     * Gets the key part (eg 'foo' in 'foo=bar').
-     * @return the key part
+     * Get the namespace part (eg 'html' in 'html:form') converted
+     * to all lower case characters.
+     * 
+     * @return the namespace part. Will be null, if optonal namespace was not found
      */
     public String getNamespace()
     {
-        return namespace.get(matcher);
+        String namespaceBuf = namespace.get(matcher());
+        if (namespaceBuf != null)
+        {
+            namespaceBuf = namespaceBuf.toLowerCase();
+        }
+        
+        return namespaceBuf;
     }
 
