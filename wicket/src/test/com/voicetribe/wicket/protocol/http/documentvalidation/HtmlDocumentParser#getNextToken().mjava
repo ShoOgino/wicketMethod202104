@@ -1,0 +1,20 @@
+    /**
+     * Iterates through the document searching for tokens. Returns the
+     * type of token that was found. If an unexpected token was encountered
+     * then the parser writes this fact to the console and continues
+     *
+     * @return The token that was found
+     */
+    public int getNextToken() {
+        while ( pos < document.length() ) {
+            char ch = document.charAt(pos);
+            if ( ch == '<' ) {
+                return processDirective();
+            }
+            else {
+                return processText();
+            }
+        }
+        return END;
+    }
+

@@ -1,0 +1,14 @@
+    /**
+     * Reset the request and the response back to a starting state
+     * and recreate the necessary wicket request, response and
+     * session objects. The request and response objects can be
+     * accessed and initialised at this point.
+     */
+    public void setupRequestAndResponse() throws IOException {
+        servletRequest.initialise();
+        servletResponse.initialise();
+        wicketSession    = HttpSession.getSession(this, servletRequest);
+        wicketRequest    = new HttpRequest(servletRequest);
+        wicketResponse  = new HttpResponse(servletResponse);
+    }
+

@@ -1,0 +1,18 @@
+    /**
+     * Get the given header as a date.
+     *
+     * @param name The header name
+     * @return The date, or -1 if header not found
+     * @throws  IllegalArgumentException If the header cannot be converted
+     */
+    public long getDateHeader(final String name) throws IllegalArgumentException {
+        String value = getHeader(name);
+        if ( value == null ) return -1;
+        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
+        try {
+            return df.parse(value).getTime();
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Can't convert header to date " + name + ": " + value);
+        }
+    }
+
