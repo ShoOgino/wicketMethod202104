@@ -1,0 +1,21 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 */
+	public StylesheetBlock(String name)
+	{
+		super(name);
+
+		// Visit all siblings and children which edit stylesheet blocks
+		getParent().visitChildren(IStylesheetBlockEditor.class, new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				// Let the component edit the stylsheet block
+				((IStylesheetBlockEditor)component).edit(StylesheetBlock.this);
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+

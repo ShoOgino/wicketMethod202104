@@ -1,0 +1,36 @@
+	/**
+	 * @see wicket.markup.html.WebComponent#onRender()
+	 */
+	protected void onRender()
+	{
+		// Allow subclass an opportunity to reorder things
+		edit();
+
+		// Get markup stream
+		final MarkupStream markupStream = findMarkupStream();
+
+		// Get next tag
+		final ComponentTag tag = markupStream.getTag();
+
+		// Must be <wicket:stylesheet/>
+		if (tag instanceof ComponentWicketTag && tag.isOpenClose("wicket:stylesheet"))
+		{
+			// Skip tag entirely, removing it from output
+			markupStream.next();
+
+			// Write out the links
+			for (final Iterator iterator = links.iterator(); iterator.hasNext();)
+			{
+				// Get next link
+				final String link = iterator.next().toString();
+
+				// Write to response
+				getResponse().write("<link rel='stylesheet' type='text/css' href='" + link + "'/>");
+			}
+		}
+		else
+		{
+			throw new WicketRuntimeException("Must be attached to a <wicket:stylesheet/> tag");
+		}
+	}
+

@@ -1,0 +1,22 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            Name of component
+	 */
+	public StylesheetLinks(String name)
+	{
+		super(name);
+
+		// Visit all siblings and children which edit stylesheet links
+		getParent().visitChildren(IStylesheetLinkEditor.class, new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				// Let the component contribute to the link list
+				((IStylesheetLinkEditor)component).edit(StylesheetLinks.this);
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+
