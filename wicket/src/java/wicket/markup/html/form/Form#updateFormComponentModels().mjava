@@ -5,13 +5,10 @@
 	 */
 	private void updateFormComponentModels()
 	{
-		visitChildren(FormComponent.class, new IVisitor()
+		visitFormComponents(new FormComponent.IVisitor()
 		{
-			public Object component(final Component component)
+			public void formComponent(final FormComponent formComponent)
 			{
-				// Update model of form component
-				final FormComponent formComponent = (FormComponent)component;
-
 				// Only update the component when it is visible and valid
 				if (formComponent.isVisible() && formComponent.isValid())
 				{
@@ -22,7 +19,6 @@
 						formComponent.updateModel();
 					}
 				}
-				return CONTINUE_TRAVERSAL;
 			}
 		});
 	}

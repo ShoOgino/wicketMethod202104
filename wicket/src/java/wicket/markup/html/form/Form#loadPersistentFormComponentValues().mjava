@@ -6,11 +6,9 @@
 	 */
 	public final void loadPersistentFormComponentValues()
 	{
-		// Visit all FormComponent contained in the page
-		visitChildren(FormComponent.class, new Component.IVisitor()
+		visitFormComponents(new FormComponent.IVisitor()
 		{
-			// For each FormComponent found on the Page (not Form)
-			public Object component(final Component component)
+			public void formComponent(final FormComponent formComponent)
 			{
 				// Component must implement persister interface and
 				// persistence for that component must be enabled.
@@ -18,16 +16,14 @@
 				// once the user submits the Form containing that FormComponent.
 				// Note: if that is true, values may remain persisted longer
 				// than really necessary
-				final FormComponent formComponent = (FormComponent)component;
 				if (formComponent.isPersistent())
 				{
 					// The persister
 					final IValuePersister persister = getValuePersister();
 
 					// Retrieve persisted value
-					persister.load((FormComponent)component);
+					persister.load(formComponent);
 				}
-				return CONTINUE_TRAVERSAL;
 			}
 		});
 	}

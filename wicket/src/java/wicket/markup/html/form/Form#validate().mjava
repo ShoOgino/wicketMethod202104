@@ -17,20 +17,23 @@
 		// Validate model using validation delegate
 		getValidationDelegate().validate(this);
 
-		// Update model using form data
-		updateFormComponentModels();
-
-		// Persist FormComponents if requested
-		persistFormComponentData();
-
-		// If validation or update caused error message(s) to appear
+		// If a validation error occurred
 		if (hasError())
 		{
-			// handle those errors
+			// mark all children as invalid
+			invalid();
+			
+			// let subclass handle error
 			onError();
 		}
 		else
 		{
+			// Persist FormComponents if requested
+			persistFormComponentData();
+			
+			// Update model using form data
+			updateFormComponentModels();
+			
 			// Model was successfully updated with valid data
 			onSubmit();
 		}

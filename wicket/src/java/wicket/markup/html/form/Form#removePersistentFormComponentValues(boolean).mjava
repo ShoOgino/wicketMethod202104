@@ -15,12 +15,11 @@
 		final IValuePersister persister = getValuePersister();
 
 		// Search for FormComponents like TextField etc.
-		visitChildren(FormComponent.class, new IVisitor()
+		visitFormComponents(new FormComponent.IVisitor()
 		{
-			public Object component(final Component component)
+			public void formComponent(final FormComponent formComponent)
 			{
-				// remove the FormComponents persisted data
-				final FormComponent formComponent = (FormComponent)component;
+				// remove the FormComponent's persisted data
 				persister.clear(formComponent);
 
 				// Disable persistence if requested. Leave unchanged otherwise.
@@ -28,8 +27,6 @@
 				{
 					formComponent.setPersistent(false);
 				}
-
-				return CONTINUE_TRAVERSAL;
 			}
 		});
 	}

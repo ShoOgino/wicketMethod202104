@@ -4,18 +4,15 @@
 	protected void onModelChanged()
 	{
 		// Visit all the form components and validate each
-		visitChildren(FormComponent.class, new IVisitor()
+		visitFormComponents(new FormComponent.IVisitor()
 		{
-			public Object component(final Component component)
+			public void formComponent(final FormComponent formComponent)
 			{
 				// If form component is using form model
-				if (component.sameRootModel(Form.this))
+				if (formComponent.sameRootModel(Form.this))
 				{
-					component.modelChanged();
+					formComponent.modelChanged();
 				}
-
-				// Continue until the end
-				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
 	}

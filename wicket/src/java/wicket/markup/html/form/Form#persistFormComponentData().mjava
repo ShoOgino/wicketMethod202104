@@ -16,13 +16,10 @@
 			final IValuePersister persister = getValuePersister();
 
 			// Search for FormComponent children. Ignore all other
-			visitChildren(FormComponent.class, new IVisitor()
+			visitFormComponents(new FormComponent.IVisitor()
 			{
-				public Object component(final Component component)
+				public void formComponent(final FormComponent formComponent)
 				{
-					// Can only a FormComponent
-					final FormComponent formComponent = (FormComponent)component;
-
 					// If peristence is switched on for that FormComponent ...
 					if (formComponent.isPersistent())
 					{
@@ -34,8 +31,6 @@
 						// Remove component's data (e.g. cookie)
 						persister.clear(formComponent);
 					}
-
-					return CONTINUE_TRAVERSAL;
 				}
 			});
 		}

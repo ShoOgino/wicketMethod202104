@@ -8,13 +8,10 @@
 		public void validate(final Form form)
 		{
 			// Visit all the form components and validate each
-			form.visitChildren(FormComponent.class, new IVisitor()
+			form.visitFormComponents(new FormComponent.IVisitor()
 			{
-				public Object component(final Component component)
+				public void formComponent(final FormComponent formComponent)
 				{
-					// Get form component
-					final FormComponent formComponent = (FormComponent)component;
-
 					// Validate form component
 					formComponent.validate();
 
@@ -29,9 +26,6 @@
 						// tell component that it is valid now
 						formComponent.valid();
 					}
-
-					// Continue until the end
-					return IVisitor.CONTINUE_TRAVERSAL;
 				}
 			});
 		}
