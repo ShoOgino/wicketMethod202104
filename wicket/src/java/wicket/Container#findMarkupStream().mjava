@@ -1,28 +1,28 @@
-	/**
-	 * Get the markup stream for this component.
-	 * 
-	 * @return The markup stream for this component, or if it doesn't have one,
-	 *         the markup stream for the nearest parent which does have one
-	 */
-	protected final MarkupStream findMarkupStream()
-	{
-		// Start here
-		Container c = this;
+    /**
+     * Get the markup stream for this component.
+     * 
+     * @return The markup stream for this component, or if it doesn't have one,
+     *         the markup stream for the nearest parent which does have one
+     */
+    protected final MarkupStream findMarkupStream()
+    {
+        // Start here
+        Container c = this;
 
-		// Walk up hierarchy until markup found
-		while (c.markupStream == null)
-		{
-			// Check parent
-			c = c.getParent();
+        // Walk up hierarchy until markup found
+        while (c.markupStream == null)
+        {
+            // Check parent
+            c = c.getParent();
 
-			// Are we at the top of the hierarchy?
-			if (c == null)
-			{
-				// Failed to find markup stream
-				throw new WicketRuntimeException(exceptionMessage("No markup found"));
-			}
-		}
+            // Are we at the top of the hierarchy?
+            if (c == null)
+            {
+                // Failed to find markup stream
+                throw new WicketRuntimeException(exceptionMessage("No markup found"));
+            }
+        }
 
-		return c.markupStream;
-	}
+        return c.markupStream;
+    }
 

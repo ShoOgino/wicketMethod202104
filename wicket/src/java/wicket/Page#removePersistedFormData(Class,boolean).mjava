@@ -1,27 +1,32 @@
-	/**
-	 * Convinience method. Search for children of type fromClass and 
-	 * invoke their respectiv removePersistedFormData() method.
-	 * 
-	 * @see Form#removePersistedFormComponentData(boolean)
-	 * 
-	 * @param formClass Form to be selected. Pages may have more than one Form.
-	 * @param disablePersistence if true, disable persistence for all FormComponents on that page. If false, it will remain unchanged. 
-	 */
-	final public void removePersistedFormData(final Class formClass, final boolean disablePersistence)
-	{
-		// Visit all children which are an instance of formClass
-		visitChildren(formClass, new IVisitor()
+    /**
+     * Convinience method. Search for children of type fromClass and invoke
+     * their respectiv removePersistedFormData() method.
+     * 
+     * @see Form#removePersistedFormComponentData(boolean)
+     * 
+     * @param formClass
+     *            Form to be selected. Pages may have more than one Form.
+     * @param disablePersistence
+     *            if true, disable persistence for all FormComponents on that
+     *            page. If false, it will remain unchanged.
+     */
+    public final void removePersistedFormData(final Class formClass,
+            final boolean disablePersistence)
+    {
+        // Visit all children which are an instance of formClass
+        visitChildren(formClass, new IVisitor()
         {
             public Object component(final Component component)
             {
-            	// They must be of type Form as well
-            	if (component instanceof Form)
-            	{
-            		// Delete persistet FormComponent data and disable persistence
-            		((Form)component).removePersistedFormComponentData(disablePersistence);
-            	}
+                // They must be of type Form as well
+                if (component instanceof Form)
+                {
+                    // Delete persistet FormComponent data and disable
+                    // persistence
+                    ((Form)component).removePersistedFormComponentData(disablePersistence);
+                }
                 return CONTINUE_TRAVERSAL;
             }
         });
-	}
+    }
 

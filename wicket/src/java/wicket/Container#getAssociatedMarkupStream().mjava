@@ -1,57 +1,60 @@
-	/**
-	 * Gets a fresh markup stream that contains the (immutable) markup resource
-	 * for this class.
-	 * 
-	 * @return A stream of MarkupElement elements
-	 * @throws MarkupException
-	 *            Runtime exception that is thrown if markup cannot be found or
-	 *            parsed correctly
-	 */
-	final MarkupStream getAssociatedMarkupStream()
-	{
-		synchronized (markupCache)
-		{
-			// Look up markup tag list by class, locale, style and markup type
-			final String key = getClass().getName() + getLocale() + getStyle() + getMarkupType();
-			Markup markup = (Markup) markupCache.get(key);
+    /**
+     * Gets a fresh markup stream that contains the (immutable) markup resource
+     * for this class.
+     * 
+     * @return A stream of MarkupElement elements
+     * @throws MarkupException
+     *             Runtime exception that is thrown if markup cannot be found or
+     *             parsed correctly
+     */
+    final MarkupStream getAssociatedMarkupStream()
+    {
+        synchronized (markupCache)
+        {
+            // Look up markup tag list by class, locale, style and markup type
+            final String key = getClass().getName() + getLocale() + getStyle() + getMarkupType();
+            Markup markup = (Markup)markupCache.get(key);
 
-			// If no markup in map
-			if (markup == null)
-			{
-				// Locate markup resource, searching up class hierarchy
-				Resource markupResource = null;
-				Class containerClass = getClass();
+            // If no markup in map
+            if (markup == null)
+            {
+                // Locate markup resource, searching up class hierarchy
+                Resource markupResource = null;
+                Class containerClass = getClass();
 
-				while ((markupResource == null) && (containerClass != Container.class))
-				{
-					// Look for markup resource for containerClass
-					markupResource = Resource.locate(getApplicationSettings().getSourcePath(), containerClass,
-							getStyle(), getLocale(), getMarkupType());
-					containerClass = containerClass.getSuperclass();
-				}
+                while ((markupResource == null) && (containerClass != Container.class))
+                {
+                    // Look for markup resource for containerClass
+                    markupResource = Resource.locate(getApplicationSettings().getSourcePath(),
+                            containerClass, getStyle(), getLocale(), getMarkupType());
+                    containerClass = containerClass.getSuperclass();
+                }
 
-				// Found markup?
-				if (markupResource != null)
-				{
-					// load the markup and watch for changes
-					markup = loadMarkupAndWatchForChanges(key, markupResource);
-				}
-				else
-				{
-					// There is no associated markup for this class
-                    throw new WicketRuntimeException(exceptionMessage("Markup of type '"
-                            + getMarkupType() + "' for component '" 
-                            + getClass().getName() + "' not found." 
-                            + " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried."));
-				}
+                // Found markup?
+                if (markupResource != null)
+                {
+                    // load the markup and watch for changes
+                    markup = loadMarkupAndWatchForChanges(key, markupResource);
+                }
+                else
+                {
+                    // There is no associated markup for this class
+                    throw new WicketRuntimeException(
+                            exceptionMessage("Markup of type '"
+                                    + getMarkupType()
+                                    + "' for component '"
+                                    + getClass().getName()
+                                    + "' not found."
+                                    + " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried."));
+                }
 
-				// Save any markup list (or absence of one) for next time
-				markupCache.put(key, markup);
-			}
+                // Save any markup list (or absence of one) for next time
+                markupCache.put(key, markup);
+            }
 
-			// Return a MarkupStream wrapper around the immutable MarkupElement
-			// list
-			return new MarkupStream(markup);
-		}
-	}
+            // Return a MarkupStream wrapper around the immutable MarkupElement
+            // list
+            return new MarkupStream(markup);
+        }
+    }
 
