@@ -1,0 +1,51 @@
+	/**
+	 * Gets the cookie for a given persistent form component. The name of the
+	 * cookie will be the component's page relative path (@see
+	 * wicket.markup.html.form.FormComponent#getPageRelativePath()). Be reminded
+	 * that only if the cookie data have been provided by the client (browser),
+	 * they'll be accessible by the server.
+	 * 
+	 * @param component
+	 *            The form component
+	 * @return The cookie for the component or null if none is available
+	 */
+	private Cookie getCookie(final FormComponent component)
+	{
+		// Gets the cookie's name
+		final String name = component.getPageRelativePath();
+
+		// Get all cookies attached to the Request by the client browser
+		Cookie[] cookies = getRequest().getCookies();
+		if (cookies != null)
+		{
+			for (int i = 0; i < cookies.length; i++)
+			{
+				Cookie cookie = cookies[i];
+
+				// Names must match and Value must not be empty
+				if (cookie.getName().equals(name))
+				{
+					// cookies with no value do me no good!
+					if (cookie.getValue() != null && cookie.getValue().length() > 0)
+					{
+						if (log.isDebugEnabled())
+						{
+							log.debug("Got cookie: " + getCookieDebugString(cookie));
+						}
+						return cookie;
+					}
+					else
+					{
+						if (log.isDebugEnabled())
+						{
+							log.debug("Got cookie " + name
+									+ ", but it had no value; returning null");
+						}
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+

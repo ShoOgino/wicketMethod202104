@@ -1,31 +1,33 @@
-    /**
-     * Adds a validator to this form component.
-     * @param validator The validator
-     * @return This
-     */
-    public final FormComponent add(final IValidator validator)
-    {
-        // If we don't yet have a validator
-        if (this.validator == IValidator.NULL)
-        {
-            // Just add the validator directly
-            this.validator = validator;
-        }
-        else
-        {
-            // Create a validator list?
-            if (this.validator instanceof ValidatorList)
-            {
-                // Already have a list. Just add new validator to list
-                ((ValidatorList)this.validator).add(validator);
-            }
-            else
-            {
-                // Create a set of the current validator and the new validator
-                this.validator = new ValidatorList(this.validator, validator);
-            }
-        }
+	/**
+	 * Adds a validator to this form component.
+	 * 
+	 * @param validator
+	 *            The validator
+	 * @return This
+	 */
+	public final FormComponent add(final IValidator validator)
+	{
+		// If we don't yet have a validator
+		if (this.validator == IValidator.NULL)
+		{
+			// Just add the validator directly
+			this.validator = validator;
+		}
+		else
+		{
+			// Create a validator list?
+			if (this.validator instanceof ValidatorList)
+			{
+				// Already have a list. Just add new validator to list
+				((ValidatorList)this.validator).add(validator);
+			}
+			else
+			{
+				// Create a set of the current validator and the new validator
+				this.validator = new ValidatorList(this.validator, validator);
+			}
+		}
 
-        return this;
-    }
+		return this;
+	}
 

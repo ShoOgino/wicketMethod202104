@@ -1,0 +1,37 @@
+	/**
+	 * Persist/save the data using Cookies.
+	 * 
+	 * @param cookie
+	 *            The Cookie to be persisted.
+	 * @return The cookie provided
+	 */
+	private Cookie save(Cookie cookie)
+	{
+		if (cookie == null)
+		{
+			return null;
+		}
+
+		if (getSettings().getComment() != null)
+		{
+			cookie.setComment(getSettings().getComment());
+		}
+
+		if (getSettings().getDomain() != null)
+		{
+			cookie.setDomain(getSettings().getDomain());
+		}
+
+		cookie.setVersion(getSettings().getVersion());
+		cookie.setSecure(getSettings().isSecure());
+
+		getResponse().addCookie(cookie);
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("saved: " + getCookieDebugString(cookie));
+		}
+
+		return cookie;
+	}
+

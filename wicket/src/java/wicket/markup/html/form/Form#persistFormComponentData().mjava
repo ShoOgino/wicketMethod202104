@@ -13,10 +13,10 @@
 		{
 			// The persistence manager responsible to persist and retrieve
 			// FormComponent data
-			final IFormComponentPersistenceManager persister = getFormComponentPersistenceManager();
+			final IValuePersister persister = getValuePersister();
 
 			// Search for FormComponent children. Ignore all other
-			visitChildren(FormComponent.ICookieValue.class, new IVisitor()
+			visitChildren(FormComponent.class, new IVisitor()
 			{
 				public Object component(final Component component)
 				{
@@ -24,18 +24,17 @@
 					final FormComponent formComponent = (FormComponent)component;
 
 					// If peristence is switched on for that FormComponent ...
-					if (formComponent.isPersistenceEnabled())
+					if (formComponent.isPersistent())
 					{
 						// Save component's data (e.g. in a cookie)
-						persister.save(formComponent.getPageRelativePath(),
-								((FormComponent.ICookieValue)formComponent).getCookieValue());
+						persister.save(formComponent);
 					}
 					else
 					{
 						// Remove component's data (e.g. cookie)
-						persister.remove(formComponent.getPageRelativePath());
-
+						persister.clear(formComponent);
 					}
+
 					return CONTINUE_TRAVERSAL;
 				}
 			});

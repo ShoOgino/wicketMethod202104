@@ -12,7 +12,7 @@
 	{
 		// The persistence manager responsible to persist and retrieve
 		// FormComponent data
-		final IFormComponentPersistenceManager persister = getFormComponentPersistenceManager();
+		final IValuePersister persister = getValuePersister();
 
 		// Search for FormComponents like TextField etc.
 		visitChildren(FormComponent.class, new IVisitor()
@@ -20,14 +20,15 @@
 			public Object component(final Component component)
 			{
 				// remove the FormComponents persisted data
-				FormComponent formComponent = (FormComponent)component;
-				persister.remove(formComponent.getPageRelativePath());
+				final FormComponent formComponent = (FormComponent)component;
+				persister.clear(formComponent);
 
 				// Disable persistence if requested. Leave unchanged otherwise.
-				if (formComponent.isPersistenceEnabled() && disablePersistence)
+				if (formComponent.isPersistent() && disablePersistence)
 				{
-					formComponent.setPersistenceEnabled(false);
+					formComponent.setPersistent(false);
 				}
+
 				return CONTINUE_TRAVERSAL;
 			}
 		});

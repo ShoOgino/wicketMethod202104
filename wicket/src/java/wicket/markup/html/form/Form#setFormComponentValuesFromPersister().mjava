@@ -18,22 +18,14 @@
 				// once the user submits the Form containing that FormComponent.
 				// Note: if that is true, values may remain persisted longer
 				// than really necessary
-				if (component instanceof FormComponent.ICookieValue
-						&& ((FormComponent)component).isPersistenceEnabled())
+				final FormComponent formComponent = (FormComponent)component;
+				if (formComponent.isPersistent())
 				{
-					// The persistence manager responsible to persist and
-					// retrieve
-					// FormComponent data
-					final IFormComponentPersistenceManager persister = getFormComponentPersistenceManager();
+					// The persister
+					final IValuePersister persister = getValuePersister();
 
 					// Retrieve persisted value
-					final String persistedValue = persister.retrieveValue(component
-							.getPageRelativePath());
-					if (persistedValue != null)
-					{
-						// Assign the retrieved/persisted value to the component
-						((FormComponent.ICookieValue)component).setCookieValue(persistedValue);
-					}
+					persister.load((FormComponent)component);
 				}
 				return CONTINUE_TRAVERSAL;
 			}
