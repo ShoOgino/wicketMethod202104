@@ -1,30 +1,31 @@
-    /**
-     * @param image The image to set
-     * @return This
-     */
-    public DynamicImage setImage(final BufferedImage image)
-    {
-        try
-        {
-            // Create output stream
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+	/**
+	 * @param image
+	 *            The image to set
+	 * @return This
+	 */
+	public DynamicImage setImage(final BufferedImage image)
+	{
+		try
+		{
+			// Create output stream
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            // Get image writer for extension
-            final ImageWriter writer = (ImageWriter)ImageIO
-                .getImageWritersByFormatName(extension).next();
+			// Get image writer for extension
+			final ImageWriter writer = (ImageWriter)ImageIO.getImageWritersByFormatName(extension)
+					.next();
 
-            // Write out gif
-            writer.setOutput(ImageIO.createImageOutputStream(out));
-            writer.write(image);
+			// Write out gif
+			writer.setOutput(ImageIO.createImageOutputStream(out));
+			writer.write(image);
 
-            // Set input stream
-            this.inputStream = new ByteArrayInputStream(out.toByteArray());
-        }
-        catch (IOException e)
-        {
-            throw new WicketRuntimeException("Unable to convert dynamic image to stream", e);
-        }
+			// Set input stream
+			this.inputStream = new ByteArrayInputStream(out.toByteArray());
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException("Unable to convert dynamic image to stream", e);
+		}
 
-        return this;
-    }
+		return this;
+	}
 

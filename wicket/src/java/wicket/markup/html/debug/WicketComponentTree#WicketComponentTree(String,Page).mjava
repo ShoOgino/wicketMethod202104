@@ -1,48 +1,52 @@
-    /**
-     * Constructor.
-     * @param componentName name of the component
-     * @param page the page
-     */
-    public WicketComponentTree(final String componentName, final Page page)
-    {
-        super(componentName);
+	/**
+	 * Constructor.
+	 * 
+	 * @param componentName
+	 *            Name of the component
+	 * @param page
+	 *            The page
+     * @see Component#Component(String)
+	 */
+	public WicketComponentTree(final String componentName, final Page page)
+	{
+		super(componentName);
 
-        // Create an empty list. It'll be filled later
-        final List data = new ArrayList();
-        
-        // Create the table
-        add(new ListView("rows2", data)
-        {
-            // Assuming all other components are already populated
-            // (and rendered), determine the components and fill
-            // the 'our' model object.
-            protected void handleRender()
-            {
-                // Get the components data and fill and sort the list
-                data.clear();
-                data.addAll(getComponentData(page));
-                Collections.sort(data, new Comparator()
-                {
-                    public int compare(Object o1, Object o2)
-                    {
-                        return ((ComponentData)o1).path.compareTo(((ComponentData)o2).path);
-                    }
-                });
-                
-                // Keep on rendering the table
-                super.handleRender();
-            }
-            
-            // Populate the table with Wicket elements
-            protected void populateItem(ListItem listItem)
-            {
-                final ComponentData cdata = (ComponentData)listItem.getModelObject();
-                
-                listItem.add(new Label("row", new Integer(listItem.getIndex() + 1)));
-                listItem.add(new Label("path", cdata.path));
-                listItem.add(new Label("type", cdata.type));
-                listItem.add(new Label("model", cdata.value));
-            }
-        });    
-    }
+		// Create an empty list. It'll be filled later
+		final List data = new ArrayList();
+
+		// Create the table
+		add(new ListView("rows2", data)
+		{
+			// Assuming all other components are already populated
+			// (and rendered), determine the components and fill
+			// the 'our' model object.
+			protected void handleRender()
+			{
+				// Get the components data and fill and sort the list
+				data.clear();
+				data.addAll(getComponentData(page));
+				Collections.sort(data, new Comparator()
+				{
+					public int compare(Object o1, Object o2)
+					{
+						return ((ComponentData)o1).path.compareTo(((ComponentData)o2).path);
+					}
+				});
+
+				// Keep on rendering the table
+				super.handleRender();
+			}
+
+			// Populate the table with Wicket elements
+			protected void populateItem(ListItem listItem)
+			{
+				final ComponentData cdata = (ComponentData)listItem.getModelObject();
+
+				listItem.add(new Label("row", new Integer(listItem.getIndex() + 1)));
+				listItem.add(new Label("path", cdata.path));
+				listItem.add(new Label("type", cdata.type));
+				listItem.add(new Label("model", cdata.value));
+			}
+		});
+	}
 
