@@ -6,7 +6,12 @@
 	 */
 	protected String getURL()
 	{
-		// gets url to the dispatcher
-		return getPage().urlFor(pageClass, parameters);
+		String pageMapName = null;
+		if (getPopupSettings() != null)
+		{
+			pageMapName = "popup" + popupNumber;
+			popupNumber++;
+		}
+		return getPage().urlFor(pageMapName, pageClass, parameters);
 	}
 

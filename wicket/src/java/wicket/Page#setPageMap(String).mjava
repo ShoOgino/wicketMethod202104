@@ -1,4 +1,6 @@
 	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
 	 * @param pageMapName
 	 *            Sets this page into the page map with the given name. If the
 	 *            page map does not yet exist, it is automatically created.
@@ -6,11 +8,10 @@
 	public final void setPageMap(final String pageMapName)
 	{
 		final Session session = getSession();
-		PageMap pageMap = session.getPageMap(pageMapName);
-		if (pageMap == null)
+		this.pageMap = session.getPageMap(pageMapName);
+		if (this.pageMap == null)
 		{
-			pageMap = session.newPageMap(pageMapName);
+			this.pageMap = session.newPageMap(pageMapName);
 		}
-		setPageMap(pageMap);
 	}
 
