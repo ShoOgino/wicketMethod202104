@@ -1,27 +1,14 @@
     public void testRemoveFromPage() throws IOException, ServletException
     {
-    	// initialize 
-        HtmlPage page = new MockPage(null);
-		page.add(this.panel);
-		
-        HttpRequestCycle cycle = new HttpRequestCycle(
-        		application, 
-				application.getWicketSession(),
-				application.getWicketRequest(),
-				application.getWicketResponse());
-        
-        FormComponent username = (FormComponent)panel.get("signInForm.username");
-        FormComponent password = (FormComponent)panel.get("signInForm.password");
-        
-        username.setPersistent(true);
-        password.setPersistent(true);
+        panel.setPersistent(true);
         
         // test
 		page.removePersistedFormData(cycle, SignInPanel.SignInForm.class, true);
 		
 		// validate
         Collection cookieCollection = application.getServletResponse().getCookies();
-        Assert.assertEquals(0, cookieCollection.size());
+        // Cookies are remove by setting maxAge == 0
+        Assert.assertEquals(2, cookieCollection.size());
 
         // initialize
         final Cookie cookieUsername = new Cookie("panel.signInForm.username", "juergen");
@@ -35,7 +22,7 @@
 		
 		// validate
         cookieCollection = application.getServletResponse().getCookies();
-        Assert.assertEquals(2, cookieCollection.size());
+        Assert.assertEquals(4, cookieCollection.size());
         Iterator iter = cookieCollection.iterator();
         while (iter.hasNext()) 
         {

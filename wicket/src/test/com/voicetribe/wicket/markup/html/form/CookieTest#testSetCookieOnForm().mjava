@@ -1,19 +1,6 @@
     public void testSetCookieOnForm() throws IOException, ServletException
     {
     	// initialize 
-        final Cookie cookieUsername = new Cookie("signInForm.username", "juergen");
-        final Cookie cookiePassword = new Cookie("signInForm.password", "test");
-        final Cookie[] cookies = new Cookie[] {cookieUsername, cookiePassword};
-        
-        application.getServletRequest().setCookies(cookies);
-
-        HttpRequestCycle cycle = new HttpRequestCycle(
-        		application, 
-				application.getWicketSession(),
-				application.getWicketRequest(),
-				application.getWicketResponse());
-        
-        // test
 		this.form.setFormComponentValuesFromPersister(cycle);
 		
 		// validate
@@ -21,6 +8,6 @@
         FormComponent password = (FormComponent)panel.get("signInForm.password");
         
         Assert.assertEquals(cookieUsername.getValue(), username.getModelObjectAsString());
-        Assert.assertEquals(cookiePassword.getValue(), password.getModelObjectAsString());
+        Assert.assertEquals("test", password.getModelObjectAsString());
     }
 
