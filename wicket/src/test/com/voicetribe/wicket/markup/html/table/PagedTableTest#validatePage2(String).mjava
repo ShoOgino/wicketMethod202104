@@ -1,10 +1,10 @@
     /**
-     * Validates page 1 of paged table.
+     * Validate page 2 of the paged table.
      *
      * @param document The document
      * @return The validation result
      */
-    private boolean validatePage1(String document)
+    private boolean validatePage2(String document)
     {
         HtmlDocumentValidator validator = new HtmlDocumentValidator();
         Tag html = new Tag("html");
@@ -19,25 +19,22 @@
         Tag ulTable = new Tag("ul");
         ulTable.addExpectedChild(new Tag("li")
                 .addExpectedChild(new Tag("span")
-                .addExpectedChild(new TextContent("one"))));
-        ulTable.addExpectedChild(new Tag("li")
-                .addExpectedChild(new Tag("span")
-                .addExpectedChild(new TextContent("two"))));
-        // note that we DO NOT expect the third element as this is not on the current page
+                .addExpectedChild(new TextContent("three"))));
+        // note that we expect only the third element
         body.addExpectedChild(ulTable);
 
         Tag ulNav = new Tag("ul");
         ulNav.addExpectedChild(new Tag("li")
+                .addExpectedChild(new Tag("a")
+                 .addExpectedChild(new Tag("span")
+                  .addExpectedChild(new TextContent("1")
+         ))));
+        ulNav.addExpectedChild(new Tag("li")
                .addExpectedChild(new Tag("span")
                 .addExpectedChild(new Tag("i")
                  .addExpectedChild(new Tag("span")
-                  .addExpectedChild(new TextContent("1")
-        )))));
-        ulNav.addExpectedChild(new Tag("li")
-                .addExpectedChild(new Tag("a")
-                 .addExpectedChild(new Tag("span")
                   .addExpectedChild(new TextContent("2")
-         ))));
+        )))));
 
         body.addExpectedChild(ulNav);
 
