@@ -1,0 +1,57 @@
+	/**
+	 * @param tag
+	 *            The tag to inspect for an optional src attribute that might
+	 *            reference an image.
+	 * @throws WicketRuntimeException
+	 *             Thrown if an image is required by the caller, but none can be
+	 *             found.
+	 */
+	public void loadImageResource(final ComponentTag tag)
+	{
+		// If locale has changed from the initial locale used to attach image
+		// resource, then we need to reload the resource in the new locale
+		if (locale != null && locale != component.getLocale())
+		{
+			imageResource = null;
+		}
+
+		// Need to load image resource for this component?
+		if (imageResource == null)
+		{
+			// Get model string
+			final String modelString = component.getModelObjectAsString();
+
+			// If model string is empty, use src attribute of tag
+			final String resourcePath;
+			if (Strings.isEmpty(modelString))
+			{
+				resourcePath = tag.getString("src");
+			}
+			else
+			{
+				resourcePath = modelString;
+			}
+
+			// If we found a resource path, try to load the image resource
+			if (!Strings.isEmpty(resourcePath))
+			{
+				final Package basePackage = component.findParentWithAssociatedMarkup().getClass()
+						.getPackage();
+				this.imageResource = StaticImageResource.get(basePackage, resourcePath, component
+						.getLocale(), component.getStyle());
+			}
+
+			// If we can't get a static image and one isn't already assigned
+			if (imageResource == null)
+			{
+				setImageResource(generateImageResource(tag));
+			}
+
+			this.locale = component.getLocale();
+		}
+
+		final String url = ((WebRequestCycle)component.getRequestCycle()).urlFor(imageResource
+				.getPath());
+		tag.put("src", component.getResponse().encodeURL(url).replaceAll("&", "&amp;"));
+	}
+
