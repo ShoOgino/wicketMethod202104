@@ -1,47 +1,49 @@
-	/**
-	 * @return True if static content was returned
-	 */
-	private boolean renderStaticContent()
-	{
-		try
-		{
-			// Get URL
-			final String url = ((HttpRequest)getRequest()).getURL();
+    /**
+     * @return True if static content was returned
+     */
+    private boolean renderStaticContent()
+    {
+        try
+        {
+            // Get URL
+            final String url = ((HttpRequest) getRequest()).getURL();
 
-			// Get servlet context
-			final ServletContext context = ((HttpApplication)application).getServletContext();
+            // Get servlet context
+            final ServletContext context = ((HttpApplication) application)
+                    .getServletContext();
 
-			// Set content type
-			response.setContentType(context.getMimeType(url));
+            // Set content type
+            response.setContentType(context.getMimeType(url));
 
-			// NOTE: Servlet container prevents accessing WEB-INF/** already.
-			// TODO Maybe a kind of exclude/include list would good as well.
-			final InputStream in = context.getResourceAsStream(url);
-			if (in != null)
-			{
-				try
-				{
-					// Copy resource input stream to servlet output stream
-					Streams.writeStream(in, ((HttpResponse)response).getServletResponse()
-							.getOutputStream());
-				}
-				finally
-				{
-					// NOTE: Do not close servlet OutputStream. Close
-					// InputStream only
-					in.close();
-				}
+            // NOTE: Servlet container prevents accessing WEB-INF/** already.
+            // TODO Maybe a kind of exclude/include list would good as well.
+            final InputStream in = context.getResourceAsStream(url);
+            if (in != null)
+            {
+                try
+                {
+                    // Copy resource input stream to servlet output stream
+                    Streams.writeStream(in, ((HttpResponse) response)
+                            .getServletResponse().getOutputStream());
+                }
+                finally
+                {
+                    // NOTE: Do not close servlet OutputStream. Close
+                    // InputStream only
+                    in.close();
+                }
                 return true;
-			}
+            }
             else
             {
                 // No static content was found
                 return false;
             }
-		}
-		catch (IOException e)
-		{
-            throw new RenderException("Cannot load static content for request " + request, e);
-		}
-	}
+        }
+        catch (IOException e)
+        {
+            throw new RenderException("Cannot load static content for request "
+                    + request, e);
+        }
+    }
 

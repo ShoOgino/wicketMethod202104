@@ -1,14 +1,18 @@
     /**
-     * Create the application settings, carrying out any necessary initialisations.
-     * @param application The application that these settings are for
+     * Create the application settings, carrying out any necessary
+     * initialisations.
+     * 
+     * @param application
+     *            The application that these settings are for
      */
     public ApplicationSettings(final IApplication application)
     {
         localizer = new Localizer(this);
         stringResourceLoaders.add(new ComponentStringResourceLoader());
-        stringResourceLoaders.add(new ApplicationStringResourceLoader(application));
-        defaultPageFactory = new PageFactory(application);
-        
+        stringResourceLoaders.add(new ApplicationStringResourceLoader(
+                application));
+        defaultPageFactory = new DefaultPageFactory(application);
+
         componentResolvers = new ArrayList();
         componentResolvers.add(new AutolinkComponentResolver());
         componentResolvers.add(new WicketTagComponentResolver());

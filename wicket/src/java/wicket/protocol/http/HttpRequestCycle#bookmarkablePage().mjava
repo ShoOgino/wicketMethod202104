@@ -1,21 +1,25 @@
-	/**
-	 * Activates a bookmarkable page if one was specified in the request.
-	 * @return True if a bookmarkable page was created and returned for the request.
-	 * @throws RenderException
-	 */
-	private boolean bookmarkablePage()
-	{
-		// Get any component parameter
-		final String pageClassName = request.getParameter("bookmarkablePage");
+    /**
+     * Activates a bookmarkable page if one was specified in the request.
+     * 
+     * @return True if a bookmarkable page was created and returned for the
+     *         request.
+     * @throws RenderException
+     */
+    private boolean bookmarkablePage()
+    {
+        // Get any component parameter
+        final String pageClassName = request.getParameter("bookmarkablePage");
 
-		if (pageClassName != null)
-		{
-			setPage(getPageFactory().newPage(pageClassName,
-					new PageParameters(this.getRequest().getParameterMap())));
+        if (pageClassName != null)
+        {
+            final Class pageClass = getSession().getClassResolver()
+                    .resolveClass(pageClassName);
+            setPage(getPageFactory().newPage(pageClass,
+                    new PageParameters(getRequest().getParameterMap())));
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 

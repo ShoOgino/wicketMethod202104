@@ -1,0 +1,16 @@
+    /**
+     * @see wicket.IClassResolver#resolveClass(java.lang.String)
+     */
+    public Class resolveClass(String classname)
+    {
+        try
+        {
+            return DefaultClassResolver.class.getClassLoader().loadClass(classname);
+        }
+        catch (ClassNotFoundException ex)
+        {
+            throw new RenderException("Unable to load class with name: "
+                    + classname);
+        }
+    }
+

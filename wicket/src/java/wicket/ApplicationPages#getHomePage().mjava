@@ -1,0 +1,24 @@
+    /**
+     * Gets home page class.
+     * @return Returns the homePage.
+     * @see ApplicationPages#setHomePage(Class)
+     */
+    public final Class getHomePage()
+    {
+        // If no home page and one was specified
+        if (homePageClass == null && !Strings.isEmpty(homePageClassName))
+        {
+            // try resolving it
+            homePageClass = Session.get().getClassResolver().resolveClass(homePageClassName);
+        }
+
+        // If no home page is available
+        if (homePageClass == null)
+        {
+            // give up
+            throw new IllegalStateException("No home page was specified in application settings");
+        }
+        
+        return homePageClass;
+    }
+

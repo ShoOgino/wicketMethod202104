@@ -1,31 +1,36 @@
-	/**
-     * Returns a URL that references a given interface on a component.  When
-     * the URL is requested from the server at a later time, the interface 
-     * will be called.
-	 * @param component The component to reference
-	 * @param listenerInterface The listener interface on the component
-	 * @return A URL that encodes a page, component and interface to call
-	 */
-	public String urlFor(final Component component, final Class listenerInterface)
-	{
+    /**
+     * Returns a URL that references a given interface on a component. When the
+     * URL is requested from the server at a later time, the interface will be
+     * called.
+     * 
+     * @param component
+     *            The component to reference
+     * @param listenerInterface
+     *            The listener interface on the component
+     * @return A URL that encodes a page, component and interface to call
+     */
+    public String urlFor(final Component component,
+            final Class listenerInterface)
+    {
         // Ensure that component instanceof listenerInterface
         if (!listenerInterface.isAssignableFrom(component.getClass()))
         {
-            throw new RenderException("The component " + component + " of class " +
-                    component.getClass() + " does not implement " + listenerInterface);
+            throw new RenderException("The component " + component
+                    + " of class " + component.getClass()
+                    + " does not implement " + listenerInterface);
         }
 
         // Compose the URL
-		final StringBuffer buffer = urlPrefix();
+        final StringBuffer buffer = urlPrefix();
 
-		buffer.append("?component=");
-		buffer.append(component.getPath());
-		buffer.append("&rendering=");
-		buffer.append(component.getPage().getRendering());
-		buffer.append("&interface=");
-		buffer.append(Classes.name(listenerInterface));
+        buffer.append("?component=");
+        buffer.append(component.getPath());
+        buffer.append("&rendering=");
+        buffer.append(component.getPage().getRendering());
+        buffer.append("&interface=");
+        buffer.append(Classes.name(listenerInterface));
 
         // Return the encoded URL
-		return response.encodeURL(buffer.toString());
-	}
+        return response.encodeURL(buffer.toString());
+    }
 

@@ -1,18 +1,25 @@
     /**
      * Handles servlet page requests.
-     * @param servletRequest Servlet request object
-     * @param servletResponse Servlet response object
-     * @throws ServletException Thrown if something goes wrong during request handling
+     * 
+     * @param servletRequest
+     *            Servlet request object
+     * @param servletResponse
+     *            Servlet response object
+     * @throws ServletException
+     *             Thrown if something goes wrong during request handling
      * @throws IOException
      */
     protected final void doGet(final HttpServletRequest servletRequest,
-            final HttpServletResponse servletResponse) throws ServletException, IOException
+            final HttpServletResponse servletResponse) throws ServletException,
+            IOException
     {
         // Get session for request
-        final HttpSession session = HttpSession.getSession(this, servletRequest);
+        final HttpSession session = HttpSession
+                .getSession(this, servletRequest);
         final HttpRequest request = new HttpRequest(servletRequest);
         final HttpResponse response = new HttpResponse(servletResponse);
-        final HttpRequestCycle cycle = new HttpRequestCycle(this, session, request, response);
+        final HttpRequestCycle cycle = new HttpRequestCycle(this, session,
+                request, response);
 
         // Render response for request cycle
         cycle.render();

@@ -1,18 +1,26 @@
     /**
-     * Resolves the given tag's automaticLinkPageClass and automaticLinkPageParameters
-     * variables by parsing the tag component name and then searching for a page class at
-     * the relative URL specified by the href attribute of the tag. The href URL is
-     * relative to the package containing the page where this component is contained.
-     * @param page The page where the link is
-     * @param markupStream Markup stream to use when throwing any exceptions
-     * @param componentName the name of the component
-     * @param tag the component tag
+     * Resolves the given tag's automaticLinkPageClass and
+     * automaticLinkPageParameters variables by parsing the tag component name
+     * and then searching for a page class at the relative URL specified by the
+     * href attribute of the tag. The href URL is relative to the package
+     * containing the page where this component is contained.
+     * 
+     * @param page
+     *            The page where the link is
+     * @param markupStream
+     *            Markup stream to use when throwing any exceptions
+     * @param componentName
+     *            the name of the component
+     * @param tag
+     *            the component tag
      */
-    private void resolveAutomaticLink(final Page page, final MarkupStream markupStream,
-    		final String componentName, final ComponentTag tag)
+    private void resolveAutomaticLink(final Page page,
+            final MarkupStream markupStream, final String componentName,
+            final ComponentTag tag)
     {
         // Get any automaticLink component
-        final Matcher matcher = automaticComponentPattern.matcher(componentName);
+        final Matcher matcher = automaticComponentPattern
+                .matcher(componentName);
 
         if (matcher.matches())
         {
@@ -27,8 +35,8 @@
 
                 if (href == null)
                 {
-                    markupStream.throwMarkupException(
-                            "Automatic link requires href attribute");
+                    markupStream
+                            .throwMarkupException("Automatic link requires href attribute");
                 }
 
                 // Find class relative to current package
@@ -36,13 +44,15 @@
 
                 try
                 {
-                    automaticLinkPageClass = RequestCycle.get().getApplication()
-                    	.getSettings().getDefaultPageFactory().classForName(
-                    	        page.getClass().getPackage().getName() + "." + path);
+                    automaticLinkPageClass = Session.get().getClassResolver()
+                            .resolveClass(
+                                    page.getClass().getPackage().getName()
+                                            + "." + path);
 
                     if (parameters != null)
                     {
-                        automaticLinkPageParameters = new PageParameters(parameters);
+                        automaticLinkPageParameters = new PageParameters(
+                                parameters);
                     }
                     else
                     {
@@ -51,22 +61,24 @@
                 }
                 catch (RenderException e)
                 {
-                    markupStream.throwMarkupException("Could not find page at " + path);
+                    markupStream.throwMarkupException("Could not find page at "
+                            + path);
                 }
             }
             else
             {
                 if (!command.equals("children") && !command.equals("border"))
                 {
-                    markupStream.throwMarkupException(
-                            "Special component names include [border], [body] and [autolink], "
-                            + "but not '" + command + "'");
+                    markupStream
+                            .throwMarkupException("Special component names include [border], [body] and [autolink], "
+                                    + "but not '" + command + "'");
                 }
             }
         }
         else
         {
-            markupStream.throwMarkupException("Invalid syntax for automaticLink component");
+            markupStream
+                    .throwMarkupException("Invalid syntax for automaticLink component");
         }
     }
 

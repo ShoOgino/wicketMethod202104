@@ -1,74 +1,56 @@
-	/**
-	 * Renders a response for the current request.  The following four steps are 
+    /**
+     * Renders a response for the current request. The following four steps are
      * followed in rendering a response:
      * <p>
-     * 1. If the URL requested is in the form of a component listener invocation, 
-     *    then that invocation will occur and is expected to generate a response.  
+     * 1. If the URL requested is in the form of a component listener
+     * invocation, then that invocation will occur and is expected to generate a
+     * response.
      * <p>
-     * 2. If the URL is to a bookmarkable page, then an instance of that page 
-     *    will render a response.  
+     * 2. If the URL is to a bookmarkable page, then an instance of that page
+     * will render a response.
      * <p>
      * 3. If the URL is for the application's home page, an instance of the home
-     *    page will render a response.
+     * page will render a response.
      * <p>
-     * 4. Finally, an attempt is made to render the requested resource as static 
-     *    content, available through the servlet context.  
+     * 4. Finally, an attempt is made to render the requested resource as static
+     * content, available through the servlet context.
      * <p>
      * If all four steps are executed and content cannot be found to satisfy the
-     * request, then the request is considered invalid and a response is written 
+     * request, then the request is considered invalid and a response is written
      * detailing the problem.
-	 */
-	protected void handleRender()
-	{
-        // Serialize renderings on the session object so that only one page
-        // can be rendered at a time for a given session.
-		synchronized (session)
-		{
-            // Set this request cycle as the active request cycle for the 
-            // session for easy access by the page being rendered and any
-            // components on that page
-            session.setRequestCycle(this);
-            
-            try
-            {            
-                // Try different methods of parsing and dispatching the request
-    			if (callComponentListener() || bookmarkablePage() || homePage())
-    			{
-    				// Get page set by handler
-    				final Page page = getPage();
-                    
-    				// Is there a page to render?
-    				if (page != null)
-    				{
-    					// Should page be redirected to?
-    					if (getRedirect())
-    					{
-    						// redirect to the page
-    						redirectToPage(page);
-    					}
-    					else
-    					{
-    						// render the page
-    						page.render();
-    					}
-    				}
-    			}
-    			else 
-                {
-                    // Try to respond with static content
-                    if (!renderStaticContent())
-        			{
-                        // No static content could be found
-                        response.write("<pre>Invalid request: " + request + "</pre>");
-                    }
-    			}
-            }
-            finally
+     */
+    protected void handleRender()
+    {
+        // Try different methods of parsing and dispatching the request
+        if (callComponentListener() || bookmarkablePage() || homePage())
+        {
+            // Get page set by handler
+            final Page page = getPage();
+
+            // Is there a page to render?
+            if (page != null)
             {
-                // Set the active request cycle back to null since we are 
-                // done rendering the requested page
-                session.setRequestCycle(null);
+                // Should page be redirected to?
+                if (getRedirect())
+                {
+                    // redirect to the page
+                    redirectToPage(page);
+                }
+                else
+                {
+                    // render the page
+                    page.render();
+                }
             }
-		}
-	}
+        }
+        else
+        {
+            // Try to respond with static content
+            if (!renderStaticContent())
+            {
+                // No static content could be found
+                response.write("<pre>Invalid request: " + request + "</pre>");
+            }
+        }
+    }
 

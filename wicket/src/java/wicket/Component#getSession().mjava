@@ -7,18 +7,31 @@
      */
     public Session getSession()
     {
-        // Get Session from Page object for this component
-        final Session session = getPage().getSession();
+        // Fetch page if possible
+        final Page page = findPage();
 
-        // Did we find the session?
-        if (session == null)
+        // If this component is attached to a page
+        if (page != null)
         {
-            // This should NEVER happen. But if it does, we'll want a nice error
-            // message.
-            throw new IllegalStateException(
-                    exceptionMessage("Page not attached to session"));
-        }
+            // Get Session from Page object for this component
+            final Session session = page.getSession();
 
-        return session;
+            // Did we find the session?
+            if (session != null)
+            {
+                return session;
+            }
+            else
+            {
+                // This should NEVER happen. But if it does, we'll want a nice
+                // error message.
+                throw new IllegalStateException(
+                        exceptionMessage("Page not attached to session"));
+            }
+        }
+        else
+        {
+            return Session.get();
+        }
     }
 

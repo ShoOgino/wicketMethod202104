@@ -1,11 +1,15 @@
     /**
      * Constructor.
-     * @param application The application that this is a session of
+     * 
+     * @param application
+     *            The application that this is a session of
      */
     protected Session(final IApplication application)
     {
         this.application = application;
-        this.pages = MostRecentlyUsedMap
-                .newInstance(application.getSettings().getMaxSessionPages());
+        setPageFactory(application.getSettings().getDefaultPageFactory());
+        setClassResolver(application.getSettings().getDefaultClassResolver());
+        this.pages = MostRecentlyUsedMap.newInstance(application.getSettings()
+                .getMaxSessionPages());
     }
 
