@@ -1,0 +1,63 @@
+    /**
+     * First try parent's implementation. If it fails, it'll throw a ClassCastException.
+     * Catch it and than apply additional means to load the class.
+     * 
+     * @param name Class name incl. package
+     * @return The Class loaded, if found
+     * @throws ClassCastException, if class could not be loaded
+     */
+    protected Class findGroovyClass(final String name) throws ClassNotFoundException 
+    {
+        log.debug("class name: " + name);
+
+        try
+        {
+            return super.findGroovyClass(name);
+        }
+        catch (ClassNotFoundException ex)
+        {
+            // classname => filename
+            String filename = Strings.replaceAll(name, ".", "/") + ".groovy";
+            
+            // File exists?
+            final URL url = getResource(filename);
+            if (url != null)
+            {
+	            try 
+	            {
+	                // Get Groovy to parse the file and create the Class
+	                final InputStream in = url.openStream();
+	                if (in != null)
+	                {
+	    	            Class clazz = parseClass(in);
+	    	            if (clazz != null)
+	    	            {
+	    	                return clazz;
+	    	            }
+	                }
+	                else
+	                {
+	                    log.warn("Groovy file not found: " + filename);
+	                }
+	            } 
+	            catch (CompilationFailedException e) 
+	            {
+	                throw new ClassNotFoundException("Error parsing groovy file: " 
+	                        + filename, e);
+	            } 
+	            catch (IOException e) 
+	            {
+	                throw new ClassNotFoundException("Error reading groovy file: " 
+	                        + filename, e);
+	            }
+	            catch (Throwable e) 
+	            {
+	                throw new ClassNotFoundException("Error while reading groovy file: " 
+	                        + filename, e);
+	            }
+            }
+            
+            throw ex;
+        }
+    }
+

@@ -1,0 +1,41 @@
+    /**
+     * Load the groovy file and watch for changes. If changes to the groovy happens,
+     * than reload the file.
+     * 
+     * @param classname
+     * @param groovyResource
+     * @return
+     */
+    private Class loadGroovyFileAndWatchForChanges(final String classname, final URL url)
+    {
+        final ApplicationSettings settings = getApplication().getSettings();
+
+        // Watch file in the future
+        final Watcher watcher = settings.getResourceWatcher();
+
+        if (watcher != null)
+        {
+            watcher.add(url, new IChangeListener()
+            {
+                public void changed()
+                {
+                    try
+                    {
+                        log.info("Reloading groovy file from " + url.getAbsolutePath());
+                        
+                        // Reload file and update cache
+                        final Class clazz = loadGroovyFile(classname, url);
+                        log.debug("Groovy file contained definition for class: " + clazz.getName());
+                    }
+                    catch (Exception e)
+                    {
+                        log.error("Unable to load groovyy file: " + url.getAbsolutePath(), e);
+                    }                
+                }
+            });
+        }
+
+        log.info("Loading groovy file from " + url.getAbsolutePath());
+        return loadGroovyFile(classname, url);
+    }
+
