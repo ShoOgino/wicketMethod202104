@@ -1,0 +1,24 @@
+	/**
+	 * Returns a formatted validation error message for a given component. The error
+	 * message is retrieved from a message bundle associated with the page in which this
+	 * validator is contained. The resource key must be of the form:
+	 * [form-name].[component-name].[validator-class]. For example, in the SignIn page's
+	 * SignIn.properties file, you might find an entry:
+	 * signInForm.password.RequiredValidator=A password is required Entries can contain
+	 * optional ognl variable interpolations from the component, such as:
+	 * editBook.name.LengthValidator='${input}' is too short a name.
+	 * <p>
+	 * Available variables for interpolation are:
+	 * <ul>
+	 * <li>${input}: the user's input</li>
+	 * <li>${name}: the name of the component</li>
+	 * </ul>
+	 * </p>
+	 * @param input the input (that caused the error)
+	 * @param component The component where the error occurred
+	 */
+	public void error(final String input, final FormComponent component)
+	{
+		error(getResourceKey(component), input, component);
+	}
+

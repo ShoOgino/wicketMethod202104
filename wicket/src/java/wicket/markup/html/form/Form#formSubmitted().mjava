@@ -8,9 +8,12 @@
 		// implementation may wish to redirect somewhere else. In that case,
 		// they can simply call setRedirect(false) in handleSubmit.
 		getRequestCycle().setRedirect(true);
+        
+        // Clear all feedback messages
+        getSession().getFeedbackMessages().clear();
 
 		// Validate model using validation delegate
-		final FeedbackMessages messages = validationDelegate.validate(this);
+		validationDelegate.validate(this);
 
 		// Update model using form data
 		updateFormComponentModels();
@@ -18,11 +21,11 @@
 		// Persist FormComponents if requested
 		persistFormComponentData();
 
-		// If validation or update caused error messages to appear
-		if (messages.hasErrorMessages())
+		// If validation or update caused error message(s) to appear
+		if (hasError())
 		{
 			// handle those errors
-			handleErrors(messages.getErrorMessages());
+			handleErrors();
 		}
 		else
 		{

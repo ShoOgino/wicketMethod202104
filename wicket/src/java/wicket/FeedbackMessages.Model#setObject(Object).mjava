@@ -1,0 +1,29 @@
+		/**
+		 * Sets the messages; the object should either be of type
+		 * {@link java.util.List}or an array of {@link FeedbackMessage}s.
+		 * 
+		 * @see wicket.model.IModel#setObject(java.lang.Object)
+		 */
+		public void setObject(Object object)
+		{
+			if (object instanceof List)
+			{
+				setMessages((List)object);
+			}
+			else if (object instanceof FeedbackMessage[])
+			{
+				if (object != null)
+				{
+					setMessages(Arrays.asList((FeedbackMessage[])object));
+				}
+				else
+				{
+					setMessages(null);
+				}
+			}
+			else
+			{
+				throw new WicketRuntimeException("Invalid model type for FeedbackMessages");
+			}
+		}
+
