@@ -1,6 +1,6 @@
     /**
-     * Look up and return any registered {@link Converter}for the specified destination
-     * class and locale. If there is no registered Converter, return an instance of
+     * Look up and return any registered {@link IConverter}for the specified destination
+     * class and locale. If there is no registered IConverter, return an instance of
      * NoopConverter if returnNoopConverterWhenNotFound == true or else <code>null</code>.
      * Precedence: if a locale is given the first search is for a converter that was
      * registered for the given type and locale. If it is not found, the second search is
@@ -10,24 +10,24 @@
      * registered for the given type and locale (and thus will be found at the first
      * search next time). If it is not found, the search is the same as when no locale was
      * given (locale == null): the 'normal', not localized registry will be searched for
-     * an entry with the given type. If still no Converter is found after this, and
+     * an entry with the given type. If still no IConverter is found after this, and
      * returnNoopConverterWhenNotFound is true an instance of NoopConverter is returned,
      * so that clients allways get a valid converter. If returnNoopConverterWhenNotFound
      * is false, null will be returned.
-     * @param clazz Class for which to return a registered Converter
+     * @param clazz Class for which to return a registered IConverter
      * @param locale The Locale
-     * @return Converter converter
+     * @return IConverter converter
      * @throws NoSuchMethodException
      * @throws IllegalArgumentException
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public Converter lookup(Class clazz, Locale locale) throws NoSuchMethodException,
+    public IConverter lookup(Class clazz, Locale locale) throws NoSuchMethodException,
             IllegalArgumentException, InstantiationException, IllegalAccessException,
             InvocationTargetException
     {
-        Converter converter = null;
+        IConverter converter = null;
 
         if (locale != null)
         {
@@ -72,7 +72,7 @@
         // else // get without locale right away
         if (converter == null) // (still) not found, try generic non-localized registration
         {
-            converter = (Converter) converters.get(clazz);
+            converter = (IConverter) converters.get(clazz);
         }
 
         if ((converter == null) && useNoopConverter) // STILL not found; return no-op

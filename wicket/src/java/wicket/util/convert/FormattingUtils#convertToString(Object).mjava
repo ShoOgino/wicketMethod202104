@@ -1,7 +1,7 @@
     /**
      * Convert the specified value into a String. If the specified value is an array, the
      * first element (converted to a String) will be returned. The registered
-     * {@link Converter}for the <code>java.lang.String</code> class will be used, which
+     * {@link IConverter}for the <code>java.lang.String</code> class will be used, which
      * allows applications to customize Object->String conversions (the default
      * implementation simply uses toString()).
      * @param value Value to be converted (may be null)
@@ -30,7 +30,7 @@
             {
                 try
                 {
-                    Converter converter = this.converterRegistry.lookup(String.class);
+                    IConverter converter = this.converterRegistry.lookup(String.class);
                     Object converted = converter.convert(value);
 
                     return (converted instanceof String) ? (String) converted : String
@@ -47,7 +47,7 @@
         {
             try
             {
-                Converter converter = this.converterRegistry.lookup(String.class);
+                IConverter converter = this.converterRegistry.lookup(String.class);
                 Object converted = converter.convert(value);
 
                 return (converted instanceof String) ? (String) converted : String
