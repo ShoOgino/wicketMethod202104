@@ -1,20 +1,20 @@
 	/**
-	 * @see wicket.IPageVersionManager#getVersion(int)
+	 * @see wicket.IPageRevisionManager#getRevision(int)
 	 */
-	public Page getVersion(int versionNumber)
+	public Page getRevision(int versionNumber)
 	{
 		// Get version for version number
-		final Version version = (Version)versions.get(new Integer(versionNumber));
+		final Revision version = (Revision)versions.get(new Integer(versionNumber));
 
 		// Found it?
 		if (version != null)
 		{
 			// Undo each version from last to first up to our version number
-			while (getVersion() > versionNumber)
+			while (getNewestRevisionNumber() > versionNumber)
 			{
 				nextVersionNumber--;
 				final Integer key = new Integer(nextVersionNumber);
-				final Version versionToUndo = (Version)versions.get(key);
+				final Revision versionToUndo = (Revision)versions.get(key);
 				versionToUndo.undo();
 				versions.remove(key);
 			}
