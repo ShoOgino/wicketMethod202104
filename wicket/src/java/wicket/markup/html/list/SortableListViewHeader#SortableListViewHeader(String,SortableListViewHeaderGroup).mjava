@@ -1,9 +1,13 @@
 	/**
 	 * Construct.
-	 * @param componentName The component name
-	 * @param group The group of headers the new one will be added to
+	 * 
+	 * @param componentName
+	 *            The component name
+	 * @param group
+	 *            The group of headers the new one will be added to
 	 */
-	public SortableListViewHeader(final String componentName, final SortableListViewHeaderGroup group)
+	public SortableListViewHeader(final String componentName,
+			final SortableListViewHeaderGroup group)
 	{
 		super(componentName);
 
@@ -12,15 +16,20 @@
 		this.group = group;
 
 		// If user clicks on the header, sorting will reverse
-		final SortableListViewHeader me = this;
 		add(new Link("actionLink")
 		{
 			public void onLinkClicked()
 			{
-				// call SortableTableHeaders implementation
-				me.linkClicked();
+				// change sorting order: ascending <-> descending
+				ascending = !ascending;
 
-				// Redirect back to result to avoid refresh updating the link count
+				// Tell the header group that something has changed
+				group.setSortedColumn(getName());
+
+				// sort the list view's model data accordingly
+				sort();
+
+				// Redirect back to result
 				getRequestCycle().setRedirect(true);
 			}
 		});
