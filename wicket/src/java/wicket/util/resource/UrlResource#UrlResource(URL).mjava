@@ -8,7 +8,8 @@
 	{
 		try
 		{
-			// Get file from URL (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4701321)
+			// Get file from URL (see
+			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4701321)
 			final File file = new File(new URI(url.toExternalForm()));
 
 			// If file exists
@@ -23,7 +24,10 @@
 		}
 		catch (URISyntaxException e)
 		{
-			throw new IllegalArgumentException("Invalid URL parameter " + url);
+			final IllegalArgumentException illegalArgumentException = new IllegalArgumentException(
+					"Invalid URL parameter " + url);
+			illegalArgumentException.initCause(e);
+			throw illegalArgumentException;
 		}
 	}
 
