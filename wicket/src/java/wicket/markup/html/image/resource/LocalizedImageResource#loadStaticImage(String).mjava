@@ -1,0 +1,24 @@
+	/**
+	 * Tries to load static image at the given path and throws an exception if
+	 * the image cannot be located.
+	 * 
+	 * @param path
+	 *            The path to the image
+	 * @return The loaded image resource
+	 * @throws WicketRuntimeException
+	 *             Thrown if the image cannot be located
+	 */
+	private ImageResource loadStaticImage(final String path)
+	{
+		final Package basePackage = component.findParentWithAssociatedMarkup().getClass()
+				.getPackage();
+		final ImageResource resource = StaticImageResource.get(basePackage, path, component
+				.getLocale(), component.getStyle());
+		if (resource == null)
+		{
+			throw new WicketRuntimeException("Could not load static image resource using path '"
+					+ path + "'");
+		}
+		return resource;
+	}
+

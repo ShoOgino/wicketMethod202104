@@ -4,6 +4,13 @@
 	 */
 	public final Object getModelLock()
 	{
-		return model != null ? model : new Object();
+		// Use model object as lock
+		final IModel model = getModel();
+		if (model == null)
+		{
+			// If no model object, then provide no synchronization
+			return new Object();
+		}
+		return model;
 	}
 

@@ -9,6 +9,15 @@
 		final IModel model = getModel();
 		if (model != null)
 		{
+			// If this component has the root model for a compound model
+			if (getFlag(FLAG_HAS_ROOT_MODEL))
+			{
+				// we need to return the root model and not a property of the
+				// model
+				return getRootModel(model);
+			}
+
+			// Get model value for this component
 			return model.getObject(this);
 		}
 		else

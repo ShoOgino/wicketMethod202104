@@ -8,11 +8,18 @@
 	 */
 	protected IModel initModel()
 	{
-		final IModel model = getPage().getModel();
-		if (model != null)
+		// Search parents for CompoundPropertyModel
+		for (Component current = getParent(); current != null; current = current.getParent())
 		{
-			return model;
+			// Get model
+			final IModel model = current.getModel();
+			if (model instanceof CompoundPropertyModel)
+			{
+				return model;
+			}
 		}
+		
+		// No model for this component!
 		return null;
 	}
 
