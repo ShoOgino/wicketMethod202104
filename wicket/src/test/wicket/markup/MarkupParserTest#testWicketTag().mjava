@@ -7,7 +7,7 @@
     public final void testWicketTag() throws ParseException,
     	ResourceNotFoundException, IOException
    	{
-	    final MarkupParser parser = new MarkupParser("wicket", "wicket");
+	    final MarkupParser parser = new MarkupParser(new XmlPullParser(), "wicket", "wicket");
 	    
 	    parser.parse("<span wicket=\"test\"/>");
 
@@ -32,7 +32,7 @@
 	        parser.parse("<span id=\"wicket-test\"/>whatever<wicket:param key=\"value\" />");
 	        assertTrue("Should have thrown an exception", false);
 	    }
-	    catch (ParseException ex)
+	    catch (MarkupException ex)
 	    {
 	        ; // ignore
 	    }
@@ -43,7 +43,7 @@
 	    
 	    parser.parse("<span id=\"wicket-test\"/> \n\r   <wicket:param key=\"value\" />\n\r\t   <wicket:param key2=\"value2\" />");
 	    
-	    //parser.parse("<span id=\"wicket-test\"/><wicket:param name=myParam>value</wicket>");
+	    //parser.parse("<span id=\"wicket-test\"/><wicket:param name=myParam>value</wicket>", null);
 	    
 	    parser.parse("<wicket:body/>");
 	    
@@ -75,7 +75,6 @@
 	        ; // ignore
 	    }
 	    
-
 	    parser.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\"/>");
 	    
 	    parser.parse("<wicket:panel><div id=\"definitionsContentBox\"><span id=\"wicket-contentPanel\"/></div></wicket:panel>");

@@ -1,0 +1,17 @@
+    /**
+     * Construct.
+     * @param parent The next MarkupFilter in the chain 
+     */
+    public WicketParamTagHandler(final IMarkupFilter parent)
+    {
+        this.parent = parent;
+        
+        // Find the XML parser at the end of the chain
+        IMarkupFilter parser = parent.getParent();
+        while (parser.getParent() != null)
+        {
+            parser = parser.getParent();
+        }
+        this.xmlParser = (IXmlPullParser)parser;
+    }
+
