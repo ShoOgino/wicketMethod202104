@@ -1,36 +1,41 @@
-    /**
-     * Start watching at a given polling rate
-     * @param pollFrequency The poll rate
-     */
-    public void start(final Duration pollFrequency)
-    {
-        // Construct task with the given polling frequency
-        final Task task = new Task("ModificationWatcher");
+	/**
+	 * Start watching at a given polling rate
+	 * 
+	 * @param pollFrequency
+	 *            The poll rate
+	 */
+	public void start(final Duration pollFrequency)
+	{
+		// Construct task with the given polling frequency
+		final Task task = new Task("ModificationWatcher");
 
-        task.run(pollFrequency, new ICode()
-        {
-            public void run(final Log log)
-            {
-                for (final Iterator iterator = modifiableToEntry.values().iterator(); 
-                     iterator.hasNext();)
-                {
-                    // Get next entry
-                    final Entry entry = (Entry) iterator.next();
+		task.run(pollFrequency, new ICode()
+		{
+			public void run(final Log log)
+			{
+				// Iterate over a copy of the list of entries to avoid concurrent
+				// modification problems without the associated liveness issues
+				// of holding a lock while potentially polling file times!
+				for (final Iterator iterator = new ArrayList(modifiableToEntry.values()).iterator(); iterator
+						.hasNext();)
+				{
+					// Get next entry
+					final Entry entry = (Entry)iterator.next();
 
-                    // If the modifiable has been modified after the last known
-                    // modification time
-                    final Time modifiableLastModified = entry.modifiable.lastModifiedTime();
+					// If the modifiable has been modified after the last known
+					// modification time
+					final Time modifiableLastModified = entry.modifiable.lastModifiedTime();
 
-                    if (modifiableLastModified.after(entry.lastModifiedTime))
-                    {
-                        // Notify all listeners that the modifiable was modified
-                        entry.listeners.notifyListeners();
+					if (modifiableLastModified.after(entry.lastModifiedTime))
+					{
+						// Notify all listeners that the modifiable was modified
+						entry.listeners.notifyListeners();
 
-                        // Update timestamp
-                        entry.lastModifiedTime = modifiableLastModified;
-                    }
-                }
-            }
-        });
-    }
+						// Update timestamp
+						entry.lastModifiedTime = modifiableLastModified;
+					}
+				}
+			}
+		});
+	}
 

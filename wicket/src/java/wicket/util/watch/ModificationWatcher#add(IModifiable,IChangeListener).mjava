@@ -1,39 +1,42 @@
-    /**
-     * Adds a Modifiable object and an IChangeListener to call when the modifiable
-     * object is modified.
-     * @param modifiable The modifiable thing to monitor
-     * @param listener The listener to call if the modifiable is modified
-     */
-    public final void add(final IModifiable modifiable, final IChangeListener listener)
-    {
-        // Look up entry for modifiable
-        final Entry entry = (Entry)modifiableToEntry.get(modifiable);
+	/**
+	 * Adds a Modifiable object and an IChangeListener to call when the
+	 * modifiable object is modified.
+	 * 
+	 * @param modifiable
+	 *            The modifiable thing to monitor
+	 * @param listener
+	 *            The listener to call if the modifiable is modified
+	 */
+	public final void add(final IModifiable modifiable, final IChangeListener listener)
+	{
+		// Look up entry for modifiable
+		final Entry entry = (Entry)modifiableToEntry.get(modifiable);
 
-        // Found it?
-        if (entry == null)
-        {
-            if (modifiable.lastModifiedTime() != null)
-            {
-                // Construct new entry
-                final Entry newEntry = new Entry();
+		// Found it?
+		if (entry == null)
+		{
+			if (modifiable.lastModifiedTime() != null)
+			{
+				// Construct new entry
+				final Entry newEntry = new Entry();
 
-                newEntry.modifiable = modifiable;
-                newEntry.lastModifiedTime = modifiable.lastModifiedTime();
-                newEntry.listeners.add(listener);
+				newEntry.modifiable = modifiable;
+				newEntry.lastModifiedTime = modifiable.lastModifiedTime();
+				newEntry.listeners.add(listener);
 
-                // Put in map
-                modifiableToEntry.put(modifiable, newEntry);
-            }
-            else
-            {
-                // The IModifiable is not returning a valid lastModifiedTime
-                log.info("Cannot track modifications to resource " + modifiable);
-            }
-        }
-        else
-        {
-            // Add listener to existing entry
-            entry.listeners.add(listener);
-        }
-    }
+				// Put in map
+				modifiableToEntry.put(modifiable, newEntry);
+			}
+			else
+			{
+				// The IModifiable is not returning a valid lastModifiedTime
+				log.info("Cannot track modifications to resource " + modifiable);
+			}
+		}
+		else
+		{
+			// Add listener to existing entry
+			entry.listeners.add(listener);
+		}
+	}
 
