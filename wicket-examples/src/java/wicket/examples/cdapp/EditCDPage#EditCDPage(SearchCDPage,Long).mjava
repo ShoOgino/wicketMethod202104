@@ -1,16 +1,11 @@
 	/**
-	 * Constructor for new CD.
-	 * 
-	 * @param parameters Page parameters
+	 * Constructor.
+	 * @param searchCDPage the search page to navigate back to
+	 * @param id the id of the cd to edit
 	 */
-	public EditCDPage(final PageParameters parameters)
+	public EditCDPage(final SearchCDPage searchCDPage, Long id)
 	{
-		Long id = null;
-		String idFromRequest = parameters.getString("id");
-		if (idFromRequest != null)
-		{
-			id = Long.valueOf(idFromRequest);
-		}
+		this.searchCDPage = searchCDPage;
 		cdModel = new HibernateObjectModel(id, CD.class, new HibernateHelperSessionDelegate());
 		add(new Label("cdTitle", new TitleModel(cdModel)));
 		FeedbackPanel feedback = new FeedbackPanel("feedback");
