@@ -1,37 +1,40 @@
-    /**
-     * Constructor.
-     * @param keyValuePairs List of key value pairs separated by a given
-     * delimiter. For example, "param1=foo,param2=bar" where delimiter is ",".
-     * @param delimiter Delimiter string used to separate key/value pairs
-     */
-    public ValueMap(final String keyValuePairs, final String delimiter)
-    {
-        // Create empty map
-        this.map = new HashMap();
+	/**
+	 * Constructor.
+	 * 
+	 * @param keyValuePairs
+	 *            List of key value pairs separated by a given delimiter. For
+	 *            example, "param1=foo,param2=bar" where delimiter is ",".
+	 * @param delimiter
+	 *            Delimiter string used to separate key/value pairs
+	 */
+	public ValueMap(final String keyValuePairs, final String delimiter)
+	{
+		// Create empty map
+		this.map = new HashMap();
 
-        // Get list of strings separated by the delimiter
-        final StringList pairs = StringList.tokenize(keyValuePairs, delimiter);
+		// Get list of strings separated by the delimiter
+		final StringList pairs = StringList.tokenize(keyValuePairs, delimiter);
 
-        // Go through each string in the list
-        for (IStringIterator iterator = pairs.iterator(); iterator.hasNext();)
-        {
-            // Get the next key value pair
-            final String pair = iterator.next();
-            
-            // Parse using metapattern parser for variable assignments
-            final VariableAssignmentParser parser = new VariableAssignmentParser(pair);
+		// Go through each string in the list
+		for (IStringIterator iterator = pairs.iterator(); iterator.hasNext();)
+		{
+			// Get the next key value pair
+			final String pair = iterator.next();
 
-            // Does it parse?
-            if (parser.matches())
-            {
-                // Succeeded.  Put key and value into map
-                put(parser.getKey(), parser.getValue());
-            }
-            else
-            {
-                throw new IllegalArgumentException
-                    ("Invalid key value list: '" + keyValuePairs + "'");
-            }
-        }
-    }
+			// Parse using metapattern parser for variable assignments
+			final VariableAssignmentParser parser = new VariableAssignmentParser(pair);
+
+			// Does it parse?
+			if (parser.matches())
+			{
+				// Succeeded. Put key and value into map
+				put(parser.getKey(), parser.getValue());
+			}
+			else
+			{
+				throw new IllegalArgumentException("Invalid key value list: '" + keyValuePairs
+						+ "'");
+			}
+		}
+	}
 

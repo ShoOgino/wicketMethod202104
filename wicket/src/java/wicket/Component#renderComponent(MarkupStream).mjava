@@ -1,8 +1,8 @@
 	/**
 	 * Renders the component at the current position in the given markup stream.
-	 * The method handleComponentTag() is called to allow the component to
-	 * mutate the start tag. The method handleComponentTagBody() is then called
-	 * to permit the component to render its body.
+	 * The method onComponentTag() is called to allow the component to mutate
+	 * the start tag. The method onComponentTagBody() is then called to permit
+	 * the component to render its body.
 	 * 
 	 * @param markupStream
 	 *            The markup stream
@@ -13,7 +13,7 @@
 		final ComponentTag tag = markupStream.getTag().mutable();
 
 		// Call any tag handler
-		handleComponentTag(tag);
+		onComponentTag(tag);
 
 		// If we're an openclose tag
 		final XmlTag.Type type = tag.getType();
@@ -38,10 +38,10 @@
 		renderComponentTag(tag);
 		markupStream.next();
 
-		// Render body using original tag type so implementors
-		// of handleBody will know if the tag has a body or not
+		// Render body using original tag type so implementors of
+		// onComponentTagBody will know if the tag has a body or not
 		tag.setType(type);
-		handleComponentTagBody(markupStream, tag);
+		onComponentTagBody(markupStream, tag);
 
 		// Render close tag
 		renderClosingComponentTag(markupStream, tag);

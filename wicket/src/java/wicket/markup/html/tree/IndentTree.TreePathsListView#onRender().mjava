@@ -1,0 +1,56 @@
+		/**
+		 * Renders the tree paths.
+		 */
+		protected void onRender()
+		{
+			TreeState treeState = getTreeState();
+			// Ask parents for markup stream to use
+			final MarkupStream markupStream = findMarkupStream();
+			// Save position in markup stream
+			final int markupStart = markupStream.getCurrentIndex();
+			// Get number of listItems to be displayed
+			int size = getViewSize();
+			if (size > 0)
+			{
+				// Loop through the markup in this container for each child
+				// container
+				for (int i = 0; i < size; i++)
+				{
+					// Get the name of the component for listItem i
+					final String componentName = Integer.toString(i);
+
+					// If this component does not already exist, populate it
+					ListItem listItem = (ListItem)get(componentName);
+					if (listItem == null)
+					{
+						// Create listItem for index i of the list
+						listItem = newItem(i);
+						populateItem(listItem);
+
+						// Add cell to list view
+						add(listItem);
+					}
+
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode)listItem.getModelObject();
+					TreePath path = new TreePath(node.getPath());
+					int row = treeState.getRowForPath(path);
+					if(row != -1)
+					{
+						listItem.setVisible(true);
+					}
+					else
+					{
+						listItem.setVisible(false);
+					}
+					// Rewind to start of markup for kids
+					markupStream.setCurrentIndex(markupStart);
+					// Render cell
+					renderItem(listItem, i >= (size - 1));
+				}
+			}
+			else
+			{
+				markupStream.skipComponent();
+			}
+		}
+

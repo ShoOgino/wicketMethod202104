@@ -1,0 +1,17 @@
+	private void onStalePage()
+	{
+		// Page was marked stale because the data model for some
+		// component on the page is stale. Find the most recent
+		// fresh page and send the user there.
+		final Page freshestPage = session.getFreshestPage();
+
+		if (freshestPage != null)
+		{
+			setPage(newPage(application.getPages().getStaleDataErrorPage(), freshestPage));
+		}
+		else
+		{
+			setPage(newPage(application.getPages().getHomePage()));
+		}
+	}
+

@@ -1,21 +1,25 @@
-    /**
-     * Gets a Time instance based on the given calendar and {@link TimeOfDay} objects.
-     * @param calendar The calendar to use
-     * @param timeOfDay The time of day
-     * @return A time value for the time of day today
-     */
-    public static Time valueOf(final Calendar calendar, final TimeOfDay timeOfDay)
-    {
-        synchronized (calendar)
-        {
-            // Set time to midnight today
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
+	/**
+	 * Gets a Time instance based on the given calendar and {@link TimeOfDay}
+	 * objects.
+	 * 
+	 * @param calendar
+	 *            The calendar to use
+	 * @param timeOfDay
+	 *            The time of day
+	 * @return A time value for the time of day today
+	 */
+	public static Time valueOf(final Calendar calendar, final TimeOfDay timeOfDay)
+	{
+		synchronized (calendar)
+		{
+			// Set time to midnight today
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(Calendar.HOUR, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
 
-            // Add time of day milliseconds to midnight
-            return valueOf(calendar.getTimeInMillis() + timeOfDay.getMilliseconds());
-        }
-    }
+			// Add time of day milliseconds to midnight
+			return valueOf(calendar.getTimeInMillis() + timeOfDay.getMilliseconds());
+		}
+	}
 

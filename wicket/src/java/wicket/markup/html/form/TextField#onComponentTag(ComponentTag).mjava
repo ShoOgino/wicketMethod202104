@@ -1,0 +1,34 @@
+	/**
+	 * Processes the component tag.
+	 * 
+	 * @param tag
+	 *            Tag to modify
+	 * @see wicket.Component#onComponentTag(ComponentTag)
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+        // Must be attached to an input tag
+		checkComponentTag(tag, "input");
+        
+        // If this is not a subclass (PasswordTextField)
+        if (getClass() == TextField.class)
+        {
+            // check for text type
+    		checkComponentTagAttribute(tag, "type", "text");
+        }
+        
+        // Default handling for component tag
+		super.onComponentTag(tag);
+        
+		if (getInvalidInput() == null)
+		{
+			// No validation errors
+			tag.put("value", getModelObjectAsString());
+		}
+		else
+		{
+			// Invalid input detected
+			tag.put("value", getInvalidInput());
+		}
+	}
+

@@ -1,0 +1,48 @@
+	/**
+	 * @see wicket.Component#onComponentTagBody(MarkupStream, ComponentTag)
+	 */
+	protected final void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
+	{
+		// Buffer to hold generated body
+		final StringBuffer options = new StringBuffer();
+
+		// Get the parent RadioChoice
+		final RadioChoice parent = (RadioChoice)findParent(RadioChoice.class);
+
+		// Get currently seleced value of radio choice
+		final Object selected = parent.getModelObject();
+
+		// Iterate through values
+		List values = (List)getModelObject();
+
+		for (final Iterator iterator = values.iterator(); iterator.hasNext();)
+		{
+			// Get next value
+			final Object value = iterator.next();
+
+			// Add choice to parent
+			final int index = parent.addRadioOption(value);
+
+			options.append("<input name=\"" + parent.getPath() + "\"" + " type=\"radio\""
+					+ ((selected == value) ? " checked" : "") + " value=\"" + index + "\">");
+
+			// Add label for radio button
+			// TODO support custom labels in future
+			final String label = String.valueOf(value.toString());
+
+			options.append(getLocalizer().getString(getName() + "." + label, this, label));
+
+			// Append separator
+			if (iterator.hasNext())
+			{
+				options.append(style.toString());
+			}
+
+			// For HTML readability
+			options.append('\n');
+		}
+
+		// Replace body
+		replaceComponentTagBody(markupStream, openTag, options.toString());
+	}
+

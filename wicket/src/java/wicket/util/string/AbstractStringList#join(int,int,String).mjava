@@ -1,29 +1,33 @@
-    /**
-     * Joins this sequence of strings from first index to last using a separator
-     * @param first The first index to use, inclusive
-     * @param last The last index to use, exclusive
-     * @param separator The separator to use
-     * @return The joined String
-     */
-    public final String join(final int first, final int last, final String separator)
-    {
-        // Allocate buffer of exactly the right length
-        final int length = totalLength() + (separator.length() * (Math.max(0, last - first - 1)));
-        final StringBuffer buf = new StringBuffer(length);
+	/**
+	 * Joins this sequence of strings from first index to last using a separator
+	 * 
+	 * @param first
+	 *            The first index to use, inclusive
+	 * @param last
+	 *            The last index to use, exclusive
+	 * @param separator
+	 *            The separator to use
+	 * @return The joined String
+	 */
+	public final String join(final int first, final int last, final String separator)
+	{
+		// Allocate buffer of exactly the right length
+		final int length = totalLength() + (separator.length() * (Math.max(0, last - first - 1)));
+		final StringBuffer buf = new StringBuffer(length);
 
-        // Loop through indexes requested
-        for (int i = first; i < last; i++)
-        {
-            // Add next string
-            buf.append(get(i));
+		// Loop through indexes requested
+		for (int i = first; i < last; i++)
+		{
+			// Add next string
+			buf.append(get(i));
 
-            // Add separator?
-            if (i != (last - 1))
-            {
-                buf.append(separator);
-            }
-        }
+			// Add separator?
+			if (i != (last - 1))
+			{
+				buf.append(separator);
+			}
+		}
 
-        return buf.toString();
-    }
+		return buf.toString();
+	}
 

@@ -1,0 +1,24 @@
+    /**
+	 * Processes the component tag.
+	 * @param tag Tag to modify
+     * @see wicket.Component#onComponentTag(ComponentTag)
+     */
+    protected final void onComponentTag(final ComponentTag tag)
+    {
+        // Add simple javascript on click handler that links to this
+        // link's linkClicked method
+        final String url = getURL().replaceAll("&", "&amp;");
+        final PopupSettings popupSettings = getPopupSettings();
+        if (popupSettings != null)
+        {
+        	popupSettings.setTarget("'" + url + "'");
+            String popupScript = popupSettings.getPopupJavaScript();
+            popupScript = popupScript.replaceAll("&", "&amp;");
+            tag.put("onclick", popupScript);
+        }
+        else
+        {
+        	tag.put("onclick", "location.href='" + url + "';");
+        }
+    }
+

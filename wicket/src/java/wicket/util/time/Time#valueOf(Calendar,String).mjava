@@ -1,20 +1,23 @@
-    /**
-     * Gets time by parsing yyyy.MM.dd-h.mma format.
-     * @param calendar The calendar to use when parsing the string
-     * @param string The string
-     * @return An immutable UNIX time value
-     * @throws ParseException
-     */
-    public static Time valueOf(final Calendar calendar, final String string) throws ParseException
-    {
-        synchronized (dateTimeFormat)
-        {
-            synchronized (calendar)
-            {
-                dateTimeFormat.setCalendar(calendar);
+	/**
+	 * Gets time by parsing yyyy.MM.dd-h.mma format.
+	 * 
+	 * @param calendar
+	 *            The calendar to use when parsing the string
+	 * @param string
+	 *            The string
+	 * @return An immutable UNIX time value
+	 * @throws ParseException
+	 */
+	public static Time valueOf(final Calendar calendar, final String string) throws ParseException
+	{
+		synchronized (dateTimeFormat)
+		{
+			synchronized (calendar)
+			{
+				dateTimeFormat.setCalendar(calendar);
 
-                return valueOf(dateTimeFormat.parse(string));
-            }
-        }
-    }
+				return valueOf(dateTimeFormat.parse(string));
+			}
+		}
+	}
 

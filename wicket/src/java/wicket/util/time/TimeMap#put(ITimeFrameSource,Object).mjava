@@ -1,23 +1,27 @@
-    /**
-     * Associates an object with a dynamic time frame
-     * @param source A source that can produce a timeframe to compare a time value with
-     * @param o The object to be returned for the given dynamic timeframe
-     */
-    public void put(final ITimeFrameSource source, final Object o)
-    {
-        final TimeFrame timeframe = source.getTimeFrame();
+	/**
+	 * Associates an object with a dynamic time frame
+	 * 
+	 * @param source
+	 *            A source that can produce a timeframe to compare a time value
+	 *            with
+	 * @param o
+	 *            The object to be returned for the given dynamic timeframe
+	 */
+	public void put(final ITimeFrameSource source, final Object o)
+	{
+		final TimeFrame timeframe = source.getTimeFrame();
 
-        for (final Iterator iterator = sources.keySet().iterator(); iterator.hasNext();)
-        {
-            final TimeFrame current = ((ITimeFrameSource)iterator.next()).getTimeFrame();
+		for (final Iterator iterator = sources.keySet().iterator(); iterator.hasNext();)
+		{
+			final TimeFrame current = ((ITimeFrameSource)iterator.next()).getTimeFrame();
 
-            if (timeframe.overlaps(current))
-            {
-                throw new IllegalArgumentException
-                    ("Timeframe " + timeframe + " overlaps timeframe " + current);
-            }
-        }
+			if (timeframe.overlaps(current))
+			{
+				throw new IllegalArgumentException("Timeframe " + timeframe
+						+ " overlaps timeframe " + current);
+			}
+		}
 
-        sources.put(source, o);
-    }
+		sources.put(source, o);
+	}
 

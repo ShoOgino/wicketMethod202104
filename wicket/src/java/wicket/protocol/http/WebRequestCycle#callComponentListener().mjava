@@ -25,13 +25,12 @@
 				// Is page stale?
 				if (page.isStale())
 				{
-					handleStalePage();
+					onStalePage();
 					return true;
 				}
-				else if (page.isRenderingStale(Integer.parseInt(request
-						.getParameter("rendering"))))
+				else if (page.isRenderingStale(Integer.parseInt(request.getParameter("rendering"))))
 				{
-					handleStaleRendering(page);
+					onStaleRendering(page);
 					return true;
 				}
 				else
@@ -42,7 +41,7 @@
 			}
 			else
 			{
-				handleExpiredPage();
+				onExpiredPage();
 				return true;
 			}
 		}
@@ -52,7 +51,7 @@
 			final String pathInfo = ((WebRequest)request).getHttpServletRequest().getPathInfo();
 			if (pathInfo != null)
 			{
-				//  Ask application to resolve shared component
+				// Ask application to resolve shared component
 				Component component = ((WebApplication)application).resolve(pathInfo.substring(1));
 				if (component != null)
 				{

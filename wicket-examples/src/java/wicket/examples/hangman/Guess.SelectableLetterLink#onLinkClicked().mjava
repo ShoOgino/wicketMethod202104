@@ -1,0 +1,22 @@
+        /**
+         * Handle clicking of this link. Redirects the request cycle based
+         * on the current state of the game.
+         */
+        public void onLinkClicked() {
+            final RequestCycle requestCycle = getRequestCycle();
+            System.err.println("Linked clicked for letter: " + letter);
+            setEnabled(false);
+            Guess guessPage = (Guess)requestCycle.getPage();
+            Hangman hangman = (Hangman)guessPage.getModelObject();
+            hangman.guessLetter(letter);
+            if ( hangman.isGuessed() ) {
+                // Redirect to win page
+                requestCycle.setPage(new Win(guessPage));
+            }
+            else if ( hangman.isAllGuessesUsed() ) {
+                // Redirect to loose page
+                requestCycle.setPage(new Lose(guessPage));
+            }
+            // else return to guess page with new state to display
+        }
+

@@ -1,0 +1,23 @@
+    /**
+     * @see wicket.MarkupContainer#onRender()
+     */
+    protected void onRender()
+    {
+        final Session session = getSession();
+
+        // Keep the current locale
+        Locale userLocale = session.getLocale();
+        
+        // Replace the locale for rendering
+        session.setLocale(currentLocale);
+        try
+        {
+            super.onRender();
+        }
+        finally
+        {
+            // set the user's locale back again
+            session.setLocale(userLocale);
+        }
+    }
+

@@ -1,0 +1,11 @@
+    /**
+     * @see wicket.Component#onComponentTag(ComponentTag)
+     */
+    protected void onComponentTag(final ComponentTag tag)
+    {
+        checkComponentTag(tag, "img");
+        super.onComponentTag(tag);
+        final String url = getRequestCycle().urlFor(this, IResourceListener.class);
+		tag.put("src", url.replaceAll("&", "&amp;"));
+    }
+

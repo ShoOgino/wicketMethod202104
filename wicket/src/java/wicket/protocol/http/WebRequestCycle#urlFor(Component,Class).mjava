@@ -21,12 +21,11 @@
 
 		// Buffer for composing URL
 		final StringBuffer buffer = urlPrefix();
-		
+
 		// Compose URL differently depending on component sharing
 		switch (component.getSharing())
 		{
-			case Component.UNSHARED : 
-			{
+			case Component.UNSHARED : {
 				buffer.append("?component=");
 				buffer.append(component.getPath());
 				buffer.append("&rendering=");
@@ -36,22 +35,19 @@
 				return response.encodeURL(buffer.toString());
 			}
 
-			case Component.SESSION_SHARED : 
-			{
+			case Component.SESSION_SHARED : {
 				buffer.append('/');
 				buffer.append(((WebSession)session).reference(component));
 				return response.encodeURL(buffer.toString());
 			}
 
-			case Component.APPLICATION_SHARED : 
-			{
+			case Component.APPLICATION_SHARED : {
 				buffer.append('/');
 				buffer.append(((WebApplication)application).reference(component));
 				return buffer.toString();
 			}
-			
-			default:
-			{
+
+			default : {
 				throw new WicketRuntimeException("Illegal component sharing type");
 			}
 		}
