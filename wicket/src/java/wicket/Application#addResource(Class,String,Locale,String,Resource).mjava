@@ -1,14 +1,14 @@
 	/**
 	 * @param scope
-	 *			  Scope of resource
+	 *            Scope of resource
 	 * @param name
-	 *			  Logical name of resource
+	 *            Logical name of resource
 	 * @param locale
-	 *			  The locale of the resource
+	 *            The locale of the resource
 	 * @param style
-	 *			  The resource style
+	 *            The resource style
 	 * @param resource
-	 *			  Resource to store
+	 *            Resource to store
 	 */
 	public void addResource(final Class scope, final String name, final Locale locale,
 			final String style, final Resource resource)
@@ -16,13 +16,14 @@
 		final String key = scope.getName() + "_" + name
 				+ (locale == null ? "" : "_" + locale.toString())
 				+ (style == null ? "" : "_" + style);
-		
+
 		// Check type
 		if (resource instanceof SharedResource)
 		{
-			throw new WicketRuntimeException("Cannot add a SharedResource.  SharedResource is a reference to a resource, not an actual resource.");
+			throw new WicketRuntimeException(
+					"Cannot add a SharedResource.  SharedResource is a reference to a resource, not an actual resource.");
 		}
-		
+
 		// Save resource
 		resourceMap.put(key, resource);
 	}
