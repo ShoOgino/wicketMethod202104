@@ -1,33 +1,29 @@
     /**
-     * Constructor.
+     * Construct.
      *
-     * @param componentName The name of this component
-     * @param group
+     * @param componentName The component name
+     * @param group The group of headers the new one will be added to 
      */
     public SortableTableHeader(final String componentName,
             final SortableTableHeaderGroup group)
     {
         super(componentName);
 
-        // Default to descending. Next/first linkClick will make it ascending
+        // Default to descending.
         this.ascending = false;
         this.group = group;
 
+        // If user clicks on the header, sorting will reverse
         final SortableTableHeader me = this;
-
-        // Action link to define a linkClicked action
         add(new Link("actionLink")
         {
             public void linkClicked()
             {
-                // Retrieve request cycle
-                final RequestCycle cycle = getRequestCycle();
-                
                 // call SortableTableHeaders implementation
                 me.linkClicked();
 
                 // Redirect back to result to avoid refresh updating the link count
-                cycle.setRedirect(true);
+                getRequestCycle().setRedirect(true);
             }
         });
     }
