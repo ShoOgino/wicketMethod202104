@@ -4,15 +4,16 @@
      * @param session
      *            The session
      */
-    protected final void doAttach(final Session session)
+    protected final void doAttach()
     {
         // Attach the model if necessary
         if (model != null && model instanceof IDetachableModel)
         {
-            ((IDetachableModel) model).attach(session);
+            ((IDetachableModel) model).attach();
         }
 
         // Initialise information that we need to work successfully
+        Session session = RequestCycle.get().getSession();
         ApplicationSettings settings = session.getApplication().getSettings();
         localizer = settings.getLocalizer();
         locale = session.getLocale();
