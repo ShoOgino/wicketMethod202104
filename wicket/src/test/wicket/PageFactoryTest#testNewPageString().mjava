@@ -1,0 +1,64 @@
+    public void testNewPageString()
+    {
+        // MyPage0: no constructor at all
+        assertEquals(MyPage0.class, factory.newPage(MyPage0.class.getName()).getClass());
+
+        // MyPage1 has only a default constructor
+        assertEquals(MyPage1.class, factory.newPage(MyPage1.class.getName()).getClass());
+        
+        // MyPage2: PageParameter parameter constructor only
+        assertEquals(MyPage2.class, factory.newPage(MyPage2.class.getName()).getClass());
+        
+        // MyPage3: Page parameter constructor only
+        Exception e = null;
+        try
+        {
+            factory.newPage(MyPage3.class.getName()).getClass();
+        }
+        catch (RenderException ex)
+        {
+            e = ex;
+        }
+        assertNotNull("MyPage3 should have thrown an exception as it does not have a default or no constructor", e);
+        
+        // MyPage4: Illegal String parameter constructor only
+        e = null;
+        try
+        {
+            factory.newPage(MyPage4.class.getName()).getClass();
+        }
+        catch (RenderException ex)
+        {
+            e = ex;
+        }
+        assertNotNull("MyPage4 should have thrown an exception as it does not have a default or no constructor", e);
+
+        // MyPage5: PageParameter and default constructor 
+        assertEquals(MyPage5.class, factory.newPage(MyPage5.class.getName()).getClass());
+
+        // String: Illegal String parameter constructor only
+        e = null;
+        /*
+        try
+        {
+            factory.newPage(String.class.getName()).getClass();
+        }
+        catch (RenderException ex)
+        {
+            e = ex;
+        }
+        assertNotNull("String does not extend Page. Should habe thrown an exception", e);
+*/
+        // String: Illegal String parameter constructor only
+        e = null;
+        try
+        {
+            factory.newPage("any text");
+        }
+        catch (RenderException ex)
+        {
+            e = ex;
+        }
+        assertNotNull("String does not extend Page. Should habe thrown an exception", e);
+    }
+
