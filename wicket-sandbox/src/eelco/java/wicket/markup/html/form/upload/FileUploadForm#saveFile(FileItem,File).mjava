@@ -1,0 +1,38 @@
+	/**
+	 * Saves the uploaded file to disk using the provided file as the target.
+	 *
+	 * @param item the upload item
+	 * @param file the target file
+	 */
+	protected final void saveFile(final FileItem item, final File file)
+	{
+		File newFile = file;
+		try
+		{
+			// We need to hold this lock because more than one thread could be
+			// uploading to the same file and both threads might run into the
+			// same conflict simultaneously. If both threads were to resolve the
+			// same conflict in the same way, they might end up writing to the
+			// same file, so we serialize conflict resolution so that only one
+			// conflict is resolved at a time.
+			synchronized (conflictResolverLock)
+			{
+				if (newFile.exists())
+				{
+					newFile = fileConflictResolver.resolveConflict(file);
+				}
+
+				// By creating the file while we still hold the
+				// conflictResovlerLock monitor, we ensure that any other
+				// threads waiting to resolve the same conflict will take
+				// a higher conflict resolution number.
+				newFile.createNewFile();
+			}
+			item.write(newFile);
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException("Could not save upload to " + newFile, e);
+		}
+	}
+

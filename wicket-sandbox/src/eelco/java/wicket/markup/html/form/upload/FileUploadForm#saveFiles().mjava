@@ -1,0 +1,23 @@
+	/**
+	 * Loops through all uploaded files and saves each file to the set upload
+	 * folder using the current conflict resolver.
+	 */
+	protected final void saveFiles()
+	{
+		// The submit was valid and some form subclass implementation of
+		// onSubmit() called super.onSubmit()
+		final Map files = ((MultipartWebRequest)getRequest()).getFiles();
+		for (final Iterator iterator = files.values().iterator(); iterator.hasNext();)
+		{
+			final FileItem fileItem = (FileItem)iterator.next();
+			long sizeInBytes = fileItem.getSize();
+
+			// Only process when there's anything uploaded at all
+			if (sizeInBytes > 0)
+			{
+				// Save the upload to disk
+				saveFile(fileItem);
+			}
+		}
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Gets the directory where the uploaded files should be put.
+	 * @return the directory where the uploaded files should be put
+	 */
+	public Folder getUploadFolder()
+	{		
+		// If no upload folder
+		if (uploadFolder == null)
+		{
+			// set a default
+			uploadFolder = new Folder(System.getProperty("java.io.tmpdir"), "wicket-uploads");
+		}
+		
+		// Ensure that folder exists
+		if (!uploadFolder.isDirectory())
+		{
+			if (!uploadFolder.mkdir())
+			{
+				throw new WicketRuntimeException("Unable to create upload folder " + uploadFolder);
+			}
+		}		
+		return uploadFolder;
+	}
+
