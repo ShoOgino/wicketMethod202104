@@ -1,0 +1,14 @@
+        protected void print_context_label(String mark, File inf, String label)
+        {
+            setupOutput();
+            if (label != null)
+                outfile.println(mark + ' ' + label);
+            else if (inf.lastModified() > 0)
+                // FIXME: use DateFormat to get precise format needed.
+                outfile.println(mark + ' ' + inf.getPath() + '\t'
+                        + new Date(inf.lastModified()));
+            else
+                /* Don't pretend that standard input is ancient. */
+                outfile.println(mark + ' ' + inf.getPath());
+        }
+

@@ -1,0 +1,44 @@
+    /**
+     * 
+     * @throws IOException
+     */
+    public void testRemoveLink() throws IOException
+    {
+        // Prepare the mock application to test the Link
+        HttpRequestCycle cycle = createRequestCycle();
+
+        // Create a ListView with a model object which contains 4 items
+        ListView lv = createListView(4);
+        
+        // add the ListView to the page
+        cycle.getPage().add(lv);
+
+        // Create a ListItem for list object at index 1.
+        ListItem li = new ListItem(1, lv);
+        
+        // Create a remove-Link for the listItem and simulate a user
+        // clicking it
+        Link removeLink = li.removeLink("1");
+        removeLink.linkClicked(cycle);
+        assertEquals(new Integer(0), lv.getListObject(0));
+        assertEquals(new Integer(2), lv.getListObject(1));
+        assertEquals(new Integer(3), lv.getListObject(2));
+
+        // Repeat the procedure for "critical" entries
+        li = new ListItem(0, lv);
+        removeLink = li.removeLink("0");
+        removeLink.linkClicked(cycle);
+        assertEquals(new Integer(2), lv.getListObject(0));
+        assertEquals(new Integer(3), lv.getListObject(1));
+
+        li = new ListItem(1, lv);
+        removeLink = li.removeLink("3");
+        removeLink.linkClicked(cycle);
+        assertEquals(new Integer(2), lv.getListObject(0));
+
+        li = new ListItem(0, lv);
+        removeLink = li.removeLink("xxx");
+        removeLink.linkClicked(cycle);
+        assertEquals(0, lv.getList().size());
+    }
+

@@ -1,0 +1,33 @@
+        /**
+         * Discard lines that have no matches in another file.
+         * 
+         * A line which is discarded will not be considered by the actual
+         * comparison algorithm; it will be as if that line were not in the
+         * file. The file's `realindexes' table maps virtual line numbers (which
+         * don't count the discarded lines) into real line numbers; this is how
+         * the actual comparison algorithm produces results that are
+         * comprehensible when the discarded lines are counted.
+         * <p>
+         * When we discard a line, we also mark it as a deletion or insertion so
+         * that it will be printed in the output.
+         * 
+         * @param f
+         *            the other file
+         */
+        void discard_confusing_lines(file_data f)
+        {
+            clear();
+            /* Set up table of which lines are going to be discarded. */
+            final byte[] discarded = discardable(f.equivCount());
+
+            /*
+             * Don't really discard the provisional lines except when they occur
+             * in a run of discardables, with nonprovisionals at the beginning
+             * and end.
+             */
+            filterDiscards(discarded);
+
+            /* Actually discard the lines. */
+            discard(discarded);
+        }
+
