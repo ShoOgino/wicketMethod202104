@@ -1,26 +1,30 @@
-    /**
-     * Loads markup.
-     * @param settings Application settings
-     * @param key Key under which markup should be cached
-     * @param markupResource The markup resource to load
-     * @return The markup
-     * @throws ParseException
-     * @throws IOException
-     * @throws ResourceNotFoundException
-     */
-    private Markup loadMarkup(final ApplicationSettings settings, final String key,
-            final Resource markupResource) throws ParseException, IOException,
-            ResourceNotFoundException
-    {
-        final MarkupParser parser = new MarkupParser(settings.getComponentNameAttribute(), getPage().incrementAutoIndex());
+	/**
+	 * Loads markup.
+	 * 
+	 * @param settings
+	 *           Application settings
+	 * @param key
+	 *           Key under which markup should be cached
+	 * @param markupResource
+	 *           The markup resource to load
+	 * @return The markup
+	 * @throws ParseException
+	 * @throws IOException
+	 * @throws ResourceNotFoundException
+	 */
+	private Markup loadMarkup(final ApplicationSettings settings, final String key,
+			final Resource markupResource) throws ParseException, IOException, ResourceNotFoundException
+	{
+		final MarkupParser parser = new MarkupParser(settings.getComponentNameAttribute(), getPage()
+				.incrementAutoIndex());
 
-        parser.setStripComments(settings.getStripComments());
-        parser.setCompressWhitespace(settings.getCompressWhitespace());
+		parser.setStripComments(settings.getStripComments());
+		parser.setCompressWhitespace(settings.getCompressWhitespace());
 
-        final Markup markup = parser.read(markupResource);
+		final Markup markup = parser.read(markupResource);
 
-        markupCache.put(key, markup);
+		markupCache.put(key, markup);
 
-        return markup;
-    }
+		return markup;
+	}
 
