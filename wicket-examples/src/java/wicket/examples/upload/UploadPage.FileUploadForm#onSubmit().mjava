@@ -3,35 +3,27 @@
 		 */
 		protected void onSubmit()
 		{
-			// get the uploaded file
-			FileItem item = (FileItem)fileModel.getObject(this);
-
-			if(item != null)
+			final FileUpload upload = fileUploadField.getFileUpload();
+			if (upload != null)
 			{
-				// the original file name
-				String fileName = item.getName();
-	
-				// hack a bit to get at least an acceptable file name
-				fileName = afterLast(fileName, ':');
-				fileName = afterLast(fileName, '\\');
-				fileName = afterLast(fileName, '/');
-				log.info("uploaded item: " + fileName);
-	
+				log.info("Uploaded file: " + upload.getFile());
+
 				// create a new file
-				File newFile = new File(uploadFolder, fileName);
-	
+				File newFile = new File(uploadFolder, upload.getFile().getName());
+
 				// check new file, delete if it allready existed
 				checkFileExists(newFile);
 				try
 				{
-					newFile.createNewFile(); // create it
-					item.write(newFile); // write the uploaded file to our new file
+					// Save to new file
+					newFile.createNewFile(); 
+					upload.writeTo(newFile); 
 				}
 				catch (Exception e)
 				{
 					throw new IllegalStateException("Unable to write file");
 				}
-	
+
 				// refresh the file list view
 				refreshFiles();
 			}
