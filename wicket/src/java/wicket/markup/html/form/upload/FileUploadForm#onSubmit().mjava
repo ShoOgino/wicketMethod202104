@@ -1,22 +1,10 @@
 	/**
-	 * This implementation of onSubmit loops through all uploaded files and
-	 * saves the file to the set upload folder using the current conflict resolver.
+	 * Saves each uploaded file by calling saveFiles().
+	 * 
 	 * @see wicket.markup.html.form.upload.UploadForm#onSubmit()
 	 */
 	protected void onSubmit()
 	{
-		// The submit was valid and some form subclass implementation of
-		// onSubmit() called super.onSubmit()
-		final Map files = ((MultipartWebRequest)getRequest()).getFiles();
-		for (final Iterator iterator = files.values().iterator(); iterator.hasNext();)
-		{
-			final FileItem fileItem = (FileItem)iterator.next();
-			long sizeInBytes = fileItem.getSize();
-			if (sizeInBytes > 0) // only process when there's anything uploaded at all
-			{
-				// save the upload to FS
-				saveFile(fileItem, new File(uploadFolder, fileItem.getName()));
-			}
-		}
+		saveFiles();
 	}
 
