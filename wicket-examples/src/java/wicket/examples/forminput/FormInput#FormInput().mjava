@@ -1,0 +1,30 @@
+	/**
+	 * Constructor
+	 */
+	public FormInput()
+	{
+		// Construct form and feedback panel and hook them up
+		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		add(feedback);
+		add(new InputForm("inputForm", feedback));
+
+		// Dropdown for selecting locale
+		add(new DropDownChoice("localeSelect", this, "locale", Arrays.asList(Locale
+				.getAvailableLocales())) 
+		{
+			public void onSelectionChanged(Object newSelection)
+			{
+				setLocale((Locale)newSelection);
+			}
+		});
+
+		// Link to return to default locale
+		add(new Link("defaultLocaleLink")
+		{
+			public void onClick()
+			{
+				setLocale(Locale.getDefault());
+			}
+		});
+	}
+
