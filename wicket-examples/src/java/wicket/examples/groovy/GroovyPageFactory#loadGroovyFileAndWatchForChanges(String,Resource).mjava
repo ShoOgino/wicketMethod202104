@@ -6,7 +6,7 @@
      * @param groovyResource
      * @return
      */
-    private Class loadGroovyFileAndWatchForChanges(final String classname, final URL url)
+    private Class loadGroovyFileAndWatchForChanges(final String classname, final Resource resource)
     {
         final ApplicationSettings settings = getApplication().getSettings();
 
@@ -15,27 +15,27 @@
 
         if (watcher != null)
         {
-            watcher.add(url, new IChangeListener()
+            watcher.add(resource, new IChangeListener()
             {
                 public void changed()
                 {
                     try
                     {
-                        log.info("Reloading groovy file from " + url.getAbsolutePath());
+                        log.info("Reloading groovy file from " + resource);
                         
                         // Reload file and update cache
-                        final Class clazz = loadGroovyFile(classname, url);
+                        final Class clazz = loadGroovyFile(classname, resource);
                         log.debug("Groovy file contained definition for class: " + clazz.getName());
                     }
                     catch (Exception e)
                     {
-                        log.error("Unable to load groovyy file: " + url.getAbsolutePath(), e);
+                        log.error("Unable to load groovyy file: " + resource, e);
                     }                
                 }
             });
         }
 
-        log.info("Loading groovy file from " + url.getAbsolutePath());
-        return loadGroovyFile(classname, url);
+        log.info("Loading groovy file from " + resource);
+        return loadGroovyFile(classname, resource);
     }
 
