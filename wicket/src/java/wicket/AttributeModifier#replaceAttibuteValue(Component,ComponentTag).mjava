@@ -3,15 +3,17 @@
 	 * and if all criteria are met then replace the value of this attribute with
 	 * the value of the contained model object.
 	 * 
+	 * @param component
+	 *            The component
 	 * @param tag
 	 *            The tag to replace the attribute value for
 	 */
-	void replaceAttibuteValue(final ComponentTag tag)
+	final void replaceAttibuteValue(final Component component, final ComponentTag tag)
 	{
 		if (enabled)
 		{
 			final ValueMap attributes = tag.getAttributes();
-			final Object replacementValue = getReplaceModel().getObject(null);
+			final Object replacementValue = replaceModel.getObject(component);
 
 			// Only do something when we have a replacement
 			if (replacementValue != null)
@@ -21,12 +23,12 @@
 					final String value = attributes.get(attribute).toString();
 					if (pattern == null || value.matches(pattern))
 					{
-						attributes.put(attribute, replacementValue);
+						attributes.put(attribute, newValue(value, replacementValue.toString()));
 					}
 				}
 				else if (addAttributeIfNotPresent)
 				{
-					attributes.put(attribute, replacementValue);
+					attributes.put(attribute, newValue(null, replacementValue.toString()));
 				}
 			}
 		}
