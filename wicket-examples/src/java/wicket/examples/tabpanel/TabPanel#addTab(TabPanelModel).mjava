@@ -1,0 +1,29 @@
+	/**
+	 * Adds a new tab to the panel
+	 * 
+	 * @param tab
+	 *           the model to provide all the information and maintain the state
+	 *           of this tab
+	 */
+	public void addTab(final TabPanelModel tab)
+	{
+		tabs.add(tab);
+		
+		if (tab.isSelected())
+		{
+			if (tab.isEnabled())
+			{
+				selectTab(indexOf(tab));
+			}
+			else
+			{
+				tab.setSelected(false);
+			}
+		}
+		
+		if ((selectedTab < 0) && tab.isEnabled())
+		{
+			selectTab(indexOf(tab));
+		}
+	}
+
