@@ -1,45 +1,50 @@
 	/**
 	 * Locate a resource. See class comments for more details.
-	 * @param path The path of the resource without extension
-	 * @param style A theme or style
-	 * @param locale The Locale to apply
-	 * @param extension the filname's extensions
-     * @return The Resource, or null if not found.
+	 * 
+	 * @param path
+	 *            The path of the resource without extension
+	 * @param style
+	 *            A theme or style
+	 * @param locale
+	 *            The Locale to apply
+	 * @param extension
+	 *            the filname's extensions
+	 * @return The Resource, or null if not found.
 	 */
-    public Resource locate(final String path, final String style, 
-    		final Locale locale, final String extension)
-    {
-        // 1. Try style and locale on classpath
-        if (style != null && locale != null)
-        {
-            final Resource resource = locate(path + "_" + style + "_", locale, extension);
-            if (resource != null)
-            {
-                return resource;
-            }
-        }
+	IResource locate(final String path, final String style, final Locale locale,
+			final String extension)
+	{
+		// 1. Try style and locale on classpath
+		if (style != null && locale != null)
+		{
+			final IResource resource = locate(path + "_" + style + "_", locale, extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
 
-        // 2. Try locale only
-        if (locale != null)
-        {
-            final Resource resource = locate(path + "_", locale, extension);
-            if (resource != null)
-            {
-                return resource;
-            }
-        }
+		// 2. Try locale only
+		if (locale != null)
+		{
+			final IResource resource = locate(path + "_", locale, extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
 
-        // 3. Try style only        
-        if (style != null)
-        {
-            final Resource resource = locate(path + "_" + style + extension);
-            if (resource != null)
-            {
-                return resource;
-            }
-        }
+		// 3. Try style only
+		if (style != null)
+		{
+			final IResource resource = locate(path + "_" + style + extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
 
-        // 4. Try without style and without locale
-        return locate(path + extension);
-    }
+		// 4. Try without style and without locale
+		return locate(path + extension);
+	}
 

@@ -7,9 +7,9 @@
         executeMultiple(null);
 
         // Determine source path
-        Resource resource = Resource.locate(null, this.getClass().getClassLoader(),
+        IResource resource = ResourceLocator.locate(null, this.getClass().getClassLoader(),
                 this.getClass().getName(), null, null, "txt");
-        String path = Strings.replaceAll(resource.getFile().getAbsolutePath(), "\\", "/");
+        String path = Strings.replaceAll(((UrlResource)resource).getFile().getAbsolutePath(), "\\", "/");
         path = Strings.beforeLastPathComponent(path, '/') + "/sourcePath";
         
         // and execute

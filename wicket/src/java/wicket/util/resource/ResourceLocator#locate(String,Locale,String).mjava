@@ -1,46 +1,51 @@
-    /**
-     * Locate a file based on its path (potentially with a style), a locale and 
-     * an extension. See class comments for more details on how the locale is used 
-     * and the order applied to find the resource.
-     * @param path Full path to resource including style, but not locale or extension
-     * @param locale The locale to apply
-     * @param extension The resource's extension
-     * @return The Resource, or null if not found.
-     */
-    private Resource locate(final String path, final Locale locale, final String extension)
-    {
-    	// 1. Apply Locale default toString() implementation. See Locale.
-        {
-            final Resource resource = locate(path + locale.toString() + extension);
-            if (resource != null)
-            {
-            	return resource;
-            }
-        }
-        
-        // 2. If country is available
-        if (locale.getCountry() != null && locale.getCountry().length() > 0)
-        {
-            final String localeString = locale.getLanguage() + "_" + locale.getCountry();
-            final Resource resource = locate(path + localeString + extension);
-            if (resource != null)
-            {
-                return resource;
-            }
-        }
+	/**
+	 * Locate a file based on its path (potentially with a style), a locale and
+	 * an extension. See class comments for more details on how the locale is
+	 * used and the order applied to find the resource.
+	 * 
+	 * @param path
+	 *            Full path to resource including style, but not locale or
+	 *            extension
+	 * @param locale
+	 *            The locale to apply
+	 * @param extension
+	 *            The resource's extension
+	 * @return The Resource, or null if not found.
+	 */
+	IResource locate(final String path, final Locale locale, final String extension)
+	{
+		// 1. Apply Locale default toString() implementation. See Locale.
+		{
+			final IResource resource = locate(path + locale.toString() + extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
 
-        // 3. If (at least the) language is available 
-        if (locale.getLanguage() != null && locale.getLanguage().length() > 0)
-        {
-            final String localeString = locale.getLanguage();
-            final Resource resource = locate(path + localeString + extension);
-            if (resource != null)
-            {
-                return resource;
-            }
-        }
+		// 2. If country is available
+		if (locale.getCountry() != null && locale.getCountry().length() > 0)
+		{
+			final String localeString = locale.getLanguage() + "_" + locale.getCountry();
+			final IResource resource = locate(path + localeString + extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
 
-        // Not found
-        return null;
-    }
+		// 3. If (at least the) language is available
+		if (locale.getLanguage() != null && locale.getLanguage().length() > 0)
+		{
+			final String localeString = locale.getLanguage();
+			final IResource resource = locate(path + localeString + extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
+
+		// Not found
+		return null;
+	}
 

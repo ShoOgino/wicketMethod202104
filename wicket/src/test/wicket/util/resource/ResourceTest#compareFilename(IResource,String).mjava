@@ -1,10 +1,10 @@
-    private void compareFilename(Resource resource, String name)
+    private void compareFilename(IResource resource, String name)
     {
         assertNotNull("Did not find resource: " + name, resource);
         
         String filename = Strings.replaceAll(this.getClass().getName(), ".", "/");
         filename += name + ".txt";
-        String resourcePath = Strings.replaceAll(resource.getFile().getAbsolutePath(), "\\", "/");
+        String resourcePath = Strings.replaceAll(((UrlResource)resource).getFile().getAbsolutePath(), "\\", "/");
         if (false == resourcePath.endsWith(filename))
         {
             filename = Strings.afterLast(filename, '/');

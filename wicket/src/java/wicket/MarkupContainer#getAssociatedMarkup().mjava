@@ -15,13 +15,13 @@
 			if (markup == null)
 			{
 				// Locate markup resource, searching up class hierarchy
-				Resource markupResource = null;
+				IResource markupResource = null;
 				Class containerClass = getClass();
 
 				while ((markupResource == null) && (containerClass != MarkupContainer.class))
 				{
 					// Look for markup resource for containerClass
-					markupResource = Resource.locate(getApplicationSettings().getSourcePath(),
+					markupResource = ResourceLocator.locate(getApplicationSettings().getSourcePath(),
 							containerClass, getStyle(), getLocale(), getMarkupType());
 					containerClass = containerClass.getSuperclass();
 				}
