@@ -1,24 +1,26 @@
-    /**
-     * Sets the messages for the current thread.
-     * @param messages the messages to use with the current thread
-     */
-    static void set(FeedbackMessages messages)
-    {
-        if (current.get() != null) // that would be wrong
-        {
-            log.error("messages were allready set for this thread!" +
-            		" Either a former cleanup failed, or the current thread has illegal" +
-            		" access. Trying to release the current messages first.");
-            // try cleaning up
-            threadDetach();
-        }
-        else
-        {
-            if (log.isDebugEnabled())
-            {
-                log.debug(messages + " set for thread " + Thread.currentThread());
-            }
-        }
-        current.set(messages);
-    }
+	/**
+	 * Sets the messages for the current thread.
+	 * 
+	 * @param messages
+	 *            the messages to use with the current thread
+	 */
+	static void set(FeedbackMessages messages)
+	{
+		if (current.get() != null) // that would be wrong
+		{
+			log.error("messages were allready set for this thread!"
+					+ " Either a former cleanup failed, or the current thread has illegal"
+					+ " access. Trying to release the current messages first.");
+			// try cleaning up
+			threadDetach();
+		}
+		else
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug(messages + " set for thread " + Thread.currentThread());
+			}
+		}
+		current.set(messages);
+	}
 
