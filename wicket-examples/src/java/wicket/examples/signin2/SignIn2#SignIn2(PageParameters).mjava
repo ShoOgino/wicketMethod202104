@@ -1,27 +1,17 @@
-    /**
-     * Constructor
-     * @param parameters The page parameters
-     */
-    public SignIn2(final PageParameters parameters)
-    {
-        super(new SignIn2Panel("signInPanel")
-        {
-            public String signIn(String username, String password)
-            {
-                // Sign the user in
-                if (username.equals("jonathan") && password.equals("password"))
-                {
-                    // Successfully signed in.
-                    getSession().setProperty("wicket.examples.signin2.user", "jonathan");
-                    
-                    // Depending on user's choice, remember me or not
-                    this.setPersistent(this.getRememberMe());
-                    return null;
-                }
-
-                // error
-                return "Couldn't sign you in";
-            }
-        });
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param parameters
+	 *            The page parameters
+	 */
+	public SignIn2(final PageParameters parameters)
+	{
+		add(new SignInPanel("signInPanel")
+		{
+			public boolean signIn(String username, String password)
+			{
+				return ((SignIn2Session)getSession()).authenticate(username, password);
+			}
+		});
+	}
 
