@@ -1,21 +1,22 @@
-    /**
-     * Applies the Ognl expression on the model object using the given object
-     * argument (Ognl.setValue).
-     * 
-     * @param object
-     *            the object that will be used when applying Ognl.setValue on
-     *            the model object
-     * @see wicket.model.IModel#setObject(java.lang.Object)
-     */
-    public void setObject(Object object)
-    {
-        try
-        {
-            Ognl.setValue(getExpression(), getContext(), getModel().getObject(), object);
-        }
-        catch (OgnlException e)
-        {
-            throw new WicketRuntimeException(e);
-        }
-    }
+	/**
+	 * Applies the Ognl expression on the model object using the given object argument
+	 * (Ognl.setValue).
+	 * @param object the object that will be used when applying Ognl.setValue on the model
+	 *           object
+	 * @see wicket.model.IModel#setObject(java.lang.Object)
+	 */
+	public void setObject(Object object)
+	{
+		try
+		{
+			String expr = getExpression();
+			Object target = getModel().getObject();
+			OgnlContext ctx = getContext();
+			Ognl.setValue(expr, ctx, target, object);
+		}
+		catch (OgnlException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
 
