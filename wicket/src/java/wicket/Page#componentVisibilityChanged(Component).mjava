@@ -1,0 +1,14 @@
+	/**
+	 * @param component
+	 *            The component that was removed
+	 */
+	final void componentVisibilityChanged(final Component component)
+	{
+		checkModification();
+		if (getFlag(FLAG_TRACK_CHANGES) && component.isVersioned())
+		{
+			newVersion();
+			versionManager.componentVisibilityChanged(component);
+		}
+	}
+

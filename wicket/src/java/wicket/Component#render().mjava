@@ -24,8 +24,6 @@
 				originalResponse = null;
 
 				// Rendering is beginning
-				internalOnBeginRender();
-				onBeginRender();
 				if (log.isDebugEnabled())
 				{
 					log.debug("Begin render " + this);
@@ -58,6 +56,7 @@
 		{
 			// Remember exception in finally block
 			renderException = e;
+			e.printStackTrace();
 			throw e;
 		}
 		finally
@@ -71,10 +70,6 @@
 
 				try
 				{
-					// Rendering has completed
-					onEndRender();
-					internalOnEndRender();
-
 					// Detach models now that rendering is fully completed
 					detachModels();
 				}

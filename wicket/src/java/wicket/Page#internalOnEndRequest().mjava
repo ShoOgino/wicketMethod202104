@@ -1,8 +1,24 @@
 	/**
-	 * Called when this page is no longer being used in a request
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL OR
+	 * OVERRIDE.
+	 * 
+	 * @see wicket.Component#internalOnEndRequest()
 	 */
-	final void internalOnEndRequest()
+	protected final void internalOnEndRequest()
 	{
+		// If the application wants component uses checked and
+		// the response is not a redirect
+		final ApplicationSettings settings = getSession().getApplication().getSettings();
+		if (settings.getComponentUseCheck() && !getResponse().isRedirect())
+		{
+			// Visit components on page
+			checkRendering();
+		}
+
+		// Clear all feedback messages
+		getFeedbackMessages().clear();
+
+		// If page is versioned
 		if (isVersioned())
 		{
 			// Any changes to the page after this point will be tracked by the

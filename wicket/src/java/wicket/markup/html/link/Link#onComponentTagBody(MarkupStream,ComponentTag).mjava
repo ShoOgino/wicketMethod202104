@@ -10,26 +10,6 @@
 	protected final void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 	{
-		// Get disabled component of the same name with "Disabled" appended
-		final Component disabledComponent = (Component)get("disabled");
-
-		if (disabledComponent != null)
-		{
-			// Get enabled container
-			final Component enabledComponent = (Component)get("enabled");
-
-			// Set visibility of enabled and disabled children
-			enabledComponent.setVisible(enabled);
-			disabledComponent.setVisible(!enabled);
-		}
-
-		// Set default for before/after link text
-		if (beforeDisabledLink == null)
-		{
-			beforeDisabledLink = getApplicationSettings().getDefaultBeforeDisabledLink();
-			afterDisabledLink = getApplicationSettings().getDefaultAfterDisabledLink();
-		}
-
 		// Draw anything before the body?
 		if (!enabled && beforeDisabledLink != null)
 		{

@@ -7,7 +7,19 @@
 	 */
 	public final Component setVisible(final boolean visible)
 	{
-		setFlag(FLAG_VISIBLE, visible);
+		// Is new visibility state a change?
+		if (visible != isVisible())
+		{
+			// Change visibility
+			setFlag(FLAG_VISIBLE, visible);
+			
+			// Tell the page that this component's visibility was changed
+			final Page page = findPage();
+			if (page != null)
+			{
+				page.componentVisibilityChanged(this);
+			}
+		}
 		return this;
 	}
 

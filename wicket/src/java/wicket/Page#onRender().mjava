@@ -14,7 +14,15 @@
 			setMarkupStream(markupStream);
 
 			// Render all the page's markup
-			renderAll(markupStream);
+			setFlag(FLAG_IS_RENDERING, true);
+			try
+			{
+				renderAll(markupStream);
+			}
+			finally
+			{
+				setFlag(FLAG_IS_RENDERING, false);
+			}
 		}
 	}
 

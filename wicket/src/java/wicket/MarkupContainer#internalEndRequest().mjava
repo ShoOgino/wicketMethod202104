@@ -1,0 +1,19 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL OR
+	 * OVERRIDE.
+	 * 
+	 * Called when a request ends.
+	 */
+	public void internalEndRequest()
+	{
+		// Handle end request for the container itself
+		super.internalEndRequest();
+
+		// Loop through child components
+		for (final Iterator iterator = childForName.values().iterator(); iterator.hasNext();)
+		{
+			// Call end request on the child
+			((Component)iterator.next()).internalEndRequest();
+		}
+	}
+
