@@ -8,14 +8,12 @@
 	 */
 	public final String getString()
 	{
-		final Component c = getRelativeComponent();
-
 		// Make sure we have a localizer before commencing
 		if (getLocalizer() == null)
 		{
-			if (c != null)
+			if (component != null)
 			{
-				setLocalizer(c.getLocalizer());
+				setLocalizer(component.getLocalizer());
 			}
 			else
 			{
@@ -25,7 +23,7 @@
 
 		// Get the string resource, doing any OGNL substitutions as part
 		// of the get operation
-		String s = localizer.getString(getResourceKey(), c, getNestedModel());
+		String s = localizer.getString(getResourceKey(), component, getNestedModel());
 
 		// Substitute any parameters if necessary
 		Object[] parameters = getParameters();
@@ -37,12 +35,12 @@
 			{
 				if (parameters[i] instanceof IModel)
 				{
-					realParams[i] = ((IModel)parameters[i]).getObject();
+					realParams[i] = ((IModel)parameters[i]).getObject(component);
 				}
 				else if (model != null && parameters[i] instanceof String)
 				{
 					realParams[i] = OgnlVariableInterpolator.interpolate((String)parameters[i],
-							model.getObject());
+							model.getObject(component));
 				}
 				else
 				{
@@ -52,10 +50,10 @@
 
 			// Apply the parameters
 			Locale workingLocale = locale;
-			if (c != null)
+			if (component != null)
 			{
 				// Use component locale out of preference
-				workingLocale = c.getLocale();
+				workingLocale = component.getLocale();
 			}
 			final MessageFormat format = new MessageFormat(s, workingLocale);
 			s = format.format(realParams);

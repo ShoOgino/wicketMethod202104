@@ -3,7 +3,7 @@
 	 */
 	public void testDetachAttachDetachableModel() throws Exception
 	{
-		IModel wsDetachModel = new AbstractDetachableModel()
+		IModel wsDetachModel = new AbstractReadOnlyDetachableModel()
 		{
 			private transient WeatherStation station;
 			
@@ -17,7 +17,7 @@
 				station = null;
 			}
 
-			protected Object onGetObject()
+			protected Object onGetObject(final Component component)
 			{
 				return station;
 			}
@@ -27,7 +27,7 @@
 		RequestCycle cycle = new WebRequestCycle(application, application.getWicketSession(),
 				application.getWicketRequest(), application.getWicketResponse());
 		model.attach();
-		Assert.assertNotNull(model.getNestedModel().getObject());
+		Assert.assertNotNull(model.getNestedModel().getObject(page));
 		Assert.assertNotNull(model.getLocalizer());
 		model.detach();
 		// Removed this because getObject() will reattach now...

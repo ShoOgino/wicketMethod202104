@@ -1,0 +1,32 @@
+	/**
+	 * @see wicket.model.AbstractDetachableModel#onGetObject(wicket.Component)
+	 */
+	protected Object onGetObject(final Component component)
+	{
+		final String expression = ognlExpression(component);
+		if (Strings.isEmpty(expression))
+		{
+			// No expression will cause OGNL to throw an exception. The OGNL
+			// expression to return the current object is "#this". Instead
+			// of throwing that exception, we'll provide a meaningful
+			// return value
+			return modelObject(component);
+		}
+
+		final Object modelObject = modelObject(component);
+		if (modelObject != null)
+		{
+			try
+			{
+				// note: if property type is null it is ignored by Ognl
+				return Ognl.getValue(expression, getContext(), modelObject,
+						propertyType(component));
+			}
+			catch (OgnlException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+		return null;
+	}
+

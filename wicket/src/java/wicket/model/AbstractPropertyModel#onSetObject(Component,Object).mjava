@@ -1,0 +1,42 @@
+	/**
+	 * Applies the Ognl expression on the model object using the given object
+	 * argument (Ognl.setValue).
+	 * 
+	 * @param object
+	 *            the object that will be used when applying Ognl.setValue on
+	 *            the model object
+	 * @see AbstractDetachableModel#onSetObject(Component, Object)
+	 */
+	protected void onSetObject(final Component component, Object object)
+	{
+		try
+		{
+			// Get the real object
+			Object modelObject = modelObject(component);
+
+			// If the object is a String
+			if (object instanceof String)
+			{
+				// and that String is not empty
+				final String string = (String)object;
+				if (!Strings.isEmpty(string))
+				{
+					// and there is a non-null property type for the component
+					final Class propertyType = propertyType(component);
+					if (propertyType != null)
+					{
+						// convert the String to the right type
+						object = converterSource.getConverter().convert(string, propertyType);
+					}
+				}
+			}
+
+			// Let OGNL set the value
+			Ognl.setValue(ognlExpression(component), getContext(), modelObject, object);
+		}
+		catch (OgnlException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+
