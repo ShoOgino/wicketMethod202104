@@ -1,0 +1,19 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
+	 * Internal intialization. Reads servlet init parameter "configuration". If
+	 * the parameter is "development", settings appropriate for development are
+	 * set. If it's "deployment", deployment settings are used. If development
+	 * configuration is specified and a "sourceFolder" init parameter is also
+	 * set, then resources in that folder will be polled for changes.
+	 */
+	protected final void internalInit()
+	{
+		final WicketServlet servlet = getWicketServlet();
+		final String configuration = wicketServlet.getInitParameter("configuration");
+		if (configuration != null)
+		{
+			getSettings().configure(configuration, wicketServlet.getInitParameter("sourceFolder"));
+		}
+	}
+

@@ -1,0 +1,36 @@
+	/**
+	 * Configures application settings for a given configuration type.
+	 * 
+	 * @param configurationType
+	 *            The configuration type. Must currently be either "development"
+	 *            or "deployment".
+	 * @param sourceFolder
+	 *            If configurationType is "development", then this folder will
+	 *            be polled for resource changes
+	 */
+	public final void configure(final String configurationType, final String sourceFolder)
+	{
+		if ("development".equalsIgnoreCase(configurationType))
+		{
+			if (sourceFolder != null)
+			{
+				setSourcePath(new Path(new Folder(sourceFolder)));
+				setResourcePollFrequency(Duration.ONE_SECOND);
+			}
+			setComponentUseCheck(true);
+			setStripWicketTags(false);
+			setStripComponentIds(false);
+		}
+		else if ("deployment".equalsIgnoreCase(configurationType))
+		{
+			setComponentUseCheck(false);
+			setStripComponentIds(true);
+			setStripWicketTags(true);
+		}
+		else
+		{
+			throw new IllegalArgumentException(
+					"Invalid configuration type.  Must be \"development\" or \"deployment\".");
+		}
+	}
+
