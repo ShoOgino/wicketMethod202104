@@ -1,35 +1,30 @@
-        /**
-         * @see wicket.markup.html.list.ListView#populateItem(wicket.markup.html.list.ListItem)
-         */
-        protected void populateItem(ListItem listItem)
-        {
-            TreeNodeModel treeNodeModel = (TreeNodeModel)listItem.getModelObject();
+		/**
+		 * @see wicket.markup.html.list.ListView#populateItem(wicket.markup.html.list.ListItem)
+		 */
+		protected void populateItem(ListItem listItem)
+		{
+			TreeNodeModel treeNodeModel = (TreeNodeModel)listItem.getModelObject();
 
-            // add spacers
-            int level = treeNodeModel.getLevel();
-            List spacerList = new ArrayList(level);
-            for(int i = 0; i < level; i++)
-            {
-                spacerList.add(treeNodeModel);
-            }
-            listItem.add(new SpacerList("spacers", spacerList));
+			// add spacers
+			int level = treeNodeModel.getLevel();
+			listItem.add(new SpacerList("spacers", level));
 
-            // add node
-            HtmlContainer nodeContainer = new HtmlContainer("node");
-            Serializable userObject = treeNodeModel.getUserObject();
+			// add node
+			HtmlContainer nodeContainer = new HtmlContainer("node");
+			Serializable userObject = treeNodeModel.getUserObject();
 
-            if (userObject == null)
-            {
-                throw new WicketRuntimeException("User object cannot be null");
-            }
-            TreeNodeLink expandCollapsLink = IndentTree.this.createJunctionLink(treeNodeModel);
-            nodeContainer.add(expandCollapsLink);
+			if (userObject == null)
+			{
+				throw new WicketRuntimeException("User object cannot be null");
+			}
+			TreeNodeLink expandCollapsLink = IndentTree.this.createJunctionLink(treeNodeModel);
+			nodeContainer.add(expandCollapsLink);
 
-            TreeNodeLink selectLink = IndentTree.this.createNodeLink(treeNodeModel);
-            nodeContainer.add(selectLink);
-            listItem.add(nodeContainer);
+			TreeNodeLink selectLink = IndentTree.this.createNodeLink(treeNodeModel);
+			nodeContainer.add(selectLink);
+			listItem.add(nodeContainer);
 
-            listItem.add(new ComponentTagAttributeModifier(
-            		"class", true, new SelectedPathReplacementModel(treeNodeModel)));
-        }
+			listItem.add(new ComponentTagAttributeModifier("class", true,
+					new SelectedPathReplacementModel(treeNodeModel)));
+		}
 
