@@ -4,12 +4,45 @@
      */
     public Home(final PageParameters parameters)
     {
+        add(new NavigationPanel("mainNavigation", "Helloworld example"));
+
         add(new Image("beer"));
 
+        // create a dummy object to serve as our Ognl substitution model
         ValueMap map = new ValueMap();
-
         map.put("user", "Jonathan");
-        add(new Label("salutation",
-                getLocalizer().getString("salutation", this, new Model(map))));
+        
+        // Here, we create a model that knows how to get localized strings.
+        // It uses the page's resource (Home_cc_LC.properties) and gets the
+        // text with resource key 'salution'. For the US, this is:
+        // salutation=${user}, dude!
+        // variable ${user} will be regconized as an Ognl variable, and will
+        // be substituted with the given model (the wrapped map). Hence,
+        // ${user} will be replaced by map.get('user'), which is 'Jonathan'.
+        StringResourceModel labelModel = new StringResourceModel(
+                "salutation", this, new Model(map));
+
+        // add the label with the dynamic model
+        add(new Label("salutation", labelModel));
+
+        // add a couple of links to be able to play around with the Locales
+        add(new Link("goCanadian"){
+            public void linkClicked(RequestCycle cycle)
+            {
+                currentLocale = Locale.CANADA;
+            }
+        });
+        add(new Link("goUS"){
+            public void linkClicked(RequestCycle cycle)
+            {
+                currentLocale = Locale.US;
+            }
+        });
+        add(new Link("goDutch"){
+            public void linkClicked(RequestCycle cycle)
+            {
+                currentLocale = new Locale("nl", "NL");
+            }
+        });
     }
 

@@ -3,17 +3,19 @@
      */
     protected void handleRender(final RequestCycle cycle)
     {
-        super.handleRender(cycle);
-
         final Session session = cycle.getSession();
-
-        if (session.getLocale() != Locale.CANADA)
+        // keep the current locale
+        Locale userLocale = session.getLocale();
+        // replace the locale for rendering
+        session.setLocale(currentLocale);
+        try
         {
-            session.setLocale(Locale.CANADA);
+            super.handleRender(cycle);
         }
-        else
+        finally
         {
-            session.setLocale(Locale.US);
+            // set the user's locale back again
+            session.setLocale(userLocale);
         }
     }
 
