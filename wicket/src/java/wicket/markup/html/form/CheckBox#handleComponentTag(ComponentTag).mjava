@@ -1,28 +1,34 @@
-    /**
+	/**
 	 * Processes the component tag.
 	 * @param tag Tag to modify
-     * @see wicket.Component#handleComponentTag(ComponentTag)
-     */
-    protected void handleComponentTag(final ComponentTag tag)
-    {
-        checkTag(tag, "input");
-        checkAttribute(tag, "type", "checkbox");
-        super.handleComponentTag(tag);
+	 * @see wicket.Component#handleComponentTag(ComponentTag)
+	 */
+	protected void handleComponentTag(final ComponentTag tag)
+	{
+		checkTag(tag, "input");
+		checkAttribute(tag, "type", "checkbox");
+		super.handleComponentTag(tag);
 
-        Object value = getModelObject();
+		Object value = getModelObject();
 
-        if (value != null)
-        {
-            if (!(value instanceof Boolean))
-            {
-                throw new WicketRuntimeException(
-                        "Model objects for checkboxes have to be of type Boolean");
-            }
-
-            if (((Boolean)value).booleanValue())
-            {
-                tag.put("checked", "true");
-            }
-        }
-    }
+		if (value != null)
+		{
+			final boolean tagValue;
+			if(value instanceof String) // probably was formatted or straight from request
+			{
+				tagValue = Boolean.parseBoolean((String)value);
+			}
+			else if(value instanceof Boolean)
+			{
+				tagValue = ((Boolean)value).booleanValue();
+			}
+			else
+			{
+				throw new WicketRuntimeException(
+						"Model objects for checkboxes have to be of type Boolean");
+			}
+			if(tagValue) tag.put("checked", "checked");
+			else tag.remove("checked"); // in case the was a design time attrib
+		}
+	}
 

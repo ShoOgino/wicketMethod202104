@@ -1,21 +1,23 @@
-    /**
-     * Constructor that uses the provided object as a dynamic model. This object will be
-     * wrapped in an instance of {@link wicket.model.Model} that will be wrapped in an instance of
-     * {@link wicket.model.PropertyModel} using the provided expression. Thus, using this constructor
-     * is a short-hand for:
-     * 
-     * <pre>
-     * new MyComponent(name, new PropertyModel(new Model(object), expression));
-     * </pre>
-     * 
-     * All components have names. A component's name cannot be null.
-     * @param name The non-null name of this component
-     * @param object the object that will be used as the subject for the given expression
-     * @param expression the OGNL expression that works on the given object
-     * @throws wicket.WicketRuntimeException Thrown if the component has been given a null name.
-     */
-    public CheckBox(String name, Serializable object, String expression)
-    {
-        super(name, object, expression);
-    }
+	/**
+	 * Constructor that uses the provided object as a dynamic model. This object will be
+	 * wrapped in an instance of {@link wicket.model.Model} that will be wrapped in an instance of
+	 * {@link wicket.model.PropertyModel} using the provided expression. Thus, using this constructor
+	 * is a short-hand for:
+	 * 
+	 * <pre>
+	 * new MyComponent(name, new PropertyModel(new Model(object), expression));
+	 * </pre>
+	 * 
+	 * All components have names. A component's name cannot be null.
+	 * @param name The non-null name of this component
+	 * @param object the object that will be used as the subject for the given expression
+	 * @param expression the OGNL expression that works on the given object
+	 * @throws wicket.WicketRuntimeException Thrown if the component has been given a null name.
+	 */
+	public CheckBox(String name, Serializable object, String expression)
+	{
+		super(name, object, expression);
+		// construct model without formatting as we want the model object as-is
+		setModel(new PropertyModel(new Model(object), expression, false));
+	}
 
