@@ -1,20 +1,28 @@
-    /**
-     * @see wicket.util.convert.ITypeConverter#convert(java.lang.Object)
-     */
-    public Object convert(final Object value)
-    {
-        if (value instanceof Number)
-        {
-            return new Double(((Number)value).doubleValue());
-        }
+	/**
+	 * @see wicket.util.convert.ITypeConverter#convert(java.lang.Object)
+	 */
+	public Object convert(final Object value)
+	{
+		if (value instanceof Number)
+		{
+			return new Double(((Number)value).doubleValue());
+		}
 
-        try
-        {
-            return new Double(getNumberFormat().parse(value.toString()).doubleValue());
-        }
-        catch (ParseException e)
-        {
-            throw new ConversionException("Cannot convert '" + value + "' to Double", e);
-        }
-    }
+		NumberFormat format = getNumberFormat();
+		try
+		{
+			return new Double(format.parse(value.toString()).doubleValue());
+		}
+		catch (ParseException e)
+		{
+			ConversionException conversionException =
+				new ConversionException("Cannot convert '" + value + "' to Double", e);
+			if(format instanceof DecimalFormat)
+			{
+				String pattern = ((DecimalFormat)format).toLocalizedPattern();
+				conversionException.setPattern(pattern);
+			}
+			throw conversionException;
+		}
+	}
 
