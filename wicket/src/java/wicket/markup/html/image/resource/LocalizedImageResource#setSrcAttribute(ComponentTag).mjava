@@ -10,9 +10,13 @@
 	{
 		// If locale has changed from the initial locale used to attach image
 		// resource, then we need to reload the resource in the new locale
-		if ((locale != null && locale != component.getLocale())
-				|| (style != null && style.equals(component.getStyle())))
+		if ((locale != null && !locale.equals(component.getLocale()))
+				|| (style != null && !style.equals(component.getStyle())))
 		{
+			// Get new component locale and style
+			this.locale = component.getLocale();
+			this.style = component.getStyle();
+
 			// If the image is a shared resource
 			if (resource instanceof SharedResource)
 			{
@@ -27,9 +31,9 @@
 				{
 					// Change the locale and style for the named resource so it
 					// will rebind when next accessed.
-					final SharedResource namedResource = (SharedResource)resource;
-					namedResource.setLocale(locale);
-					namedResource.setStyle(style);
+					final SharedResource sharedResource = (SharedResource)resource;
+					sharedResource.setLocale(locale);
+					sharedResource.setStyle(style);
 				}
 			}
 			else
@@ -66,10 +70,6 @@
 				}
 			}
 		}
-
-		// Save component locale and style so we can detect changes
-		this.locale = component.getLocale();
-		this.style = component.getStyle();
 
 		// Get URL for resource
 		final String url;

@@ -32,8 +32,11 @@
 			final String name = valueParser.getImageName();
 			if (!Strings.isEmpty(name))
 			{
-				component.getApplication().addResource(name, resource);
-				return new SharedResource(Application.class, name);
+				component.getApplication().addResource(Application.class, name, locale, style, resource);
+				final SharedResource sharedResource = new SharedResource(Application.class, name);
+				sharedResource.setLocale(locale);
+				sharedResource.setStyle(style);
+				return sharedResource;
 			}
 			return resource;
 		}
