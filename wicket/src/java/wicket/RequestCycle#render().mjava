@@ -1,7 +1,7 @@
 	/**
 	 * Renders response for request. NOTE: THIS METHOD IS INTENDED FOR INTERNAL
 	 * USE ONLY AND MAY NOT BE SUPPORTED IN THE FUTURE.
-	 * 
+	 *
 	 * @throws ServletException
 	 */
 	public final void render() throws ServletException
@@ -10,10 +10,14 @@
 		// can be rendered at a time for a given session.
 		synchronized (session)
 		{
+			// Restore the transient application association with the session
+			session.setApplication(application);
+
 			// Set this request cycle as the active request cycle for the
 			// session for easy access by the page being rendered and any
 			// components on that page
 			session.setRequestCycle(this);
+
 
 			try
 			{

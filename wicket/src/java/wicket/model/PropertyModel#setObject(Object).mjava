@@ -1,7 +1,7 @@
 	/**
 	 * Applies the Ognl expression on the model object using the given object
 	 * argument (Ognl.setValue).
-	 * 
+	 *
 	 * @param object
 	 *            the object that will be used when applying Ognl.setValue on
 	 *            the model object
@@ -19,8 +19,8 @@
 			if (object != null && propertyType != null && (object instanceof String)
 					&& (!((String)object).trim().equals("")))
 			{
-				object = converter.convert(object, propertyType); // convert to
-				// set type
+				object = converterProvider.getConverter().convert(object, propertyType);
+				// convert to set type
 			}
 			OgnlContext ctx = getContext(); // get the ognl context instance
 			Ognl.setValue(expr, ctx, target, object); // let ognl set the value
