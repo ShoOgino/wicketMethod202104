@@ -1,0 +1,40 @@
+    /**
+     * Searches for a charset for a specified key.
+     * 
+     * @param key the key for the charset.
+     * @return the found charset or an empty string.
+     */
+    private final String searchCharSet(final String key)
+    {
+        if ((key != null) && (key.length() > 0))
+        {
+            // Go through mappers.
+            Map mapper;
+            String charset;
+
+            for (int i = 0; i < mappers.length; i++)
+            {
+                mapper = mappers[i];
+                if (mapper != null)
+                {
+                    charset = (String) mapper.get(key);
+                    if (charset != null)
+                    {
+                        // Update the cache.
+                        if (i > MAP_CACHE)
+                        {
+                            mappers[MAP_CACHE].put(key, charset);
+                        }
+
+                        return charset;
+                    }
+                }
+            }
+
+            // Not found, add an empty string to the cache.
+            mappers[MAP_CACHE].put(key, "");
+        }
+
+        return "";
+    }
+
