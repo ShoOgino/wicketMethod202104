@@ -1,14 +1,14 @@
-    /**
-     * 
-     * @param sourcePath
-     * @param style
-     * @param locale
-     * @param extension
-     */
-    public void createAndTestResource(Path sourcePath, String style, Locale locale, String extension)
-    {
-        IResource resource = ResourceLocator.locate(sourcePath, this.getClass().getClassLoader(),
-                this.getClass().getName(), style, locale, "txt");
-        compareFilename(resource, extension);
-    }
+	/**
+	 * 
+	 * @param sourcePath
+	 * @param style
+	 * @param locale
+	 * @param extension
+	 */
+	public void createAndTestResource(Path sourcePath, String style, Locale locale, String extension)
+	{
+		ResourceLocator locator = new DefaultResourceLocator(sourcePath);
+		IResource resource = locator.locate(this.getClass(), style, locale, "txt");
+		compareFilename(resource, extension);
+	}
 

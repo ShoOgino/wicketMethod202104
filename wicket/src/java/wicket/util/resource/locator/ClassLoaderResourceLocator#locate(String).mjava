@@ -1,0 +1,23 @@
+	/**
+	 * @see wicket.util.resource.locator.AbstractResourceLocator#locate(java.lang.String)
+	 */
+	protected IResource locate(final String path)
+	{
+		// Ensure classloader
+		if (classloader == null)
+		{
+			classloader = getClass().getClassLoader();
+		}
+
+		// Log attempt
+		log.debug("Attempting to locate resource '" + path + "' using classloader " + classloader);
+
+		// Try loading path using classloader
+		final URL url = classloader.getResource(path);
+		if (url != null)
+		{
+			return new UrlResource(url);
+		}
+		return null;
+	}
+

@@ -1,8 +1,6 @@
 	/**
 	 * Constructor
 	 * 
-	 * @param classLoader
-	 *            The classloader for loading the image
 	 * @param basePackage
 	 *            The base package to search from
 	 * @param resourcePath
@@ -12,8 +10,8 @@
 	 * @param style
 	 *            The style of the image
 	 */
-	private StaticImageResource(final ClassLoader classLoader, final Package basePackage,
-			final String resourcePath, final Locale locale, final String style)
+	private StaticImageResource(final Package basePackage, final String resourcePath,
+			final Locale locale, final String style)
 	{
 		// TODO we might want to consider relaxing this in the future so people
 		// can stash images in subfolders and the like
@@ -23,7 +21,7 @@
 		}
 
 		final String path = basePackage.getName() + "." + resourcePath;
-		this.resource = ResourceLocator.locate(RequestCycle.get().getApplication().getSettings()
-				.getSourcePath(), classLoader, path, style, locale, null);
+		this.resource = RequestCycle.get().getApplication().getResourceLocator().locate(path,
+				style, locale, null);
 	}
 

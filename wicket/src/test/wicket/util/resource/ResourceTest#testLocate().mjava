@@ -1,18 +1,19 @@
-    /**
-     *
-     */
-    public void testLocate()
-    {
-        // Execute without source path
-        executeMultiple(null);
+	/**
+	 * 
+	 */
+	public void testLocate()
+	{
+		// Execute without source path
+		executeMultiple(new Path());
 
-        // Determine source path
-        IResource resource = ResourceLocator.locate(null, this.getClass().getClassLoader(),
-                this.getClass().getName(), null, null, "txt");
-        String path = Strings.replaceAll(((UrlResource)resource).getFile().getAbsolutePath(), "\\", "/");
-        path = Strings.beforeLastPathComponent(path, '/') + "/sourcePath";
-        
-        // and execute
-        executeMultiple(new Path(new Folder(path)));
-    }
+		// Determine source path
+		ResourceLocator locator = new ResourceLocator(new ClassLoaderResourceLocator());
+		IResource resource = locator.locate(getClass(), null, null, "txt");
+		String path = Strings.replaceAll(((UrlResource)resource).getFile().getAbsolutePath(), "\\",
+				"/");
+		path = Strings.beforeLastPathComponent(path, '/') + "/sourcePath";
+
+		// and execute
+		executeMultiple(new Path(new Folder(path)));
+	}
 
