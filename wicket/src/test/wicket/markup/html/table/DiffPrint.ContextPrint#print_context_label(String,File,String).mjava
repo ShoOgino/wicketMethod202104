@@ -4,9 +4,9 @@
             if (label != null)
                 outfile.println(mark + ' ' + label);
             else if (inf.lastModified() > 0)
-                // FIXME: use DateFormat to get precise format needed.
                 outfile.println(mark + ' ' + inf.getPath() + '\t'
-                        + new Date(inf.lastModified()));
+                        + new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+                        		.format(new Date(inf.lastModified())));
             else
                 /* Don't pretend that standard input is ancient. */
                 outfile.println(mark + ' ' + inf.getPath());
