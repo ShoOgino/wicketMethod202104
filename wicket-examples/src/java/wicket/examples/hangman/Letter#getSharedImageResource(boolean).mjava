@@ -1,0 +1,24 @@
+	/**
+	 * @param enabled
+	 *            True to get the enabled resource, false to get the disabled
+	 *            resource
+	 * @return SharedResource token for this letter
+	 */
+	public SharedResource getSharedImageResource(final boolean enabled)
+	{
+		return new SharedResource(Letter.class, asString() + (enabled ? "_enabled" : "_disabled"))
+		{
+			protected Resource newResource()
+			{
+				// Lazy loading of shared resource
+				final DefaultButtonImageResource buttonResource = new DefaultButtonImageResource(30, 30,
+						asString());
+				if (!enabled)
+				{
+					buttonResource.setColor(Color.GRAY);
+				}
+				return buttonResource;				
+			}
+		};
+	}
+

@@ -1,0 +1,30 @@
+	/**
+	 * Binds this shared resource to the given application
+	 * 
+	 * @param application
+	 *            The application which holds the shared resource
+	 */
+	public final void bind(final Application application)
+	{
+		// Try to resolve resource
+		if (resource == null)
+		{
+			// Try to get resource from Application repository
+			resource = application.getResource(scope, name, locale, style);
+
+			// Not available yet?
+			if (resource == null)
+			{
+				// Create resource using lazy-init factory method
+				resource = newResource();
+				if (resource == null)
+				{
+					throw new WicketRuntimeException("Unable to resolve shared resource " + this);
+				}
+
+				// Share through application
+				application.addResource(scope, name, locale, style, resource);
+			}
+		}
+	}
+
