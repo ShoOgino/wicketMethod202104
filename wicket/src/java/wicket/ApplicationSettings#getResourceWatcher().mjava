@@ -4,14 +4,13 @@
      */
     public ModificationWatcher getResourceWatcher()
     {
-        if (!triedToCreateResouceWatcher)
+        if (resourceWatcher == null)
         {
-            final Duration frequency = getResourcePollFrequency();
-            if (frequency != null)
+            final Duration pollFrequency = getResourcePollFrequency();
+            if (pollFrequency != null)
             {
-                resourceWatcher = new ModificationWatcher(frequency);
+                resourceWatcher = new ModificationWatcher(pollFrequency);
             }
-            triedToCreateResouceWatcher = true;
         }
         return resourceWatcher;
     }
