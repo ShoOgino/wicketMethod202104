@@ -3,16 +3,23 @@
 	 */
 	public void testDetachAttachDetachableModel() throws Exception
 	{
-		IModel wsDetachModel = new DetachableModel(wsModel)
+		IModel wsDetachModel = new AbstractDetachableModel()
 		{
+			private transient WeatherStation station;
+			
 			protected void onAttach()
 			{
-				setObject(new WeatherStation());
+				station = new WeatherStation();
 			}
 
 			protected void onDetach()
 			{
-				setObject(null);
+				station = null;
+			}
+
+			protected Object onGetObject()
+			{
+				return station;
 			}
 		};
 		StringResourceModel model = new StringResourceModel("simple.text", page, wsDetachModel);

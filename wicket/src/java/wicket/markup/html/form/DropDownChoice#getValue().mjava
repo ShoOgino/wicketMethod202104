@@ -3,19 +3,11 @@
 	 */
 	public final String getValue()
 	{
-		final List list = getValues();
-		if (list instanceof IDetachableChoiceList)
+		final IChoice choice = getChoices().choiceForObject(getModelObject());
+		if (choice != null)
 		{
-			final int index = list.indexOf(getModelObject());
-			if (index != -1)
-			{
-				return ((IDetachableChoiceList)list).getId(index);
-			}
-			return "-1";
+			return choice.getId();
 		}
-		else
-		{
-			return Integer.toString(list.indexOf(getModelObject()));
-		}
+		return "-1";
 	}
 

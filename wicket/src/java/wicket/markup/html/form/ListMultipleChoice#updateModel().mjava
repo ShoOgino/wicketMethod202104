@@ -1,6 +1,6 @@
 	/**
 	 * Updates this forms model from the request.
-	 *
+	 * 
 	 * @see FormComponent#updateModel()
 	 */
 	protected final void updateModel()
@@ -19,30 +19,19 @@
 		}
 
 		// Get indices selected from request
-		final String[] indicesOrIds = inputAsStringArray();
+		final String[] ids = inputAsStringArray();
 
 		// If one or more ids is selected
-		if (indicesOrIds != null && indicesOrIds.length > 0 && !Strings.isEmpty(indicesOrIds[0]))
+		if (ids != null && ids.length > 0 && !Strings.isEmpty(ids[0]))
 		{
 			// Get values that could be selected
-			final List list = getValues();
+			final IChoiceList choices = getChoices();
 
 			// Loop through selected indices
-			for (int i = 0; i < indicesOrIds.length; i++)
+			for (int i = 0; i < ids.length; i++)
 			{
-				if (list instanceof IDetachableChoiceList)
-				{
-					selectedValues.add(((IDetachableChoiceList)list).objectForId(indicesOrIds[i]));
-				}
-				else
-				{
-					// Get index
-					final int index = Integer.parseInt(indicesOrIds[i]);
-					
-					// Add the value at the given index to the collection of
-					// selected values
-					selectedValues.add(list.get(index));
-				}
+				final IChoice choice = choices.choiceForId(ids[i]);
+				selectedValues.add(choice.getObject());
 			}
 		}
 	}

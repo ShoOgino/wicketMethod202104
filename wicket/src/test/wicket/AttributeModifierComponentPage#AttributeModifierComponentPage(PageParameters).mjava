@@ -17,9 +17,9 @@
 
 		// Label with attribute inserter
 		Label label3 = new Label("label3", new Model("Label 3"));
-		label3.add(new AttributeModifier("class", true, new DetachableModel()
+		label3.add(new AttributeModifier("class", true, new AbstractDetachableModel()
 		{
-			private String text = null;
+			private transient String text = null;
 
 			public void onDetach()
 			{
@@ -31,7 +31,7 @@
 				text = "insertLabel";
 			}
 
-			public Object getObject()
+			public Object onGetObject()
 			{
 				attach();
 				return text;

@@ -12,7 +12,7 @@
 	{
 		final StringBuffer options = new StringBuffer();
 		final Object selected = getModelObject();
-		final List list = getValues();
+		final IChoiceList choices = getChoices();
 
 		// Is null a valid selection value?
 		if (nullValid)
@@ -22,19 +22,19 @@
 
 			// Add option tag
 			options.append("\n<option");
-			
+
 			// If null is selected, indicate that
 			if (selected == null)
 			{
 				options.append(" selected=\"selected\"");
 			}
-			
+
 			// Add body of option tag
 			options.append(" value=\"\">").append(option).append("</option>");
 		}
 		else
 		{
-			// Null is not valid.  Is it selected anyway?
+			// Null is not valid. Is it selected anyway?
 			if (selected == null)
 			{
 				// Force the user to pick a non-null value
@@ -45,34 +45,19 @@
 			}
 		}
 
-		for (int i = 0; i < list.size(); i++)
+		for (int i = 0; i < choices.size(); i++)
 		{
-			final Object value = list.get(i);
-
-			if (value != null)
+			final IChoice choice = choices.get(i);
+			if (choice != null)
 			{
-				final String id;
-				final String displayValue;
-				if (list instanceof IDetachableChoiceList)
-				{
-					IDetachableChoiceList choiceList = (IDetachableChoiceList)list;
-					id = choiceList.getId(i);
-					displayValue = choiceList.getDisplayValue(i);
-
-				}
-				else
-				{
-					id = Integer.toString(i);
-					displayValue = value.toString();
-				}
-				final boolean currentOptionIsSelected = isSelected(value);
+				final String displayValue = choice.getDisplayValue();
 				options.append("\n<option ");
-				if (currentOptionIsSelected)
+				if (isSelected(choice.getObject()))
 				{
 					options.append("selected=\"selected\"");
 				}
 				options.append("value=\"");
-				options.append(id);
+				options.append(choice.getId());
 				options.append("\">");
 				options.append(getLocalizer().getString(getName() + "." + displayValue, this,
 						displayValue));
@@ -80,8 +65,7 @@
 			}
 			else
 			{
-				throw new IllegalArgumentException(
-						"Dropdown choice contains null value in values collection at index " + i);
+				throw new IllegalArgumentException("Choice list has null value at index " + i);
 			}
 		}
 
