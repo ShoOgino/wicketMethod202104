@@ -9,14 +9,14 @@
 	 * @param readAheadSize
 	 *            The read ahead buffer available to read the xml encoding
 	 *            information
-	 * @return null, if &lt;?xml ..?&gt; has been found; else all characters
+	 * @return Null, if &lt;?xml ..?&gt; has been found; else all characters
 	 *         read ahead
 	 * @throws IOException
 	 */
 	private final String determineEncoding(final InputStream in, final int readAheadSize)
 			throws IOException
 	{
-		// max one line
+		// Max one line
 		StringBuffer pushBack = new StringBuffer(readAheadSize);
 
 		// TODO could be improved if <?xml would be checked as well.
@@ -26,9 +26,8 @@
 		{
 			pushBack.append((char)value);
 
-			// stop at end of the first tag or end of line. If it is html
-			// without
-			// newlines, stop after X bytes (= characters)
+			// Stop at end of the first tag or end of line. If it is HTML
+			// without newlines, stop after X bytes (= characters)
 			if ((value == '>') || (value == '\n') || (value == '\r')
 					|| (pushBack.length() >= (readAheadSize - 1)))
 			{
