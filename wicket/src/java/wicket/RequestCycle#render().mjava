@@ -19,11 +19,14 @@
 			// components on that page
 			session.setRequestCycle(this);
 
-
 			try
 			{
 				// Render response for request cycle
 				onRender();
+			}
+			catch (StackOverflowError e)
+			{
+				throw new ServletException("Wicket could not render page", e);
 			}
 			catch (RuntimeException e)
 			{
@@ -37,7 +40,7 @@
 				}
 
 				// Handle the exception
-				handleRenderingException(e);
+				onException(e);
 			}
 			finally
 			{
