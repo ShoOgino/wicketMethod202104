@@ -1,8 +1,8 @@
     /**
      * Gets the value that results when the given Ognl expression is applied to the model
      * object (Ognl.getValue).
-     * @return the value that results when the given Ognl expression is applied to the
-     *         model object
+     * @return the value that results when the given Ognl expression
+     * is applied to the model object
      * @see wicket.model.IModel#getObject()
      */
     public Object getObject()
@@ -30,7 +30,8 @@
             Object raw = Ognl.getValue(getExpression(), getContext(), modelObject);
             if (applyFormatting)
             {
-                return converterRegistry.getFormattingUtils().getObjectFormatted(
+                FormattingUtils formattingUtils = converterRegistry.getFormattingUtils();
+				return formattingUtils.getObjectFormatted(
                         raw, getLocale(), getFormatPattern(), getFormatPattern());
             }
             else
