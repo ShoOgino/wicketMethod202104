@@ -36,7 +36,8 @@
 				if (inputStream == null)
 				{
 					inputStream = new ByteArrayInputStream(getImageData());
-					lastModifiedTime = Time.now();
+					// This shouldn't be done here but the getImageData implementation should do it when it is regenerated..
+					//lastModifiedTime = Time.now();
 				}
 				return inputStream;
 			}
@@ -47,6 +48,11 @@
 			public Time lastModifiedTime()
 			{
 				return DynamicImageResource.this.lastModifiedTime();
+			}
+
+			public long length()
+			{
+				return DynamicImageResource.this.getImageData().length;
 			}
 		};
 	}
