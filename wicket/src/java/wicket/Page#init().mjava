@@ -1,10 +1,25 @@
 	/**
-	 * Adds page to session and sets default state.
+	 * Initializes Page by adding it to the Session and initializing it.
 	 */
 	private void init()
 	{
+		// Get session
 		final Session session = getSession();
-		session.addPage(this);
+
+		// Add page to session
+		session.add(this);
+
+		// Set versioning of page based on default
 		setVersioned(session.getApplication().getSettings().getVersionPagesByDefault());
+
+		// Loop through the PageSet objects for this Page
+		for (final Iterator iterator = getPageSets(); iterator.hasNext();)
+		{
+			// Get next PageSet
+			final PageSet pageSet = (PageSet)iterator.next();
+
+			// Let PageSet initialize the Page
+			pageSet.init(this);
+		}
 	}
 

@@ -1,0 +1,34 @@
+	/**
+	 * Returns a URL that references a given interface on a component. When the
+	 * URL is requested from the server at a later time, the interface will be
+	 * called. A URL returned by this method will not be stable across sessions
+	 * and cannot be bookmarked by a user.
+	 * 
+	 * @param component
+	 *            The component to reference
+	 * @param listenerInterface
+	 *            The listener interface on the component
+	 * @return A URL that encodes a page, component and interface to call
+	 */
+	public String urlFor(final Component component, final Class listenerInterface)
+	{
+		// Ensure that component instanceof listenerInterface
+		if (!listenerInterface.isAssignableFrom(component.getClass()))
+		{
+			throw new WicketRuntimeException("The component " + component + " of class "
+					+ component.getClass() + " does not implement " + listenerInterface);
+		}
+
+		// Buffer for composing URL
+		final WebRequestCycle cycle = getWebRequestCycle();
+		final StringBuffer buffer = urlPrefix(cycle);
+		appendPageMapName(buffer);
+		buffer.append("component=");
+		buffer.append(component.getPath());
+		buffer.append("&version=");
+		buffer.append(component.getPage().getCurrentVersionNumber());
+		buffer.append("&interface=");
+		buffer.append(Classes.name(listenerInterface));
+		return cycle.getResponse().encodeURL(buffer.toString());
+	}
+

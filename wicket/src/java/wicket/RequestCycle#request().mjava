@@ -7,6 +7,9 @@
 	 */
 	public final void request() throws ServletException
 	{
+		// Any page used to respond to the request
+		Page page = null;
+		
 		// Response is beginning
 		internalOnBeginRequest();
 		onBeginRequest();
@@ -24,7 +27,7 @@
 				if (onRespond())
 				{
 					// Get page set by subclass response
-					final Page page = getResponsePage();
+					page = getResponsePage();
 					if (page != null)
 					{
 						try
@@ -63,7 +66,7 @@
 			catch (RuntimeException e)
 			{
 				// Handle any runtime exception
-				onRuntimeException(e);
+				onRuntimeException(page, e);
 			}
 			finally
 			{

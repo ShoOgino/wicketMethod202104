@@ -1,0 +1,26 @@
+	/**
+	 * @param pageStates
+	 */
+	private void addPages(final List pageStates)
+	{
+		// Add page states as need be
+		for (final Iterator iterator = pageStates.iterator(); iterator.hasNext();)
+		{
+			// Get next attribute name
+			final PageState pageState = (PageState)iterator.next();
+
+			// If PageState has not been added to the session
+			if (!pageState.addedToSession)
+			{
+				// Get page from page state
+				final Page page = pageState.getPage();
+
+				// Add to page map specified in page state info
+				getPageMap(pageState.pageMapName).put(page);
+
+				// Page has been added to session now
+				pageState.addedToSession = true;
+			}
+		}
+	}
+

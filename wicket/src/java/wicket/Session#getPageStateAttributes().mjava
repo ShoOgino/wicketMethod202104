@@ -1,0 +1,21 @@
+	/**
+	 * @return List of PageState values set as session attributes
+	 */
+	private List getPageStateAttributes()
+	{
+		// PageStates to add
+		final List pageStates = new ArrayList();
+
+		// Copy any changed pages into our (transient) Session
+		for (final Iterator iterator = getAttributeNames().iterator(); iterator.hasNext();)
+		{
+			// Get attribute value
+			final Object value = getAttribute((String)iterator.next());
+			if (value instanceof PageState)
+			{
+				pageStates.add(value);
+			}
+		}
+		return pageStates;
+	}
+

@@ -6,31 +6,31 @@
 	 * 
 	 * @param p
 	 *            The package to start at
-	 * @param path
+	 * @param relativePath
 	 *            The relative path to the class
 	 * @return The absolute path
 	 */
-	public static String absolutePath(final Package p, final String path)
+	public static String absolutePath(final Package p, final String relativePath)
 	{
 		// Is path already absolute?
-		if (path.startsWith("/"))
+		if (relativePath.startsWith("/"))
 		{
-			return path;
+			return relativePath;
 		}
 		else
 		{
 			// Break package into list of package names
 			final StringList absolutePath = StringList.tokenize(p.getName(), ".");
-			
+
 			// Break path into folders
-			final StringList folders = StringList.tokenize(path, "/\\");
-		
+			final StringList folders = StringList.tokenize(relativePath, "/\\");
+
 			// Iterate through folders
 			for (final IStringIterator iterator = folders.iterator(); iterator.hasNext();)
 			{
 				// Get next folder
 				final String folder = iterator.next();
-	
+
 				// Up one?
 				if (folder.equals(".."))
 				{
@@ -41,7 +41,7 @@
 					}
 					else
 					{
-						throw new IllegalArgumentException("Invalid path " + path);
+						throw new IllegalArgumentException("Invalid path " + relativePath);
 					}
 				}
 				else
@@ -50,7 +50,7 @@
 					absolutePath.add(folder);
 				}
 			}
-	
+
 			// Return absolute path
 			return absolutePath.join("/");
 		}

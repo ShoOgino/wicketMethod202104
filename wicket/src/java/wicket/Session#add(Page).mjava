@@ -1,0 +1,26 @@
+	/**
+	 * Adds page to session if not already added.
+	 * 
+	 * @param page
+	 *            Page to add to this session
+	 */
+	protected final void add(final Page page)
+	{
+		// Set page map for page
+		final String pageMapName = cycle == null ? PageMap.defaultName : cycle.getRequest()
+				.getParameter("pageMap");
+		page.setPageMap(getPageMap(pageMapName));
+
+		// Add to page local transient page map
+		final Page removedPage = page.getPageMap().add(page);
+
+		// Get any page that was removed
+		if (removedPage != null)
+		{
+			removeAttribute(removedPage.getId());
+		}
+
+		// Add PageState entry to list of changed pages
+		pageChanged(page);
+	}
+

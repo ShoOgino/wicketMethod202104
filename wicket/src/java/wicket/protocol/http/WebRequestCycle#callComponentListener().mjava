@@ -13,6 +13,7 @@
 	{
 		// Get any component parameter
 		final String path = request.getParameter("component");
+		final String pageMapName = request.getParameter("pageMap");
 		if (path != null)
 		{
 			// Get version number
@@ -21,7 +22,7 @@
 					.parseInt(versionNumberString);
 
 			// Get page from path
-			final Page page = session.getPage(path, versionNumber);
+			final Page page = session.getPage(pageMapName, path, versionNumber);
 
 			// Does page exist?
 			if (page != null)
@@ -39,7 +40,7 @@
 		else
 		{
 			// Get path info
-			final String pathInfo = ((WebRequest)request).getHttpServletRequest().getPathInfo();
+			final String pathInfo = getWebRequest().getHttpServletRequest().getPathInfo();
 			if (pathInfo != null)
 			{
 				// Get resource for path

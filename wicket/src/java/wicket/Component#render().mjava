@@ -35,8 +35,8 @@
 				// Call implementation to render component
 				onRender();
 
-				// Tell the page that the component rendered
-				getPage().componentRendered(this);
+				// Component has been rendered
+				rendered();
 			}
 
 			// Restore original response
@@ -66,9 +66,16 @@
 			}
 			catch (RuntimeException e)
 			{
-				throw new WicketRuntimeException(
-						"Exception thrown while cleaning up from the following exception which was thrown during rendering: "
-								+ Strings.toString(renderException), e);
+				if (renderException != null)
+				{
+					throw new WicketRuntimeException(
+							"Exception thrown while cleaning up from the following exception which was thrown during rendering: "
+									+ Strings.toString(renderException), e);
+				}
+				else
+				{
+					throw e;
+				}
 			}
 		}
 	}

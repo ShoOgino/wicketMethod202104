@@ -1,0 +1,16 @@
+	/**
+	 * @see wicket.PageSetMap#pageSet(wicket.Page)
+	 */
+	public PageSet pageSet(final Page page)
+	{
+		for (Package p = page.getClass().getPackage(); p != null; p = Packages.parent(p))
+		{
+			final PageSet pageSet = (PageSet)packageToPageSet.get(p);
+			if (pageSet != null)
+			{
+				return pageSet;
+			}
+		}
+		return null;
+	}
+

@@ -1,0 +1,27 @@
+	/**
+	 * Redirects to any intercept page previously specified by a call to
+	 * redirectToInterceptPage.
+	 * 
+	 * @return True if an original destination was redirected to
+	 * @see PageMap#redirectToInterceptPage(Page)
+	 */
+	public final boolean continueToOriginalDestination()
+	{
+		final RequestCycle cycle = RequestCycle.get();
+		if (interceptContinuationURL != null)
+		{
+			cycle.getResponse().redirect(interceptContinuationURL);
+
+			// Since we are explicitly redirecting to a page already, we do not
+			// want a second redirect to occur automatically
+			cycle.setRedirect(false);
+
+			// Reset interception URL
+			interceptContinuationURL = null;
+			session.dirty();
+			
+			return true;
+		}
+		return false;
+	}
+
