@@ -6,18 +6,18 @@
             Object modelObject = listItem.getModelObject();
             if(modelObject instanceof List)
             {
-                Panel row = getTreeRowPanel("row", null);
+                Panel row = tree.internalGetTreeRowPanel("row", null);
                 row.setVisible(false);
                 listItem.add(row);
-                FileNLTreeRows nested = new FileNLTreeRows("nested", (List)modelObject, tree);
+                ListTreeRows nested = new ListTreeRows("nested", (List)modelObject, tree);
                 listItem.add(nested);
             }
             else
             {
                 TreeNodeModel nodeModel = (TreeNodeModel)modelObject;
-                Panel row = getTreeRowPanel("row", nodeModel);
+                Panel row = tree.internalGetTreeRowPanel("row", nodeModel);
                 listItem.add(row);
-                FileNLTreeRows nested = new FileNLTreeRows("nested", null, tree);
+                ListTreeRows nested = new ListTreeRows("nested", null, tree);
                 nested.setVisible(false);
                 listItem.add(nested);
             }

@@ -5,9 +5,9 @@
 		private void setCurrentTree(String type)
 		{
 			final Tree tree;
-			if(TYPE_NL.equals(type)) // create NL with simple linkClicked override
+			if(TYPE_LIST.equals(type)) // create NL with simple linkClicked override
             {
-                tree = new NLTree("fileTree", currentTree.getTreeState()){
+                tree = new ListTree("fileTree", currentTree.getTreeState()){
 
                 	protected void linkClicked(RequestCycle cycle, TreeNodeModel node)
                 	{
@@ -19,11 +19,11 @@
             }
             else if(TYPE_INDENT.equals(type)) // create indent tree
             {
-            	tree = new FileIndentTree("fileTree", currentTree.getTreeState());
+            	tree = new CustomIndentTree("fileTree", currentTree.getTreeState());
             }
-            else if(TYPE_NL_CUSTOM_ROWS.equals(type)) // create NL tree with custom panels
+            else if(TYPE_LIST_CUSTOM_ROWS.equals(type)) // create NL tree with custom panels
             {
-            	tree = new FileNLTreeCustomRows("fileTree", currentTree.getTreeState());
+            	tree = new CustomListTree("fileTree", currentTree.getTreeState());
             }
             else
             {
