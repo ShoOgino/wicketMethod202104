@@ -14,16 +14,9 @@
 	    // Must be marked as autolink tag
         if (tag.isAutolinkEnabled())
         {
-            // Autolinks are only supported with anchor tags
-            if (!tag.getName().equalsIgnoreCase("a"))
-            {
-                markupStream.throwMarkupException(
-                        "Automatic link can only be attached to an anchor tag");
-            }
-            
             // Try to find the Page matching the href
     	    final String componentName = tag.getComponentName();
-            final Link link = resolveAutomaticLink(container.getPage(), markupStream, componentName, tag);
+            final Component link = resolveAutomaticLink(container.getPage(), componentName, tag);
 
 	        // Add the link to the container
 			container.add(link);
@@ -34,7 +27,7 @@
 
 			// Render the Link
 			link.render();
-
+			
 			// Tell the container, we handled the componentName
 			return true;
 		}
