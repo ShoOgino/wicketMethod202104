@@ -6,7 +6,12 @@
 		return new AbstractReadOnlyDetachableModel()
 		{
 			private transient List list;
-			
+
+			public Object getNestedModel()
+			{
+				return list;
+			}
+
 			protected void onAttach()
 			{
 				this.list = new AbstractList()
@@ -29,11 +34,6 @@
 			}
 
 			protected Object onGetObject(final Component component)
-			{
-				return list;
-			}
-
-			public Object getNestedModel()
 			{
 				return list;
 			}
