@@ -1,15 +1,20 @@
     /**
      * Constructor.
      * @param componentName The name of this component
-     * @param table The table for this page link
+     * @param table The table the page links are referring to
      * @param increment increment by
      */
     public TableNavigationIncrementLink(final String componentName, final Table table, final int increment)
     {
         super(componentName, new IPageLink()
         {
+            /**
+             * @see wicket.markup.html.link.IPageLink#getPage()
+             */
             public Page getPage()
             {
+                // Determine the page number based on the current table page
+                // and the increment
                 int idx = table.getCurrentPage() + increment;
                 if (idx < 0)
                 {
@@ -20,10 +25,16 @@
                     idx = table.getList().size() - 1;
                 }
                 
+                // Tell the table which page to print next 
                 table.setCurrentPage(idx);
+                
+                // Return the table page the link is referring to
                 return table.getPage();
             }
 
+            /**
+             * @see wicket.markup.html.link.IPageLink#getPageClass()
+             */
             public Class getPageClass()
             {
                 return table.getPage().getClass();

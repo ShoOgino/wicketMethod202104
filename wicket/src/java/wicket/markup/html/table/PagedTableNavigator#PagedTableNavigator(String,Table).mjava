@@ -1,16 +1,18 @@
     /**
      * Constructor.
-     * @param componentName
-     * @param table
+     * @param componentName The component's name
+     * @param table The table the page links are referring to.
      */
     public PagedTableNavigator(final String componentName, final Table table)
     {
         super(componentName);
-        
+
+        // Get the navigation bar and add it to the hierarchy
         this.tableNavigation = newTableNavigation(table);
         add(tableNavigation);
             
-        // model = null; the model will be auto-generated during handleBody
+        // model = null; the headline test will be auto-generated during 
+        // handleBody.
         add(new Label("headline", null)
         {
             // Dynamically - at runtime - create the text
@@ -22,6 +24,7 @@
             }
         });
         
+        // Add additional page links
         add(new TableNavigationLink("first", table, 0));
         add(new TableNavigationIncrementLink("prev", table, -1));
         add(new TableNavigationIncrementLink("next", table, 1));
