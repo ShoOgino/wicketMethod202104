@@ -7,10 +7,11 @@
 	 */
 	protected final void onComponentTag(final ComponentTag tag)
 	{
+		checkComponentTag(tag, "input");
 		checkComponentTagAttribute(tag, "type", "image");
-
-		// Try to load image resource from src attribute if not already loaded
 		localizedImageResource.loadImageResource(tag);
 		super.onComponentTag(tag);
+		final String url = urlFor(IResourceListener.class);
+		tag.put("src", getResponse().encodeURL(url).replaceAll("&", "&amp;"));
 	}
 

@@ -1,0 +1,46 @@
+	/**
+	 * @param scope
+	 *            The resource's scope
+	 * @param name
+	 *            Name of resource to get
+	 * @param locale
+	 *            The locale of the resource
+	 * @param style
+	 *            The resource style
+	 * @return The logical resource
+	 */
+	public Resource getResource(final Class scope, final String name, final Locale locale,
+			final String style)
+	{
+		// Resource
+		Resource resource = null;
+
+		// 1. Look for fully qualified entry with locale and style
+		String key = name + (locale == null ? "" : "_" + locale.toString())
+				+ (style == null ? "" : "_" + style);
+		resource = (Resource)resourceMap.get(new ResourceKey(scope, key));
+		if (resource != null)
+		{
+			return resource;
+		}
+
+		// 2. Look for entry without style
+		key = name + (locale == null ? "" : "_" + locale.toString());
+		resource = (Resource)resourceMap.get(new ResourceKey(scope, key));
+		if (resource != null)
+		{
+			return resource;
+		}
+
+		// 3. Look for entry without locale
+		key = name + (style == null ? "" : "_" + style);
+		resource = (Resource)resourceMap.get(new ResourceKey(scope, key));
+		if (resource != null)
+		{
+			return resource;
+		}
+		
+		// 4. Look for base name
+		return (Resource)resourceMap.get(new ResourceKey(scope, name));
+	}
+

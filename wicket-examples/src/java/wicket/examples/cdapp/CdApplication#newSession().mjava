@@ -1,0 +1,17 @@
+	/**
+	 * @see wicket.ISessionFactory#newSession()
+	 */
+	public Session newSession()
+	{
+		return new WebSession(CdApplication.this)
+		{
+			/**
+			 * @see wicket.protocol.http.WebSession#getRequestCycleFactory()
+			 */
+			protected IRequestCycleFactory getRequestCycleFactory()
+			{
+				return requestCycleFactory;
+			}
+		};
+	}
+

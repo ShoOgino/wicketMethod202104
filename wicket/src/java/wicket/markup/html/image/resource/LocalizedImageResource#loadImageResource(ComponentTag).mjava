@@ -10,13 +10,31 @@
 	{
 		// If locale has changed from the initial locale used to attach image
 		// resource, then we need to reload the resource in the new locale
-		if (locale != null && locale != component.getLocale())
+		if ((locale != null && locale != component.getLocale())
+				|| (style != null && style.equals(component.getStyle())))
 		{
-			imageResource = null;
+			if (resource instanceof SharedResource)
+			{
+				if (isFactoryResource)
+				{
+					this.resource = null;
+				}
+				else
+				{
+					// Change the locale and style for the named resource so it will rebind
+					final SharedResource namedResource = (SharedResource)resource;
+					namedResource.setLocale(locale);
+					namedResource.setStyle(style);					
+				}
+			}
+			else
+			{
+				this.resource = null;
+			}
 		}
 
 		// Need to load image resource for this component?
-		if (imageResource == null)
+		if (resource == null)
 		{
 			// Get model string
 			final String modelString = component.getModelObjectAsString();
@@ -37,20 +55,21 @@
 			{
 				final Package basePackage = component.findParentWithAssociatedMarkup().getClass()
 						.getPackage();
-				this.imageResource = StaticImageResource.get(basePackage, resourcePath, component
+				this.resource = StaticImageResource.get(basePackage, resourcePath, component
 						.getLocale(), component.getStyle());
 			}
 
 			// If we can't get a static image and one isn't already assigned
-			if (imageResource == null)
+			if (resource == null)
 			{
-				setImageResource(generateImageResource(tag));
+				// Create image using factory
+				this.resource = newImageResource(tag);
+				this.isFactoryResource = true;
 			}
 
+			// Save component's locale and style so we can detect changes later
 			this.locale = component.getLocale();
+			this.style = component.getStyle();
 		}
-
-		final String url = component.getPage().urlFor(imageResource.getPath());
-		tag.put("src", component.getResponse().encodeURL(url).replaceAll("&", "&amp;"));
 	}
 
