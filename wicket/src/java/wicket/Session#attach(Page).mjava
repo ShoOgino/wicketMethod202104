@@ -1,0 +1,16 @@
+	/**
+	 * @param page
+	 *            The page to traverse
+	 */
+	private void attach(Page page)
+	{
+		page.visitChildren(new IVisitor()
+		{
+			public Object component(Component component)
+			{
+				component.onSessionAttach();
+				return IVisitor.CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+
