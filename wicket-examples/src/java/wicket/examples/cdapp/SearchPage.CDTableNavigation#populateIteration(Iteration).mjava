@@ -1,0 +1,21 @@
+		/**
+		 * @see wicket.markup.html.list.Loop#populateIteration(wicket.markup.html.list.Loop.Iteration)
+		 */
+		protected void populateIteration(final Iteration iteration)
+		{
+			final PageableListViewNavigationLink link = new PageableListViewNavigationLink(
+					"pageLink", pageableListView, iteration.getIteration());
+
+			if (iteration.getIteration() > 0)
+			{
+				iteration.add(new Label("separator", "|"));
+			}
+			else
+			{
+				iteration.add(new Label("separator", ""));
+			}
+			link.add(new Label("pageNumber", String.valueOf(iteration.getIteration() + 1)));
+			link.add(new Label("pageLabel", "page"));
+			iteration.add(link);
+		}
+
