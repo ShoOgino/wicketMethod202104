@@ -1,9 +1,14 @@
     /**
-     * Gets input (that caused the error).
-     * @return the input.
+     * Get the input that caused this validation error message.
+     * @return The input, or null if none is available.
      */
-    public Serializable getInput()
+    public String getInput()
     {
-        return input;
+        final Component reporter = getReporter();
+        if (reporter instanceof FormComponent)
+        {
+            return ((FormComponent)getReporter()).getStringValue();
+        }
+        return null;
     }
 
