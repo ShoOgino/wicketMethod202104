@@ -1,39 +1,26 @@
     /**
-     * Creates a new Page and apply the PageParameters to the Page constructor
-     * if a proper constructor exists. Else use the default constructor.
-     * 
-     * @param pageClass
-     *            The name of the page class to create
-     * @param parameters
-     *            The page parameters
-     * @return The new page
-     * @throws WicketRuntimeException
+     * @see IPageFactory#newPage(Class, PageParameters)
      */
-    public Page newPage(final Class pageClass, final PageParameters parameters)
+    public final Page newPage(final Class pageClass, final PageParameters parameters)
     {
-        // Find constructor for page class. Try constructor with PageParameters
-        // first. If not available try default constructor.
-        Constructor constructor = null;
-        try
+        // Try to get constructor that takes PageParameters
+        Constructor constructor = constructor(pageClass, PageParameters.class);
+
+        // If we got a PageParameters constructor
+        if (constructor != null)
         {
-            // Constructor with PageParameter argument
-            constructor = getConstructor(pageClass, PageParameters.class);
-        }
-        catch (RuntimeException e)
-        {
-            // Try default constructor
-            constructor = getConstructor(pageClass, null);
+            // return new Page(parameters)
+            return newPage(constructor, parameters);
         }
 
-        if (constructor == null)
+        // If PageParameters is null or empty, try default constructor
+        if (parameters == null || parameters.isEmpty())
         {
-            throw new WicketRuntimeException("Could not find constructor for page '"
-                    + pageClass
-                    + "' with PageParameter argument or default constructor");
+            return newPage(pageClass);
         }
 
-        // Create an instance of Page. PageParameters will be applied
-        // Depending on the constructor found,
-        return newPage(constructor, parameters);
+        // Couldn't find PageParameters constructor and parameters were passed
+        throw new WicketRuntimeException("Could not find a constructor in " + pageClass
+                + " that would accept PageParameters argument " + parameters);
     }
 

@@ -1,14 +1,19 @@
     /**
-     * Creates a new page. If Page with PageParameter argument constructor
-     * exists, PageParameter will be null.
-     * 
-     * @param pageClass
-     *            The page class to instantiate
-     * @return The page
-     * @throws WicketRuntimeException
+     * @see IPageFactory#newPage(Class)
      */
     public final Page newPage(final Class pageClass)
     {
-        return newPage(pageClass, (PageParameters) null);
+        try
+        {
+            return (Page) pageClass.newInstance();
+        }
+        catch (InstantiationException e)
+        {
+            throw new WicketRuntimeException("Unable to create page from class " + pageClass, e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new WicketRuntimeException("Unable to create page from class " + pageClass, e);
+        }
     }
 

@@ -1,0 +1,35 @@
+    /**
+     * Looks up a one-arg Page constructor by class and argument type.
+     * 
+     * @param pageClass
+     *            The class of page
+     * @param argumentType
+     *            The argument type
+     * @return The page constructor, or null if no one-arg constructor can be
+     *         found taking the given argument type.
+     */
+    private final Constructor constructor(final Class pageClass, final Class argumentType)
+    {
+        // Get constructor for page class from cache
+        Constructor constructor = (Constructor) constructorForClass.get(pageClass);
+
+        // Need to look up?
+        if (constructor == null)
+        {
+            try
+            {
+                // Try to find the constructor
+                constructor = pageClass.getConstructor(new Class[] { argumentType });
+
+                // Store it in the cache
+                constructorForClass.put(pageClass, constructor);
+            }
+            catch (NoSuchMethodException e)
+            {
+                return null;
+            }
+        }
+
+        return constructor;
+    }
+

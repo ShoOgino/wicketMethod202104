@@ -1,48 +1,35 @@
     /**
-     * Creates a new instance of a page using the given constructor and
-     * constructor argument.
+     * Creates a new Page using the given constructor and argument.
      * 
      * @param constructor
      *            The constructor to invoke
-     * @param parameter
-     *            The parameter to pass to the constructor
+     * @param argument
+     *            The argument to pass to the constructor
      * @return The new page
      * @throws WicketRuntimeException
+     *             Thrown if the Page cannot be instantiated using the given
+     *             constructor and argument.
      */
-    protected Page newPage(final Constructor constructor, final Object parameter)
+    private final Page newPage(final Constructor constructor, final Object argument)
     {
         try
         {
-            if (constructor.getParameterTypes().length == 0)
-            {
-                return (Page) constructor.newInstance(new Object[0]);
-            }
-
-            return (Page) constructor.newInstance(new Object[] { parameter });
+            return (Page) constructor.newInstance(new Object[] { argument });
         }
         catch (InstantiationException e)
         {
-            throw new WicketRuntimeException("Cannot instantiate page object with "
-                    + constructor, e);
+            throw new WicketRuntimeException("Can't instantiate page using constructor "
+                    + constructor + " and argument " + argument, e);
         }
         catch (IllegalAccessException e)
         {
-            throw new WicketRuntimeException("Cannot access " + constructor, e);
+            throw new WicketRuntimeException("Can't instantiate page using constructor "
+                    + constructor + " and argument " + argument, e);
         }
         catch (InvocationTargetException e)
         {
-            // In order to avoid classloader issues within Wicket, wicket.jar
-            // has to be in /WEB-INF/lib
-            final Class homePageClass = application.getPages().getHomePage();
-            if (homePageClass.getClassLoader() != constructor.getClass()
-                    .getClassLoader())
-            {
-                throw new WicketRuntimeException(
-                        "Classloader problems: Most probably Wicket-xxx.jar is not in /WEB-INF/lib: Exception thrown by "
-                                + constructor, e);
-            }
-
-            throw new WicketRuntimeException("Exception thrown by " + constructor, e);
+            throw new WicketRuntimeException("Can't instantiate page using constructor "
+                    + constructor + " and argument " + argument, e);
         }
     }
 
