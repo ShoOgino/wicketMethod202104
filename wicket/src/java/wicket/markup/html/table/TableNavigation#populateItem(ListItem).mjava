@@ -1,20 +1,21 @@
     /**
-     * Adds a {@link TableNavigationLink}to the cell. Override this to add custom
-     * components for your navigation. Use (TableNavigationLink)cell.getModel() to get the
-     * current link.
+     * Populate the current cell with a page link (TableNavigationLink) enclosing
+     * the page number the link is pointing to. Subclasses may provide there own
+     * implementation adding more sophisticated page links.
+     * 
      * @param listItem the list item to populate
      * @see wicket.markup.html.table.Table#populateItem(wicket.markup.html.table.ListItem)
      */
     protected void populateItem(final ListItem listItem)
     {
-        // Get link
-        final int page = ((Integer) listItem.getModelObject()).intValue();
-        final TableNavigationLink link = new TableNavigationLink("pageLink", table, page);
-
-        // Add pagenumber label (1..n) to the navigation link
-        link.add(new Label("pageNumber", String.valueOf(page + 1)));
-
-        // Add the navigation link to the cell
+        // Get the index of page this link shall point to
+        final int pageIndex = ((Integer) listItem.getModelObject()).intValue();
+        
+        // Add a page link pointing to the page
+        final TableNavigationLink link = new TableNavigationLink("pageLink", table, pageIndex);
         listItem.add(link);
+
+        // Add a label (the page number) to the list which is enclosed by the link
+        link.add(new Label("pageNumber", String.valueOf(pageIndex + 1)));
     }
 
