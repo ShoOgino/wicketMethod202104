@@ -1,15 +1,18 @@
     /**
      * Validates the given form component.
+     * Validates that a form component's value is of a certain min/max length.
      * @param input the input to validate
      * @param component The component to validate
      * @return Error for component or NO_ERROR if none
      */
     public ValidationErrorMessage validate(
-            final Serializable input, final FormComponent component)
+            final String input, final FormComponent component)
     {
+        // Get value
         final String value = (String)input;
 
-        if (value == null || value.trim().equals(""))
+        // Check length
+        if ((checkMin && (value.length() < min)) || (checkMax && (value.length() > max)))
         {
             return errorMessage(input, component);
         }
