@@ -3,12 +3,21 @@
 	 * 
 	 * @return The model
 	 */
-	public final IModel getModel()
+	public IModel getModel()
 	{
+		// If model is null
+		if (model == null)
+		{
+			// give subclass a chance to lazy-init model
+			onNullModel();
+		}
+		
+		// Attach model if need be
 		if (model instanceof IDetachableModel)
 		{
 			((IDetachableModel)model).attach();
 		}
+		
 		return model;
 	}
 
