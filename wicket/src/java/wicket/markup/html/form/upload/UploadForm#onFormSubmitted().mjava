@@ -9,8 +9,31 @@
 		// Change the request to a multipart web request so parameters are
 		// parsed out correctly
 		final HttpServletRequest request = ((WebRequest)getRequest()).getHttpServletRequest();
-		final MultipartWebRequest multipartWebRequest = new MultipartWebRequest(request);
-		getRequestCycle().setRequest(multipartWebRequest);
+		try
+		{
+			final MultipartWebRequest multipartWebRequest = new MultipartWebRequest(this, request);
+			getRequestCycle().setRequest(multipartWebRequest);
+		}
+		catch (FileUploadException e)
+		{
+			// Create model with exception and maximum size values
+			final HashMap model = new HashMap();
+			model.put("exception", e);
+			model.put("maxSize", maxSize);
+
+			if (e instanceof SizeLimitExceededException)
+			{
+				// Resource key should be <form-id>.uploadTooLarge to override default message
+				final String defaultValue = "Upload must be less than " + maxSize;
+				error(getString(getId() + ".uploadTooLarge", Model.valueOf(model), defaultValue));
+			}
+			else
+			{
+				// Resource key should be <form-id>.uploadFailed to override default message
+				final String defaultValue = "Upload failed: " + e.getLocalizedMessage();
+				error(getString(getId() + ".uploadFailed", Model.valueOf(model), defaultValue));
+			}
+		}
 
 		// Now do normal form submit validation processing
 		super.onFormSubmitted();

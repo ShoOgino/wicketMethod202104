@@ -3,13 +3,20 @@
 	 */
 	protected void updateModel()
 	{
-		final MultipartWebRequest multipartWebRequest = ((MultipartWebRequest)getRequest());
-		final FileItem item = multipartWebRequest.getFile(getPath());
-
-		// only update the model when there is a file (larger than zero bytes)
-		if (item != null && item.getSize() > 0)
+		// Get request 
+		final Request request = getRequest();
+		
+		// If we successfully installed a multipart request
+		if (request instanceof MultipartWebRequest)
 		{
-			this.fileUpload = new FileUpload(item);
+			// Get the item for the path
+			final FileItem item = ((MultipartWebRequest)request).getFile(getPath());
+	
+			// Only update the model when there is a file (larger than zero bytes)
+			if (item != null && item.getSize() > 0)
+			{
+				this.fileUpload = new FileUpload(item);
+			}
 		}
 	}
 
