@@ -1,0 +1,48 @@
+	/**
+	 * Constructor.
+	 * @param componentName The name of this component
+	 * @param pageableListView The list view the page links are referring to
+	 * @param increment increment by
+	 */
+	public PageableListViewNavigationIncrementLink(final String componentName,
+			final PageableListView pageableListView, final int increment)
+	{
+		super(componentName, new IPageLink()
+		{
+			/**
+			 * @see wicket.markup.html.link.IPageLink#getPage()
+			 */
+			public Page getPage()
+			{
+				// Determine the page number based on the current PageableListView page
+				// and the increment
+				int idx = pageableListView.getCurrentPage() + increment;
+				if (idx < 0)
+				{
+					idx = 0;
+				}
+				else if (idx > (pageableListView.getList().size() - 1))
+				{
+					idx = pageableListView.getList().size() - 1;
+				}
+
+				// Tell the PageableListView which page to print next
+				pageableListView.setCurrentPage(idx);
+
+				// Return the PageableListView page the link is referring to
+				return pageableListView.getPage();
+			}
+
+			/**
+			 * @see wicket.markup.html.link.IPageLink#getPageIdentity()
+			 */
+			public Class getPageIdentity()
+			{
+				return pageableListView.getPage().getClass();
+			}
+		});
+
+		this.increment = increment;
+		this.pageableListView = pageableListView;
+	}
+

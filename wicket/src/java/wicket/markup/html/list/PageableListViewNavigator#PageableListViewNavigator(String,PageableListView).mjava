@@ -1,0 +1,33 @@
+	/**
+	 * Constructor.
+	 * @param componentName The component's name
+	 * @param pageableListView The PageableListView the page links are referring to.
+	 */
+	public PageableListViewNavigator(final String componentName,
+			final PageableListView pageableListView)
+	{
+		super(componentName);
+
+		// Get the navigation bar and add it to the hierarchy
+		this.pageableListViewNavigation = newNavigation(pageableListView);
+		add(pageableListViewNavigation);
+
+		// model = null; the headline test will be auto-generated during
+		// handleBody.
+		add(new Label("headline", null)
+		{
+			// Dynamically - at runtime - create the text
+			protected void handleBody(final MarkupStream markupStream, final ComponentTag openTag)
+			{
+				String text = getHeadlineText(pageableListView);
+				replaceBody(markupStream, openTag, text);
+			}
+		});
+
+		// Add additional page links
+		add(new PageableListViewNavigationLink("first", pageableListView, 0));
+		add(new PageableListViewNavigationIncrementLink("prev", pageableListView, -1));
+		add(new PageableListViewNavigationIncrementLink("next", pageableListView, 1));
+		add(new PageableListViewNavigationLink("last", pageableListView, pageableListView.getPageCount() - 1));
+	}
+
