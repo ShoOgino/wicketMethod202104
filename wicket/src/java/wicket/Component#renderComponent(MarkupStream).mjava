@@ -1,8 +1,8 @@
 	/**
 	 * Renders the component at the current position in the given markup stream.
 	 * The method handleComponentTag() is called to allow the component to
-	 * mutate the start tag. The method handleBody() is then called to permit
-	 * the component to render its body.
+	 * mutate the start tag. The method handleComponentTagBody() is then called
+	 * to permit the component to render its body.
 	 * 
 	 * @param markupStream
 	 *            The markup stream
@@ -35,15 +35,15 @@
 		}
 
 		// Render open tag
-		renderTag(tag);
+		renderComponentTag(tag);
 		markupStream.next();
 
 		// Render body using original tag type so implementors
 		// of handleBody will know if the tag has a body or not
 		tag.setType(type);
-		handleBody(markupStream, tag);
+		handleComponentTagBody(markupStream, tag);
 
 		// Render close tag
-		renderCloseTag(markupStream, tag);
+		renderClosingComponentTag(markupStream, tag);
 	}
 

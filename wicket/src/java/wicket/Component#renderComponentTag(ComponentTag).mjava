@@ -6,16 +6,25 @@
 	 * @param tag
 	 *            The tag to write
 	 */
-	protected final void renderTag(ComponentTag tag)
+	protected final void renderComponentTag(ComponentTag tag)
 	{
-		// Apply attribute tag modifiers
-		if ((attributeModifiers != null) && (tag.getType() != XmlTag.CLOSE))
+		// Apply attribute modifiers
+		if (attributeModifiers != null && tag.getType() != XmlTag.CLOSE)
 		{
 			tag = tag.mutable();
 			for (Iterator it = attributeModifiers.iterator(); it.hasNext();)
 			{
 				((AttributeModifier)it.next()).replaceAttibuteValue(tag);
 			}
+		}
+
+		// Strip component name attribute if desired
+		final ApplicationSettings settings = getApplication().getSettings();
+		if (settings.getStripComponentNames())
+		{
+			// Get mutable copy of tag and remove component name
+			tag = tag.mutable();
+			tag.removeComponentName(settings.getComponentNameAttribute());
 		}
 
 		// Write the tag

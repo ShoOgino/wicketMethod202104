@@ -1,5 +1,7 @@
 	/**
-	 * Renders associated markup for a Border or Panel component.
+	 * Renders the entire associated markup stream for a container such as a
+	 * Border or Panel. Any leading or trailing raw markup in the associated
+	 * markup is skipped.
 	 * 
 	 * @param openTagName
 	 *            the tag to render the associated markup for
@@ -20,15 +22,15 @@
 		final ComponentTag associatedMarkupOpenTag = associatedMarkupStream.getTag();
 
 		// Check for required open tag name
-		if (!(associatedMarkupStream.atOpenTag(openTagName) 
-		        && (associatedMarkupOpenTag instanceof ComponentWicketTag)))
+		if (!(associatedMarkupStream.atOpenTag(openTagName) && (associatedMarkupOpenTag instanceof ComponentWicketTag)))
 		{
 			associatedMarkupStream.throwMarkupException(exceptionMessage);
 		}
 
-		renderTag(associatedMarkupStream, associatedMarkupOpenTag);
-		renderBody(associatedMarkupStream, associatedMarkupOpenTag);
-		renderCloseTag(associatedMarkupStream, associatedMarkupOpenTag);
+		renderComponentTag(associatedMarkupOpenTag);
+        associatedMarkupStream.next();
+		renderComponentTagBody(associatedMarkupStream, associatedMarkupOpenTag);
+		renderClosingComponentTag(associatedMarkupStream, associatedMarkupOpenTag);
 		setMarkupStream(originalMarkupStream);
 	}
 

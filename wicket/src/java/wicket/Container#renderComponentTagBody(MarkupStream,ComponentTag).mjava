@@ -1,12 +1,15 @@
 	/**
-	 * Renders markup until the closing tag for openTag is reached.
+	 * Renders markup for the body of a ComponentTag from the current position
+	 * in the given markup stream. If the open tag passed in does not require a
+	 * close tag, nothing happens. Markup is rendered until the closing tag for
+	 * openTag is reached.
 	 * 
 	 * @param markupStream
 	 *            The markup stream
 	 * @param openTag
 	 *            The open tag
 	 */
-	protected final void renderBody(final MarkupStream markupStream, final ComponentTag openTag)
+	protected final void renderComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
 		// If the open tag requires a close tag
 		if (openTag.requiresCloseTag())
@@ -17,9 +20,7 @@
 				// Render markup element. Doing so must advance the markup
 				// stream
 				final int index = markupStream.getCurrentIndex();
-
 				renderNext(markupStream);
-
 				if (index == markupStream.getCurrentIndex())
 				{
 					markupStream.throwMarkupException("Markup element at index " + index
