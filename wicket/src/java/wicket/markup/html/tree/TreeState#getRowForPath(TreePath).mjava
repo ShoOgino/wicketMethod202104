@@ -1,0 +1,27 @@
+	/**
+	 * Returns the row that the last item identified in path is visible at.
+	 * Will return -1 if any of the elements in path are not currently visible.
+	 * @param path the path
+	 * @return the row that the last item identified in path is visible at
+	 */
+	public int getRowForPath(TreePath path)
+	{
+		if (path == null || root == null)
+			return -1;
+
+		TreeStateNode node = getNodeForPath(path, true, false);
+
+		if (node != null)
+			return node.getRow();
+
+		TreePath parentPath = path.getParentPath();
+
+		node = getNodeForPath(parentPath, true, false);
+		if (node != null && node.isExpanded())
+		{
+			return node.getRowToModelIndex(treeModel.getIndexOfChild(parentPath
+					.getLastPathComponent(), path.getLastPathComponent()));
+		}
+		return -1;
+	}
+
