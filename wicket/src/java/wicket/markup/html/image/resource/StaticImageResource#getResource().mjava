@@ -3,6 +3,12 @@
 	 */
 	public IResource getResource()
 	{
+		if (resource == null)
+		{
+			// Locate resource
+			this.resource = RequestCycle.get().getApplication().getResourceLocator().locate(
+					absolutePath, style, locale, null);
+		}
 		return resource;
 	}
 
