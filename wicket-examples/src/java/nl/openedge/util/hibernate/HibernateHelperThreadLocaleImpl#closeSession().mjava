@@ -1,0 +1,21 @@
+	/**
+	 * close session for this Thread.
+	 * @throws HibernateException when an unexpected Hibernate exception occurs
+	 */
+	public void closeSession() throws HibernateException
+	{
+		Session sess = (Session) hibernateHolder.get();
+		if (sess != null)
+		{
+			hibernateHolder.set(null);
+			try
+			{
+				sess.close();
+			}
+			catch (HibernateException ex)
+			{
+				log.error(ex);
+			}
+		}
+	}
+

@@ -1,0 +1,34 @@
+	/**
+	 * Does initialization of the helper.
+	 */
+	private static void initialize()
+	{
+		String filename = PROPERTIES_LOCATION;
+		// first, see if there are system properties defined
+		Properties properties = new Properties();
+		InputStream is = null;
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		if (loader != null)
+		{ // try to load with context class loader
+			is = loader.getResourceAsStream(filename);
+		}
+		if ((loader == null) || (is == null))
+		{ // classloader fallthrough
+			is = HibernateHelper.class.getResourceAsStream(filename);
+		}
+		if (is != null)
+		{ // if an inputstream was found, try to read properties object from it
+			try
+			{
+				properties.load(is);
+			}
+			catch (IOException e)
+			{
+				log.error(e.getMessage(), e);
+			}
+		}
+		// do further initialization
+		initializeDelegate(properties);
+		initializeHibernateConfig(properties);
+	}
+

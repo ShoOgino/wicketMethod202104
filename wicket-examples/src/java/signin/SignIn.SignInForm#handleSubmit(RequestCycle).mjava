@@ -1,0 +1,22 @@
+        /**
+         * @see com.voicetribe.wicket.markup.html.form.Form#handleSubmit(com.voicetribe.wicket.RequestCycle)
+         */
+        public final void handleSubmit(final RequestCycle cycle)
+        {
+            // Sign the user in
+            if (properties.getString("username").equals("jonathan") &&
+                properties.getString("password").equals("password"))
+            {
+                cycle.getSession().setProperty("user", "jonathan");
+                if (!cycle.continueToOriginalDestination())
+                {
+                    cycle.setPage(new Home(PageParameters.NULL));
+                }
+            }
+            else
+            {
+                // Form method that will notify feedback panel
+                errorMessage("Couldn't sign you in");
+            }
+        }
+

@@ -1,0 +1,29 @@
+	/**
+	 * Filter statements on start of statement.
+	 * @param drops statements
+	 * @param inclAlterFlag if true, everything that starts with alter, else the inverse
+	 * @return part of the input
+	 */
+	private String[] splitAltTables(String[] drops, boolean inclAlterFlag)
+	{
+		List temp = new ArrayList();
+		for (int i = 0; i < drops.length; i++)
+		{
+			if (inclAlterFlag)
+			{
+				if (drops[i].toLowerCase().trim().startsWith("alter"))
+				{
+					temp.add(drops[i]);
+				}
+			}
+			else
+			{
+				if (!drops[i].toLowerCase().trim().startsWith("alter"))
+				{
+					temp.add(drops[i]);
+				}
+			}
+		}
+		return (String[]) temp.toArray(new String[temp.size()]);
+	}
+

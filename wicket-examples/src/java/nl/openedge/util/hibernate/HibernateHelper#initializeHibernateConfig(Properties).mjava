@@ -1,0 +1,36 @@
+	/**
+	 * initialize hibernate config.
+	 * 
+	 * @param properties
+	 *            the properties
+	 */
+	private static void initializeHibernateConfig(Properties properties)
+	{
+		String hibernateConfig = System.getProperty(SYSTEM_PROPERTY_HIBERNATE_CONFIG);
+		// is the default configuration location overriden?
+		if (hibernateConfig == null) // if not a system property
+		{
+			hibernateConfig = properties.getProperty(PROPERTY_HIBERNATE_CONFIG);
+		}
+		if (hibernateConfig != null)
+		{
+			log.info("using Hibernate config from URL: " + hibernateConfig);
+			try
+			{
+				URL config = URLHelper.convertToURL(hibernateConfig, HibernateHelper.class);
+				if (config != null)
+				{
+					setConfigURL(config);
+				}
+				else
+				{
+					log.error("unable to construct URL from " + hibernateConfig);
+				}
+			}
+			catch (MalformedURLException e)
+			{
+				log.error(e.getMessage(), e);
+			}
+		}
+	}
+

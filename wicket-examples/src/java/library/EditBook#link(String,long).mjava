@@ -1,0 +1,22 @@
+    /**
+     * Gets a link to a page that will edit a book
+     * @param name The name of the link
+     * @param id The id of the book that the page will edit
+     * @return The page link
+     */
+    public static PageLink link(final String name, final long id)
+    {
+        return new PageLink(name, new IPageLink()
+        {
+            public Page getPage()
+            {
+                return new EditBook(Book.get(id));
+            }
+
+            public Class getPageClass()
+            {
+                return EditBook.class;
+            }
+        });
+    }
+

@@ -1,0 +1,21 @@
+	/**
+	 * @param servletContext
+	 *            the servlet context
+	 * @param pathToTranslate
+	 *            the path to translate
+	 * @return URL the URL as a resource from the servlet context
+	 * @throws MalformedURLException
+	 *             when the path does not follow the URL rules
+	 */
+	private static URL getServletContextURL(ServletContext servletContext, String pathToTranslate)
+			throws MalformedURLException
+	{
+		String path = pathToTranslate;
+		URL url;
+		// Quick sanity check
+		if (!path.startsWith("/"))
+			path = "/" + path;
+		url = servletContext.getResource(path);
+		return url;
+	}
+

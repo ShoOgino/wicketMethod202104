@@ -1,0 +1,27 @@
+    /**
+     * Constructor
+     * @param parameters The page parameters
+     */
+    public SignIn(final PageParameters parameters)
+    {
+        add(new SignInPanel("signInPanel")
+        {
+            protected String signIn(final RequestCycle cycle, final String username, final String password)
+            {
+                // Sign the user in
+                final User user = Authenticator.forSession(cycle.getSession()).authenticate(username, password);
+
+                // If the user was signed in
+                if (user != null)
+                {
+                    return null;
+                }
+                else
+                {
+                    // Form method that will notify feedback panel
+                    return getLocalizedString("couldNotAuthenticate");
+                }
+            }
+        });
+    }
+

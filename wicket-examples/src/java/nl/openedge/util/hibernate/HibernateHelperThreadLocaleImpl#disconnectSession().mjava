@@ -1,0 +1,21 @@
+	/**
+	 * disconnect session and remove from threadlocal for this Thread.
+	 * @throws HibernateException when an unexpected Hibernate exception occurs
+	 */
+	public void disconnectSession() throws HibernateException
+	{
+		Session sess = (Session) hibernateHolder.get();
+		if (sess != null)
+		{
+			hibernateHolder.set(null);
+			try
+			{
+				sess.disconnect();
+			}
+			catch (HibernateException ex)
+			{
+				log.error(ex);
+			}
+		}
+	}
+

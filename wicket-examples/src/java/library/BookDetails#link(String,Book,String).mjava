@@ -1,0 +1,23 @@
+    /**
+     * Creates an external page link
+     * @param name The name of the link component to create
+     * @param book The book to link to
+     * @param noBookTitle The title to show if book is null
+     * @return The external page link
+     */
+    public static ExternalPageLink link(final String name, final Book book, final String noBookTitle)
+    {
+        final ExternalPageLink link = new ExternalPageLink(name, BookDetails.class);
+        if (book != null)
+        {
+            link.setParameter("id", book.getId());
+            link.add(new Label("title", book));
+        }
+        else
+        {
+            link.add(new Label("title", noBookTitle));
+            link.setEnabled(false);
+        }
+        return link;
+    }
+

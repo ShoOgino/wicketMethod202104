@@ -1,0 +1,27 @@
+    /**
+     * Checks the given username and password, returning a User object if
+     * if the username and password identify a valid user.
+     * @param username The username
+     * @param password The password
+     * @return The signed in user
+     */
+    public final User authenticate(final String username, final String password)
+    {
+        if (user == null)
+        {
+            // Trivial password "db"
+            if ("jonathan".equalsIgnoreCase(username) && "password".equalsIgnoreCase(password))
+            {
+                // Create User object
+                final User user = new User();
+                user.setName(username);
+                final List books = user.getBooks();
+                books.add(new Book("Effective Java", "Joshua Bloch", Book.NON_FICTION));
+                books.add(new Book("The Illiad", "Homer Simpson", Book.FICTION));
+                books.add(new Book("Why Stock Markets Crash", "Didier Sornette", Book.NON_FICTION));
+                setUser(user);
+            }
+        }
+        return user;
+    }
+

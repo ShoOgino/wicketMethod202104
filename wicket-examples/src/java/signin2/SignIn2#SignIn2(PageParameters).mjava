@@ -1,0 +1,24 @@
+    /**
+     * Constructor
+     * @param parameters The page parameters
+     */
+    public SignIn2(final PageParameters parameters)
+    {
+        add(new SignInPanel("signInPanel")
+        {
+            protected String signIn(RequestCycle cycle, String username, String password)
+            {
+                // Sign the user in
+                if (username.equals("jonathan") && password.equals("password"))
+                {
+                    cycle.getSession().setProperty("user", "jonathan");
+                    return null;
+                }
+                else
+                {
+                    return "Couldn't sign you in";
+                }
+            }
+        });
+    }
+
