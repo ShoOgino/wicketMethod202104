@@ -1,35 +1,35 @@
-    /**
-     * Returns a bookmarkable URL that references a given page class using a
-     * given set of page parameters. Since the URL which is returned contains
-     * all information necessary to instantiate and render the page, it can be
-     * stored in a user's browser as a stable bookmark.
-     * 
-     * @param pageClass
-     *            Class of page
-     * @param parameters
-     *            Parameters to page
-     * @return Bookmarkable URL to page
-     */
-    public String urlFor(final Class pageClass, final PageParameters parameters)
-    {
-        final StringBuffer buffer = urlPrefix();
+	/**
+	 * Returns a bookmarkable URL that references a given page class using a
+	 * given set of page parameters. Since the URL which is returned contains
+	 * all information necessary to instantiate and render the page, it can be
+	 * stored in a user's browser as a stable bookmark.
+	 * 
+	 * @param pageClass
+	 *            Class of page
+	 * @param parameters
+	 *            Parameters to page
+	 * @return Bookmarkable URL to page
+	 */
+	public String urlFor(final Class pageClass, final PageParameters parameters)
+	{
+		final StringBuffer buffer = urlPrefix();
 
-        buffer.append("?bookmarkablePage=");
-        buffer.append(pageClass.getName());
+		buffer.append("?bookmarkablePage=");
+		buffer.append(pageClass.getName());
 
-        if (parameters != null)
-        {
-            for (final Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();)
-            {
-                final String key = (String)iterator.next();
+		if (parameters != null)
+		{
+			for (final Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();)
+			{
+				final String key = (String)iterator.next();
 
-                buffer.append('&');
-                buffer.append(key);
-                buffer.append('=');
-                buffer.append(parameters.getString(key));
-            }
-        }
+				buffer.append('&');
+				buffer.append(key);
+				buffer.append('=');
+				buffer.append(parameters.getString(key));
+			}
+		}
 
-        return response.encodeURL(buffer.toString());
-    }
+		return response.encodeURL(buffer.toString());
+	}
 
