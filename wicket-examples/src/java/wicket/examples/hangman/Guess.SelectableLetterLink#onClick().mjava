@@ -4,20 +4,22 @@
 		 */
 		public void onClick()
 		{
-			final RequestCycle requestCycle = getRequestCycle();
 			log.error("Linked clicked for letter: " + letter);
 			setEnabled(false);
 			getHangman().guessLetter(letter);
-			if (getHangman().isGuessed())
+			if (getHangman().isWon())
 			{
 				// Redirect to win page
-				requestCycle.setResponsePage(new Win(Guess.this));
+				setResponsePage(new Win(Guess.this));
 			}
-			else if (getHangman().isAllGuessesUsed())
+			else if (getHangman().isLost())
 			{
 				// Redirect to loose page
-				requestCycle.setResponsePage(new Lose(Guess.this));
+				setResponsePage(new Lose(Guess.this));
 			}
-			// else return to guess page with new state to display
+			else
+			{
+				// Return to guess page with new state to display
+			}
 		}
 
