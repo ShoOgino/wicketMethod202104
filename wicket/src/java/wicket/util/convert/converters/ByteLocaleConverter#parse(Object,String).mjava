@@ -1,5 +1,5 @@
     /**
-     * Convert the specified locale-sensitive input object into an output object of the
+     * Converts the specified locale-sensitive input object into an output object of the
      * specified type. This method will return values of type Byte.
      * @param value The input object to be converted
      * @param pattern The pattern is used for the convertion
@@ -10,14 +10,11 @@
     protected Object parse(Object value, String pattern) throws ParseException
     {
         final Number parsed = (Number) super.parse(value, pattern);
-
         if (parsed.longValue() != parsed.byteValue())
         {
             throw new ConversionException("Supplied number is not of type Byte: "
                     + parsed.longValue());
         }
-
-        // now return property Byte
         return new Byte(parsed.byteValue());
     }
 

@@ -1,25 +1,28 @@
     /**
-     * Convert the specified input object into an output object of the specified type.
-     * @param type Data type to which this value should be converted
+     * Converts the specified input object into an output object of the specified type.
      * @param value The input value to be converted
      * @return converted object
      * @exception ConversionException if conversion cannot be performed successfully
      */
-    public Object convert(Class type, Object value)
+    public Object convert(Object value)
     {
         if (value == null)
         {
             return null;
         }
 
-        if (value instanceof Character)
+        if (value instanceof Integer)
         {
             return (value);
+        }
+        else if (value instanceof Number)
+        {
+            return new Integer(((Number) value).intValue());
         }
 
         try
         {
-            return (new Character(value.toString().charAt(0)));
+            return (new Integer(value.toString()));
         }
         catch (Exception e)
         {
