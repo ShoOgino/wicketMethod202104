@@ -5,18 +5,12 @@
 	{
 		super(componentName, model);
 
-		if (model != null)
+		if (model == null)
 		{
-			if (getModelObject() == null)
-			{
-				this.setModelObject(Collections.EMPTY_LIST);
-			}
-			else if (!(getModelObject() instanceof List))
-			{
-				throw new IllegalArgumentException("A ListView model object must be of type List");
-			}
+		    throw new IllegalArgumentException(
+		            "null models are not allowed. You may a Loop type instead");
 		}
-
+		
 		// A reasonable default for viewSize can not be determined right now,
 		// because list items might be added or removed until ListView
 		// gets rendered.

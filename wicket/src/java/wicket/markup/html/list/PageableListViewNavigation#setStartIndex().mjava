@@ -5,7 +5,7 @@
 	private void setStartIndex()
 	{
 		// Which startIndex are we currently using
-		int firstListItem = this.getStartIndex();
+		int firstListItem = this.startIndex;
 
 		// How many page links shall be displayed
 		int viewSize = this.getViewSize();
@@ -35,8 +35,19 @@
 		{
 			firstListItem = 0;
 		}
+		
+		if ((viewSize != getSize()) || (this.startIndex != firstListItem))
+		{
+		    this.modelChangeImpending();
 
-		// Tell the ListView what the new start index shall be
-		this.setStartIndex(firstListItem);
+			// Tell the ListView what the new start index shall be
+			this.startIndex = firstListItem;
+		    this.setViewSize(viewSize);
+		    
+		    this.modelChanged();
+		    
+		    // force all children to be re-rendered
+		    removeAll();
+		}
 	}
 
