@@ -14,23 +14,28 @@
             setRedirect(false);
             if (page != null)
             {
+                // Copy feedback messages into page
                 page.messages = FeedbackMessages.get();
-                FeedbackMessages.remove(); // only clean thread local; in fact we moved the
-                	// reference from the thread local to the page temporarily
+                
+                // Remove thread local feedback messages
+                FeedbackMessages.remove(); 
             }
-            else // hmmm, no page, which probably means we are rendering directely
-                // ourselves; as a fallthrough, we have to clear things up
+            else 
             {
+                // Hmmm, no page, which probably means we are rendering directely
+                // ourselves; as a fallthrough, we have to clear things up
                 FeedbackMessages.release(); 
             }
         }
         else
         {
-            // clear the ui messages and reset the original component models
+            // Clear the ui messages and reset the original component models
             // the components have had the possibility of rendering the messages,
             // and the messages are meant for 'one time use' only.
             FeedbackMessages.release();
         }
-        current.set(null); // reset ThreadLocal reference
+        
+        // Clear ThreadLocal reference
+        current.set(null); 
     }
 

@@ -1,43 +1,47 @@
     /**
-     * Clears the current messages instance from the thread local and
+     * Clears the current message's instance from the thread local and
      * reset the original models of the components that had theirs replaced
      * with decorator models. To be used by the framework only (package local).
      */
     static void release()
     {
-        FeedbackMessages currentMessages = (FeedbackMessages)current.get();
-        if(currentMessages != null)
+        final FeedbackMessages currentMessages = (FeedbackMessages)current.get();
+        if (currentMessages != null)
         {
-            if(log.isDebugEnabled())
+            if (log.isDebugEnabled())
             {
                 log.debug("FeedbackMessages " + currentMessages + " released for thread "
                         + Thread.currentThread());
             }
-            // only error level components have their models (possibly) replaced
-            Set components = currentMessages.getErrorReporters();
-            for(Iterator i = components.iterator(); i.hasNext();)
+            
+            // Only error level components have their models (possibly) replaced
+            final Set components = currentMessages.getErrorReporters();
+            for (final Iterator i = components.iterator(); i.hasNext();)
             {
                 Component component = (Component)i.next();
                 IModel currentModel = component.getModel();
-                // if the model was wrapped (ie the error message was added by the
+                
+                // If the model was wrapped (ie the error message was added by the
                 // validation mechanism of this framework
-                if(currentModel instanceof ValidationErrorModelDecorator)
+                if (currentModel instanceof ValidationErrorModelDecorator)
                 {
-                    ValidationErrorModelDecorator deco =
+                    ValidationErrorModelDecorator decorator =
                         ((ValidationErrorModelDecorator)currentModel);
-                    IModel originalModel = deco.getOriginalModel();
-                    // replace the model with the initial one
+                    IModel originalModel = decorator.getOriginalModel();
+                    
+                    // Replace the model with the initial one
                     component.setModel(originalModel);
                 }
             }
-            // clear thread local
+            
+            // Clear thread local
             current.set(null);
         }
         else
         {
-            if(log.isDebugEnabled())
+            if (log.isDebugEnabled())
             {
-                log.debug("no FeedbackMessages to release for thread " + Thread.currentThread());
+                log.debug("No FeedbackMessages to release for thread " + Thread.currentThread());
             }
         }
     }
