@@ -1,0 +1,25 @@
+	/**
+	 * Gets the message context.
+	 * 
+	 * @param input
+	 *            The input
+	 * @param component
+	 *            the component
+	 * @param e
+	 *            the conversion exception
+	 * @return a map with variables for interpolation
+	 */
+	protected Map messageModel(FormComponent component, String input, ConversionException e)
+	{
+		Map model = super.messageModel(component, input);
+		model.put("type", type);
+		Locale loc = e.getLocale();
+		if (loc != null)
+		{
+			model.put("locale", loc);
+		}
+		model.put("exception", e.getMessage());
+		model.put("pattern", e.getPattern());
+		return model;
+	}
+

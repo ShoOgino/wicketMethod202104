@@ -1,27 +1,31 @@
 	/**
 	 * Validates input by trying it to convert to the given type using the
-	 * {@link wicket.util.convert.IStringConverter}instance of component that
-	 * does the validation.
-	 * @param component the component that wants to validate its input
+	 * {@link wicket.util.convert.IConverter}instance of the component doing
+	 * the validation.
+	 * 
+	 * @param component
+	 *            The component that wants to validate its input
 	 * @see wicket.markup.html.form.validation.IValidator#validate(wicket.markup.html.form.FormComponent)
 	 */
 	public final void validate(FormComponent component)
 	{
 		// Get component value
 		final String value = component.getRequestString();
-		if (!isNullOrEmpty(value))
-        {
-    		// Check value by attempting to convert it
-    		final IConverter converter = component.getConverter();
-    		final Locale localeForValidation = getLocaleForValidation();
-    		try
-    		{
-    			converter.convert(value, type);
-    		}
-    		catch (ConversionException e)
-    		{
-    			conversionError(value, component, e);
-    		}
-        }
+
+		// If value is non-empty
+		if (!Strings.isEmpty(value))
+		{
+			// Check value by attempting to convert it using the given locale
+			final IConverter converter = component.getConverter();
+			((ILocalizable)converter).setLocale(getLocale());
+			try
+			{
+				converter.convert(value, type);
+			}
+			catch (ConversionException e)
+			{
+				conversionError(value, component, e);
+			}
+		}
 	}
 

@@ -1,43 +1,66 @@
 	/**
 	 * Converts the given value to class c.
-	 * @param value the value to convert
-	 * @param c the class to convert to
-	 * @return the converted value
-	 *
-	 * @see wicket.util.convert.IConverter#convert(java.lang.Object, java.lang.Class)
+	 * 
+	 * @param value
+	 *            The value to convert
+	 * @param c
+	 *            The class to convert to
+	 * @return The converted value
+	 * 
+	 * @see wicket.util.convert.IConverter#convert(java.lang.Object,
+	 *      java.lang.Class)
 	 */
 	public Object convert(Object value, Class c)
 	{
-		if(value == null)
+		// Null is always converted to null
+		if (value == null)
 		{
 			return null;
 		}
-		if(c == null) // as a fallthrough, try to convert to object
+
+		// Class cannot be null
+		if (c == null)
 		{
-			c = Object.class;
+			throw new IllegalArgumentException("Class cannot be null");
 		}
-		IConverter converter = get(c);
-		if(converter == null)
+
+		// Catch all cases where value is already the right type
+		if (c.isAssignableFrom(value.getClass()))
 		{
-			converter = fallThroughConverter;
+			return value;
 		}
-		if(converter instanceof ILocalizable)
+
+		// Get type converter for class
+		ITypeConverter converter = get(c);
+		if (converter == null)
+		{
+			if (defaultConverter instanceof ILocalizable)
+			{
+				((ILocalizable)defaultConverter).setLocale(locale);
+			}
+			return defaultConverter.convert(value, c);
+		}
+
+		// Set locale
+		if (converter instanceof ILocalizable)
 		{
 			((ILocalizable)converter).setLocale(locale);
 		}
+
 		try
 		{
-			return converter.convert(value, c);
+			// Use type converter to convert to value
+			return converter.convert(value);
 		}
-      catch (ConversionException e)
-      {
-          throw e.setConverter(converter).setLocale(locale)
-          	.setTargetType(c).setTriedValue(value);
-      }
-      catch (Exception e)
-      {
-          throw new ConversionException(e).setConverter(converter)
-          	.setLocale(locale).setTargetType(c).setTriedValue(value);
-      }
+		catch (ConversionException e)
+		{
+			throw e.setConverter(this).setTypeConverter(converter).setLocale(locale).setTargetType(
+					c).setSourceValue(value);
+		}
+		catch (Exception e)
+		{
+			throw new ConversionException(e).setConverter(this).setLocale(locale).setTargetType(c)
+					.setSourceValue(value);
+		}
 	}
 

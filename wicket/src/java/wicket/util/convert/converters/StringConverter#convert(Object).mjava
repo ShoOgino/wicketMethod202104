@@ -1,0 +1,51 @@
+	/**
+	 * @see wicket.util.convert.ITypeConverter#convert(java.lang.Object)
+	 */
+	public Object convert(final Object value)
+	{
+		// Null is always converted to null
+		if (value == null)
+		{
+			return null;
+		}
+
+		// Catch all cases where value is already the right type
+		if (value instanceof String)
+		{
+			return value;
+		}
+
+		// Get string converter for value's class
+		final Class c = value.getClass();
+		ITypeConverter converter = get(c);
+		if (converter == null)
+		{
+			if (defaultConverter instanceof ILocalizable)
+			{
+				((ILocalizable)defaultConverter).setLocale(locale);
+			}
+			return defaultConverter.convert(value);
+		}
+
+		// Set locale
+		if (converter instanceof ILocalizable)
+		{
+			((ILocalizable)converter).setLocale(locale);
+		}
+
+		try
+		{
+			// Use type converter to convert to value
+			return converter.convert(value);
+		}
+		catch (ConversionException e)
+		{
+			throw e.setTypeConverter(this).setLocale(locale).setTargetType(c).setSourceValue(value);
+		}
+		catch (Exception e)
+		{
+			throw new ConversionException(e).setTypeConverter(this).setLocale(locale)
+					.setTargetType(c).setSourceValue(value);
+		}
+	}
+

@@ -11,10 +11,12 @@
 			final Object modelObject = model.getObject();
 			if (modelObject != null)
 			{
-				// get converter
-				IStringConverter stringConverter = getConverter();
+				// Get converter
+				IConverter converter = getConverter();
+                
 				//	Model string from property
-				final String modelString = stringConverter.toString(modelObject);
+				final String modelString = (String)converter.convert(modelObject, String.class);
+                
 				// If we should escape the markup
 				if (shouldEscapeModelStrings)
 				{
