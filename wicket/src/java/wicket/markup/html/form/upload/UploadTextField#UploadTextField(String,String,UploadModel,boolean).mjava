@@ -1,0 +1,24 @@
+	/**
+	 * Construct.
+	 * @param name component name
+	 * @param fileFieldName the name of the file upload form field
+	 * @param model the upload model to be used for putting the upload and its name
+	 * @param uploadRequired whether the upload is required
+	 */
+	public UploadTextField(String name, String fileFieldName,
+			UploadModel model, boolean uploadRequired)
+	{
+		super(name, model);
+		if (fileFieldName == null)
+		{
+			throw new NullPointerException("fileFieldName must be provided");
+		}
+		this.fileFieldName = fileFieldName;
+		if(model == null)
+		{
+			throw new NullPointerException("model must be provided");
+		}
+		this.uploadRequired = uploadRequired;
+		add(new UploadFieldValidator());
+	}
+
