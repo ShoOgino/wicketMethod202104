@@ -4,7 +4,7 @@
 		// and expire any pages in the session cache that are
 		// newer than the given page since they will no longer
 		// be accessible.
-		setPage(page);
+		setResponsePage(page);
 
 		// Invoke interface on the component at the given path on the page
 		final Component component = page.get(Strings.afterFirstPathComponent(path, '.'));
@@ -21,7 +21,7 @@
 			// Must be an internal error of some kind or someone is hacking
 			// around with URLs in their browser.
 			log.error("No component found for " + path);
-			setPage(newPage(application.getPages().getInternalErrorPage()));
+			setResponsePage(newPage(application.getPages().getInternalErrorPage()));
 		}
 	}
 
