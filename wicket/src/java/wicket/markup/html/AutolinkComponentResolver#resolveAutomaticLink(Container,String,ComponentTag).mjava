@@ -3,17 +3,18 @@
 	 * component name and then searching for a page class at the absolute or
 	 * relative URL specified by the href attribute of the tag.
 	 * 
-	 * @param page
-	 *           The page where the link is
+	 * @param container
+	 *           The container where the link is
 	 * @param componentName
 	 *           the name of the component
 	 * @param tag
 	 *           the component tag
 	 * @return A BookmarkablePageLink to handle the href
 	 */
-	private Component resolveAutomaticLink(final Page page, final String componentName,
+	private Component resolveAutomaticLink(final Container container, final String componentName,
 			final ComponentTag tag)
 	{
+        final Page page = container.getPage();
 		final String originalHref = tag.getAttributes().getString("href");
 		final int pos = originalHref.indexOf(".html");
 
@@ -23,12 +24,15 @@
 		// ".html?" => 6 chars
 		if ((classPath.length() + 6) < originalHref.length())
 		{
-			String queryString = originalHref.substring(classPath.length() + 6);
+			final String queryString = originalHref.substring(classPath.length() + 6);
 			pageParameters = new PageParameters(new ValueMap(queryString, "&"));
 		}
 
 		// Make the componentName (page-)unique
 		final String id = componentName + page.getAutoIndex();
+        
+        // The component name on the tag changed
+        tag.setComponentName(id);
 
 		// Obviously a href like href="myPkg.MyLabel.html" will do as well.
 		// Wicket will not throw an exception. It accepts it.
