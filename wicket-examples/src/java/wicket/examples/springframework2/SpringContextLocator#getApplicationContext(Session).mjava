@@ -1,0 +1,16 @@
+    /**
+     * This method always trie to get the WebApplicationContext set by the
+     * ContextLoaderListener of Spring otherwise fails.
+     * 
+     * @see org.springframework.web.context.support.WebApplicationContextUtils
+     */
+    public static ApplicationContext getApplicationContext(Session session)
+    {
+        javax.servlet.http.HttpSession httpSession = ((HttpSession) session)
+                .getHttpServletSession();
+        
+        return WebApplicationContextUtils
+                .getRequiredWebApplicationContext(httpSession
+                        .getServletContext());
+    }
+
