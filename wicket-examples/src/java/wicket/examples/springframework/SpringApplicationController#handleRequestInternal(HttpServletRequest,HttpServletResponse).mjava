@@ -1,0 +1,21 @@
+    /**
+     * Handle the request. Simply forward it to Wicket.
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractController#handleRequestInternal(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse)
+     */
+    protected ModelAndView handleRequestInternal(HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse) throws Exception
+    {
+        if (application != null)
+        {
+            application.doService(servletRequest, servletResponse);
+        }
+        else
+        {
+            log.error("Wickets application object is not available. Probably the bean named 'wicketApplication' was not found in Spring's web application context: <servlet-name>-servlet.xml");
+        }
+        
+        return null;
+    }
+
