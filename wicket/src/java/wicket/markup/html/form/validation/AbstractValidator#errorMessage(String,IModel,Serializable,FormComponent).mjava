@@ -1,0 +1,21 @@
+    /**
+     * Returns a formatted validation error message for a given component. The error
+     * message is retrieved from a message bundle associated with the page in which this
+     * validator is contained using the given resource key. The resourceModel is used
+     * for variable interpolation.
+     * @param resourceKey the resource key to be used for the message
+     * @param resourceModel the model for variable interpolation
+     * @param input the input (that caused the error)
+     * @param component The component where the error occurred
+     * @return The validation error message
+     */
+    public final ValidationErrorMessage errorMessage(
+    		final String resourceKey, final IModel resourceModel,
+            final Serializable input, final FormComponent component)
+    {
+        // Return formatted error message
+        Localizer localizer = component.getLocalizer();
+		String message = localizer.getString(resourceKey, component, resourceModel);
+        return new ValidationErrorMessage(input, component, message);
+    }
+

@@ -1,0 +1,30 @@
+    /**
+     * Returns a formatted validation error message for a given component. The error
+     * message is retrieved from a message bundle associated with the page in which this
+     * validator is contained using the given resource key.
+     * <p>
+     * Available variables for interpolation are:
+     * <ul>
+     *   <li>
+     * 		${input}: the user's input
+     *   </li>
+     *   <li>
+     *   	${name}: the name of the component
+     *   </li>
+     * </ul>
+     * </p>
+     * @param resourceKey the resource key to be used for the message
+     * @param input the input (that caused the error)
+     * @param component The component where the error occurred
+     * @return The validation error message
+     */
+    public final ValidationErrorMessage errorMessage(
+    		final String resourceKey,
+            final Serializable input, final FormComponent component)
+    {
+        Map resourceModel = new HashMap(2);
+        resourceModel.put("input", input);
+        resourceModel.put("name", component.getName());
+		return errorMessage(resourceKey, resourceModel, input, component);
+    }
+
