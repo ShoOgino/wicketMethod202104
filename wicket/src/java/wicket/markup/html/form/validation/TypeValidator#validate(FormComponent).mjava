@@ -1,0 +1,27 @@
+	/**
+	 * Validates input by trying it to convert to the given type using the
+	 * {@link wicket.util.convert.ConverterRegistry} instance of that can be
+	 * found in the application settings.
+	 * @param component the component that wants to validate its input
+	 * @return validation error message
+	 * @see wicket.markup.html.form.validation.IValidator#validate(wicket.markup.html.form.FormComponent)
+	 */
+	public ValidationErrorMessage validate(FormComponent component)
+	{
+        // Get component value
+        final String value = component.getStringValue();
+        
+        // Check value by attempting to convert it
+		final ConversionUtils conversionUtils = getConversionUtils();
+		final Locale localeForValidation = getLocaleForValidation();
+		try
+		{
+			conversionUtils.convert(component.getStringValue(), type, localeForValidation);
+			return ValidationErrorMessage.NO_MESSAGE;
+		}
+		catch (ConversionException e)
+		{
+			return getError(value, component, e);
+		}
+	}
+
