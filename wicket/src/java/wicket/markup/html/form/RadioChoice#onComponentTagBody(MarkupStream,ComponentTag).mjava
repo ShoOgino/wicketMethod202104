@@ -31,7 +31,19 @@
 				// Add radio tag
 				buffer.append("<input name=\"" + getPath() + "\"" + " type=\"radio\""
 						+ (isSelected(choice) ? " checked" : "") + " value=\"" + choice.getId()
-						+ "\">");
+						+ "\"");
+				
+				// Should a roundtrip be made (have onSelectionChanged called) when the option is clicked?
+				if (wantOnSelectionChangedNotifications())
+				{
+					final String url = urlFor(IOnChangeListener.class);
+
+					// NOTE: do not encode the url as that would give invalid JavaScript
+					buffer.append(" onclick=\"location.href='" + url + "&" + getPath()
+							+ "=" + choice.getId() + "';\"");
+				}
+
+				buffer.append(">");
 
 				// Add label for radio button
 				buffer.append(getLocalizer().getString(getId() + "." + label, this, label));
