@@ -7,13 +7,13 @@
 			listItem.add(new Label("file", filename));
 			listItem.add(new Link("delete")
 			{
-
 				public void onClick()
 				{
 					final File file = new File(uploadFolder, filename);
 					log.info("Deleting " + file);
 					Files.delete(file);
 					refreshFiles();
+					getRequestCycle().setRedirect(true);
 				}
 			});
 		}
