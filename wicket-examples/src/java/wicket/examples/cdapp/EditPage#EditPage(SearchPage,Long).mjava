@@ -3,7 +3,7 @@
 	 * @param searchCDPage the search page to navigate back to
 	 * @param id the id of the cd to edit
 	 */
-	public EditCDPage(final SearchCDPage searchCDPage, Long id)
+	public EditPage(final SearchPage searchCDPage, Long id)
 	{
 		super();
 		cdModel = new HibernateObjectModel(id, CD.class, new HibernateHelperSessionDelegate());
@@ -13,12 +13,15 @@
 		add(feedback);
 		add(new DetailForm("detailForm", feedback, cdModel));
 		add(new ImageUploadForm("imageUpload", cdModel));
-		ImageResource imgResource = new ImageResource()
+
+		// create an image resource that displays a question mark when no image is
+		// set on the cd, or displays a thumbnail of the cd's image when there is one
+		ImageResource thumbImgResource = new ImageResource()
 		{
-			protected IResource getResource()
+			public IResource getResource()
 			{
 				final CD cd = (CD)cdModel.getObject(null);
-				if(cd.getImage() == null)
+				if (cd.getImage() == null)
 				{
 					return IMG_UNKNOWN.getResource();
 				}
@@ -31,7 +34,9 @@
 							return cd.getImage();
 						}
 					};
-					return img.getResource();
+					ThumbnailImageResource res =
+						new ThumbnailImageResource(img, 100);
+					return res.getResource();
 				}
 			}
 
@@ -41,6 +46,17 @@
 				return super.getPath();
 			}
 		};
-		add(new Image("cdimage", imgResource));
+
+		// create a link that displays the full image in a popup page
+		ImagePopupLink popupImageLink = new ImagePopupLink("popupImageLink", cdModel);
+
+		// create an image using the image resource
+		popupImageLink.add(new Image("cdimage", thumbImgResource));
+
+		// add the link to the original image
+		add(popupImageLink);
+
+		// add link for deleting the image
+		add(new DeleteImageLink("deleteImageLink", cdModel));
 	}
 
