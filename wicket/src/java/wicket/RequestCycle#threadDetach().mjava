@@ -1,9 +1,8 @@
     /**
-     * Releases the current thread local related resources.
-     * The threadlocal of this request cycle is reset.
-     * If we are in a 'redirect' state, we do not want to loose our messages
-     * as - e.g. when handling a form - there's a fat change we are comming back
-     * for the rendering of it.
+     * Releases the current thread local related resources. The threadlocal of
+     * this request cycle is reset. If we are in a 'redirect' state, we do not
+     * want to loose our messages as - e.g. when handling a form - there's a fat
+     * change we are comming back for the rendering of it.
      */
     private void threadDetach()
     {
@@ -16,26 +15,28 @@
             {
                 // Copy feedback messages into page
                 page.messages = FeedbackMessages.get();
-                
+
                 // Remove thread local feedback messages
-                FeedbackMessages.remove(); 
+                FeedbackMessages.remove();
             }
-            else 
+            else
             {
-                // Hmmm, no page, which probably means we are rendering directely
+                // Hmmm, no page, which probably means we are rendering
+                // directely
                 // ourselves; as a fallthrough, we have to clear things up
-                FeedbackMessages.threadDetach(); 
+                FeedbackMessages.threadDetach();
             }
         }
         else
         {
             // Clear the ui messages and reset the original component models
-            // the components have had the possibility of rendering the messages,
+            // the components have had the possibility of rendering the
+            // messages,
             // and the messages are meant for 'one time use' only.
             FeedbackMessages.threadDetach();
         }
-        
+
         // Clear ThreadLocal reference
-        current.set(null); 
+        current.set(null);
     }
 
