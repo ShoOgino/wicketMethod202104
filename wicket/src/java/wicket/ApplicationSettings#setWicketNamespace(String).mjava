@@ -1,0 +1,21 @@
+	/**
+	 * Sets wicket namespace in use in this application. Normally, this is
+	 * "wicket", but it can be changed in the unlikely event of
+	 * nameing conflicts.
+	 * 
+	 * @param namespace
+	 *            The wicket namespace to set.
+	 * @return This
+	 */
+	public final ApplicationSettings setWicketNamespace(final String namespace)
+	{
+		if (!MetaPattern.VARIABLE_NAME.matcher(namespace).matches())
+		{
+			throw new IllegalArgumentException(
+					"Wicket namespace must be a valid variable name ([a-z][a-z0-9_]*)");
+		}
+
+		this.wicketNamespace = namespace;
+		return this;
+	}
+
