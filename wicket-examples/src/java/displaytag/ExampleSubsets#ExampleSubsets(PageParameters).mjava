@@ -1,0 +1,24 @@
+    /**
+     * Constructor.
+     * 
+     * @param parameters Page parameters
+     */
+    public ExampleSubsets(final PageParameters parameters)
+    {
+        List data = new TestList(10, false);
+        
+        // Add table of existing comments
+        add(new SimpleDisplaytagTableComponent("table1", data));
+
+        // First alternativ
+        List data2 = new ArrayList();
+        data2.addAll(data.subList(0, 5));
+        add(new SimpleDisplaytagTableComponent("table2", data2));
+
+        // Second alternativ
+        SimpleDisplaytagTableComponent table = new SimpleDisplaytagTableComponent("table3", data);
+        table.setStartIndex(3);
+        table.setNumberOfCellsToDisplay(8 - 3);
+        add(table);
+    }
+
