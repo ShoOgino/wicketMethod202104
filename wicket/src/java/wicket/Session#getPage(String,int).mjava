@@ -18,15 +18,14 @@
 		}
 
 		// Retrieve the page for the first path component from this session
-		Page page = getPage(Integer.parseInt(Strings.firstPathComponent(path,
-				componentPathSeparator)));
-		
+		Page page = getPage(Strings.firstPathComponent(path, componentPathSeparator));
+
 		// Is there a page with the right id at all?
 		if (page != null)
 		{
 			// Get the version of the page requested from the page
 			final Page version = page.getVersion(versionNumber);
-	
+
 			// Is the requested version available?
 			if (version != null)
 			{
@@ -35,11 +34,11 @@
 				{
 					// This is our new page
 					page = version;
-		
+
 					// Replaces old page entry
 					getPageMap().put(page.getId(), page);
 					pageChanged(page);
-				}				
+				}
 				return page;
 			}
 		}

@@ -12,12 +12,12 @@
 		if (!(tag instanceof ComponentWicketTag) || !settings.getStripWicketTags())
 		{
 			// Apply attribute modifiers
-			if ((attributeModifiers != null) && (tag.getType() != XmlTag.CLOSE))
+			if (attributeModifiers != null && tag.getType() != XmlTag.CLOSE)
 			{
 				tag = tag.mutable();
-				for (Iterator it = attributeModifiers.iterator(); it.hasNext();)
+				for (AttributeModifier current = attributeModifiers; current != null; current = current.next)
 				{
-					((AttributeModifier)it.next()).replaceAttibuteValue(tag);
+					current.replaceAttibuteValue(tag);
 				}
 			}
 
