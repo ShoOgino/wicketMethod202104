@@ -1,0 +1,16 @@
+	private void compareFilename(IResourceStream resource, String name)
+	{
+		assertNotNull("Did not find resource: " + name, resource);
+
+		String filename = Strings.replaceAll(this.getClass().getName(), ".", "/");
+		filename += name + ".txt";
+		String resourcePath = Strings.replaceAll(((UrlResourceStream)resource).getFile()
+				.getAbsolutePath(), "\\", "/");
+		if (false == resourcePath.endsWith(filename))
+		{
+			filename = Strings.afterLast(filename, '/');
+			resourcePath = Strings.afterLast(resourcePath, '/');
+			assertEquals("Did not find resource", filename, resourcePath);
+		}
+	}
+

@@ -6,7 +6,7 @@
 	{
 		try
 		{
-			final IResource resource = new ClassLoaderResourceLocator().locate(
+			final IResourceStream resource = new ClassLoaderResourceStreamLocator().locate(
 					"wicket/examples/hangman/WordList", "", Locale.getDefault(), ".txt");
 			final String wordlist = Streams.readString(resource.getInputStream());
 			this.words = Arrays.asList(wordlist.split("\\s+"));
@@ -16,7 +16,7 @@
 		{
 			throw new RuntimeException("Couldn't read word list");
 		}
-		catch (ResourceNotFoundException e)
+		catch (ResourceStreamNotFoundException e)
 		{
 			throw new RuntimeException("Couldn't read word list");
 		}

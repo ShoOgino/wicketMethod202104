@@ -1,0 +1,26 @@
+	/**
+	 * @return This resource as a String.
+	 */
+	public String asString()
+	{
+		try
+		{
+			if (charset == null)
+			{
+				return Streams.readString(new InputStreamReader(getInputStream()));
+			}
+			else
+			{
+				return Streams.readString(new InputStreamReader(getInputStream(), charset));
+			}
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException("Unable to read resource as String", e);
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			throw new WicketRuntimeException("Unable to read resource as String", e);
+		}
+	}
+

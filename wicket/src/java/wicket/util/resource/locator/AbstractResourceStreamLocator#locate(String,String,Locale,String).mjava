@@ -1,0 +1,50 @@
+	/**
+	 * Locate a resource. See class comments for more details.
+	 * 
+	 * @param path
+	 *            The path of the resource without extension
+	 * @param style
+	 *            A theme or style
+	 * @param locale
+	 *            The Locale to apply
+	 * @param extension
+	 *            the filname's extensions
+	 * @return The Resource, or null if not found.
+	 */
+	public IResourceStream locate(final String path, final String style, final Locale locale,
+			final String extension)
+	{
+		// 1. Try style, locale and extension
+		if (style != null && locale != null)
+		{
+			final IResourceStream resource = locate(path + "_" + style, locale, extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
+
+		// 2. Try locale and extension
+		if (locale != null)
+		{
+			final IResourceStream resource = locate(path, locale, extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
+
+		// 3. Try style and extension
+		if (style != null)
+		{
+			final IResourceStream resource = locate(path + "_" + style + extension);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
+
+		// 4. Try just extension
+		return locate(path + extension);
+	}
+

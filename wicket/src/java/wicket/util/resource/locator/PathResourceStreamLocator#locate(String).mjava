@@ -1,0 +1,20 @@
+	/**
+	 * @see wicket.util.resource.locator.AbstractResourceStreamLocator#locate(java.lang.String)
+	 */
+	protected IResourceStream locate(final String path)
+	{
+		// Log attempt
+		log.debug("Attempting to locate resource '" + path + "' on path " + searchPath);
+
+		// Try to find file resource on the path supplied
+		final File file = searchPath.find(path);
+
+		// Found resource?
+		if (file != null)
+		{
+			// Return file resource
+			return new FileResourceStream(file);
+		}
+		return null;
+	}
+
