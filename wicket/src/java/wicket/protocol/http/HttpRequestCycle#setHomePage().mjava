@@ -1,0 +1,19 @@
+	/**
+	 * Set's the next page to the homepage. The homepage paramtermap is checked for the initial parameters
+	 */
+	private void setHomePage()
+	{
+		Map parameters = application.getSettings().getHomePageParameters();
+		if(parameters == null)
+		{
+			setPage(newPage(application.getSettings().getHomePage()));
+		}
+		else
+		{
+			Map map = new HashMap(parameters);
+			map.putAll(request.getParameterMap());
+			Page toPage = getPageFactory().newPage(application.getSettings().getHomePage(),new PageParameters(map));
+			setPage(toPage);
+		}
+	}
+
