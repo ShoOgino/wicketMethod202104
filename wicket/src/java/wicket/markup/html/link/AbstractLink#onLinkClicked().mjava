@@ -1,14 +1,20 @@
 	/**
-	 * THIS METHOD IS NOT PART OF THE WICKET API.  DO NOT ATTEMPT TO OVERRIDE 
-	 * OR CALL IT.
+	 * THIS METHOD IS NOT PART OF THE WICKET API. DO NOT ATTEMPT TO OVERRIDE OR
+	 * CALL IT.
 	 * 
-	 * Called when a link is clicked.  The implementation of this method is currently
-	 * to simply call onClick(), but this may be augmented in the future.
+	 * Called when a link is clicked. The implementation of this method is
+	 * currently to simply call onClick(), but this may be augmented in the
+	 * future.
 	 * 
 	 * @see ILinkListener
 	 */
 	public final void onLinkClicked()
 	{
 		onClick();
+
+		// Since the invocation of onLinkClicked occurred through a URL that
+		// would repeat the action if the user refreshed the page, we redirect
+		// to our resulting page so this won't happen.
+		getRequestCycle().setRedirect(true);
 	}
 
