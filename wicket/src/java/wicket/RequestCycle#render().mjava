@@ -22,6 +22,15 @@
 			}
 			catch (RuntimeException e)
 			{
+				try
+				{
+					// current page should be deattached.
+					getPage().detachModels(getPage());
+				}
+				catch (RuntimeException e1)
+				{
+					log.debug("Error detaching models when exception is thrown", e1);
+				}
 				handleRenderingException(e);
 			}
 			finally
