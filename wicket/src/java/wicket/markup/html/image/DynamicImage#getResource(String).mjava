@@ -7,9 +7,11 @@
 	{
 		return new IResource()
 		{
+			private InputStream inputStream = null;
+
 			public void close() throws IOException
 			{
-				inputStream.close();
+				if ( inputStream != null ) inputStream.close();
 			}
 
 			public String getExtension()
@@ -19,6 +21,9 @@
 
 			public InputStream getInputStream() throws ResourceNotFoundException
 			{
+				if ( inputStream == null) {
+					inputStream = new ByteArrayInputStream(imageData);
+				}
 				return inputStream;
 			}
 		};
