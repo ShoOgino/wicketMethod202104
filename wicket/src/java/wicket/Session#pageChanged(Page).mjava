@@ -5,9 +5,13 @@
 	 */
 	public final void pageChanged(final Page page)
 	{
-		// Add PageState for this page to the list of changed pages
-		// that need to be replicated
-		final PageState pageState = pageState(page);
+		// Create PageState for page
+		final PageState pageState = newPageState(page);
+
+		// The page must have been added to the session already
+		pageState.addedToSession = true;
+
+		// Set HttpSession attribute for new PageState
 		setAttribute(page.getName(), pageState);
 	}
 
