@@ -1,20 +1,21 @@
-    /**
-     * Constructor.
-     * @param parameters Page parameters
-     */
-    public UploadPage(final PageParameters parameters)
-    {
-        tempDir = new File(System.getProperty("java.io.tmpdir"), "WicketUploadTest");
-        if(!tempDir.isDirectory())
-        {
-            tempDir.mkdir();
-        }
-        add(new UploadForm("upload", null, tempDir));
-        add(new Label("dir", tempDir.getAbsolutePath()));
-        files.addAll(Arrays.asList(tempDir.list()));
-        fileListView = new FileListView("fileList", files);
-        add(fileListView);
-        add(new FeedbackPanel("feedback"));
-        
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param parameters
+	 *            Page parameters
+	 */
+	public UploadPage(final PageParameters parameters)
+	{
+		uploadFolder = new Folder(System.getProperty("java.io.tmpdir"), "WicketUploadTest");
+		if (!uploadFolder.isDirectory())
+		{
+			uploadFolder.mkdir();
+		}
+		add(new UploadForm("upload", null, uploadFolder));
+		add(new Label("dir", uploadFolder.getAbsolutePath()));
+		files.addAll(Arrays.asList(uploadFolder.list()));
+		fileListView = new FileListView("fileList", files);
+		add(fileListView);
+		add(new FeedbackPanel("feedback"));
+	}
 

@@ -1,0 +1,29 @@
+	/**
+	 * Deletes a file, dealing with a particularly nasty bug on Windows.
+	 * 
+	 * @param file
+	 *            File to delete
+	 * @return True if file was deleted
+	 */
+	public static boolean delete(final java.io.File file)
+	{
+		// Delete current file
+		if (!file.delete())
+		{
+			// NOTE: fix for java/win bug. see:
+			// http://forum.java.sun.com/thread.jsp?forum=4&thread=158689&tstart=0&trange=15
+			System.gc();
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch (InterruptedException e)
+			{
+			}
+
+			// Try one more time to delete the file
+			return file.delete();
+		}
+		return true;
+	}
+

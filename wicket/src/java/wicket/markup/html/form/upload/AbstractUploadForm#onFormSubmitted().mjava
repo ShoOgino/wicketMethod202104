@@ -1,0 +1,14 @@
+	/**
+	 * @see wicket.markup.html.form.Form#onFormSubmitted()
+	 */
+	public void onFormSubmitted()
+	{
+		// Change the request to a multipart web request so parameters are
+		// parsed out correctly
+		RequestCycle.get().setRequest(
+				new MultipartWebRequest(((WebRequest)getRequest()).getHttpServletRequest()));
+
+		// Now do normal form submit validation processing
+		super.onFormSubmitted();
+	}
+
