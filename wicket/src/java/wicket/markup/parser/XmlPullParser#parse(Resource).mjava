@@ -1,7 +1,8 @@
 	/**
 	 * Reads and parses markup from a resource such as file.
 	 * 
-	 * @param resource The resource to read and parse 
+	 * @param resource
+	 *            The resource to read and parse
 	 * @throws IOException
 	 * @throws ResourceNotFoundException
 	 */
@@ -18,12 +19,15 @@
 				throw new IOException("BufferedInputStream does not support mark/reset");
 			}
 
-			// read ahead buffer required for the first line of the markup (encoding)
+			// read ahead buffer required for the first line of the markup
+			// (encoding)
 			final int readAheadSize = 80;
 			bin.mark(readAheadSize);
 
-			// read-ahead the input stream, if it starts with <?xml encoding=".."?>.
-			// If yes, set this.encoding and return the character which follows it.
+			// read-ahead the input stream, if it starts with <?xml
+			// encoding=".."?>.
+			// If yes, set this.encoding and return the character which follows
+			// it.
 			// If no, return the whole line. determineEncoding will read-ahead
 			//        at max. the very first line of the markup
 			this.encoding = determineEncoding(bin, readAheadSize);
@@ -33,7 +37,7 @@
 			final String markup;
 			if (this.encoding == null)
 			{
-			    // Use JVM default
+				// Use JVM default
 				bin.reset();
 				markup = Streams.readString(bin);
 			}
