@@ -1,0 +1,17 @@
+	/**
+	 * @see wicket.Component#setVersioned(boolean)
+	 */
+	public void setVersioned(final boolean isVersioned)
+	{
+		super.setVersioned(isVersioned);
+		
+		// Search for FormComponents like TextField etc.
+		visitFormComponents(new FormComponent.IVisitor()
+		{
+			public void formComponent(final FormComponent formComponent)
+			{
+				formComponent.setVersioned(isVersioned);
+			}
+		});		
+	}
+
