@@ -14,26 +14,35 @@
 		final Object selected = getModelObject();
 		final List list = getValues();
 
-		if (emptyAllowed && selected == null)
+		// Is null a valid selection value?
+		if (nullValid)
 		{
-			final String emptyOne = getLocalizer().getString(getName() + ".emptyOne", this, "");
+			// Null is valid, so look up the value for it
+			final String option = getLocalizer().getString(getName() + ".null", this, "");
 
-			options.append("\n<option selected=\"selected\" value=\"").append("\">").append(
-					emptyOne).append("</option>");
+			// Add option tag
+			options.append("\n<option");
+			
+			// If null is selected, indicate that
+			if (selected == null)
+			{
+				options.append(" selected=\"selected\"");
+			}
+			
+			// Add body of option tag
+			options.append(" value=\"\">").append(option).append("</option>");
 		}
-		else if (emptyAllowed)
+		else
 		{
-			final String emptyOne = getLocalizer().getString(getName() + ".emptyOne", this, "");
-
-			options.append("\n<option value=\"").append("\">").append(emptyOne).append("</option>");
-		}
-		else if (selected == null && getRenderNullOption())
-		{
-			final String chooseOne = getLocalizer().getString(getName() + ".null", this,
-					DEFAULT_NULL_OPTION_VALUE);
-
-			options.append("\n<option selected=\"selected\" value=\"").append("\">").append(
-					chooseOne).append("</option>");
+			// Null is not valid.  Is it selected anyway?
+			if (selected == null)
+			{
+				// Force the user to pick a non-null value
+				final String option = getLocalizer().getString(getName() + ".null", this,
+						CHOOSE_ONE);
+				options.append("\n<option selected=\"selected\" value=\"\">").append(option)
+						.append("</option>");
+			}
 		}
 
 		for (int i = 0; i < list.size(); i++)
@@ -59,9 +68,9 @@
 				final boolean currentOptionIsSelected = isSelected(value);
 				options.append("\n<option ");
 				if (currentOptionIsSelected)
-                {
+				{
 					options.append("selected=\"selected\"");
-                }
+				}
 				options.append("value=\"");
 				options.append(id);
 				options.append("\">");

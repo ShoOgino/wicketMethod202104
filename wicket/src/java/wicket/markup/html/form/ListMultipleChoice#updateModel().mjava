@@ -21,8 +21,10 @@
 		// Get indices selected from request
 		final String[] indicesOrIds = getRequestStrings();
 
-		if (indicesOrIds != null)
+		// If one or more ids is selected
+		if (indicesOrIds != null && indicesOrIds.length > 0 && !Strings.isEmpty(indicesOrIds[0]))
 		{
+			// Get values that could be selected
 			final List list = getValues();
 
 			// Loop through selected indices
@@ -34,7 +36,9 @@
 				}
 				else
 				{
+					// Get index
 					final int index = Integer.parseInt(indicesOrIds[i]);
+					
 					// Add the value at the given index to the collection of
 					// selected values
 					selectedValues.add(list.get(index));
