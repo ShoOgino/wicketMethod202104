@@ -1,5 +1,5 @@
     /**
-     * Renders wicket.response for request.
+     * Renders response for request.
      * NOTE: THIS METHOD IS INTENDED FOR INTERNAL USE ONLY AND MAY NOT BE SUPPORTED IN THE FUTURE.
      * @throws ServletException
      */
@@ -7,7 +7,7 @@
     {
         try
         {
-            // Render wicket.response for request cycle
+            // Render response for request cycle
             handleRender();
         }
         catch (RuntimeException e)
@@ -24,14 +24,14 @@
                         ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
                     {
                         // use internal error page
-                        setPage(newPage(settings.getInternalErrorPage()));
+                        setPage(getPageFactory().newPage(settings.getInternalErrorPage()));
                     }
                     else
                     {
                         // otherwise show full details
                         setPage(new ExceptionErrorPage(e));
                     }
-                    // We generally want to redirect the wicket.response because we were
+                    // We generally want to redirect the response because we were
                     // in the middle of rendering and the page may end up looking
                     // like spaghetti otherwise
                     redirectToPage(getPage());
@@ -53,7 +53,7 @@
         finally
         {
             release();
-            response.close(); //close the wicket.response
+            response.close(); //close the response
         }
     }
 

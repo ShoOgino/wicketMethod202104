@@ -5,10 +5,20 @@
      */
     public final Class getHomePage()
     {
-        if (homePage == null)
+        if (homePage != null)
         {
-            throw new IllegalStateException("No home page specified");
+            return homePage;
         }
-        return homePage;
+        
+        if ((homePageClassName != null) && (homePageClassName.trim().length() > 0))
+        {
+            final Class homePage = getPageFactory().getClassInstance(homePageClassName);
+            if (homePage != null)
+            {
+                return homePage;
+            }
+        }
+        
+        throw new IllegalStateException("No home page specified");
     }
 

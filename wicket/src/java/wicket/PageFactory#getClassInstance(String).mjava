@@ -1,0 +1,24 @@
+    /**
+     * Object Factory: Simply load the Class with name. Subclasses may overwrite
+     * it to load Groovy classes e.g..
+     * 
+     * @param classname fully qualified classname
+     * @return Class
+     */
+    public Class getClassInstance(final String classname)
+    {
+        try
+        {
+            return PageFactory.class.getClassLoader().loadClass(classname);
+        } 
+        catch (ClassNotFoundException ex)
+        {
+            if (childFactory == null)
+            {
+                throw new RenderException("Unable to load class with name: " + classname);
+            }
+        }
+        
+        return childFactory.getClassInstance(classname);
+    }
+

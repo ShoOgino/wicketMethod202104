@@ -7,16 +7,6 @@
      */
     protected final Page newPage(final Class pageClass, final Page page)
     {
-        // Find constructor for page class
-        final Constructor constructor = getConstructor(pageClass, Page.class);
-        if (constructor != null)
-        {
-            return newPage(constructor, page);
-        }
-        else
-        {
-            throw new RenderException("Could not find constructor for page '"
-                    + pageClass + "'");
-        }
+        return getPageFactory().newPage(pageClass, page);
     }
 

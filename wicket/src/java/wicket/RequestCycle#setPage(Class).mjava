@@ -1,9 +1,10 @@
     /**
-     * Convenience method that sets page on wicket.response object.
-     * @param c The page class to render as a wicket.response
+     * Convenience method that sets page on response object.
+     * @param c The page class to render as a response
+     * @deprecated use cycle.setPage(cycle.getPageFactory().newPage(Class)) instead
      */
     public final void setPage(final Class c)
     {
-        this.page = newPage(c);
+        this.page = getPageFactory().newPage(c, new PageParameters(request.getParameterMap()));
     }
 
