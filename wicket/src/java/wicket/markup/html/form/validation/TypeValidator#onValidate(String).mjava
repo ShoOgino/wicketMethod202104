@@ -1,0 +1,25 @@
+	/**
+	 * Validates input by trying it to convert to the given type using the
+	 * {@link wicket.util.convert.IConverter}instance of the component doing
+	 * the validation.
+	 * 
+	 * @see wicket.markup.html.form.validation.StringValidator#onValidate(java.lang.String)
+	 */
+	public void onValidate(String value)
+	{
+		// If value is non-empty
+		if (!Strings.isEmpty(value))
+		{
+			// Check value by attempting to convert it
+			final IConverter converter = getComponent().getConverter();
+			try
+			{
+				converter.convert(value, type);
+			}
+			catch (ConversionException e)
+			{
+				error(messageModel(e));
+			}
+		}
+	}
+
