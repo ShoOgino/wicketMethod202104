@@ -24,12 +24,10 @@
 			final int readAheadSize = 80;
 			bin.mark(readAheadSize);
 
-			// read-ahead the input stream, if it starts with <?xml
-			// encoding=".."?>.
-			// If yes, set this.encoding and return the character which follows
-			// it.
+			// read-ahead the input stream if it starts with <?xml
+			// encoding=".."?>. If yes, set this.encoding.
 			// If no, return the whole line. determineEncoding will read-ahead
-			// at max. the very first line of the markup
+			// at max. the very first line of the markup.
 			this.encoding = determineEncoding(bin, readAheadSize);
 
 			// Depending on the encoding determined from the markup-file, read
