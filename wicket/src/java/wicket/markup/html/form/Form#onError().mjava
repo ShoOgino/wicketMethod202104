@@ -1,28 +1,8 @@
 	/**
-	 * Sets error messages for form. First all childs (form components) are
-	 * asked to do their part of error handling, and after that, the registered
-	 * (if any) error handler of this form is called.
+	 * Method to override if you want to do something special when an error
+	 * occurs (other than simply displaying validation errors).
 	 */
 	protected void onError()
 	{
-		// Traverse children of this form, calling validationError() on any
-		// components implementing IValidationFeedback.
-		visitChildren(IValidationFeedback.class, new IVisitor()
-		{
-			public Object component(final Component component)
-			{
-				// Call validation error handler
-				((IValidationFeedback)component).updateValidationFeedback(Form.this);
-
-				// Traverse all children
-				return CONTINUE_TRAVERSAL;
-			}
-		});
-
-		// Call the validation handler that is registered with this form, if any
-		if (validationFeedback != null)
-		{
-			validationFeedback.updateValidationFeedback(this);
-		}
 	}
 
