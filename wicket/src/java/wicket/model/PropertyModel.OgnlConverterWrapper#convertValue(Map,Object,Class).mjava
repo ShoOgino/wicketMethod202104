@@ -1,10 +1,15 @@
         /**
          * Converts the provided value to provided type using provided context.
-         * @param context Ognl context
-         * @param value the current, unconverted value
-         * @param toType the type that should be converted to
+         * 
+         * @param context
+         *            Ognl context
+         * @param value
+         *            The current, unconverted value
+         * @param toType
+         *            The type that should be converted to
          * @return Object the converted value
-         * @see ognl.DefaultTypeConverter#convertValue(java.util.Map, java.lang.Object, java.lang.Class)
+         * @see ognl.DefaultTypeConverter#convertValue(java.util.Map,
+         *      java.lang.Object, java.lang.Class)
          */
         public Object convertValue(Map context, Object value, Class toType)
         {
@@ -13,8 +18,8 @@
                 return null;
             }
 
-            if ((!toType.isArray())
-                    && value instanceof String[] && (((String[]) value).length == 1))
+            if ((!toType.isArray()) && value instanceof String[]
+                    && (((String[]) value).length == 1))
             {
                 value = ((String[]) value)[0];
             }
@@ -24,7 +29,8 @@
                 return null;
             }
 
-            ConversionUtils conversionUtils = converterRegistry.getConversionUtils();
+            ConversionUtils conversionUtils = converterRegistry
+                    .getConversionUtils();
 
             return conversionUtils.convert(value, toType, getLocale());
         }

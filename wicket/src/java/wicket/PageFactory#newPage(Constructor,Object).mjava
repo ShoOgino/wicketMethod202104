@@ -1,9 +1,11 @@
     /**
-     * Creates a new instance of a page using the given constructor and constructor 
-     * argument. 
+     * Creates a new instance of a page using the given constructor and
+     * constructor argument.
      * 
-     * @param constructor The constructor to invoke
-     * @param parameter The parameter to pass to the constructor
+     * @param constructor
+     *            The constructor to invoke
+     * @param parameter
+     *            The parameter to pass to the constructor
      * @return The new page
      * @throws RenderException
      */
@@ -11,12 +13,12 @@
     {
         try
         {
-    		if(constructor.getParameterTypes().length == 0)
-    		{
-    			return (Page)constructor.newInstance(new Object[0]);
-    		}
+            if (constructor.getParameterTypes().length == 0)
+            {
+                return (Page) constructor.newInstance(new Object[0]);
+            }
 
-    		return (Page)constructor.newInstance(new Object[] { parameter });
+            return (Page) constructor.newInstance(new Object[] { parameter });
         }
         catch (InstantiationException e)
         {
@@ -29,15 +31,17 @@
         }
         catch (InvocationTargetException e)
         {
-        	// In order to avoid classloader issues within Wicket, wicket.jar
-        	// has to be in /WEB-INF/lib
-        	ApplicationSettings settings = application.getSettings();
+            // In order to avoid classloader issues within Wicket, wicket.jar
+            // has to be in /WEB-INF/lib
+            ApplicationSettings settings = application.getSettings();
             Class homePageClass = settings.getHomePage();
-            if (homePageClass.getClassLoader() != constructor.getClass().getClassLoader())
-        	{
-        		throw new RenderException("Classloader problems: Most probably Wicket-xxx.jar is not in /WEB-INF/lib: Exception thrown by " 
-        		        + constructor, e);
-	    	}
+            if (homePageClass.getClassLoader() != constructor.getClass()
+                    .getClassLoader())
+            {
+                throw new RenderException(
+                        "Classloader problems: Most probably Wicket-xxx.jar is not in /WEB-INF/lib: Exception thrown by "
+                                + constructor, e);
+            }
 
             throw new RenderException("Exception thrown by " + constructor, e);
         }

@@ -1,11 +1,13 @@
     /**
-     * Creates a new instance of a page using the given class name.
-     * If pageClass implements a constructor with Page argument, page
-     * will be forwarded to that constructor. Else, the default
-     * constructor will be used and page be neglected.
+     * Creates a new instance of a page using the given class name. If pageClass
+     * implements a constructor with Page argument, page will be forwarded to
+     * that constructor. Else, the default constructor will be used and page be
+     * neglected.
      * 
-     * @param pageClass The class of page to create
-     * @param page Parameter to page constructor
+     * @param pageClass
+     *            The class of page to create
+     * @param page
+     *            Parameter to page constructor
      * @return The new page
      * @throws RenderException
      */
@@ -16,14 +18,14 @@
         final Constructor constructor = getConstructor(pageClass, Page.class);
         if (constructor != null)
         {
-            // Create an instance of type pageClass and provide page as 
+            // Create an instance of type pageClass and provide page as
             // constructor argument, if proper constructor was found. Else
             // page will be neglected.
             return newPage(constructor, page);
         }
 
         throw new RenderException("Could not find constructor for page '"
-                    + pageClass 
-                    + "' with Page argument constructor or default constructor");
+                + pageClass
+                + "' with Page argument constructor or default constructor");
     }
 

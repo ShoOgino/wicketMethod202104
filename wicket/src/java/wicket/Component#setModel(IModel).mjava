@@ -1,16 +1,18 @@
-	/**
-	 * Sets the given model.
-	 * @param model the model
-	 * @return This
-	 */
-	public final Component setModel(final IModel model)
-	{
-		IModel mod = getModel();
-		if ((mod != null) && (mod instanceof IDetachableModel))
-		{
-			((IDetachableModel) mod).detach(RequestCycle.get());
-		}
-		this.model = (IModel) model;
-		return this;
-	}
+    /**
+     * Sets the given model.
+     * 
+     * @param model
+     *            the model
+     * @return This
+     */
+    public final Component setModel(final IModel model)
+    {
+        final IModel currentModel = getModel();
+        if (currentModel != null && currentModel instanceof IDetachableModel)
+        {
+            ((IDetachableModel) currentModel).detach(getSession());
+        }
+        this.model = (IModel) model;
+        return this;
+    }
 

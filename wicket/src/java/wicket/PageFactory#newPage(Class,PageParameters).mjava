@@ -2,36 +2,38 @@
      * Creates a new Page and apply the PageParameters to the Page constructor
      * if a proper constructor exists. Else use the default constructor.
      * 
-     * @param pageClass The name of the page class to create
-     * @param parameters The page parameters
+     * @param pageClass
+     *            The name of the page class to create
+     * @param parameters
+     *            The page parameters
      * @return The new page
      * @throws RenderException
      */
     public Page newPage(final Class pageClass, final PageParameters parameters)
     {
-    	// Find constructor for page class. Try constructor with PageParameters
+        // Find constructor for page class. Try constructor with PageParameters
         // first. If not available try default constructor.
-    	Constructor constructor = null;
-		try
-		{
-		    // Constructor with PageParameter argument
-			constructor = getConstructor(pageClass, PageParameters.class);
-		}
-		catch (RuntimeException e)
-		{
-		    // Try default constructor
-			constructor = getConstructor(pageClass, null);
-		}
-		
-		if (constructor == null)
+        Constructor constructor = null;
+        try
         {
-	        throw new RenderException("Could not find constructor for page '"
-	                + pageClass 
-	                + "' with PageParameter argument or default constructor");
+            // Constructor with PageParameter argument
+            constructor = getConstructor(pageClass, PageParameters.class);
+        }
+        catch (RuntimeException e)
+        {
+            // Try default constructor
+            constructor = getConstructor(pageClass, null);
         }
 
-		// Create an instance of Page. PageParameters will be applied
-		// Depending on the constructor found,
+        if (constructor == null)
+        {
+            throw new RenderException("Could not find constructor for page '"
+                    + pageClass
+                    + "' with PageParameter argument or default constructor");
+        }
+
+        // Create an instance of Page. PageParameters will be applied
+        // Depending on the constructor found,
         return newPage(constructor, parameters);
     }
 

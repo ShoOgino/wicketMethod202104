@@ -1,0 +1,19 @@
+    /**
+     * Detaches from the given session
+     * 
+     * @param session
+     *            The session
+     */
+    protected final void doDetach(final Session session)
+    {
+        // Detach the model if necessary
+        if (model != null && model instanceof IDetachableModel)
+        {
+            ((IDetachableModel) model).detach(session);
+        }
+
+        // Clear down any information we don't want held in the session
+        localizer = null;
+        locale = null;
+    }
+
