@@ -1,0 +1,24 @@
+    /**
+     * 
+     * @param componentName
+     * @param pageableListView
+     */
+    public MyPageableListViewNavigator(final String componentName,
+		final PageableListView pageableListView)
+    {
+        super(componentName, pageableListView);
+
+		// model = null; the headline test will be auto-generated during
+		// handleBody.
+		add(new Label("headline", null)
+		{
+			// Dynamically - at runtime - create the text
+			protected void onComponentTagBody(final MarkupStream markupStream,
+					final ComponentTag openTag)
+			{
+				String text = getHeadlineText(pageableListView);
+				replaceComponentTagBody(markupStream, openTag, text);
+			}
+		});
+    }
+
