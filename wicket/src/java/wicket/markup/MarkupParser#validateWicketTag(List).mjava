@@ -1,0 +1,88 @@
+    /**
+     * Handle wicket parameter tags
+     * 
+     * @param markupElements
+     * @param tag
+     * @throws ParseException
+     */
+    private final void validateWicketTag(final List markupElements)
+    	throws ParseException
+    {
+        for (int i=0; i < markupElements.size(); i++)
+        {
+            final Object elem = markupElements.get(i);
+            
+            if (!(elem instanceof ComponentWicketTag))
+            {
+                continue;
+            }
+            
+            // There might be more than one wicket parameter tag. 
+            // Find the component tag (which is not a param tag).
+            MarkupElement parentTag = (MarkupElement) elem;
+            int pos = i;
+            while (parentTag instanceof ComponentWicketTag)
+            {
+                pos -= 1;
+                if (pos < 0)
+                {
+                    throw new ParseException(
+                            "Found Wicket parameter tag without related component tag.",
+                            ((ComponentTag)elem).getPos());
+                }
+                
+                parentTag = (MarkupElement) markupElements.get(pos);
+                
+                if (parentTag instanceof RawMarkup)
+                {
+                    String text = ((RawMarkup)parentTag).toString();
+                    text = text.replaceAll("\n", "");
+                    text = text.replaceAll("\r", "");
+                    text = text.trim();
+                    if (text.length() == 0)
+                    {
+                        pos -= 1;
+                        if (pos < 0)
+                        {
+                            throw new ParseException(
+                                    "Found Wicket parameter tag without related component tag.",
+                                    ((ComponentTag)elem).getPos());
+                        }
+                        
+                        parentTag = (MarkupElement) markupElements.get(pos);
+                    }
+                }
+            }
+            
+	        if (!(parentTag instanceof ComponentTag))
+	        {
+	            throw new ParseException(
+	                    "Wicket parameter tag must immediately follow a wicket parameter "
+	                    + "or wicket component tag.", 
+	                    ((ComponentTag)elem).getPos());
+	        }
+	        
+	        // TODO: <wicket:params name = "myProperty">My completely free text that can
+	        //   contain everything</wicket:params> is currently not supported
+	        
+	        // Add the parameters to the component tag
+	        final ComponentTag tag = (ComponentTag)parentTag;
+	        ValueMap params = new ValueMap(tag.attributes);
+	        params.putAll(((ComponentTag)elem).getAttributes());
+	        params.makeImmutable();
+	        
+	        tag.attributes = params;
+	        
+	        // Shall the wicket tag be removed from output?
+	        if (removeWicketParamTags == true)
+	        {
+	            // TODO "empty" RawMarkup could also be removed: 
+	            //  like <wicket:param..> being the only tag in the whole line 
+	            markupElements.remove(elem);
+	            
+	            // adjust the index to match the removal
+	            i -= 1;
+	        }
+        }
+    }
+

@@ -8,7 +8,7 @@
 	 * @param exceptionMessage
 	 *           message that will be used for exceptions
 	 */
-	protected final void renderAssociatedMarkup(final RequestCycle cycle, final String openTagName,
+	protected final void renderAssociatedMarkup(final RequestCycle cycle, final String name,
 			final String exceptionMessage)
 	{
 		// Get markup associated with Border or Panel component
@@ -18,14 +18,16 @@
 		associatedMarkupStream.skipRawMarkup();
 		setMarkupStream(associatedMarkupStream);
 
-		// Check for required open tag name
-		if (!associatedMarkupStream.atOpenTag(openTagName))
-		{
-			associatedMarkupStream.throwMarkupException(exceptionMessage);
-		}
-
 		// Get open tag in associated markup of border component
 		final ComponentTag associatedMarkupOpenTag = associatedMarkupStream.getTag();
+
+		// Check for required open tag name
+		if (!associatedMarkupStream.atOpenTag("[" + name + "]") &&
+		        !(associatedMarkupStream.atOpenTag("region") 
+		                && name.equalsIgnoreCase(((ComponentWicketTag) associatedMarkupOpenTag).getNameAttribute())))
+		{
+		    associatedMarkupStream.throwMarkupException(exceptionMessage);
+		}
 
 		renderTag(cycle, associatedMarkupStream, associatedMarkupOpenTag);
 		renderBody(cycle, associatedMarkupStream, associatedMarkupOpenTag);

@@ -17,7 +17,9 @@
 
         // Position in parse
         int position = 0;
-
+       
+        boolean hasWicketParamTag = false;
+        
         // Loop through tags
         for (ComponentTag tag; null != (tag = nextTag());)
         {
@@ -25,7 +27,12 @@
             {
                 log.debug("tag: " + tag.toUserDebugString() + ", stack: " + stack);
             }
-
+        
+            if ((tag instanceof ComponentWicketTag) && "param".equalsIgnoreCase(tag.getName()))
+            {
+                hasWicketParamTag = true;
+            }
+            
             // True if tag should be added to list
             boolean addTag = false;
 
@@ -152,6 +159,12 @@
         // Return immutable list after removing preview components marked by
         // "[remove]"
         removePreviewComponents(list);
+
+        // Validate wicket-param tag are following component tags
+        if (hasWicketParamTag == true)
+        {
+            validateWicketTag(list);
+        }
 
         return Collections.unmodifiableList(list);
     }
