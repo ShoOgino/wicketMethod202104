@@ -53,14 +53,13 @@
         assertNull(tag);
 
         // no extra characters allowed before <?xml>
-        // TODO allows yes/no? Exception yes/no?
+        // Are comments allowed preceding the encoding string?
         parser.parse(new StringResource("<!-- Comment --!> <?xml encoding='iso-8859-1' ?>"));
         assertNull(parser.getEncoding());
         tag = (XmlTag) parser.nextTag();
         assertNull(tag);
 
-        // 'test' is not a valid attribut
-        // TODO I'd certainly prefer an exception
+        // 'test' is not a valid attribut. But we currently don't test it.
         parser.parse(new StringResource("<?xml test='123' >"));
         assertNull(parser.getEncoding());
         tag = (XmlTag) parser.nextTag();
