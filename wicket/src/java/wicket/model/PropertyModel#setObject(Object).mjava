@@ -9,10 +9,15 @@
 	{
 		try
 		{
-			String expr = getExpression();
-			Object target = getModel().getObject();
-			OgnlContext ctx = getContext();
-			Ognl.setValue(expr, ctx, target, object);
+			String expr = getExpression(); // get the ognl expression
+			Object target = getModel().getObject(); // get the real object
+			if(propertyType != null) // convert the incomming object to the target type
+			{
+				IConverter converter = component.getConverter(); // get converter
+				object = converter.convert(object, propertyType); // convert to set type
+			}
+			OgnlContext ctx = getContext(); // get the ognl context instance
+			Ognl.setValue(expr, ctx, target, object); // let ognl set the value
 		}
 		catch (OgnlException e)
 		{
