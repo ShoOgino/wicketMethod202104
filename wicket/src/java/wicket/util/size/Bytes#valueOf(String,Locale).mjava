@@ -12,12 +12,16 @@
     {
         final Matcher matcher = PATTERN.matcher(string);
 
+        // Valid input?
         if (matcher.matches())
         {
             try
             {
-                final double value = NumberFormat.getNumberInstance(locale).parse(matcher.group(1))
-                        .doubleValue();
+                // Get double precision value
+                final double value = NumberFormat.getNumberInstance(locale)
+                    .parse(matcher.group(1)).doubleValue();
+                
+                // Get units specified
                 final String units = matcher.group(3);
 
                 if (units.equalsIgnoreCase(""))
@@ -47,8 +51,7 @@
             }
             catch (ParseException e)
             {
-                throw new StringValueConversionException("Unable to parse numeric part: " + string,
-                        e);
+                throw new StringValueConversionException("Unable to parse numeric part: " + string, e);
             }
         }
         else
