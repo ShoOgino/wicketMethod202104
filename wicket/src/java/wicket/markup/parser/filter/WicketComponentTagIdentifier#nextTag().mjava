@@ -24,15 +24,15 @@
 
 		// Identify tags with Wicket namespace
 		ComponentTag tag;
-		if (componentNameAttribute.equalsIgnoreCase(xmlTag.getNamespace())
-				|| (applyDefaultComponentName && ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE
+		if (componentIdAttribute.equalsIgnoreCase(xmlTag.getNamespace())
+				|| (applyDefaultComponentId && ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE
 						.equalsIgnoreCase(xmlTag.getNamespace())))
 		{
 			// It is <wicket:...>
 			tag = new ComponentWicketTag(xmlTag);
 
 			// Make it a wicket component. Otherwise it would be RawMarkup
-			tag.setComponentId(tag.getName());
+			tag.setId(tag.getName());
 		}
 		else
 		{
@@ -43,41 +43,41 @@
 		// If the form <tag id = "wicket-value"> is used
 		final String id = xmlTag.getAttributes().getString("id");
 
-		if ((id != null) && id.startsWith(componentNameAttribute + "-"))
+		if ((id != null) && id.startsWith(componentIdAttribute + "-"))
 		{
 			// extract component name from value
-			tag.setComponentId(id.substring(componentNameAttribute.length() + 1).trim());
+			tag.setId(id.substring(componentIdAttribute.length() + 1).trim());
 
 			// Depending on apps setting, "wicket-" will be removed or not
 			if (this.stripWicketFromComponentTag)
 			{
-				tag.put("id", tag.getComponentId());
+				tag.put("id", tag.getId());
 			}
 		}
-		else if ((id != null) && applyDefaultComponentName
-				&& id.startsWith(ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE))
+		else if ((id != null) && applyDefaultComponentId
+				&& id.startsWith(ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE))
 		{
 			// extract component name from value
-			tag.setComponentId(id.substring(
-					ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE.length() + 1).trim());
+			tag.setId(id.substring(
+					ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE.length() + 1).trim());
 
 			// Depending on apps setting, "wicket-" will be removed or not
 			if (this.stripWicketFromComponentTag)
 			{
-				tag.put("id", tag.getComponentId());
+				tag.put("id", tag.getId());
 			}
 		}
-		else if (tag.getAttributes().containsKey(componentNameAttribute))
+		else if (tag.getAttributes().containsKey(componentIdAttribute))
 		{
-			// Set componentName value on tag
-			tag.setComponentId(tag.getAttributes().getString(componentNameAttribute));
+			// Set componentId value on tag
+			tag.setId(tag.getAttributes().getString(componentIdAttribute));
 		}
-		else if (applyDefaultComponentName
-				&& tag.getAttributes().containsKey(ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE))
+		else if (applyDefaultComponentId
+				&& tag.getAttributes().containsKey(ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE))
 		{
-			// Set componentName value on tag
-			tag.setComponentId(tag.getAttributes().getString(
-					ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE));
+			// Set componentId value on tag
+			tag.setId(tag.getAttributes().getString(
+					ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE));
 		}
 
 		return tag;

@@ -1,0 +1,22 @@
+	/**
+	 * Sets component id attribute in use in this application. Normally, this
+	 * is "wicket", but it can be changed in the unlikely event that tag
+	 * attribute naming conflicts arise.
+	 * 
+	 * @param componentIdAttribute
+	 *            The componentIdAttribute to set.
+	 * @return This
+	 */
+	public final ApplicationSettings setComponentIdAttribute(final String componentIdAttribute)
+	{
+	    if (!MetaPattern.VARIABLE_NAME.matcher(componentIdAttribute).matches())
+	    {
+	        throw new IllegalArgumentException(
+	                "Component id attribute must be a valid variable name ([a-z][a-z0-9_]*)");
+	    }
+	    
+	    this.applyDefaultComponentId = true;
+		this.componentIdAttribute = componentIdAttribute;
+		return this;
+	}
+

@@ -10,9 +10,9 @@
 
         // Chain together all the different markup filters
         final WicketComponentTagIdentifier detectWicketComponents = new WicketComponentTagIdentifier(xmlParser);
-        detectWicketComponents.setComponentNameAttribute(this.componentNameAttribute);
+        detectWicketComponents.setComponentIdAttribute(this.componentIdAttribute);
         detectWicketComponents.setStripWicketFromComponentTag(this.stripWicketFromComponentTag);
-        detectWicketComponents.setApplyDefaultComponentName(this.applyDefaultComponentName);
+        detectWicketComponents.setApplyDefaultComponentId(this.applyDefaultComponentId);
         
         final WicketParamTagHandler wicketParamTagHandler = new WicketParamTagHandler(
                 new HtmlHandler(detectWicketComponents));
@@ -29,10 +29,10 @@
         // Loop through tags
         for (ComponentTag tag; null != (tag = (ComponentTag)markupFilterChain.nextTag());)
         {
-            boolean add = (tag.getComponentId() != null);
+            boolean add = (tag.getId() != null);
             if (!add && tag.getXmlTag().isClose())
             {
-                add = ((tag.getOpenTag() != null) && (tag.getOpenTag().getComponentId() != null));
+                add = ((tag.getOpenTag() != null) && (tag.getOpenTag().getId() != null));
             }
 
             // Add tag to list?
@@ -61,7 +61,7 @@
                 }
 
                 // Add to list unless preview component tag remover flagged as removed
-                if (!PreviewComponentTagRemover.IGNORE.equals(tag.getComponentId()))
+                if (!PreviewComponentTagRemover.IGNORE.equals(tag.getId()))
                 {
 	                list.add(tag);
                 }

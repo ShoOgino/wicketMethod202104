@@ -5,14 +5,14 @@
 	 * 
 	 * @param container
 	 *            The container where the link is
-	 * @param componentName
+	 * @param componentId
 	 *            the name of the component
 	 * @param tag
 	 *            the component tag
 	 * @return A BookmarkablePageLink to handle the href
 	 */
 	private Component resolveAutomaticLink(final MarkupContainer container,
-			final String componentName, final ComponentTag tag)
+			final String componentId, final ComponentTag tag)
 	{
 		final Page page = container.getPage();
 		final String originalHref = tag.getAttributes().getString("href");
@@ -28,11 +28,11 @@
 			pageParameters = new PageParameters(new ValueMap(queryString, "&"));
 		}
 
-		// Make the componentName (page-)unique
-		final String id = componentName + page.getAutoIndex();
+		// Make the componentId (page-)unique
+		final String id = componentId + page.getAutoIndex();
 
 		// The component name on the tag changed
-		tag.setComponentId(id);
+		tag.setId(id);
 
 		// Obviously a href like href="myPkg.MyLabel.html" will do as well.
 		// Wicket will not throw an exception. It accepts it.

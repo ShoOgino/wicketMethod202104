@@ -9,7 +9,7 @@
 	 *            The current component tag while parsing the markup
 	 * @param container
 	 *            The container parsing its markup
-	 * @return true, if componentName was handle by the resolver. False,
+	 * @return true, if componentId was handle by the resolver. False,
 	 *         otherwise
 	 */
 	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
@@ -19,8 +19,8 @@
 		if (tag.isAutolinkEnabled())
 		{
 			// Try to find the Page matching the href
-			final String componentName = tag.getComponentId();
-			final Component link = resolveAutomaticLink(container, componentName, tag);
+			final String componentId = tag.getId();
+			final Component link = resolveAutomaticLink(container, componentId, tag);
 
 			// Add the link to the container
 			container.add(link);
@@ -32,11 +32,11 @@
 			// Render the Link
 			link.render();
 
-			// Tell the container, we handled the componentName
+			// Tell the container, we handled the componentId
 			return true;
 		}
 
-		// We were not able to handle the componentName
+		// We were not able to handle the componentId
 		return false;
 	}
 

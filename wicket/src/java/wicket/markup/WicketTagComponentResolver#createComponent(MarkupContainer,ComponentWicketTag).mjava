@@ -10,10 +10,10 @@
     private Component createComponent(final MarkupContainer container, final ComponentWicketTag tag)
     {
         // If no component name is given, create a page-unique one yourself.
-        String componentName = tag.getNameAttribute();
-        if (componentName == null)
+        String componentId = tag.getNameAttribute();
+        if (componentId == null)
         {
-            componentName = "anonymous-" + container.getPage().getAutoIndex();
+            componentId = "anonymous-" + container.getPage().getAutoIndex();
         }
 
         // Get the component class name
@@ -30,13 +30,13 @@
         final Class componentClass = container.getSession().getClassResolver().resolveClass(classname);
 
         // construct the component. It must have a constructor with a single
-        // String (componentName) parameter.
+        // String (componentId) parameter.
         final Component component;
         try
         {
             final Constructor constructor = componentClass
                     .getConstructor(new Class[] { String.class });
-            component = (Component)constructor.newInstance(new Object[] { componentName });
+            component = (Component)constructor.newInstance(new Object[] { componentId });
         }
         catch (NoSuchMethodException e)
         {
