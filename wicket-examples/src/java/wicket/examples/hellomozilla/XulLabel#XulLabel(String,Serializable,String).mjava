@@ -1,0 +1,16 @@
+	/**
+	 * Construct.
+	 * @param name name of the component
+	 * @param object subject of ognlExpression
+	 * @param ognlExpression ognl expression that works on object
+	 */
+	public XulLabel(String name, Serializable object, String ognlExpression)
+	{
+		super(name);
+		// create a replacement body that will get the result of the ognlExpression
+		// applied to the object
+		IModel replacementModel = new PropertyModel(new Model(object), ognlExpression);
+		// replace the value attribute with the result of the replacement model
+		add(new ComponentTagAttributeModifier("value", replacementModel));
+	}
+
