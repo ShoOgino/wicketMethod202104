@@ -1,24 +1,24 @@
-    /**
-     * Writes a simple tag out to the response stream. Any components that might
-     * be referenced by the tag are ignored. Also undertakes any tag attribute
-     * modifications if they have been added to the component.
-     * 
-     * @param tag
-     *            The tag to write
-     */
-    protected final void renderTag(ComponentTag tag)
-    {
-        // Apply attribute tag modifiers
-        if (attributeModifiers != null && tag.getType() != ComponentTag.CLOSE)
-        {
-            tag = tag.mutable();
-            for (Iterator it = attributeModifiers.iterator(); it.hasNext();)
-            {
-                ((ComponentTagAttributeModifier)it.next()).replaceAttibuteValue(tag);
-            }
-        }
+	/**
+	 * Writes a simple tag out to the response stream. Any components that might
+	 * be referenced by the tag are ignored. Also undertakes any tag attribute
+	 * modifications if they have been added to the component.
+	 * 
+	 * @param tag
+	 *            The tag to write
+	 */
+	protected final void renderTag(ComponentTag tag)
+	{
+		// Apply attribute tag modifiers
+		if (attributeModifiers != null && tag.getType() != ComponentTag.CLOSE)
+		{
+			tag = tag.mutable();
+			for (Iterator it = attributeModifiers.iterator(); it.hasNext();)
+			{
+				((ComponentTagAttributeModifier)it.next()).replaceAttibuteValue(tag);
+			}
+		}
 
-        // Write the tag
-        getResponse().write(tag);
-    }
+		// Write the tag
+		getResponse().write(tag);
+	}
 

@@ -1,36 +1,36 @@
-    /**
-     * Gets the current session object. Although this method is not final
-     * (because Page overrides it), it is not intended to be overridden by
-     * clients and clients of the framework should not do so!
-     * 
-     * @return The session that this component is in
-     */
-    public Session getSession()
-    {
-        // Fetch page if possible
-        final Page page = findPage();
+	/**
+	 * Gets the current session object. Although this method is not final
+	 * (because Page overrides it), it is not intended to be overridden by
+	 * clients and clients of the framework should not do so!
+	 * 
+	 * @return The session that this component is in
+	 */
+	public Session getSession()
+	{
+		// Fetch page if possible
+		final Page page = findPage();
 
-        // If this component is attached to a page
-        if (page != null)
-        {
-            // Get Session from Page object for this component
-            final Session session = page.getSession();
+		// If this component is attached to a page
+		if (page != null)
+		{
+			// Get Session from Page object for this component
+			final Session session = page.getSession();
 
-            // Did we find the session?
-            if (session != null)
-            {
-                return session;
-            }
-            else
-            {
-                // This should NEVER happen. But if it does, we'll want a nice
-                // error message.
-                throw new IllegalStateException(exceptionMessage("Page not attached to session"));
-            }
-        }
-        else
-        {
-            return Session.get();
-        }
-    }
+			// Did we find the session?
+			if (session != null)
+			{
+				return session;
+			}
+			else
+			{
+				// This should NEVER happen. But if it does, we'll want a nice
+				// error message.
+				throw new IllegalStateException(exceptionMessage("Page not attached to session"));
+			}
+		}
+		else
+		{
+			return Session.get();
+		}
+	}
 
