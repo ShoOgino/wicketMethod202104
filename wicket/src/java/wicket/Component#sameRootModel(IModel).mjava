@@ -13,18 +13,7 @@
 		// If both models are non-null they could be the same
 		if (thisModel != null && thatModel != null)
 		{
-			// Find most nested models
-			while (thisModel instanceof INestedModel)
-			{
-				thisModel = ((INestedModel)thisModel).getNestedModel();
-			}
-
-			while (thatModel instanceof INestedModel)
-			{
-				thatModel = ((INestedModel)thatModel).getNestedModel();
-			}
-
-			return thisModel == thatModel;
+			return getRootModel(thisModel) == getRootModel(thatModel);
 		}
 
 		return false;

@@ -3,5 +3,13 @@
 	 *            The component to get the model object for
 	 * @return The model for this property
 	 */
-	protected abstract Object modelObject(Component component);
+	protected Object modelObject(final Component component)
+	{
+		final Object modelObject = getNestedModel();
+		if (modelObject instanceof IModel)
+		{
+			return ((IModel)modelObject).getObject(component);
+		}
+		return modelObject;
+	}
 
