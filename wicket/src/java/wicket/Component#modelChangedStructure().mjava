@@ -6,16 +6,16 @@
 	 * model, the corresponding page is made stale. In addition, all previous
 	 * renderings of the page holding this component are made stale.
 	 */
-	protected void invalidateModel()
+	public void modelChangedStructure()
 	{
 		// Find the page where this component lives. There is no need to
 		// check the return value for null here since getPage() will throw
 		// an IllegalState exception if its return value is null.
 		final Page page = getPage();
-
+	
 		// Make all previous renderings of the page stale
 		page.setStaleRendering(page.getRendering());
-
+	
 		// Visit all pages in the session
 		getSession().visitPages(new Session.IPageVisitor()
 		{
