@@ -4,13 +4,18 @@
 	 * @param currentValue
 	 *            the current list value
 	 * @return whether the given value represents the current selection
-	 * @see wicket.markup.html.form.Choice#isSelected(java.lang.Object)
 	 */
 	protected boolean isSelected(Object currentValue)
 	{
-		Collection collection = (Collection)getModelObject();
-		if (collection != null)
-			return collection.contains(currentValue);
-		return false;
+		Object modelObject = getModelObject();
+		if (modelObject == null)
+		{
+			if (currentValue == null)
+				return true;
+			else
+				return false;
+		}
+		boolean equals = currentValue.equals(modelObject);
+		return equals;
 	}
 
