@@ -6,7 +6,10 @@
      */
     public void linkClicked(RequestCycle cycle, TreeNodeModel node)
     {
-        Serializable userObject = node.getUserObject();
+        // get the user object. WARNING: do not call node.getUserObject, as we want the
+        // wrapped user object in case it was made unique
+        Object userObject = node.getTreeNode().getUserObject();
+
         TreeStateCache state = tree.getTreeState();
         TreePath selection = state.findTreePath(userObject);
         tree.setExpandedState(selection, (!node.isExpanded())); // inverse

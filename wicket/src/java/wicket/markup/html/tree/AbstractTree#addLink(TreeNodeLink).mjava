@@ -4,16 +4,6 @@
      */
     final void addLink(TreeNodeLink link)
     {
-        TreeNodeModel node = link.getNode();
-        Serializable userObject = node.getUserObject();
-
-        // links can change, but the target user object should be the same, so
-        // if a new link is added that actually points to the same userObject, it will
-        // replace the old one thus allowing the old link to be GC-ed. We need the creator hash
-        // to be able to have more trees in the same page with the same link names
-        String linkId = link.getName() + "." + userObject.hashCode();
-
-        link.setId(linkId);
-        links.put(linkId, link);
+        links.put(link.getId(), link);
     }
 

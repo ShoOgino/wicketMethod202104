@@ -1,0 +1,19 @@
+    /**
+     * Loops through all tree nodes and make the user object of each tree node unique.
+     * By default, this is done by wrapping the found user objects in instances
+     * of {@link IdWrappedUserObject}.
+     * @param treeModel the tree model
+     */
+    public void makeUnique(TreeModel treeModel)
+    {
+        DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
+        makeUnique(rootNode);
+        DefaultMutableTreeNode node;
+        Enumeration e = rootNode.preorderEnumeration();
+        while (e.hasMoreElements())
+        {
+            node = (DefaultMutableTreeNode)e.nextElement();
+            makeUnique(node);
+        }
+    }
+

@@ -4,6 +4,14 @@
      */
     public final Serializable getUserObject()
     {
-        return (Serializable)treeNode.getUserObject();
+    	Object obj = treeNode.getUserObject();
+    	if(obj instanceof IdWrappedUserObject)
+    	{
+    		return (Serializable)((IdWrappedUserObject)obj).getUserObject();
+    	}
+    	else
+    	{
+    		return (Serializable)obj;
+    	}
     }
 
