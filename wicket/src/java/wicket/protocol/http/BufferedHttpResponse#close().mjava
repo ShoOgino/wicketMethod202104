@@ -1,0 +1,26 @@
+	/**
+     * Flushes the response buffer by doing a redirect or writing out the buffer.
+     * NOTE: The servlet container will close the response output stream.
+	 */
+	public void close()
+	{
+        try
+        {
+            // If a redirection was specified
+            if (redirectUrl != null)
+            {
+                // actually redirect
+                super.redirect(redirectUrl);
+            }
+            else
+            {
+                // Write the buffer to the response stream
+                getServletResponse().getWriter().write(buffer.toString());
+            }
+        }
+        catch (IOException e)
+        {
+            throw new WicketRuntimeException("Failed to flush response output", e);
+        }
+	}
+
