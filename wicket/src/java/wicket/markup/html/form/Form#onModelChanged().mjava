@@ -1,0 +1,22 @@
+	/**
+	 * @see wicket.Component#onModelChanged()
+	 */
+	protected void onModelChanged()
+	{
+		// Visit all the form components and validate each
+		visitChildren(FormComponent.class, new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				// If form component is using form model
+				if (component.sameRootModel(Form.this))
+				{
+					component.modelChanged();
+				}
+
+				// Continue until the end
+				return IVisitor.CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+
