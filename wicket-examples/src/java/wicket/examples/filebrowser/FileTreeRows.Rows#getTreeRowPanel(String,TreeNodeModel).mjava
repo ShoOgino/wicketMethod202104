@@ -1,12 +1,15 @@
-		/**
-         * Override to provide a custom row panel.
-         * @see wicket.markup.html.tree.Tree#getTreeRowPanel(java.lang.String, wicket.markup.html.tree.TreeNodeModel)
+        /**
+         * Gets the row panel.
+         * @param componentName name of the component
+         * @param nodeModel the node model
+         * @return the new panel for one row
          */
         protected Panel getTreeRowPanel(String componentName, TreeNodeModel nodeModel)
         {
             TreeRowReplacementModel replacementModel =
                 new TreeRowReplacementModel(nodeModel);
-            Panel rowPanel = new FileTreeRow(componentName, this, nodeModel);
+            Panel rowPanel = new FileTreeRow(componentName,
+            		FileTreeRows.this.tree, nodeModel);
             rowPanel.add(new ComponentTagAttributeModifier(
                     "class", true, replacementModel));
             return rowPanel;
