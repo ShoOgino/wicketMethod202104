@@ -1,5 +1,7 @@
     /**
-     * Handle wicket parameter tags
+     * Validate wicket-param tag are following component tags, assign
+     * the params to the ComponentTag immediately preceding and remove
+     * the <wicket:param ..> from output.
      * 
      * @param markupElements
      * @throws ParseException
@@ -7,6 +9,7 @@
     private final void validateWicketTag(final List markupElements)
     	throws ParseException
     {
+        // For each ComponentWicketTag found ...
         for (int i=0; i < markupElements.size(); i++)
         {
             final Object elem = markupElements.get(i);
@@ -17,7 +20,8 @@
             }
             
             // There might be more than one wicket parameter tag. 
-            // Find the component tag (which is not a param tag).
+            // Find the component tag (which is not a param tag) preceding
+            // that element.
             MarkupElement parentTag = (MarkupElement) elem;
             int pos = i;
             while (parentTag instanceof ComponentWicketTag)
@@ -32,6 +36,8 @@
                 
                 parentTag = (MarkupElement) markupElements.get(pos);
                 
+                // param tags may be in the next line with empty RawMarkup between 
+                // the ComponentTag and the param tag. 
                 if (parentTag instanceof RawMarkup)
                 {
                     String text = ((RawMarkup)parentTag).toString();
@@ -69,7 +75,6 @@
 	        ValueMap params = new ValueMap(tag.attributes);
 	        params.putAll(((ComponentTag)elem).getAttributes());
 	        params.makeImmutable();
-	        
 	        tag.attributes = params;
 	        
 	        // Shall the wicket tag be removed from output?

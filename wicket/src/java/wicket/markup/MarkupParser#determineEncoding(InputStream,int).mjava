@@ -8,10 +8,10 @@
      * @return null, if &lt;?xml ..?&gt; has been found; else all characters read ahead
      * @throws IOException
      */
-    final private String determineEncoding(final InputStream in) throws IOException
+    final private String determineEncoding(final InputStream in, final int readAheadSize) throws IOException
     {
         // max one line
-        StringBuffer pushBack = new StringBuffer(80);
+        StringBuffer pushBack = new StringBuffer(readAheadSize);
         
         int value;
         while ((value = in.read()) != -1)
@@ -23,7 +23,7 @@
             if ((value == '>') 
                     || (value == '\n') 
                     || (value == '\r') 
-                    || (pushBack.length() > 75))
+                    || (pushBack.length() >= (readAheadSize - 1)))
             {
                 break;
             }
@@ -33,19 +33,17 @@
         final Matcher matcher = encodingPattern.matcher(pushBack);
         if (!matcher.find())
         {
-            // No; return the whole string
-            return pushBack.toString();
+            // No
+            return null;
         }
         
         // Extract the encoding
-        encoding = matcher.group(3);
+        String encoding = matcher.group(3);
         if ((encoding == null) || (encoding.length() == 0))
         {
             encoding = matcher.group(4);
         }
         
-        // Because we are removing <?xml ..?> from markup and because
-        // there are no additional characters in pushBack, ...
-        return null;
+        return encoding;
     }
 

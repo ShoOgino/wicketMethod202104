@@ -1,11 +1,12 @@
     /**
-     * Removes components marked as "[remove]" from list. Nested components are not
-     * allowed, for obvious reasons.
+     * Removes region enclosed by <wicket:region name=remove> tags.
+     * ComponentTag are not allowed within this region for obvious reasons.
+     * 
      * @param list The list to process
      */
     private void removePreviewComponents(final List list)
     {
-        // Remove any [remove] components
+        // Remove any <wicket:region name=remove> components
         for (int i = 0; i < list.size(); i++)
         {
             // Get next element
@@ -14,9 +15,10 @@
             // If element is a component tag
             if (element instanceof ComponentTag)
             {
-                // Check for open tag labelled "[remove]"
+                // Check for open tag 
                 final ComponentTag openTag = (ComponentTag) element;
                 
+                // TODO to be removed for Wicket 1.0
                 boolean remove = (openTag.isOpen() && openTag.componentName.equalsIgnoreCase("[remove]"));
                 if (remove == true)
                 {
@@ -70,14 +72,14 @@
 
                     if (i < list.size())
                     {
-                        throw new MarkupException("[Remove] open tag "
+                        throw new MarkupException("<wicket:region name=remove> open tag "
                                 + openTag + " not closed by " + list.get(i) 
-                                + " It must nt contain a nested wicket component.");
+                                + ". It must not contain a nested wicket component.");
                     }
                     else
                     {
-                        throw new MarkupException("[Remove] open tag "
-                                + openTag + " not closed"
+                        throw new MarkupException("<wicket:region name=remove> open tag "
+                                + openTag + " not closed."
                         		+ " It must nt contain a nested wicket component.");
                     }
                 }

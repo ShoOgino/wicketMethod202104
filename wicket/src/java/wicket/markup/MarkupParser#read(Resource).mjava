@@ -1,5 +1,5 @@
     /**
-     * Reads and parses markup from a file.
+     * Reads and parses markup from a Resource such as a file.
      * @param resource The file
      * @return The markup
      * @throws ParseException
@@ -14,24 +14,35 @@
         
         try
         {
+            final BufferedInputStream bin = new BufferedInputStream(resource.getInputStream(), 4000);
+            if (!bin.markSupported())
+            {
+                throw new IOException("BufferedInputStream does not support mark/reset");
+            }
+            
+            // read ahead buffer
+            final int readAheadSize = 80;
+            bin.mark(readAheadSize);
+            
             // read-ahead the input stream, if it starts with <?xml encoding=".." ?>.
             // If yes, set this.encoding and return the character which follow it.
             // If not, return the whole line. determineEncoding will read-ahead
             // at max. the very first line of the markup
-            final String pushBack = determineEncoding(resource.getInputStream());
+            this.encoding = determineEncoding(bin, readAheadSize);
 
             // Depending the encoding determine from the markup-file, read
             // the rest either with specific encoding or JVM default
             final String markup;
-            if (encoding == null)
+            if (this.encoding == null)
             {
-                // Use JVM default to read the markup
-                markup = pushBack + Streams.readString(resource.getInputStream());
+                bin.reset();
+                markup = Streams.readString(bin);
             }
             else
             {
-                // Use the encoding as specific in <?xml encoding=".." ?>
-                markup = Streams.readString(resource.getInputStream(), encoding);
+                // Use the encoding as specified in <?xml encoding=".." ?>
+                // Don't re-read <?xml ..> again
+                markup = Streams.readString(bin, encoding);
             }
 
             return new Markup(resource, parseMarkup(markup));

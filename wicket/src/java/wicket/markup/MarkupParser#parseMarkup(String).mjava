@@ -9,7 +9,7 @@
         // List to return
         final List list = new ArrayList();
 
-        // Create tag parser
+        // keep a reference to the markup
         setInput(markup);
 
         // Tag stack to find balancing tags
@@ -17,10 +17,12 @@
 
         // Position in parse
         int position = 0;
-       
+
+        // This is to avoid unnecessary list scans. If any <wicket:param ..>
+        // tag was found, this value will be true.
         boolean hasWicketParamTag = false;
         
-        // Loop through tags
+        // Loop through the tags
         for (ComponentTag tag; null != (tag = nextTag());)
         {
             if(log.isDebugEnabled())
@@ -28,6 +30,7 @@
                 log.debug("tag: " + tag.toUserDebugString() + ", stack: " + stack);
             }
         
+            // Set the flag if <wicket:param ...> was found
             if ((tag instanceof ComponentWicketTag) && "param".equalsIgnoreCase(tag.getName()))
             {
                 hasWicketParamTag = true;
@@ -90,8 +93,8 @@
                 else
                 {
                     throw new ParseException("Tag "
-                            + tag.toUserDebugString() + " does not have a matching open tag", tag
-                            .getPos());
+                            + tag.toUserDebugString() + " does not have a matching open tag", 
+                            tag.getPos());
                 }
             }
             else if (tag.type == ComponentTag.OPEN_CLOSE)
@@ -113,7 +116,7 @@
 
                     if (stripComments)
                     {
-                        rawMarkup = rawMarkup.replaceAll("<!--(.|\n|\r)*?-->", "");
+                        rawMarkup = new String(rawMarkup.toString()).replaceAll("<!--(.|\n|\r)*?-->", "");
                     }
 
                     if (compressWhitespace)
@@ -156,16 +159,18 @@
             list.add(new RawMarkup(markup.substring(position, markup.length())));
         }
 
-        // Return immutable list after removing preview components marked by
-        // "[remove]"
+        // remove <wicket:region name=remove> regions
         removePreviewComponents(list);
 
-        // Validate wicket-param tag are following component tags
+        // Validate wicket-param tag are following component tags, assign
+        // the params to the ComponentTag immediately preceding and remove
+        // the <wicket:param ..> from output.
         if (hasWicketParamTag == true)
         {
             validateWicketTag(list);
         }
 
+        // Return an umodifable list of MarkupElements
         return Collections.unmodifiableList(list);
     }
 
