@@ -1,34 +1,36 @@
-	/**
-	 * initialise.
-	 * @throws ConfigException when this delegate could not be properly initialized
-	 */
-	public void init() throws ConfigException
-	{
+    /**
+     * initialise.
+     * @throws ConfigException when this delegate could not be properly initialized
+     */
+    public void init() throws ConfigException
+    {
+        if (!initialised)
+        {
+            initialised = true;
 
-		if (!initialised)
-		{
-			initialised = true;
-			// Initialize hibernate
-			// configure; load mappings
-			configuration = new Configuration();
-			try
-			{
-				if (configURL != null)
-				{
-					configuration.configure(configURL);
-				}
-				else
-				{
-					configuration.configure();
-				}
-				// build a SessionFactory
-				factory = configuration.buildSessionFactory();
-			}
-			catch (HibernateException e)
-			{
-				log.error(e.getMessage(), e);
-				throw new ConfigException(e);
-			}
-		}
-	}
+            // Initialize hibernate
+            // configure; load mappings
+            configuration = new Configuration();
+
+            try
+            {
+                if (configURL != null)
+                {
+                    configuration.configure(configURL);
+                }
+                else
+                {
+                    configuration.configure();
+                }
+
+                // build a SessionFactory
+                factory = configuration.buildSessionFactory();
+            }
+            catch (HibernateException e)
+            {
+                log.error(e.getMessage(), e);
+                throw new ConfigException(e);
+            }
+        }
+    }
 

@@ -1,46 +1,54 @@
-	/**
-	 * Initialize the delegate.
-	 * 
-	 * @param properties
-	 *            the properties
-	 */
-	private static void initializeDelegate(Properties properties)
-	{
-		String delegateImplClass = System.getProperty(SYSTEM_PROPERTY_DELEGATE);
-		if (delegateImplClass == null) // if not a system property
-		{
-			delegateImplClass = properties.getProperty(PROPERTY_DELEGATE);
-		}
-		if (delegateImplClass != null) // try to load the delegate
-		{
-			try
-			{
-				ClassLoader loader = Thread.currentThread().getContextClassLoader();
-				if (loader == null)
-				{
-					loader = HibernateHelper.class.getClassLoader();
-				}
-				Class clazz = loader.loadClass(delegateImplClass);
-				delegate = (HibernateHelperDelegate) clazz.newInstance();
-			}
-			catch (ClassNotFoundException e)
-			{
-				log.error(e.getMessage(), e);
-			}
-			catch (InstantiationException e)
-			{
-				log.error(e.getMessage(), e);
-			}
-			catch (IllegalAccessException e)
-			{
-				log.error(e.getMessage(), e);
-			}
-		}
-		if (delegate == null) // if no delegate was given or instantiation failed
-		{
-			log.info("fallback on default HibernateHelperDelegate implementation: "
-					+ HibernateHelperThreadLocaleImpl.class.getName());
-			delegate = new HibernateHelperThreadLocaleImpl();
-		}
-	}
+    /**
+     * Initialize the delegate.
+     *
+     * @param properties
+     *            the properties
+     */
+    private static void initializeDelegate(Properties properties)
+    {
+        String delegateImplClass = System.getProperty(SYSTEM_PROPERTY_DELEGATE);
+
+        if (delegateImplClass == null) // if not a system property
+        {
+            delegateImplClass = properties.getProperty(PROPERTY_DELEGATE);
+        }
+
+        if (delegateImplClass != null) // try to load the delegate
+        {
+            try
+            {
+                ClassLoader loader = Thread.currentThread()
+                                           .getContextClassLoader();
+
+                if (loader == null)
+                {
+                    loader = HibernateHelper.class.getClassLoader();
+                }
+
+                Class clazz = loader.loadClass(delegateImplClass);
+
+                delegate = (HibernateHelperDelegate) clazz.newInstance();
+            }
+            catch (ClassNotFoundException e)
+            {
+                log.error(e.getMessage(), e);
+            }
+            catch (InstantiationException e)
+            {
+                log.error(e.getMessage(), e);
+            }
+            catch (IllegalAccessException e)
+            {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        if (delegate == null) // if no delegate was given or instantiation failed
+        {
+            log.info(
+                "fallback on default HibernateHelperDelegate implementation: "
+                + HibernateHelperThreadLocaleImpl.class.getName());
+            delegate = new HibernateHelperThreadLocaleImpl();
+        }
+    }
 

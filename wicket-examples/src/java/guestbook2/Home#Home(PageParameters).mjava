@@ -3,19 +3,20 @@
      * @param parameters Page parameters
      */
     public Home(final PageParameters parameters)
-    {        
+    {
         // Add comment form
         add(new CommentForm("commentForm"));
 
         // Add table of existing comments
         add(table = new Table("comments", commentList)
-        {
-            public void populateCell(final Cell cell)
-            {
-                final Comment comment = (Comment)cell.getModelObject();
-                cell.add(new Label("date", comment.getDate()));
-                cell.add(new MultiLineLabel("text", comment.getText()));
-            }   
-        });
+                {
+                    public void populateCell(final Cell cell)
+                    {
+                        final Comment comment = (Comment) cell.getModelObject();
+
+                        cell.add(new Label("date", comment.getDate()));
+                        cell.add(new MultiLineLabel("text", comment.getText()));
+                    }
+                });
     }
 

@@ -6,25 +6,27 @@
         {
             // Construct a copy of the edited comment
             final Comment newComment = new Comment(comment);
-            
+
             // Set date of comment to add
             newComment.setDate(new Date());
-            
+
             // Add the component we edited to the list of comments
             commentList.add(newComment);
-            
+
             try
             {
                 // Get hibernate session
                 Session session = HibernateHelper.getSession();
+
                 try
                 {
                     // Save comment to db
                     Transaction transaction = session.beginTransaction();
+
                     session.save(newComment);
                     transaction.commit();
                 }
-                finally 
+                finally
                 {
                     HibernateHelper.closeSession();
                 }
@@ -37,7 +39,7 @@
             {
                 throw new RuntimeException("Unable to save comment", e);
             }
-            
+
             table.invalidateModel();
         }
 
