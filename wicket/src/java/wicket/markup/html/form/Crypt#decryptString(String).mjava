@@ -1,20 +1,11 @@
     /**
-     * Decrypts a String into a byte array.
+     * Decrypts a string into a string.
      * 
-     * @param plainText text to decrypt
+     * @param text text to decript
      * @return the decrypted text
      */
-    private final byte[] decryptString(final String plainText)
+    public final String decryptString(final String text)
     {
-        final byte[] plainBytes;
-        try
-        {
-            plainBytes = new BASE64Decoder().decodeBuffer(plainText);
-        }
-        catch (IOException ex) 
-        {
-            throw new RuntimeException(ex.getMessage());
-        }
-        return crypt(plainBytes, Cipher.DECRYPT_MODE);
+        return new String(decryptStringToByteArray(text));
     }
 
