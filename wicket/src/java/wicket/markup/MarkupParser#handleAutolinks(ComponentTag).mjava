@@ -18,8 +18,21 @@
         if ((automaticLinking == true) && (tag.getComponentName() == null) 
                 && tag.getAttributes().containsKey("href"))
         {
-            // Just a dummy name. The ComponentTag will not be forwarded.
-            return resolveAutomaticLink(tag);
+            final String originalHref = tag.getAttributes().getString("href");
+
+            // Only hrefs which reference a html can be autolinks (for now)
+            final int pos = originalHref.indexOf(".html");
+            if (pos <= 0)
+            {
+                return false;
+            }
+            
+            // Assign a dummy name. A component resolver will pick it and
+            // handle the details.
+            tag.componentName = "_autolink_";
+            tag.enableAutolink(true);
+            
+            return true;
         }
         
         // For all <wicket:link ..> tags

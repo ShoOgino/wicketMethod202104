@@ -1,0 +1,45 @@
+    /**
+     * Automatically creates a ExternalPageLink component.
+     * 
+     * @see wicket.markup.IComponentResolver#resolve(RequestCycle, MarkupStream, ComponentTag, Container)
+     * @param cycle The current RequestCycle 
+     * @param markupStream The current markupStream
+     * @param tag The current component tag while parsing the markup
+     * @param container The container parsing its markup
+     * @return true, if componentName was handle by the resolver. False, otherwise  
+     */
+	public boolean resolve(final Container container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+	    // Must be marked as autolink tag
+        if (tag.isAutolinkEnabled())
+        {
+            // Autolinks are only supported with anchor tags
+            if (!tag.getName().equalsIgnoreCase("a"))
+            {
+                markupStream.throwMarkupException(
+                        "Automatic link can only be attached to an anchor tag");
+            }
+            
+            // Try to find the Page matching the href
+    	    final String componentName = tag.getComponentName();
+            final Link link = resolveAutomaticLink(container.getPage(), markupStream, componentName, tag);
+
+	        // Add the link to the container
+			container.add(link);
+			if (log.isDebugEnabled()) 
+			{
+				log.debug("Added autolink " + link);
+			}
+
+			// Render the Link
+			link.render();
+
+			// Tell the container, we handled the componentName
+			return true;
+		}
+	
+        // We were not able to handle the componentName
+        return false;
+	}
+

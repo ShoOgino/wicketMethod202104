@@ -131,24 +131,16 @@
                     list.add(new RawMarkup(rawMarkup));
                 }
 
-                if (tag.isAutolinkEnabled())
+                if ((tag instanceof ComponentWicketTag) && ((ComponentWicketTag)tag).isLinkTag())
                 {
                     final String tagString = tag.toXmlString();
 	                list.add(new RawMarkup(tagString));
                 }
                 else
                 {
-                    if ((tag instanceof ComponentWicketTag) && ((ComponentWicketTag)tag).isLinkTag())
-                    {
-                        final String tagString = tag.toXmlString();
-    	                list.add(new RawMarkup(tagString));
-                    }
-                    else
-                    {
-		                // Add immutable tag
-		                tag.makeImmutable();
-		                list.add(tag);
-                    }
+	                // Add immutable tag
+	                tag.makeImmutable();
+	                list.add(tag);
                 }
                 
                 // Position is after tag

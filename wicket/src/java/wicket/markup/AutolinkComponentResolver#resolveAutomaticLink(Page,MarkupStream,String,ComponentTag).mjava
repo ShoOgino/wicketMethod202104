@@ -3,19 +3,22 @@
      * variables by parsing the tag component name and then searching for a page class at
      * the relative URL specified by the href attribute of the tag. The href URL is
      * relative to the package containing the page where this component is contained.
+     * @param page The page where the link is
+     * @param markupStream Markup stream to use when throwing any exceptions
+     * @param componentName the name of the component
      * @param tag the component tag
-     * @return
-     * @throws ParseException
+     * @return A BookmarkablePageLink to handle the href
      */
-    private boolean resolveAutomaticLink(final ComponentTag tag)
-    	throws ParseException
+    private Link resolveAutomaticLink(final Page page, final MarkupStream markupStream,
+    		final String componentName, final ComponentTag tag)
     {
         final String originalHref = tag.getAttributes().getString("href");
 
         final int pos = originalHref.indexOf(".html");
         if (pos <= 0)
         {
-            return false;
+            markupStream.throwMarkupException(
+            	"Expected to find '*.html' in href: " + originalHref);
         }
         
         String classPath = originalHref.substring(0, pos);
@@ -29,14 +32,13 @@
         }
         
         classPath = classPath.replaceAll("/", ".");
-        classPath = autolinkBasePage.getClass().getPackage().getName() + "." + classPath;
+        classPath = page.getClass().getPackage().getName() + "." + classPath;
+        
+        Class clazz = page.getApplicationSettings().getDefaultClassResolver().resolveClass(classPath);
 
-        Class clazz = autolinkBasePage.getApplicationSettings().getDefaultClassResolver().resolveClass(classPath);
+        // Make the componentName (page-)unique
+        final String id = componentName + "-" + page.getAutoIndex();
         
-        String url = RequestCycle.get().urlFor(clazz, pageParameters);
-        tag.put("href", url);
-        tag.enableAutolink(true);
-        
-        return true;
+        return new BookmarkablePageLink(id, clazz, pageParameters);
     }
 
