@@ -9,11 +9,15 @@
 	 */
 	public boolean guess(final Letter letter)
 	{
-		final boolean correct = word.guess(letter);
-		if (!correct)
+		if (!letter.isGuessed())
 		{
-			guessesRemaining--;		
+			final boolean correct = word.guess(letter);
+			if (!correct)
+			{
+				guessesRemaining--;		
+			}
+			return correct;
 		}
-		return correct;
+		return false;
 	}
 

@@ -4,19 +4,17 @@
 	 * pointing to. Subclasses may provide there own implementation adding more
 	 * sophisticated page links.
 	 * 
-	 * @param loopItem
-	 *            the loop item to populate
-	 * @see wicket.markup.html.list.Loop#populateItem(LoopItem)
+	 * @see wicket.markup.html.list.Loop#populateContainer(MarkupContainer, int)
 	 */
-	protected void populateItem(final LoopItem loopItem)
+	protected void populateContainer(final MarkupContainer container, final int iteration)
 	{
 		// Get the index of page this link shall point to
-		final int pageIndex = this.startIndex + loopItem.getIndex();
+		final int pageIndex = this.startIndex + iteration;
 
 		// Add a page link pointing to the page
 		final PageableListViewNavigationLink link = new PageableListViewNavigationLink("pageLink",
 				pageableListView, pageIndex);
-		loopItem.add(link);
+		container.add(link);
 
 		// Add a label (the page number) to the list which is enclosed by the
 		// link
