@@ -1,8 +1,8 @@
     /**
      * Test page.
-     * @throws InterruptedException
+     * @throws Exception
      */
-    public void testHomePage() throws InterruptedException {
+    public void testHomePage() throws Exception {
         try
         {
             beginAt("/guestbook");
@@ -13,8 +13,10 @@
         }
         
         this.dumpResponse(System.out);
+        this.dumpResponse(System.out);
         assertTitleEquals("Wicket Examples - guestbook");
-        this.assertElementNotPresent("comments");
+        this.assertXpathNodeNotPresent("//*[@wicket:id='comments']");
+        //this.assertElementNotPresent("comments");
         
         assertFormPresent("wicket-commentForm");
         this.assertFormElementPresent("0.commentForm.text");

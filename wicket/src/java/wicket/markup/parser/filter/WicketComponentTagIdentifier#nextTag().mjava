@@ -24,9 +24,7 @@
 
 		// Identify tags with Wicket namespace
 		ComponentTag tag;
-		if (componentIdAttribute.equalsIgnoreCase(xmlTag.getNamespace())
-				|| (applyDefaultComponentId && ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE
-						.equalsIgnoreCase(xmlTag.getNamespace())))
+		if (wicketNamespace.equalsIgnoreCase(xmlTag.getNamespace()))
 		{
 			// It is <wicket:...>
 			tag = new ComponentWicketTag(xmlTag);
@@ -41,43 +39,11 @@
 		}
 
 		// If the form <tag id = "wicket-value"> is used
-		final String id = xmlTag.getAttributes().getString("id");
-
-		if ((id != null) && id.startsWith(componentIdAttribute + "-"))
+		final String value = tag.getAttributes().getString(wicketNamespace + ":id");
+		if (value != null)
 		{
-			// extract component name from value
-			tag.setId(id.substring(componentIdAttribute.length() + 1).trim());
-
-			// Depending on apps setting, "wicket-" will be removed or not
-			if (this.stripWicketFromComponentTag)
-			{
-				tag.put("id", tag.getId());
-			}
-		}
-		else if ((id != null) && applyDefaultComponentId
-				&& id.startsWith(ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE))
-		{
-			// extract component name from value
-			tag.setId(id.substring(
-					ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE.length() + 1).trim());
-
-			// Depending on apps setting, "wicket-" will be removed or not
-			if (this.stripWicketFromComponentTag)
-			{
-				tag.put("id", tag.getId());
-			}
-		}
-		else if (tag.getAttributes().containsKey(componentIdAttribute))
-		{
-			// Set componentId value on tag
-			tag.setId(tag.getAttributes().getString(componentIdAttribute));
-		}
-		else if (applyDefaultComponentId
-				&& tag.getAttributes().containsKey(ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE))
-		{
-			// Set componentId value on tag
-			tag.setId(tag.getAttributes().getString(
-					ComponentTag.DEFAULT_COMPONENT_ID_ATTRIBUTE));
+			// Make it a wicket component. Otherwise it would be RawMarkup
+			tag.setId(value);
 		}
 
 		return tag;
