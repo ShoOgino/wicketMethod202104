@@ -1,0 +1,15 @@
+	/**
+	 * @see wicket.markup.html.form.FormComponent#updateModel()
+	 */
+	protected void updateModel()
+	{
+		MultipartWebRequest multipartWebRequest = ((MultipartWebRequest)getRequest());
+		FileItem item = multipartWebRequest.getFile(getPath());
+
+		// only update the model when there is a file (larger than zero bytes
+		if (item != null && item.getSize() > 0)
+		{
+			setModelObject(item);
+		}
+	}
+

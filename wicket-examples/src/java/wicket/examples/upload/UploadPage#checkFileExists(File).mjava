@@ -1,0 +1,16 @@
+	/**
+	 * Check whether the file allready exists, and if so, try to delete it.
+	 * @param newFile the file to check
+	 */
+	private void checkFileExists(File newFile)
+	{
+		if(newFile.exists())
+		{
+			// Try to delete the file
+			if (!Files.delete(newFile))
+			{
+				throw new IllegalStateException("Unable to overwrite " + newFile.getAbsolutePath());
+			}
+		}
+	}
+

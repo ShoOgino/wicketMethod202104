@@ -6,6 +6,10 @@
 	 */
 	public UploadPage(final PageParameters parameters)
 	{
+		// set upload folder to tempdir + 'wicket-uploads'.
+		this.uploadFolder = uploadFolder = new Folder(
+				System.getProperty("java.io.tmpdir"), "wicket-uploads");
+
 		// Create feedback panels
 		final FeedbackPanel simpleUploadFeedback = new FeedbackPanel("simpleUploadFeedback");
 		final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
@@ -18,13 +22,12 @@
 		final SimpleUploadForm simpleUploadForm = new SimpleUploadForm("simpleUpload");
 		simpleUploadForm.add(simpleUploadFeedback);
 		add(simpleUploadForm);
-
-		// Add multiple upload form, which is hooked up explicitly to its
-		// feedback panel by passing the feedback panel to the form constructor.
-		final MultipleFilesUploadForm uploadForm = new MultipleFilesUploadForm("upload",
-				uploadFeedback);
-		this.uploadFolder = uploadForm.getUploadFolder();
-		add(uploadForm);
+//
+//		// Add multiple upload form, which is hooked up explicitly to its
+//		// feedback panel by passing the feedback panel to the form constructor.
+//		final MultipleFilesUploadForm uploadForm = new MultipleFilesUploadForm("upload",
+//				uploadFeedback);
+//		add(uploadForm);
 
 		// Add folder view
 		add(new Label("dir", uploadFolder.getAbsolutePath()));

@@ -1,12 +1,16 @@
 	/**
+	 * Wraps the servlet request in a multipart request and sets it as
+	 * the current request.
+	 *
 	 * @see wicket.markup.html.form.Form#onFormSubmitted()
 	 */
 	public void onFormSubmitted()
 	{
 		// Change the request to a multipart web request so parameters are
 		// parsed out correctly
-		RequestCycle.get().setRequest(
-				new MultipartWebRequest(((WebRequest)getRequest()).getHttpServletRequest()));
+		HttpServletRequest request = ((WebRequest)getRequest()).getHttpServletRequest();
+		MultipartWebRequest multipartWebRequest = new MultipartWebRequest(request);
+		RequestCycle.get().setRequest(multipartWebRequest);
 
 		// Now do normal form submit validation processing
 		super.onFormSubmitted();
