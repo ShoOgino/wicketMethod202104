@@ -7,43 +7,15 @@
 	 *            The open tag for the body
 	 * @see wicket.Component#onComponentTagBody(MarkupStream, ComponentTag)
 	 */
-	protected final void onComponentTagBody(final MarkupStream markupStream,
+	protected void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 	{
-		final StringBuffer options = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		final Object selected = getModelObject();
 		final IChoiceList choices = getChoices();
 
-		// Is null a valid selection value?
-		if (nullValid)
-		{
-			// Null is valid, so look up the value for it
-			final String option = getLocalizer().getString(getName() + ".null", this, "");
-
-			// Add option tag
-			options.append("\n<option");
-
-			// If null is selected, indicate that
-			if (selected == null)
-			{
-				options.append(" selected=\"selected\"");
-			}
-
-			// Add body of option tag
-			options.append(" value=\"\">").append(option).append("</option>");
-		}
-		else
-		{
-			// Null is not valid. Is it selected anyway?
-			if (selected == null)
-			{
-				// Force the user to pick a non-null value
-				final String option = getLocalizer().getString(getName() + ".null", this,
-						CHOOSE_ONE);
-				options.append("\n<option selected=\"selected\" value=\"\">").append(option)
-						.append("</option>");
-			}
-		}
+		// Append default option
+		buffer.append(getDefaultChoice(selected));
 
 		for (int i = 0; i < choices.size(); i++)
 		{
@@ -51,17 +23,17 @@
 			if (choice != null)
 			{
 				final String displayValue = choice.getDisplayValue();
-				options.append("\n<option ");
-				if (isSelected(choice.getObject()))
+				buffer.append("\n<option ");
+				if (isSelected(choice))
 				{
-					options.append("selected=\"selected\"");
+					buffer.append("selected=\"selected\"");
 				}
-				options.append("value=\"");
-				options.append(choice.getId());
-				options.append("\">");
-				options.append(getLocalizer().getString(getName() + "." + displayValue, this,
+				buffer.append("value=\"");
+				buffer.append(choice.getId());
+				buffer.append("\">");
+				buffer.append(getLocalizer().getString(getName() + "." + displayValue, this,
 						displayValue));
-				options.append("</option>");
+				buffer.append("</option>");
 			}
 			else
 			{
@@ -69,7 +41,7 @@
 			}
 		}
 
-		options.append("\n");
-		replaceComponentTagBody(markupStream, openTag, options.toString());
+		buffer.append("\n");
+		replaceComponentTagBody(markupStream, openTag, buffer.toString());
 	}
 

@@ -5,6 +5,13 @@
 	 */
 	protected void updateModel()
 	{
-		setModelObject(Boolean.valueOf(!Strings.isEmpty(getInput())));
+		try
+		{
+			setModelObject(Strings.toBoolean(getInput()));
+		}
+		catch (StringValueConversionException e)
+		{
+			throw new WicketRuntimeException("Invalid boolean input value posted \"" + getInput() + "\"");
+		}
 	}
 

@@ -1,0 +1,42 @@
+	/**
+	 * @see wicket.markup.html.form.AbstractChoice#getDefaultChoice(Object)
+	 */
+	protected String getDefaultChoice(final Object selected)
+	{
+		// The <option> tag buffer
+		final StringBuffer buffer = new StringBuffer();
+		
+		// Is null a valid selection value?
+		if (nullValid)
+		{
+			// Null is valid, so look up the value for it
+			final String option = getLocalizer().getString(getName() + ".null", this, "");
+
+			// Add option tag
+			buffer.append("\n<option");
+
+			// If null is selected, indicate that
+			if (selected == null)
+			{
+				buffer.append(" selected=\"selected\"");
+			}
+
+			// Add body of option tag
+			buffer.append(" value=\"\">").append(option).append("</option>");
+		}
+		else
+		{
+			// Null is not valid. Is it selected anyway?
+			if (selected == null)
+			{
+				// Force the user to pick a non-null value
+				final String option = getLocalizer().getString(getName() + ".null", this,
+						CHOOSE_ONE);
+				buffer.append("\n<option selected=\"selected\" value=\"\">").append(option)
+						.append("</option>");
+			}
+		}
+		
+		return buffer.toString();
+	}
+

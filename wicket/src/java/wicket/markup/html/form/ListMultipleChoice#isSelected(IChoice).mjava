@@ -1,0 +1,26 @@
+	/**
+	 * @see AbstractChoice#isSelected(IChoice)
+	 */
+	protected final boolean isSelected(IChoice choice)
+	{
+		// Get value of the form "id1;id2;id3"
+		final String value = getValue();
+		
+		// Have a value at all?
+		if (value != null)
+		{
+			// Loop through ids
+			for (final StringTokenizer tokenizer = new StringTokenizer(value, ";"); tokenizer
+					.hasMoreTokens();)
+			{
+				final String id = tokenizer.nextToken(); 
+				if (id.equals(choice.getId()))
+				{
+					return true;
+				}
+			}
+
+		}
+		return false;
+	}
+

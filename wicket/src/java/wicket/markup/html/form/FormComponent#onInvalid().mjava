@@ -1,9 +1,21 @@
 	/**
-	 * Handle invalidation
+	 * Handle invalidation by storing the user input for form repopulation
 	 */
 	protected void onInvalid()
 	{
-		// Store the user input for form repopulation
-		invalidInput = getInput();
+		// Get input as String array
+		final String[] input = inputAsStringArray();
+		
+		// If there is any input
+		if (input != null)
+		{
+			// join the values together with ";", for example, "id1;id2;id3"
+			invalidInput = StringList.valueOf(input).join(";");		
+		}
+		else
+		{
+			// no input 
+			invalidInput = null;
+		}
 	}
 
