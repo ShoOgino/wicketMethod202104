@@ -1,0 +1,27 @@
+    /**
+     * Gets a sub list of messages with messages that are of the given level or above.
+     * @param level the level to get the messages for
+     * @return the sub list of message with messages that are of the given level or above,
+     * or an empty list
+     */
+    public FeedbackMessages getMessages(int level)
+    {
+        if(messages != null)
+        {
+            List sublist = new ArrayList();
+            for(Iterator i = messages.iterator(); i.hasNext();)
+            {
+                FeebackMessage message = (FeebackMessage)i.next();
+                if(message.isLevel(level))
+                {
+                    sublist.add(message);
+                }
+            }
+            return new FeedbackMessages().setMessages(sublist);
+        }
+        else
+        {
+            return new FeedbackMessages();
+        }
+    }
+
