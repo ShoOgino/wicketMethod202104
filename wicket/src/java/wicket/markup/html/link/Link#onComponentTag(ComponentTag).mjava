@@ -17,11 +17,14 @@
 			setEnabled(!linksTo(getPage()));
 		}
 
+		// Set href to link to this link's linkClicked method
+		String url = getURL();
+
 		// If we're disabled
 		if (!enabled)
 		{
 			// if the tag is an anchor proper
-			if(tag.getName().equalsIgnoreCase("a"))
+			if (tag.getName().equalsIgnoreCase("a"))
 			{
 				// Change anchor link to span tag
 				tag.setName("span");
@@ -29,7 +32,8 @@
 				// Remove any href from the old link
 				tag.remove("href");
 
-				// if it generates a popupscript, remove the design time JS handler
+				// if it generates a popupscript, remove the design time JS
+				// handler
 				if (popupSettings != null)
 				{
 					tag.remove("onclick");
@@ -43,24 +47,23 @@
 		}
 		else
 		{
-			// Set href to link to this link's linkClicked method
-			String url = getURL();
-
 			// if the tag is an anchor proper
-			if(tag.getName().equalsIgnoreCase("a"))
+			if (tag.getName().equalsIgnoreCase("a"))
 			{
 				// generate the href attribute
 				tag.put("href", url.replaceAll("&", "&amp;"));
+
 				// Add any popup script
 				if (popupSettings != null)
 				{
-					// NOTE: don't encode to HTML as that is not valid JavaScript
+					// NOTE: don't encode to HTML as that is not valid
+					// JavaScript
 					tag.put("onclick", popupSettings.getPopupJavaScript());
 				}
 			}
 			else
 			{
-				// generate either a popup script by asking popup settings for one
+				// generate a popup script by asking popup settings for one
 				if (popupSettings != null)
 				{
 					popupSettings.setTarget("'" + url + "'");
@@ -73,6 +76,13 @@
 					tag.put("onclick", "location.href='" + url + "';");
 				}
 			}
+		}
+
+		// If the subclass specified javascript, use that
+		final String onClickJavaScript = getOnClickScript(url);
+		if (onClickJavaScript != null)
+		{
+			tag.put("onclick", onClickJavaScript);
 		}
 	}
 
