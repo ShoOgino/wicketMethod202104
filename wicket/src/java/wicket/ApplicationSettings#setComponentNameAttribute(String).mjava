@@ -9,6 +9,12 @@
 	 */
 	public final ApplicationSettings setComponentNameAttribute(final String componentNameAttribute)
 	{
+	    if (!MetaPattern.VARIABLE_NAME.matcher(componentNameAttribute).matches())
+	    {
+	        throw new IllegalArgumentException(
+	                "Component name attribute must be a valid variable name ([a-z][a-z0-9_]*)");
+	    }
+	    
 		this.componentNameAttribute = componentNameAttribute;
 		return this;
 	}

@@ -23,7 +23,8 @@
 
         // Identify tags with Wicket namespace
         ComponentTag tag;
-        if (wicketNamespace.equalsIgnoreCase(xmlTag.getNamespace()))
+        if (componentNameAttribute.equalsIgnoreCase(xmlTag.getNamespace()) 
+            || ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE.equalsIgnoreCase(xmlTag.getNamespace()))
         {
             // It is <wicket:...>
             tag = new ComponentWicketTag(xmlTag);
@@ -44,6 +45,18 @@
         {
             // extract component name from value
             tag.setComponentName(id.substring(componentNameAttribute.length() + 1).trim());
+
+            // Depending on apps setting, "wicket-" will be removed or not
+            if (this.stripWicketFromComponentTag)
+            {
+                tag.put("id", tag.getComponentName());
+            }
+        }
+        else if ((id != null) && id.startsWith(ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE))
+        {
+            // extract component name from value
+            tag.setComponentName(id.substring(
+                    ComponentTag.DEFAULT_COMPONENT_NAME_ATTRIBUTE.length() + 1).trim());
 
             // Depending on apps setting, "wicket-" will be removed or not
             if (this.stripWicketFromComponentTag)
