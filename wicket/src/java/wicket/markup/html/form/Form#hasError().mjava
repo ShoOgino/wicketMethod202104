@@ -1,22 +1,22 @@
-    /**
-     * @return True if this form has at least one error.
-     */
-    private boolean hasError()
-    {
-        final Object value = visitChildren(new IVisitor()
-        {
-            public Object component(final Component component)
-            {
-                if (component.hasErrorMessage())
-                {
-                    return STOP_TRAVERSAL;   
-                }
+	/**
+	 * @return True if this form has at least one error.
+	 */
+	private boolean hasError()
+	{
+		final Object value = visitChildren(new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				if (component.hasErrorMessage())
+				{
+					return STOP_TRAVERSAL;
+				}
 
-                // Traverse all children
-                return CONTINUE_TRAVERSAL;
-            }
-        });
-        
-        return value == IVisitor.STOP_TRAVERSAL ? true : false;
-    }
+				// Traverse all children
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+
+		return value == IVisitor.STOP_TRAVERSAL ? true : false;
+	}
 
