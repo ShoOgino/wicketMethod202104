@@ -58,14 +58,13 @@
 
 					// html allows to represent true in different ways
 					final String autolink = tag.getAttributes().getString("autolink");
-					if ((autolink == null) || "".equals(autolink)
-							|| "true".equalsIgnoreCase(autolink) || "1".equals(autolink))
+					try
 					{
-						autolinking = true;
+						autolinking = Strings.isEmpty(autolink) || Strings.isTrue(autolink);
 					}
-					else
+					catch (StringValueConversionException e)
 					{
-						autolinking = false;
+						throw new WicketRuntimeException("Invalid autolink attribute value \"" + autolink + "\"");
 					}
 				}
 				else if (tag.isClose())
