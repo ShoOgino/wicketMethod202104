@@ -1,32 +1,18 @@
     /**
-     * Add components.
+     * Builds the structures needed to display the currently visible tree paths.
      */
     private void setSelectedPaths()
     {
-        TreePath selectedPath = treeState.getSelectedPath(); // get current
-
-        // selection
-        Enumeration e = treeState.getVisiblePathsFromRoot(); // get all visible
-
-        // paths
+        removeAll();
         List visiblePathsList = new ArrayList();
-
-        while (e.hasMoreElements())
+        TreePath selectedPath = treeState.getSelectedPath(); // get current
+        Enumeration e = treeState.getVisiblePathsFromRoot(); // get all visible
+        while (e.hasMoreElements()) // put enumeration in a list
         {
             visiblePathsList.add(e.nextElement());
         }
-
-        Model model = new Model((Serializable) visiblePathsList);
-
-        if (visibleTreePathTable == null)
-        {
-            visibleTreePathTable = new VisibleTreePathTable("tree", model);
-            add(visibleTreePathTable);
-        }
-        else
-        {
-            visibleTreePathTable.reset();
-            visibleTreePathTable.setModel(model);
-        }
+        List topList = new ArrayList(); // reference to the first level list
+        buildList(visiblePathsList, 0, 0, topList); // build the nested lists
+        add(new TreeRows("tree", topList, this)); // add the tree panel
     }
 

@@ -1,0 +1,21 @@
+    /**
+     * Construct.
+     * @param componentName name of the component
+     * @param node the tree node for this row
+     */
+    public TreeRow(String componentName, Tree tree, NodeModel nodeModel)
+    {
+        super(componentName);
+        if(nodeModel != null)
+        {
+            TreeNodeLink link = new TreeNodeLink("link", tree, nodeModel);
+            link.add(new Label("label", String.valueOf(nodeModel.getUserObject())));
+            add(link);
+        }
+        else
+        {
+            // not a real node; just add some dummies
+            add(new HtmlContainer("link").add(new HtmlContainer("label")));
+        }
+    }
+

@@ -1,0 +1,36 @@
+    /**
+     * Builds nested lists that represent the current visible tree paths.
+     * @param visiblePathsList the whole - flat - list of visible paths
+     * @param index the current index in the list of visible paths
+     * @param level the current nesting level
+     * @param rows a list that holds the current level of rows
+     * @return the index in the list of visible paths
+     */
+    private int buildList(final List visiblePathsList, int index, int level, final List rows)
+    {
+        int len = visiblePathsList.size();
+        while (index < len)
+        {
+            TreePath path = (TreePath) visiblePathsList.get(index);
+            DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)path.getLastPathComponent();
+            int thisLevel = treeNode.getLevel();
+            if (thisLevel > level) // go deeper
+            {
+                List nestedRows = new ArrayList();
+                rows.add(nestedRows);
+                index = buildList(visiblePathsList, index, thisLevel, nestedRows);
+            }
+            else if (thisLevel < level) // end of nested
+            {
+                return index;
+            }
+            else // node
+            {
+                NodeModel nodeModel = new NodeModel(treeNode, treeState, path);
+                rows.add(nodeModel);
+                index++;
+            }
+        }
+        return index;
+    }
+
