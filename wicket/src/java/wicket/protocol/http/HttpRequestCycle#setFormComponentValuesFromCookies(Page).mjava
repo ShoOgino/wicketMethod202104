@@ -1,27 +1,27 @@
-    /**
-     * Sets values for form components based on cookie values in the request.
-     * @param page the current page
-     */
-    final void setFormComponentValuesFromCookies(final Page page)
-    {
-    	if (page == null)
-    	{
-    		throw new IllegalArgumentException("'page' must not be null");
-    	}
+	/**
+	 * Sets values for form components based on cookie values in the request.
+	 * @param page the current page
+	 */
+	final void setFormComponentValuesFromCookies(final Page page)
+	{
+		if (page == null)
+		{
+			throw new IllegalArgumentException("'page' must not be null");
+		}
 
-    	// May be there is some other means I don't know. But I need access
-    	// to 'this' from inside the anonymous inner class.
-    	final RequestCycle cycle = this;
-    	
+		// May be there is some other means I don't know. But I need access
+		// to 'this' from inside the anonymous inner class.
+		final RequestCycle cycle = this;
+
 		// Visit all Forms contained in the page
 		page.visitChildren(Form.class, new Component.IVisitor()
-        {
-	    	// For each FormComponent found on the Page (not Form)
-            public Object component(final Component component)
-            {
-            	((Form)component).setFormComponentValuesFromPersister(cycle);
-                return CONTINUE_TRAVERSAL;
-            }
-        });
-    }
+		{
+			// For each FormComponent found on the Page (not Form)
+			public Object component(final Component component)
+			{
+				((Form) component).setFormComponentValuesFromPersister(cycle);
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
 

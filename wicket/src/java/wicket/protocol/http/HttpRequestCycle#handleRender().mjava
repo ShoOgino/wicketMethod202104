@@ -1,38 +1,41 @@
-    /**
-     * Renders a wicket.response for this request cycle.
-     */
-    protected void handleRender()
-    {
-        // Dispatch to component listener or handle as bookmarkable page or home
-        // page
-        if (callComponentListener() || bookmarkablePage() || homePage())
-        {
-            // Get page set by handler
-            Page page = getPage();
+	/**
+	 * Renders a wicket.response for this request cycle.
+	 */
+	protected void handleRender()
+	{
+		// Dispatch to component listener or handle as bookmarkable page or home
+		// page
+		synchronized (session)
+		{
+			if (callComponentListener() || bookmarkablePage() || homePage())
+			{
+				// Get page set by handler
+				Page page = getPage();
+				// Is there a page to render?
+				if (page != null)
+				{
+					// Should page be redirected to?
+					if (getRedirect())
+					{
+						// redirect to the page
+						redirectToPage(page);
+					}
+					else
+					{
+						// render the page
+						page.render(this);
+					}
+				}
+			}
+			else if (respondWithStaticContent())
+			{
+				// nothing to do
+			}
+			else
+			{
+				response.write("<pre>Invalid request: " + request + "</pre>");
+			}
 
-            // Is there a page to render?
-            if (page != null)
-            {
-                // Should page be redirected to?
-                if (getRedirect())
-                {
-                    // redirect to the page
-                    redirectToPage(page);
-                }
-                else
-                {
-                    // render the page
-                    page.render(this);
-                }
-            }
-        }
-        else if (respondWithStaticContent())
-        {
-            // nothing to do
-        }
-        else
-        {
-            response.write("<pre>Invalid request: " + request + "</pre>");
-        }
-    }
+		}
+	}
 

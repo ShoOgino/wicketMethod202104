@@ -1,28 +1,28 @@
-    /**
-     * @param pageClass Class of page
-     * @param parameters Parameters to page
-     * @return Bookmarkable URL to page
-     */
-    public String urlFor(final Class pageClass, final PageParameters parameters)
-    {
-        final StringBuffer buffer = urlPrefix();
+	/**
+	 * @param pageClass Class of page
+	 * @param parameters Parameters to page
+	 * @return Bookmarkable URL to page
+	 */
+	public String urlFor(final Class pageClass, final PageParameters parameters)
+	{
+		final StringBuffer buffer = urlPrefix();
 
-        buffer.append("?bookmarkablePage=");
-        buffer.append(pageClass.getName());
+		buffer.append("?bookmarkablePage=");
+		buffer.append(pageClass.getName());
 
-        if (parameters != null)
-        {
-	        for (final Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();)
-	        {
-	            final String key = (String) iterator.next();
-	
-	            buffer.append('&');
-	            buffer.append(key);
-	            buffer.append('=');
-	            buffer.append(parameters.getString(key));
-	        }
-        }
-        
-        return response.encodeURL(buffer.toString());
-    }
+		if (parameters != null)
+		{
+			for (final Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();)
+			{
+				final String key = (String) iterator.next();
+
+				buffer.append('&');
+				buffer.append(key);
+				buffer.append('=');
+				buffer.append(parameters.getString(key));
+			}
+		}
+
+		return response.encodeURL(buffer.toString());
+	}
 
