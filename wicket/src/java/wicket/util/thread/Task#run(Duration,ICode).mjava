@@ -1,5 +1,7 @@
     /**
-     * Runs this task at the given frequency.
+     * Runs this task at the given frequency.  You may only call this method 
+     * if the task has not yet been started.  If the task is already running, 
+     * an IllegalStateException will be thrown.
      * @param frequency The frequency at which to run the code
      * @param code The code to run
      * @throws IllegalStateException Thrown if task is already running
@@ -37,16 +39,18 @@
                 }
             };
 
+            // Start the thread
             final Thread thread = new Thread(runnable, name + " Task");
-
             thread.setDaemon(isDaemon);
             thread.start();
-
+            
+            // We're started all right!
             isStarted = true;
         }
         else
         {
-            throw new IllegalStateException("Attempt to start task that is already started");
+            throw new IllegalStateException
+            ("Attempt to start task that has already been started");
         }
     }
 
