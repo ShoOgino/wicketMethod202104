@@ -1,0 +1,21 @@
+		/**
+		 * Add node to list and add any childs recursively.
+		 * @param list the list to add the node to
+		 * @param node the node to add
+		 */
+		private void add(List list, DefaultMutableTreeNode node)
+		{
+			list.add(node);
+			Enumeration children = node.children();
+			if(children.hasMoreElements()) // any elements?
+			{
+				List childList = new ArrayList();
+				list.add(childList);
+				while(children.hasMoreElements())
+				{
+					DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
+					add(childList, child);
+				}
+			}
+		}
+

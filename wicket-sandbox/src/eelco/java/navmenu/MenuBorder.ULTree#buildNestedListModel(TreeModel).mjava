@@ -1,0 +1,22 @@
+		/**
+		 * Builds the internal structure.
+		 * @param model the tree model that the internal structure is to be based on
+		 */
+		private void buildNestedListModel(TreeModel model)
+		{
+			nestedList = new ArrayList(); // reference to the first level list
+			if (model != null)
+			{
+				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
+				if(root != null)
+				{
+					Enumeration children = root.children();
+					while(children.hasMoreElements())
+					{
+						DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
+						add(nestedList, child);
+					}
+				}
+			}
+		}
+
