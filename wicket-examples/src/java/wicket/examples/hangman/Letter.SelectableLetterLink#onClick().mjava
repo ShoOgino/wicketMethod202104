@@ -4,18 +4,22 @@
 		 */
 		public void onClick()
 		{
-			log.error("Linked clicked for letter: " + letter);
+			// Guess the letter
+			game.guess(Letter.this);
+
+			// This letter can no longer be guessed
 			setEnabled(false);
-			getHangman().guess(letter);
-			if (getHangman().isWon())
+
+			// Is the game over?
+			if (game.isWon())
 			{
 				// Redirect to win page
-				setResponsePage(new Win(Guess.this));
+				setResponsePage(new Win());
 			}
-			else if (getHangman().isLost())
+			else if (game.isLost())
 			{
-				// Redirect to loose page
-				setResponsePage(new Lose(Guess.this));
+				// Redirect to lose page
+				setResponsePage(new Lose());
 			}
 			else
 			{

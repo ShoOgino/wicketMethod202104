@@ -1,0 +1,35 @@
+	/**
+	 * Initialise the hangman read for a new game.
+	 * 
+	 * @param guessesAllowed
+	 *            Number of guesses allowed
+	 * @param wordGenerator
+	 *            The word generator
+	 */
+	public void newGame(final int guessesAllowed, final WordGenerator wordGenerator)
+	{
+		this.guessesAllowed = guessesAllowed;
+		this.word = wordGenerator.next();
+		this.wordGenerator = wordGenerator;
+		guessesRemaining = guessesAllowed;
+		
+		// Add letters
+		if (letters == null)
+		{
+			letters = new ArrayList();
+			for (char c = 'a'; c <= 'z'; c++)
+			{
+				letters.add(new Letter(c));
+			}		
+		}
+		else
+		{
+			// Reset guesses
+			for (Iterator iterator = letters.iterator(); iterator.hasNext();)
+			{
+				Letter letter = (Letter)iterator.next();
+				letter.reset();
+			}
+		}
+	}
+

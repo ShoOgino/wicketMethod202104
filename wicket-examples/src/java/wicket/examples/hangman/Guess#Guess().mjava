@@ -3,30 +3,20 @@
 	 */
 	public Guess()
 	{
-		log.error("Created the guess page");
-
 		// Components for displaying the guesses remaining & the hangman
-		add(new Label("guessesRemaining", new PropertyModel(getHangman(), "guessesRemaining")));
+		add(new Label("guessesRemaining", new PropertyModel(getGame(), "guessesRemaining")));
 
 		// Components for displaying the current word
-		add(new Label("correctLetters", new PropertyModel(getHangman(), "correctLetters")));
+		add(new Label("word", new PropertyModel(getGame(), "word.asString(true)")));
 
-		// Components for displaying the letters that can be selected
-		final List letters = new ArrayList();
-		for (char c = 'a'; c <= 'z'; c++)
-		{
-			letters.add(new Character(c));
-		}	
-		
-		final ListView listView = new ListView("letters", letters)
+		// Show the game's letters
+		add(new ListView("letters", getGame().getLetters())
 		{
 			protected void populateItem(ListItem listItem)
 			{
-				listItem.add(new SelectableLetterLink((Character)listItem.getModelObject()));
+				final Letter letter = (Letter)listItem.getModelObject();
+				listItem.add(letter.getGuessLink(getGame()));
 			}
-		};
-
-		listView.setOptimizeRenderProcess(true);
-		add(listView);
+		});
 	}
 
