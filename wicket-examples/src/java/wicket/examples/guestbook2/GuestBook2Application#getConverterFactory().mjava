@@ -1,0 +1,29 @@
+	/**
+	 * @see wicket.Application#getConverterFactory()
+	 */
+	public IConverterFactory getConverterFactory()
+	{
+        return new IConverterFactory()
+        {
+			public IConverter newConverter(final Locale locale)
+			{
+                // Create converter
+                final Converter converter = new Converter(locale);
+                
+                // Create date to string converter
+                final DateToStringConverter dateToStringConverter = new DateToStringConverter();
+                dateToStringConverter.setDateFormat(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT));
+                
+                // Set string conversion for Date and Timestamp classes
+                final StringConverter stringConverter = new StringConverter();
+                stringConverter.set(Date.class, dateToStringConverter);
+                stringConverter.set(Timestamp.class, dateToStringConverter);
+                           
+                // Set new string converter
+                converter.set(String.class, stringConverter);
+                
+                return converter;
+			}            
+        };
+	}
+

@@ -20,12 +20,8 @@
 		ITypeConverter converter = get(c);
 		if (converter == null)
 		{
-			defaultConverter.setLocale(getLocale());
 			return defaultConverter.convert(value);
 		}
-
-		// Set locale
-		converter.setLocale(getLocale());
 
 		try
 		{
@@ -34,13 +30,12 @@
 		}
 		catch (ConversionException e)
 		{
-			throw e.setTypeConverter(this).setLocale(getLocale()).setTargetType(c).setSourceValue(
-					value);
+			throw e.setTypeConverter(this).setTargetType(c).setSourceValue(value);
 		}
 		catch (Exception e)
 		{
-			throw new ConversionException(e).setTypeConverter(this).setLocale(getLocale())
-					.setTargetType(c).setSourceValue(value);
+			throw new ConversionException(e).setTypeConverter(this).setTargetType(c)
+					.setSourceValue(value);
 		}
 	}
 
