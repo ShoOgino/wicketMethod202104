@@ -1,51 +1,60 @@
-	/**
-	 * Get the localized string using all of the supplied parameters. This method is left
-	 * public to allow developers full control over string resource loading. However, it
-	 * is recommended that one of the other convenience methods in the class are used as
-	 * they handle all of the work related to obtaining the current user locale and style
-	 * information.
-	 * @param key The key to obtain the resource for
-	 * @param component The component to get the resource for (optional)
-	 * @param model The model to use for OGNL substitutions in the strings (optional)
-	 * @param locale The locale to get the resource for (optional)
-	 * @param style The style to get the resource for (optional)
-	 * @param defaultValue The default value (optional)
-	 * @return The string resource
-	 * @throws MissingResourceException If resource not found and configuration dictates
-	 *             that exception should be thrown
-	 */
-	public String getString(final String key, final Component component, final IModel model,
-			final Locale locale, final String style, final String defaultValue)
-			throws MissingResourceException
-	{
-		String string = null;
+    /**
+     * Get the localized string using all of the supplied parameters. This
+     * method is left public to allow developers full control over string
+     * resource loading. However, it is recommended that one of the other
+     * convenience methods in the class are used as they handle all of the work
+     * related to obtaining the current user locale and style information.
+     * 
+     * @param key
+     *            The key to obtain the resource for
+     * @param component
+     *            The component to get the resource for (optional)
+     * @param model
+     *            The model to use for OGNL substitutions in the strings
+     *            (optional)
+     * @param locale
+     *            The locale to get the resource for (optional)
+     * @param style
+     *            The style to get the resource for (optional)
+     * @param defaultValue
+     *            The default value (optional)
+     * @return The string resource
+     * @throws MissingResourceException
+     *             If resource not found and configuration dictates that
+     *             exception should be thrown
+     */
+    public String getString(final String key, final Component component, final IModel model,
+            final Locale locale, final String style, final String defaultValue)
+            throws MissingResourceException
+    {
+        String string = null;
 
-		// Search each loader in turn and return the string if it is found
-		for (Iterator it = settings.getStringResourceLoaders().iterator(); it.hasNext();)
-		{
-			IStringResourceLoader loader = (IStringResourceLoader) it.next();
-			string = loader.get(component, key, locale, style);
-			if (string != null)
-			{
-				return substituteOgnl(string, model);
-			}
-		}
+        // Search each loader in turn and return the string if it is found
+        for (Iterator it = settings.getStringResourceLoaders().iterator(); it.hasNext();)
+        {
+            IStringResourceLoader loader = (IStringResourceLoader)it.next();
+            string = loader.get(component, key, locale, style);
+            if (string != null)
+            {
+                return substituteOgnl(string, model);
+            }
+        }
 
-		// Resource not found, so handle missing resources based on application
-		// configuration
-		if (settings.getUseDefaultOnMissingResource() && defaultValue != null)
-		{
-			return defaultValue;
-		}
+        // Resource not found, so handle missing resources based on application
+        // configuration
+        if (settings.getUseDefaultOnMissingResource() && defaultValue != null)
+        {
+            return defaultValue;
+        }
 
-		if (settings.getExceptionOnMissingResource())
-		{
-			throw new MissingResourceException("Unable to find resource: " + key, getClass()
-					.getName(), key);
-		}
-		else
-		{
-			return "??" + key + "??";
-		}
-	}
+        if (settings.getExceptionOnMissingResource())
+        {
+            throw new MissingResourceException("Unable to find resource: " + key, getClass()
+                    .getName(), key);
+        }
+        else
+        {
+            return "??" + key + "??";
+        }
+    }
 
