@@ -11,27 +11,27 @@
 		{
 			// Get request cycle to render to
 			final RequestCycle cycle = getRequestCycle();
-	
+
 			// Save original Response
 			final Response originalResponse = cycle.getResponse();
-	
+
 			// If component is not visible, set response to NullResponse
 			if (!isVisible())
 			{
 				cycle.setResponse(NullResponse.getInstance());
 			}
-	
+
 			// Synchronize on model lock while rendering to help ensure
 			// that the model doesn't change while its being read
 			synchronized (getModelLock())
 			{
 				// Call implementation to render component
 				onRender();
-				
+
 				// Tell the page that the component rendered
 				getPage().componentRendered(this);
 			}
-	
+
 			// Restore original response
 			cycle.setResponse(originalResponse);
 		}
@@ -40,7 +40,7 @@
 			// Rendering has completed
 			onEndRender();
 			onInternalEndRender();
-			
+
 			// Detach models now that rendering is fully completed
 			detachModels();
 		}
