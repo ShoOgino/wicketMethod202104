@@ -1,7 +1,7 @@
 	/**
 	 * Updates feedback on each feedback component on or attached to the form.
 	 */
-	private void updateValidationFeedback()
+	private void addValidationFeedback()
 	{
 		// Traverse children of this form, calling validationError() on any
 		// components implementing IValidationFeedback.
@@ -10,7 +10,7 @@
 			public Object component(final Component component)
 			{
 				// Call validation error handler
-				((IValidationFeedback)component).updateValidationFeedback(Form.this);
+				((IValidationFeedback)component).addValidationFeedback(Form.this);
 
 				// Traverse all children
 				return CONTINUE_TRAVERSAL;
@@ -20,7 +20,7 @@
 		// Call the validation handler that is registered with this form, if any
 		if (validationFeedback != null)
 		{
-			validationFeedback.updateValidationFeedback(this);
+			validationFeedback.addValidationFeedback(this);
 		}
 	}
 

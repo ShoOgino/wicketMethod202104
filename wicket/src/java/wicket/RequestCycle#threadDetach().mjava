@@ -6,6 +6,9 @@
 	 */
 	private void threadDetach()
 	{
+		// Close the response
+		response.close();
+		
 		if (getRedirect())
 		{
 			// Since we are explicitly redirecting to a page already, we do not
@@ -15,5 +18,9 @@
 
 		// Clear ThreadLocal reference
 		current.set(null);
+
+		// Set the active request cycle back to null since we are
+		// done rendering the requested page
+		session.setRequestCycle(null);
 	}
 

@@ -11,47 +11,22 @@
 		// can be rendered at a time for a given session.
 		synchronized (session)
 		{
-			// Restore the transient application association with the session
-			session.setApplication(application);
-
-			// Set this request cycle as the active request cycle for the
-			// session for easy access by the page being rendered and any
-			// components on that page
-			session.setRequestCycle(this);
+			// Attach thread local resources for request
+			threadAttach();
 
 			try
 			{
 				// Render response for request cycle
 				onRender();
 			}
-			catch (StackOverflowError e)
-			{
-				throw new ServletException("Wicket could not render page", e);
-			}
 			catch (RuntimeException e)
 			{
-				// Reset page for re-rendering after exception
-				Page currentPage = getPage();
-                                
-                // Could be null when it expired
-				if (currentPage != null) 
-				{
-					currentPage.reset();
-				}
-
-				// Handle the exception
-				onException(e);
+				// Handle any runtime exception
+				onRuntimeException(e);
 			}
 			finally
 			{
-				// Close the response
-				response.close();
-
-				// Set the active request cycle back to null since we are
-				// done rendering the requested page
-				session.setRequestCycle(null);
-
-				// Thread is done and should release thread local resources
+				// Release thread local resources
 				threadDetach();
 			}
 		}

@@ -1,0 +1,21 @@
+	/**
+	 * Called when this component is finished rendering.
+	 */
+	protected void onRendered()
+	{	
+		// Increase render count for component
+		rendering++;
+
+		// Detach any detachable model from this component
+		detachModel();
+
+		// Also detach models from any contained attribute modifiers
+		if (attributeModifiers != null)
+		{
+			for (Iterator iterator = attributeModifiers.iterator(); iterator.hasNext();)
+			{
+				((AttributeModifier)iterator.next()).detachModel();
+			}
+		}
+	}
+

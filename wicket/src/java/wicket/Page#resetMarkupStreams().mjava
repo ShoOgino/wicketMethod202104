@@ -2,18 +2,8 @@
 	 * Reset this page. Called if rendering is interrupted by an exception to
 	 * put the page back into a state where it can function again.
 	 */
-	final void reset()
+	final void resetMarkupStreams()
 	{
-		try
-		{
-			// Models should be detached
-			detachModels();
-		}
-		catch (RuntimeException e1)
-		{
-			log.debug("Error detaching models when exception is thrown", e1);
-		}
-
 		// When an exception is thrown while rendering a page, there may
 		// be invalid markup streams set on various containers. We need
 		// to reset these to null to ensure they get recreated correctly.
@@ -26,6 +16,5 @@
 				return CONTINUE_TRAVERSAL;
 			}
 		});
-
 	}
 

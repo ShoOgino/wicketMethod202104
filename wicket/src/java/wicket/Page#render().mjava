@@ -3,22 +3,18 @@
 	 */
 	public void render()
 	{
-		try
-		{
-			super.render();
+		// Render markup in page
+		super.render();
 
-			// If the application wants component uses checked and
-			// the response is not a redirect
-			if (getApplicationSettings().getComponentUseCheck() && !getResponse().isRedirect())
-			{
-				// Visit components on page
-				checkRendering(this);
-			}
-		}
-		finally
+		// If the application wants component uses checked and
+		// the response is not a redirect
+		if (getApplicationSettings().getComponentUseCheck() && !getResponse().isRedirect())
 		{
-			// Be sure to detach models
-			detachModels();
+			// Visit components on page
+			checkRendering(this);
 		}
+		
+		// Reset page for future use
+		reset();
 	}
 

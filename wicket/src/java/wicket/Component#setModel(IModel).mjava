@@ -3,9 +3,8 @@
 	 * 
 	 * @param model
 	 *            the model
-	 * @return This
 	 */
-	private final Component setModel(final IModel model)
+	private final void setModel(final IModel model)
 	{
 		// Detach current model if it's an IDetachableModel
 		if (this.model != null && this.model instanceof IDetachableModel)
@@ -20,8 +19,10 @@
 		}
 
 		// Change model
-		this.model = (IModel)model;
-		modelChanged();
-		return this;
+		if (this.model != model)
+		{
+			this.model = (IModel)model;
+			modelChanged();
+		}
 	}
 
