@@ -38,6 +38,9 @@
             
             // True if tag should be added to list
             boolean addTag = false;
+            
+            // resolve autolinks inline
+            addTag = handleAutolinks(tag);
 
             // Check tag type
             if (tag.type == ComponentTag.OPEN)
@@ -46,7 +49,7 @@
                 stack.push(tag);
 
                 // We add open tags if they have the componentName attribute set
-                addTag = tag.componentName != null;
+                addTag |= tag.componentName != null;
             }
             else if (tag.type == ComponentTag.CLOSE)
             {
@@ -88,7 +91,7 @@
 
                     // We want to add the tag if the open Tag on the stack had a
                     // componentName attribute
-                    addTag = top.componentName != null;
+                    addTag |= top.componentName != null;
                 }
                 else
                 {
@@ -103,7 +106,7 @@
                 tag.closes = tag;
 
                 // Does the open tag have the attribute we're looking for?
-                addTag = tag.componentName != null;
+                addTag |= tag.componentName != null;
             }
 
             // Add tag to list?
@@ -128,10 +131,26 @@
                     list.add(new RawMarkup(rawMarkup));
                 }
 
-                // Add immutable tag
-                tag.makeImmutable();
-                list.add(tag);
-
+                if (tag.isAutolinkEnabled())
+                {
+                    final String tagString = tag.toXmlString();
+	                list.add(new RawMarkup(tagString));
+                }
+                else
+                {
+                    if ((tag instanceof ComponentWicketTag) && ((ComponentWicketTag)tag).isLinkTag())
+                    {
+                        final String tagString = tag.toXmlString();
+    	                list.add(new RawMarkup(tagString));
+                    }
+                    else
+                    {
+		                // Add immutable tag
+		                tag.makeImmutable();
+		                list.add(tag);
+                    }
+                }
+                
                 // Position is after tag
                 position = tag.getPos() + tag.getLength();
             }

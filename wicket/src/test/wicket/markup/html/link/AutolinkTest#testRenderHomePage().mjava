@@ -1,0 +1,28 @@
+    /**
+     * @throws Exception
+     */
+    public void testRenderHomePage() throws Exception {
+        application = new MockHttpApplication(null);
+        application.getPages().setHomePage(AutolinkPage.class);
+        application.getSettings().setAutomaticLinking(true);
+        
+        // Do the processing
+        application.setupRequestAndResponse();
+        application.processRequestCycle();
+
+        // Validate the document
+        String document = application.getServletResponse().getDocument();
+        System.out.println(document);
+    	Assert.assertTrue(validateDocument(document));
+    	
+    	/*
+        TODO
+        <img href="Page1.gif"> ...   if autolink == true then resolve Page relativ
+        <img href="/Page1.gif"> ...   if autolink == true then resolve servlet context absolut
+        <link href="*.css"> ...      if autolink == true then replace in <head> as well
+        <a href="subdir/Home.html">  if autolink == true then resolve Page relativ
+        <a href="/rootDir/Home.html"> if autolink == true then resolve servlet absolut
+        */
+
+    }
+
