@@ -1,21 +1,17 @@
 	/**
-	 * Create the loose page and its associated components.
+	 * Create the lose page and its associated components.
 	 * 
 	 * @param guessPage
 	 *            The guess page that we came from and return back to
 	 */
-	public Lose(final Guess guessPage) {
-		Hangman hangman = (Hangman) guessPage.getModelObject();
-		add(new Label("currentWord", hangman.getCurrentWord()));
-		add(new Link("playAgain") {
-			/**
-			 * Comment for <code>serialVersionUID</code>
-			 */
-			private static final long serialVersionUID = 1L;
-
-			public void onClick() {
-				Hangman hangman = (Hangman) guessPage.getModelObject();
-				hangman.newGame();
+	public Lose(final Guess guessPage)
+	{
+		add(new Label("currentWord", getHangman().getCurrentWord()));
+		add(new Link("playAgain")
+		{
+			public void onClick()
+			{
+				getHangman().newGame();
 				guessPage.resetLetters();
 				getRequestCycle().setPage(guessPage);
 			}

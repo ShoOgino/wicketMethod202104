@@ -13,7 +13,7 @@
 		cycle.getPage().add(lv);
 
 		// Create a ListItem for list object at index 1.
-		ListItem li = new ListItem(1, lv);
+		ListItem li = new ListItem(lv, 1);
 
 		// Create a remove-Link for the listItem and simulate a user
 		// clicking it
@@ -24,18 +24,18 @@
 		assertEquals(new Integer(3), lv.getListObject(2));
 
 		// Repeat the procedure for "critical" entries
-		li = new ListItem(0, lv);
+		li = new ListItem(lv, 0);
 		removeLink = li.removeLink("0");
 		removeLink.onClick();
 		assertEquals(new Integer(2), lv.getListObject(0));
 		assertEquals(new Integer(3), lv.getListObject(1));
 
-		li = new ListItem(1, lv);
+		li = new ListItem(lv, 1);
 		removeLink = li.removeLink("3");
 		removeLink.onClick();
 		assertEquals(new Integer(2), lv.getListObject(0));
 
-		li = new ListItem(0, lv);
+		li = new ListItem(lv, 0);
 		removeLink = li.removeLink("xxx");
 		removeLink.onClick();
 		assertEquals(0, lv.getList().size());

@@ -1,0 +1,35 @@
+	/**
+	 * Gets the list of messages relevant to this model's form.
+	 * 
+	 * @param form
+	 *            The form to get messages for
+	 * @return The messages
+	 */
+	public List messages(final Form form)
+	{
+		if (messages != null)
+		{
+			// List of messages reported by children of the form
+			final List list = new ArrayList();
+
+			// Loop through messages
+			for (Iterator iterator = messages.iterator(); iterator.hasNext();)
+			{
+				// Get next message
+				final FeedbackMessage message = (FeedbackMessage)iterator.next();
+
+				// If the reporter is the form itself of the report is contained
+				// by the form
+				if (form == message.getReporter() || form.contains(message.getReporter(), true))
+				{
+					// add the message to the list
+					list.add(message);
+				}
+			}
+
+			// Return list of messages reported by children of the form.
+			return Collections.unmodifiableList(list);
+		}
+		return Collections.EMPTY_LIST;
+	}
+

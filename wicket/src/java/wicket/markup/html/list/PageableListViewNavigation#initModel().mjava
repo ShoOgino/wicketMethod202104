@@ -1,0 +1,30 @@
+	/**
+	 * @see wicket.Component#initModel()
+	 */
+	protected IModel initModel()
+	{
+		return new DetachableModel()
+		{
+			protected void onAttach()
+			{
+				setObject(new AbstractList()
+				{
+					public Object get(final int index)
+					{
+						return new Integer(index);
+					}
+
+					public int size()
+					{
+						return getViewSize();
+					}
+				});
+			}
+
+			protected void onDetach()
+			{
+				setObject(null);
+			}
+		};
+	}
+
