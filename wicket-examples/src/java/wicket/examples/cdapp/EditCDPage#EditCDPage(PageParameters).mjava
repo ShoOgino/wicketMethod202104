@@ -11,7 +11,18 @@
 		{
 			id = Long.valueOf(idFromRequest);
 		}
-		HibernateObjectModel model = createObjectModel(id);
-		addComponents(model);
+		cdModel = new HibernateObjectModel(id, CD.class, new HibernateHelperSessionDelegate());
+		// add a label with expression title. What happens is that a
+		// PropertyModel is constructed with our instance of IModel
+		// (DetachableCDModel) and
+		// property expression 'title'. At execution time, our DetachableCDModel
+		// will
+		// load the CD as the actual model. That CD will be used for the
+		// expression,
+		// thus property 'title' of the current CD will be used for the label.
+		add(new Label("cdTitle", new TitleModel(cdModel)));
+		FeedbackPanel feedback = new FeedbackPanel("feedback");
+		add(feedback);
+		add(new DetailForm("detailForm", feedback, cdModel));
 	}
 
