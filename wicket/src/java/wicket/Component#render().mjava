@@ -15,8 +15,13 @@
 			cycle.setResponse(NullResponse.getInstance());
 		}
 
-		// Call implementation to render component
-		handleRender();
+		// Synchronize on model lock while rendering to help ensure
+		// that the model doesn't change while its being read
+		synchronized (getModelLock())
+		{
+			// Call implementation to render component
+			handleRender();
+		}
 
 		// Restore original response
 		cycle.setResponse(originalResponse);
