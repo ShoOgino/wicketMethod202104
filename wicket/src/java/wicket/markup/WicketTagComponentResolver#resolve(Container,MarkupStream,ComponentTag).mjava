@@ -24,8 +24,26 @@
                 final Component component = createComponent(container, wicketTag);
                 if (component != null)
                 {
+                    nestedComponents.put(component, null);
                     // Add it to the hierarchy and render it
                     container.add(component);
+                    component.render();
+                    
+                    nestedComponents.remove(component);
+                    return true;
+                }
+            }
+        }
+        
+        // Re-parent children of <wicket:component>. 
+        if ((tag.getComponentName() != null) && nestedComponents.containsKey(container))
+        {
+            final Container parent = container.getParent();
+            if (parent != null)
+            {
+                final Component component = parent.get(tag.getComponentName());
+                if (component != null)
+                {
                     component.render();
                     return true;
                 }
