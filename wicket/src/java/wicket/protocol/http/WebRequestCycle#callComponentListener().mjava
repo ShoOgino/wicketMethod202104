@@ -15,25 +15,20 @@
 		final String path = request.getParameter("component");
 		if (path != null)
 		{
+			// Grt version number
+			final String versionString = request.getParameter("version");
+			int version = Strings.isEmpty(versionString) ? 0 : Integer.parseInt(versionString);
+			
 			// Get page from path
-			log.debug("Getting page for path " + path);
-			final Page page = session.getPage(path);
+			log.debug("Getting page [path = " + path + ", version = " + version + "]");
+			final Page page = session.getPage(path, version);
 			
 			// Does page exist?
 			if (page != null)
 			{
-				// Is page stale?
-				if (page.isStale())
-				{
-					onStalePage();
-					return true;
-				}
-				else
-				{
-					// Execute the user's code
-					invokeInterface(page, path, request.getParameter("interface"));
-					return true;
-				}
+				// Execute the user's code
+				invokeInterface(page, path, request.getParameter("interface"));
+				return true;
 			}
 			else
 			{

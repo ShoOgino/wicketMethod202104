@@ -1,0 +1,23 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param page
+	 *            The page that we're versioning
+	 * @param maxVersions
+	 *            The maximum number of versions to maintain before expiring the
+	 *            old versions
+	 */
+	public UndoPageVersionManager(final Page page, final int maxVersions)
+	{
+		this.page = page;
+		this.versions = new LinkedHashMap()
+		{
+			protected boolean removeEldestEntry(Map.Entry ignored)
+			{
+				// Remove oldest entry if there are more than maxVersions
+				// entries
+				return size() > maxVersions;
+			}
+		};
+	}
+

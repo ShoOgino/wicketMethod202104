@@ -9,7 +9,14 @@
 		if (model == null)
 		{
 			// give subclass a chance to lazy-init model
-			setModel(initModel());
+			this.model = initModel();
+
+			// Set self as source of converter in case the model needs to do
+			// conversions
+			if (model instanceof IConvertible)
+			{
+				((IConvertible)model).setConverterSource(this);
+			}
 		}
 
 		return model;

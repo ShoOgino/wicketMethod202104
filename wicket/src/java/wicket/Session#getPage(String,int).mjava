@@ -1,0 +1,38 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
+	 * Get the page for the given path.
+	 * 
+	 * @param path
+	 *            Component path
+	 * @param version
+	 *            The version of the page required
+	 * @return The page based on the first path component (the page id)
+	 */
+	public final Page getPage(final String path, final int version)
+	{
+		// Retrieve the page for the first path component from this session
+		Page page = getPage(Integer.parseInt(Strings.firstPathComponent(path,
+				componentPathSeparator)));
+
+		// Get the version of the page requested from the page
+		final Page pageVersion = page.getVersion(version);
+
+		// Need to update session with new page?
+		if (pageVersion != page)
+		{
+			// This is our new page
+			page = pageVersion;
+
+			// Replaces old page entry
+			getPageMap().put(new Integer(pageVersion.getId()), page);
+			pageChanged(page);
+		}
+
+		// Modifications to this page are potentially beginning
+		page.onInternalBeginRequest();
+		page.onBeginRequest();
+
+		return page;
+	}
+

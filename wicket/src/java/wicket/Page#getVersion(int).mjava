@@ -10,6 +10,22 @@
 	 */
 	public Page getVersion(final int version)
 	{
-		return getVersionManager().getVersion(version);
+		// If we're still the original Page
+		if (versionManager == IPageVersionManager.NULL)
+		{
+			// return self
+			return this;
+		}
+		
+		// Get page of desired version
+		final Page page = getVersionManager().getVersion(version);
+		
+		// If we went all the way back to the original page, remove version info
+		if (page.getVersion() == -1)
+		{
+			page.versionManager = IPageVersionManager.NULL;
+		}
+		
+		return page;
 	}
 
