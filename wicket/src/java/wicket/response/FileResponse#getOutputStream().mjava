@@ -1,0 +1,19 @@
+	/**
+	 * @see wicket.Response#getOutputStream()
+	 */
+	public OutputStream getOutputStream()
+	{
+		try
+		{
+			if (out == null)
+			{
+				out = new FileOutputStream(file);
+			}
+			return out;
+		}
+		catch (FileNotFoundException e)
+		{
+			throw new WicketRuntimeException("Unable to get output stream to file " + file, e);			
+		}
+	}
+

@@ -1,0 +1,34 @@
+	/**
+	 * Gets the image resource for a given set of criteria. Only one image
+	 * resource will be loaded for the same criteria.
+	 * 
+	 * @param classLoader
+	 *            The classloader for loading the image
+	 * @param basePackage
+	 *            The base package to search from
+	 * @param resourcePath
+	 *            The path to the resource
+	 * @param locale
+	 *            The locale of the image
+	 * @param style
+	 *            The style of the image
+	 * @return The image resource
+	 */
+	public static StaticImageResource get(final ClassLoader classLoader, final Package basePackage,
+			final String resourcePath, final Locale locale, final String style)
+	{
+		final String key = classLoader.toString() + basePackage.getName() + resourcePath
+				+ locale.toString() + style;
+		synchronized (imageResourceMap)
+		{
+			StaticImageResource imageResource = (StaticImageResource)imageResourceMap.get(key);
+			if (imageResource == null)
+			{
+				imageResource = new StaticImageResource(classLoader, basePackage, resourcePath, locale,
+						style);
+				imageResourceMap.put(key, imageResource);
+			}
+			return imageResource;
+		}
+	}
+

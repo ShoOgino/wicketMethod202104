@@ -1,8 +1,24 @@
-    /**
-     * @see wicket.Response#close()
-     */
-    public void close()
-    {
-        out.close();
-    }
+	/**
+	 * @see wicket.Response#close()
+	 */
+	public void close()
+	{
+		if (printWriter != null)
+		{
+			printWriter.close();
+			printWriter = null;
+		}
+		if (out != null)
+		{
+			try
+			{
+				out.close();
+				out = null;
+			}
+			catch (IOException e)
+			{
+				throw new WicketRuntimeException("Unable to close to file " + file, e);
+			}
+		}
+	}
 

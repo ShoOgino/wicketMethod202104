@@ -1,20 +1,27 @@
-    /**
-     * @see wicket.Component#onComponentTag(ComponentTag)
-     */
-    protected void onComponentTag(final ComponentTag tag)
-    {
-        final String imageResource = getModelObjectAsString();
-        if (Strings.isEmpty(imageResource))
-        {
-            resourcePath = tag.getString("src");
-        }
-        else
-        {
-            resourcePath = imageResource;
-        }
-	    style = getStyle();
-	    locale = getLocale();
-    	
-        super.onComponentTag(tag);
-    }
+	/**
+	 * @see wicket.Component#onComponentTag(ComponentTag)
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+		// Need to load image resource for this component?
+		if (imageResource == null)
+		{
+			final String modelString = getModelObjectAsString();
+			final String resourcePath;
+			if (Strings.isEmpty(modelString))
+			{
+				resourcePath = tag.getString("src");
+			}
+			else
+			{
+				resourcePath = modelString;
+			}
+
+			final Package basePackage = findParentWithAssociatedMarkup().getClass().getPackage();
+			this.imageResource = StaticImageResource.get(getClass().getClassLoader(), basePackage,
+					resourcePath, getLocale(), getStyle());
+		}
+
+		super.onComponentTag(tag);
+	}
 

@@ -1,0 +1,28 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
+	 * Called when a resource is requested.
+	 */
+	public final void onResourceRequested()
+	{
+		// Get request cycle
+		final RequestCycle cycle = RequestCycle.get();
+
+		// The cycle's page is set to null so that it won't be rendered back to
+		// the client since the resource being requested has nothing to do with
+		// pages
+		cycle.setPage((Page)null);
+
+		// Fetch resource from subclass if necessary
+		setResource();
+
+		// Get servlet response to use when responding with resource
+		final Response response = cycle.getResponse();
+
+		// Configure response with content type of resource
+		response.setContentType(resource.getContentType());
+
+		// Respond with resource
+		respond(response);
+	}
+

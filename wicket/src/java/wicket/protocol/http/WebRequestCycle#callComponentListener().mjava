@@ -51,24 +51,13 @@
 			final String pathInfo = ((WebRequest)request).getHttpServletRequest().getPathInfo();
 			if (pathInfo != null)
 			{
-				// Ask application to resolve shared component
-				Component component = ((WebApplication)application).resolve(pathInfo.substring(1));
-				if (component != null)
+				// Get resource for path
+				final Resource resource = Resource.forPath(pathInfo.substring(1));
+				if (resource != null)
 				{
-					// Found shared component, so invoke interface on it
-					invokeInterface(component, "IResourceListener");
+					// Request resource
+					resource.onResourceRequested();
 					return true;
-				}
-				else
-				{
-					// Ask session to resolve the path next
-					component = ((WebSession)session).resolve(pathInfo);
-					if (component != null)
-					{
-						// Found it!
-						invokeInterface(component, "IResourceListener");
-						return true;
-					}
 				}
 			}
 		}
