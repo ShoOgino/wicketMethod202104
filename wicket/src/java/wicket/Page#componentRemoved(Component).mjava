@@ -4,14 +4,9 @@
 	 */
 	final void componentRemoved(final Component component)
 	{
-		if (!component.isAuto())
+		if (isVersioned(component))
 		{
-			checkModification();
-			if (getFlag(FLAG_TRACK_CHANGES) && component.isVersioned())
-			{
-				newVersion();
-				versionManager.componentRemoved(component);
-			}
+			versionManager.componentRemoved(component);
 		}
 	}
 

@@ -13,22 +13,24 @@
 		final int iterations = getIterations();
 		if (iterations > 0)
 		{
-			// Loop through the markup in this container for each iteration
-			for (int i = 0; i < iterations; i++)
+			// Loop through the markup in this container for each item
+			for (int iteration = 0; iteration < iterations; iteration++)
 			{
-				// Create container for the given loop iteration
-				final LoopItem iteration = (LoopItem)get(Integer.toString(i));
-				if (iteration == null)
+				// Get item for iteration
+				final LoopItem item = (LoopItem)get(Integer.toString(iteration));
+
+				// Item should have been constructed in internalOnBeginRequest
+				if (item == null)
 				{
 					throw new WicketRuntimeException(
-							"Loop iteration is null.  Probably the loop iterations were changed between onBeginRequest and render time.");
+							"Loop item is null.  Probably the number of loop iterations were changed between onBeginRequest and render time.");
 				}
 
 				// Rewind to start of markup for kids
 				markupStream.setCurrentIndex(markupStart);
 
 				// Render iteration
-				renderIteration(iteration);
+				renderItem(item);
 			}
 		}
 		else

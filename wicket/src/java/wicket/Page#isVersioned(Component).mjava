@@ -1,0 +1,33 @@
+	/**
+	 * @param component
+	 *            The component which is affected
+	 * @return True if the change is okay to report
+	 */
+	private final boolean isVersioned(final Component component)
+	{
+		// Auto components do not participate in versioning since they are
+		// added during the rendering phase (which is normally illegal).
+		if (component.isAuto())
+		{
+			return false;
+		}
+		else
+		{
+			// Throw exception if modification is attempted during rendering
+			if (getFlag(FLAG_IS_RENDERING))
+			{
+				throw new WicketRuntimeException(
+						"Cannot modify component hierarchy during render phase");
+			}
+
+			// Start new version?
+			if (getFlag(FLAG_TRACK_CHANGES) && component.isVersioned())
+			{
+				newVersion();
+			}
+
+			// Okay to record version information
+			return true;
+		}
+	}
+
