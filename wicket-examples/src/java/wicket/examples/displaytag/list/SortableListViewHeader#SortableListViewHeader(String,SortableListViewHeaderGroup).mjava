@@ -1,0 +1,24 @@
+	/**
+	 * Construct.
+	 * @param componentName The component name
+	 * @param group The group of headers the new one will be added to
+	 */
+	public SortableListViewHeader(final String componentName, final SortableListViewHeaderGroup group)
+	{
+		super(componentName);
+
+		// Default to descending.
+		this.ascending = false;
+		this.group = group;
+
+		// If user clicks on the header, sorting will reverse
+		add(new Link("actionLink")
+		{
+			public void onClick()
+			{
+				// call SortableTableHeaders implementation
+				SortableListViewHeader.this.linkClicked();
+			}
+		});
+	}
+

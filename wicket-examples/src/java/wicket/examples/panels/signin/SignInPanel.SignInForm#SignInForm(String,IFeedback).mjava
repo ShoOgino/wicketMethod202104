@@ -1,0 +1,34 @@
+		/**
+		 * Constructor.
+		 * 
+		 * @param componentName
+		 *            Name of the form component
+		 * @param feedback
+		 *            The feedback panel to update
+		 */
+		public SignInForm(final String componentName, final IFeedback feedback)
+		{
+			super(componentName, feedback);
+
+			// Attach textfield components that edit properties map
+			// in lieu of a formal beans model
+			add(username = new TextField("username", new PropertyModel(properties,
+					"username")));
+			add(password = new PasswordTextField("password", new PropertyModel(
+					properties, "password")));
+
+			// MarkupContainer row for remember me checkbox
+			WebMarkupContainer rememberMeRow = new WebMarkupContainer("rememberMeRow");
+			add(rememberMeRow);
+
+			// Add rememberMe checkbox
+			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel(
+					SignInPanel.this, "rememberMe")));
+
+			// Make form values persistent
+			setPersistent(rememberMe);
+
+			// Show remember me checkbox?
+			rememberMeRow.setVisible(includeRememberMe);
+		}
+
