@@ -31,19 +31,14 @@
 			cycle.setResponse(NullResponse.getInstance());
 		}
 
-		// Synchronize on model lock while rendering to help ensure
-		// that the model doesn't change while its being read
-		synchronized (getModelLock())
-		{
-			// Call implementation to render component
-			onRender();
+		// Call implementation to render component
+		onRender();
 
-			// Component has been rendered
-			rendered();
+		// Component has been rendered
+		rendered();
 
-			// Detach models now that rendering is fully completed
-			detachModels();
-		}
+		// Detach models now that rendering is fully completed
+		detachModels();
 
 		// Restore original response if any
 		if (isVisible)
