@@ -1,0 +1,24 @@
+	/**
+	 * @see wicket.util.resource.IResourceStream#getInputStream()
+	 */
+	public InputStream getInputStream() throws ResourceNotFoundException
+	{
+		final byte[] bytes;
+		if (charset != null)
+		{
+			try
+			{
+				bytes = getString().getBytes(charset);
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				throw new ResourceNotFoundException("Could not encode resource", e);
+			}
+		}
+		else
+		{
+			bytes = getString().getBytes();
+		}
+		return new ByteArrayInputStream(bytes);
+	}
+
