@@ -1,0 +1,22 @@
+    /**
+     * Guess the given letter for the current word. If the letter matches then
+     * the word is updated otherwise the guesses remaining counter is reduced.
+     * The letter guessed is also recorded.
+     *
+     * @param letter The letter being guessed
+     * @return Whether the letter was in the word or not
+     */
+    public boolean guessLetter(char letter) {
+        letter = Character.toLowerCase(letter);
+        boolean correctGuess = false;
+        for ( int i = 0; i < currentWord.length(); i++ ) {
+            if ( currentWord.charAt(i) == letter ) {
+                correctGuess = true;
+                letters[i] = letter;
+            }
+        }
+        if ( !correctGuess && guessedLetters[letter - 'a'] == false ) guessesRemaining--;
+        guessedLetters[letter - 'a'] = true;
+        return correctGuess;
+    }
+
