@@ -1,0 +1,29 @@
+	/**
+	 * Gets a PageState record for a given Page. The default, inefficient
+	 * implementation is to simply wrap the entire Page object. More intimate
+	 * knowledge of a Page, however, may allow significant compression of state
+	 * information.
+	 * 
+	 * @param page
+	 *            The page
+	 * @return The page state record
+	 */
+	protected PageState pageState(final Page page)
+	{
+		// Add to list of pages to replicate
+		return new PageState()
+		{
+			// NOTE: Since this is an anonymous class referencing the final
+			// parameter "final Page page", the anonymous class implementation
+			// that Java creates on the fly will contain a field with this
+			// value in it. Since PageState is Serializable, this anonymous
+			// subclass is actually a fully clusterable PageState record
+			// which simply references (and therefore copies) the entire Page.
+
+			public Page getPage()
+			{
+				return page;
+			}
+		};
+	}
+

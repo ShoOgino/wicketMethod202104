@@ -10,29 +10,27 @@
 		{
 			// Copy state into Session
 			this.state = state;
-			
-			// Lock changed pages
-			synchronized (state.changedPages)
+
+			// Copy any changed pages into our (transient) Session
+			for (final Iterator iterator = getAttributeNames().iterator(); iterator.hasNext();)
 			{
-				// Copy any changed pages into our (transient) Session
-				for (final Iterator iterator = state.changedPages.iterator(); iterator.hasNext();)
+				// Get next pageState guy
+				final PageState pageState = (PageState)getAttribute((String)iterator.next());
+
+				// If PageState has not been added to the session
+				if (!pageState.addedToSession())
 				{
-					// Get next change
-					final IPage changedPage = (IPage)iterator.next();
-	
-					// If its not the master copy, we need to add it since it was
-					// replicated over here
-					if (!changedPage.isMaster())
-					{
-						// Get page
-						final Page page = changedPage.getPage();
-	
-						// Add to page map
-						pages.put(new Integer(page.getId()), page);
-					}
-	
-					iterator.remove();
+					// Get page from page state
+					final Page page = pageState.getPage();
+
+					// Add to page map
+					getPageMap().put(new Integer(page.getId()), page);
+
+					// Page has been added to session now
+					pageState.addedToSession = true;
 				}
+
+				iterator.remove();
 			}
 		}
 	}

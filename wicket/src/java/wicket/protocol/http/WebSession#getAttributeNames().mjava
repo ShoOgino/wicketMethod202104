@@ -1,0 +1,19 @@
+	/**
+	 * @see Session#getAttributeNames()
+	 */
+	protected List getAttributeNames()
+	{
+		final List list = new ArrayList();
+		final Enumeration names = httpSession.getAttributeNames();
+		final String prefix = sessionAttributeName + "-";
+		while (names.hasMoreElements())
+		{
+			final String name = (String)names.nextElement();
+			if (name.startsWith(prefix))
+			{
+				list.add(name.substring(prefix.length()));
+			}
+		}
+		return list;
+	}
+
