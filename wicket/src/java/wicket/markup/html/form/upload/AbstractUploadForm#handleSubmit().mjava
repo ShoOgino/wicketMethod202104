@@ -1,27 +1,30 @@
     /**
      * Handles an upload.
+     * 
      * @see wicket.markup.html.form.Form#handleSubmit()
      */
     public void handleSubmit()
     {
-		try
+        try
         {
-			HttpRequest httpRequest = (HttpRequest)getRequest();
+            HttpRequest httpRequest = (HttpRequest) getRequest();
             HttpServletRequest request = (httpRequest).getServletRequest();
-			boolean isMultipart = FileUpload.isMultipartContent(request);
-			if(!isMultipart)
-			{
-			    throw new IllegalStateException("request is not a multipart request");
-			}
-			prepareUpload();
-			FileUploadBase upload = createUpload();
+            boolean isMultipart = FileUpload.isMultipartContent(request);
+            if (!isMultipart)
+            {
+                throw new IllegalStateException(
+                        "Request is not a multipart request");
+            }
+            prepareUpload();
+            FileUploadBase upload = createUpload();
             List items = parseRequest(request, upload);
-			processFileItems(items);
-			finishUpload();
+            processFileItems(items);
+            finishUpload();
         }
         catch (FileUploadException e)
         {
-            throw new RuntimeException(e); // for the time being, we throw
+            // For the time being, we throw
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,28 +1,31 @@
     /**
      * Process an upload item.
-     * @param item upload item (item.isFormField() == false)
+     * 
+     * @param item
+     *            upload item (item.isFormField() == false)
      * @see wicket.markup.html.form.upload.AbstractUploadForm#processUploadedFile(org.apache.commons.fileupload.FileItem)
      */
     protected final void processUploadedFile(FileItem item)
     {
-		if (item == null)
-		{
-			throw new NullPointerException("no file");
-		}
-		String originalName = item.getName();
-		int extloc = originalName.lastIndexOf('.');
-		String ext = originalName.substring((extloc + 1), originalName.length());
-		if (fileName == null)
-		{
-			fileName = originalName.substring(0, extloc);
-		}
+        if (item == null)
+        {
+            throw new IllegalArgumentException("No file");
+        }
+        String originalName = item.getName();
+        int extloc = originalName.lastIndexOf('.');
+        String ext = originalName
+                .substring((extloc + 1), originalName.length());
+        if (fileName == null)
+        {
+            fileName = originalName.substring(0, extloc);
+        }
 
-		if (fileName == null || fileName.trim().equals(""))
-		{
-		    throw new RuntimeException("no file name given");
-		}
+        if (fileName == null || fileName.trim().equals(""))
+        {
+            throw new RuntimeException("No file name given");
+        }
 
-		File targetFile = new File(targetDirectory, fileName + "." + ext);
-		saveFile(item, targetFile);
+        File targetFile = new File(targetDirectory, fileName + "." + ext);
+        saveFile(item, targetFile);
     }
 
