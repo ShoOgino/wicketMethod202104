@@ -1,0 +1,34 @@
+		/**
+		 * Sets the current tree.
+		 * @param type type of the tree
+		 */
+		private void setCurrentTree(String type)
+		{
+			final Tree tree;
+			if(TYPE_NL.equals(type)) // create NL with simple linkClicked override
+            {
+                tree = new NLTree("fileTree", currentTree.getTreeState()){
+
+                	protected void linkClicked(RequestCycle cycle, TreeNodeModel node)
+                	{
+                        super.linkClicked(cycle, node);
+                        FileBrowser.log.info("tree link was clicked, user object: "
+                        		+ node.getUserObject());
+                	}
+                };
+            }
+            else if(TYPE_INDENT.equals(type)) // create indent tree
+            {
+            	tree = new FileIndentTree("fileTree", currentTree.getTreeState());
+            }
+            else if(TYPE_NL_CUSTOM_ROWS.equals(type)) // create NL tree with custom panels
+            {
+            	tree = new FileNLTreeCustomRows("fileTree", currentTree.getTreeState());
+            }
+            else
+            {
+            	throw new RuntimeException("invalid type selection");
+            }
+			FileBrowser.this.setTreeComponent(tree);
+		}
+

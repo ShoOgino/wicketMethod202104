@@ -4,14 +4,22 @@
      * @param tree
      * @param nodeModel the tree node for this row
      */
-    public FileTreeRow(String componentName, NLTree tree, TreeNodeModel nodeModel)
+    public FileNLTreeRow(String componentName, final FileNLTreeCustomRows tree,
+    		TreeNodeModel nodeModel)
     {
         super(componentName);
         HtmlContainer li = null;
         if(nodeModel != null)
         {
             File file = (File)nodeModel.getUserObject();
-            li = new OnClickTreeNodeLink("li", tree, nodeModel);
+            li = new OnClickTreeNodeLink("li", tree, nodeModel){
+
+                public void linkClicked(RequestCycle cycle, TreeNodeModel node)
+                {
+                	// link to tree
+                	tree.linkClicked(cycle, node);
+                }   
+            };
             li.add(new Label("label", file.getName()));
         }
         else
