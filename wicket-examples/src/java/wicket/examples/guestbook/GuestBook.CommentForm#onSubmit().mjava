@@ -4,20 +4,18 @@
 		public final void onSubmit()
 		{
 			// Construct a copy of the edited comment
+			final Comment comment = (Comment)getRootModelObject();
 			final Comment newComment = new Comment(comment);
 
 			// Set date of comment to add
 			newComment.setDate(new Date());
 
 			// Add the component we edited to the list of comments
+			commentListView.modelChangeImpending();
             synchronized (commentListView.getModelLock())
             {
     			commentList.add(0, newComment);
             }
-
-			// Invalidate the commentListView's model since a structural change
-			// was made to the comment list (we added an entry)
-			commentListView.modelChangedStructure();
 
 			// Clear out the text component
 			comment.setText("");
