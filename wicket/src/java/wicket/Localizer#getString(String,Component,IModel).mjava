@@ -1,0 +1,18 @@
+    /**
+     * @param key The key to obtain the resource for
+     * @param component The component to get the resource for (optional)
+     * @param model The model to use for OGNL substitutions in the strings (optional)
+     * @return The string resource
+     * @throws MissingResourceException If resource not found and configuration dictates that
+     *                                  exception should be thrown
+     * @see #getString(String, Component, IModel, String)
+     */
+    public String getString(final String key,
+                            final Component component,
+                            final IModel model)
+    throws MissingResourceException {
+        Session session = Session.get();
+        return getString(key, component, model, session.getLocale(),
+                         session.getStyle(), null);
+    }
+

@@ -1,0 +1,31 @@
+    /**
+     * Skips this component and all nested components
+     */
+    public final void skipComponent()
+    {
+        // Get start tag
+        final ComponentTag startTag = getTag();
+
+        if (startTag.isOpen())
+        {
+            // Skip <tag>
+            next();
+
+            // Skip nested components
+            skipToMatchingCloseTag(startTag);
+
+            // Skip </tag>
+            next();
+        }
+        else if (startTag.isOpenClose())
+        {
+            // Skip <tag/>
+            next();
+        }
+        else
+        {
+            // We were something other than <tag> or <tag/>
+            throwMarkupException("Skip component called on bad markup element " + startTag);
+        }
+    }
+

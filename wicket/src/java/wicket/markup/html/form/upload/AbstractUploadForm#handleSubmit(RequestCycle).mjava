@@ -1,0 +1,27 @@
+    /**
+     * Handles an upload.
+     * @param cycle the request cycle
+     * @see wicket.markup.html.form.Form#handleSubmit(wicket.RequestCycle)
+     */
+    public void handleSubmit(RequestCycle cycle)
+    {
+		try
+        {
+			HttpServletRequest request = ((HttpRequest)cycle.getRequest()).getServletRequest();
+			boolean isMultipart = FileUpload.isMultipartContent(request);
+			if(!isMultipart)
+			{
+			    throw new IllegalStateException("request is not a multipart request");
+			}
+			prepareUpload();
+			FileUploadBase upload = createUpload();
+            List items = parseRequest(request, upload);
+			processFileItems(items);
+			finishUpload();
+        }
+        catch (FileUploadException e)
+        {
+            throw new RuntimeException(e); // for the time being, we throw
+        }
+    }
+

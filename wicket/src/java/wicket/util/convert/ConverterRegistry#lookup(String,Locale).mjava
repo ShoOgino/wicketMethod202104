@@ -1,0 +1,64 @@
+    /**
+     * Look up and return any registered {@link Formatter}for the specified destination
+     * key and locale; if there is no registered Formatter, return <code>null</code>.
+     * Precedence: if a locale is given the first search is for a formatter that was
+     * registered for the given type and locale. If it is not found, the second search is
+     * for any formatter of the type LocaleFormatter that was registered for the given
+     * key. If it is found, a new instance will be created for the given locale and the
+     * newly instantiated formatter will be registered for the given key and locale (and
+     * thus will be found at the first search next time). If it is not found, the search
+     * is the same as when no locale was given (locale == null): the 'normal', not
+     * localized registry will be searched for an entry with the given key. If this is not
+     * found either, null will be returned.
+     * @param key key that the formatter was registered with
+     * @param locale the Locale
+     * @return the formatter
+     * @throws NoSuchMethodException
+     * @throws IllegalArgumentException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public Formatter lookup(String key, Locale locale) throws NoSuchMethodException,
+            IllegalArgumentException, InstantiationException, IllegalAccessException,
+            InvocationTargetException
+    {
+        Formatter formatter = null;
+
+        if (locale != null)
+        {
+            String lockey = getLocKey(key, locale);
+
+            // first try registration for specific locale
+            formatter = (LocaleFormatter) localizedConverters.get(lockey);
+
+            if (formatter == null) // not found, try generic localized// registration
+            {
+                String globLocKey = getLocKey(key);
+                LocaleFormatter _formatter = (LocaleFormatter) localizedConverters.get(globLocKey);
+
+                // if found, instantiate a localized one and store for next use
+                if (_formatter != null)
+                {
+                    Class cls = _formatter.getClass();
+                    LocaleFormatter _newFormatter = (LocaleFormatter) cls.newInstance();
+
+                    _newFormatter.setLocale(locale);
+
+                    // register the new instance for this locale
+                    localizedConverters.put(key, _newFormatter);
+                    formatter = _newFormatter;
+                }
+            }
+        }
+
+        // else // get without locale right away
+        if (formatter == null) // (still) not found, try generic non-localized//
+                               // registration
+        {
+            formatter = (Formatter) converters.get(getLocKey(key));
+        }
+
+        return formatter;
+    }
+

@@ -1,0 +1,20 @@
+    /**
+     * Header has been clicked. Define what to do.
+     *
+     * @param cycle
+     */
+    protected void linkClicked(final RequestCycle cycle)
+    {
+        // change sorting order: ascending <-> descending
+        ascending = !ascending;
+
+        // Tell the header group that something has changed
+        group.setSortedColumn(getName());
+
+        // sort the table's model data accordingly
+        sort();
+
+        // Redirect back to result to avoid refresh updating the link count
+        cycle.setRedirect(true);
+    }
+

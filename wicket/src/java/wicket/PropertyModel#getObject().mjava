@@ -1,0 +1,46 @@
+    /**
+     * Gets the value that results when the given Ognl expression is applied to the model
+     * object (Ognl.getValue).
+     * @return the value that results when the given Ognl expression is applied to the
+     *         model object
+     * @see wicket.IModel#getObject()
+     */
+    public Object getObject()
+    {
+        if ((getExpression() == null) || (getExpression().trim().length() == 0))
+        {
+            // No expression will cause OGNL to throw an exception. The OGNL
+            // expression to return the current object is "#this". Instead
+            // of throwing that exception, we'll provide a meaningfull
+            // return value
+            return model.getObject();
+        }
+        IModel theModel = getModel();
+        if(theModel == null)
+        {
+            return null;
+        }
+        Object modelObject = theModel.getObject();
+        if(modelObject == null)
+        {
+            return null;
+        }
+        try
+        {
+            Object raw = Ognl.getValue(getExpression(), getContext(), modelObject);
+            if (applyFormatting)
+            {
+                return converterRegistry.getFormattingUtils().getObjectFormatted(
+                        raw, getLocale(), getFormatPattern(), getFormatPattern());
+            }
+            else
+            {
+                return raw;
+            }
+        }
+        catch (OgnlException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+

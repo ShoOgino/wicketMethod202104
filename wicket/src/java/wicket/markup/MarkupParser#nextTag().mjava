@@ -1,0 +1,107 @@
+    /**
+     * Gets the next tag from the input string.
+     * @return The extracted tag.
+     * @throws ParseException
+     */
+    private ComponentTag nextTag() throws ParseException
+    {
+        // Index of open bracket
+        int openBracketIndex = input.indexOf('<', this.inputPosition);
+
+        // While we can find an open tag, parse the tag
+        if (openBracketIndex != -1)
+        {
+            // Determine line number
+            countLinesTo(input, openBracketIndex);
+
+            // Get index of closing tag and advance past the tag
+            final int closeBracketIndex = input.indexOf('>', openBracketIndex);
+
+            if (closeBracketIndex == -1)
+            {
+                throw new ParseException("No matching close bracket at position "
+                        + openBracketIndex, this.inputPosition);
+            }
+
+            // Get the tagtext between open and close brackets
+            String tagText = input.substring(openBracketIndex + 1, closeBracketIndex);
+
+            // Handle comments
+            if (tagText.startsWith("!--"))
+            {
+                // Skip ahead to -->
+                this.inputPosition = input.indexOf("-->", openBracketIndex + 4) + 3;
+
+                if (this.inputPosition == -1)
+                {
+                    throw new ParseException(
+                            "Unclosed comment beginning at " + openBracketIndex, openBracketIndex);
+                }
+
+                return nextTag();
+            }
+            else
+            {
+                // Type of tag
+                ComponentTag.Type type = ComponentTag.OPEN;
+
+                // If the tag ends in '/', it's a "simple" tag like <foo/>
+                if (tagText.endsWith("/"))
+                {
+                    type = ComponentTag.OPEN_CLOSE;
+                    tagText = tagText.substring(0, tagText.length() - 1);
+                }
+                else if (tagText.startsWith("/"))
+                {
+                    // The tag text starts with a '/', it's a simple close tag
+                    type = ComponentTag.CLOSE;
+                    tagText = tagText.substring(1);
+                }
+
+                // We don't deeply parse tags like DOCTYPE that start with !
+                // or XML document definitions that start with ?
+                if (tagText.startsWith("!") || tagText.startsWith("?") )
+                {
+                    // Move to position after the tag
+                    this.inputPosition = closeBracketIndex + 1;
+
+                    // Return next tag
+                    return nextTag();
+                }
+                else
+                {
+                    // Parse remainting tag text, obtaining a tag object or null
+                    // if it's invalid
+                    final ComponentTag tag = parseTagText(tagText);
+
+                    if (tag != null)
+                    {
+                        // Populate tag fields
+                        tag.type = type;
+                        tag.pos = openBracketIndex;
+                        tag.length = (closeBracketIndex + 1) - openBracketIndex;
+                        tag.getAttributes().makeImmutable();
+                        tag.text = input.substring(openBracketIndex, closeBracketIndex + 1);
+                        tag.lineNumber = lineNumber;
+                        tag.columnNumber = columnNumber;
+
+                        // Move to position after the tag
+                        this.inputPosition = closeBracketIndex + 1;
+
+                        // Return the tag we found!
+                        return tag;
+                    }
+                    else
+                    {
+                        throw new ParseException(
+                                "Malformed tag (line " + lineNumber + ", column "
+                                + columnNumber + ")", openBracketIndex);
+                    }
+                }
+            }
+        }
+
+        // There is no next matching tag
+        return null;
+    }
+

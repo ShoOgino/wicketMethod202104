@@ -1,0 +1,59 @@
+    /**
+     * Renders wicket.response for request.
+     * NOTE: THIS METHOD IS INTENDED FOR INTERNAL USE ONLY AND MAY NOT BE SUPPORTED IN THE FUTURE.
+     * @throws ServletException
+     */
+    public final void render() throws ServletException
+    {
+        try
+        {
+            // Render wicket.response for request cycle
+            handleRender();
+        }
+        catch (RuntimeException e)
+        {
+            // Render a page for the user
+            try
+            {
+                // If application doesn't want debug info showing up for users
+                ApplicationSettings settings = application.getSettings();
+                if (settings.getUnexpectedExceptionDisplay() !=
+                    ApplicationSettings.SHOW_NO_EXCEPTION_PAGE)
+                {
+                    if (settings.getUnexpectedExceptionDisplay() ==
+                        ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
+                    {
+                        // use internal error page
+                        setPage(newPage(settings.getInternalErrorPage()));
+                    }
+                    else
+                    {
+                        // otherwise show full details
+                        setPage(new ExceptionErrorPage(e));
+                    }
+                    // We generally want to redirect the wicket.response because we were
+                    // in the middle of rendering and the page may end up looking
+                    // like spaghetti otherwise
+                    redirectToPage(getPage());
+                }
+            }
+            catch (RuntimeException ignored)
+            {
+                // We ignore any problems trying to render the exception display
+                // page because we are just going to rethrow the exception anyway
+                // and the original problem will be displayed on the console by
+                // the container.  It's better this way because users of the framework
+                // will not want to be distracted by any internal problems rendering
+                // a runtime exception error display page.
+            }
+
+            // Rethrow error for console / container
+            throw e;
+        }
+        finally
+        {
+            release();
+            response.close(); //close the wicket.response
+        }
+    }
+

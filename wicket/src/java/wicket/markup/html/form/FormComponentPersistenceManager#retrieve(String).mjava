@@ -1,0 +1,44 @@
+    /**
+	 * Retrieve a persisted Cookie by means of its name 
+	 * (FormComponet.getPageRelativePath())
+	 * 
+	 * @param name The "primary key" to find the data
+	 * @return the cookie (if found), null if not found
+	 */
+	public Cookie retrieve(String name) 
+	{
+		// Get all cookies attached to the Request by the client browser
+		Cookie[] cookies = getRequest().getCookies();
+		if (cookies != null) 
+		{
+			for (int i = 0; i < cookies.length; i++) 
+			{
+				Cookie cookie = cookies[i];
+
+				// Names must match and Value must not be empty
+				if (cookie.getName().equals(name)) 
+				{
+					// cookies with no value do me no good!
+					if ((cookie.getValue() != null) && (cookie.getValue().length() > 0)) 
+					{
+						if (log.isDebugEnabled())
+						{
+						    log.debug("retrieved: " + getCookieDebugString(cookie));
+						}
+						return cookie;
+					}
+					else
+					{
+						if (log.isDebugEnabled())
+						{
+						    log.debug("retrieved cookie " + name
+						            + ", but it had no value; returning null");
+						}
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+

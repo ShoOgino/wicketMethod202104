@@ -1,0 +1,63 @@
+    /**
+     * Scan the related markup and attach a SortableTableHeader to each 
+     * &lt;th&gt; tag found.
+     *   
+     * @see wicket.Component#handleRender(wicket.RequestCycle)
+     */
+    protected void handleRender(RequestCycle cycle)
+    {
+        // Allow anonmous class to access 'this' methods with same name
+        final SortableTableHeaders me = this;
+
+        // Get the markup related to the component
+        MarkupStream markupStream = this.findMarkupStream();
+        
+        // Save position in markup stream
+        final int markupStart = markupStream.getCurrentIndex();
+
+        // Must be <thead> tag
+        ComponentTag tag = markupStream.getTag();
+        checkTag(tag, "thead");
+        
+        // find all <th id="wcn-..." childs
+        // Loop through the markup in this container
+        markupStream.next();
+        while (markupStream.hasMore())
+        {
+            final MarkupElement element = markupStream.get();
+            if (element instanceof ComponentTag)
+            {
+                // Get element as tag
+                tag = (ComponentTag) element;
+                if (tag.getName().equalsIgnoreCase("th"))
+                {
+                    // Get component name
+                    final String componentName = tag.getComponentName();
+                    if ((componentName != null) && (get(componentName) == null))
+                    {
+	                    add(new SortableTableHeader(componentName, group)
+	                    {
+	                        protected int compareTo(final Object o1, final Object o2)
+	                        {
+	                            return me.compareTo(this, o1, o2);
+	                        }
+	
+	                        protected Comparable getObjectToCompare(final Object object)
+	                        {
+	                            return me.getObjectToCompare(this, object);
+	                        }
+	                    });
+                    }
+                }
+            }
+            
+            markupStream.next();
+        }
+        
+        // Rewind to start of markup
+        markupStream.setCurrentIndex(markupStart);
+
+        // Continue with default behaviour
+        super.handleRender(cycle);
+    }
+

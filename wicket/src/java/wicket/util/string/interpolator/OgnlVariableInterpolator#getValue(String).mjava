@@ -1,0 +1,18 @@
+    /**
+     * Gets a value for a variable name during interpolation
+     * @param variableName The variable
+     * @return The value
+     */
+    protected String getValue(final String variableName)
+    {
+        try
+        {
+            return Ognl.getValue(variableName, model).toString();
+        }
+        catch (OgnlException e)
+        {
+            throw new RuntimeException("Unable to get value of variable '"
+                    + variableName + "' in " + string);
+        }
+    }
+

@@ -1,0 +1,101 @@
+    /**
+     * Gets the next tag from the input string.
+     * @param name Name of the tag to get, or null to get any next tag. Matching is case
+     *            independent, so "a" and "A" are the same tag.
+     * @return The extracted tag.
+     * @throws ParseException
+     */
+    public Tag nextTag(final String name) throws ParseException
+    {
+        // Index of open tag string like "<"
+        final int openBracketIndex = input.indexOf(openBracket, pos);
+
+        // While we can find an open tag, parse the tag
+        if (openBracketIndex != -1)
+        {
+            // Get index of closing tag and advance past the tag
+            final int closeBracketIndex = input.indexOf(closeBracket, openBracketIndex);
+
+            if (closeBracketIndex == -1)
+            {
+                throw new ParseException("No matching close bracket at position "
+                        + openBracketIndex, pos);
+            }
+
+            // Get the tagtext between open and close brackets
+            String tagText = input.substring(openBracketIndex + openBracketLength,
+                    closeBracketIndex);
+
+            // Handle comments
+            if (tagText.startsWith("!--"))
+            {
+                // Skip ahead to -->
+                pos = input.indexOf("--" + closeBracket, openBracketIndex + openBracketLength + 3);
+
+                if (pos == -1)
+                {
+                    throw new ParseException("Unclosed comment beginning at " + openBracketIndex,
+                            openBracketIndex);
+                }
+            }
+            else
+            {
+                // Everything is an open tag by default
+                boolean isOpen = true;
+                boolean isClose = false;
+
+                // If the tag ends in '/', it's an open and close tag
+                if (tagText.endsWith("/"))
+                {
+                    isOpen = true;
+                    isClose = true;
+                    tagText = tagText.substring(0, tagText.length() - 1);
+                }
+
+                // If the tagtext starts with a '/', it's a simple close tag
+                if (tagText.startsWith("/"))
+                {
+                    isClose = true;
+                    isOpen = false;
+                    tagText = tagText.substring(1);
+                }
+
+                // Parse remainting tagtext, obtaining a (the) tag object or
+                // null if it's invalid
+                final Tag tag = parseTagText(tagText);
+
+                if (tag != null)
+                {
+                    // If the caller either doesn't care what the name is, or
+                    // the tag has the name
+                    // they asked for then return the tag
+                    if ((name == null) || tag.name.equalsIgnoreCase(name))
+                    {
+                        // Populate tag fields
+                        tag.isClose = isClose;
+                        tag.isOpen = isOpen;
+                        tag.pos = openBracketIndex;
+                        tag.length = (closeBracketIndex + closeBracketLength) - openBracketIndex;
+                        tag.getAttributes().makeImmutable();
+                        tag.text = input.substring(openBracketIndex, closeBracketIndex
+                                + closeBracketLength);
+
+                        // Move to position after the tag
+                        pos = closeBracketIndex + closeBracketLength;
+
+                        // Return the tag we found!
+                        return tag;
+                    }
+                }
+                else
+                {
+                    throw new ParseException("Malformed tag at position " + openBracketIndex,
+                            openBracketIndex);
+                }
+            }
+        }
+
+        // There is no next matching tag
+        return null;
+    }
+

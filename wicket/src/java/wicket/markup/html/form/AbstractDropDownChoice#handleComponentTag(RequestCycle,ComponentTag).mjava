@@ -1,0 +1,21 @@
+	/**
+	 * @see wicket.Component#handleComponentTag(RequestCycle,
+	 *      wicket.markup.ComponentTag)
+	 */
+	protected void handleComponentTag(final RequestCycle cycle, final ComponentTag tag)
+	{
+		checkTag(tag, "select");
+
+		if (this instanceof IOnChangeListener)
+		{
+			// if a user subclasses this class and implements IOnChangeListener
+			// an onChange scriptlet is added
+			String url = cycle.urlFor(this, IOnChangeListener.class);
+
+			tag.put("onChange", "location.href='" + url
+					+ "&selected=' + this.options[this.selectedIndex].value;");
+		}
+
+		super.handleComponentTag(cycle, tag);
+	}
+

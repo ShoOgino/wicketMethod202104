@@ -1,0 +1,19 @@
+    /**
+     * @param time The time
+     * @return Gets an Object for the given time value or null if none exists
+     */
+    public Object get(final Time time)
+    {
+        for (final Iterator iterator = sources.keySet().iterator(); iterator.hasNext();)
+        {
+            final TimeFrame current = ((ITimeFrameSource) iterator.next()).get();
+
+            if (current.contains(time))
+            {
+                return sources.get(current);
+            }
+        }
+
+        return null;
+    }
+

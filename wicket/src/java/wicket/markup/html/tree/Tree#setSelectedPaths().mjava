@@ -1,0 +1,32 @@
+    /**
+     * Add components.
+     */
+    private void setSelectedPaths()
+    {
+        TreePath selectedPath = treeState.getSelectedPath(); // get current
+
+        // selection
+        Enumeration e = treeState.getVisiblePathsFromRoot(); // get all visible
+
+        // paths
+        List visiblePathsList = new ArrayList();
+
+        while (e.hasMoreElements())
+        {
+            visiblePathsList.add(e.nextElement());
+        }
+
+        Model model = new Model((Serializable) visiblePathsList);
+
+        if (visibleTreePathTable == null)
+        {
+            visibleTreePathTable = new VisibleTreePathTable("tree", model);
+            add(visibleTreePathTable);
+        }
+        else
+        {
+            visibleTreePathTable.reset();
+            visibleTreePathTable.setModel(model);
+        }
+    }
+

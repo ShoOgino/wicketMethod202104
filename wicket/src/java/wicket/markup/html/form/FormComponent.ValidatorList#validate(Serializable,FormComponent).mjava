@@ -1,0 +1,19 @@
+        /**
+         * Validates the given component.
+         * @param input the input
+         * @param component The component to validate
+         * @return The error returned by the first validator in the list which reported an
+         *         error or null if no validator reported an error
+         */
+        public ValidationErrorMessage validate(final Serializable input, final FormComponent component)
+        {
+            final ValidationErrorMessage message = left.validate(input, component);
+
+            if (message != ValidationErrorMessage.NO_MESSAGE && message.isLevelError())
+            {
+                return message;
+            }
+
+            return right.validate(input, component);
+        }
+

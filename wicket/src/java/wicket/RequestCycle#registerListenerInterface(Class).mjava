@@ -1,0 +1,37 @@
+    /**
+     * Adds an interface to the map of interfaces that can be invoked by outsiders.
+     * The interface must have a single method with the signature methodName(RequestCycle).
+     * NOTE: THIS METHOD IS NOT INTENDED FOR USE BY FRAMEWORK CLIENTS.
+     * @param c The interface class, which must extend IListener.
+     */
+    public static void registerListenerInterface(final Class c)
+    {
+        // Ensure that c extends IListener
+        if (!IListener.class.isAssignableFrom(c))
+        {
+            throw new IllegalArgumentException("Class " + c + " must extend IListener");
+        }
+
+        // Search methods in class
+        final Method[] methods = c.getMethods();
+        for (int i = 0; i < methods.length; i++)
+        {
+            // Get method parameter types
+            final Class[] parameters = methods[i].getParameterTypes();
+
+            // If there is only one parameter, and it is RequestCycle
+            if (parameters.length == 1 && parameters[0] == RequestCycle.class)
+            {
+                // Save this interface method by the non-qualified class name
+                listenerInterfaceMethods.put(Classes.name(c), methods[i]);
+
+                // Done!
+                return;
+            }
+        }
+
+        // Failed to find interface method
+        throw new IllegalArgumentException("Internal error: " + c
+                + " does not have a method that takes RequestCycle as a parameter");
+    }
+

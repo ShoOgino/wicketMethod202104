@@ -1,0 +1,23 @@
+    /**
+     * Renders this component and all sub-components using the given markup stream.
+     * @param cycle The wicket.response to write to
+     * @param markupStream The markup stream
+     */
+    final void renderAll(final RequestCycle cycle, final MarkupStream markupStream)
+    {
+        // Loop through the markup in this container
+        while (markupStream.hasMore())
+        {
+            // Element rendering is responsible for advancing markup stream!
+            final int index = markupStream.getCurrentIndex();
+
+            renderNext(cycle, markupStream);
+
+            if (index == markupStream.getCurrentIndex())
+            {
+                markupStream.throwMarkupException("Component at markup stream index "
+                        + index + " failed to advance the markup stream");
+            }
+        }
+    }
+

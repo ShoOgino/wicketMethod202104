@@ -1,0 +1,50 @@
+    /**
+     * Renders this container.
+     * @param cycle The request cycle
+     */
+    protected void handleRender(final RequestCycle cycle)
+    {
+        // Ask parents for markup stream to use
+        final MarkupStream markupStream = findMarkupStream();
+
+        // Save position in markup stream
+        final int markupStart = markupStream.getCurrentIndex();
+
+        TreeNode currentNode = (TreeNode) getModelObject();
+        final int childCount = currentNode.getChildCount();
+
+        if (childCount > 0)
+        {
+            for (int i = 0; i < childCount; i++)
+            {
+                // Get name of component for cell i
+                final String componentName = Integer.toString(i);
+
+                // If this component does not already exist
+                Node node = (Node) get(componentName);
+
+                if (node == null)
+                {
+                    // Create node for index i of the childs
+                    node = newNode(i);
+
+                    // Add node to list
+                    add(node);
+
+                    // Let subclass populate it with components
+                    populateNode(node);
+                }
+
+                // Rewind to start of markup for kids
+                markupStream.setCurrentIndex(markupStart);
+
+                // Render node
+                node.render(cycle);
+            }
+        }
+        else
+        {
+            markupStream.skipComponent();
+        }
+    }
+

@@ -1,0 +1,21 @@
+    /**
+     * Advance parsing.
+     * @param pattern pattern
+     * @return true if found, false otherwise
+     */
+    protected final boolean advance(final MetaPattern pattern)
+    {
+        final CharSequence s = input.subSequence(pos, length);
+
+        this.matcher = pattern.matcher(s);
+
+        if (matcher.lookingAt())
+        {
+            pos += matcher.end();
+
+            return true;
+        }
+
+        return false;
+    }
+

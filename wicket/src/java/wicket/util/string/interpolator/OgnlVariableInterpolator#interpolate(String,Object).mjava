@@ -1,0 +1,19 @@
+    /**
+     * Interpolates string using OGNL
+     * @param string String containing OGNL expressions like ${ognl}
+     * @param object The object for OGNL to reflect on
+     * @return The interpolated string
+     */
+    public static String interpolate(final String string, final Object object)
+    {
+        // If there's any reason to go to the expense of ognl
+        if (string.indexOf("${") != -1)
+        {
+            // do ognl variable interpolation
+            return new OgnlVariableInterpolator(string, object).toString();
+        }
+
+        // Return simple string
+        return string;
+    }
+

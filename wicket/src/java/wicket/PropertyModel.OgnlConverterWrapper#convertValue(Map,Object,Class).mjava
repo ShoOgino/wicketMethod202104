@@ -1,0 +1,33 @@
+        /**
+         * Convert the provided value to provided type using provided context.
+         * @param context Ognl context
+         * @param value the current, unconverted value
+         * @param toType the type that should be converted to
+         * @return Object the converted value
+         * @see ognl.DefaultTypeConverter#convertValue(java.util.Map, java.lang.Object,
+         *      java.lang.Class)
+         */
+        public Object convertValue(Map context, Object value, Class toType)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            if ((!toType.isArray())
+                    && value instanceof String[] && (((String[]) value).length == 1))
+            {
+                value = ((String[]) value)[0];
+            }
+
+            //TODO this might be just too crude for strings
+            if ((value instanceof String) && ((String) value).trim().equals(""))
+            {
+                return null;
+            }
+
+            ConversionUtils conversionUtils = converterRegistry.getConversionUtils();
+
+            return conversionUtils.convert(value, toType, getLocale());
+        }
+

@@ -1,0 +1,61 @@
+    /**
+     * Parses the text between tags. For example, "a href=foo.html".
+     * @param tagText The text between tags
+     * @return A new Tag object or null if the tag is invalid
+     */
+    private Tag parseTagText(final String tagText)
+    {
+        // Get the length of the tagtext
+        final int tagTextLength = tagText.length();
+
+        // If we match tagname pattern
+        final Matcher tagnameMatcher = TAG_NAME_PATTERN.matcher(tagText);
+        final Tag tag = new Tag();
+
+        if (tagnameMatcher.lookingAt())
+        {
+            // Extract the tag from the pattern matcher
+            tag.name = tagnameMatcher.group(1).toLowerCase();
+
+            int pos = tagnameMatcher.end(0);
+
+            // Are we at the end? Then there are no attributes, so we just
+            // return the tag
+            if (pos == tagTextLength)
+            {
+                return tag;
+            }
+
+            // Extract attributes
+            final Matcher attributeMatcher = ATTRIBUTE_PATTERN.matcher(tagText);
+
+            while (attributeMatcher.find(pos))
+            {
+                // Get key and value using attribute pattern
+                final String key = attributeMatcher.group(1);
+                String value = attributeMatcher.group(2);
+
+                // Set new position to end of attribute
+                pos = attributeMatcher.end(0);
+
+                // Chop off double quotes
+                if (value.startsWith("\""))
+                {
+                    value = value.substring(1, value.length() - 1);
+                }
+
+                // Put the attribute in the attributes hash
+                tag.attributes.put(key.toLowerCase(), StringValue.valueOf(value));
+
+                // The input has to match exactly (no left over junk after
+                // attributes)
+                if (pos == tagTextLength)
+                {
+                    return tag;
+                }
+            }
+        }
+
+        return null;
+    }
+

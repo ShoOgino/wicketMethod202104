@@ -1,0 +1,30 @@
+    /**
+     * Redirects to the given url.
+     * @param url The URL to redirect to
+     */
+    public final void redirect(final String url)
+    {
+        if (httpServletResponse != null)
+        {
+            try
+            {
+                if (httpServletResponse.isCommitted())
+                {
+                	log.error("Unable to redirect. HTTP Response has already been committed.");
+                }
+                
+                if (log.isDebugEnabled()) 
+            	{
+                	log.debug("Redirecting to " + url);
+            	}
+                
+                httpServletResponse.sendRedirect(url);
+                redirect = true;
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException("Redirect failed", e);
+            }
+        }
+    }
+

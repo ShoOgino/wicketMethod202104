@@ -1,0 +1,25 @@
+    /**
+     * @see wicket.Container#handleBody(wicket.RequestCycle,
+     *      wicket.markup.MarkupStream,
+     *      wicket.markup.ComponentTag)
+     */
+    protected void handleBody(final RequestCycle cycle, final MarkupStream markupStream,
+            final ComponentTag openTag)
+    {
+        Object value = getModelObject();
+        final String displayLabel;
+
+        if (label != null)
+        {
+            displayLabel = label;
+        }
+        else
+        {
+            displayLabel = String.valueOf(value);
+        }
+
+        String s = getLocalizer().getString(getPath() + "." + displayLabel, this, displayLabel);
+
+        replaceBody(cycle, markupStream, openTag, s);
+    }
+

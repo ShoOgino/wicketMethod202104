@@ -1,0 +1,31 @@
+	/**
+	 * @see wicket.markup.html.form.FormComponent.ICookieValue#getCookieValue()
+	 */
+	public final String getCookieValue()
+	{
+		// Get the list of selected values
+		
+		final Collection selectedValues = (Collection) getModelObject();
+		final StringBuffer cookieValue = new StringBuffer();
+		if(selectedValues != null)
+		{
+			final List list = getValues();
+			final Iterator it = selectedValues.iterator();
+			while(it.hasNext())
+			{
+				final int index = list.indexOf(it.next());
+				if(list instanceof IIdList)
+				{
+					cookieValue.append(((IIdList)list).getIdValue(index));
+				}
+				else
+				{
+					cookieValue.append(index);
+				}
+				// the id's can't have ; in there id!! should we escape it or something??
+				cookieValue.append(";");
+			}
+		}
+		return cookieValue.toString();
+	}
+

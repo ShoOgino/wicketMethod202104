@@ -1,0 +1,24 @@
+	/**
+     * Gets instance of LRU map with given maximum limit on entries
+     * @param maxEntries Maximum number of entries allowed in the map
+     * @return MRU map instance
+     */
+    public static MostRecentlyUsedMap newInstance(final int maxEntries)
+    {
+        if (maxEntries <= 0)
+        {
+            throw new IllegalArgumentException("Must have at least one entry");
+        }
+
+        return new MostRecentlyUsedMap()
+        {
+        	/** serialVersionUID */
+			private static final long serialVersionUID = -3137250910658864184L;
+
+			protected boolean removeEldestEntry(final Map.Entry eldest)
+            {
+                return size() > maxEntries;
+            }
+        };
+    }
+

@@ -1,0 +1,19 @@
+    /**
+     * Gets the request parameter for this component as an int.
+     * @param cycle The request
+     * @return The value in the request for this component
+     */
+    public final int getRequestInt(final RequestCycle cycle)
+    {
+        final String string = getRequestString(cycle);
+        try
+        {
+            return Integer.parseInt(string);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new IllegalArgumentException(exceptionMessage("Internal error.  Request string '"
+                    + string + "' not a valid integer"));
+        }
+    }
+

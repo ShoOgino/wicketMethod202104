@@ -1,0 +1,40 @@
+    /**
+     * @see wicket.IResourceListener#resourceRequested(wicket.RequestCycle)
+     */
+    public void resourceRequested(final RequestCycle cycle)
+    {
+        // The cycle's page is set to null so that it won't be rendered back to
+        // the client
+        // since the resource being requested has nothing to do with pages
+        cycle.setPage((Page) null);
+
+        // Respond with image
+        final HttpServletResponse response = ((HttpResponse) cycle.getResponse())
+                .getServletResponse();
+
+        response.setContentType("image/" + resource.getExtension());
+
+        try
+        {
+            final OutputStream out = new BufferedOutputStream(response.getOutputStream());
+
+            try
+            {
+                Streams.writeStream(new BufferedInputStream(resource.getInputStream()), out);
+            }
+            finally
+            {
+                resource.close();
+                out.flush();
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RenderException("Unable to render resource " + resource, e);
+        }
+        catch (ResourceNotFoundException e)
+        {
+            throw new RenderException("Unable to render resource " + resource, e);
+        }
+    }
+

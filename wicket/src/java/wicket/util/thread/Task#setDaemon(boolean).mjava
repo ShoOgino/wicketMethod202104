@@ -1,0 +1,16 @@
+    /**
+     * Set daemon or not.
+     * @param daemon True if this task's thread should be a daemon
+     * @throws IllegalStateException Thrown if task is already running
+     */
+    public synchronized void setDaemon(final boolean daemon)
+    {
+        if (isStarted)
+        {
+            throw new IllegalStateException(
+                    "Attempt to set daemon boolean of task that is already started");
+        }
+
+        isDaemon = daemon;
+    }
+

@@ -1,0 +1,21 @@
+        /**
+         * @see wicket.util.profile.IObjectProfileNode.INodeFilter#accept(wicket.util.profile.IObjectProfileNode)
+         */
+        public boolean accept(final IObjectProfileNode node)
+        {
+            final IObjectProfileNode parent = node.parent();
+
+            if (parent == null)
+            {
+                return true; // always accept root node
+            }
+            else if (node.size() >= (m_threshold * parent.size()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+

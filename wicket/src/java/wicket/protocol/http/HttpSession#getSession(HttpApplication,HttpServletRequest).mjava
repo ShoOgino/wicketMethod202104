@@ -1,0 +1,38 @@
+    /**
+     * Gets session from request, creating a new one if it doesn't already exist
+     * @param application The application object
+     * @param request The http request object
+     * @return The session object
+     */
+    static HttpSession getSession(final HttpApplication application,
+            final HttpServletRequest request)
+    {
+        // Get session, creating if it doesn't exist
+        final javax.servlet.http.HttpSession httpServletSession = request.getSession(true);
+
+        // Get Session abstraction from httpSession attribute
+        HttpSession session = (HttpSession) httpServletSession.getAttribute("session");
+
+        if (session == null)
+        {
+            // Create session
+            session = new HttpSession(application, httpServletSession);
+
+            // Set the client Locale for this session
+            session.setLocale(request.getLocale());
+
+            // Attach to httpSession
+            httpServletSession.setAttribute("session", session);
+        }
+        else
+        {
+            // Reattach http servlet session
+            session.httpServletSession = httpServletSession;
+        }
+
+        // Set the current session to the session we just retrieved
+        Session.set(session);
+
+        return session;
+    }
+

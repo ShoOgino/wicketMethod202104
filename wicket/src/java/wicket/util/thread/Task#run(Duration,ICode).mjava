@@ -1,0 +1,52 @@
+    /**
+     * Runs this task at the given frequency.
+     * @param frequency The frequency at which to run the code
+     * @param code The code to run
+     * @throws IllegalStateException Thrown if task is already running
+     */
+    public synchronized final void run(final Duration frequency, final ICode code)
+    {
+        if (!isStarted)
+        {
+            final Runnable runnable = new Runnable()
+            {
+                public void run()
+                {
+                    // Sleep until start time
+                    startTime.fromNow().sleep();
+
+                    while (true)
+                    {
+                        // Get the start of the current period
+                        final Time startOfPeriod = Time.now();
+
+                        try
+                        {
+                            // Run the user's code
+                            code.run(log);
+                        }
+                        catch (Exception e)
+                        {
+                            log.error("Unhandled exception thrown by user code in task " + name, e);
+                        }
+
+                        // Sleep until the period is over (or not at all if it's
+                        // already passed)
+                        startOfPeriod.add(frequency).fromNow().sleep();
+                    }
+                }
+            };
+
+            final Thread thread = new Thread(runnable, name + " Task");
+
+            thread.setDaemon(isDaemon);
+            thread.start();
+
+            isStarted = true;
+        }
+        else
+        {
+            throw new IllegalStateException("Attempt to start task that is already started");
+        }
+    }
+

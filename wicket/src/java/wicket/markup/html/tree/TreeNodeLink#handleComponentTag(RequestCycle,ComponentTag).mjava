@@ -1,0 +1,15 @@
+    /**
+     * @see wicket.Component#handleComponentTag(RequestCycle, ComponentTag)
+     */
+    protected final void handleComponentTag(final RequestCycle cycle, final ComponentTag tag)
+    {
+        // Can only attach links to anchor tags
+        checkTag(tag, "a");
+
+        // Default handling for tag
+        super.handleComponentTag(cycle, tag);
+
+        // Set href to link to this link's linkClicked method
+        tag.put("href", getURL(cycle));
+    }
+

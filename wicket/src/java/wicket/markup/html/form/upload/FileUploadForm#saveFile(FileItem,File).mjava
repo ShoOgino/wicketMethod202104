@@ -1,0 +1,28 @@
+    /**
+     * Saves the uploaded file to disk.
+     * @param item the upload item 
+     * @param targetFile the target file
+     */
+    private void saveFile(final FileItem item, final File targetFile)
+    {
+        final File writeTo;
+        // do some checking: does file allready exist?
+		if (targetFile.exists())
+		{ // file allready does exist
+		    writeTo = fileExistsConflictHandler.getFileForSaving(targetFile);
+		}
+		else
+		{
+		    writeTo = targetFile;
+		}
+
+		try
+        {
+		    item.write(writeTo);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+

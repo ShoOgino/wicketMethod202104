@@ -1,0 +1,33 @@
+    /**
+     * Looks up a page constructor by class name.
+     * @param pageClass The class of page
+     * @param parameter The parameter class for the constructor
+     * @return The page constructor
+     * @throws RenderException
+     */
+    private Constructor getConstructor(final Class pageClass, final Class parameter)
+    {
+        Constructor constructor = (Constructor)constructors.get(pageClass);
+        if (constructor == null)
+        {
+            try
+            {
+            	if(parameter == null)
+            	{
+            		constructor = pageClass.getConstructor(null);
+            	}
+            	else
+            	{
+            		constructor = pageClass.getConstructor(new Class[] { parameter });
+            	}
+            	constructors.put(pageClass, constructor);
+            }
+            catch (NoSuchMethodException e)
+            {
+                throw new RenderException("Could not find page constructor in "
+                        + pageClass, e);
+            }
+        }
+        return constructor;
+    }
+

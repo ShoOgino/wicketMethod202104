@@ -1,0 +1,62 @@
+    /**
+     * Get the formatter for the given name/ pattern/ class/ locale. 1. look in the
+     * ConverterRegistry if a formatter was stored with the formatterName and optionally
+     * locale as key. 2. if not found, look in the ConverterRegistry if a formatter was
+     * stored with the pattern and optionally the locale as key. 3. if not found, look in
+     * the ConverterRegistry if a Converter was stored for the type of the property that
+     * implements Formatter (as well as Converter).
+     * @param formatterName name of formatter
+     * @param pattern pattern: might be used as a key to store a Formatter
+     * @param clazz class of property
+     * @param locale locale to get Formatter for
+     * @return Formatter instance of Formatter if found, null otherwise
+     */
+    private Formatter getFormatter(String formatterName, String pattern, Class clazz, Locale locale)
+    {
+        Formatter formatter = null;
+
+        // first look up on fieldname
+        if (formatterName != null)
+        {
+            formatter = this.converterRegistry.lookup(formatterName);
+        }
+
+        if ((formatter == null) && (pattern != null)) // not found, try pattern
+        {
+            formatter = this.converterRegistry.lookup(pattern);
+        }
+
+        Converter converter = null;
+
+        if ((formatter == null) && (clazz != null)) // not found, try converter
+        {
+            try
+            {
+                converter = this.converterRegistry.lookup(clazz, locale);
+            }
+            catch (NoSuchMethodException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (InstantiationException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (InvocationTargetException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            if ((converter != null) && (converter instanceof Formatter))
+            {
+                formatter = (Formatter) converter;
+            } // else will return null
+        }
+
+        return formatter;
+    }
+

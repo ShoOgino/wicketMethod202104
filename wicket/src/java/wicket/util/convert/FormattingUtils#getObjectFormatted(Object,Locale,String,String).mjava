@@ -1,0 +1,32 @@
+    /**
+     * Formats the given object using the given locale, formatter name and formatter
+     * pattern.
+     * @param object the un-formatted object
+     * @param locale locale
+     * @param formatterName name of formatter
+     * @param formatPattern pattern to be used for formatting
+     * @return value formatted
+     */
+    public String getObjectFormatted(Object object, Locale locale, String formatterName,
+            String formatPattern)
+    {
+        if (object == null)
+        {
+            return null;
+        }
+
+        String formatted = null;
+        Formatter formatter = getFormatter(formatterName, formatPattern, object.getClass(), locale);
+
+        if (formatter != null)
+        {
+            formatted = formatter.format(object, formatPattern);
+        }
+        else
+        {
+            formatted = convertToString(object);
+        }
+
+        return formatted;
+    }
+

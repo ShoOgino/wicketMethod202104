@@ -1,0 +1,39 @@
+    /**
+     * Get recursively all components of the page, extract the information
+     * relevant for us and add them to a list.
+     * 
+     * @param page
+     * @return List of component data objects
+     */
+    private List getComponentData(final Page page)
+    {
+        final List data = new ArrayList();
+        
+        page.visitChildren(new IVisitor()
+        {
+            public Object component(Component component)
+            {
+                final ComponentData object = new ComponentData();
+                
+                // anonymous class? Get the parent's class name
+                String name = component.getClass().getName();
+                if (name.indexOf("$") > 0)
+                {
+                    name = component.getClass().getSuperclass().getName();
+                }
+
+                // remove the path component
+                name = Strings.lastPathComponent(name, '.');
+                
+                object.path = component.getPageRelativePath();
+                object.type = name;
+                object.value = component.getModelObjectAsString();
+                
+                data.add(object);
+                return IVisitor.CONTINUE_TRAVERSAL;
+            }
+        });
+        
+        return data;
+    }
+

@@ -1,0 +1,22 @@
+    /**
+     * Creates a new instance of a page using the given class name.
+     * @param pageClass The class of page to create
+     * @param page Parameter to page constructor
+     * @return The new page
+     * @throws RenderException
+     */
+    protected final Page newPage(final Class pageClass, final Page page)
+    {
+        // Find constructor for page class
+        final Constructor constructor = getConstructor(pageClass, Page.class);
+        if (constructor != null)
+        {
+            return newPage(constructor, page);
+        }
+        else
+        {
+            throw new RenderException("Could not find constructor for page '"
+                    + pageClass + "'");
+        }
+    }
+

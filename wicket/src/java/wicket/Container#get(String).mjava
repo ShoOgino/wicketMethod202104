@@ -1,0 +1,30 @@
+    /**
+     * Get a child component by looking it up with the given path.
+     * @param path Path to component
+     * @return The component at the path
+     */
+    public final Component get(final String path)
+    {
+        // Reference to this container
+        if (path == null || path.trim().equals(""))
+        {
+            return this;
+        }
+
+        // Get child's name, if any
+        final String childName = Strings.firstPathComponent(path, '.');
+
+        // Get child by name
+        final Component child = (Component) childForName.get(childName);
+
+        // Found child?
+        if (child != null)
+        {
+            // Recurse on latter part of path
+            return child.get(Strings.afterFirstPathComponent(path, '.'));
+        }
+
+        // No child by that name
+        return null;
+    }
+

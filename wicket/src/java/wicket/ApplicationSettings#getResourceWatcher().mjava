@@ -1,0 +1,18 @@
+    /**
+     * @return Resource watcher with polling frequency determined by setting,
+     * or null if no polling frequency has been set.
+     */
+    Watcher getResourceWatcher()
+    {
+        if (!triedToCreateResouceWatcher)
+        {
+            final Duration frequency = getResourcePollFrequency();
+            if (frequency != null)
+            {
+                resourceWatcher = new Watcher(frequency);
+            }
+            triedToCreateResouceWatcher = true;
+        }
+        return resourceWatcher;
+    }
+

@@ -1,0 +1,23 @@
+    /**
+     * Returns a timeframe source for a start and end time-of-day. For example, called
+     * with 3pm and 5pm as parameters, the timeframe source returned would produce
+     * timeframe objects representing 3pm-5pm on whatever day it is when the caller calls
+     * the timeframesource interface.
+     * @param startTimeOfDay The start time for this time frame each day
+     * @param endTimeOfDay The end time for this time frame each day
+     * @return A timeframe source which will return the specified timeframe each day
+     */
+    public static ITimeFrameSource eachDay(final TimeOfDay startTimeOfDay,
+            final TimeOfDay endTimeOfDay)
+    {
+        check(startTimeOfDay, endTimeOfDay);
+
+        return new ITimeFrameSource()
+        {
+            public TimeFrame get()
+            {
+                return new TimeFrame(Time.valueOf(startTimeOfDay), Time.valueOf(endTimeOfDay));
+            }
+        };
+    }
+

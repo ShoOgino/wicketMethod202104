@@ -1,0 +1,36 @@
+    /**
+     * Create a new string resource model using the supplied
+     * parameters.
+     * <p>
+     * The relative component parameter should generally
+     * be supplied, as without it resources can not be obtained from
+     * resouce bundles that are held relative to a particular component
+     * or page. However, for application that use only global
+     * resources then this parameter may be null.
+     * <p>
+     * The model parameter is also optional and only needs to be supplied if
+     * value substitutions are to take place on either the resource
+     * key or the actual resource strings.
+     * <p>
+     * The parameters parameter is also optional and is used for
+     * substitutions.
+     *
+     * @param resourceKey The resource key for this string resource
+     * @param relativeComponent The component that the resource is relative to
+     * @param model The model to use for OGNL substitutions
+     * @param parameters The parameters to substitute using a Java MessageFormat object
+     */
+    public StringResourceModel(final String resourceKey,
+                               final Component relativeComponent,
+                               final IModel model,
+                               final Object[] parameters) {
+        super(null);
+        if ( resourceKey == null ) {
+            throw new NullPointerException("Resource key must not be null");
+        }
+        this.resourceKey = resourceKey;
+        this.relativeComponent = relativeComponent;
+        this.model = model;
+        this.parameters = parameters;
+    }
+

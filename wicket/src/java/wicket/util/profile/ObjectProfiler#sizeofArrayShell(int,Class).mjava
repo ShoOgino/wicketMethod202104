@@ -1,0 +1,12 @@
+    /*
+     * Computes the "shallow" size of an array instance.
+     */
+    private static int sizeofArrayShell(final int length, final Class componentType)
+    {
+        // this ignores memory alignment issues by design:
+        final int slotSize = componentType.isPrimitive() ? sizeofPrimitiveType(componentType)
+                : OBJREF_SIZE;
+
+        return OBJECT_SHELL_SIZE + INT_FIELD_SIZE + OBJREF_SIZE + (length * slotSize);
+    }
+

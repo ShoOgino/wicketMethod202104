@@ -1,0 +1,41 @@
+    /**
+     * Renders the close tag at the current position in the markup stream.
+     * @param cycle request cycle
+     * @param markupStream the markup stream
+     * @param openTag the tag to render
+     */
+    final void renderCloseTag(
+            final RequestCycle cycle, final MarkupStream markupStream,
+            final ComponentTag openTag)
+    {
+        // Tag should be open tag and not openclose tag
+        if (openTag.isOpen())
+        {
+            // If we found a close tag and it closes the open tag, we're good
+            if (markupStream.atCloseTag() && markupStream.getTag().closes(openTag))
+            {
+                // Get the close tag from the stream
+                ComponentTag closeTag = markupStream.getTag();
+
+                // If the open tag had its name changed
+                if (openTag.getNameChanged())
+                {
+                    // change the name of the close tag
+                    closeTag = closeTag.mutable();
+                    closeTag.setName(openTag.getName());
+                }
+
+                // Render the close tag
+                renderTag(cycle, markupStream, closeTag);
+            }
+            else
+            {
+                if (openTag.requiresCloseTag())
+                {
+                    // Missing close tag
+                    markupStream.throwMarkupException("Expected close tag for " + openTag);
+                }
+            }
+        }
+    }
+

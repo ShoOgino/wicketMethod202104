@@ -1,0 +1,21 @@
+    /**
+     * Sets the current {@link Locale}and the {@link ConverterRegistry}, and in case the
+     * wrapped model is a {@link IDetachableModel}, calls attach on the wrapped model.
+     * @see wicket.DetachableModel#doAttach(wicket.RequestCycle)
+     */
+    protected final void doAttach(final RequestCycle cycle)
+    {
+        if (model instanceof IDetachableModel)
+        {
+            ((IDetachableModel) model).attach(cycle);
+        }
+
+        // save the reference to the current locale
+        this.locale = cycle.getSession().getLocale();
+
+        ApplicationSettings settings = cycle.getApplication().getSettings();
+
+        // save the reference to the current converter registry instance
+        this.converterRegistry = settings.getConverterRegistry();
+    }
+

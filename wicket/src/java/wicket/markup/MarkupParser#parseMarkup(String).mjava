@@ -1,0 +1,158 @@
+    /**
+     * Scans the given markup string and extracts balancing tags.
+     * @param markup The markup
+     * @return An immutable list of immutable MarkupElement elements
+     * @throws ParseException Thrown if markup is malformed or tags don't balance
+     */
+    private List parseMarkup(final String markup) throws ParseException
+    {
+        // List to return
+        final List list = new ArrayList();
+
+        // Create tag parser
+        setInput(markup);
+
+        // Tag stack to find balancing tags
+        final Stack stack = new Stack();
+
+        // Position in parse
+        int position = 0;
+
+        // Loop through tags
+        for (ComponentTag tag; null != (tag = nextTag());)
+        {
+            if(log.isDebugEnabled())
+            {
+                log.debug("tag: " + tag.toUserDebugString() + ", stack: " + stack);
+            }
+
+            // True if tag should be added to list
+            boolean addTag = false;
+
+            // Check tag type
+            if (tag.type == ComponentTag.OPEN)
+            {
+                // Push onto stack
+                stack.push(tag);
+
+                // We add open tags if they have the componentName attribute set
+                addTag = tag.componentName != null;
+            }
+            else if (tag.type == ComponentTag.CLOSE)
+            {
+                // Check that there is something on the stack
+                if (stack.size() > 0)
+                {
+                    // Pop the top tag off the stack
+                    ComponentTag top = (ComponentTag) stack.pop();
+
+                    // If the name of the current close tag does not match the
+                    // tag on the stack
+                    // then we may have a mismatched close tag
+                    boolean mismatch = !top.getName().equalsIgnoreCase(tag.getName());
+
+                    if (mismatch)
+                    {
+                        // Pop any simple tags off the top of the stack
+                        while (mismatch && !top.requiresCloseTag())
+                        {
+                            // Pop simple tag
+                            top = (ComponentTag) stack.pop();
+
+                            // Does new top of stack mismatch too?
+                            mismatch = !top.getName().equalsIgnoreCase(tag.getName());
+                        }
+
+                        // If adjusting for simple tags did not fix the problem,
+                        // it must be a real mismatch.
+                        if (mismatch)
+                        {
+                            throw new ParseException("Tag "
+                                    + top.toUserDebugString() + " has a mismatched close tag at "
+                                    + tag.toUserDebugString(), tag.getPos());
+                        }
+                    }
+
+                    // Tag matches, so add pointer to matching tag
+                    tag.closes = top;
+
+                    // We want to add the tag if the open Tag on the stack had a
+                    // componentName attribute
+                    addTag = top.componentName != null;
+                }
+                else
+                {
+                    throw new ParseException("Tag "
+                            + tag.toUserDebugString() + " does not have a matching open tag", tag
+                            .getPos());
+                }
+            }
+            else if (tag.type == ComponentTag.OPEN_CLOSE)
+            {
+                // Tag closes itself
+                tag.closes = tag;
+
+                // Does the open tag have the attribute we're looking for?
+                addTag = tag.componentName != null;
+            }
+
+            // Add tag to list?
+            if (addTag)
+            {
+                // Add text from last position to tag position
+                if (tag.getPos() > position)
+                {
+                    String rawMarkup = markup.substring(position, tag.getPos());
+
+                    if (stripComments)
+                    {
+                        rawMarkup = rawMarkup.replaceAll("<!--(.|\n|\r)*?-->", "");
+                    }
+
+                    if (compressWhitespace)
+                    {
+                        rawMarkup = rawMarkup.replaceAll("[ \\t]+", " ");
+                        rawMarkup = rawMarkup.replaceAll("( ?[\\r\\n] ?)+", "\n");
+                    }
+
+                    list.add(new RawMarkup(rawMarkup));
+                }
+
+                // Add immutable tag
+                tag.makeImmutable();
+                list.add(tag);
+
+                // Position is after tag
+                position = tag.getPos() + tag.getLength();
+            }
+        }
+
+        // If there's still a non-simple tag left, it's an error
+        while (stack.size() > 0)
+        {
+            final ComponentTag top = (ComponentTag) stack.peek();
+
+            if (!top.requiresCloseTag())
+            {
+                stack.pop();
+            }
+            else
+            {
+                throw new ParseException("Tag " + top + " at " + top.getPos()
+                        + " did not have a close tag", top.getPos());
+            }
+        }
+
+        // Add tail?
+        if (position < markup.length())
+        {
+            list.add(new RawMarkup(markup.substring(position, markup.length())));
+        }
+
+        // Return immutable list after removing preview components marked by
+        // "[remove]"
+        removePreviewComponents(list);
+
+        return Collections.unmodifiableList(list);
+    }
+

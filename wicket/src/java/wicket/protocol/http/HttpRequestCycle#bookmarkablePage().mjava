@@ -1,0 +1,33 @@
+    /**
+     * Activates a bookmarkable page if one was specified in the request.
+     * @return True if a bookmarkable page was created and returned for the request.
+     * @throws RenderException
+     */
+    private boolean bookmarkablePage()
+    {
+        // Get any component parameter
+        final String pageClassName = request.getParameter("bookmarkablePage");
+
+        if (pageClassName != null)
+        {
+            try
+            {
+                final Class pageClass = Class.forName(pageClassName);
+
+                setPage(newPage(pageClass));
+            }
+            catch (ClassNotFoundException e)
+            {
+                throw new RenderException("Could not find page class '" + pageClassName + "'", e);
+            }
+            catch (RenderException e)
+            {
+                throw new RenderException("Could not create page '" + pageClassName + "'", e);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+

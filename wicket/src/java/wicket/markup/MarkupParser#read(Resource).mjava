@@ -1,0 +1,44 @@
+    /**
+     * Reads and parses markup from a file.
+     * @param resource The file
+     * @return The markup
+     * @throws ParseException
+     * @throws IOException
+     * @throws ResourceNotFoundException
+     */
+    public Markup read(final Resource resource) throws ParseException, IOException,
+            ResourceNotFoundException
+    {
+        // reset: Must come from markup
+        this.encoding = null;
+        
+        try
+        {
+            // read-ahead the input stream, if it starts with <?xml encoding=".." ?>.
+            // If yes, set this.encoding and return the character which follow it.
+            // If not, return the whole line. determineEncoding will read-ahead
+            // at max. the very first line of the markup
+            final String pushBack = determineEncoding(resource.getInputStream());
+
+            // Depending the encoding determine from the markup-file, read
+            // the rest either with specific encoding or JVM default
+            final String markup;
+            if (encoding == null)
+            {
+                // Use JVM default to read the markup
+                markup = pushBack + Streams.readString(resource.getInputStream());
+            }
+            else
+            {
+                // Use the encoding as specific in <?xml encoding=".." ?>
+                markup = Streams.readString(resource.getInputStream(), encoding);
+            }
+
+            return new Markup(resource, parseMarkup(markup));
+        }
+        finally
+        {
+            resource.close();
+        }
+    }
+

@@ -1,0 +1,27 @@
+    /**
+     * Validates the given form component.
+     * @param input the input
+     * @param component The component to validate
+     * @return Error for component or NO_ERROR if none
+     */
+    public ValidationErrorMessage validate(
+            final Serializable input, final FormComponent component)
+    {
+        try
+        {
+            // Get long value
+            final long value = Long.parseLong((String)input);
+
+            if ((value < min) || (value > max))
+            {
+                return errorMessage(input, component);
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            return errorMessage(input, component);
+        }
+
+        return NO_ERROR;
+    }
+

@@ -1,0 +1,19 @@
+    /**
+     * Generate the de-/encryption key
+     * 
+     * @return secretKey
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
+    private final SecretKey generateKey() throws NoSuchAlgorithmException,
+            InvalidKeySpecException
+    {
+        if (this.encryptionKey == null)
+        {
+            this.encryptionKey = "WiCkEt-CrYpT";
+        }
+        
+        final PBEKeySpec spec = new PBEKeySpec(this.encryptionKey.toCharArray());
+        return SecretKeyFactory.getInstance(CRYPT_METHOD).generateSecret(spec);
+    }
+

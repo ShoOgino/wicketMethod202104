@@ -1,0 +1,36 @@
+    /**
+     * Releases the current thread local related resources.
+     * The threadlocal of this request cycle is reset.
+     * If we are in a 'redirect' state, we do not want to loose our messages
+     * as - e.g. when handling a form - there's a fat change we are comming back
+     * for the rendering of it.
+     */
+    private void release()
+    {
+        if(getRedirect())
+        {
+            // Since we are explicitly redirecting to a page already, we do not
+            // want a second redirect to occur automatically
+            setRedirect(false);
+            if(page != null)
+            {
+                page.messages = UIMessages.get();
+                UIMessages.remove(); // only clean thread local; in fact we moved the
+                	// reference from the thread local to the page temporarily
+            }
+            else // hmmm, no page, which probably means we are rendering directely
+                // ourselves; as a fallthrough, we have to clear things up
+            {
+                UIMessages.release(); 
+            }
+        }
+        else
+        {
+            // clear the ui messages and reset the original component models
+            // the components have had the possibility of rendering the messages,
+            // and the messages are meant for 'one time use' only.
+            UIMessages.release();
+        }
+        current.set(null); // reset ThreadLocal reference
+    }
+

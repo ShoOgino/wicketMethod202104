@@ -1,0 +1,25 @@
+    /**
+     * Get the string resource for the given combination of key, locale and style.
+     * The information is obtained from a single application-wide resource
+     * bundle.
+     *
+     * @param component Not used - can be null
+     * @param key The key to obtain the string for
+     * @param locale The locale identifying the resource set to
+     *               select the strings from
+     * @param style The (optional) style identifying the resource
+     *              set to select the strings from
+     * @return The string resource value or null if resource not loaded
+     */
+    public final String get(final Component component, final String key, final Locale locale, final String style) {
+        // Locate previously loaded resources from the cache
+        final String id = createCacheId(style, locale);
+        ValueMap strings = (ValueMap)resourceCache.get(id);
+        if ( strings == null ) {
+            // No resources previously loaded, attempt to load them
+            strings = loadResources(style, locale, id);
+        }
+
+        return strings.getString(key);
+    }
+

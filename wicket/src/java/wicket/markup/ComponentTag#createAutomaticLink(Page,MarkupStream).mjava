@@ -1,0 +1,24 @@
+    /**
+     * Automatically creates a ExternalPageLink component using the tag syntax:
+     * "[autolink:parameters]", where parameters can be a list of comma separated key
+     * value pairs, such as "x=9,y=foo".
+     * @param page The page where the link is
+     * @param markupStream The markup stream to use when throwing any exceptions
+     * @return The component created by the automaticLink component command
+     */
+    public ExternalPageLink createAutomaticLink(
+            final Page page, final MarkupStream markupStream)
+    {
+        // If this tag does not yet know what it's destination class and page
+        // parameters are
+        if (automaticLinkPageClass == null)
+        {
+            // look them up
+            resolveAutomaticLink(page, markupStream);
+        }
+
+        // Create automaticLink bookmark link
+        return new ExternalPageLink(getComponentName(), automaticLinkPageClass,
+                automaticLinkPageParameters);
+    }
+

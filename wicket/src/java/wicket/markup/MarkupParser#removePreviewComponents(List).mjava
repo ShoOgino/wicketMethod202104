@@ -1,0 +1,65 @@
+    /**
+     * Removes components marked as "[remove]" from list. Nested components are not
+     * allowed, for obvious reasons.
+     * @param list The list to process
+     */
+    private void removePreviewComponents(final List list)
+    {
+        // Remove any [remove] components
+        for (int i = 0; i < list.size(); i++)
+        {
+            // Get next element
+            final MarkupElement element = (MarkupElement) list.get(i);
+
+            // If element is a component tag
+            if (element instanceof ComponentTag)
+            {
+                // Check for open tag labelled "[remove]"
+                final ComponentTag openTag = (ComponentTag) element;
+
+                if (openTag.isOpen() && openTag.componentName.equalsIgnoreCase("[remove]"))
+                {
+                    // Remove open tag
+                    list.remove(i);
+
+                    // If a raw markup tag follows (new value at index i after
+                    // deletion)
+                    if ((i < list.size()) && list.get(i) instanceof RawMarkup)
+                    {
+                        // remove any raw markup
+                        list.remove(i);
+                    }
+
+                    // Must have close tag
+                    if ((i < list.size()) && list.get(i) instanceof ComponentTag)
+                    {
+                        // Get close tag
+                        ComponentTag closeTag = (ComponentTag) list.get(i);
+
+                        // Does it close the open tag?
+                        if (closeTag.closes(openTag))
+                        {
+                            // Remove close tag
+                            list.remove(i);
+
+                            // Back up one because i++ is coming at the bottom
+                            // of the loop
+                            // and we still need to process list[i].
+                            i--;
+                        }
+                        else
+                        {
+                            throw new MarkupException("[Remove] open tag "
+                                    + openTag + " not closed by " + list.get(i));
+                        }
+                    }
+                    else
+                    {
+                        throw new MarkupException("[Remove] open tag "
+                                + openTag + " not closed by " + list.get(i));
+                    }
+                }
+            }
+        }
+    }
+

@@ -1,0 +1,41 @@
+    /**
+     * Constructor.
+     * @param componentName Name of this component
+     * @param c Page class
+     */
+    public PageLink(final String componentName, final Class c)
+    {
+        this(componentName, new IPageLink()
+        {
+            /** Serial Version ID */
+			private static final long serialVersionUID = 319659497178801753L;
+
+			public Page getPage()
+            {
+                try
+                {
+                    return (Page) c.newInstance();
+                }
+                catch (InstantiationException e)
+                {
+                    throw new RenderException("Cannot instantiate page class " + c, e);
+                }
+                catch (IllegalAccessException e)
+                {
+                    throw new RenderException("Cannot instantiate page class " + c, e);
+                }
+            }
+
+            public Class getPageClass()
+            {
+                return c;
+            }
+        });
+
+        // Ensure that c is a subclass of Page
+        if (!Page.class.isAssignableFrom(c))
+        {
+            throw new IllegalArgumentException("Class " + c + " is not a subclass of Page");
+        }
+    }
+

@@ -1,0 +1,96 @@
+    /**
+     * Parses the text between tags. For example, "a href=foo.html".
+     * @param tagText The text between tags
+     * @return A new Tag object or null if the tag is invalid
+     */
+    private ComponentTag parseTagText(final String tagText)
+    {
+        // Get the length of the tagtext
+        final int tagTextLength = tagText.length();
+
+        // If we match tagname pattern
+        final WordParser tagnameParser = new WordParser(tagText);
+        final ComponentTag tag = new ComponentTag();
+
+        if (tagnameParser.matcher().lookingAt())
+        {
+            // Extract the tag from the pattern matcher
+            tag.name = tagnameParser.getWord().toLowerCase();
+
+            int pos = tagnameParser.matcher().end(0);
+
+            // Are we at the end? Then there are no attributes, so we just
+            // return the tag
+            if (pos == tagTextLength)
+            {
+                return tag;
+            }
+
+            // Extract attributes
+            final VariableAssignmentParser attributeParser = new VariableAssignmentParser(tagText);
+
+            while (attributeParser.matcher().find(pos))
+            {
+                // Get key and value using attribute pattern
+                String value = attributeParser.getValue();
+
+                // Set new position to end of attribute
+                pos = attributeParser.matcher().end(0);
+
+                // Chop off double quotes
+                if (value.startsWith("\""))
+                {
+                    value = value.substring(1, value.length() - 1);
+                }
+
+                // Trim trailing whitespace
+                value = value.trim();
+
+                // Get key
+                final String key = attributeParser.getKey();
+
+                // If the form <tag id = "wcn-value"> is used
+                boolean wcnId = key.equalsIgnoreCase("id") && value.startsWith(componentNameAttribute + "-");
+
+                if (wcnId)
+                {
+                    // extract component name from value
+                    value = value.substring(componentNameAttribute.length() + 1).trim();
+                }
+
+                // If value is an automaticLink link, like [autolink], then add
+                // automaticLink numbering to keep tag value separate from other
+                // tags
+                if (value.startsWith("[autolink")
+                    && ((value.charAt(9) == ']') || (value.charAt(9) == ':')))
+                {
+                    value += ("-" + autoIndexPrefix + "-" + autoIndex);
+                    autoIndex++;
+                    tag.automaticLink = true;
+                }
+
+                // If user-defined component name attribute is used OR the
+                // standard name ("wcn") is used
+                if (wcnId
+                        || key.equalsIgnoreCase(componentNameAttribute)
+                        || key.equalsIgnoreCase(ComponentTag.wicketComponentNameAttribute))
+                {
+                    // Set componentName value on tag
+                    tag.componentName = value;
+                }
+
+                // Put the attribute in the attributes hash
+                tag.attributes.put(key, StringValue.valueOf(value));
+
+                // The input has to match exactly (no left over junk after
+                // attributes)
+                if (pos == tagTextLength)
+                {
+                    return tag;
+                }
+            }
+        }
+
+        return null;
+    }
+

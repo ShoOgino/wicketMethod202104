@@ -1,0 +1,27 @@
+    /**
+     * Returns a link that will move the given listItem "down" (towards 
+     * the end) in the listView.
+     * 
+     * @param componentName Name of move-down link component to create
+     * @return The link component
+     */
+    public final Link moveDownLink(final String componentName)
+    {
+        final Link link = new Link(componentName)
+        {
+			public void linkClicked(final RequestCycle cycle)
+            {
+                // Swap listeItem and invalidate listView
+                Collections.swap(listView.getList(), index, index + 1);
+                listView.invalidateModel();
+            }
+        };
+
+        if (index == (listView.getList().size() - 1))
+        {
+            link.setVisible(false);
+        }
+
+        return link;
+    }
+

@@ -1,0 +1,25 @@
+    /**
+     * @param source The source attribute of the image tag
+     * @return Gets the image resource to attach to the component.
+     */
+    protected IResource getImageResource(final String source)
+    {
+        return new IResource()
+        {
+            public void close() throws IOException
+            {
+                inputStream.close();
+            }
+
+            public String getExtension()
+            {
+                return extension;
+            }
+
+            public InputStream getInputStream() throws ResourceNotFoundException
+            {
+                return inputStream;
+            }
+        };
+    }
+

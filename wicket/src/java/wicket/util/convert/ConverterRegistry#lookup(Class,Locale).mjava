@@ -1,0 +1,86 @@
+    /**
+     * Look up and return any registered {@link Converter}for the specified destination
+     * class and locale. If there is no registered Converter, return an instance of
+     * NoopConverter if returnNoopConverterWhenNotFound == true or else <code>null</code>.
+     * Precedence: if a locale is given the first search is for a converter that was
+     * registered for the given type and locale. If it is not found, the second search is
+     * for any converter of the type LocaleConverter that was registered for the given
+     * type. If it is found, a new instance will be created for the given locale, the
+     * pattern will be copied if possible and the newly instantiated converter will be
+     * registered for the given type and locale (and thus will be found at the first
+     * search next time). If it is not found, the search is the same as when no locale was
+     * given (locale == null): the 'normal', not localized registry will be searched for
+     * an entry with the given type. If still no Converter is found after this, and
+     * returnNoopConverterWhenNotFound is true an instance of NoopConverter is returned,
+     * so that clients allways get a valid converter. If returnNoopConverterWhenNotFound
+     * is false, null will be returned.
+     * @param clazz Class for which to return a registered Converter
+     * @param locale The Locale
+     * @return Converter converter
+     * @throws NoSuchMethodException
+     * @throws IllegalArgumentException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public Converter lookup(Class clazz, Locale locale) throws NoSuchMethodException,
+            IllegalArgumentException, InstantiationException, IllegalAccessException,
+            InvocationTargetException
+    {
+        Converter converter = null;
+
+        if (locale != null)
+        {
+            String lockey = getLocKey(clazz, locale);
+
+            // first try registration for specific locale
+            converter = (LocaleConverter) localizedConverters.get(lockey);
+
+            if (converter == null) // not found, try generic localized// registration
+            {
+                LocaleConverter _converter = (LocaleConverter) localizedConverters.get(clazz);
+
+                // if found, instantiate a localized one and store for next use
+                if (_converter != null)
+                {
+                    Class cls = _converter.getClass();
+                    Class[] paramTypes = new Class[] {Locale.class};
+                    Constructor constructor = cls.getConstructor(paramTypes);
+                    Object[] initArgs = new Object[] {locale};
+
+                    // create new instance for this locale
+                    LocaleConverter _newConverter = (LocaleConverter) constructor
+                            .newInstance(initArgs);
+
+                    // try to copy the pattern
+                    if ((_converter instanceof BaseLocaleConverter)
+                            && (_newConverter instanceof BaseLocaleConverter))
+                    {
+                        String pattern = ((BaseLocaleConverter) _converter).getPattern();
+
+                        ((BaseLocaleConverter) _newConverter).setPattern(pattern);
+                    }
+
+                    // else: too bad, but it's probably not a problem
+                    // register the new instance for this locale
+                    localizedConverters.put(lockey, _newConverter);
+                    converter = _newConverter;
+                }
+            }
+        }
+
+        // else // get without locale right away
+        if (converter == null) // (still) not found, try generic non-localized//
+                               // registration
+        {
+            converter = (Converter) converters.get(clazz);
+        }
+
+        if ((converter == null) && useNoopConverter) // STILL not found; return// no-op
+        {
+            converter = NOOP_CONVERTER;
+        }
+
+        return converter;
+    }
+

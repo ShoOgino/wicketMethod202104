@@ -1,0 +1,42 @@
+    /*
+     * Performs phase 2 of profile creation: totalling of node sizes (via non-recursive
+     * post-order traversal of the tree created in phase 1) and 'locking down' of profile
+     * nodes into their most compact form.
+     */
+    private static void finishProfileTree(ObjectProfileNode node)
+    {
+        final LinkedList queue = new LinkedList();
+        IObjectProfileNode lastFinished = null;
+
+        while (node != null)
+        {
+            // note that an unfinished non-shell node has its child count
+            // in m_size and m_children[0] is its shell node:
+            if ((node.m_size == 1) || (lastFinished == node.m_children[1]))
+            {
+                node.finish();
+                lastFinished = node;
+            }
+            else
+            {
+                queue.addFirst(node);
+
+                for (int i = 1; i < node.m_size; ++i)
+                {
+                    final IObjectProfileNode child = node.m_children[i];
+
+                    queue.addFirst(child);
+                }
+            }
+
+            if (queue.isEmpty())
+            {
+                return;
+            }
+            else
+            {
+                node = (ObjectProfileNode) queue.removeFirst();
+            }
+        }
+    }
+

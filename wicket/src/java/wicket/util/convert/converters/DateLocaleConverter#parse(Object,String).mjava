@@ -1,0 +1,33 @@
+    /**
+     * Convert the specified locale-sensitive input object into an output object of the
+     * specified type.
+     * @param value The input object to be converted
+     * @param pattern The pattern is used for the convertion
+     * @return converted object
+     * @exception ConversionException if conversion cannot be performed successfully
+     */
+    protected Object parse(Object value, String pattern) throws ConversionException
+    {
+        DateFormat formatter = getFormat(pattern, locale);
+
+        try
+        {
+            return formatter.parse((String) value);
+        }
+        catch (ParseException e)
+        {
+            String dpat = null;
+
+            if (pattern != null)
+            {
+                dpat = pattern;
+            }
+            else if (formatter instanceof SimpleDateFormat)
+            {
+                dpat = ((SimpleDateFormat) formatter).toLocalizedPattern();
+            }
+
+            throw new ConversionException(e).setPattern(dpat);
+        }
+    }
+

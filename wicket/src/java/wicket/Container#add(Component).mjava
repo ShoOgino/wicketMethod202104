@@ -1,0 +1,49 @@
+    /**
+     * Adds a child component to this container.
+     * @param child The child
+     * @throws IllegalArgumentException Thrown if a child with the same name is replaced
+     *             by the add operation.
+     * @return This
+     */
+    public Container add(final Component child)
+    {
+        // Get child name
+        final String childName = child.getName();
+
+        if(log.isDebugEnabled())
+        {
+            log.debug("Add " + childName + " to " + this);
+        }
+
+        // Set child's parent
+        child.setParent(this);
+
+        // Are we using MicroMap optimization?
+        if (optimizeChildMapsForSpace)
+        {
+            if (childForName.size() == MicroMap.MAX_ENTRIES)
+            {
+                // Reallocate MicroMap as MiniMap
+                childForName = new MiniMap(childForName, MINIMAP_MAX_ENTRIES);
+            }
+            else if (childForName.size() == MINIMAP_MAX_ENTRIES)
+            {
+                // Reallocate MiniMap as full HashMap
+                childForName = new HashMap(childForName);
+            }
+        }
+
+        // Add to map
+        final Object replaced = childForName.put(childName, child);
+
+        // Look up to make sure it's not already in the map
+        if (replaced != null)
+        {
+            throw new IllegalArgumentException(exceptionMessage(
+                    "A child component with the name '"
+                    + childName + "' already exists"));
+        }
+
+        return this;
+    }
+

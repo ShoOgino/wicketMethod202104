@@ -1,0 +1,20 @@
+    /**
+     * Renders this container to the given wicket.response object.
+     * @param cycle The wicket.response to write to
+     */
+    protected void handleRender(final RequestCycle cycle)
+    {
+    	configureResponse(cycle);
+    	
+        // Check access to page
+        if (checkAccess(cycle))
+        {
+            // Set page's associated markup stream
+            final MarkupStream markupStream = getAssociatedMarkupStream();
+            setMarkupStream(markupStream);
+
+            // Render all the page's markup
+            renderAll(cycle, markupStream);
+        }
+    }
+

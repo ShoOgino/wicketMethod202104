@@ -1,0 +1,71 @@
+    /**
+     * Encodes a markup string using HTML entities where appropriate
+     * @param s The string to remove HTML from
+     * @param escapeSpaces True to replace ' ' with nonbreaking space
+     * @return The escaped string
+     */
+    public static String escapeMarkup(final String s, final boolean escapeSpaces)
+    {
+        if (s == null)
+        {
+            return null;
+        }
+        else
+        {
+            final StringBuffer buffer = new StringBuffer();
+
+            for (int i = 0; i < s.length(); i++)
+            {
+                final char c = s.charAt(i);
+
+                switch (c)
+                {
+                    case '\t':
+
+                        if (escapeSpaces)
+                        {
+                            // Assumption is four space tabs (sorry, but that's just
+                            // how it is!)
+                            buffer.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                        }
+                        else
+                        {
+                            buffer.append(c);
+                        }
+
+                        break;
+
+                    case ' ':
+
+                        if (escapeSpaces)
+                        {
+                            buffer.append("&nbsp;");
+                        }
+                        else
+                        {
+                            buffer.append(c);
+                        }
+
+                        break;
+
+                    case '<':
+                        buffer.append("&lt;");
+
+                        break;
+
+                    case '>':
+                        buffer.append("&gt;");
+
+                        break;
+
+                    default:
+                        buffer.append(c);
+
+                        break;
+                }
+            }
+
+            return buffer.toString();
+        }
+    }
+

@@ -1,0 +1,21 @@
+    /**
+     * format value with pattern or using the default pattern
+     * @see wicket.util.convert.Formatter#format(java.lang.Object, java.lang.String)
+     */
+    public String format(Object value, String pattern) throws IllegalArgumentException
+    {
+        DateFormat format = getFormat(pattern, locale);
+        Date date = null;
+
+        if (value instanceof Date)
+        {
+            date = (Date) value;
+        }
+        else
+        {
+            date = (Date) convert(Date.class, value);
+        }
+
+        return format.format(date);
+    }
+

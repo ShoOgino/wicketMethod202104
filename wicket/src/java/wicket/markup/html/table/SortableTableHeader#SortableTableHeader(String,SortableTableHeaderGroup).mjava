@@ -1,0 +1,31 @@
+    /**
+     * Constructor.
+     *
+     * @param componentName The name of this component
+     * @param group
+     */
+    public SortableTableHeader(final String componentName,
+            final SortableTableHeaderGroup group)
+    {
+        super(componentName);
+
+        // Default to descending. Next/first linkClick will make it ascending
+        this.ascending = false;
+        this.group = group;
+
+        final SortableTableHeader me = this;
+
+        // Action link to define a linkClicked action
+        add(new Link("actionLink")
+        {
+            public void linkClicked(final RequestCycle cycle)
+            {
+                // call SortableTableHeaders implementation
+                me.linkClicked(cycle);
+
+                // Redirect back to result to avoid refresh updating the link count
+                cycle.setRedirect(true);
+            }
+        });
+    }
+

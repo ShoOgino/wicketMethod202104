@@ -1,0 +1,77 @@
+    /**
+     * Resolves the given tag's automaticLinkPageClass and automaticLinkPageParameters
+     * variables by parsing the tag component name and then searching for a page class at
+     * the relative URL specified by the href attribute of the tag. The href URL is
+     * relative to the package containing the page where this component is contained.
+     * @param page The page where the link is
+     * @param markupStream Markup stream to use when throwing any exceptions
+     */
+    private void resolveAutomaticLink(final Page page, final MarkupStream markupStream)
+    {
+        // Get component name attribute
+        final String componentName = getComponentName();
+
+        // Get any automaticLink component
+        final Matcher matcher = automaticComponentPattern.matcher(componentName);
+
+        if (matcher.matches())
+        {
+            final String command = automaticCommand.get(matcher);
+            final String parameters = automaticParameters.get(matcher);
+
+            if (command.equals("autolink"))
+            {
+                // Must be anchor tag
+                if (!getName().equalsIgnoreCase("a"))
+                {
+                    markupStream.throwMarkupException(
+                            "Automatic link can only be attached to an anchor tag");
+                }
+
+                // Must have href value
+                final String href = getAttributes().getString("href");
+
+                if (href == null)
+                {
+                    markupStream.throwMarkupException(
+                            "Automatic link requires href attribute");
+                }
+
+                // Find class relative to current package
+                final String path = Strings.stripEnding(href, ".html");
+
+                try
+                {
+                    automaticLinkPageClass = Classes.relativeClass(
+                            page.getClass().getPackage(), path);
+
+                    if (parameters != null)
+                    {
+                        automaticLinkPageParameters = new PageParameters(parameters);
+                    }
+                    else
+                    {
+                        automaticLinkPageParameters = PageParameters.NULL;
+                    }
+                }
+                catch (ClassNotFoundException e)
+                {
+                    markupStream.throwMarkupException("Could not find page at " + path);
+                }
+            }
+            else
+            {
+                if (!command.equals("children") && !command.equals("border"))
+                {
+                    markupStream.throwMarkupException(
+                            "Special component names include [border], [body] and [autolink], "
+                            + "but not '" + command + "'");
+                }
+            }
+        }
+        else
+        {
+            markupStream.throwMarkupException("Invalid syntax for automaticLink component");
+        }
+    }
+

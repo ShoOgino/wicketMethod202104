@@ -1,0 +1,21 @@
+    /** 
+     * Gets the messages for the calling Thread. The current messages are lazily
+     * constructed (thus created on the first call to this method within a request)
+     * and are stored in a thread local variable.
+     * @return the messages for the calling Thread
+     */
+    public static UIMessages get()
+    {
+        UIMessages currentMessages = (UIMessages)current.get();
+        if(currentMessages == null)
+        {
+            currentMessages = new UIMessages();
+            current.set(currentMessages);
+            if(log.isDebugEnabled())
+            {
+                log.debug("UIMessages created for thread " + Thread.currentThread());
+            }
+        }
+        return currentMessages;
+    }
+

@@ -1,0 +1,43 @@
+    /**
+     * @see wicket.Component#handleBody(RequestCycle, MarkupStream,
+     *      ComponentTag)
+     */
+    protected final void handleBody(final RequestCycle cycle, final MarkupStream markupStream,
+            final ComponentTag openTag)
+    {
+        // Get disabled component of the same name with "Disabled" appended
+        final Container disabledContainer = (Container) get("disabled");
+
+        if (disabledContainer != null)
+        {
+            // Get enabled container
+            final Container enabledContainer = (DisabledLink) get("enabled");
+
+            // Set visibility of enabled and disabled children
+            enabledContainer.setVisible(enabled);
+            disabledContainer.setVisible(!enabled);
+        }
+
+        // Set default for before/after link text
+        if (beforeDisabledLink == null)
+        {
+            beforeDisabledLink = getApplicationSettings().getDefaultBeforeDisabledLink();
+            afterDisabledLink = getApplicationSettings().getDefaultAfterDisabledLink();
+        }
+
+        // Draw anything before the body?
+        if (!enabled && (beforeDisabledLink != null))
+        {
+            cycle.getResponse().write(beforeDisabledLink);
+        }
+
+        // Render the body of the link
+        renderBody(cycle, markupStream, openTag);
+
+        // Draw anything after the body?
+        if (!enabled && (afterDisabledLink != null))
+        {
+            cycle.getResponse().write(afterDisabledLink);
+        }
+    }
+

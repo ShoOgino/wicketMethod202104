@@ -1,0 +1,67 @@
+    /**
+     * Interpolate using variables
+     * @return The interpolated string
+     */
+    public String toString()
+    {
+        // Result buffer
+        final StringBuffer buffer = new StringBuffer();
+
+        // For each occurrences of "${"
+        int start;
+        int pos = 0;
+
+        while ((start = string.indexOf("${", pos)) != -1)
+        {
+            // Append text before possible variable
+            buffer.append(string.substring(pos, start));
+
+            // Position is now where we found the "${"
+            pos = start;
+
+            // Get start and end of variable name
+            final int startVariableName = start + 2;
+            final int endVariableName = string.indexOf('}', startVariableName);
+
+            // Found a close brace?
+            if (endVariableName != -1)
+            {
+                // Get variable name inside brackets
+                final String variableName = string.substring(startVariableName, endVariableName);
+
+                // Get value of variable
+                final String value = getValue(variableName);
+
+                // If there's no value
+                if (value == null)
+                {
+                    // Leave variable uninterpolated, allowing multiple
+                    // interpolators to
+                    // do their work on the same string
+                    buffer.append("${" + variableName + "}");
+                }
+                else
+                {
+                    // Append variable value
+                    buffer.append(value);
+                }
+
+                // Move past variable
+                pos = endVariableName + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // Append anything that might be left
+        if (pos < string.length())
+        {
+            buffer.append(string.substring(pos));
+        }
+
+        // Convert result to String
+        return buffer.toString();
+    }
+

@@ -1,0 +1,58 @@
+    /**
+     * Get the string currently represented by this string resource model.
+     * The string that is returned may vary for each call to this method
+     * depending on the values contained in the model and an the
+     * parameters that were passed when this string resource model
+     * was created.
+     *
+     * @return The string
+     */
+    public final String getString() {
+        Component c = getRelativeComponent();
+
+        // Make sure we have a localizer before commencing
+        if ( getLocalizer() == null ) {
+            if ( c != null ) {
+                setLocalizer(c.getLocalizer());
+            }
+            else {
+                throw new IllegalStateException("No localizer has been set");
+            }
+        }
+
+        // Get the string resource, doing any OGNL substitutions as part
+        // of the get operation
+        String s = localizer.getString(getResourceKey(), c, getModel());
+
+        // Substitute any parameters if necessary
+        Object[] parameters = getParameters();
+        if ( parameters != null ) {
+            // Build the real parameters
+            Object[] realParams = new Object[parameters.length];
+            for ( int i = 0; i < parameters.length; i++ ) {
+                if ( parameters[i] instanceof IModel ) {
+                    realParams[i] = ((IModel)parameters[i]).getObject();
+                }
+                else if ( model != null && parameters[i] instanceof String ) {
+                    realParams[i] = OgnlVariableInterpolator.interpolate(
+                                            (String)parameters[i], model.getObject());
+                }
+                else {
+                    realParams[i] = parameters[i];
+                }
+            }
+
+            // Apply the parameters
+            Locale workingLocale = locale;
+            if ( c != null ) {
+                // Use component locale out of preference
+                workingLocale = c.getLocale();
+            }
+            MessageFormat format = new MessageFormat(s, workingLocale);
+            s = format.format(realParams);
+        }
+
+        // Return the string resource
+        return s;
+    }
+

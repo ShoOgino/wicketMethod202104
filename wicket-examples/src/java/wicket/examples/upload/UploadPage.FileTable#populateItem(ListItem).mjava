@@ -1,0 +1,26 @@
+        /**
+         * @see wicket.markup.html.table.Table#populateCell(wicket.markup.html.table.Cell)
+         */
+        protected void populateItem(ListItem listItem)
+        {
+            final String fileName = (String)listItem.getModelObject();
+            listItem.add(new Label("file", fileName));
+            listItem.add(new Link("delete") {
+                
+                public void linkClicked(RequestCycle cycle)
+                {
+                    File toDelete = new File(tempDir, fileName);
+                    log.info("delete " + toDelete);
+                    toDelete.delete();
+                    try 
+                    {
+                        Thread.sleep(100); // wait for file lock (Win issue)
+                    }
+                    catch (InterruptedException e)
+                    {
+                    }
+                    refreshFiles();
+                } 
+            });
+        }
+

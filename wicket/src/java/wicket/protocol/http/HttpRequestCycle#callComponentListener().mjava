@@ -1,0 +1,127 @@
+    /**
+     * Calls a component listener interface on a page that already exists in the session.
+     * The session component is found using the path in the 'component' parameter of the
+     * request. The interface method to be called is determined by the 'interface'
+     * parameter of the request. The interface can only be one of the interfaces listed in
+     * the secureInterfaceMethods map in the RequestDispatcher implementation.
+     * @return True if the component listener was successfully called
+     * @throws RenderException
+     */
+    private boolean callComponentListener()
+    {
+        // Get any component parameter
+        final String path = request.getParameter("component");
+
+        if (path != null)
+        {
+            // Get page where component resides
+            code.debug("Getting page " + path);
+
+            // Get page from path
+            final Page page = session.getPage(path);
+
+            // Get the rendering of the page
+            final int rendering = Integer.parseInt(request.getParameter("rendering"));
+
+            // Does page exist?
+            if (page != null)
+            {
+                // Is page stale?
+                if (page.isStale())
+                {
+                    // Page was marked stale because the data model for some
+                    // component on the page is stale
+                    // Find the most recent fresh page and send the user there
+                    final Page freshestPage = session.getFreshestPage();
+
+                    if (freshestPage != null)
+                    {
+                        setPage(newPage(application.getSettings().getStaleDataErrorPage(),
+                                freshestPage));
+                    }
+                    else
+                    {
+                        setPage(newPage(application.getSettings().getHomePage()));
+                    }
+
+                    return true;
+                }
+                else if (page.isRenderingStale(rendering))
+                {
+                    // Just a particular rendering of the page is stale, so send
+                    // the user back to the page
+                    setPage(newPage(application.getSettings().getStaleDataErrorPage(), page));
+
+                    return true;
+                }
+                else
+                {
+                    // Get the component at the given path on the page
+                    final Component component = page
+                            .get(Strings.afterFirstPathComponent(path, '.'));
+
+                    // Got component?
+                    if (component != null)
+                    {
+                        // Set the page for the component as the wicket.response page
+                        // and expire any
+                        // pages in the session cache that are newer than the
+                        // given page since
+                        // they will no longer be accessible.
+                        setPage(page);
+                        session.expireNewerThan(page);
+
+                        // Look up interface to call
+                        final String interfaceName = request.getParameter("interface");
+                        final Method method = getInterfaceMethod(interfaceName);
+
+                        try
+                        {
+                            // Invoke the interface method on the component
+                            method.invoke(component, new Object[] {this});
+                        }
+                        catch (IllegalAccessException e)
+                        {
+                            throw new RenderException("Cannot access method "
+                                    + method + " of interface " + interfaceName, e);
+                        }
+                        catch (InvocationTargetException e)
+                        {
+                            throw new RenderException("Method "
+                                    + method + " of interface " + interfaceName
+                                    + " threw an exception", e);
+                        }
+
+                        // Set form component values from cookies
+                        setFormComponentValuesFromCookies(page);
+                        return true;
+                    }
+                    else
+                    {
+                        // If the page is in the session and is not stale, then
+                        // the
+                        // component in question should exist. Therefore, we
+                        // should not
+                        // get here. So it must be an internal error of some
+                        // kind or
+                        // someone is hacking around with URLs in their browser.
+                        code.error("No component found for " + path);
+                        setPage(newPage(application.getSettings().getInternalErrorPage()));
+
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                // Page was expired from session, probably because backtracking
+                // limit was reached
+                setPage(newPage(application.getSettings().getPageExpiredErrorPage()));
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+

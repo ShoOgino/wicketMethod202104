@@ -1,0 +1,26 @@
+    /**
+     * Convenience method that gets the set of reporters of messages that
+     * are of the ERROR level or above.
+     * @return the set of reporters of messages that are of the ERROR level or above
+     */
+    public Set getErrorReporters()
+    {
+        if(messages != null)
+        {
+            Set subset = new HashSet();
+            for(Iterator i = messages.iterator(); i.hasNext();)
+            {
+                UIMessage message = (UIMessage)i.next();
+                if(message.isLevel(UIMessage.ERROR))
+                {
+                    subset.add(message.getReporter());
+                }
+            }
+            return subset;
+        }
+        else
+        {
+            return Collections.EMPTY_SET;
+        }
+    }
+
