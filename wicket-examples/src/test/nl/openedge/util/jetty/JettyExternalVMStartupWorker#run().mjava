@@ -1,0 +1,25 @@
+	/**
+	 * Ping Jetty tot succes of max tries.
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run()
+	{
+
+		try
+		{
+			// start Jetty in another VM
+			startExternalJettyInstance();
+		}
+		catch (IOException e)
+		{
+			log.error(e.getMessage(), e);
+		}
+
+		// ping the remote monitor for startup of Jetty
+		jettyStarted = JettyHelper.pingMonitorForServerStarted(commKey, "127.0.0.1",
+				monitorPort, maxTries, sleepBetweenTries);
+		// if we get here, jetty started up successfully
+		log.info("monitor acknowledged Jetty startup");
+	}
+

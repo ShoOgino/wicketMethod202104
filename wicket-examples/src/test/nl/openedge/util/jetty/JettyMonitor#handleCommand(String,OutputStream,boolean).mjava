@@ -1,0 +1,28 @@
+	/**
+	 * Handle given command.
+	 * 
+	 * @param cmd
+	 *            the command to handle
+	 * @param socketOutputStream
+	 *            output stream of socket
+	 * @param goOn
+	 *            current value of goOn
+	 * @return value of goOn, possibly changed
+	 * @throws IOException
+	 */
+	private boolean handleCommand(String cmd, OutputStream socketOutputStream, boolean goOn)
+			throws IOException
+	{
+		log.info("handle command '" + cmd + "'");
+		if ("stop".equals(cmd))
+		{
+			handleStopCommand(socketOutputStream);
+			goOn = false;
+		}
+		else if ("status".equals(cmd))
+		{
+			handleStatusCommand(socketOutputStream);
+		}
+		return goOn;
+	}
+

@@ -1,0 +1,22 @@
+	/**
+	 * Start Jetty.
+	 * 
+	 * @throws Exception
+	 * @see junit.extensions.TestSetup#setUp()
+	 */
+	public void setUp() throws Exception
+	{
+		// start Jetty
+		if (getJettyConfig() != null)
+		{
+			// start Jetty with config document
+			jettyServer = JettyHelper.startJetty(getJettyConfig(), isUseJettyPlus());
+		}
+		else
+		{
+			// start Jetty with arguments (port etc.)
+			jettyServer = JettyHelper.startJetty(getPort(), getWebappContextRoot(),
+					getContextPath(), isUseJettyPlus());
+		}
+	}
+

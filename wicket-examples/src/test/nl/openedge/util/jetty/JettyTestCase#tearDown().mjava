@@ -1,0 +1,17 @@
+	/**
+	 * Stop Jetty; inhereting classes can override methods beforeTearDown and afterTearDown for test
+	 * case specific behaviour.
+	 * 
+	 * @throws Exception
+	 */
+	public final void tearDown() throws Exception
+	{
+		// first let current test case tear down fixture
+		beforeTearDown();
+		log.info("Stopping Jetty");
+		jettyServer.stop();
+		log.info("Jetty stopped");
+		// call for further tear down
+		afterTearDown();
+	}
+

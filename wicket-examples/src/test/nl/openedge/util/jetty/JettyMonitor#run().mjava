@@ -1,0 +1,23 @@
+	/**
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run()
+	{
+		log.info("Starting Jetty Monitor on port " + monitorPort);
+		createServerSocket();
+		log.info("Socket created");
+		// listen to incomming connections until stop command is issued (method blocks)
+		listen();
+		try
+		{
+			// exiting... close server socket
+			serverSocketChanel.close();
+		}
+		catch (IOException e)
+		{
+			log.error(e.getMessage(), e);
+		}
+		log.info("exiting monitor and VM");
+		System.exit(0);
+	}
+
