@@ -11,32 +11,17 @@
 	{
 		int size = this.viewSize;
 
-		// If model object (list view) == null and viewSize has not been
-		// deliberately changed, than size = 0.
-		Object modelObject = getModelObject();
-		if ((modelObject == null) && (viewSize == Integer.MAX_VALUE))
+		// Adjust view size to model object's list size
+		final Object modelObject = getModelObject();
+		final int modelSize = getList().size();
+		if (firstIndex > modelSize)
 		{
-			size = 0;
+			return 0;
 		}
-		else if (modelObject instanceof List)
-		{
-			// Adjust view size to model object's list size
-			final int modelSize = ((List)modelObject).size();
-			if (firstIndex > modelSize)
-			{
-				return 0;
-			}
 
-			if ((size == Integer.MAX_VALUE) || ((firstIndex + size) > modelSize))
-			{
-				size = modelSize - firstIndex;
-			}
-		}
-		else if (viewSize == Integer.MAX_VALUE)
+		if ((size == Integer.MAX_VALUE) || ((firstIndex + size) > modelSize))
 		{
-			// The model is not a list and size is not set; probably an error
-			log.warn("model object (" + modelObject
-					+ ") is not a List and the view size is not explicitly set");
+			size = modelSize - firstIndex;
 		}
 
 		// firstIndex + size must be smaller than Integer.MAX_VALUE

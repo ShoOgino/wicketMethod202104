@@ -2,19 +2,23 @@
 	 * Returns a link that will move the given listItem "up" (towards the
 	 * beginning) in the listView.
 	 * 
-	 * @param componentId
+	 * @param componentName
 	 *            Name of move-up link component to create
+	 * @param item
 	 * @return The link component
 	 */
-	public final Link moveUpLink(final String componentId)
+	public final Link moveUpLink(final String componentName, final ListItem item)
 	{
-		final Link link = new Link(componentId)
+		final int index = getList().indexOf(item.getModelObject());
+		final Link link = new Link(componentName)
 		{
 			public void onClick()
 			{
 				// Swap listItems and invalidate listView
-				listView.modelChangeImpending();
-				Collections.swap(listView.getList(), index, index - 1);
+				Collections.swap(getList(), index, index - 1);
+				
+				// Make sure you re-render the list properly
+				ListView.this.removeAll();
 			}
 		};
 

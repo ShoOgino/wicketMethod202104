@@ -1,8 +1,24 @@
 	/**
 	 * @see wicket.Component#Component(String, IModel)
 	 */
-	public ListView(final String id, IModel model)
+	public ListView(final String componentName, final IModel model)
 	{
-		super(id, model);
+		super(componentName, model);
+
+		if (model != null)
+		{
+			if (getModelObject() == null)
+			{
+				this.setModelObject(Collections.EMPTY_LIST);
+			}
+			else if (!(getModelObject() instanceof List))
+			{
+				throw new IllegalArgumentException("A ListView model object must be of type List");
+			}
+		}
+
+		// A reasonable default for viewSize can not be determined right now,
+		// because list items might be added or removed until ListView
+		// gets rendered.
 	}
 

@@ -1,0 +1,23 @@
+    /**
+     * Subclass Table's newCell() and return a ListItem which will add/modify its
+     * class attribute and thus provide ListItems with alternating row colours.
+     * 
+     * See wicket.markup.html.table.Table#newItem(int)
+     * @param index Index of item 
+     * @return List item
+     */
+    protected ListItem getNewListItem(final int index)
+    {
+		return new ListItem(index, getListItemModel(getModel(), index))
+	        {
+	            protected void onComponentTag(final ComponentTag tag)
+	            {
+	                // add/modify the attribute controlling the CSS style
+	                tag.put("class", (getIndex() % 2) == 0 ? "even" : "odd");
+	                
+	                // continue with default behaviour
+	                super.onComponentTag(tag);
+	            }
+	        };
+    }
+
