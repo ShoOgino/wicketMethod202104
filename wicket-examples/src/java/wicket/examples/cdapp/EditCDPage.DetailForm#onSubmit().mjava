@@ -4,6 +4,7 @@
 		public void onSubmit()
 		{
 			CD cd = (CD)getModelObject();
+			boolean isNew = (cd.getId() == null);
 			// note that, as we used the Ognl property model, the fields are
 			// allready updated
 			Session session = null;
@@ -17,6 +18,11 @@
 				// set message for search page to display on next rendering
 				searchCDPage.setInfoMessageForNextRendering("cd " + cd.getTitle() + " saved");
 				searchCDPage.modelChangedStructure(); // force reload of data
+				if (isNew)
+				{
+					// if it was a new cd, set the search page to page 1
+					searchCDPage.setCurrentResultPageToFirst();
+				}
 				getRequestCycle().setPage(searchCDPage); // navigate back to search page
 			}
 			catch (HibernateException e)
