@@ -2,8 +2,7 @@
 		 * Validates all children of this form, recording all messages that are
 		 * returned by the validators.
 		 * 
-		 * @param form
-		 *            the form that the validation is applied to
+		 * @param form the form that the validation is applied to
 		 * @return the list of validation messages that were recorded during
 		 *         validation
 		 */
@@ -14,7 +13,9 @@
 			{
 				public Object component(final Component component)
 				{
-					final ValidationErrorMessage message = ((FormComponent)component).validate();
+					FormComponent formComponent = (FormComponent)component;
+					final ValidationErrorMessage message = (formComponent).validate();
+
 					if (message != ValidationErrorMessage.NO_MESSAGE)
 					{
 						if (log.isDebugEnabled())
@@ -22,12 +23,13 @@
 							log.debug("validation error: " + message);
 						}
 						messages.add(message);
-
-						// Replace the model
-						// TODO examine any easy ways to avoid this
-						ValidationErrorModelDecorator deco = new ValidationErrorModelDecorator(
-								component, message.getInput());
-						component.setModel(deco);
+						formComponent.setValid(false);
+						formComponent.invalid();
+					}
+					else
+					{
+						formComponent.setValid(true);
+						// set explicitly to reset any old value
 					}
 
 					// Continue until the end

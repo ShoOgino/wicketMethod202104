@@ -1,13 +1,20 @@
-    /**
+	/**
 	 * Processes the component tag.
 	 * @param tag Tag to modify
-     * @see wicket.Component#handleComponentTag(ComponentTag)
-     */
-    protected void handleComponentTag(final ComponentTag tag)
-    {
-        checkTag(tag, "input");
-        checkAttribute(tag, "type", "text");
-        super.handleComponentTag(tag);
-        tag.put("value", getModelObjectAsString());
-    }
+	 * @see wicket.Component#handleComponentTag(ComponentTag)
+	 */
+	protected void handleComponentTag(final ComponentTag tag)
+	{
+		checkTag(tag, "input");
+		checkAttribute(tag, "type", "text");
+		super.handleComponentTag(tag);
+		if(invalidInput == null) // no validation errors
+		{
+			tag.put("value", getModelObjectAsString());
+		}
+		else // invalid input detected
+		{
+			tag.put("value", invalidInput);
+		}
+	}
 

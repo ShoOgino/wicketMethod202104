@@ -1,11 +1,20 @@
-    /**
+	/**
 	 * Handle the container's body.
 	 * @param markupStream The markup stream
 	 * @param openTag The open tag for the body
-     * @see wicket.Component#handleBody(MarkupStream, ComponentTag)
-     */
-    protected void handleBody(final MarkupStream markupStream, final ComponentTag openTag)
-    {
-        replaceBody(markupStream, openTag, getModelObjectAsString());
-    }
+	 * @see wicket.Component#handleBody(MarkupStream, ComponentTag)
+	 */
+	protected void handleBody(final MarkupStream markupStream, final ComponentTag openTag)
+	{
+		final String bodyContent;
+		if(invalidInput == null) // no validation errors
+		{
+			bodyContent = getModelObjectAsString();
+		}
+		else // invalid input detected
+		{
+			bodyContent = invalidInput;
+		}
+		replaceBody(markupStream, openTag, getModelObjectAsString());
+	}
 
