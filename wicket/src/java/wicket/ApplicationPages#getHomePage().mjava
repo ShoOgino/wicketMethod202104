@@ -5,17 +5,10 @@
      */
     public final Class getHomePage()
     {
-        // If no home page and one was specified
-        if (homePageClass == null && !Strings.isEmpty(homePageClassName))
-        {
-            // try resolving it
-            homePageClass = Session.get().getClassResolver().resolveClass(homePageClassName);
-        }
-
         // If no home page is available
         if (homePageClass == null)
         {
-            // give up
+            // give up with an exception
             throw new IllegalStateException("No home page was specified in application settings");
         }
         
