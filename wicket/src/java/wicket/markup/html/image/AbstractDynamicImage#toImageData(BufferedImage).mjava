@@ -1,9 +1,8 @@
 	/**
-	 * @param image
-	 *            The image to set
-	 * @return This
+	 * @param image The image to turn into data
+	 * @return The image data for this dynamic image
 	 */
-	public DynamicImage setImage(final BufferedImage image)
+	protected byte[] toImageData(final BufferedImage image)
 	{
 		try
 		{
@@ -18,14 +17,12 @@
 			writer.setOutput(ImageIO.createImageOutputStream(out));
 			writer.write(image);
 
-			// Store the image data
-			this.imageData = out.toByteArray();
+			// Return the image data
+			return out.toByteArray();
 		}
 		catch (IOException e)
 		{
 			throw new WicketRuntimeException("Unable to convert dynamic image to stream", e);
 		}
-
-		return this;
 	}
 
