@@ -1,0 +1,40 @@
+	/**
+	 * Get image for a junction; used by method createExpandCollapseLink.
+	 * If you use the packaged panel (IndentTree.html), you must name the component
+	 * using JUNCTION_IMAGE_NAME.
+	 * @param node the tree node
+	 * @return the image for the junction
+	 */
+	protected AbstractImage getJunctionImage(final DefaultMutableTreeNode node)
+	{
+		if (!node.isLeaf())
+		{
+			// we want the image to be dynamically, yet resolving to a application
+			// static image.
+			IModel imgModel = new Model()
+			{
+				public Object getObject()
+				{
+					final String url;
+					if(isExpanded(node))
+					{
+						url = getRequestCycle().urlFor(
+								JUNCTION_IMG_MINUS, IResourceListener.class);
+					}
+					else
+					{
+						url = getRequestCycle().urlFor(
+								JUNCTION_IMG_PLUS, IResourceListener.class);
+					}
+					return url;
+				}
+			};
+			DynamicLocalImage img = new DynamicLocalImage(JUNCTION_IMAGE_NAME, imgModel);
+			return img;
+		}
+		else
+		{
+			return JUNCTION_IMG_BLANK;
+		}
+	}
+
