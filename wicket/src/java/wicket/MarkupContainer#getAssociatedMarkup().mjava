@@ -1,0 +1,49 @@
+	/**
+	 * Gets any (immutable) markup resource for this class.
+	 * 
+	 * @return Markup resource
+	 */
+	final Markup getAssociatedMarkup()
+	{
+		synchronized (markupCache)
+		{
+			// Look up markup tag list by class, locale, style and markup type
+			final String key = markupKey();
+			Markup markup = (Markup)markupCache.get(key);
+
+			// If no markup in map
+			if (markup == null)
+			{
+				// Locate markup resource, searching up class hierarchy
+				Resource markupResource = null;
+				Class containerClass = getClass();
+
+				while ((markupResource == null) && (containerClass != MarkupContainer.class))
+				{
+					// Look for markup resource for containerClass
+					markupResource = Resource.locate(getApplicationSettings().getSourcePath(),
+							containerClass, getStyle(), getLocale(), getMarkupType());
+					containerClass = containerClass.getSuperclass();
+				}
+
+				// Found markup?
+				if (markupResource != null)
+				{
+					// load the markup and watch for changes
+					markup = loadMarkupAndWatchForChanges(key, markupResource);
+				}
+				else
+				{
+					// flag markup as non-existent (as opposed to null, which
+					// might mean that it's simply not loaded into the cache)
+					markup = Markup.NO_MARKUP;
+				}
+
+				// Save any markup list (or absence of one) for next time
+				markupCache.put(key, markup);
+			}
+
+			return markup;
+		}
+	}
+
