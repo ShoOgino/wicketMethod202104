@@ -20,18 +20,12 @@
 		ITypeConverter converter = get(c);
 		if (converter == null)
 		{
-			if (defaultConverter instanceof ILocalizable)
-			{
-				((ILocalizable)defaultConverter).setLocale(getLocale());
-			}
+			defaultConverter.setLocale(getLocale());
 			return defaultConverter.convert(value);
 		}
 
 		// Set locale
-		if (converter instanceof ILocalizable)
-		{
-			((ILocalizable)converter).setLocale(getLocale());
-		}
+		converter.setLocale(getLocale());
 
 		try
 		{
