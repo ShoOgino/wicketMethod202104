@@ -1,24 +1,18 @@
 	/**
-	 * Locate a resource. See above for more details.
-	 * 
-	 * @param resourcePath The path of the resource including its filename,
-	 *      but with extension.
+	 * Locate a resource. See class comments for more details.
+	 * @param path The path of the resource without extension
 	 * @param style A theme or style
 	 * @param locale The Locale to apply
-	 * @param extensionString the filname's extensions
-	 * @return null, if resource not found
+	 * @param extension the filname's extensions
+     * @return The Resource, or null if not found.
 	 */
-    public Resource locate(final String resourcePath, final String style, 
-    		final Locale locale, final String extensionString)
+    public Resource locate(final String path, final String style, 
+    		final Locale locale, final String extension)
     {
-        Resource resource = null;
-        
         // 1. Try style and locale on classpath
-        if ((style != null) && (locale != null))
+        if (style != null && locale != null)
         {
-            resource = locate(resourcePath
-                    + "_" + style + "_", locale, extensionString);
-
+            final Resource resource = locate(path + "_" + style + "_", locale, extension);
             if (resource != null)
             {
                 return resource;
@@ -28,9 +22,7 @@
         // 2. Try locale only
         if (locale != null)
         {
-            resource = locate(resourcePath 
-                    + "_", locale, extensionString);
-
+            final Resource resource = locate(path + "_", locale, extension);
             if (resource != null)
             {
                 return resource;
@@ -40,8 +32,7 @@
         // 3. Try style only        
         if (style != null)
         {
-            resource = locate(resourcePath + "_" + style + extensionString);
-
+            final Resource resource = locate(path + "_" + style + extension);
             if (resource != null)
             {
                 return resource;
@@ -49,7 +40,6 @@
         }
 
         // 4. Try without style and without locale
-        resource = locate(resourcePath + extensionString);
-        return resource;
+        return locate(path + extension);
     }
 

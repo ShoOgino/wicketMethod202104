@@ -1,23 +1,22 @@
     /**
-     * Loads a resource from the file system from next to a given class. This method
-     * prefers to load from the source tree first in the default locale. If a source tree
-     * cannot be found, the classpath is used.
-     * 
-     * @param sourcePath Source path to look along for resource
-     * @param classloader The classloader to look on if the resource is not on the source
-     *            path
-     * @param resourcePath The path to the resource
+     * Loads a resource. This method prefers to load from the path argument first.
+     * If the resource cannot be found on the path, the classloader provided is
+     * searched.  Resources are located using the style, locale and extension provided
+     * and the naming logic encapsulated in ResourceLocator.
+     * @param path Path to search for resource
+     * @param classloader ClassLoader to search if not found on path
+     * @param resourcePath The path of the resource
      * @param style Any resource style, such as a skin style
      * @param locale The locale of the resource to load
      * @param extension The extension of the resource
      * @return The resource
+     * @see ResourceLocator
      */
-    public static Resource locate(final Path sourcePath, final ClassLoader classloader,
+    public static Resource locate(final Path path, final ClassLoader classloader,
             String resourcePath, final String style, final Locale locale, final String extension)
     {
         // If no extension specified, extract extension
         final String extensionString;
-
         if (extension == null)
         {
             extensionString = "." + Strings.lastPathComponent(resourcePath, '.');
@@ -31,30 +30,30 @@
         // Compute string components
         resourcePath = resourcePath.replace('.', '/');
 
-        // The resource
-        Resource resource = null;
-
-        // Search the sourcePath provided first and classpath second
-        if ((sourcePath != null) && (sourcePath.size() > 0))
+        // 1. Search the path provided
+        if (path != null && path.size() > 0)
         {
-            resource = new ResourceLocator()
+            final Resource resource = new ResourceLocator()
 			{
 	            /**
 	             * Check if file exists.
-	             * 
-	             * @param filename name of the file
-	             * @return null, if file not found
+	             * @param name Name of the resource to find
+	             * @return Resource, or null if file not found
 	             */
-	            protected Resource locate(final String filename)
+	            protected Resource locate(final String name)
 	            {
-	                log.debug("locate Resource from source path: " + filename);
-	                final File file = sourcePath.find(filename);
-
+                    // Log attempt
+	                log.debug("Attempting to locate resource '" + name + "' on path");
+                    
+                    // Try to find file resource on the path supplied
+	                final File file = path.find(name);
+                    
+                    // Found resource?
 	                if (file != null)
 	                {
+                        // Return file resource
 	                    return new Resource(file);
 	                }
-
 	                return null;
 	            }
 	    	}.locate(resourcePath, style, locale, extensionString);
@@ -65,29 +64,27 @@
 	    	}
         }
 
-        // Try classpath second
-        resource = new ResourceLocator()
+        // 2. Search the ClassLoader provided
+        return new ResourceLocator()
 		{
             /**
-             * Check if file exists.
-             * @param filename the resource's filename
-             * @return null, if file not found
+             * Locate resource using classloader
+             * @param name Name of resource
+             * @return The resource 
              */
-            protected Resource locate(final String filename)
+            protected Resource locate(final String name)
             {
-                log.debug("locate Resource from class path: " + filename);
+                // Log attempt
+                log.debug("Attempting to locate resource '" + name + "' on classpath");
+                
                 // Try loading filename on classpath
-                final URL url = classloader.getResource(filename);
-
+                final URL url = classloader.getResource(name);
                 if (url != null)
                 {
                     return new Resource(url);
                 }
-
                 return null;
             }
     	}.locate(resourcePath, style, locale, extensionString);
-
-    	return resource;
     }
 
