@@ -14,8 +14,8 @@
      * @return true, if componentName was handle by the resolver. False,
      *         otherwise
      */
-    public boolean resolve(final Container container,
-            final MarkupStream markupStream, final ComponentTag tag)
+    public boolean resolve(final Container container, final MarkupStream markupStream,
+            final ComponentTag tag)
     {
         // Get the component name to handle
         final String componentName = tag.getComponentName();
@@ -23,8 +23,7 @@
         // The componentName may be [autolink] or [autolink:key=value,
         // key2=value, ...]
         if (componentName.startsWith("[autolink")
-                && ((componentName.charAt(9) == ']') || (componentName
-                        .charAt(9) == ':')))
+                && ((componentName.charAt(9) == ']') || (componentName.charAt(9) == ':')))
         {
             // Autolinks are only supported with anchor tags
             if (!tag.getName().equalsIgnoreCase("a"))
@@ -34,8 +33,7 @@
             }
 
             // Try to find the Page matching the href
-            resolveAutomaticLink(container.getPage(), markupStream,
-                    componentName, tag);
+            resolveAutomaticLink(container.getPage(), markupStream, componentName, tag);
 
             // Make the compnentName (page-)unique
             final String id = "[autolink]-" + autoIndex;
@@ -47,8 +45,8 @@
             tag.attributes.makeImmutable();
 
             // Create an external (bookmarkable) Link
-            final Link link = new BookmarkablePageLink(id,
-                    automaticLinkPageClass, automaticLinkPageParameters);
+            final Link link = new BookmarkablePageLink(id, automaticLinkPageClass,
+                    automaticLinkPageParameters);
 
             // Add the link to the container
             container.add(link);

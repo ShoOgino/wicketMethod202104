@@ -14,13 +14,11 @@
      * @param tag
      *            the component tag
      */
-    private void resolveAutomaticLink(final Page page,
-            final MarkupStream markupStream, final String componentName,
-            final ComponentTag tag)
+    private void resolveAutomaticLink(final Page page, final MarkupStream markupStream,
+            final String componentName, final ComponentTag tag)
     {
         // Get any automaticLink component
-        final Matcher matcher = automaticComponentPattern
-                .matcher(componentName);
+        final Matcher matcher = automaticComponentPattern.matcher(componentName);
 
         if (matcher.matches())
         {
@@ -35,8 +33,7 @@
 
                 if (href == null)
                 {
-                    markupStream
-                            .throwMarkupException("Automatic link requires href attribute");
+                    markupStream.throwMarkupException("Automatic link requires href attribute");
                 }
 
                 // Find class relative to current package
@@ -44,15 +41,12 @@
 
                 try
                 {
-                    automaticLinkPageClass = Session.get().getClassResolver()
-                            .resolveClass(
-                                    page.getClass().getPackage().getName()
-                                            + "." + path);
+                    automaticLinkPageClass = Session.get().getClassResolver().resolveClass(
+                            page.getClass().getPackage().getName() + "." + path);
 
                     if (parameters != null)
                     {
-                        automaticLinkPageParameters = new PageParameters(
-                                parameters);
+                        automaticLinkPageParameters = new PageParameters(parameters);
                     }
                     else
                     {
@@ -61,8 +55,7 @@
                 }
                 catch (WicketRuntimeException e)
                 {
-                    markupStream.throwMarkupException("Could not find page at "
-                            + path);
+                    markupStream.throwMarkupException("Could not find page at " + path);
                 }
             }
             else
@@ -77,8 +70,7 @@
         }
         else
         {
-            markupStream
-                    .throwMarkupException("Invalid syntax for automaticLink component");
+            markupStream.throwMarkupException("Invalid syntax for automaticLink component");
         }
     }
 
