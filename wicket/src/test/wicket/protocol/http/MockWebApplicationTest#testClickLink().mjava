@@ -1,30 +1,30 @@
-    /**
-     * @throws Exception
-     */
-    public void testClickLink() throws Exception {
-        // Need to call the home page first
-        testRenderHomePage();
+	/**
+	 * @throws Exception
+	 */
+	public void testClickLink() throws Exception {
+		// Need to call the home page first
+		testRenderHomePage();
 
-        // Now request that we click the link
-        application.setupRequestAndResponse();
-        MockPage p = (MockPage)application.getLastRenderedPage();
-        Link link = (Link)p.get("actionLink");
-        application.getServletRequest().setRequestToComponent(link);
-        application.processRequestCycle();
+		// Now request that we click the link
+		application.setupRequestAndResponse();
+		MockPage p = (MockPage)application.getLastRenderedPage();
+		Link link = (Link)p.get("actionLink");
+		application.getServletRequest().setRequestToComponent(link);
+		application.processRequestCycle();
 
-        // Check that redirect was set as expected and invoke it
-        Assert.assertTrue("Response should be a redirect", application.getServletResponse().isRedirect());
-        String redirect = application.getServletResponse().getRedirectLocation();
-        application.setupRequestAndResponse();
-        application.getServletRequest().setRequestToRedirectString(redirect);
-        application.processRequestCycle();
+		// Check that redirect was set as expected and invoke it
+		Assert.assertTrue("Response should be a redirect", application.getServletResponse().isRedirect());
+		String redirect = application.getServletResponse().getRedirectLocation();
+		application.setupRequestAndResponse();
+		application.getServletRequest().setRequestToRedirectString(redirect);
+		application.processRequestCycle();
 
-        // Validate the document
-        String document = application.getServletResponse().getDocument();
-        Assert.assertTrue(validateDocument(document, 1));
+		// Validate the document
+		String document = application.getServletResponse().getDocument();
+		Assert.assertTrue(validateDocument(document, 1));
 
-        // Inspect the page & model
-        p = (MockPage)application.getLastRenderedPage();
-        Assert.assertEquals("Link should have been clicked 1 time", 1, p.getLinkClickCount());
-    }
+		// Inspect the page & model
+		p = (MockPage)application.getLastRenderedPage();
+		Assert.assertEquals("Link should have been clicked 1 time", 1, p.getLinkClickCount());
+	}
 

@@ -1,0 +1,27 @@
+	/**
+	 * Goes back a version from the current version
+	 * 
+	 * @return True if the page was successfully reverted to its previous
+	 *         version
+	 */
+	private boolean undo()
+	{
+		// Get the change list that was applied to the previous version
+		final Integer key = new Integer(getCurrentVersionNumber() - 1);
+		final ChangeList changeList = (ChangeList)appliedChangeListForVersionNumber.get(key);
+		if (changeList == null)
+		{
+			return false;
+		}
+
+		// Undo changes made to previous version to get to this version
+		changeList.undo();
+
+		// Remove version from change list map
+		appliedChangeListForVersionNumber.remove(key);
+
+		// One less version around
+		versionNumber--;
+		return true;
+	}
+

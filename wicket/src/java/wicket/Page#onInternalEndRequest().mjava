@@ -3,15 +3,24 @@
 	 */
 	final void onInternalEndRequest()
 	{
-		// Any changes to the page after this point will be tracked by the
-		// Page's revision manager
-		trackChanges = true;
-
-		// If there have been changes to the page in this revision
-		if (changeCount > 0)
+		if (isVersioned)
 		{
-			// We're done with this revision
-			getRevisionManager().endRevision();
+			// Any changes to the page after this point will be tracked by the
+			// page's version manager. Since trackChanges is never set to false,
+			// this effectively means that change tracking begins after the
+			// first
+			// request to a page completes.
+			trackChanges = true;
+
+			// If there have been changes to the page
+			if (changeCount > 0)
+			{
+				// We're done with this version
+				if (versionManager != null)
+				{
+					versionManager.endVersion();
+				}
+			}
 		}
 	}
 

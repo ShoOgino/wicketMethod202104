@@ -1,0 +1,42 @@
+	/**
+	 * Override this method to implement a custom way of producing a version of
+	 * a Page when it cannot be found in the Session.
+	 * 
+	 * @param versionNumber
+	 *            The version desired
+	 * @return A Page object with the component/model hierarchy that was
+	 *         attached to this page at the time represented by the requested
+	 *         version.
+	 */
+	public Page getVersion(final int versionNumber)
+	{
+		// If we're still the original Page and that's what's desired
+		if (versionManager == null)
+		{
+			if (versionNumber == 0)
+			{
+				return this;
+			}
+			else
+			{
+				throw new IllegalStateException(
+						"No version manager available to retrieve requested versionNumber "
+								+ versionNumber);
+			}
+		}
+		else
+		{
+			// Get page of desired version
+			final Page page = versionManager.getVersion(versionNumber);
+
+			// If we went all the way back to the original page
+			if (page != null && page.getCurrentVersionNumber() == 0)
+			{
+				// remove version info
+				page.versionManager = null;
+			}
+
+			return page;
+		}
+	}
+

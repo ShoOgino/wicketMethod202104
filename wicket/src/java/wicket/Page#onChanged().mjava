@@ -1,0 +1,31 @@
+	/**
+	 * Install version manager if need be
+	 */
+	private final void onChanged()
+	{
+		// If version management is enabled
+		if (isVersioned)
+		{
+			// and we are creating a new version of the original page
+			if (trackChanges)
+			{
+				// and we have no version manager
+				if (versionManager == null)
+				{
+					// then install a new version manager
+					versionManager = newVersionManager();
+				}
+
+				// If there have not been any changes yet
+				if (changeCount == 0)
+				{
+					// start a new version
+					versionManager.beginVersion();
+				}
+
+				// Increase number of changes
+				changeCount++;
+			}
+		}
+	}
+
