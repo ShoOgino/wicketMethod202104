@@ -1,25 +1,27 @@
-    /**
-     * Binds this MetaPattern to one or more capturing groups.  Since MetaPatterns
-     * can nest, the binding process can recurse.
-     * @param group The initial capturing group number
-     * @return The final capturing group (for use in recursion)
-     */
-    private int bind(int group)
-    {
-        if (this instanceof Group)
-        {
-            // System.out.println("Binding " + this + " to group " + group);
-            ((Group)this).bind(group++);
-        }
+	/**
+	 * Binds this MetaPattern to one or more capturing groups. Since
+	 * MetaPatterns can nest, the binding process can recurse.
+	 * 
+	 * @param group
+	 *            The initial capturing group number
+	 * @return The final capturing group (for use in recursion)
+	 */
+	private int bind(int group)
+	{
+		if (this instanceof Group)
+		{
+			// System.out.println("Binding " + this + " to group " + group);
+			((Group)this).bind(group++);
+		}
 
-        if (patterns != null)
-        {
-            for (int i = 0; i < patterns.size(); i++)
-            {
-                group = ((MetaPattern)patterns.get(i)).bind(group);
-            }
-        }
+		if (patterns != null)
+		{
+			for (int i = 0; i < patterns.size(); i++)
+			{
+				group = ((MetaPattern)patterns.get(i)).bind(group);
+			}
+		}
 
-        return group;
-    }
+		return group;
+	}
 

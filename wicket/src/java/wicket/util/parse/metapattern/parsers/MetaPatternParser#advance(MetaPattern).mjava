@@ -1,27 +1,29 @@
-    /**
-     * Advance parsing to the next element. The internal cursor will be moved
-     * to end of the string matched. 
-     * @param pattern Meta pattern
-     * @return True if found, false otherwise
-     */
-    protected final boolean advance(final MetaPattern pattern)
-    {
-        // get the remaining part of the input
-        final CharSequence s = input.subSequence(pos, length);
+	/**
+	 * Advance parsing to the next element. The internal cursor will be moved to
+	 * end of the string matched.
+	 * 
+	 * @param pattern
+	 *            Meta pattern
+	 * @return True if found, false otherwise
+	 */
+	protected final boolean advance(final MetaPattern pattern)
+	{
+		// get the remaining part of the input
+		final CharSequence s = input.subSequence(pos, length);
 
-        // does the pattern match?
-        this.matcher = pattern.matcher(s);
-        if (matcher.lookingAt())
-        {
-            // Yes, it does. Move the cursor to the end of the
-            // char sequence matched.
-            pos += matcher.end();
+		// does the pattern match?
+		this.matcher = pattern.matcher(s);
+		if (matcher.lookingAt())
+		{
+			// Yes, it does. Move the cursor to the end of the
+			// char sequence matched.
+			pos += matcher.end();
 
-            // Found the pattern
-            return true;
-        }
+			// Found the pattern
+			return true;
+		}
 
-        // Did not find the pattern.
-        return false;
-    }
+		// Did not find the pattern.
+		return false;
+	}
 

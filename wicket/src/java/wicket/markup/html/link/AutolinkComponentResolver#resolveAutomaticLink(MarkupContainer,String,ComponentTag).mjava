@@ -1,20 +1,20 @@
 	/**
-	 * Resolves the given tag's page class and page parameters by parsing the tag
-	 * component name and then searching for a page class at the absolute or
+	 * Resolves the given tag's page class and page parameters by parsing the
+	 * tag component name and then searching for a page class at the absolute or
 	 * relative URL specified by the href attribute of the tag.
 	 * 
 	 * @param container
-	 *           The container where the link is
+	 *            The container where the link is
 	 * @param componentName
-	 *           the name of the component
+	 *            the name of the component
 	 * @param tag
-	 *           the component tag
+	 *            the component tag
 	 * @return A BookmarkablePageLink to handle the href
 	 */
-	private Component resolveAutomaticLink(final MarkupContainer container, final String componentName,
-			final ComponentTag tag)
+	private Component resolveAutomaticLink(final MarkupContainer container,
+			final String componentName, final ComponentTag tag)
 	{
-        final Page page = container.getPage();
+		final Page page = container.getPage();
 		final String originalHref = tag.getAttributes().getString("href");
 		final int pos = originalHref.indexOf(".html");
 
@@ -30,9 +30,9 @@
 
 		// Make the componentName (page-)unique
 		final String id = componentName + page.getAutoIndex();
-        
-        // The component name on the tag changed
-        tag.setComponentName(id);
+
+		// The component name on the tag changed
+		tag.setComponentName(id);
 
 		// Obviously a href like href="myPkg.MyLabel.html" will do as well.
 		// Wicket will not throw an exception. It accepts it.
@@ -40,16 +40,18 @@
 
 		if (!classPath.startsWith("."))
 		{
-			// Href is relative. Resolve the url given relative to the current page
+			// Href is relative. Resolve the url given relative to the current
+			// page
 			final String className = page.getClass().getPackage().getName() + "." + classPath;
-			final Class clazz = page.getApplicationSettings().getDefaultClassResolver().resolveClass(
-					className);
+			final Class clazz = page.getApplicationSettings().getDefaultClassResolver()
+					.resolveClass(className);
 
 			return new BookmarkablePageLink(id, clazz, pageParameters);
 		}
 		else
 		{
-			// href is absolute. If class with the same absolute path exists, use
+			// href is absolute. If class with the same absolute path exists,
+			// use
 			// it.
 			// Else don't change the href.
 			final String className = classPath.substring(1);

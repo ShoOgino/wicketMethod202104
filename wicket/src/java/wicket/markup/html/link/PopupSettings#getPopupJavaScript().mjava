@@ -1,55 +1,55 @@
-    /**
-     * Get the onClick javascript event handler.
-     * @return the onClick javascript event handler
-     */
-    public String getPopupJavaScript()
-    {
-        String windowTitle = getWindowName();
+	/**
+	 * Get the onClick javascript event handler.
+	 * 
+	 * @return the onClick javascript event handler
+	 */
+	public String getPopupJavaScript()
+	{
+		String windowTitle = getWindowName();
 
-        if (windowTitle == null)
-        {
-            windowTitle = "";
-        }
-        else
-        {
-            windowTitle = windowTitle.replace('.', '_'); // Fix for IE bug.
-        }
+		if (windowTitle == null)
+		{
+			windowTitle = "";
+		}
+		else
+		{
+			windowTitle = windowTitle.replace('.', '_'); // Fix for IE bug.
+		}
 
-        String target = getTarget();
-        StringBuffer script = new StringBuffer(
-                "if (!window.focus) return true; window.open(" + target + ", '")
-                .append(windowTitle).append("', '");
+		String target = getTarget();
+		StringBuffer script = new StringBuffer("if (!window.focus) return true; window.open("
+				+ target + ", '").append(windowTitle).append("', '");
 
-        script.append("scrollbars=").append(getScrollBars() ? "yes" : "no");
-        script.append(", location=").append(getLocationBar() ? "yes" : "no");
-        script.append(", menuBar=").append(getMenuBar() ? "yes" : "no");
-        script.append(", resizable=").append(isResizable() ? "yes" : "no");
-        script.append(", scrollbars=").append(getScrollBars() ? "yes" : "no");
-        script.append(", status=").append(getStatusBar() ? "yes" : "no");
-        script.append(", toolbar=").append(getToolbar() ? "yes" : "no");
+		script.append("scrollbars=").append(getScrollBars() ? "yes" : "no");
+		script.append(", location=").append(getLocationBar() ? "yes" : "no");
+		script.append(", menuBar=").append(getMenuBar() ? "yes" : "no");
+		script.append(", resizable=").append(isResizable() ? "yes" : "no");
+		script.append(", scrollbars=").append(getScrollBars() ? "yes" : "no");
+		script.append(", status=").append(getStatusBar() ? "yes" : "no");
+		script.append(", toolbar=").append(getToolbar() ? "yes" : "no");
 
-        if (getWidth() != -1)
-        {
-            script.append(", width=").append(getWidth());
-        }
+		if (getWidth() != -1)
+		{
+			script.append(", width=").append(getWidth());
+		}
 
-        if (getHeight() != -1)
-        {
-            script.append(", height=").append(getHeight());
-        }
+		if (getHeight() != -1)
+		{
+			script.append(", height=").append(getHeight());
+		}
 
-        if (getLeft() != -1)
-        {
-            script.append(", left=").append(getLeft());
-        }
+		if (getLeft() != -1)
+		{
+			script.append(", left=").append(getLeft());
+		}
 
-        if (getTop() != -1)
-        {
-            script.append(", top=").append(getTop());
-        }
+		if (getTop() != -1)
+		{
+			script.append(", top=").append(getTop());
+		}
 
-        script.append("'); ").append(" return false;");
+		script.append("'); ").append(" return false;");
 
-        return script.toString();
-    }
+		return script.toString();
+	}
 
