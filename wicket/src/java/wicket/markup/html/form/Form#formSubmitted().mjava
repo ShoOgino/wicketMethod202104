@@ -1,33 +1,19 @@
 	/**
-	 * Handles form submissions.
+	 * Handles form submissions. By default, this method simply calls validate()
+	 * to validate the form and update the model.
+	 * 
+	 * @see Form#validate()
 	 */
-	public final void formSubmitted()
+	public void formSubmitted()
 	{
-		// Redirect back to result to avoid postback warnings. But we turn
-		// redirecting on as the first thing because the user's handleSubmit
-		// implementation may wish to redirect somewhere else. In that case,
-		// they can simply call setRedirect(false) in handleSubmit.
-		getRequestCycle().setRedirect(true);
-
-		// Validate model using validation delegate
-		validationDelegate.validate(this);
-
-		// Update model using form data
-		updateFormComponentModels();
-
-		// Persist FormComponents if requested
-		persistFormComponentData();
-
-		// If validation or update caused error message(s) to appear
-		if (hasError())
+		final int buttons = countButtons();
+		if (buttons <= 1)
 		{
-			// handle those errors
-			handleErrors();
+			validate();
 		}
-		else
+		else if (buttons > 1)
 		{
-			// Model was successfully updated with valid data
-			handleSubmit();
+			invokeButtonClicked();
 		}
 	}
 

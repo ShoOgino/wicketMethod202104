@@ -1,0 +1,38 @@
+	/**
+	 * Validates the form and updates the models of form components. If the form
+	 * validates successfully, handleValidSubmit() is called. If not,
+	 * handleErrors() is called.
+	 * 
+	 * @see Form#handleValidSubmit()
+	 * @see Form#handleValidationErrors()
+	 */
+	protected final void validate()
+	{
+		// Redirect back to result to avoid postback warnings. But we turn
+		// redirecting on as the first thing because the user's handleSubmit
+		// implementation may wish to redirect somewhere else. In that case,
+		// they can simply call setRedirect(false) in handleSubmit.
+		getRequestCycle().setRedirect(true);
+
+		// Validate model using validation delegate
+		getValidationDelegate().validate(this);
+
+		// Update model using form data
+		updateFormComponentModels();
+
+		// Persist FormComponents if requested
+		persistFormComponentData();
+
+		// If validation or update caused error message(s) to appear
+		if (hasError())
+		{
+			// handle those errors
+			handleValidationErrors();
+		}
+		else
+		{
+			// Model was successfully updated with valid data
+			handleValidSubmit();
+		}
+	}
+
