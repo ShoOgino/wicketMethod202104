@@ -27,13 +27,13 @@
 		else
 		{
 			// Save original change tracking state
-			final boolean originalTrackChanges = trackChanges;
+			final boolean originalTrackChanges = getFlag(FLAG_TRACK_CHANGES);
 			try
 			{
 				// While the version manager is potentially playing around with
 				// the Page, it may change the page in order to undo changes and
 				// we don't want change tracking going on while its doing this.
-				trackChanges = false;
+				setFlag(FLAG_TRACK_CHANGES, false);
 
 				// Get page of desired version
 				final Page page = versionManager.getVersion(versionNumber);
@@ -50,7 +50,7 @@
 			finally
 			{
 				// Restore change tracking state
-				trackChanges = originalTrackChanges;
+				setFlag(FLAG_TRACK_CHANGES, originalTrackChanges);
 			}
 		}
 	}

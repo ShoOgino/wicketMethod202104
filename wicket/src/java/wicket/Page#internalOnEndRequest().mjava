@@ -9,10 +9,10 @@
 			// page's version manager. Since trackChanges is never set to false,
 			// this effectively means that change tracking begins after the
 			// first request to a page completes.
-			trackChanges = true;
+			setFlag(FLAG_TRACK_CHANGES, true);
 
-			// If there have been changes to the page
-			if (changeCount > 0)
+			// If a new version was created
+			if (getFlag(FLAG_NEW_VERSION))
 			{
 				// We're done with this version
 				if (versionManager != null)
@@ -20,8 +20,8 @@
 					versionManager.endVersion();
 				}
 
-				// Reset change count for next time
-				changeCount = 0;
+				// Reset boolean for next request
+				setFlag(FLAG_NEW_VERSION, false);
 			}
 		}
 	}

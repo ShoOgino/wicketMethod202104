@@ -1,7 +1,7 @@
 	/**
-	 * Install version manager if need be
+	 * Starts a new version of this page
 	 */
-	private final void onChanged()
+	private final void newVersion()
 	{
 		// If we have no version manager
 		if (versionManager == null)
@@ -10,14 +10,12 @@
 			versionManager = newVersionManager();
 		}
 
-		// If there have not been any changes yet
-		if (changeCount == 0)
+		// If a new version has not yet been started
+		if (!getFlag(FLAG_NEW_VERSION))
 		{
 			// start a new version
 			versionManager.beginVersion();
+			setFlag(FLAG_NEW_VERSION, true);
 		}
-
-		// Increase number of changes
-		changeCount++;
 	}
 
