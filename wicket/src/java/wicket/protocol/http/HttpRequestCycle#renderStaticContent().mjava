@@ -16,7 +16,6 @@
             response.setContentType(context.getMimeType(url));
 
             // NOTE: Servlet container prevents accessing WEB-INF/** already.
-            // TODO Maybe a kind of exclude/include list would good as well.
             final InputStream in = context.getResourceAsStream(url);
             if (in != null)
             {
@@ -28,8 +27,8 @@
                 }
                 finally
                 {
-                    // NOTE: Do not close servlet OutputStream. Close
-                    // InputStream only
+                    // NOTE: We close only the InputStream. The app server will
+                    // close the output stream.
                     in.close();
                 }
                 return true;
