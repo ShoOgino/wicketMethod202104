@@ -1,0 +1,31 @@
+	/**
+	 * @param page
+	 *            The page that went wrong
+	 * @param e
+	 *            The exception that was thrown
+	 */
+	private void redirectToExceptionErrorPage(final Page page, final RuntimeException e)
+	{
+		// If application doesn't want debug info showing up for users
+		final ApplicationSettings settings = application.getSettings();
+		if (settings.getUnexpectedExceptionDisplay() != ApplicationSettings.SHOW_NO_EXCEPTION_PAGE)
+		{
+			if (settings.getUnexpectedExceptionDisplay() == ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
+			{
+				// Show internal error page
+				setResponsePage(session.getPageFactory(page).newPage(
+						application.getPages().getInternalErrorPage()));
+			}
+			else
+			{
+				// Show full details
+				setResponsePage(new ExceptionErrorPage(e, getResponsePage()));
+			}
+
+			// We generally want to redirect the response because we
+			// were in the middle of rendering and the page may end up
+			// looking like spaghetti otherwise
+			redirectTo(getResponsePage());
+		}
+	}
+
