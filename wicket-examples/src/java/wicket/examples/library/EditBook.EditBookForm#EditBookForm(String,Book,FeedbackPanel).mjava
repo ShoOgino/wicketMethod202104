@@ -1,57 +1,55 @@
-        /**
-         * Constructor
-         * @param componentName Name of form
-         * @param book Book model
-         * @param feedback Feedback component that shows errors
-         */
-        public EditBookForm(final String componentName, final Book book,
-            final FeedbackPanel feedback)
-        {
-            super(componentName, feedback);
+		/**
+		 * Constructor
+		 * 
+		 * @param componentName
+		 *            Name of form
+		 * @param book
+		 *            Book model
+		 * @param feedback
+		 *            Feedback component that shows errors
+		 */
+		public EditBookForm(final String componentName, final Book book,
+				final FeedbackPanel feedback)
+		{
+			super(componentName, book, feedback);
 
-            // Set model
-            this.book = book;
+			// Create a required text field with a max length of 30 characters
+			// that edits the book's title
+			final TextField title = new TextField("title");
+			title.add(RequiredValidator.getInstance());
+			title.add(LengthValidator.max(30));
+			final FormComponentFeedbackBorder titleFeedback = new FormComponentFeedbackBorder(
+					"titleFeedback", title);
+			add(titleFeedback);
 
-            Model bookModel = new Model(book);
+			// Create a required text field that edits the book's author
+			final TextField author = new TextField("author");
+			author.add(RequiredValidator.getInstance());
+			final FormComponentFeedbackBorder authorFeedback = new FormComponentFeedbackBorder(
+					"authorFeedback", author);
+			add(authorFeedback);
 
-            // Create a required text field with a max length of 30 characters that edits the book's title
-            final TextField title = new TextField("title", bookModel, "title");
-            title.add(RequiredValidator.getInstance());
-            title.add(LengthValidator.max(30));
-            final FormComponentFeedbackBorder titleFeedback =
-                new FormComponentFeedbackBorder("titleFeedback", title);
-            add(titleFeedback);
+			// Add fiction checkbox
+			add(new CheckBox("fiction"));
 
-            // Create a required text field that edits the book's author
-            final TextField author = new TextField("author", bookModel, "author");
-            author.add(RequiredValidator.getInstance());
-            final FormComponentFeedbackBorder authorFeedback =
-                new FormComponentFeedbackBorder("authorFeedback", author);
-            add(authorFeedback);
+			// Books is everything but otherBook
+			List books = new ArrayList();
 
-            // Add fiction checkbox
-            add(new CheckBox("fiction", bookModel, "fiction"));
+			books.addAll(Book.getBooks());
+			books.remove(otherBook);
 
-            // Books is everything but otherBook
-            List books = new ArrayList();
+			// Add companion book choice
+			add(new DropDownChoice("companionBook", books));
 
-            books.addAll(Book.getBooks());
-            books.remove(otherBook);
+			// Add radio choice test
+			final RadioChoice relatedBook = new RadioChoice("relatedBook");
 
-            // Add companion book choice
-            add(new DropDownChoice("companionBook", bookModel, "companionBook", books));
+			relatedBook.add(new RadioOptionSet("relatedBooks", books));
+			relatedBook.add(new RadioOption("otherBook", otherBook));
+			add(relatedBook);
 
-            // Add radio choice test
-            final RadioChoice relatedBook =
-                new RadioChoice("relatedBook", bookModel, "relatedBook");
-
-            relatedBook.add(new RadioOptionSet("relatedBooks", books));
-            relatedBook.add(new RadioOption("otherBook", otherBook));
-            add(relatedBook);
-
-            // Multi-select among writing styles
-            add(new ListMultipleChoice("writingStyles",
-                    new PropertyModel(bookModel, "writingStyles"),
-                    EnumeratedType.getValues(Book.WritingStyle.class)));
-        }
+			// Multi-select among writing styles
+			add(new ListMultipleChoice("writingStyles", new PropertyModel(getModel(),
+					"writingStyles"), EnumeratedType.getValues(Book.WritingStyle.class)));
+		}
 
