@@ -3,14 +3,21 @@
 	 * 
 	 * @param componentNameAttribute
 	 *            The attribute name to remove
+	 * @param removeComponentsWithDefaultName
+	 *            If true, components with name "wicket" get removed as
 	 */
-	public void removeComponentName(final String componentNameAttribute)
+	public void removeComponentName(final String componentNameAttribute,
+			final boolean removeComponentsWithDefaultName)
 	{
 		if (xmlTag.isMutable())
 		{
 			this.componentName = null;
 			xmlTag.remove(componentNameAttribute);
-			xmlTag.remove(DEFAULT_COMPONENT_NAME_ATTRIBUTE);
+			
+			if (removeComponentsWithDefaultName)
+			{
+				xmlTag.remove(DEFAULT_COMPONENT_NAME_ATTRIBUTE);
+			}
 		}
 		else
 		{
