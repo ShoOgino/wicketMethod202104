@@ -5,21 +5,26 @@
 	{
 		if (node.isLeaf())
 		{
-			Image img = new Image(NODE_IMAGE_NAME, "node.gif");
+			Image img = new Image(NODE_IMAGE_NAME, getImage("node.gif"));
 			return img;
 		}
 		else
 		{
-			if (isExpanded(node))
+			// we want the image to be dynamically, yet resolving to a static image.
+			return new Image(NODE_IMAGE_NAME, (SharedResource)null)
 			{
-				Image img = new Image(NODE_IMAGE_NAME, "folderopen.gif");
-				return img;
-			}
-			else
-			{
-				Image img = new Image(NODE_IMAGE_NAME, "folder.gif");
-				return img;
-			}
+				protected Resource getImageResource()
+				{
+					if (isExpanded(node))
+					{
+						return getImage("folderopen.gif");
+					}
+					else
+					{
+						return getImage("folder.gif");
+					}
+				}
+			};
 		}
 	}
 
