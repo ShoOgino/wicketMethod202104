@@ -3,17 +3,17 @@
 	 */
 	private final void checkRendering()
 	{
+		final Count unrenderedComponents = new Count();
+		final StringBuffer buffer = new StringBuffer();
 		visitChildren(new IVisitor()
 		{
 			public Object component(final Component component)
 			{
 				// If component never rendered
-				if ((renderedComponents == null) || !renderedComponents.contains(component))
+				if (renderedComponents == null || !renderedComponents.contains(component))
 				{
-					// Throw exception
-					throw new WicketRuntimeException(component
-							.exceptionMessage("Component never rendered. You probably failed to "
-									+ "reference it in your markup"));
+					unrenderedComponents.increment();
+					buffer.append("" + unrenderedComponents.getCount() + ". " + component + "\n");
 				}
 				return CONTINUE_TRAVERSAL;
 			}
@@ -21,5 +21,13 @@
 
 		// Get rid of set
 		renderedComponents = null;
+
+		// Throw exception if any errors were found
+		if (unrenderedComponents.getCount() > 0)
+		{
+			// Throw exception
+			throw new WicketRuntimeException("The component(s) below failed to render:\n\n"
+					+ buffer.toString());
+		}
 	}
 

@@ -1,0 +1,38 @@
+	/**
+	 * Ensure that there is space in childForId map for a new entry before
+	 * adding it.
+	 * 
+	 * @param child
+	 *            The child to put into the map
+	 * @return Any component that was replaced
+	 */
+	private final Component put(final Component child)
+	{
+		if (optimizeChildMapsForSpace)
+		{
+			if (childForId == Collections.EMPTY_MAP)
+			{
+				childForId = new MicroMap();
+			}
+			else if (childForId.size() == MicroMap.MAX_ENTRIES)
+			{
+				// Reallocate MicroMap as MiniMap
+				childForId = new MiniMap(childForId, MINIMAP_MAX_ENTRIES);
+			}
+			else if (childForId.size() == MINIMAP_MAX_ENTRIES)
+			{
+				// Reallocate MiniMap as full HashMap
+				childForId = new HashMap(childForId);
+			}
+		}
+		else
+		{
+			if (childForId == Collections.EMPTY_MAP)
+			{
+				childForId = new HashMap();
+			}
+		}
+
+		return (Component)childForId.put(child.getId(), child);
+	}
+

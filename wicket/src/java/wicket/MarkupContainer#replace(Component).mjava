@@ -16,30 +16,10 @@
 
 		if (child.getParent() != this)
 		{
-			// First reset the childs parent (can't set them at once with
-			// another)
-			child.setParent(null);
-
-			// Set child's parent
-			child.setParent(this);
-
-			// Are we using MicroMap optimization?
-			if (optimizeChildMapsForSpace)
-			{
-				if (childForId.size() == MicroMap.MAX_ENTRIES)
-				{
-					// Reallocate MicroMap as MiniMap
-					childForId = new MiniMap(childForId, MINIMAP_MAX_ENTRIES);
-				}
-				else if (childForId.size() == MINIMAP_MAX_ENTRIES)
-				{
-					// Reallocate MiniMap as full HashMap
-					childForId = new HashMap(childForId);
-				}
-			}
-
 			// Add to map
-			final Component replaced = (Component)childForId.put(child.getId(), child);
+			final Component replaced = put(child);
+			addedComponent(child);
+			removedComponent(replaced);
 
 			// Look up to make sure it was already in the map
 			if (replaced == null)
@@ -47,16 +27,6 @@
 				throw new IllegalArgumentException(
 						exceptionMessage("A child component with the id '" + child.getId()
 								+ "' didn't exist"));
-			}
-
-			replaced.setParent(null);
-
-			// Notify the page that the replace happened
-			final Page page = findPage();
-			if (page != null)
-			{
-				page.componentRemoved(replaced);
-				page.componentAdded(child);
 			}
 		}
 

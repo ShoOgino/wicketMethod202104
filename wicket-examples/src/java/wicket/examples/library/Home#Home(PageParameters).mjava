@@ -9,7 +9,8 @@
 		final User user = getLibrarySession().getUser();
 		if (user != null)
 		{
-			add(new ListView("books", new PropertyModel(user, "books"))
+			final PageableListView listView;
+			add(listView = new PageableListView("books", new PropertyModel(user, "books"), 4)
 			{
 				public void populateItem(final ListItem listItem)
 				{
@@ -23,6 +24,7 @@
 					listItem.add(EditBook.link("edit", book.getId()));
 				}
 			});
+			add(new PageableListViewNavigator("navigator", listView));
 		}
 	}
 

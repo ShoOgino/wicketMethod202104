@@ -9,27 +9,35 @@
 	 */
 	public final Link moveUpLink(final String id, final ListItem item)
 	{
-		final Link link = new Link(id)
+		return new Link(id)
 		{
+			/**
+			 * @see wicket.Component#onBeginRequest()
+			 */
+			protected void onBeginRequest()
+			{
+				setAutoEnable(false);
+				if (getList().indexOf(item.getModelObject()) == 0)
+				{
+					setEnabled(false);
+				}
+			}
+
+			/**
+			 * @see wicket.markup.html.link.Link#onClick()
+			 */
 			public void onClick()
 			{
 				final int index = getList().indexOf(item.getModelObject());
-				if(index != -1)
+				if (index != -1)
 				{
 					// Swap items and invalidate listView
 					Collections.swap(getList(), index, index - 1);
-	
+
 					// Make sure you re-render the list properly
 					ListView.this.removeAll();
 				}
 			}
 		};
-
-		if (getList().indexOf(item.getModelObject()) == 0)
-		{
-			link.setEnabled(false);
-		}
-
-		return link;
 	}
 

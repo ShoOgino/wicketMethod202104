@@ -1,0 +1,20 @@
+	/**
+	 * @param component
+	 *            Component being removed
+	 */
+	private static final void removedComponent(final Component component)
+	{
+		// Notify Page that component is being removed
+		final Page page = component.findPage();
+		if (page != null)
+		{
+			page.componentRemoved(component);
+		}
+
+		// Detach model
+		component.detachModel();
+
+		// Component is removed
+		component.setParent(null);
+	}
+
