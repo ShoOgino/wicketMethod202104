@@ -1,5 +1,5 @@
     /**
-     * @see wicket.markup.IComponentResolver#resolve(MarkupContainer, MarkupStream,
+     * @see wicket.IComponentResolver#resolve(MarkupContainer, MarkupStream,
      *      ComponentTag)
      * @param container
      *            The container parsing its markup
@@ -14,10 +14,10 @@
             final ComponentTag tag)
     {
         // It must be <wicket:...>
-        if (tag instanceof ComponentWicketTag)
+        if (tag instanceof WicketTag)
         {
             // It must be <wicket:component...>
-            final ComponentWicketTag wicketTag = (ComponentWicketTag)tag;
+            final WicketTag wicketTag = (WicketTag)tag;
             if (wicketTag.isComponentTag())
             {
                 // Create and initialize the component
@@ -30,8 +30,7 @@
                     try
                     {
 	                    // 2. Add it to the hierarchy and render it
-	                    container.add(component);
-	                    component.render();
+	                    container.autoAdd(component);
                     }
                     finally
                     {

@@ -4,11 +4,14 @@
 	 */
 	final void componentModelChanging(final Component component)
 	{
-		checkModification();
-		if (getFlag(FLAG_TRACK_CHANGES) && component.isVersioned())
+		if (!component.isAuto())
 		{
-			newVersion();
-			versionManager.componentModelChanging(component);
+			checkModification();
+			if (getFlag(FLAG_TRACK_CHANGES) && component.isVersioned())
+			{
+				newVersion();
+				versionManager.componentModelChanging(component);
+			}
 		}
 	}
 

@@ -9,16 +9,16 @@
         final List list = new ArrayList();
 
         // Chain together all the different markup filters
-        final WicketComponentTagIdentifier detectWicketComponents = new WicketComponentTagIdentifier(xmlParser);
+        final WicketTagIdentifier detectWicketComponents = new WicketTagIdentifier(xmlParser);
         detectWicketComponents.setWicketNamespace(this.wicketNamespace);
         
         final WicketParamTagHandler wicketParamTagHandler = new WicketParamTagHandler(
                 new HtmlHandler(detectWicketComponents));
         wicketParamTagHandler.setStripWicketTag(this.stripWicketTag);
         
-        final PreviewComponentTagRemover previewComponentTagRemover = new PreviewComponentTagRemover(wicketParamTagHandler);
+        final WicketRemoveTagHandler previewComponentTagRemover = new WicketRemoveTagHandler(wicketParamTagHandler);
         
-        final AutolinkHandler autolinkHandler = new AutolinkHandler(previewComponentTagRemover);
+        final WicketLinkTagHandler autolinkHandler = new WicketLinkTagHandler(previewComponentTagRemover);
         autolinkHandler.setAutomaticLinking(this.automaticLinking);
 
         // Markup filter chain starts with auto link handler
@@ -59,7 +59,7 @@
                 }
 
                 // Add to list unless preview component tag remover flagged as removed
-                if (!PreviewComponentTagRemover.IGNORE.equals(tag.getId()))
+                if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
                 {
 	                list.add(tag);
                 }
