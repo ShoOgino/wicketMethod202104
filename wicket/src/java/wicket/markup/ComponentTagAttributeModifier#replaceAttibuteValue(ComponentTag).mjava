@@ -1,22 +1,27 @@
-    /**
-     * Check the given component tag for an instance of the attribute
-     * to modify and if all criteria are met then replace the value of
-     * this attribute with the value of the contained model object.
-     *
-     * @param tag The tag to replace the attribute value for
-     */
-    public void replaceAttibuteValue(final ComponentTag tag) {
-        if ( !enabled ) return;
+	/**
+	 * Check the given component tag for an instance of the attribute
+	 * to modify and if all criteria are met then replace the value of
+	 * this attribute with the value of the contained model object.
+	 *
+	 * @param tag The tag to replace the attribute value for
+	 */
+	public void replaceAttibuteValue(final ComponentTag tag)
+	{
+		if (!enabled)
+			return;
 
-        ValueMap attributes = tag.getAttributes();
-        if ( attributes.containsKey(attribute) ) {
-            String value = attributes.get(attribute).toString();
-            if ( pattern == null || value.matches(pattern) ) {
-                attributes.put(attribute, getReplaceModel().getObject());
-            }
-        }
-        else if ( addAttributeIfNotPresent ) {
-            attributes.put(attribute, getReplaceModel().getObject());
-        }
-    }
+		ValueMap attributes = tag.getAttributes();
+		if (attributes.containsKey(attribute))
+		{
+			String value = attributes.get(attribute).toString();
+			if (pattern == null || value.matches(pattern))
+			{
+				attributes.put(attribute, getReplaceModel().getObject());
+			}
+		}
+		else if (addAttributeIfNotPresent)
+		{
+			attributes.put(attribute, getReplaceModel().getObject());
+		}
+	}
 

@@ -1,61 +1,70 @@
-    /**
-     * Get the string resource for the given combination of key, locale and style.
-     * The information is obtained from a resource bundle associated with the
-     * provided component instance (or one of its parent containers). The supplied
-     * component may be null, which indicates that this loader should be skipped
-     * and a value of null will be returned. If the supplied component is not an
-     * instance of <code>Page</code> and has not been previously added to a
-     * <code>Page</code> then an exception will be thrown.
-     *
-     * @param component The component to use to find resources to be loaded
-     * @param key The key to obtain the string for
-     * @param locale The locale identifying the resource set to
-     *               select the strings from
-     * @param style The (optional) style identifying the resource
-     *              set to select the strings from
-     * @return The string resource value or null if resource not found
-     * @throws InvalidResourceSpecificationException If the component is not associated with a page
-     */
-    public final String get(final Component component, final String key, final Locale locale, final String style)
-    throws InvalidResourceSpecificationException {
-        // Check rules
-        if ( component == null ) return null;
-        if ( component.getPage() == null ) {
-            throw new InvalidResourceSpecificationException(
-                    "Components used for locating resources must be attached to pages: " +
-                    component.getClass().getName());
-        }
+	/**
+	 * Get the string resource for the given combination of key, locale and style.
+	 * The information is obtained from a resource bundle associated with the
+	 * provided component instance (or one of its parent containers). The supplied
+	 * component may be null, which indicates that this loader should be skipped
+	 * and a value of null will be returned. If the supplied component is not an
+	 * instance of <code>Page</code> and has not been previously added to a
+	 * <code>Page</code> then an exception will be thrown.
+	 *
+	 * @param component The component to use to find resources to be loaded
+	 * @param key The key to obtain the string for
+	 * @param locale The locale identifying the resource set to
+	 *               select the strings from
+	 * @param style The (optional) style identifying the resource
+	 *              set to select the strings from
+	 * @return The string resource value or null if resource not found
+	 * @throws InvalidResourceSpecificationException If the component is not associated with a page
+	 */
+	public final String get(final Component component, final String key, final Locale locale,
+			final String style) throws InvalidResourceSpecificationException
+	{
+		// Check rules
+		if (component == null)
+			return null;
+		if (component.getPage() == null)
+		{
+			throw new InvalidResourceSpecificationException(
+					"Components used for locating resources must be attached to pages: "
+							+ component.getClass().getName());
+		}
 
-        // Build search stack
-        Stack searchStack = new Stack();
-        searchStack.push(component);
-        if ( !(component instanceof Page) ) {
-            Container c = component.getParent();
-            while ( true ) {
-                searchStack.push(c);
-                if ( c instanceof Page ) break;
-                c = c.getParent();
-            }
-        }
+		// Build search stack
+		Stack searchStack = new Stack();
+		searchStack.push(component);
+		if (!(component instanceof Page))
+		{
+			Container c = component.getParent();
+			while (true)
+			{
+				searchStack.push(c);
+				if (c instanceof Page)
+					break;
+				c = c.getParent();
+			}
+		}
 
-        // Iterate through search stack
-        String value = null;
-        while ( !searchStack.isEmpty() ) {
-            Component c = (Component)searchStack.pop();
+		// Iterate through search stack
+		String value = null;
+		while (!searchStack.isEmpty())
+		{
+			Component c = (Component) searchStack.pop();
 
-            // Locate previously loaded resources from the cache
-            final String id = createCacheId(c, style, locale);
-            ValueMap strings = (ValueMap)resourceCache.get(id);
-            if ( strings == null ) {
-                // No resources previously loaded, attempt to load them
-                strings = loadResources(c, style, locale, id);
-            }
+			// Locate previously loaded resources from the cache
+			final String id = createCacheId(c, style, locale);
+			ValueMap strings = (ValueMap) resourceCache.get(id);
+			if (strings == null)
+			{
+				// No resources previously loaded, attempt to load them
+				strings = loadResources(c, style, locale, id);
+			}
 
-            value = strings.getString(key);
-            if ( value != null ) break;
-        }
+			value = strings.getString(key);
+			if (value != null)
+				break;
+		}
 
-        // Return the resource value (may be null if resource was not found)
-        return value;
-    }
+		// Return the resource value (may be null if resource was not found)
+		return value;
+	}
 

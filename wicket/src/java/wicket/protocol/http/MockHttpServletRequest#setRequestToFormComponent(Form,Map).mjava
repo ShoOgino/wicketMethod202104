@@ -1,26 +1,28 @@
-    /**
-     * Initialise the request parameters to point to the given form component.
-     * The additional map should contain mappings between individual components
-     * that appear in the form and the string value that should be submitted
-     * for each of these components.
-     *
-     * @param form The for to send the request to
-     * @param values The values for each of the form components
-     */
-    public void setRequestToFormComponent(final Form form, final Map values) {
-        setRequestToComponent(form);
-        form.visitChildren(new Component.IVisitor()
-        {
-            public Object component(final Component component)
-            {
-                if ( component instanceof FormComponent ) {
-                    String value = (String)values.get(component);
-                    if ( value != null ) {
-                        parameters.put(component.getPath(), values.get(component));
-                    }
-                }
-                return CONTINUE_TRAVERSAL;
-            }
-        });
-    }
+	/**
+	 * Initialise the request parameters to point to the given form component. The
+	 * additional map should contain mappings between individual components that appear in
+	 * the form and the string value that should be submitted for each of these
+	 * components.
+	 * @param form The for to send the request to
+	 * @param values The values for each of the form components
+	 */
+	public void setRequestToFormComponent(final Form form, final Map values)
+	{
+		setRequestToComponent(form);
+		form.visitChildren(new Component.IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				if (component instanceof FormComponent)
+				{
+					String value = (String) values.get(component);
+					if (value != null)
+					{
+						parameters.put(component.getPath(), values.get(component));
+					}
+				}
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
 
