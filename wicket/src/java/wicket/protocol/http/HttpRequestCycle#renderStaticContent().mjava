@@ -1,15 +1,15 @@
 	/**
 	 * @return True if static content was returned
 	 */
-	private boolean respondWithStaticContent()
+	private boolean renderStaticContent()
 	{
 		try
 		{
 			// Get URL
-			final String url = ((HttpRequest) getRequest()).getURL();
+			final String url = ((HttpRequest)getRequest()).getURL();
 
 			// Get servlet context
-			final ServletContext context = ((HttpApplication) application).getServletContext();
+			final ServletContext context = ((HttpApplication)application).getServletContext();
 
 			// Set content type
 			response.setContentType(context.getMimeType(url));
@@ -17,16 +17,13 @@
 			// NOTE: Servlet container prevents accessing WEB-INF/** already.
 			// TODO Maybe a kind of exclude/include list would good as well.
 			final InputStream in = context.getResourceAsStream(url);
-
 			if (in != null)
 			{
 				try
 				{
 					// Copy resource input stream to servlet output stream
-					Streams.writeStream(in, ((HttpResponse) response).getServletResponse()
+					Streams.writeStream(in, ((HttpResponse)response).getServletResponse()
 							.getOutputStream());
-
-					return true;
 				}
 				finally
 				{
@@ -34,16 +31,17 @@
 					// InputStream only
 					in.close();
 				}
+                return true;
 			}
+            else
+            {
+                // No static content was found
+                return false;
+            }
 		}
 		catch (IOException e)
 		{
-			// Ignore inability to access resource for now
-			// TODO Should this throw a ServletException or some other kind of
-			// runtime exception?
-			// TODO Maybe this should be logged using code broadcaster pattern?
+            throw new RenderException("Cannot load static content for request " + request, e);
 		}
-
-		return false;
 	}
 

@@ -4,11 +4,6 @@
 	 */
 	final void setFormComponentValuesFromCookies(final Page page)
 	{
-		if (page == null)
-		{
-			throw new IllegalArgumentException("'page' must not be null");
-		}
-
 		// May be there is some other means I don't know. But I need access
 		// to 'this' from inside the anonymous inner class.
 		final RequestCycle cycle = this;
@@ -19,7 +14,7 @@
 			// For each FormComponent found on the Page (not Form)
 			public Object component(final Component component)
 			{
-				((Form) component).setFormComponentValuesFromPersister(cycle);
+				((Form)component).setFormComponentValuesFromPersister(cycle);
 				return CONTINUE_TRAVERSAL;
 			}
 		});
