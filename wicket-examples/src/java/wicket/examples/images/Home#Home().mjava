@@ -5,16 +5,17 @@
 	{
 		// Get our custom application subclass
 		final ImagesApplication application = (ImagesApplication)getApplication();
-		
+
 		// Image as package resource
 		add(new Image("image2"));
 
-		// Dynamically created image.  Will re-render whenever resource is asked for.
+		// Dynamically created image. Will re-render whenever resource is asked
+		// for.
 		add(new Image("image3", new RenderedDynamicImageResource(100, 100)
 		{
 			protected boolean render(Graphics2D graphics)
 			{
-				application.drawCircle(graphics);
+				drawCircle(graphics);
 				return true;
 			}
 		}));
@@ -23,9 +24,10 @@
 		add(new Image("image4", new Model("Image2.gif")));
 
 		// Dynamically created buffered image
-		add(new Image("image5", application.getImage5Resource()));
-		
+		add(new Image("image5", getImage5Resource()));
+
 		// Add cancel button image
-		add(new Image("cancelButton", application.getCancelButtonImageResource()));
+		add(new Image("cancelButton", cancelButtonImageResource.getShared(getApplication(),
+				Home.class, "cancel")));
 	}
 
