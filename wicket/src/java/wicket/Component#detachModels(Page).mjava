@@ -1,36 +1,34 @@
-    /**
-     * Detach all models that the components of this page have.
-     * @param page the page
-     */
-    final void detachModels(final Page page)
-    {
-        page.visitChildren(new IVisitor()
-        {
-            public Object component(final Component component)
-            {
-                IModel componentModel = component.getModel();
-                if ((componentModel != null)
-                        && (componentModel instanceof IDetachableModel))
-                {
-                    ((IDetachableModel) componentModel).detach(RequestCycle.get());
-                }
+	/**
+	 * Detach all models that the components of this page have.
+	 * @param page the page
+	 */
+	final void detachModels(final Page page)
+	{
+		page.visitChildren(new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				IModel componentModel = component.getModel();
+				if ((componentModel != null) && (componentModel instanceof IDetachableModel))
+				{
+					((IDetachableModel) componentModel).detach(RequestCycle.get());
+				}
 
-                // Also detach models from any contained attribute modifiers
-                if (component.attributeModifiers != null)
-                {
-                    for (Iterator it = component.attributeModifiers.iterator(); it.hasNext();)
-                    {
-                        IModel modifierModel = (IModel)
-                        	((ComponentTagAttributeModifier)it.next()).getReplaceModel();
-                        if ((modifierModel != null)
-                                && (modifierModel instanceof IDetachableModel))
-                        {
-                            ((IDetachableModel) modifierModel).detach(RequestCycle.get());
-                        }
-                    }
-                }
-                return CONTINUE_TRAVERSAL;
-            }
-        });
-    }
+				// Also detach models from any contained attribute modifiers
+				if (component.attributeModifiers != null)
+				{
+					for (Iterator it = component.attributeModifiers.iterator(); it.hasNext();)
+					{
+						IModel modifierModel = (IModel) ((ComponentTagAttributeModifier) it.next())
+								.getReplaceModel();
+						if ((modifierModel != null) && (modifierModel instanceof IDetachableModel))
+						{
+							((IDetachableModel) modifierModel).detach(RequestCycle.get());
+						}
+					}
+				}
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
 

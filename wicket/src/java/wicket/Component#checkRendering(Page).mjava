@@ -1,23 +1,23 @@
-    /**
-     * Check if all components rendered and throw an exception when this is not the case.
-     * @param page the page
-     */
-    final void checkRendering(final Page page)
-    {
-        page.visitChildren(new IVisitor()
-        {
-            public Object component(final Component component)
-            {
-                // If component never rendered
-                if (component.rendering == 0)
-                {
-                    // Throw exception
-                    throw new RenderException(component.exceptionMessage(
-                            "Component never rendered. You probably failed to " +
-                            "reference it in your markup."));
-                }
-                return CONTINUE_TRAVERSAL;
-            }
-        });
-    }
+	/**
+	 * Check if all components rendered and throw an exception when this is not the case.
+	 * @param page the page
+	 */
+	final void checkRendering(final Page page)
+	{
+		page.visitChildren(new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				// If component never rendered
+				if (component.rendering == 0)
+				{
+					// Throw exception
+					throw new RenderException(component
+							.exceptionMessage("Component never rendered. You probably failed to "
+									+ "reference it in your markup."));
+				}
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
 
