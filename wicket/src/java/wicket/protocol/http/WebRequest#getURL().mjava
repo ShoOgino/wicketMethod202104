@@ -5,20 +5,16 @@
      */
     public String getURL()
     {
-        String url = httpServletRequest.getContextPath() + httpServletRequest.getServletPath();
-        final String pathInfo = httpServletRequest.getPathInfo();
-
-        if (pathInfo != null)
-        {
-            url += pathInfo;
-        }
-
-        final String queryString = httpServletRequest.getQueryString();
-
-        if (queryString != null)
-        {
-            url += ("?" + queryString);
-        }
+    	/*
+    	 * Servlet 2.3 specification :
+		 * Context Path: The path prefix associated with the ServletContext that this
+		 * servlet is a part of. If this context is the default context rooted at the base
+		 * of the web server's URL namespace, this path will be an empty string.
+		 * Otherwise, this path starts with a "/" character but does not end with
+		 * a "/" character.
+		 */
+        String contextPath = httpServletRequest.getContextPath();
+		String url = contextPath + '/' + getRelativeURL();
 
         return url;
     }
