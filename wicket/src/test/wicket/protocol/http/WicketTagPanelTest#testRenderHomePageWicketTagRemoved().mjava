@@ -1,15 +1,16 @@
 	/**
 	 * @throws Exception
 	 */
-	public void testRenderHomePage() throws Exception
+	public void testRenderHomePageWicketTagRemoved() throws Exception
 	{
-		// Do the processing
+		// Remove wicket tags from output
+		application.getSettings().setStripWicketTags(true);
 		application.setupRequestAndResponse();
 		application.processRequestCycle();
 
 		// Validate the document
 		String document = application.getServletResponse().getDocument();
 		System.out.println(document);
-		assertTrue(validatePage1(document));
+		assertTrue(validatePage2(document));
 	}
 
