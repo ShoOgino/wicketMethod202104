@@ -1,20 +1,17 @@
-    /**
-     * Because only servlet 2.4 supports web.xml locale-encoding-mapping-list
-     * deployment descriptors, this is a workaround for 
-     * servlet 2.3 
-     */
-    protected void configureResponse()
-    {
-        final Locale originalLocale = getSession().getLocale();
-        getSession().setLocale(Locale.GERMANY);
-    	super.configureResponse();
-    	
-    	final String encoding = "text/" 
-    		+ getMarkupType() 
-			+ "; charset=" 
-			+ CharSetUtil.configureResponse(getRequestCycle());
-    	
-    	getResponse().setContentType(encoding);
-    	getSession().setLocale(originalLocale);
-    }
+	/**
+	 * Because only servlet 2.4 supports web.xml locale-encoding-mapping-list
+	 * deployment descriptors, this is a workaround for servlet 2.3
+	 */
+	protected void configureResponse()
+	{
+		final Locale originalLocale = getSession().getLocale();
+		getSession().setLocale(Locale.GERMANY);
+		super.configureResponse();
+
+		final String encoding = "text/" + getMarkupType() + "; charset="
+				+ CharSetUtil.configureResponse(getRequestCycle());
+
+		getResponse().setContentType(encoding);
+		getSession().setLocale(originalLocale);
+	}
 
