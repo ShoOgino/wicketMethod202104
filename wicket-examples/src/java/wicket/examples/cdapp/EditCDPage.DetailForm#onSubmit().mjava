@@ -12,10 +12,11 @@
 			{
 				session = HibernateHelper.getSession();
 				tx = session.beginTransaction();
-				session.save(cd);
+				session.saveOrUpdate(cd);
 				tx.commit();
 				info("cd saved");
-				//getRequestCycle().setPage(getSearchPage());
+				Page searchPage = getPageFactory().newPage(SearchCDPage.class);
+				getRequestCycle().setPage(searchPage);
 			}
 			catch (HibernateException e)
 			{
