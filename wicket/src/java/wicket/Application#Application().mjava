@@ -1,16 +1,21 @@
-    /**
-     * Constructor
-     */
-    public Application()
-    {
-        this.name = Classes.name(getClass());
+	/**
+	 * Constructor
+	 */
+	public Application()
+	{
+		// Create name from subclass
+		this.name = Classes.name(getClass());
 
-        // Construct localizer for this application
-        this.localizer = new Localizer(this);
+		// Consttruct aggregated settings and pages objects
+		this.settings = new ApplicationSettings(this);
+		this.pages = new ApplicationPages();
 
-        // Install default component resolvers
-        componentResolvers = new ArrayList();
-        componentResolvers.add(new AutolinkComponentResolver());
-        componentResolvers.add(new WicketTagComponentResolver());
-    }
+		// Construct localizer for this application
+		this.localizer = new Localizer(this);
+
+		// Install default component resolvers
+		componentResolvers = new ArrayList();
+		componentResolvers.add(new AutolinkComponentResolver());
+		componentResolvers.add(new WicketTagComponentResolver());
+	}
 

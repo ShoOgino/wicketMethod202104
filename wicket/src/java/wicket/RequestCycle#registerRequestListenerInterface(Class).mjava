@@ -1,41 +1,41 @@
-    /**
-     * Adds an interface to the map of interfaces that can be invoked by
-     * outsiders. The interface must have a single method with the signature
-     * methodName(RequestCycle). NOTE: THIS METHOD IS NOT INTENDED FOR USE BY
-     * FRAMEWORK CLIENTS.
-     * 
-     * @param i
-     *            The interface class, which must extend IRequestListener.
-     */
-    public static void registerRequestListenerInterface(final Class i)
-    {
-        // Ensure that i extends IRequestListener
-        if (!IRequestListener.class.isAssignableFrom(i))
-        {
-            throw new IllegalArgumentException("Class " + i + " must extend IRequestListener");
-        }
+	/**
+	 * Adds an interface to the map of interfaces that can be invoked by
+	 * outsiders. The interface must have a single method with the signature
+	 * methodName(RequestCycle). NOTE: THIS METHOD IS NOT INTENDED FOR USE BY
+	 * FRAMEWORK CLIENTS.
+	 * 
+	 * @param i
+	 *            The interface class, which must extend IRequestListener.
+	 */
+	public static void registerRequestListenerInterface(final Class i)
+	{
+		// Ensure that i extends IRequestListener
+		if (!IRequestListener.class.isAssignableFrom(i))
+		{
+			throw new IllegalArgumentException("Class " + i + " must extend IRequestListener");
+		}
 
-        // Get interface methods
-        final Method[] methods = i.getMethods();
+		// Get interface methods
+		final Method[] methods = i.getMethods();
 
-        // If there is only one method
-        if (methods.length == 1)
-        {
-            // and that method takes no parameters
-            if (methods[0].getParameterTypes().length == 0)
-            {
-                // Save this interface method by the non-qualified class name
-                listenerInterfaceMethods.put(Classes.name(i), methods[0]);
-            }
-            else
-            {
-                throw new IllegalArgumentException("Method in interface " + i
-                        + " cannot have parameters");
-            }
-        }
-        else
-        {
-            throw new IllegalArgumentException("Interface " + i + " can have only one method");
-        }
-    }
+		// If there is only one method
+		if (methods.length == 1)
+		{
+			// and that method takes no parameters
+			if (methods[0].getParameterTypes().length == 0)
+			{
+				// Save this interface method by the non-qualified class name
+				listenerInterfaceMethods.put(Classes.name(i), methods[0]);
+			}
+			else
+			{
+				throw new IllegalArgumentException("Method in interface " + i
+						+ " cannot have parameters");
+			}
+		}
+		else
+		{
+			throw new IllegalArgumentException("Interface " + i + " can have only one method");
+		}
+	}
 

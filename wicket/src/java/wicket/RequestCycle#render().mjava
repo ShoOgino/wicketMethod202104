@@ -1,41 +1,41 @@
-    /**
-     * Renders response for request. NOTE: THIS METHOD IS INTENDED FOR INTERNAL
-     * USE ONLY AND MAY NOT BE SUPPORTED IN THE FUTURE.
-     * 
-     * @throws ServletException
-     */
-    public final void render() throws ServletException
-    {
-        // Serialize renderings on the session object so that only one page
-        // can be rendered at a time for a given session.
-        synchronized (session)
-        {
-            // Set this request cycle as the active request cycle for the
-            // session for easy access by the page being rendered and any
-            // components on that page
-            session.setRequestCycle(this);
+	/**
+	 * Renders response for request. NOTE: THIS METHOD IS INTENDED FOR INTERNAL
+	 * USE ONLY AND MAY NOT BE SUPPORTED IN THE FUTURE.
+	 * 
+	 * @throws ServletException
+	 */
+	public final void render() throws ServletException
+	{
+		// Serialize renderings on the session object so that only one page
+		// can be rendered at a time for a given session.
+		synchronized (session)
+		{
+			// Set this request cycle as the active request cycle for the
+			// session for easy access by the page being rendered and any
+			// components on that page
+			session.setRequestCycle(this);
 
-            try
-            {
-                // Render response for request cycle
-                handleRender();
-            }
-            catch (RuntimeException e)
-            {
-                handleRenderingException(e);
-            }
-            finally
-            {
-                // Close the response
-                response.close();
+			try
+			{
+				// Render response for request cycle
+				handleRender();
+			}
+			catch (RuntimeException e)
+			{
+				handleRenderingException(e);
+			}
+			finally
+			{
+				// Close the response
+				response.close();
 
-                // Set the active request cycle back to null since we are
-                // done rendering the requested page
-                session.setRequestCycle(null);
+				// Set the active request cycle back to null since we are
+				// done rendering the requested page
+				session.setRequestCycle(null);
 
-                // Thread is done and should release thread local resources
-                threadDetach();
-            }
-        }
-    }
+				// Thread is done and should release thread local resources
+				threadDetach();
+			}
+		}
+	}
 

@@ -1,46 +1,46 @@
-    /**
-     * Sets up to handle a runtime exception thrown during rendering
-     * 
-     * @param e
-     *            The exception
-     */
-    private void handleRenderingException(RuntimeException e)
-    {
-        // Render a page for the user
-        try
-        {
-            // If application doesn't want debug info showing up for users
-            ApplicationSettings settings = application.getSettings();
-            if (settings.getUnexpectedExceptionDisplay() != ApplicationSettings.SHOW_NO_EXCEPTION_PAGE)
-            {
-                if (settings.getUnexpectedExceptionDisplay() == ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
-                {
-                    // use internal error page
-                    setPage(getPageFactory().newPage(application.getPages().getInternalErrorPage()));
-                }
-                else
-                {
-                    // otherwise show full details
-                    setPage(new ExceptionErrorPage(e));
-                }
-                // We generally want to redirect the response because we were
-                // in the middle of rendering and the page may end up looking
-                // like spaghetti otherwise
-                redirectToPage(getPage());
-            }
-        }
-        catch (RuntimeException ignored)
-        {
-            // We ignore any problems trying to render the exception display
-            // page because we are just going to rethrow the exception anyway
-            // and the original problem will be displayed on the console by
-            // the container. It's better this way because users of the
-            // framework
-            // will not want to be distracted by any internal problems rendering
-            // a runtime exception error display page.
-        }
+	/**
+	 * Sets up to handle a runtime exception thrown during rendering
+	 * 
+	 * @param e
+	 *            The exception
+	 */
+	private void handleRenderingException(RuntimeException e)
+	{
+		// Render a page for the user
+		try
+		{
+			// If application doesn't want debug info showing up for users
+			ApplicationSettings settings = application.getSettings();
+			if (settings.getUnexpectedExceptionDisplay() != ApplicationSettings.SHOW_NO_EXCEPTION_PAGE)
+			{
+				if (settings.getUnexpectedExceptionDisplay() == ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
+				{
+					// use internal error page
+					setPage(getPageFactory().newPage(application.getPages().getInternalErrorPage()));
+				}
+				else
+				{
+					// otherwise show full details
+					setPage(new ExceptionErrorPage(e));
+				}
+				// We generally want to redirect the response because we were
+				// in the middle of rendering and the page may end up looking
+				// like spaghetti otherwise
+				redirectToPage(getPage());
+			}
+		}
+		catch (RuntimeException ignored)
+		{
+			// We ignore any problems trying to render the exception display
+			// page because we are just going to rethrow the exception anyway
+			// and the original problem will be displayed on the console by
+			// the container. It's better this way because users of the
+			// framework
+			// will not want to be distracted by any internal problems rendering
+			// a runtime exception error display page.
+		}
 
-        // Rethrow error for console / container
-        throw e;
-    }
+		// Rethrow error for console / container
+		throw e;
+	}
 
