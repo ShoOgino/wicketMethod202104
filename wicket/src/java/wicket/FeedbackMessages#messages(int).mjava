@@ -3,28 +3,28 @@
 	 * above.
 	 * 
 	 * @param level
-	 *            the level to get the messages for
-	 * @return the sub list of message with messages that are of the given level
+	 *            The level to get the messages for
+	 * @return The sub list of message with messages that are of the given level
 	 *         or above, or an empty list
 	 */
-	public FeedbackMessages messages(int level)
+	public List messages(int level)
 	{
+		List list = null;
 		if (messages != null)
 		{
-			final List sublist = new ArrayList();
 			for (final Iterator i = messages.iterator(); i.hasNext();)
 			{
 				final FeedbackMessage message = (FeedbackMessage)i.next();
 				if (message.isLevel(level))
 				{
-					sublist.add(message);
+					if (list == null)
+					{
+						list = new ArrayList();
+					}
+					list.add(message);
 				}
 			}
-			return new FeedbackMessages().setMessages(sublist);
 		}
-		else
-		{
-			return new FeedbackMessages();
-		}
+		return list != null ? Collections.unmodifiableList(list) : Collections.EMPTY_LIST;
 	}
 
