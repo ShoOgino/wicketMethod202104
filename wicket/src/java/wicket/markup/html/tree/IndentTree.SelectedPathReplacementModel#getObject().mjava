@@ -1,0 +1,19 @@
+		/**
+		 * @see wicket.model.IModel#getObject()
+		 */
+		public Object getObject()
+		{
+			TreePath path = treeNodeModel.getPath();
+			TreePath selectedPath = treeNodeModel.getTreeState().getSelectedPath();
+			if(selectedPath != null)
+			{
+				boolean equals = IndentTree.this.equals(path, selectedPath);
+				
+				if(equals)
+				{
+					return IndentTree.this.getCSSClassForSelectedRow();
+				}
+			}
+			return IndentTree.this.getCSSClassForRow();
+		}
+
