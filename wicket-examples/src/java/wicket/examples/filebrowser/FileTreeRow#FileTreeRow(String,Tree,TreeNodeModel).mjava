@@ -1,0 +1,22 @@
+    /**
+     * Construct.
+     * @param componentName name of the component
+     * @param node the tree node for this row
+     */
+    public FileTreeRow(String componentName, Tree tree, TreeNodeModel nodeModel)
+    {
+        super(componentName);
+        if(nodeModel != null)
+        {
+            TreeNodeLink link = new TreeNodeLink("link", tree, nodeModel);
+            File file = (File)nodeModel.getUserObject();
+            link.add(new Label("label", file.getName()));
+            add(link);
+        }
+        else
+        {
+            // not a real node; just add some dummies
+            add(new HtmlContainer("link").add(new HtmlContainer("label")));
+        }
+    }
+
