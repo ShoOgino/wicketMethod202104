@@ -2,14 +2,14 @@
      * @return Resource watcher with polling frequency determined by setting, or null if
      *         no polling frequency has been set.
      */
-    public Watcher getResourceWatcher()
+    public ModificationWatcher getResourceWatcher()
     {
         if (!triedToCreateResouceWatcher)
         {
             final Duration frequency = getResourcePollFrequency();
             if (frequency != null)
             {
-                resourceWatcher = new Watcher(frequency);
+                resourceWatcher = new ModificationWatcher(frequency);
             }
             triedToCreateResouceWatcher = true;
         }

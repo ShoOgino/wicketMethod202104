@@ -5,29 +5,29 @@
     public void start(final Duration pollFrequency)
     {
         // Construct task with the given polling frequency
-        final Task task = new Task("Watcher");
+        final Task task = new Task("ModificationWatcher");
 
         task.run(pollFrequency, new ICode()
         {
-            public void run(final Log codeListener)
+            public void run(final Log log)
             {
-                for (final Iterator iterator = changeableToEntry.values().iterator(); iterator
-                        .hasNext();)
+                for (final Iterator iterator = modifiableToEntry.values().iterator(); 
+                     iterator.hasNext();)
                 {
                     // Get next entry
                     final Entry entry = (Entry) iterator.next();
 
-                    // If the changeable has been modified after the last known
+                    // If the modifiable has been modified after the last known
                     // modification time
-                    final Time changeableLastModified = entry.changeable.lastModifiedTime();
+                    final Time modifiableLastModified = entry.modifiable.lastModifiedTime();
 
-                    if (changeableLastModified.after(entry.lastModifiedTime))
+                    if (modifiableLastModified.after(entry.lastModifiedTime))
                     {
-                        // Notify all listeners that the changeable changed
+                        // Notify all listeners that the modifiable was modified
                         entry.listeners.notifyListeners();
 
                         // Update timestamp
-                        entry.lastModifiedTime = changeableLastModified;
+                        entry.lastModifiedTime = modifiableLastModified;
                     }
                 }
             }
