@@ -1,14 +1,11 @@
 	/**
 	 * Releases the current thread local related resources. The threadlocal of
 	 * this request cycle is reset. If we are in a 'redirect' state, we do not
-	 * want to loose our messages as - e.g. when handling a form - there's a fat
-	 * change we are comming back for the rendering of it.
+	 * want to lose our messages as - e.g. when handling a form - there's a fat
+	 * chance we are coming back for the rendering of it.
 	 */
 	private void threadDetach()
 	{
-		// Close the response
-		response.close();
-		
 		if (getRedirect())
 		{
 			// Since we are explicitly redirecting to a page already, we do not
@@ -22,5 +19,8 @@
 		// Set the active request cycle back to null since we are
 		// done rendering the requested page
 		session.setRequestCycle(null);
+		        
+        // This thread is no longer attached to a Session
+        Session.set(null);
 	}
 

@@ -1,0 +1,57 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * <p>
+	 * Responds to a request.
+	 * 
+	 * @throws ServletException
+	 */
+	public final void respond() throws ServletException
+	{
+		// Serialize renderings on the session object so that only one page
+		// can be rendered at a time for a given session.
+		synchronized (session)
+		{
+			// Attach thread local resources for request
+			threadAttach();
+
+			try
+			{
+				// Handle request 
+				final boolean renderPage = onRespond();
+
+				// Replicate session if need be
+				session.updateCluster();
+
+				// Is there a page to render?
+				if (renderPage)
+				{
+					final Page page = getPage();
+					if (page != null)
+					{
+						// Should page be redirected to?
+						if (getRedirect())
+						{
+							// Redirect to the page
+							redirectToPage(page);
+						}
+						else
+						{
+							// Render the page
+							page.render();
+						}
+					}
+				}
+			}
+			catch (RuntimeException e)
+			{
+				// Handle any runtime exception
+				onRuntimeException(e);
+			}
+			finally
+			{
+				// Release thread local resources
+				threadDetach();
+			}
+		}
+	}
+

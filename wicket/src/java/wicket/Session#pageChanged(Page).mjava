@@ -1,0 +1,16 @@
+	/**
+	 * Called when an IPage record should be added to the replicated state
+	 * 
+	 * @param page
+	 */
+	public final void pageChanged(final Page page)
+	{
+		// Add IPage for this page to the list of changed pages
+		// that need to be replicated
+		final IPage changedPage = onPageChanged(page);
+		synchronized (state.changedPages)
+		{
+			state.changedPages.add(changedPage);
+		}
+	}
+

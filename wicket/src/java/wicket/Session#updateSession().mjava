@@ -1,0 +1,39 @@
+	/**
+	 * Updates this session using changed state information that may have been
+	 * replicated to this node on a cluster.
+	 */
+	public final void updateSession()
+	{
+		// Get any replicated state from the session
+		final State state = (State)getAttribute("state");
+		if (state != null)
+		{
+			// Copy state into Session
+			this.state = state;
+			
+			// Lock changed pages
+			synchronized (state.changedPages)
+			{
+				// Copy any changed pages into our (transient) Session
+				for (final Iterator iterator = state.changedPages.iterator(); iterator.hasNext();)
+				{
+					// Get next change
+					final IPage changedPage = (IPage)iterator.next();
+	
+					// If its not the master copy, we need to add it since it was
+					// replicated over here
+					if (!changedPage.isMaster())
+					{
+						// Get page
+						final Page page = changedPage.getPage();
+	
+						// Add to page map
+						pages.put(new Integer(page.getId()), page);
+					}
+	
+					iterator.remove();
+				}
+			}
+		}
+	}
+
