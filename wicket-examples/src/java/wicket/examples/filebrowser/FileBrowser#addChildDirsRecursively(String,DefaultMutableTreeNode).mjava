@@ -12,7 +12,14 @@
         }
 
         File d = new File(currentPath);
-        String[] c = d.list(); // get list of directories
+        String[] c = d.list(new FilenameFilter(){
+
+            public boolean accept(File dir, String name)
+            {
+                return dir.isDirectory();
+            }
+            
+        }); // get list of directories
 
         if (c != null)
         {
