@@ -3,22 +3,18 @@
      */
     protected void handleComponentTag(final ComponentTag tag)
     {
-        checkComponentTag(tag, "img");
-        super.handleComponentTag(tag);
-
-        final String imageResource = (String)getModelObject();
-        if (imageResource != null)
-        {
-            resourcePath = imageResource;
-        }
-        else
+        final String imageResource = getModelObjectAsString();
+        if (Strings.isEmpty(imageResource))
         {
             resourcePath = tag.getString("src");
         }
+        else
+        {
+            resourcePath = imageResource;
+        }
 	    style = getStyle();
 	    locale = getLocale();
-
-        final String url = getRequestCycle().urlFor(this, IResourceListener.class);
-		tag.put("src", url.replaceAll("&", "&amp;"));
+    	
+        super.handleComponentTag(tag);
     }
 
