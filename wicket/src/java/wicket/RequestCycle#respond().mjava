@@ -1,0 +1,33 @@
+	/**
+	 * Respond with response page
+	 * 
+	 * @throws ServletException
+	 */
+	private void respond() throws ServletException
+	{
+		// Get any page that is to be used to respond to the request
+		final Page page = getResponsePage();
+		if (page != null)
+		{
+			try
+			{
+				// Should page be redirected to?
+				if (getRedirect())
+				{
+					// Redirect to the page
+					redirectTo(page);
+				}
+				else
+				{
+					// Make request to page
+					page.request();
+				}
+			}
+			catch (RuntimeException e)
+			{
+				// Handle any runtime exception
+				onRuntimeException(page, e);
+			}
+		}
+	}
+

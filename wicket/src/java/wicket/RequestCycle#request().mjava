@@ -11,58 +11,25 @@
 		// can be rendered at a time for a given session.
 		synchronized (session)
 		{
-			// Attach thread local resources for request
-			threadAttach();
-
-			// Any page used to respond to the request
-			Page page = null;
-
-			// Response is beginning
-			internalOnBeginRequest();
-			onBeginRequest();
-
 			try
 			{
-				// If subclass response to request set a Page to render
-				if (onRespond())
+				// Attach thread local resources for request
+				threadAttach();
+
+				// Response is beginning
+				internalOnBeginRequest();
+				onBeginRequest();
+
+				// If request is parsed successfully
+				if (parseRequest())
 				{
-					// Get page set by subclass response
-					page = getResponsePage();
-					if (page != null)
-					{
-						try
-						{
-							// Should page be redirected to?
-							if (getRedirect())
-							{
-								// Redirect to the page
-								redirectTo(page);
-							}
-							else
-							{
-								// Make request to page
-								page.request();
-							}
-						}
-						finally
-						{
-							// Response is ending
-							internalOnEndRequest();
-							onEndRequest();
-						}
-					}
+					// respond with a page
+					respond();
 				}
-				else
-				{
-					// Response is ending
-					internalOnEndRequest();
-					onEndRequest();
-				}
-			}
-			catch (RuntimeException e)
-			{
-				// Handle any runtime exception
-				onRuntimeException(page, e);
+
+				// Response is ending
+				internalOnEndRequest();
+				onEndRequest();
 			}
 			finally
 			{
