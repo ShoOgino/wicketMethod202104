@@ -5,7 +5,14 @@
 	{
 		try
 		{
-			return Streams.readString(new InputStreamReader(getInputStream(), charset));
+			if (charset == null)
+			{
+				return Streams.readString(new InputStreamReader(getInputStream()));
+			}
+			else
+			{
+				return Streams.readString(new InputStreamReader(getInputStream(), charset));
+			}
 		}
 		catch (IOException e)
 		{
