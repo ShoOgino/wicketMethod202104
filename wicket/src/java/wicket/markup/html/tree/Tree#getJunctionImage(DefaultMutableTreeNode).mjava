@@ -1,0 +1,37 @@
+	/**
+	 * Get image for a junction; used by method createExpandCollapseLink. If you
+	 * use the packaged panel (Tree.html), you must name the component
+	 * using JUNCTION_IMAGE_NAME.
+	 * 
+	 * @param node
+	 *            the tree node
+	 * @return the image for the junction
+	 */
+	protected Image getJunctionImage(final DefaultMutableTreeNode node)
+	{
+		if (!node.isLeaf())
+		{
+			// we want the image to be dynamically, yet resolving to a
+			// application static image.
+			final ImageResource imgResource = new ImageResource()
+			{
+				public IResource getResource()
+				{
+					if (isExpanded(node))
+					{
+						return IMG_MINUS.getResource();
+					}
+					else
+					{
+						return IMG_PLUS.getResource();
+					}
+				}
+			};
+			return new Image(JUNCTION_IMAGE_NAME, imgResource);
+		}
+		else
+		{
+			return new Image(JUNCTION_IMAGE_NAME, IMG_BLANK);
+		}
+	}
+

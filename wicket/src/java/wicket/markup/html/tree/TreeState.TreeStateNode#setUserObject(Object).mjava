@@ -1,0 +1,20 @@
+		/**
+		 * Messaged to set the user object. This resets the path.
+		 * 
+		 * @param o
+		 *            the user object
+		 */
+		public void setUserObject(Object o)
+		{
+			super.setUserObject(o);
+			if (path != null)
+			{
+				TreeStateNode parent = (TreeStateNode) getParent();
+
+				if (parent != null)
+					resetChildrenPaths(parent.getTreePath());
+				else
+					resetChildrenPaths(null);
+			}
+		}
+

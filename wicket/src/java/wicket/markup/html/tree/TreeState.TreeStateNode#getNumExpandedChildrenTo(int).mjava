@@ -1,0 +1,28 @@
+		/**
+		 * Returns the number of children that are expanded to
+		 * <code>stopIndex</code>. This does not include the number of
+		 * children that the child at <code>stopIndex</code> might have.
+		 * 
+		 * @param stopIndex
+		 *            index to stop on
+		 * @return the number of children that are expanded to
+		 *         <code>stopIndex</code>
+		 */
+		private int getNumExpandedChildrenTo(int stopIndex)
+		{
+			TreeStateNode aChild;
+			int retCount = stopIndex;
+
+			for (int counter = 0, maxCounter = getChildCount(); counter < maxCounter; counter++)
+			{
+				aChild = (TreeStateNode) getChildAt(counter);
+				if (aChild.childIndex >= stopIndex)
+					return retCount;
+				else
+				{
+					retCount += aChild.getTotalChildCount();
+				}
+			}
+			return retCount;
+		}
+

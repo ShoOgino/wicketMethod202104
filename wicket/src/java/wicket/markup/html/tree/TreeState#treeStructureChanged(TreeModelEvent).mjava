@@ -1,0 +1,60 @@
+	/**
+	 * <p>
+	 * Invoked after the tree has drastically changed structure from a given
+	 * node down. If the path returned by e.getPath() is of length one and the
+	 * first element does not identify the current root node the first element
+	 * should become the new root of the tree.
+	 * <p>
+	 * <p>
+	 * e.path() holds the path to the node.
+	 * </p>
+	 * <p>
+	 * e.childIndices() returns null.
+	 * </p>
+	 * 
+	 * @param e
+	 *            the tree model event
+	 */
+	public void treeStructureChanged(TreeModelEvent e)
+	{
+		if (e != null)
+		{
+			TreePath changedPath = e.getTreePath();
+			TreeStateNode changedNode = getNodeForPath(changedPath, false, false);
+
+			// Check if root has changed, either to a null root, or
+			// to an entirely new root.
+			if (changedNode == root
+					|| (changedNode == null && ((changedPath == null && treeModel != null && treeModel
+							.getRoot() == null) || (changedPath != null && changedPath
+							.getPathCount() <= 1))))
+			{
+				rebuild(true);
+			}
+			else if (changedNode != null)
+			{
+				boolean wasExpanded, wasVisible;
+				TreeStateNode parent = (TreeStateNode) changedNode.getParent();
+
+				wasExpanded = changedNode.isExpanded();
+				wasVisible = changedNode.isVisible();
+
+				int index = parent.getIndex(changedNode);
+				changedNode.collapse(false);
+				parent.remove(index);
+
+				if (wasVisible && wasExpanded)
+				{
+					int row = changedNode.getRow();
+					parent.resetChildrenRowsFrom(row, index, changedNode.getChildIndex());
+					changedNode = getNodeForPath(changedPath, false, true);
+					changedNode.expand();
+				}
+				if (treeSelectionModel != null && wasVisible && wasExpanded)
+					treeSelectionModel.resetRowSelection();
+				if (wasVisible)
+					this.visibleNodesChanged();
+			}
+		}
+	}
+

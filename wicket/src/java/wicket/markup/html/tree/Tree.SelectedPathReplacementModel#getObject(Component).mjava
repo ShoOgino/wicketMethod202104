@@ -1,0 +1,19 @@
+		/**
+		 * @see wicket.model.IModel#getObject(Component)
+		 */
+		public Object getObject(final Component component)
+		{
+			TreePath path = new TreePath(node.getPath());
+			TreePath selectedPath = getTreeState().getSelectedPath();
+			if (selectedPath != null)
+			{
+				boolean equals = Tree.this.equals(path, selectedPath);
+
+				if (equals)
+				{
+					return Tree.this.getCssClassForSelectedRow();
+				}
+			}
+			return Tree.this.getCssClassForRow();
+		}
+
