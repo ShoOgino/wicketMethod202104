@@ -7,14 +7,23 @@
 		assertEquals(new Float(1.1), converter.convert(new Float(1.1)));
 		assertEquals(new Float(1.1), converter.convert("1.1"));
 		assertEquals("1.1", new StringConverter(Locale.US).convert(new Float(1.1)));
-		try
-		{
-			converter.convert("whatever");
-			fail("Conversion should have thrown an exception");
-		}
-		catch (ConversionException e)
-		{
-			// this is correct
-		}
+        try
+        {
+            converter.convert("whatever");
+            fail("Conversion should have thrown an exception");
+        }
+        catch (ConversionException e)
+        {
+            // this is correct
+        }
+        try
+        {
+            converter.convert("1.1whatever");
+            fail("Conversion should have thrown an exception");
+        }
+        catch (ConversionException e)
+        {
+            // this is correct
+        }
 	}
 
