@@ -1,0 +1,26 @@
+	/**
+	 * Install version manager if need be
+	 */
+	private final void changed()
+	{
+		// If we are creating a revision of the original Page
+		if (trackChanges)
+		{
+			// Install a real version manager now if we don't already have one
+			if (versionManager == IPageVersionManager.NULL)
+			{
+				versionManager = newVersionManager();
+			}
+
+			// If there have not been any changes yet
+			if (changeCount == 0)
+			{
+				// start a new version
+				getVersionManager().beginVersion();
+			}
+
+			// Increase number of changes
+			changeCount++;
+		}
+	}
+

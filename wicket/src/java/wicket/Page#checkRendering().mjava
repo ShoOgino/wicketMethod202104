@@ -1,18 +1,14 @@
 	/**
-	 * Check if all components rendered and throw an exception when this is not
-	 * the case.
-	 * 
-	 * @param page
-	 *            the page
+	 * Throw an exception if not all components rendered.
 	 */
-	final void checkRendering(final Page page)
+	private final void checkRendering()
 	{
-		page.visitChildren(new IVisitor()
+		visitChildren(new IVisitor()
 		{
 			public Object component(final Component component)
 			{
 				// If component never rendered
-				if (component.rendering == 0)
+				if (!renderedComponents.contains(component))
 				{
 					// Throw exception
 					throw new WicketRuntimeException(component
@@ -22,5 +18,7 @@
 				return CONTINUE_TRAVERSAL;
 			}
 		});
+
+		renderedComponents = null;
 	}
 

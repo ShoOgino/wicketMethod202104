@@ -10,10 +10,12 @@
 	 */
 	public MarkupContainer add(final Component child)
 	{
+		// Check for degenerate case
 		if (child == this)
 		{
 			throw new IllegalArgumentException("Component can't be added to itself");
 		}
+		
 		// Get child name
 		final String childName = child.getName();
 
@@ -48,6 +50,13 @@
 		{
 			throw new IllegalArgumentException(exceptionMessage("A child component with the name '"
 					+ childName + "' already exists"));
+		}
+
+		// Tell the page a component was added
+		final Page page = findPage();
+		if (page != null)
+		{
+			page.componentAdded(child);
 		}
 
 		return this;

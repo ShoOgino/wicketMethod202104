@@ -1,14 +1,8 @@
 	/**
 	 * Renders this container to the given response object.
 	 */
-	protected void onRender()
+	protected final void onRender()
 	{
-		// Adds any feedback messages on this page to the given component
-		if (feedback != null)
-		{
-			feedback.addFeedbackMessages(this, false);
-		}
-
 		// Configure response object with locale and content type
 		configureResponse();
 
@@ -22,16 +16,5 @@
 			// Render all the page's markup
 			renderAll(markupStream);
 		}
-
-		// If the application wants component uses checked and
-		// the response is not a redirect
-		if (getApplicationSettings().getComponentUseCheck() && !getResponse().isRedirect())
-		{
-			// Visit components on page
-			checkRendering(this);
-		}
-
-		// Clear all feedback messages
-		getFeedbackMessages().clear();
 	}
 

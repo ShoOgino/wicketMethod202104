@@ -1,0 +1,28 @@
+	/**
+	 * Removes the named component
+	 * 
+	 * @param name
+	 *            The component to remove
+	 */
+	public void remove(final String name)
+	{
+		final Component component = get(name);
+		if (component != null)
+		{
+			// Remove from map
+			childForName.remove(name);
+			
+			// Notify Page
+			final Page page = findPage();
+			if (page != null)
+			{
+				page.componentRemoved(component);
+			}
+		}
+		else
+		{
+			throw new WicketRuntimeException("Unable to find a component named '" + name
+					+ "' to remove");
+		}
+	}
+

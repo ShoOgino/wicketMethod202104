@@ -7,6 +7,9 @@
 	 */
 	public final void respond() throws ServletException
 	{
+		// Response is beginning
+		beginResponse();
+
 		// Serialize renderings on the session object so that only one page
 		// can be rendered at a time for a given session.
 		synchronized (session)
@@ -23,24 +26,35 @@
 					final Page page = getPage();
 					if (page != null)
 					{
-						// Should page be redirected to?
-						if (getRedirect())
+						try
 						{
-							// Redirect to the page
-							redirectToPage(page);
+							// Should page be redirected to?
+							if (getRedirect())
+							{
+								// Redirect to the page
+								redirectToPage(page);
+							}
+							else
+							{
+								// Render the page
+								page.render();
+							}
 						}
-						else
+						finally
 						{
-							// Render the page
-							page.render();
-							
-							// Replicate session if need be
-							session.updateCluster();
-							
+							// Response is ending
+							endResponse();
+
 							// The request is over
+							page.onInternalEndRequest();
 							page.onEndRequest();
 						}
 					}
+				}
+				else
+				{
+					// Response is ending
+					endResponse();
 				}
 			}
 			catch (RuntimeException e)

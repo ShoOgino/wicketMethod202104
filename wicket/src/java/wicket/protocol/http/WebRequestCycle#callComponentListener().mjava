@@ -18,7 +18,7 @@
 			// Get page from path
 			log.debug("Getting page for path " + path);
 			final Page page = session.getPage(path);
-
+			
 			// Does page exist?
 			if (page != null)
 			{
@@ -28,13 +28,9 @@
 					onStalePage();
 					return true;
 				}
-				else if (page.isRenderingStale(Integer.parseInt(request.getParameter("rendering"))))
-				{
-					onStaleRendering(page);
-					return true;
-				}
 				else
 				{
+					// Execute the user's code
 					invokeInterface(page, path, request.getParameter("interface"));
 					return true;
 				}

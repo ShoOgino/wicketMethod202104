@@ -4,8 +4,9 @@
 	public final void render()
 	{
 		// Rendering is beginning
+		onInternalBeginRender();
 		onBeginRender();
-		
+
 		try
 		{
 			// Get request cycle to render to
@@ -26,6 +27,9 @@
 			{
 				// Call implementation to render component
 				onRender();
+				
+				// Tell the page that the component rendered
+				getPage().componentRendered(this);
 			}
 	
 			// Restore original response
@@ -33,11 +37,9 @@
 		}
 		finally
 		{
-			// Increase render count for component
-			rendering++;
-
 			// Rendering has completed
 			onEndRender();
+			onInternalEndRender();
 			
 			// Detach models now that rendering is fully completed
 			detachModels();
