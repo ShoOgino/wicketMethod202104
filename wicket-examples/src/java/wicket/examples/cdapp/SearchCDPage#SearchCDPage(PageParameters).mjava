@@ -1,0 +1,33 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param pageParameters parameters for this page
+	 */
+	public SearchCDPage(PageParameters pageParameters)
+	{
+		super();
+		final int rowsPerPage = 8;
+		searchModel = new CDSearchModel(rowsPerPage);
+		FeedbackPanel feedback = new FeedbackPanel("feedback");
+		add(new SearchForm("searchForm", feedback));
+		add(feedback);
+		resultsListView = new SearchCDResultsListView("results", searchModel, rowsPerPage);
+		add(resultsListView);
+		WebMarkupContainer resultsTableHeader = new WebMarkupContainer("resultsHeader")
+		{
+			public void render()
+			{
+				setVisible(searchModel.hasResults());
+				super.render();
+			}
+		};
+		resultsTableHeader.add(new SortLink("sortOnArtist", "performers"));
+		resultsTableHeader.add(new SortLink("sortOnTitle", "title"));
+		resultsTableHeader.add(new SortLink("sortOnYear", "year"));
+		resultsTableHeader.add(new SortLink("sortOnLabel", "label"));
+		resultsTableHeader.setVisible(false); // non-visible as there are no
+		// results yet
+		add(resultsTableHeader);
+		add(new CDTableNavigation("navigation", resultsListView));
+	}
+

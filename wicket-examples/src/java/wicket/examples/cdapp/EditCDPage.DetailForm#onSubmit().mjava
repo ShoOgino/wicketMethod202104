@@ -1,0 +1,33 @@
+		/**
+		 * @see wicket.markup.html.form.Form#onSubmit()
+		 */
+		public void onSubmit()
+		{
+			CD cd = (CD)getModelObject();
+			// note that, as we used the Ognl property model, the fields are
+			// allready updated
+			Session session = null;
+			Transaction tx = null;
+			try
+			{
+				session = HibernateHelper.getSession();
+				tx = session.beginTransaction();
+				session.save(cd);
+				tx.commit();
+				info("cd saved");
+				//getRequestCycle().setPage(getSearchPage());
+			}
+			catch (HibernateException e)
+			{
+				try
+				{
+					tx.rollback();
+				}
+				catch (HibernateException ex)
+				{
+					ex.printStackTrace();
+				}
+				throw new WicketRuntimeException(e);
+			}
+		}
+

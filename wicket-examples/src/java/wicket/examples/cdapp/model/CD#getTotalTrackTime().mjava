@@ -1,0 +1,30 @@
+	/**
+	 * This methods returns the total trackTime rounded to 2 decimals
+	 * @return Double totalTrackTime
+	 */
+	public Double getTotalTrackTime()
+	{
+		double totalTrackTime = 0;
+
+		if (tracks == null)
+		{
+			return new Double(0);
+		}
+
+		Iterator iter = tracks.iterator();
+		while (iter.hasNext())
+		{
+			Track aTrack = (Track)iter.next();
+			if (aTrack != null && aTrack.getLength() != null)
+			{
+				totalTrackTime += aTrack.getLength().doubleValue();
+			}
+		}
+
+		DecimalFormat dc = new DecimalFormat(".00");
+
+		String formattedDouble = dc.format(totalTrackTime);
+
+		return new Double(formattedDouble);
+	}
+
