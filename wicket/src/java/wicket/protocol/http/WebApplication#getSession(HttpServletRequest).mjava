@@ -26,7 +26,6 @@
 			if (session instanceof WebSession)
 			{
 				webSession = (WebSession)session;
-				webSession.sessionAttributeName = sessionAttributeName;
 			}
 			else
 			{
@@ -41,11 +40,8 @@
 			httpSession.setAttribute(sessionAttributeName, webSession);
 		}
 
-		// Attach / reattach http servlet session
-		webSession.httpSession = httpSession;
-
-		// Set the current session to the session we just retrieved
-		Session.set(webSession);
+		// Set session attribute name and attach/reattach http servlet session
+		webSession.init(httpSession, sessionAttributeName);
 
 		return webSession;
 	}
