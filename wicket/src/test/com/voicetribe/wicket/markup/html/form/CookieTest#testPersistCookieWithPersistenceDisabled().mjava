@@ -1,0 +1,27 @@
+    public void testPersistCookieWithPersistenceDisabled() throws IOException, ServletException
+    {
+    	// initialize 
+        HtmlPage page = new MockPage(null);
+		page.add(this.panel);
+		
+        HttpRequestCycle cycle = new HttpRequestCycle(
+        		application, 
+				application.getWicketSession(),
+				application.getWicketRequest(),
+				application.getWicketResponse());
+        
+        FormComponent username = (FormComponent)panel.get("signInForm.username");
+        FormComponent password = (FormComponent)panel.get("signInForm.password");
+        
+        //username.setPersistent(true);
+        //password.setPersistent(true);
+        
+        // test
+        // will call persistFromComponentData(), which is private
+		this.form.formSubmitted(cycle);
+		
+		// validate
+        Collection cookies = application.getServletResponse().getCookies();
+        Assert.assertEquals(cookies.size(), 0);
+    }
+
