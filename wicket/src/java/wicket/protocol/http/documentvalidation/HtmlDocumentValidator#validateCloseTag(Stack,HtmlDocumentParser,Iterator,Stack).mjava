@@ -1,9 +1,14 @@
     /**
      * Validate the close tag that was found.
-     * @param tagNameStack The stack of tag names
-     * @param parser The parser
-     * @param expectedElements The current iterator of expected elements
-     * @param iteratorStack The stack of previous iterators
+     * 
+     * @param tagNameStack
+     *            The stack of tag names
+     * @param parser
+     *            The parser
+     * @param expectedElements
+     *            The current iterator of expected elements
+     * @param iteratorStack
+     *            The stack of previous iterators
      * @return The next iterator to use, or null
      */
     private Iterator validateCloseTag(Stack tagNameStack, HtmlDocumentParser parser,
@@ -11,27 +16,26 @@
     {
         if (tagNameStack.isEmpty())
         {
-            System.err.println("Found closing tag </"
-                    + parser.getTag() + "> when there are no " + "tags currently open");
+            System.err.println("Found closing tag </" + parser.getTag() + "> when there are no "
+                    + "tags currently open");
             expectedElements = null;
         }
         else
         {
-            String expectedTag = (String) tagNameStack.pop();
+            String expectedTag = (String)tagNameStack.pop();
             if (!expectedTag.equals(parser.getTag()))
             {
-                System.err.println("Found closing tag </"
-                        + parser.getTag() + "> when we expecting " + "the closing tag </"
-                        + expectedTag + "> instead");
+                System.err
+                        .println("Found closing tag </" + parser.getTag() + "> when we expecting "
+                                + "the closing tag </" + expectedTag + "> instead");
                 expectedElements = null;
             }
             else
             {
                 if (expectedElements.hasNext())
                 {
-                    DocumentElement e = (DocumentElement) expectedElements.next();
-                    System.err.println("Found closing tag </"
-                            + parser.getTag() + "> but we were "
+                    DocumentElement e = (DocumentElement)expectedElements.next();
+                    System.err.println("Found closing tag </" + parser.getTag() + "> but we were "
                             + "expecting to find another child element: " + e.toString());
                     expectedElements = null;
                 }
@@ -44,7 +48,7 @@
                     }
                     else
                     {
-                        expectedElements = (Iterator) iteratorStack.pop();
+                        expectedElements = (Iterator)iteratorStack.pop();
                     }
                 }
             }

@@ -1,7 +1,9 @@
     /**
-     * Check whether the supplied document is valid against the spec that has been built
-     * up within the validator.
-     * @param document The document to validate
+     * Check whether the supplied document is valid against the spec that has
+     * been built up within the validator.
+     * 
+     * @param document
+     *            The document to validate
      * @return Whether the document is valid or not
      */
     public boolean isDocumentValid(final String document)
@@ -18,19 +20,19 @@
             int token = parser.getNextToken();
             switch (token)
             {
-                case HtmlDocumentParser.UNKNOWN:
+                case HtmlDocumentParser.UNKNOWN :
                     // Just ignore this and carry on processing!
                     // Error is already recorded by the parser
                     break;
-                case HtmlDocumentParser.END:
+                case HtmlDocumentParser.END :
                     end = true;
                     break;
-                case HtmlDocumentParser.COMMENT:
+                case HtmlDocumentParser.COMMENT :
                     valid = validateComment(expectedElements, parser);
                     if (!valid)
                         end = true;
                     break;
-                case HtmlDocumentParser.OPEN_TAG:
+                case HtmlDocumentParser.OPEN_TAG :
                     valid = validateTag(expectedElements, parser);
                     if (!valid)
                         end = true;
@@ -38,14 +40,14 @@
                         expectedElements = saveOpenTagState(iteratorStack, expectedElements,
                                 tagNameStack);
                     break;
-                case HtmlDocumentParser.OPENCLOSE_TAG:
+                case HtmlDocumentParser.OPENCLOSE_TAG :
                     valid = validateTag(expectedElements, parser);
                     if (valid)
                         valid = checkOpenCloseTag();
                     if (!valid)
                         end = true;
                     break;
-                case HtmlDocumentParser.CLOSE_TAG:
+                case HtmlDocumentParser.CLOSE_TAG :
                     expectedElements = validateCloseTag(tagNameStack, parser, expectedElements,
                             iteratorStack);
                     if (expectedElements == null)
@@ -54,7 +56,7 @@
                         end = true;
                     }
                     break;
-                case HtmlDocumentParser.TEXT:
+                case HtmlDocumentParser.TEXT :
                     valid = validateText(expectedElements, parser);
                     if (!valid)
                         end = true;

@@ -1,26 +1,29 @@
-	/**
-	 * Initialise the request parameters from the given redirect string that redirects
-	 * back to a particular component for display.
-	 * @param redirect The redirect string to display from
-	 */
-	public void setRequestToRedirectString(final String redirect)
-	{
-		String paramPart = redirect.substring(redirect.indexOf('?') + 1);
-		String[] paramTuples = paramPart.split("&");
-		for (int t = 0; t < paramTuples.length; t++)
-		{
-			String[] bits = paramTuples[t].split("=");
-			if (bits.length != 2)
-				continue;
-			try
-			{
-				parameters.put(URLDecoder.decode(bits[0], "UTF-8"), URLDecoder.decode(bits[1],
-						"UTF-8"));
-			}
-			catch (UnsupportedEncodingException e)
-			{
-				// Should never happen
-			}
-		}
-	}
+    /**
+     * Initialise the request parameters from the given redirect string that
+     * redirects back to a particular component for display.
+     * 
+     * @param redirect
+     *            The redirect string to display from
+     */
+    public void setRequestToRedirectString(final String redirect)
+    {
+        final String paramPart = redirect.substring(redirect.indexOf('?') + 1);
+        final String[] paramTuples = paramPart.split("&");
+        for (int t = 0; t < paramTuples.length; t++)
+        {
+            final String[] bits = paramTuples[t].split("=");
+            if (bits.length == 2)
+            {
+                try
+                {
+                    parameters.put(URLDecoder.decode(bits[0], "UTF-8"), URLDecoder.decode(bits[1],
+                            "UTF-8"));
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    // Should never happen
+                }
+            }
+        }
+    }
 

@@ -1,7 +1,10 @@
     /**
      * Validate the comment token that was found.
-     * @param expectedElements The iterator of expected elements
-     * @param parser The parser
+     * 
+     * @param expectedElements
+     *            The iterator of expected elements
+     * @param parser
+     *            The parser
      * @return Whether the comment is valid or not
      */
     private boolean validateComment(Iterator expectedElements, HtmlDocumentParser parser)
@@ -11,29 +14,27 @@
         {
             if (expectedElements.hasNext())
             {
-                DocumentElement e = (DocumentElement) expectedElements.next();
+                DocumentElement e = (DocumentElement)expectedElements.next();
                 if (e instanceof Comment)
                 {
-                    if (!((Comment) e).getText().equals(parser.getComment()))
+                    if (!((Comment)e).getText().equals(parser.getComment()))
                     {
-                        System.err.println("Found comment '"
-                                + parser.getComment() + "' does not match " + "expected comment '"
-                                + ((Comment) e).getText() + "'");
+                        System.err.println("Found comment '" + parser.getComment()
+                                + "' does not match " + "expected comment '"
+                                + ((Comment)e).getText() + "'");
                         valid = false;
                     }
                 }
                 else
                 {
-                    System.err.println("Found comment '"
-                            + parser.getComment() + "' was not expected. " + "We were expecting: "
-                            + e.toString());
+                    System.err.println("Found comment '" + parser.getComment()
+                            + "' was not expected. " + "We were expecting: " + e.toString());
                     valid = false;
                 }
             }
             else
             {
-                System.err.println("Found comment '"
-                        + parser.getComment() + "' was not expected. "
+                System.err.println("Found comment '" + parser.getComment() + "' was not expected. "
                         + "We were not expecting any more elements within the current tag");
                 valid = false;
             }

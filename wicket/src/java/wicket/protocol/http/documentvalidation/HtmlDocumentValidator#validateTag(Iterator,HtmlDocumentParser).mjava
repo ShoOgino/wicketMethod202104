@@ -1,7 +1,10 @@
     /**
      * Validate the tag token that was found.
-     * @param expectedElements The iterator of expected elements
-     * @param parser The parser
+     * 
+     * @param expectedElements
+     *            The iterator of expected elements
+     * @param parser
+     *            The parser
      * @return Whether the tag is valid or not
      */
     private boolean validateTag(Iterator expectedElements, HtmlDocumentParser parser)
@@ -9,15 +12,14 @@
         boolean valid = true;
         if (expectedElements.hasNext())
         {
-            DocumentElement e = (DocumentElement) expectedElements.next();
+            DocumentElement e = (DocumentElement)expectedElements.next();
             if (e instanceof Tag)
             {
-                workingTag = (Tag) e;
+                workingTag = (Tag)e;
                 if (!workingTag.getTag().equals(parser.getTag()))
                 {
-                    System.err.println("Found tag <"
-                            + parser.getTag() + "> does not match " + "expected tag <"
-                            + workingTag.getTag() + ">");
+                    System.err.println("Found tag <" + parser.getTag() + "> does not match "
+                            + "expected tag <" + workingTag.getTag() + ">");
                     valid = false;
                 }
                 else
@@ -27,34 +29,33 @@
                     Map expectedAttributes = workingTag.getExpectedAttributes();
                     for (Iterator it = expectedAttributes.keySet().iterator(); it.hasNext();)
                     {
-                        String name = (String) it.next();
-                        String pattern = (String) expectedAttributes.get(name);
+                        String name = (String)it.next();
+                        String pattern = (String)expectedAttributes.get(name);
                         if (!actualAttributes.containsKey(name))
                         {
-                            System.err.println("Tag <"
-                                    + workingTag.getTag() + "> was expected to have a '" + name
-                                    + "' attribute " + "but this was not present");
+                            System.err.println("Tag <" + workingTag.getTag()
+                                    + "> was expected to have a '" + name + "' attribute "
+                                    + "but this was not present");
                             valid = false;
                         }
 
-                        String value = (String) actualAttributes.get(name);
+                        String value = (String)actualAttributes.get(name);
                         if (!value.matches(pattern))
                         {
-                            System.err.println("The value '"
-                                    + value + "' of attribute '" + name + "' of tag <"
-                                    + workingTag.getTag() + "> was expected to match the pattern '"
-                                    + pattern + "' but it does not");
+                            System.err.println("The value '" + value + "' of attribute '" + name
+                                    + "' of tag <" + workingTag.getTag()
+                                    + "> was expected to match the pattern '" + pattern
+                                    + "' but it does not");
                             valid = false;
                         }
                     }
 
                     for (Iterator it = workingTag.getIllegalAttributes().iterator(); it.hasNext();)
                     {
-                        String name = (String) it.next();
+                        String name = (String)it.next();
                         if (actualAttributes.containsKey(name))
                         {
-                            System.err.println("Tag <"
-                                    + workingTag.getTag()
+                            System.err.println("Tag <" + workingTag.getTag()
                                     + "> should not have an attributed named '" + name + "'");
                             valid = false;
                         }
@@ -63,16 +64,14 @@
             }
             else
             {
-                System.err.println("Found tag <"
-                        + parser.getTag() + "> was not expected. " + "We were expecting: "
-                        + e.toString());
+                System.err.println("Found tag <" + parser.getTag() + "> was not expected. "
+                        + "We were expecting: " + e.toString());
                 valid = false;
             }
         }
         else
         {
-            System.err.println("Found tag <"
-                    + parser.getTag() + "> was not expected. "
+            System.err.println("Found tag <" + parser.getTag() + "> was not expected. "
                     + "We were not expecting any more elements within the current tag");
             valid = false;
         }
