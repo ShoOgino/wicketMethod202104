@@ -11,25 +11,22 @@
             public Object component(final Component component)
             {
                 IModel componentModel = component.getModel();
-                if ((componentModel != null)
-                        && (componentModel instanceof IDetachableModel))
+                if ((componentModel != null) && (componentModel instanceof IDetachableModel))
                 {
-                    ((IDetachableModel) componentModel).detach();
+                    ((IDetachableModel)componentModel).detach();
                 }
 
                 // Also detach models from any contained attribute modifiers
                 if (component.attributeModifiers != null)
                 {
-                    for (Iterator iterator = component.attributeModifiers
-                            .iterator(); iterator.hasNext();)
+                    for (Iterator iterator = component.attributeModifiers.iterator(); iterator
+                            .hasNext();)
                     {
-                        IModel modifierModel = (IModel) ((ComponentTagAttributeModifier) iterator
+                        IModel modifierModel = (IModel)((ComponentTagAttributeModifier)iterator
                                 .next()).getReplaceModel();
-                        if ((modifierModel != null)
-                                && (modifierModel instanceof IDetachableModel))
+                        if ((modifierModel != null) && (modifierModel instanceof IDetachableModel))
                         {
-                            ((IDetachableModel) modifierModel)
-                                    .detach();
+                            ((IDetachableModel)modifierModel).detach();
                         }
                     }
                 }

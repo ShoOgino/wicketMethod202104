@@ -6,15 +6,13 @@
      * @param openTag
      *            the tag to render
      */
-    final void renderCloseTag(final MarkupStream markupStream,
-            final ComponentTag openTag)
+    final void renderCloseTag(final MarkupStream markupStream, final ComponentTag openTag)
     {
         // Tag should be open tag and not openclose tag
         if (openTag.isOpen())
         {
             // If we found a close tag and it closes the open tag, we're good
-            if (markupStream.atCloseTag()
-                    && markupStream.getTag().closes(openTag))
+            if (markupStream.atCloseTag() && markupStream.getTag().closes(openTag))
             {
                 // Get the close tag from the stream
                 ComponentTag closeTag = markupStream.getTag();
@@ -35,8 +33,7 @@
                 if (openTag.requiresCloseTag())
                 {
                     // Missing close tag
-                    markupStream.throwMarkupException("Expected close tag for "
-                            + openTag);
+                    markupStream.throwMarkupException("Expected close tag for " + openTag);
                 }
             }
         }
