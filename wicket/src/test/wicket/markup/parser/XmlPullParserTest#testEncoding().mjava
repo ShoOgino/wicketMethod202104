@@ -1,0 +1,69 @@
+    /**
+     * 
+     * @throws Exception
+     */
+    public final void testEncoding() throws Exception
+    {
+        final XmlPullParser parser = new XmlPullParser();
+        parser.parse(new StringResource("<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?>"));
+        assertEquals("iso-8859-1", parser.getEncoding());
+        XmlTag tag = (XmlTag) parser.nextTag();
+        assertNull(tag);
+
+        parser.parse(new StringResource("<?xml version=\"1.0\" encoding='iso-8859-1' ?> test test"));
+        assertEquals("iso-8859-1", parser.getEncoding());
+        tag = (XmlTag) parser.nextTag();
+        assertNull(tag);
+
+        // re-order and move close (remove whitespaces
+        parser.parse(new StringResource("   <?xml encoding='iso-8859-1'version=\"1.0\"?> test test"));
+        assertEquals("iso-8859-1", parser.getEncoding());
+        tag = (XmlTag) parser.nextTag();
+        assertNull(tag);
+
+        // attribute value must be enclosed by ""
+        Exception ex = null;
+        try
+        {
+            parser.parse(new StringResource("<?xml encoding=iso-8859-1 ?> test test"));
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            ex = e;
+        }
+        assertNotNull(ex);
+
+        // Invaluid encoding
+        ex = null;
+        try
+        {
+            parser.parse(new StringResource("<?xml encoding='XXX' ?>"));
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            ex = e;
+        }
+        assertNotNull(ex);
+
+        // no extra characters allowed before <?xml>
+        // TODO I'd certainly prefer an exception
+        parser.parse(new StringResource("xxxx <?xml encoding='iso-8859-1' ?>"));
+        assertNull(parser.getEncoding());
+        tag = (XmlTag) parser.nextTag();
+        assertNull(tag);
+
+        // no extra characters allowed before <?xml>
+        // TODO allows yes/no? Exception yes/no?
+        parser.parse(new StringResource("<!-- Comment --!> <?xml encoding='iso-8859-1' ?>"));
+        assertNull(parser.getEncoding());
+        tag = (XmlTag) parser.nextTag();
+        assertNull(tag);
+
+        // 'test' is not a valid attribut
+        // TODO I'd certainly prefer an exception
+        parser.parse(new StringResource("<?xml test='123' >"));
+        assertNull(parser.getEncoding());
+        tag = (XmlTag) parser.nextTag();
+        assertNull(tag);
+    }
+
