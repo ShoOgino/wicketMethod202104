@@ -1,17 +1,32 @@
 		/**
-		 * Gets the messages.
-		 *
+		 * Gets the list of messages relevant to this model's form.
+		 * 
 		 * @see wicket.model.IModel#getObject()
 		 */
 		public Object getObject()
 		{
-			if (level == FeedbackMessage.UNDEFINED)
+			if (messages != null)
 			{
-				return messages();
+				// List of messages reported by children of the form
+				final List list = new ArrayList();
+
+				// Loop through messages
+				for (Iterator iterator = messages.iterator(); iterator.hasNext();)
+				{
+					// Get next message
+					final FeedbackMessage message = (FeedbackMessage)iterator.next();
+
+					// If the reporter is inside the given form (recursively)
+					if (form.contains(message.getReporter(), true))
+					{
+						// add the message to the list
+						list.add(message);
+					}
+				}
+
+				// Return list of messages reported by children of the form.
+				return Collections.unmodifiableList(list);
 			}
-			else
-			{
-				return messages(level);
-			}
+			return Collections.EMPTY_LIST;
 		}
 

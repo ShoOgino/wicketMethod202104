@@ -1,30 +1,24 @@
 	/**
 	 * Looks up a message for the given component.
-	 *
+	 * 
 	 * @param component
 	 *            the component to look up the message for
 	 * @return the message that is found for the given component (first match)
 	 *         or null if none was found
 	 */
-	FeedbackMessage messageForComponent(Component component)
+	FeedbackMessage messageForComponent(final Component component)
 	{
 		if (messages != null)
 		{
-			FeedbackMessage message = null;
-			for (Iterator i = messages.iterator(); i.hasNext();)
+			for (Iterator iterator = messages.iterator(); iterator.hasNext();)
 			{
-				FeedbackMessage toTest = (FeedbackMessage)i.next();
-				if ((toTest.getReporter() != null) && (toTest.getReporter().equals(component)))
+				FeedbackMessage message = (FeedbackMessage)iterator.next();
+				if (message.getReporter() == component)
 				{
-					message = toTest;
-					break;
+					return message;
 				}
 			}
-			return message;
 		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 
