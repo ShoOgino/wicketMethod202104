@@ -3,12 +3,12 @@
      * 
      * @return instance of de-/encryption class
      */
-    public ICrypt getCryptInstance()
+    public ICrypt getCrypt()
     {
         try
         {
-            final ICrypt crypt = (ICrypt) this.cryptClass.newInstance();
-            crypt.setKey(getEncryptionKey());
+            final ICrypt crypt = (ICrypt)getSettings().getCryptClass().newInstance();
+            crypt.setKey(getSettings().getEncryptionKey());
             return crypt;
         }
         catch (InstantiationException e)

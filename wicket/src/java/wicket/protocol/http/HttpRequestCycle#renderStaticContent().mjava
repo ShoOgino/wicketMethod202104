@@ -6,10 +6,10 @@
         try
         {
             // Get URL
-            final String url = ((HttpRequest) getRequest()).getURL();
+            final String url = ((HttpRequest)getRequest()).getURL();
 
             // Get servlet context
-            final ServletContext context = ((HttpApplication) application)
+            final ServletContext context = ((WebApplication)application).getWicketServlet()
                     .getServletContext();
 
             // Set content type
@@ -23,8 +23,8 @@
                 try
                 {
                     // Copy resource input stream to servlet output stream
-                    Streams.writeStream(in, ((HttpResponse) response)
-                            .getServletResponse().getOutputStream());
+                    Streams.writeStream(in, ((HttpResponse)response).getServletResponse()
+                            .getOutputStream());
                 }
                 finally
                 {
@@ -42,8 +42,7 @@
         }
         catch (IOException e)
         {
-            throw new WicketRuntimeException("Cannot load static content for request "
-                    + request, e);
+            throw new WicketRuntimeException("Cannot load static content for request " + request, e);
         }
     }
 

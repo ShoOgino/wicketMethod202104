@@ -28,11 +28,17 @@
             throws MissingResourceException
     {
         String string = null;
+        
+        final ApplicationSettings settings = application.getSettings();        
+        if (settings == null)
+        {
+            throw new IllegalStateException("Application did not contain configured settings");
+        }
 
         // Search each loader in turn and return the string if it is found
-        for (Iterator it = settings.getStringResourceLoaders().iterator(); it.hasNext();)
+        for (final Iterator iterator = settings.getStringResourceLoaders().iterator(); iterator.hasNext();)
         {
-            IStringResourceLoader loader = (IStringResourceLoader)it.next();
+            IStringResourceLoader loader = (IStringResourceLoader)iterator.next();
             string = loader.loadStringResource(component, key, locale, style);
             if (string != null)
             {
@@ -47,7 +53,7 @@
             return defaultValue;
         }
 
-        if (settings.getExceptionOnMissingResource())
+        if (settings.getThrowExceptionOnMissingResource())
         {
             throw new MissingResourceException("Unable to find resource: " + key, getClass()
                     .getName(), key);

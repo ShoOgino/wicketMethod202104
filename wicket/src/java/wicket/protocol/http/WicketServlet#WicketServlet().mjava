@@ -1,0 +1,49 @@
+    /**
+     * Constructor
+     */
+    public WicketServlet()
+    {
+        final String applicationClassName = getInitParameter("applicationClassName");
+        try
+        {
+            final Class applicationClass = Class.forName(applicationClassName);
+            if (WebApplication.class.isAssignableFrom(applicationClass))
+            {
+                // Construct WebApplication subclass
+                this.webApplication = (WebApplication)applicationClass.newInstance();
+
+                // Set this WicketServlet as the servlet for the web application
+                this.webApplication.setWicketServlet(this);
+
+                // Finished
+                log.info("Successfully constructed WicketServlet for application class "
+                        + applicationClass);
+            }
+            else
+            {
+                throw new WicketRuntimeException("Application class " + applicationClassName
+                        + " must be a subclass of WebApplication");
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new WicketRuntimeException("Unable to create application of class "
+                    + applicationClassName, e);
+        }
+        catch (InstantiationException e)
+        {
+            throw new WicketRuntimeException("Unable to create application of class "
+                    + applicationClassName, e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new WicketRuntimeException("Unable to create application of class "
+                    + applicationClassName, e);
+        }
+        catch (SecurityException e)
+        {
+            throw new WicketRuntimeException("Unable to create application of class "
+                    + applicationClassName, e);
+        }
+    }
+

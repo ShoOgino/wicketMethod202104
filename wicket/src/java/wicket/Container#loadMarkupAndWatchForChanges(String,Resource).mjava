@@ -9,12 +9,12 @@
 	 */
 	private Markup loadMarkupAndWatchForChanges(final String key, final Resource markupResource)
 	{
-		final ApplicationSettings settings = getApplicationSettings();
+		final Application application = getApplication();
 
 		try
 		{
 			// Watch file in the future
-			final ModificationWatcher watcher = settings.getResourceWatcher();
+			final ModificationWatcher watcher = application.getResourceWatcher();
 
 			if (watcher != null)
 			{
@@ -27,7 +27,7 @@
 							try
 							{
 								log.info("Reloading markup from " + markupResource);
-								loadMarkup(settings, key, markupResource);
+								loadMarkup(application, key, markupResource);
 							}
 							catch (ParseException e)
 							{
@@ -48,7 +48,7 @@
 
 			log.info("Loading markup from " + markupResource);
 
-			return loadMarkup(settings, key, markupResource);
+			return loadMarkup(application, key, markupResource);
 		}
 		catch (ParseException e)
 		{
