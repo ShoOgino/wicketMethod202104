@@ -1,0 +1,34 @@
+	/**
+	 * Constructor
+	 */
+	public CdApplication()
+	{
+		try
+		{
+			final Configuration configuration = new Configuration();
+			configuration.configure();
+			// build hibernate SessionFactory for this application instance
+			sessionFactory = configuration.buildSessionFactory();
+			// create database
+			new DatabaseUtil(configuration).createDatabase();
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+
+		ApplicationSettings settings = getSettings();
+		settings.setThrowExceptionOnMissingResource(false);
+		getPages().setHomePage(Home.class);
+		if (!Boolean.getBoolean("cache-templates"))
+		{
+			Duration pollFreq = Duration.ONE_SECOND;
+			settings.setResourcePollFrequency(pollFreq);
+			log.info("template caching is INACTIVE");
+		}
+		else
+		{
+			log.info("template caching is ACTIVE");
+		}
+	}
+

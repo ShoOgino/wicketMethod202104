@@ -1,0 +1,19 @@
+	/**
+	 * @see wicket.RequestCycle#onEndRequest()
+	 */
+	protected void onEndRequest()
+	{
+		try
+		{
+			session.close();
+		}
+		catch (HibernateException e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			session = null;
+		}
+	}
+

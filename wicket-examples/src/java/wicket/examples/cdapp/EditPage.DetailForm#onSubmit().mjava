@@ -7,16 +7,15 @@
 			boolean isNew = (cd.getId() == null);
 			// note that, as we used the Ognl property model, the fields are
 			// allready updated
-			dao.save(cd);
+			getCdDao().save(cd);
 			// set message for search page to display on next rendering
 			searchCDPage.setInfoMessageForNextRendering("cd " + cd.getTitle() + " saved");
-			
-			// TODO searchCDPage.; // force reload of data
+
 			if (isNew)
 			{
 				// if it was a new cd, set the search page to page 1
 				searchCDPage.setCurrentResultPageToFirst();
 			}
-			getRequestCycle().setResponsePage(searchCDPage); // navigate back to search page
+			setResponsePage(searchCDPage); // navigate back to search page
 		}
 
