@@ -10,7 +10,7 @@
         // Add table of existing comments
         add(new Table("rows", data)
         {
-            public boolean populateCell(final Cell cell)
+            public void populateCell(final Cell cell)
             {
                 final ListObject value = (ListObject) cell.getModelObject();
             
@@ -32,15 +32,13 @@
                 statusLink.setParameter("id", value.getId());
                 statusLink.add(new Label("status", value.getStatus()));
                 tagClass.add(statusLink);
-                
-                return true;
             }
         });
         
         // Add table of existing comments
         add(new Table("rows2", data)
         {
-            public boolean populateCell(final Cell cell)
+            public void populateCell(final Cell cell)
             {
                 final ListObject value = (ListObject) cell.getModelObject();
             
@@ -69,8 +67,6 @@
                         new ExternalPageLink("delete", Page3.class)
                         	.setParameter("id", value.getId())
                         	.setParameter("action", "delete"));
-                
-                return true;
             }
         });
     }
