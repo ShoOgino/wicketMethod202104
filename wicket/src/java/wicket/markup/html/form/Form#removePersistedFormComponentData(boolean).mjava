@@ -1,34 +1,35 @@
 	/**
 	 * Removes already persisted data for all FormComponent childs and disable
-	 * persistence for the same components. 
-	 *
+	 * persistence for the same components.
+	 * 
 	 * @see Page#removePersistedFormData(Class, boolean)
-	 *  
-	 * @param disablePersistence if true, disable persistence for all
-	 * FormComponents on that page. If false, it will remain unchanged. 
+	 * 
+	 * @param disablePersistence
+	 *            if true, disable persistence for all FormComponents on that
+	 *            page. If false, it will remain unchanged.
 	 */
 	public void removePersistedFormComponentData(final boolean disablePersistence)
 	{
-		// The persistence manager responsible to persist and retrieve FormComponent data
-    	final IFormComponentPersistenceManager persister =
-    	    getFormComponentPersistenceManager();
+		// The persistence manager responsible to persist and retrieve
+		// FormComponent data
+		final IFormComponentPersistenceManager persister = getFormComponentPersistenceManager();
 
 		// Search for FormComponents like TextField etc.
 		visitChildren(FormComponent.class, new IVisitor()
-        {
-            public Object component(final Component component)
-            {
-        		// remove the FormComponents persisted data
-            	FormComponent formComponent = (FormComponent)component;
-           		persister.remove(formComponent.getPageRelativePath());
-           		
-           		// Disable persistence if requested. Leave unchanged otherwise.
-            	if (formComponent.isPersistenceEnabled() && disablePersistence)
-            	{
-            		formComponent.setPersistenceEnabled(false);
-            	}
-                return CONTINUE_TRAVERSAL;
-            }
-        });
+		{
+			public Object component(final Component component)
+			{
+				// remove the FormComponents persisted data
+				FormComponent formComponent = (FormComponent)component;
+				persister.remove(formComponent.getPageRelativePath());
+
+				// Disable persistence if requested. Leave unchanged otherwise.
+				if (formComponent.isPersistenceEnabled() && disablePersistence)
+				{
+					formComponent.setPersistenceEnabled(false);
+				}
+				return CONTINUE_TRAVERSAL;
+			}
+		});
 	}
 

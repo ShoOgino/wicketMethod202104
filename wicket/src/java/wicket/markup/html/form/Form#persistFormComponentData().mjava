@@ -1,44 +1,44 @@
-    /**
-     * Persist (e.g. Cookie) FormComponent data to be reloaded and re-assigned
-     * to the FormComponent automatically when the page is visited by the 
-     * user next time. 
-     * 
-     * @see wicket.markup.html.form.FormComponent#updateModel()
-     */
-    private void persistFormComponentData()
-    {
-        // Cannot add cookies to request cycle unless it accepts them
-        // We could conceivably be HTML over some other protocol!
-        if (getRequestCycle() instanceof HttpRequestCycle)
-        {
-            // The persistence manager responsible to persist and retrieve FormComponent data
-            final IFormComponentPersistenceManager persister =
-                getFormComponentPersistenceManager();
+	/**
+	 * Persist (e.g. Cookie) FormComponent data to be reloaded and re-assigned
+	 * to the FormComponent automatically when the page is visited by the user
+	 * next time.
+	 * 
+	 * @see wicket.markup.html.form.FormComponent#updateModel()
+	 */
+	private void persistFormComponentData()
+	{
+		// Cannot add cookies to request cycle unless it accepts them
+		// We could conceivably be HTML over some other protocol!
+		if (getRequestCycle() instanceof HttpRequestCycle)
+		{
+			// The persistence manager responsible to persist and retrieve
+			// FormComponent data
+			final IFormComponentPersistenceManager persister = getFormComponentPersistenceManager();
 
-            // Search for FormComponent children. Ignore all other
-            visitChildren(FormComponent.ICookieValue.class, new IVisitor()
-            {
-                public Object component(final Component component)
-                {
-                    // Can only a FormComponent
-                    final FormComponent formComponent = (FormComponent) component;
+			// Search for FormComponent children. Ignore all other
+			visitChildren(FormComponent.ICookieValue.class, new IVisitor()
+			{
+				public Object component(final Component component)
+				{
+					// Can only a FormComponent
+					final FormComponent formComponent = (FormComponent)component;
 
-                    // If peristence is switched on for that FormComponent ...
-                    if (formComponent.isPersistenceEnabled())
-                    {
-                        // Save component's data (e.g. in a cookie)
-                        persister.save(formComponent.getPageRelativePath(),
-                                ((FormComponent.ICookieValue) formComponent).getCookieValue());
-                    }
-                    else
-                    {
-                        // Remove component's data (e.g. cookie)
-                        persister.remove(formComponent.getPageRelativePath());
+					// If peristence is switched on for that FormComponent ...
+					if (formComponent.isPersistenceEnabled())
+					{
+						// Save component's data (e.g. in a cookie)
+						persister.save(formComponent.getPageRelativePath(),
+								((FormComponent.ICookieValue)formComponent).getCookieValue());
+					}
+					else
+					{
+						// Remove component's data (e.g. cookie)
+						persister.remove(formComponent.getPageRelativePath());
 
-                    }
-                    return CONTINUE_TRAVERSAL;
-                }
-            });
-        }
-    }
+					}
+					return CONTINUE_TRAVERSAL;
+				}
+			});
+		}
+	}
 
