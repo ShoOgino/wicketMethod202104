@@ -8,8 +8,8 @@
 	 */
 	public Object getObject()
 	{
-		String expr = getExpression();
-		if (expr == null || expr.trim().length() == 0)
+		final String expression = getExpression();
+		if (Strings.isEmpty(expression))
 		{
 			// No expression will cause OGNL to throw an exception. The OGNL
 			// expression to return the current object is "#this". Instead
@@ -17,26 +17,23 @@
 			// return value
 			return model.getObject();
 		}
-		IModel theModel = getModel();
-		if (theModel == null)
+
+		if (model != null)
 		{
-			return null;
+			final Object modelObject = model.getObject();
+			if (modelObject != null)
+			{
+				try
+				{
+					// note: if property type is null it is ignored by Ognl
+					return Ognl.getValue(expression, getContext(), modelObject, propertyType);
+				}
+				catch (OgnlException e)
+				{
+					throw new WicketRuntimeException(e);
+				}
+			}
 		}
-		Object modelObject = theModel.getObject();
-		if (modelObject == null)
-		{
-			return null;
-		}
-		try
-		{
-			OgnlContext ctx = getContext();
-			Object result = Ognl.getValue(expr, ctx, modelObject, propertyType);
-			// note: if property type is null it is ignored by Ognl
-			return result;
-		}
-		catch (OgnlException e)
-		{
-			throw new WicketRuntimeException(e);
-		}
+		return null;
 	}
 
