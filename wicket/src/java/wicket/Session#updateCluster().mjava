@@ -1,16 +1,22 @@
 	/**
-	 * Replicates any changed data to the cluser.
+	 * Replicates this session to the cluster if it has changed.
 	 */
 	public final void updateCluster()
 	{
 		// If state is dirty
-		if (this.state.dirty)
+		if (dirty)
 		{
-			// State is no longer dirty
-			this.state.dirty = false;
+			log.debug("updateCluster(): Session is dirty.  Replicating.");
 
-			// Set attribute
-			setAttribute(stateSessionAttribute, state);
+			// State is no longer dirty
+			this.dirty = false;
+
+			// Set attribute.
+			setAttribute(sessionAttributeName, this);
+		}
+		else
+		{
+			log.debug("updateCluster(): Session not dirty.");
 		}
 	}
 

@@ -4,16 +4,19 @@
 	 */
 	public final void updateSession()
 	{
-		// Get any replicated state from the session
-		final State state = (State)getAttribute(stateSessionAttribute);
-		if (state != null)
+		// Go through each page map in the session
+		log.debug("updateSession(): Updating session.");
+		for (final Iterator iterator = pageMapForName.values().iterator(); iterator.hasNext();)
 		{
-			// Copy state into Session
-			state.attach(this);
-			this.state = state;
+			// Remove all pages from the current page map
+			final PageMap pageMap = ((PageMap)iterator.next());
+			pageMap.setSession(this);
+
+			log.debug("updateSession(): Attaching session to PageMap " + pageMap);
 		}
 
 		// Get PageStates from session attributes
+		log.debug("updateSession(): Getting PageState attributes.");
 		final List pageStates = getPageStateAttributes();
 
 		// Sort page states so that they can be added in reverse order of
@@ -22,5 +25,6 @@
 
 		// Adds pages to session
 		addPages(pageStates);
+		log.debug("updateSession(): Done updating session.");
 	}
 
