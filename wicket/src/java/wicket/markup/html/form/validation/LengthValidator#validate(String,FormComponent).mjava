@@ -1,18 +1,17 @@
     /**
      * Validates the given form component.
-     * Validates that a form component's value is of a certain min/max length.
-     * @param input the input to validate
+     * Validates that a form component's value is of a certain minimum 
+     * and/or maximum length.
+     * @param input The input to validate
      * @param component The component to validate
      * @return Error for component or NO_ERROR if none
      */
     public ValidationErrorMessage validate(
             final String input, final FormComponent component)
     {
-        // Get value
-        final String value = (String)input;
-
         // Check length
-        if ((checkMin && (value.length() < min)) || (checkMax && (value.length() > max)))
+        if ((checkMin && input.length() < min) || 
+            (checkMax && input.length() > max))
         {
             return errorMessage(input, component);
         }
