@@ -1,0 +1,26 @@
+        /**
+         * The shape as a string using the given request cycle; will be used
+         * for rendering.
+         * @return The shape as a string
+         */
+        public String toString()
+        {
+            //Add any popup script
+            final String popupJavaScript;
+
+            if (link.getPopupSpecification() != null)
+            {
+                popupJavaScript = link.getPopupSpecification().getPopupJavaScript();
+            }
+            else
+            {
+                popupJavaScript = null;
+            }
+
+            return "<area shape=\""
+                    + getType() + "\"" + " coords=\"" + getCoordinates() + "\"" + " href=\""
+                    + link.getURL() + "\""
+                    + ((popupJavaScript == null) ? "" : (" onClick = \"" + popupJavaScript + "\""))
+                    + ">";
+        }
+

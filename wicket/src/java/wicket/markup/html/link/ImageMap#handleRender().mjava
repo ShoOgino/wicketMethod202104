@@ -1,0 +1,37 @@
+    /**
+     * @see wicket.Component#handleRender()
+     */
+    protected void handleRender()
+    {
+        // Get markup stream
+        final MarkupStream markupStream = findMarkupStream();
+
+        // Get mutable copy of next tag
+        final ComponentTag tag = markupStream.getTag().mutable();
+
+        // Must be an img tag
+        checkTag(tag, "img");
+
+        // Set map name to path
+        tag.put("usemap", "#" + getPath());
+
+        // Write out the tag
+        renderTag(markupStream, tag);
+
+        // Write out the image map
+        final StringBuffer imageMap = new StringBuffer();
+
+        imageMap.append("\n<map name=\"" + getPath() + "\"> ");
+
+        for (Iterator iterator = shapeLinks.iterator(); iterator.hasNext();)
+        {
+            final ShapeLink shapeLink = (ShapeLink) iterator.next();
+
+            imageMap.append('\n');
+            imageMap.append(shapeLink.toString());
+        }
+
+        imageMap.append("\n</map>");
+        getResponse().write(imageMap.toString());
+    }
+

@@ -1,0 +1,26 @@
+    /**
+     * @see wicket.Component#handleComponentTag(ComponentTag)
+     */
+    protected void handleComponentTag(final ComponentTag tag)
+    {
+        checkTag(tag, "input");
+        checkAttribute(tag, "type", "checkbox");
+        super.handleComponentTag(tag);
+
+        Object value = getModelObject();
+
+        if (value != null)
+        {
+            if (!(value instanceof Boolean))
+            {
+                throw new RuntimeException(
+                        "model objects for checkboxes have to be of type Boolean");
+            }
+
+            if (((Boolean)value).booleanValue())
+            {
+                tag.put("checked", "true");
+            }
+        }
+    }
+

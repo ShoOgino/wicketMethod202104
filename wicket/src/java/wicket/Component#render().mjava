@@ -1,0 +1,27 @@
+	/**
+	 * Performs a render of this component.
+	 */
+	public void render()
+	{
+        // Get request cycle to render to
+        final RequestCycle cycle = getRequestCycle();
+        
+        // Save original Response
+        final Response originalResponse = cycle.getResponse();
+        
+        // If component is not visible, set response to NullResponse
+        if (!visible)
+        {
+            cycle.setResponse(NullResponse.getInstance());
+        }
+        
+		// Call implementation to render component
+		handleRender();
+        
+        // Restore original response
+        cycle.setResponse(originalResponse);
+
+		// Increase render count for component
+		rendering++;
+	}
+

@@ -1,0 +1,27 @@
+    /**
+     * Performs a render of this component.
+     */
+    public void render()
+    {
+        try
+        {
+            initUIMessages();
+            super.render();
+
+            // If the application wants component uses checked and 
+            // the response is not a redirect
+            if (getApplicationSettings().getComponentUseCheck() &&
+                !getResponse().isRedirect())
+            {
+                // Visit components on page
+                checkRendering(this);
+            }
+        }
+        finally // be sure to have models detached
+        {
+            // Visit components on page
+            final Page page = (Page)this;
+            detachModels(page);
+        }
+    }
+
