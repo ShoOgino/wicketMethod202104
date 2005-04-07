@@ -58,6 +58,15 @@
 			markupStream.throwMarkupException("A <wicket:body> tag must be an open or open-close tag.");
         }
 
+        // There exactly only one body tag per border
+        if (haveSeenBodyTag == true)
+        {
+			markupStream.throwMarkupException(
+			        "There must be exactly one <wicket:body> tag for each border compoment.");
+        }
+        
+        haveSeenBodyTag = true;
+        
 		// Render the body tag
 		renderComponentTag(bodyTag);
 
