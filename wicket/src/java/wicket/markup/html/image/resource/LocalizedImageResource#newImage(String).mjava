@@ -3,9 +3,8 @@
 	 * 
 	 * @param value
 	 *            The value to parse
-	 * @return The image resource
 	 */
-	private Resource newImage(final String value)
+	private void newImage(final String value)
 	{
 		// Parse value
 		final ImageValueParser valueParser = new ImageValueParser(value);
@@ -32,20 +31,25 @@
 			final String name = valueParser.getImageName();
 			if (!Strings.isEmpty(name))
 			{
-				component.getApplication().addResource(Application.class, name, locale, style, resource);
-				final SharedResource sharedResource = new SharedResource(Application.class, name);
-				sharedResource.setLocale(locale);
-				sharedResource.setStyle(style);
-				return sharedResource;
+				component.getApplication().addResource(Application.class, name, locale, style,
+						resource);
+				final ResourceReference resourceReference = new ResourceReference(
+						Application.class, name);
+				resourceReference.setLocale(locale);
+				resourceReference.setStyle(style);
+				this.resourceReference = resourceReference;
 			}
-			return resource;
+			else
+			{
+				this.resource = resource;
+			}
 		}
 		else
 		{
 			throw new WicketRuntimeException(
 					"Could not generate image for value attribute '"
 							+ value
-							+ "'.  Was expecting a value attribute of the form \"[resourceFactoryName]:[sharedResourceName]?:[factorySpecification]\".");
+							+ "'.  Was expecting a value attribute of the form \"[resourceFactoryName]:[resourceReferenceName]?:[factorySpecification]\".");
 		}
 	}
 
