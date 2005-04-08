@@ -18,5 +18,23 @@
 		{
 			log.debug("updateCluster(): Session not dirty.");
 		}
+
+		// Go through all pages in all page maps, replicating any dirty pages
+		visitPageMaps(new IVisitor()
+		{
+			public void pageMap(PageMap pageMap)
+			{
+				pageMap.visitPages(new PageMap.IVisitor()
+				{
+					public void page(Page page)
+					{
+						if (page.isDirty())
+						{
+							replicate(page);
+						}
+					}
+				});
+			}
+		});
 	}
 

@@ -4,11 +4,12 @@
 	 */
 	public final void removeAll()
 	{
-		// Go through each page map in the session
-		for (final Iterator iterator = pageMapForName.values().iterator(); iterator.hasNext();)
+		visitPageMaps(new IVisitor()
 		{
-			// Remove all pages from the current page map
-			((PageMap)iterator.next()).removeAll();
-		}
+			public void pageMap(PageMap pageMap)
+			{
+				pageMap.removeAll();
+			}
+		});
 	}
 
