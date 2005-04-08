@@ -13,12 +13,11 @@
 	public void addResource(final Class scope, final String name, final Locale locale,
 			final String style, final Resource resource)
 	{
-		// Save resource
-		final String key = scope.getName() + "_" + name
-				+ (locale == null ? "" : "_" + locale.toString())
-				+ (style == null ? "" : "_" + style);
+		// Store resource
+		final String key = scope.getName() + "_" + localizedPath(name, locale, style);
 		resourceMap.put(key, resource);
-		// shared resources are cacheable.
+
+		// Application shared resources are cacheable.
 		resource.setCacheable(true);
 	}
 

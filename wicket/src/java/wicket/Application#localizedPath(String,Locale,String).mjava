@@ -1,0 +1,39 @@
+	/**
+	 * Inserts _[locale] and _[style] into path just before any extension that
+	 * might exist.
+	 * 
+	 * @param path
+	 *            The resource path
+	 * @param locale
+	 *            The locale
+	 * @param style
+	 *            The style
+	 * @return The localized path
+	 */
+	static String localizedPath(final String path, final Locale locale, final String style)
+	{
+		final StringBuffer buffer = new StringBuffer();
+		final String extension = Files.extension(path);
+		final String basePath = Files.basePath(path, extension);
+		buffer.append(basePath);
+		if (locale != null)
+		{
+			if (!locale.equals(Locale.getDefault()))
+			{
+				buffer.append('_');
+				buffer.append(locale.toString());
+			}
+		}
+		if (style != null)
+		{
+			buffer.append('_');
+			buffer.append(style);
+		}
+		if (extension != null)
+		{
+			buffer.append('.');
+			buffer.append(extension);
+		}
+		return buffer.toString();
+	}
+

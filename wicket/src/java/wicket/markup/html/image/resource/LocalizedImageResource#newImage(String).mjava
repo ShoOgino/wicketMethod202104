@@ -12,36 +12,35 @@
 		// Does value match parser?
 		if (valueParser.matches())
 		{
-			// Look up factory
-			final IResourceFactory factory = component.getApplication().getResourceFactory(
-					valueParser.getFactoryName());
+			final String imageReferenceName = valueParser.getImageReferenceName();
+			final String specification = valueParser.getSpecification();
+			final String factoryName = valueParser.getFactoryName();
+			final Application application = component.getApplication();
 
-			// Found factory?
-			if (factory == null)
+			// Do we have a reference?
+			if (!Strings.isEmpty(imageReferenceName))
 			{
-				throw new WicketRuntimeException("Could not find image resource factory named "
-						+ valueParser.getFactoryName());
-			}
+				// Is resource already available via the application?
+				if (application.getResource(Application.class, imageReferenceName, locale, style) == null)
+				{
+					// Resource not available yet, so create it with factory and
+					// share via Application
+					final Resource imageResource = getImageResourceFactory(application, factoryName)
+							.newResource(specification, locale, style);
+					application.addResource(Application.class, imageReferenceName, locale, style,
+							imageResource);
+				}
 
-			// Have factory create new image resource
-			final ImageResource resource = (ImageResource)factory.newResource(valueParser
-					.getSpecification(), locale, style);
-
-			// Stash resource in application for sharing
-			final String name = valueParser.getImageName();
-			if (!Strings.isEmpty(name))
-			{
-				component.getApplication().addResource(Application.class, name, locale, style,
-						resource);
-				final ResourceReference resourceReference = new ResourceReference(
-						Application.class, name);
+				// Create resource reference
+				this.resourceReference = new ResourceReference(Application.class,
+						imageReferenceName);
 				resourceReference.setLocale(locale);
 				resourceReference.setStyle(style);
-				this.resourceReference = resourceReference;
 			}
 			else
 			{
-				this.resource = resource;
+				this.resource = (ImageResource)getImageResourceFactory(application, factoryName)
+						.newResource(specification, locale, style);
 			}
 		}
 		else
