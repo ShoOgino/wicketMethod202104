@@ -6,16 +6,11 @@
 	 */
 	final MarkupStream getAssociatedMarkupStream()
 	{
-		// Look for associated markup
-		final Markup markup = getAssociatedMarkup();
-
-		// If we found markup for this container
-		if (markup != Markup.NO_MARKUP)
-		{
-			// return a MarkupStream for the markup
-			return new MarkupStream(markup);
-		}
-		else
+	    try
+	    {
+	        return getApplication().getMarkupCache().getMarkupStream(this, null);
+	    }
+	    catch (WicketRuntimeException ex)
 		{
 			// throw exception since there is no associated markup
 			throw new WicketRuntimeException(

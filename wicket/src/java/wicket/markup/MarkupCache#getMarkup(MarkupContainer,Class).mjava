@@ -1,0 +1,68 @@
+	/**
+	 * Gets any (immutable) markup resource for this class.
+	 * 
+	 * @param container
+	 *            The container the markup should be associated with
+	 * @param clazz
+	 *            The class to get the associated markup for. If null, the the
+	 *            container's class is used, but it can be a parent class of
+	 *            container as well.
+	 * @return Markup resource
+	 */
+	// This is class is already prepared for markup inheritance
+	private final Markup getMarkup(final MarkupContainer container, Class clazz)
+	{
+		if (clazz == null)
+		{
+			clazz = container.getClass();
+		}
+		else
+		{
+			if (!clazz.isInstance(container))
+			{
+				throw new WicketRuntimeException("Parameter clazz must be instance of container");
+			}
+		}
+
+		synchronized (markupCache)
+		{
+			// Look up markup tag list by class, locale, style and markup type
+			final String key = markupKey(container, clazz);
+			Markup markup = (Markup)markupCache.get(key);
+
+			// If no markup in map
+			if (markup == null)
+			{
+				// Locate markup resource, searching up class hierarchy
+				IResourceStream markupResource = null;
+				Class containerClass = clazz;
+
+				while ((markupResource == null) && (containerClass != MarkupContainer.class))
+				{
+					// Look for markup resource for containerClass
+					markupResource = application.getResourceStreamLocator().locate(containerClass,
+							container.getStyle(), container.getLocale(), container.getMarkupType());
+					containerClass = containerClass.getSuperclass();
+				}
+
+				// Found markup?
+				if (markupResource != null)
+				{
+					// load the markup and watch for changes
+					markup = loadMarkupAndWatchForChanges(key, markupResource);
+				}
+				else
+				{
+					// flag markup as non-existent (as opposed to null, which
+					// might mean that it's simply not loaded into the cache)
+					markup = Markup.NO_MARKUP;
+				}
+
+				// Save any markup list (or absence of one) for next time
+				markupCache.put(key, markup);
+			}
+
+			return markup;
+		}
+	}
+
