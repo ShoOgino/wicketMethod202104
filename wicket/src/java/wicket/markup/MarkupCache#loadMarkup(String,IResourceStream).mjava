@@ -1,17 +1,17 @@
 	/**
-	 * Loads markup.
+	 * Loads markup from a resource stream.
 	 * 
 	 * @param key
 	 *            Key under which markup should be cached
-	 * @param markupResource
-	 *            The markup resource to load
+	 * @param markupResourceStream
+	 *            The markup resource stream to load
 	 * @return The markup
 	 */
-	private Markup loadMarkup(final String key, final IResourceStream markupResource)
+	private final Markup loadMarkup(final String key, final IResourceStream markupResourceStream)
 	{
 		try
 		{
-			final Markup markup = application.newMarkupParser().readAndParse(markupResource);
+			final Markup markup = application.newMarkupParser().readAndParse(markupResourceStream);
 			synchronized (markupCache)
 			{
 				markupCache.put(key, markup);
@@ -20,15 +20,15 @@
 		}
 		catch (ParseException e)
 		{
-			log.error("Unable to parse markup from " + markupResource, e);
+			log.error("Unable to parse markup from " + markupResourceStream, e);
 		}
 		catch (ResourceStreamNotFoundException e)
 		{
-			log.error("Unable to find markup from " + markupResource, e);
+			log.error("Unable to find markup from " + markupResourceStream, e);
 		}
 		catch (IOException e)
 		{
-			log.error("Unable to read markup from " + markupResource, e);
+			log.error("Unable to read markup from " + markupResourceStream, e);
 		}
 		return Markup.NO_MARKUP;
 	}
