@@ -5,31 +5,22 @@
 	 * 
 	 * @return The session that this component is in
 	 */
-	public Session getSession()
+	public final Session getSession()
 	{
-		// Fetch page if possible
+		// Fetch page, if possible
 		final Page page = findPage();
 
 		// If this component is attached to a page
 		if (page != null)
 		{
-			// Get Session from Page object for this component
-			final Session session = page.getSession();
-
-			// Did we find the session?
-			if (session != null)
-			{
-				return session;
-			}
-			else
-			{
-				// This should NEVER happen. But if it does, we'll want a nice
-				// error message.
-				throw new IllegalStateException(exceptionMessage("Page not attached to session"));
-			}
+			// Get Session from Page (which should generally be
+			// faster than a thread local lookup via Session.get())
+			return page.getSessionInternal();
 		}
 		else
 		{
+			// Use ThreadLocal storage to get Session since this
+			// component is apparently not yet attached to a Page.
 			return Session.get();
 		}
 	}
