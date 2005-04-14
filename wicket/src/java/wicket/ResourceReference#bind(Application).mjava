@@ -10,7 +10,7 @@
 		if (resource == null)
 		{
 			// Try to get resource from Application repository
-			resource = application.getResource(scope, name, locale, style);
+			resource = application.getSharedResources().get(scope, name, locale, style);
 
 			// Not available yet?
 			if (resource == null)
@@ -21,7 +21,7 @@
 				{
 					// If lazy-init did not create resource with correct locale
 					// and style then we should default the resource
-					resource = application.getResource(scope, name, null, null);
+					resource = application.getSharedResources().get(scope, name, null, null);
 					if (resource == null)
 					{
 						throw new WicketRuntimeException("Unable to resolve shared resource "
@@ -30,7 +30,7 @@
 				}
 
 				// Share through application
-				application.addResource(scope, name, locale, style, resource);
+				application.getSharedResources().add(scope, name, locale, style, resource);
 			}
 		}
 	}
