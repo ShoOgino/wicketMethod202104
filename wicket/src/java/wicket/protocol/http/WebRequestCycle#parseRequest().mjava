@@ -22,16 +22,23 @@
 	protected final boolean parseRequest()
 	{
 		// Try different methods of parsing and dispatching the request
-		if (callComponentListener() || bookmarkablePage() || homePage() || resourceReference())
+		if (callComponentListener() || bookmarkablePage() || homePage())
 		{
+			// Returning a page
 			return true;
 		}
 		else
 		{
-			if (!renderStaticContent())
+			// If it's not a resource reference or static content
+			if (!resourceReference() && !staticContent())
 			{
+				// then we cannot process the request
 				throw new WicketRuntimeException("Unable to parse request " + request);
 			}
+			
+			// Don't update the cluster, not returning a page
+			setUpdateCluster(false);
+			setResponsePage(null);
 			return false;
 		}
 	}

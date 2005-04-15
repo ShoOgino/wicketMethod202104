@@ -23,10 +23,14 @@
 
 			// Get page from path
 			final Page page = session.getPage(pageMapName, path, versionNumber);
-
+			
 			// Does page exist?
 			if (page != null)
 			{
+				// Assume cluster needs to be updated now, unless listener invocation
+				// change this (for example, with a simple page redirect)
+				setUpdateCluster(true);
+
 				// Execute the user's code
 				invokeInterface(page, path, request.getParameter("interface"));
 				return true;
