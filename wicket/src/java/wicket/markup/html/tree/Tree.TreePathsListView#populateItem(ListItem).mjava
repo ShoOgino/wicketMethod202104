@@ -3,25 +3,24 @@
 		 */
 		protected void populateItem(ListItem listItem)
 		{
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) listItem
-					.getModelObject();
+			// get the tree state
+			TreeState treeState = getTreeState();
+
+			// get the model object which is a tree node
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) listItem.getModelObject();
 
 			// add spacers
 			int level = node.getLevel();
 			listItem.add(new SpacerList("spacers", level));
 
-			// add node
-			WebMarkupContainer nodeContainer = new WebMarkupContainer("node");
-			Link expandCollapsLink = Tree.this.createJunctionLink(node);
-			nodeContainer.add(expandCollapsLink);
+			// add node panel
+			listItem.add(newNodePanel("node", node));
 
-			Link selectLink = Tree.this.createNodeLink(node);
-			nodeContainer.add(selectLink);
-			listItem.add(nodeContainer);
-
+			// add attr modifier for highlighting the selection
 			listItem.add(new AttributeModifier("class", true,
 					new SelectedPathReplacementModel(node)));
 
+			// check whether to current item is part of the visible path
 			final TreePath path = new TreePath(node.getPath());
 			final int row = treeState.getRowForPath(path);
 			if (row != -1)
