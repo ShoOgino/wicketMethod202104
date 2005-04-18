@@ -1,0 +1,24 @@
+		/**
+		 * @see wicket.markup.html.list.ListView#newItem(int)
+		 */
+		protected ListItem newItem(final int index)
+		{
+			IModel listItemModel = getListItemModel(getModel(), index);
+
+			// create a list item that is smart enough to determine whether
+			// it should be displayed or not
+			return new ListItem(index, listItemModel)
+			{
+				public boolean isVisible()
+				{
+					TreeState treeState = getTreeState();
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode)getModelObject();
+					final TreePath path = new TreePath(node.getPath());
+					final int row = treeState.getRowForPath(path);
+
+					// if the row is -1, it is not visible, otherwise it is
+					return (row != -1);
+				}
+			};
+		}
+

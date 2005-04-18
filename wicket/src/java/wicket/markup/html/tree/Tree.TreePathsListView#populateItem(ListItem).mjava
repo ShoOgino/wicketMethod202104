@@ -3,11 +3,8 @@
 		 */
 		protected void populateItem(ListItem listItem)
 		{
-			// get the tree state
-			TreeState treeState = getTreeState();
-
 			// get the model object which is a tree node
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) listItem.getModelObject();
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)listItem.getModelObject();
 
 			// add spacers
 			int level = node.getLevel();
@@ -19,17 +16,5 @@
 			// add attr modifier for highlighting the selection
 			listItem.add(new AttributeModifier("class", true,
 					new SelectedPathReplacementModel(node)));
-
-			// check whether to current item is part of the visible path
-			final TreePath path = new TreePath(node.getPath());
-			final int row = treeState.getRowForPath(path);
-			if (row != -1)
-			{
-				listItem.setVisible(true);
-			}
-			else
-			{
-				listItem.setVisible(false);
-			}
 		}
 
