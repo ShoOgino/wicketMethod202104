@@ -3,21 +3,22 @@
 	 */
 	protected void onValidate()
 	{
-		final int buttons = countButtons();
-		if (buttons <= 1)
+		// Validate the form
+		if (validate())
 		{
-			validate();
-		}
-		else if (buttons > 1)
-		{
-			final Button button = findSubmittingButton();
-			if (button == null)
+			// If there is more than one button, we also call the Button's
+			// onSubmit() handler
+			if (countButtons() > 1)
 			{
-				throw new WicketRuntimeException("Unable to find submitting button");
-			}
-			else
-			{
-				button.onSubmit();
+				final Button button = findSubmittingButton();
+				if (button == null)
+				{
+					throw new WicketRuntimeException("Unable to find submitting button");
+				}
+				else
+				{
+					button.onSubmit();
+				}
 			}
 		}
 	}

@@ -3,10 +3,12 @@
 	 * validates successfully, handleValidSubmit() is called. If not,
 	 * handleErrors() is called.
 	 * 
+	 * @return True if the form validated
+	 * 
 	 * @see Form#onSubmit()
 	 * @see Form#onError()
 	 */
-	protected final void validate()
+	protected final boolean validate()
 	{
 		// Redirect back to result to avoid postback warnings. But we turn
 		// redirecting on as the first thing because the user's handleSubmit
@@ -25,6 +27,9 @@
 
 			// let subclass handle error
 			onError();
+			
+			// Form failed to validate
+			return false;
 		}
 		else
 		{
@@ -36,6 +41,9 @@
 
 			// Model was successfully updated with valid data
 			onSubmit();
+			
+			// Form validated
+			return true;
 		}
 	}
 
