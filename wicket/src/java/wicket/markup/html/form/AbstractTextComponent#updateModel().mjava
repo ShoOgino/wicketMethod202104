@@ -3,8 +3,11 @@
 	 * 
 	 * @see wicket.markup.html.form.FormComponent#updateModel()
 	 */
-    protected void updateModel()
+	protected void updateModel()
 	{
-		setModelObject(getInput());
+		String input = getInput();
+		if (isInputNullOnEmptyString() && "".equals(input))
+			input = null;
+		setModelObject(input);
 	}
 
