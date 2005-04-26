@@ -14,7 +14,12 @@
 			{
 				// we need to return the root model and not a property of the
 				// model
-				return getRootModel(model);
+				Object result = getRootModel(model);
+				if( (result instanceof IModel))
+				{
+					result = ((IModel)result).getObject(this);
+				}
+				return result;
 			}
 
 			// Get model value for this component
