@@ -8,20 +8,22 @@
 		int firstListItem = this.startIndex;
 
 		// How many page links shall be displayed
-		int viewSize = this.getViewSize();
+		int viewSize = getViewSize();
+		int margin = getMargin();
 
 		// What is the PageableListView's page index to be displayed
 		int currentPage = pageableListView.getCurrentPage();
 
 		// Make sure the current page link index is within the current
 		// window taking the left and right margin into account
-		if (currentPage < (firstListItem + this.margin))
-		{
-			firstListItem = currentPage - viewSize + margin;
-		}
-		else if (currentPage >= (firstListItem + viewSize - this.margin))
+		if (currentPage < (firstListItem + margin))
 		{
 			firstListItem = currentPage - margin;
+		}
+		else if((currentPage >= (firstListItem + viewSize - margin)))
+		{
+
+			firstListItem = (currentPage + margin + 1) - viewSize;
 		}
 
 		// Make sure the first index is >= 0 and the last index is <=
@@ -41,8 +43,10 @@
 			this.modelChanging();
 
 			// Tell the ListView what the new start index shall be
+			addStateChange(new StartIndexChange(this.startIndex));
 			this.startIndex = firstListItem;
-			this.setViewSize(viewSize);
+			
+			this.setIterations(Math.min(viewSize,pageableListView.getPageCount()));
 
 			this.modelChanged();
 
