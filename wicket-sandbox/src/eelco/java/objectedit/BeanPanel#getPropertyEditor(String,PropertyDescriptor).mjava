@@ -6,13 +6,29 @@
 	 */
 	protected Panel getPropertyEditor(String panelId, PropertyDescriptor descriptor)
 	{
-		if(descriptor instanceof IndexedPropertyDescriptor)
+		Class type = descriptor.getPropertyType();
+		PropertyEditor editor = (PropertyEditor)cachedEditors.get(type);
+		if (editor != null)
 		{
-			throw new WicketRuntimeException("index properties not supported yet ");
+			return editor;
 		}
-		else
+
+		editor = findCustomEditor(panelId, descriptor);
+
+		if (editor == null)
 		{
-			return new SimplePropertyPanel(panelId, getModel(), descriptor);
+			if (descriptor instanceof IndexedPropertyDescriptor)
+			{
+				throw new WicketRuntimeException("index properties not supported yet ");
+			}
+			else
+			{
+				editor = new SimplePropertyPanel(panelId, getModel(), descriptor);
+			}
 		}
+
+		cachedEditors.put(type, editor);
+
+		return editor;
 	}
 
