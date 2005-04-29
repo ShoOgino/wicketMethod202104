@@ -9,6 +9,7 @@
 		// Clear all feedback messages
 		getFeedbackMessages().clear();
 
+		// visit all this page's children to detach the models
 		visitChildren(new IVisitor()
 		{
 			public Object component(Component component)
@@ -26,5 +27,11 @@
 				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
+
+		if (isVersioned())
+		{
+			// end the version
+			endVersion();
+		}
 	}
 
