@@ -14,9 +14,14 @@
 		    try
 		    {
 				final Class pageClass = session.getClassResolver().resolveClass(pageClassName);
-				setResponsePage(session.getPageFactory().newPage(pageClass,
-						new PageParameters(getRequest().getParameterMap())));
+				Page newPage = session.getPageFactory().newPage(pageClass,
+						new PageParameters(getRequest().getParameterMap()));
+				setResponsePage(newPage);
 				setUpdateCluster(true);
+
+				// we have to initialize the page's request now
+				newPage.internalBeginRequest();
+
 				return true;
 		    }
 		    catch (RuntimeException e)
