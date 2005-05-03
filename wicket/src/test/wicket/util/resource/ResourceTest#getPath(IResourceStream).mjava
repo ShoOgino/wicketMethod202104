@@ -1,0 +1,20 @@
+	/**
+	 * Gets the path of the resource as a string.
+	 * @param resource the resource
+	 * @return the path of the resource as a string
+	 */
+	private String getPath(IResourceStream resource)
+	{
+		try
+		{
+			URL url = ((UrlResourceStream)resource).getURL();
+			String path = new File(new URI(url.toString())).getPath();
+			path = Strings.replaceAll(path, "\\", "/");
+			return path;
+		}
+		catch (URISyntaxException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
