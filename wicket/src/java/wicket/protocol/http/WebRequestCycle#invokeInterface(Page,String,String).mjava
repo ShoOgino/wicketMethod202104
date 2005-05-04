@@ -12,39 +12,23 @@
 	{
 		// Set the page for the component as the response page
 		setResponsePage(page);
-
-		try
+		setInvokePage(page);
+		// Invoke interface on the component at the given path on the page
+		final Component component = page.get(Strings.afterFirstPathComponent(path, '.'));
+		if (component != null)
 		{
-			// Invoke interface on the component at the given path on the page
-			final Component component = page.get(Strings.afterFirstPathComponent(path, '.'));
-			if (component != null)
-			{
-				// Invoke interface on component
-				invokeInterface(component, interfaceName);
-	
-				// Set form component values from cookies
-				setFormComponentValuesFromCookies(page);
-			}
-			else
-			{
-				// Must be an internal error of some kind or someone is hacking
-				// around with URLs in their browser.
-				log.error("No component found for " + path);
-				setResponsePage(newPage(application.getPages().getInternalErrorPage()));
-			}
+			// Invoke interface on component
+			invokeInterface(component, interfaceName);
+
+			// Set form component values from cookies
+			setFormComponentValuesFromCookies(page);
 		}
-		finally
+		else
 		{
-			//TODO strange to do that here huh? Yep, we definitively need a tighter cycle
-			// See RFE 1193700 (http://sourceforge.net/tracker/index.php?func=detail&aid=1193700&group_id=119783&atid=684978)
-			page.internalBeginRequest();
-
-			if(getRedirect())
-			{
-				// as the rendering will be done by redirecting, we need to end
-				// this page's request here
-				page.internalEndRequest();
-			}
+			// Must be an internal error of some kind or someone is hacking
+			// around with URLs in their browser.
+			log.error("No component found for " + path);
+			setResponsePage(newPage(application.getPages().getInternalErrorPage()));
 		}
 	}
 
