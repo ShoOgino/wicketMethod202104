@@ -6,6 +6,13 @@
 	 */
 	protected void redirectTo(final Page page)
 	{
-		getRequestCycle().redirectTo(page);
+		try
+		{
+			getRequestCycle().redirectTo(page);
+		}
+		catch (ServletException ex)
+		{
+			throw new WicketRuntimeException(ex);
+		}
 	}
 
