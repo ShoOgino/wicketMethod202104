@@ -3,5 +3,24 @@
 	 */
 	public SunJceCrypt()
 	{
+	    try
+	    {
+			// Initialize and add a security provider required for encryption
+			//Security.addProvider(new com.sun.crypto.provider.SunJCE());
+	        final Class clazz = Class.forName("com.sun.crypto.provider.SunJCE");
+	        Security.addProvider((Provider)clazz.newInstance());
+	    }
+	    catch (ClassNotFoundException ex)
+	    {
+	        throw new WicketRuntimeException("Unable to load SunJCE service provider", ex);
+	    }
+	    catch (IllegalAccessException ex)
+	    {
+	        throw new WicketRuntimeException("Unable to load SunJCE service provider", ex);
+	    }
+	    catch (InstantiationException ex)
+	    {
+	        throw new WicketRuntimeException("Unable to load SunJCE service provider", ex);
+	    }
 	}
 
