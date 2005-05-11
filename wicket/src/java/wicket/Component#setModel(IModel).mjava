@@ -4,15 +4,8 @@
 	 * @param model
 	 *            the model
 	 */
-	public final void setModel(final IModel model)
+	public void setModel(final IModel model)
 	{
-		// If a compound model is explicitly set on this component
-		if (model instanceof CompoundPropertyModel)
-		{
-			// we need to remember this for getModelObject()
-			setFlag(FLAG_HAS_ROOT_MODEL, true);
-		}
-
 		// Detach current model
 		if (this.model != null)
 		{
@@ -25,5 +18,15 @@
 			addStateChange(new ComponentModelChange(this.model));
 			this.model = (IModel)model;
 		}
+		// If a compound model is explicitly set on this component
+		if (model instanceof CompoundPropertyModel)
+		{
+			// we need to remember this for getModelObject()
+			setFlag(FLAG_HAS_ROOT_MODEL, true);
+			
+			
+		}
+		
+		modelChanged();
 	}
 
