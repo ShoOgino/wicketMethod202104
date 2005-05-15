@@ -21,6 +21,14 @@
 			{
 				// Clear all feedback messages if it isn't a redirect
 				page.getFeedbackMessages().clear();
+
+				// and see if we have to redirect the render part by default
+				ApplicationSettings.RenderStrategy strategy = getSession().getApplication()
+						.getSettings().getRenderStrategy();
+				boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER
+						|| strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
+
+				setRedirect(issueRedirect);
 			}
 
 			// Invoke interface on component
