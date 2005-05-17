@@ -6,8 +6,6 @@
 			final FileUpload upload = fileUploadField.getFileUpload();
 			if (upload != null)
 			{
-				log.info("Uploaded file: " + upload.getFile());
-
 				// Create a new file
 				File newFile = new File(uploadFolder, upload.getFile().getName());
 
@@ -17,7 +15,9 @@
 				{
 					// Save to new file
 					newFile.createNewFile(); 
-					upload.writeTo(newFile); 
+					upload.writeTo(newFile);
+
+					UploadPage.this.info("saved file: " + upload.getFile());
 				}
 				catch (Exception e)
 				{
