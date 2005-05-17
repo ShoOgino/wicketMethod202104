@@ -1,0 +1,47 @@
+	/**
+	 * Returns the given url encoded.
+	 * 
+	 * @param url
+	 *            The URL to encode
+	 * @return The encoded url
+	 */
+	public String encodeURL(String url)
+	{
+	    // The crypt implementation must be known
+		if (urlCrypt != null)
+		{
+		    // The url must have a query string, otherwise keep the url unchanged
+		    final int pos = url.indexOf('?');
+		    if (pos > 0)
+		    {
+		        // The url's path
+			    String urlPrefix = url.substring(0, pos);
+			    
+			    // Extract the querystring 
+			    String queryString = url.substring(pos + 1);
+			    
+			    // if the querystring starts with a parameter like 
+			    // "secure=", than don#t change the querystring as it 
+			    // has been encoded already
+			    if (!queryString.startsWith("secure="))
+			    {
+			        // The length of the encrypted string depends on the
+			        // length of the original querystring. Let's try to
+			        // make the querystring shorter first without loosing
+			        // information.
+				    queryString = shortenUrl(queryString);
+				    
+				    // encrypt the query string
+					final String encryptedQueryString = urlCrypt.encrypt(queryString);
+					
+					// build the new complete url
+					final String encryptedUrl = urlPrefix + "?secure=" + escapeUrl(encryptedQueryString);
+					return encryptedUrl;
+			    }
+		    }
+		}
+		
+		// we didn't change anything
+		return url;
+	}
+

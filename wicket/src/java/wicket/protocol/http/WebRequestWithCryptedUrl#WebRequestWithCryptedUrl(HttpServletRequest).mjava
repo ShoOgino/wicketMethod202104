@@ -1,0 +1,55 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param request
+	 *            The oiginal request information
+	 */
+	public WebRequestWithCryptedUrl(final HttpServletRequest request)
+	{
+		super(request);
+
+		// Encoded query string have only a single parameter named "secure"
+		final String secureParam = request.getParameter("secure");
+		if ((secureParam != null) && (secureParam.length() > 0))
+		{
+		    // Decrypt the query string
+			final String queryString = urlCrypt.decrypt(secureParam);
+			
+			// The querystring might have been shortened (length reduced).
+			// In that case, lengthen the query string again. 
+			this.queryString = rebuildUrl(queryString);
+			
+			// extract parameter key/value pairs from the query string
+		    this.parameters = analyzeQueryString(this.queryString);
+		}
+		else
+		{
+		    // If "secure" parameter does not exist, we assume the query string
+		    // is not encoded.
+		    // Note: You might want to throw an exception, if you don't want 
+		    // the automatic fallback.
+			this.queryString = null;
+		    this.parameters = new ValueMap();
+		}
+		
+		// If available, add POST parameters as well. They are not encrypted.
+		// The parameters from HttpRequest 
+		final Map params = super.getParameterMap();
+		if ((params != null) && !params.isEmpty())
+		{
+		    // For all parameters (POST + URL query string)
+		    final Iterator iter = params.entrySet().iterator();
+		    while (iter.hasNext())
+		    {
+		        final Map.Entry entry = (Map.Entry)iter.next();
+		        
+		        // Ignore the "secure" parameter
+		        if (!"secure".equalsIgnoreCase((String)entry.getKey()))
+		        {
+		            // add key/value to our parameter map
+		            this.parameters.put(entry.getKey(), entry.getValue());
+		        }
+		    }
+		}
+	}
+
