@@ -12,16 +12,16 @@
 	 *            The style of the image (see {@link wicket.Session})
 	 * @return The image resource
 	 */
-	public static StaticImageResource get(final Package basePackage, final String path,
+	public static StaticResource get(final Package basePackage, final String path,
 			final Locale locale, final String style)
 	{
 		final String key = basePackage.getName() + '/' + SharedResources.path(path, locale, style);
 		synchronized (imageResourceMap)
 		{
-			StaticImageResource imageResource = (StaticImageResource)imageResourceMap.get(key);
+			StaticResource imageResource = (StaticResource)imageResourceMap.get(key);
 			if (imageResource == null)
 			{
-				imageResource = new StaticImageResource(basePackage, path, locale, style);
+				imageResource = new StaticResource(basePackage, path, locale, style);
 				imageResourceMap.put(key, imageResource);
 			}
 			return imageResource;
