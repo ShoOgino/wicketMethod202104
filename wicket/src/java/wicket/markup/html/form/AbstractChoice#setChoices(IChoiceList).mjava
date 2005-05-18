@@ -1,0 +1,25 @@
+	/**
+	 * Sets the list of choices.
+	 *
+	 * @param choices the list of choices
+	 */
+	public final void setChoices(IChoiceList choices)
+	{
+		if(this.choices != null && (this.choices != choices))
+		{
+			if (isVersioned())
+			{
+				addStateChange(new Change()
+				{
+					final IChoiceList oldList = AbstractChoice.this.choices;
+
+					public void undo()
+					{
+						AbstractChoice.this.choices = oldList;
+					}
+				});
+			}
+		}
+		this.choices = choices;
+	}
+
