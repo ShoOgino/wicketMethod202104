@@ -12,6 +12,8 @@
 		final String secureParam = request.getParameter("secure");
 		if ((secureParam != null) && (secureParam.length() > 0))
 		{
+			// Get the crypt implementation from the application
+			ICrypt urlCrypt = Session.get().getApplication().newCrypt();
 		    // Decrypt the query string
 			final String queryString = urlCrypt.decrypt(secureParam);
 			
