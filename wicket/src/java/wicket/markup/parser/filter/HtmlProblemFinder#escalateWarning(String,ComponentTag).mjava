@@ -1,0 +1,27 @@
+	/**
+	 * Handle the issue. Depending the setting either log a warning, an error,
+	 * throw an exception or ignore it.
+	 * 
+	 * @param msg The message
+	 * @param tag The current tag
+	 */
+	private void escalateWarning(final String msg, final ComponentTag tag)
+	{
+	    if (problemEscalation == ERR_LOG_WARN)
+	    {
+	        log.warn(msg + tag.toUserDebugString());
+	    }
+	    else if (problemEscalation == ERR_LOG_ERROR)
+	    {
+	        log.error(msg + tag.toUserDebugString());
+	    }
+	    else if (problemEscalation == ERR_INGORE)
+	    {
+	        ;
+	    }
+	    else // if (problemEscalation == ERR_THROW_EXCEPTION)
+	    {
+	        throw new MarkupException(msg + tag.toUserDebugString());
+	    }
+	}
+
