@@ -1,0 +1,24 @@
+		/**
+		 * Construct.
+		 * @param id component id
+		 */
+		public LocaleDropDownChoice(String id)
+		{
+			super(id);
+
+			// set the model that gets the current locale, and that is used for updating
+			// the current locale to property 'locale' of FormInput
+			setModel(new PropertyModel(FormInput.this, "locale"));
+
+			// use a custom implementation of choices, as we want to display
+			// the choices localized
+			ChoiceList locales = new ChoiceList(LOCALES)
+			{
+				protected IChoice newChoice(Object object, int index)
+				{
+					return new LocaleChoice((Locale)object, index);
+				}
+			};
+			setChoices(locales);
+		}
+
