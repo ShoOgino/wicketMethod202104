@@ -1,0 +1,120 @@
+	/**
+	 * Converts a Java String to an HTML markup String by replacing illegal
+	 * characters with HTML entities where appropriate. Spaces are converted to
+	 * non-breaking spaces (&lt;nbsp&gt;) if escapeSpaces is true, tabs are
+	 * converted to four non-breaking spaces, less than signs are converted to
+	 * &amp;lt; entities and greater than signs to &amp;gt; entities.
+	 * 
+	 * @param s
+	 *            The string to escape
+	 * @param escapeSpaces
+	 *            True to replace ' ' with nonbreaking space
+	 * @param convertToHtmlUnicodeEscapes
+	 *            True to convert non-7 bit characters to unicode HTML (&#...)
+	 * @return The escaped string
+	 */
+	public static String escapeMarkup(final String s,
+			final boolean escapeSpaces, final boolean convertToHtmlUnicodeEscapes)
+	{
+		if (s == null)
+		{
+			return null;
+		}
+		else
+		{
+			final StringBuffer buffer = new StringBuffer();
+
+			int len = s.length();
+			for (int i = 0; i < len; i++)
+			{
+				final char c = s.charAt(i);
+
+				switch (c)
+				{
+					case '\t' :
+						if (escapeSpaces)
+						{
+							// Assumption is four space tabs (sorry, but that's
+							// just
+							// how it is!)
+							buffer.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+						}
+						else
+						{
+							buffer.append(c);
+						}
+						break;
+
+					case ' ' :
+						if (escapeSpaces)
+						{
+							buffer.append("&nbsp;");
+						}
+						else
+						{
+							buffer.append(c);
+						}
+						break;
+
+					case '<' :
+						buffer.append("&lt;");
+						break;
+
+					case '>' :
+						buffer.append("&gt;");
+						break;
+
+					case '&':
+
+						// if this is an entity (&#), then do not convert
+						if ( (i < len - 1) && (s.charAt(i + 1) == '#') )
+					    {
+							buffer.append(c);
+							
+					    }
+						else
+						{
+							// it is not an entity, so convert it to &amp;
+							buffer.append("&amp;");
+						}
+					    break;
+
+					case '"':
+					    buffer.append("&quot;");
+					    break;
+
+					case '\'':
+					    buffer.append("&#039;");
+					    break;
+
+					default :
+
+						if(convertToHtmlUnicodeEscapes)
+						{
+			                int ci = 0xffff & c;
+			                if (ci < 160 )
+							{   
+								// nothing special only 7 Bit
+								buffer.append(c);
+							}
+							else
+							{
+			                    // Not 7 Bit use the unicode system
+								buffer.append("&#");
+								buffer.append(new Integer(ci).toString());
+								buffer.append(';');
+			                }
+						}
+						else
+						{
+							buffer.append(c);
+						}
+
+						break;
+				}
+			}
+
+			return buffer.toString();
+		}
+	}
+
