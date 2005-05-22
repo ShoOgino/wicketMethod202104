@@ -1,0 +1,22 @@
+	/**
+	 * Gets a default property editor panel.
+	 * @param panelId component id
+	 * @param descriptor property descriptor
+	 * @return a property editor
+	 */
+	protected final PropertyEditor getDefaultEditor(
+			String panelId, PropertyDescriptor descriptor)
+	{
+		PropertyEditor editor;
+		Class type = descriptor.getPropertyType();
+		if(Boolean.class.isAssignableFrom(type) || Boolean.TYPE == type)
+		{
+			editor = new PropertyCheckBox(panelId, getModel(), descriptor, getEditMode());
+		}
+		else
+		{
+			editor = new PropertyInput(panelId, getModel(), descriptor, getEditMode());
+		}
+		return editor;
+	}
+
