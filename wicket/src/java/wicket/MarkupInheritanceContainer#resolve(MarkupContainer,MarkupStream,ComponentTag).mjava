@@ -1,0 +1,89 @@
+	/**
+	 * Try to resolve the component name, then create a component, add it to the
+	 * container and render the component.
+	 * 
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return True if componentId was handled by the resolver, false otherwise.
+	 */
+	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+	    // Not sure this can really happen, but onComponentTagBody() must be called first 
+	    if (openTag == null)
+	    {
+	        return false;
+	    }
+	    
+	    // I'm currently only interested in <wicket:...> tags
+		if (!(tag instanceof WicketTag))
+        {
+		    // resolve inherited components
+		    final String name = tag.getId();
+		    final Component component = this.getParent().get(name);
+		    if (component != null)
+		    {
+		        component.render();
+		        return true;
+		    }
+		    
+            return false;
+        }
+		
+		final WicketTag wtag = (WicketTag) tag;
+
+        // The current markup stream must be the parent's one.
+        // Thus, watch out for <wicket:child>
+        
+        if (!wtag.isChildTag())
+        {
+            return false;
+        }
+
+        ComponentTag bodyTag = tag;
+        if (tag.isOpen())
+        {
+            // It is open-preview-close already.
+            // Only RawMarkup is allowed within the preview region, which
+            // gets stripped from output
+            markupStream.next();
+            markupStream.skipRawMarkup();
+        }
+        else if (tag.isOpenClose())
+        {
+            // Automatically expand <wicket:body/> to <wicket:body>...</wicket:body>
+            // in order for the html to look right: insert the body in between the
+            // wicket tags instead of behind the open-close tag.
+            bodyTag = tag.mutable();
+            bodyTag.setType(XmlTag.OPEN);
+        }
+        else
+        {
+			markupStream.throwMarkupException("A <wicket:child> tag must be an open or open-close tag.");
+        }
+
+        // render <wicket:child> tag
+		renderComponentTag(bodyTag);
+		markupStream.next();
+		
+		// swap temporarily back to original markup and render the body 
+		// of <wicket:extend> and switch back the to parents markup.
+		dual.swapCurrentMarkupStream();
+		super.onComponentTagBody(this.dual, openTag);
+		dual.swapCurrentMarkupStream();
+		
+		// Render </wicket:child>
+		if (tag.isOpenClose())
+		{
+		    bodyTag.setType(XmlTag.CLOSE);
+			renderComponentTag(bodyTag);
+		}
+	    
+		// Continue rendering the parent markup until its end
+		return true;
+	}
+

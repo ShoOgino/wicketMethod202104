@@ -1,0 +1,38 @@
+	/**
+	 * @see wicket.IComponentResolver#resolve(MarkupContainer,
+	 *      MarkupStream, ComponentTag)
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return true, if componentId was handle by the resolver. False, otherwise
+	 */
+	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		// It must be <wicket:...>
+		if (tag instanceof WicketTag)
+		{
+			final WicketTag wicketTag = (WicketTag)tag;
+			
+			// It must be <wicket:extend...>
+			if (wicketTag.isExtendTag())
+			{
+			    if (markupStream.getCurrentIndex() != 0)
+			    {
+			        log.warn("nothing should precede the <wicket:extend> tag");
+			    }
+
+			    // wicket:extend regions are handled by MarkupInheritanceContainer
+		        final MarkupInheritanceContainer inherit = new MarkupInheritanceContainer();
+		        container.autoAdd(inherit);
+		        
+			    return true;
+			}
+		}
+		// We were not able to handle the componentId
+		return false;
+	}
+
