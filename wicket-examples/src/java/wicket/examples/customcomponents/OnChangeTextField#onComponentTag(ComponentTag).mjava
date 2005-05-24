@@ -1,0 +1,18 @@
+	/**
+	 * Processes the component tag.
+	 * 
+	 * @param tag Tag to modify
+	 * @see wicket.Component#onComponentTag(wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+		// url that points to this components IOnChangeListener method
+		final String url = urlFor(IOnChangeListener.class);
+
+		// NOTE: do not encode the url as that would give invalid JavaScript
+		tag.put("onChange", "location.href='" + url + "&" + getPath()
+				+ "=' + this.value;");
+
+		super.onComponentTag(tag);
+	}
+
