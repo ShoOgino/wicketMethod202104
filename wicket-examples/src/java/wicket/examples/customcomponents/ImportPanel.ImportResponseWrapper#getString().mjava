@@ -1,0 +1,24 @@
+		/**
+		 * Retrieves the buffered output, using the containing tag's 'charEncoding'
+		 * attribute, or the tag's default encoding, <b>if necessary </b>.
+		 * @return buffered output
+		 * @throws UnsupportedEncodingException
+		 */
+		public String getString() throws UnsupportedEncodingException
+		{
+			// not simply toString() because we need to throw
+			// UnsupportedEncodingException
+			if (writerUsed)
+			{
+				return stringWriter.toString();
+			}
+			else if (streamUsed)
+			{
+				return byteArrayOutputStream.toString();
+			}
+			else
+			{
+				return ""; // target didn't write anything
+			}
+		}
+
