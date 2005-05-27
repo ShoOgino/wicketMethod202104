@@ -8,11 +8,17 @@
 	 */
 	protected final void renderComponentTag(ComponentTag tag)
 	{
+	    if (this.renderComponentTag == false)
+	    {
+	        // Do nothing
+	        return;
+	    }
+
 		final ApplicationSettings settings = getApplication().getSettings();
 		if (!(tag instanceof WicketTag) || !settings.getStripWicketTags())
 		{
 			// Apply attribute modifiers
-			if (attributeModifiers != null && tag.getType() != XmlTag.CLOSE)
+			if ((attributeModifiers != null) && (tag.getType() != XmlTag.CLOSE))
 			{
 				tag = tag.mutable();
 				for (AttributeModifier current = attributeModifiers; current != null; current = current.next)
