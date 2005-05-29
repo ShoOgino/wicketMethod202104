@@ -1,0 +1,16 @@
+	/**
+	 * @see wicket.Application#newMarkupParser()
+	 */
+	public MarkupParser newMarkupParser()
+	{
+		final MarkupParser parser = new MarkupParser(new XmlPullParser())
+		{
+			public void initFilterChain()
+			{
+				appendMarkupFilter(new HtmlHeadTagHandler());
+			}
+		};
+		parser.configure(getSettings());
+		return parser;
+	}
+
