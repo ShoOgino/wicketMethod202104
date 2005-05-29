@@ -5,8 +5,11 @@
 	 *            the markup stream
 	 * @param openTag
 	 *            the tag to render
+	 * @param renderTagOnly
+	 *            if true, the tag will not be written to the output
 	 */
-	final void renderClosingComponentTag(final MarkupStream markupStream, final ComponentTag openTag)
+	final void renderClosingComponentTag(final MarkupStream markupStream, 
+	        final ComponentTag openTag, final boolean renderTagOnly)
 	{
 		// Tag should be open tag and not openclose tag
 		if (openTag.isOpen())
@@ -26,7 +29,10 @@
 				}
 
 				// Render the close tag
-				renderComponentTag(closeTag);
+				if (renderTagOnly == false)
+				{
+				    renderComponentTag(closeTag);
+				}
 				markupStream.next();
 			}
 			else
@@ -37,15 +43,6 @@
 					markupStream.throwMarkupException("Expected close tag for " + openTag);
 				}
 			}
-		}
-		else if (openTag.isOpenClose())
-		{
-		    if (this.renderComponentTag == false)
-		    {
-				// Write synthetic close tag
-				getResponse().write(openTag.syntheticCloseTagString());
-		    }
-		    
 		}
 	}
 

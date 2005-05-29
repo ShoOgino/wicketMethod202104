@@ -26,7 +26,10 @@
 		}
 
 		// Render open tag
-		renderComponentTag(tag);
+		if (getRenderBodyOnly() == false)
+		{
+		    renderComponentTag(tag);
+		}
 		markupStream.next();
 
 		// Render the body only if open-body-close. Do not render if open-close.
@@ -39,7 +42,7 @@
 		// Render close tag
 		if (tag.isOpen())
 		{
-			renderClosingComponentTag(markupStream, tag);
+			renderClosingComponentTag(markupStream, tag, getRenderBodyOnly());
 		}
 	}
 
