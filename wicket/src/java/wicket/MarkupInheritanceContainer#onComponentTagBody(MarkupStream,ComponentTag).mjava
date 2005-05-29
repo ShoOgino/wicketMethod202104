@@ -9,23 +9,37 @@
 	protected final void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
 	    this.openTag = openTag;
+	    this.resolved = false;
 
+	    // Get the real component
+	    final MarkupContainer parent = this.getParent();
+	    
 		// Get the inherited markup stream
-	    MarkupStream parentMarkupStream = this.getParent().getInheritedMarkupStream();
+	    final MarkupStream parentMarkupStream = getInheritedMarkupStream(parent);
 		if (parentMarkupStream == null)
 		{
 		    throw new MarkupException("Did not find parent markup (inheritance) for Class: " + super.getClass().getName());
 		}
 
-		// Create the "merged" markup stream. And because the parent stream is first, the base
-		// class' markup will be rendered first.
-		this.dual = new DualMarkupStream(parentMarkupStream, markupStream);
-		this.setMarkupStream(this.dual);
+	    if (!(parent instanceof MarkupInheritanceContainer))
+	    {
+	        this.dual = new DualMarkupStream(markupStream);
+			
+			// Important: set the parent component's markup as well
+			parent.setMarkupStream(this.dual);
+	    }
+	    else
+	    {
+	        this.dual = (DualMarkupStream) parent.getMarkupStream();
+	    }
+
+		this.dual.push(parentMarkupStream);
+	    this.setMarkupStream(this.dual);
 		
-		// Important: set the parent component's markup as well
-		this.getParent().setMarkupStream(this.dual);
-		
-		// go one rendering the component
+		// go on rendering the component
+	    log.debug("inherit: onComponentTagBody: " + dual.getCurrentMarkupStream().toString());
 		super.onComponentTagBody(this.dual, openTag);
+		this.dual.pop();
+	    log.debug("inherit: back from onComponentTagBody: " + dual.getCurrentMarkupStream().toString());
 	}
 

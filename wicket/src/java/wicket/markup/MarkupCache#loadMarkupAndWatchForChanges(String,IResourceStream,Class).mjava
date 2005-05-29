@@ -7,10 +7,12 @@
 	 *            The key for the resource
 	 * @param markupResourceStream
 	 *            The markup stream to load and begin to watch
+	 * @param containerClass
+	 *            The Class the associated stream is directly associated
 	 * @return The markup in the stream
 	 */
 	private final Markup loadMarkupAndWatchForChanges(final String key,
-			final IResourceStream markupResourceStream)
+			final IResourceStream markupResourceStream, final Class containerClass)
 	{
 		// Watch file in the future
 		final ModificationWatcher watcher = application.getResourceWatcher();
@@ -21,12 +23,12 @@
 				public void onChange()
 				{
 					log.info("Reloading markup from " + markupResourceStream);
-					loadMarkup(key, markupResourceStream);
+					loadMarkup(key, markupResourceStream, containerClass);
 				}
 			});
 		}
 
 		log.info("Loading markup from " + markupResourceStream);
-		return loadMarkup(key, markupResourceStream);
+		return loadMarkup(key, markupResourceStream, containerClass);
 	}
 

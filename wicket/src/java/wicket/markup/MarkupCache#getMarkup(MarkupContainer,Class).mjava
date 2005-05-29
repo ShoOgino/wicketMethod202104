@@ -39,6 +39,8 @@
 
 				while ((markupResource == null) && (containerClass != MarkupContainer.class))
 				{
+				    clazz = containerClass;
+				    
 					// Look for markup resource for containerClass
 					markupResource = application.getResourceStreamLocator().locate(containerClass,
 							container.getStyle(), container.getLocale(), container.getMarkupType());
@@ -49,7 +51,7 @@
 				if (markupResource != null)
 				{
 					// load the markup and watch for changes
-					markup = loadMarkupAndWatchForChanges(key, markupResource);
+					markup = loadMarkupAndWatchForChanges(key, markupResource, clazz);
 				}
 				else
 				{

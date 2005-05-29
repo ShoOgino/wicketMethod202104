@@ -5,13 +5,17 @@
 	 *            Key under which markup should be cached
 	 * @param markupResourceStream
 	 *            The markup resource stream to load
+	 * @param containerClass
+	 *            The Class the associated stream is directly associated
 	 * @return The markup
 	 */
-	private final Markup loadMarkup(final String key, final IResourceStream markupResourceStream)
+	private final Markup loadMarkup(final String key, final IResourceStream markupResourceStream,
+	        final Class containerClass)
 	{
 		try
 		{
 			final Markup markup = application.newMarkupParser().readAndParse(markupResourceStream);
+			markup.setContainerClass(containerClass);
 			synchronized (markupCache)
 			{
 				markupCache.put(key, markup);
