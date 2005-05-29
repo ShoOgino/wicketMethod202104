@@ -1,0 +1,30 @@
+	/**
+	 * When property ifFormat is not set, this method is called to get the date pattern.
+	 * This method gets the current locale, and returns the pattern based on that.
+	 * <p>
+	 * This locale/pattern map is by far complete. Override this method or set
+	 * ifFormat if this doesnt work for you. Any contributions are welcome.
+	 * </p>
+	 * @return the pattern
+	 */
+	protected String getDatePattern()
+	{
+		Locale locale = Session.get().getLocale();
+
+		// now, just try a few that I know of
+
+		if (Locale.GERMAN.equals(locale))
+		{
+			return "%d.%m.%Y";
+		}
+
+
+		if (new Locale("nl").equals(locale))
+		{
+			return "%d-%m-%Y";
+		}
+
+		// return US pattern by default
+		return "%Y/%m/%d";		
+	}
+
