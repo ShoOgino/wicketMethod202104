@@ -5,7 +5,9 @@
      */
     private List parseMarkup() throws ParseException
     {
-        this.markupFilterChain = newFilterChain();
+        final List autoAddList = new ArrayList();
+        
+        this.markupFilterChain = newFilterChain(autoAddList);
         initFilterChain();
         
         // List to return
@@ -25,7 +27,7 @@
             }
 
             // Add tag to list?
-            if (add)
+            if (add || (autoAddList.size() > 0))
             {
                 final CharSequence text =
                     	xmlParser.getInputFromPositionMarker(tag.getPos());
@@ -77,17 +79,23 @@
                     }
                 }
 
+                if ((add == false) && (autoAddList.size() > 0))
+                {
+                    xmlParser.setPositionMarker(tag.getPos());
+                }
+                list.addAll(autoAddList);
+                autoAddList.clear();
+            }
+            
+            if (add)
+            {
                 // Add to list unless preview component tag remover flagged as removed
                 if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
                 {
 	                list.add(tag);
                 }
-
-                if (!(tag instanceof DynamicWicketTag))
-                {
-	                // Position is after tag
-	                xmlParser.setPositionMarker();
-                }
+                
+                xmlParser.setPositionMarker();
             }
         }
 

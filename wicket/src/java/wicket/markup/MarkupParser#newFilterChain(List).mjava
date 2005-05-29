@@ -2,9 +2,10 @@
 	 * Create a new markup filter chain and initialize with all default
 	 * filters required.
 	 * 
+	 * @param tagList
 	 * @return a preconfigured markup filter chain
 	 */
-	private IMarkupFilter newFilterChain()
+	private IMarkupFilter newFilterChain(final List tagList)
 	{
         // Chain together all the different markup filters and configure them
         final WicketTagIdentifier detectWicketComponents = new WicketTagIdentifier(xmlParser);
@@ -20,6 +21,7 @@
         autolinkHandler.setAutomaticLinking(this.automaticLinking);
 
         final HtmlHeaderSectionHandler headerHandler = new HtmlHeaderSectionHandler(autolinkHandler);
+        headerHandler.setTagList(tagList);
         
         // Markup filter chain starts with auto link handler
         return headerHandler;
