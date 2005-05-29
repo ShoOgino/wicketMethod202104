@@ -1,0 +1,38 @@
+	/**
+	 * @see wicket.IComponentResolver#resolve(MarkupContainer,
+	 *      MarkupStream, ComponentTag)
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return true, if componentId was handle by the resolver. False, otherwise
+	 */
+	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		// It must be <head>
+		if ("_header".equals(tag.getId()))
+		{
+		    if (container.get(tag.getId()) == null)
+		    {
+			    HtmlHeaderContainer header = new HtmlHeaderContainer();
+			    container.autoAdd(header);
+	
+			    Page page = container.getPage();
+			    if (!(page instanceof WebPage))
+			    {
+			        throw new WicketRuntimeException("Page must be WebPage: " + page.toString());
+			    }
+			    
+			    ((WebPage)page).headerComponents.add(header);
+		    }
+		    
+		    return true;
+		}
+			
+		// We were not able to handle the componentId
+		return false;
+	}
+
