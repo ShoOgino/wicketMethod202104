@@ -22,28 +22,28 @@
 			return tag;
 		}
 		
-		if (tag instanceof WicketTag)
-		{
-		    return tag;
-		}
-
 		if (done == true)
 		{
 		    return tag;
 		}
-		
-		if ("head".equalsIgnoreCase(tag.getName()))
+
+		if (!(tag instanceof WicketTag) && "head".equalsIgnoreCase(tag.getName()))
         {
-		    if (tag.isClose())
+		    withinHead = !withinHead;
+		    if (tag.isClose() == true)
 		    {
 		        done = true;
 		    }
-		    tag.setId("_header");
+		    
+		    return tag;
         }
-		else if ("body".equalsIgnoreCase(tag.getName()))
+		
+		if ("body".equalsIgnoreCase(tag.getName()))
         {
 		    done = true;
 
+			// TODO remove comment, to activate
+/*		    
 			final XmlTag headOpenTag = new XmlTag();
 			headOpenTag.setName("head");
 			headOpenTag.setType(XmlTag.OPEN);
@@ -57,10 +57,22 @@
 			closeTag.setOpenTag(openTag);
 			closeTag.setId("_header");
 
-			// TODO remove comment, to activate
-			//tagList.add(openTag);
-			//tagList.add(closeTag);
+			tagList.add(openTag);
+			tagList.add(closeTag);
+*/		
+		    return tag;
         }
+		
+		if (!(tag instanceof WicketTag))
+		{
+		    return tag;
+		}
+
+		final WicketTag wtag = (WicketTag) tag;
+		if ((withinHead == false) && (wtag.isHeadTag() == true))
+		{
+		    throw new MarkupException("<wicket:head> is only allow within <head> section.");
+		}
 		
 		return tag;
 	}
