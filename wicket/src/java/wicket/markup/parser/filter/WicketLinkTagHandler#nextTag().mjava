@@ -7,7 +7,7 @@
 	 * @see wicket.markup.parser.IMarkupFilter#nextTag()
 	 * @return Return the next eligible MarkupElement
 	 */
-	public MarkupElement nextTag() throws ParseException
+	public final MarkupElement nextTag() throws ParseException
 	{
 		// Get next tag. Null, if no more tag available
 		final ComponentTag tag = (ComponentTag)getParent().nextTag();
@@ -20,10 +20,10 @@
 		// considered for autolinking. This is because it is assumed that Wicket
 		// components like images or all other kind of Wicket Links will handle
 		// it themselves.
-		final String href = tag.getAttributes().getString("href");
-		if ((autolinking == true) && (tag.getId() == null) && (href != null)
-				&& (href.endsWith(".html") || (href.indexOf(".html?") != -1))
-				&& (href.indexOf(":") == -1))
+		// Subclass analyzeAutolinkCondition() to implement you own implementation
+		// and register the new tag handler with the markup parser through
+		// Application.newMarkupParser().
+		if ((autolinking == true) && (analyzeAutolinkCondition(tag) == true))
 		{
 			// Mark it as autolink enabled
 			tag.enableAutolink(true);

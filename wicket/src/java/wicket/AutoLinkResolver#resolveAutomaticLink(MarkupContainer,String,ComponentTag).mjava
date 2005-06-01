@@ -14,55 +14,103 @@
 	private final Component resolveAutomaticLink(final MarkupContainer container,
 			final String id, final ComponentTag tag)
 	{
+	    // Init
 		final Page page = container.getPage();
 		final String originalHref = tag.getAttributes().getString("href");
-		final int pos = originalHref.indexOf(".html");
-
-		String classPath = originalHref.substring(0, pos);
+		
 		PageParameters pageParameters = null;
-
-		// ".html?" => 6 chars
-		if ((classPath.length() + 6) < originalHref.length())
+		String classPath = originalHref;
+		
+		// get query string 
+		int pos = originalHref.indexOf("?");
+		if (pos != -1)
 		{
-			final String queryString = originalHref.substring(classPath.length() + 6);
+			final String queryString = originalHref.substring(pos + 1);
 			pageParameters = new PageParameters(new ValueMap(queryString, "&"));
+			classPath = originalHref.substring(0, pos);
 		}
 
 		// Make the id (page-)unique
 		final String autoId = id + Integer.toString(page.getAutoIndex());
 
-		// The component name on the tag changed
+		// By setting the component name, the tag becomes a Wicket component 
+		// tag, which needs a Component attached to it.
 		tag.setId(autoId);
 
-		// Obviously a href like href="myPkg.MyLabel.html" will do as well.
-		// Wicket will not throw an exception. It accepts it.
-		classPath = Strings.replaceAll(classPath,"/", ".");
-
-		if (!classPath.startsWith("."))
+		// remove the file extension, but remember it
+		String extension = null;
+		pos = classPath.lastIndexOf(".");
+		if (pos != -1)
 		{
-			// Href is relative. Resolve the url given relative to the current
-			// page
-			final String className = page.getClass().getPackage().getName() + "." + classPath;
-			final Class clazz = page.getApplicationSettings().getDefaultClassResolver()
-					.resolveClass(className);
-
-			return new AutolinkBookmarkablePageLink(autoId, clazz, pageParameters);
+		    extension = classPath.substring(pos + 1);
+		    classPath = classPath.substring(0, pos);
 		}
-		else
-		{
-			// href is absolute. If class with the same absolute path exists,
-			// use it. Else don't change the href.
-			final String className = classPath.substring(1);
-			try
+
+		// HTML hrefs are validated differently
+		if ("html".equalsIgnoreCase(extension))
+        {
+			// Obviously a href like href="myPkg.MyLabel.html" will do as well.
+			// Wicket will not throw an exception. It accepts it.
+			classPath = Strings.replaceAll(classPath,"/", ".");
+			
+		    if (!classPath.startsWith("."))
 			{
+				// Href is relative. Resolve the url given relative to the current
+				// page
+				final String className = page.getClass().getPackage().getName() + "." + classPath;
 				final Class clazz = page.getApplicationSettings().getDefaultClassResolver()
 						.resolveClass(className);
-
+	
 				return new AutolinkBookmarkablePageLink(autoId, clazz, pageParameters);
 			}
-			catch (WicketRuntimeException ex)
+			else
 			{
-				; // fall through
+				// href is absolute. If class with the same absolute path exists,
+				// use it. Else don't change the href.
+				final String className = classPath.substring(1);
+				try
+				{
+					final Class clazz = page.getApplicationSettings().getDefaultClassResolver()
+							.resolveClass(className);
+	
+					return new AutolinkBookmarkablePageLink(autoId, clazz, pageParameters);
+				}
+				catch (WicketRuntimeException ex)
+				{
+					; // fall through
+				}
+			}
+        }
+		// Validate all other hrefs
+		else
+		{
+		    if (classPath.startsWith("/") || classPath.startsWith("\\"))
+			{
+				// href is absolute. Don't change it at all.
+			}
+		    else
+		    {
+				// Href is relative, prepend the package name. Thus we keep
+		        // pre-view capabilities in Dreamweaver etc. and creat a proper
+		        // href at runtime.
+		        
+		        // <wicket:head> component are handled differently. We can not use
+		        // the container, because it is the container the header has been
+		        // added to (e.g. the Page). What we need however, is the component
+		        // (e.g. a Panel) which contributed it.
+		        Component relevantContainer = container;
+		        if (container instanceof HtmlHeaderContainer)
+		        {
+		            relevantContainer = findPanelComponent(container);
+		        }
+		        
+		        // Create the runtime href which has the proper package name
+		        // prepended.
+		        String href = relevantContainer.getClass().getPackage().getName();
+		        href = Strings.replaceAll(href, ".", "/") + "/" + originalHref;
+		        
+		        // Create the component implementing the link
+				return new AutolinkExternalLink(autoId, href);
 			}
 		}
 

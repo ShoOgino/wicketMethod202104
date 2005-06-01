@@ -1,0 +1,31 @@
+	/**
+	 * Analyze the tag. If return value == true, a autolink component will
+	 * be created. <p>
+	 * Subclass analyzeAutolinkCondition() to implement you own implementation
+	 * and register the new tag handler with the markup parser through
+	 * Application.newMarkupParser().
+	 * 
+	 * @param tag The current tag being parsed
+	 * @return If true, tag will become auto-component
+	 */
+	protected boolean analyzeAutolinkCondition(final ComponentTag tag)
+	{
+		final String href = tag.getAttributes().getString("href");
+		if ((tag.getId() == null) && (href != null)
+				&& (href.indexOf(":") == -1))
+		{
+			if (href.endsWith(".html") || (href.indexOf(".html?") != -1))
+			{
+			    return true;
+			}
+
+			// All <head><link> which are used for referencing css and js file.
+			if ("link".equals(tag.getName()))
+			{
+			    return true;
+			}
+		}
+		
+		return false;
+	}
+
