@@ -1,0 +1,22 @@
+		/**
+		 * @see wicket.Component#initModel()
+		 */
+		protected IModel initModel()
+		{
+			return new Model()
+			{
+				public Object getObject(Component component)
+				{
+					MarkupContainer parent = getParent();
+					return parent.getModel().getObject(parent);
+				};
+
+				public void setObject(Component component, Object object)
+				{
+					MarkupContainer parent = getParent();
+					parent.getModel().setObject(parent, object);
+				};
+
+			};
+		}
+
