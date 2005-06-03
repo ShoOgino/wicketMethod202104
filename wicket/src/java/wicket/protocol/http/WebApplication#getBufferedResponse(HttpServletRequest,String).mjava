@@ -1,16 +1,17 @@
 	/**
 	 * Returns the redirect map where the buffered render pages are stored in.
+	 * 
 	 * @param request
-	 * @param requestUri 
+	 * @param requestUri
 	 * @return The Redirect map or null when there are no redirects.
 	 */
 	public BufferedResponse getBufferedResponse(HttpServletRequest request, String requestUri)
 	{
 		String sessionId = request.getSession(true).getId();
 		Map sessionMap = (Map)redirectMap.get(sessionId);
-		if(sessionMap != null)
+		if (sessionMap != null)
 		{
-			sessionMap.put("last-time-used", new Long(System.currentTimeMillis()));
+			sessionMap.put("last-time-used", Time.now());
 			return (BufferedResponse)sessionMap.remove(requestUri);
 		}
 		return null;
