@@ -1,0 +1,19 @@
+	/**
+	 * Add stylesheet to header.
+	 */
+	private void addCSS()
+	{
+		IModel hrefReplacement = new Model()
+		{
+			public Object getObject(Component component)
+			{
+				CSS.bind(getApplication());
+				String url = getPage().urlFor(CSS.getPath());
+				return url;
+			};
+		};
+		WebMarkupContainer css = new WebMarkupContainer("css");
+		css.add(new AttributeModifier("href", true, hrefReplacement));
+		addToHeader(css);
+	}
+
