@@ -1,0 +1,17 @@
+	/**
+	 * @see wicket.Application#createApplicationSettings()
+	 */
+	public ApplicationSettings createApplicationSettings()
+	{
+		return new ApplicationSettings(this) {
+			
+			/**
+			 * @see wicket.ApplicationSettings#createResourceFinder()
+			 */
+			public IResourceFinder createResourceFinder()
+			{
+				return new WebApplicationPath(getWicketServlet().getServletContext());
+			}
+		};
+	}
+
