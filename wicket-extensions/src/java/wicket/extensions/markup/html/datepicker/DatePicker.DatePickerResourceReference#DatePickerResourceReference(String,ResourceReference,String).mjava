@@ -1,21 +1,20 @@
 		/**
 		 * Construct.
-		 * @param id
-		 * @param file relative location of the packaged file
+		 * @param id component id
+		 * @param resourceReference the reference to the resource
 		 * @param attributeToReplace the attribute to replace of the target tag
 		 */
-		public ResourceReference(String id, String file, String attributeToReplace)
+		public DatePickerResourceReference(String id,
+				final ResourceReference resourceReference,
+				String attributeToReplace)
 		{
 			super(id);
-
-			final StaticResourceReference ref = new StaticResourceReference(
-					DatePicker.class, file);
 
 			IModel srcReplacement = new Model()
 			{
 				public Object getObject(Component component)
 				{
-					String url = getPage().urlFor(ref.getPath());
+					String url = getPage().urlFor(resourceReference.getPath());
 					return url;
 				};
 			};
