@@ -3,9 +3,9 @@
 	 * 
 	 * @param pathname
 	 *            The filename with possible path
-	 * @return The file located on the path
+	 * @return The url located on the path
 	 */
-	public File find(final String pathname)
+	public URL find(final String pathname)
 	{
 		for (final Iterator iterator = folders.iterator(); iterator.hasNext();)
 		{
@@ -14,7 +14,14 @@
 
 			if (file.exists())
 			{
-				return file;
+				try
+				{
+					return file.toURL();
+				}
+				catch (MalformedURLException ex)
+				{
+					// ignore
+				}
 			}
 		}
 
