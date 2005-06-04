@@ -1,0 +1,19 @@
+	/**
+	 * First render the body of component. And if it is the header component 
+	 * of a Page (compared to a Panel or Border), than get the header sections
+	 * from all component in the hierachie and append them.
+	 * 
+	 * @see wicket.MarkupContainer#onComponentTagBody(wicket.markup.MarkupStream, wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	{
+		super.onComponentTagBody(markupStream, openTag);
+		
+		// render the header section only, if we are on a Page
+		// Panels and Border do not need to render the header section
+		if (getParent() instanceof WebPage)
+		{
+		    renderHeadSections();
+		}
+	}
+
