@@ -11,9 +11,10 @@
 		
 		// render the header section only, if we are on a Page
 		// Panels and Border do not need to render the header section
-		if (getParent() instanceof WebPage)
+		MarkupContainer parent = getParent();
+		if (parent instanceof IHeaderRenderer)
 		{
-		    renderHeadSections();
+		    ((IHeaderRenderer)parent).renderHeadSections(this);
 		}
 	}
 

@@ -1,10 +1,14 @@
 	/**
+	 * THIS METHOD IS NOT PART OF THE PUBLIC API.
+	 *
 	 * Render the header container component.
+	 * 
+	 * @param container
 	 */
-	private void renderHeadSections()
+	public final void renderHeadSections(final HtmlHeaderContainer container)
 	{
 		// collect all header parts and render them
-		getParent().visitChildren(WebMarkupContainer.class, new IVisitor()
+		visitChildren(WebMarkupContainer.class, new IVisitor()
         {
 		    private int nbrOfContributions;
 		    
@@ -20,9 +24,9 @@
 
 					// In case a Component with header has been added to the page 
 					// multiple times, the header must only be added once.
-					if ((headerPart != null) && (get(headerPart.getId()) == null))
+					if ((headerPart != null) && (container.get(headerPart.getId()) == null))
 					{
-						autoAdd(headerPart);
+						container.autoAdd(headerPart);
 						nbrOfContributions++;
 					}
 				}
