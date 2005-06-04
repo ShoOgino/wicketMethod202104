@@ -7,7 +7,7 @@
 	 *            The list view for this page link
 	 * @param pageNumber
 	 *            The page number in the PageableListView that this link links
-	 *            to
+	 *            to. Negative pageNumbers are relative to the end of the list.
 	 */
 	public PageableListViewNavigationLink(final String id,
 			final PageableListView pageableListView, final int pageNumber)
@@ -19,11 +19,17 @@
 			    int idx = pageNumber;
 				if (idx < 0)
 				{
-					idx = 0;
+					idx = pageableListView.getPageCount() + idx;
 				}
-				else if (idx > (pageableListView.getList().size() - 1))
+				
+				if (idx > (pageableListView.getList().size() - 1))
 				{
 					idx = pageableListView.getList().size() - 1;
+				}
+
+				if (idx < 0)
+				{
+					idx = 0;
 				}
 			    
 				pageableListView.setCurrentPage(idx);
@@ -37,7 +43,7 @@
 			}
 		});
 
-		this.pageNumber = (pageNumber < 0 ? 0 : pageNumber);
+		this.pageNumber = pageNumber;
 		this.pageableListView = pageableListView;
 	}
 
