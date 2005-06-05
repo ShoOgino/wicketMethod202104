@@ -4,27 +4,48 @@
 	 */
 	public Time lastModifiedTime()
 	{
-		URLConnection urlConnection = null;
-		try
+		if(file != null)
 		{
-			urlConnection = url.openConnection();
-
-			// update the last modified time.
-			lastModified = urlConnection.getLastModified();
+			lastModified = file.lastModified();
 		}
-		catch (IOException e)
+		else
 		{
-			log.error("getLastModified for " + url + " failed: " + e.getMessage());
+			URLConnection urlConnection = null;
+			try
+			{
+				
+				urlConnection = url.openConnection();
+	
+				// update the last modified time.
+				lastModified = urlConnection.getLastModified();
+			}
+			catch (IOException e)
+			{
+				log.error("getLastModified for " + url + " failed: " + e.getMessage());
+			}
+			finally
+			{
+				// if applicable, disconnect
+				if (urlConnection != null)
+				{
+					if(urlConnection instanceof HttpURLConnection)
+			        { 
+			             ((HttpURLConnection)urlConnection).disconnect();
+			        }
+					else
+					{
+						try
+						{
+							urlConnection.getInputStream().close();
+						}
+						catch (Exception ex)
+						{
+							// ignore
+						}
+					}
+				}
+			}
 		}
-		finally
-		{
-			// if applicable, disconnect
-			if (urlConnection != null && urlConnection instanceof HttpURLConnection) 
-	        { 
-	             ((HttpURLConnection)urlConnection).disconnect();
-	        }
-		}
-
 		return Time.milliseconds(lastModified);
 	}
 

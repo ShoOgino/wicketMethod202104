@@ -8,15 +8,24 @@
 	{
 		// Save URL
 		this.url = url;
+		URLConnection connection = null;
 		try
 		{
-			URLConnection connection = url.openConnection();
+			connection = url.openConnection();
 			contentLength = connection.getContentLength();
 			contentType = connection.getContentType();
 			lastModified = connection.getLastModified();
-			if (connection instanceof HttpURLConnection)
+			try
 			{
-				((HttpURLConnection)connection).disconnect();
+				file = new File(new URI(url.toExternalForm()));
+			}
+			catch (URISyntaxException ex)
+			{
+				log.info("couldn't convert url: " + url + " to file");
+			}
+			if(file != null && !file.exists())
+			{
+				file = null;
 			}
 		}
 		catch (IOException ex)
@@ -28,6 +37,28 @@
 					"Invalid URL parameter " + url);
 			illegalArgumentException.initCause(ex);
 			throw illegalArgumentException;
+		}
+		finally
+		{
+			// if applicable, disconnect
+			if (connection != null)
+			{
+				if(connection instanceof HttpURLConnection)
+		        { 
+		             ((HttpURLConnection)connection).disconnect();
+		        }
+				else
+				{
+					try
+					{
+						connection.getInputStream().close();
+					}
+					catch (Exception ex)
+					{
+						// ignore
+					}
+				}
+			}
 		}
 	}
 
