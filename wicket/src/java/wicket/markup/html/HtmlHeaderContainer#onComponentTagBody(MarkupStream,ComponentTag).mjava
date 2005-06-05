@@ -1,20 +1,23 @@
 	/**
-	 * First render the body of component. And if it is the header component 
-	 * of a Page (compared to a Panel or Border), than get the header sections
-	 * from all component in the hierachie and append them.
+	 * First render the body of component. And if it is the header component of
+	 * a Page (compared to a Panel or Border), than get the header sections from
+	 * all component in the hierachie and render them as well.
 	 * 
-	 * @see wicket.MarkupContainer#onComponentTagBody(wicket.markup.MarkupStream, wicket.markup.ComponentTag)
+	 * @see wicket.MarkupContainer#onComponentTagBody(wicket.markup.MarkupStream,
+	 *      wicket.markup.ComponentTag)
 	 */
 	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
+	    // In any case, first render the header section associated with the markup
 		super.onComponentTagBody(markupStream, openTag);
-		
-		// render the header section only, if we are on a Page
-		// Panels and Border do not need to render the header section
+
+		// If the parent component is a Page (or a bordered Page), we must
+		// now include the header sections of all components in the component
+		// hierarchie.
 		MarkupContainer parent = getParent();
 		if (parent instanceof IHeaderRenderer)
 		{
-		    ((IHeaderRenderer)parent).renderHeadSections(this);
+			((IHeaderRenderer)parent).renderHeadSections(this);
 		}
 	}
 
