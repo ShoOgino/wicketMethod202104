@@ -1,19 +1,18 @@
 	/**
-	 * Configures application settings for a given configuration type.
-	 * @param configurationType The configuration type. Must currently be either
-	 *            "development" or "deployment". If the type is 'development',
-	 *            the given resourcePath is polled for changes
-	 * @param resourcePath path for looking up resources
+	 * Convenience method that configures application settings for a given
+	 * configuration type.
+	 * 
+	 * @param configurationType
+	 *            The configuration type. Must currently be either "development"
+	 *            or "deployment". If the type is 'development', the given
+	 *            resourceFolder is polled for changes
+	 * @param resourceFolder
+	 *            Folder for polling resources
 	 * @see File#pathSeparator
 	 */
-	public final void configure(final String configurationType, final String resourcePath)
+	public final void configure(final String configurationType, final String resourceFolder)
 	{
-		IResourceFinder path = null;
-		if (resourcePath != null)
-		{
-			path = createResourceFinder();
-			addToPath(resourcePath, path);
-		}
-		configure(configurationType, path);
+		configure(configurationType);
+		addResourceFolder(resourceFolder);
 	}
 

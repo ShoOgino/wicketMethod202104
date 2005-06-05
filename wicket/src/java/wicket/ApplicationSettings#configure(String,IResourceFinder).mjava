@@ -1,20 +1,23 @@
 	/**
 	 * Configures application settings for a given configuration type.
-	 * @param configurationType The configuration type. Must currently be either
-	 *            "development" or "deployment". If the type is 'development',
-	 *            the given resourcePath is polled for changes
-	 * @param resourcePath path for looking up resources
+	 * 
+	 * @param configurationType
+	 *            The configuration type. Must currently be either "development"
+	 *            or "deployment". If the type is 'development', the given
+	 *            resourceFinder is polled for changes
+	 * @param resourceFinder
+	 *            Finder for looking up resources
 	 * @see File#pathSeparator
 	 */
-	public final void configure(final String configurationType, final IResourceFinder resourcePath)
+	public final void configure(final String configurationType, final IResourceFinder resourceFinder)
 	{
-		if (resourcePath != null)
+		if (resourceFinder != null)
 		{
-			setResourcePath(resourcePath);
+			setResourceFinder(resourceFinder);
 		}
 		if ("development".equalsIgnoreCase(configurationType))
 		{
-			if (resourcePath != null)
+			if (resourceFinder != null)
 			{
 				setResourcePollFrequency(Duration.ONE_SECOND);
 			}
