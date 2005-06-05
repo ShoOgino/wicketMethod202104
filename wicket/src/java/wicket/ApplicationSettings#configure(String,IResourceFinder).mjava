@@ -1,0 +1,35 @@
+	/**
+	 * Configures application settings for a given configuration type.
+	 * @param configurationType The configuration type. Must currently be either
+	 *            "development" or "deployment". If the type is 'development',
+	 *            the given resourcePath is polled for changes
+	 * @param resourcePath path for looking up resources
+	 * @see File#pathSeparator
+	 */
+	public final void configure(final String configurationType, final IResourceFinder resourcePath)
+	{
+		if (resourcePath != null)
+		{
+			setResourcePath(resourcePath);
+		}
+		if ("development".equalsIgnoreCase(configurationType))
+		{
+			if (resourcePath != null)
+			{
+				setResourcePollFrequency(Duration.ONE_SECOND);
+			}
+			setComponentUseCheck(true);
+			setStripWicketTags(false);
+		}
+		else if ("deployment".equalsIgnoreCase(configurationType))
+		{
+			setComponentUseCheck(false);
+			setStripWicketTags(true);
+		}
+		else
+		{
+			throw new IllegalArgumentException(
+					"Invalid configuration type.  Must be \"development\" or \"deployment\".");
+		}
+	}
+
