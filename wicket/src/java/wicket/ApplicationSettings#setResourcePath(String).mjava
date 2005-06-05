@@ -7,13 +7,10 @@
 	 *            The resourcePath to set
 	 * @return This
 	 */
-	public final ApplicationSettings setResourcePath(final IResourceFinder resourcePath)
+	public final ApplicationSettings setResourcePath(final String resourcePath)
 	{
-		this.resourcePath = resourcePath;
-
-		// Cause resource locator to get recreated
-		application.resourcePathChanged();
-
-		return this;
+		IResourceFinder path = createResourceFinder();
+		addToPath(resourcePath, path);
+		return setResourcePath(path);
 	}
 
