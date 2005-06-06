@@ -1,29 +1,34 @@
 	/**
 	 * Construct.
 	 * @param id the component id
-	 * @param targetTextField the receiving text field
-	 * @param buttonIcon icon image
-	 * @param style style of this date picker
+	 * @param target the receiving component
+	 * @param properties datepicker properties
 	 */
-	public DatePicker(String id, TextField targetTextField,
-			ResourceReference buttonIcon, ResourceReference style)
+	public DatePicker(String id, Component target, DatePickerProperties properties)
 	{
 		super(id);
 
-		if (targetTextField == null)
+		if(properties == null)
+		{
+			throw new NullPointerException("properties must be non null when using this constructor");
+		}
+
+		this.properties = properties;
+		
+		if (target == null)
 		{
 			throw new NullPointerException("targetTextField must be not null");
 		}
 
-		targetTextField.add(new IdAttributeModifier(targetTextField));
-		this.targetTextField = targetTextField;
+		target.add(new IdAttributeModifier(target));
+		this.target = target;
 
-		add(triggerButton = new TriggerButton("trigger", buttonIcon));
+		add(triggerButton = new TriggerButton("trigger", properties.getIcon()));
 		add(new InitScript("script"));
 		addToHeader(new DatePickerResourceReference("calendarMain", "calendar.js", "src"));
 		addToHeader(new DatePickerResourceReference("calendarSetup", "calendar-setup.js", "src"));
-		addToHeader(new DatePickerResourceReference("calendarLanguage", "lang/calendar-en.js", "src"));
-		addToHeader(new DatePickerResourceReference("calendarStyle", style, "href"));
+		addToHeader(new DatePickerResourceReference("calendarLanguage", properties.getLanguage(), "src"));
+		addToHeader(new DatePickerResourceReference("calendarStyle", properties.getStyle(), "href"));
 
 		new StaticResourceReference(DatePicker.class, "style/aqua/active-bg.gif");
 		new StaticResourceReference(DatePicker.class, "style/aqua/dark-bg.gif");
