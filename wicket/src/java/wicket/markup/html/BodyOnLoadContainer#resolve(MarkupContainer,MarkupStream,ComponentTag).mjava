@@ -1,0 +1,25 @@
+	/**
+	 * @see wicket.IComponentResolver#resolve(wicket.MarkupContainer, wicket.markup.MarkupStream, wicket.markup.ComponentTag)
+	 */
+	public boolean resolve(MarkupContainer container, MarkupStream markupStream, ComponentTag tag)
+	{
+		MarkupContainer parent = getParent();
+		if (parent != null)
+		{
+		    if (parent.getId().equals(tag.getId()))
+		    {
+		        parent.render();
+		        return true;
+		    }
+		    
+		    Component component = parent.get(tag.getId());
+		    if (component != null)
+		    {
+		        component.render();
+		        return true;
+		    }
+		}
+		
+		return false;
+	}
+

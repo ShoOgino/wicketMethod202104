@@ -5,7 +5,7 @@
 	 * @param tagList
 	 * @return a preconfigured markup filter chain
 	 */
-	private IMarkupFilter newFilterChain(final List tagList)
+	private final IMarkupFilter newFilterChain(final List tagList)
 	{
         // Chain together all the different markup filters and configure them
         final WicketTagIdentifier detectWicketComponents = new WicketTagIdentifier(xmlParser);
@@ -19,12 +19,24 @@
         
         final WicketLinkTagHandler autolinkHandler = new WicketLinkTagHandler(previewComponentTagRemover);
         autolinkHandler.setAutomaticLinking(this.automaticLinking);
-
-        // TODO Note: currently not needed
-        //final HtmlHeaderSectionHandler headerHandler = new HtmlHeaderSectionHandler(autolinkHandler);
-        //headerHandler.setTagList(tagList);
         
-        // Markup filter chain starts with auto link handler
+        if (this.container != null)
+        {
+	        final BodyOnLoadHandler bodyHandler = new BodyOnLoadHandler(autolinkHandler);
+	
+	        // Pages require additional handlers
+	        if ((this.container != null) && (container instanceof Page))
+	        {
+	            final HtmlHeaderSectionHandler headerHandler = new HtmlHeaderSectionHandler(bodyHandler);
+	            headerHandler.setTagList(tagList);
+	            
+	            return headerHandler;
+	        }
+	        
+	        // Markup filter chain starts with auto link handler
+	        return bodyHandler;
+        }
+        
         return autolinkHandler;
 	}
 
