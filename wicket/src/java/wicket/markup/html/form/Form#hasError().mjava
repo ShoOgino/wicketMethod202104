@@ -1,22 +1,15 @@
 	/**
 	 * @return True if this form has at least one error.
 	 */
-	private boolean hasError()
+	boolean hasError()
 	{
-		final Object value = visitChildren(new IVisitor()
+		// if this form itself has an error message
+		if (hasErrorMessage())
 		{
-			public Object component(final Component component)
-			{
-				if (component.hasErrorMessage())
-				{
-					return STOP_TRAVERSAL;
-				}
+			return true;
+		}
 
-				// Traverse all children
-				return CONTINUE_TRAVERSAL;
-			}
-		});
-
-		return value == IVisitor.STOP_TRAVERSAL ? true : false;
+		// the form doesn't have any errors, now check any nested form components
+		return anyFormComponentError();
 	}
 

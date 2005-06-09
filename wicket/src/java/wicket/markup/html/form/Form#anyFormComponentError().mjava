@@ -1,0 +1,23 @@
+	/**
+	 * Find out whether there is any registered error for a form component.
+	 * @return whether there is any registered error for a form component
+	 */
+	private boolean anyFormComponentError()
+	{
+		final Object value = visitChildren(new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				if (component.hasErrorMessage())
+				{
+					return STOP_TRAVERSAL;
+				}
+
+				// Traverse all children
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+
+		return value == IVisitor.STOP_TRAVERSAL ? true : false;
+	}
+

@@ -5,6 +5,11 @@
 	 */
 	public IFormValidationStrategy getValidationStrategy()
 	{
-		return DefaultFormValidationStrategy.getInstance();
+		// lazy construct
+		if (formValidationStrategy == null)
+		{
+			formValidationStrategy = new DefaultFormValidationStrategy();
+		}
+		return formValidationStrategy;
 	}
 
