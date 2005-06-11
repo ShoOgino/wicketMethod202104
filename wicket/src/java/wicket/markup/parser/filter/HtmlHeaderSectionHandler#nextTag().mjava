@@ -23,35 +23,41 @@
 		}
 		
 		// Whatever there is left in the markup, <wicket:head> is no longer allowed
-		if (done == true)
+		if ((status == STATE_BODY_FOUND) || (status == STATE_HEAD_CLOSED))
 		{
 		    return tag;
 		}
 
 		// if it is <head> or <wicket:head>
-		if ("head".equalsIgnoreCase(tag.getName()))
+		if (HEAD.equalsIgnoreCase(tag.getName()))
         {
 		    // if <wicket:head>
 			if (tag instanceof WicketTag)
 			{
-			    if (tag.isClose() == true)
+			    if (tag.isOpen() == true)
 			    {
-			        done = true;
+			        status = STATE_WICKET_HEAD_OPENED;
+			    }
+			    else
+			    {
+			        status = STATE_WICKET_HEAD_CLOSED;
 			    }
 			}
 			else
 			{
 			    // it is <head>
-			    withinHead = !withinHead;
-			    if (tag.isClose() == true)
+			    if (tag.isOpen() == true)
 			    {
-			        if (done == false)
+			        status = STATE_HEAD_OPENED;
+			    }
+			    else
+			    {
+			        if (status != STATE_WICKET_HEAD_CLOSED)
 			        {
 			            // we found <head> but no <wicket:head>
-			            insertWicketHeadTag();
+			            insertWicketHeadTag(false);
 			        }
-			        
-			        done = true;
+			        status = STATE_HEAD_CLOSED;
 			    }
 			}
 			
@@ -61,26 +67,12 @@
 		if ("body".equalsIgnoreCase(tag.getName()))
         {
 		    // <head> must allways be before <body>
-		    done = true;
+		    status = STATE_BODY_FOUND;
 		    
 		    // we found neither <head> nor <wicket:head>
-			tagList.add(new RawMarkup("<head>"));
-		    insertWicketHeadTag();
-			tagList.add(new RawMarkup("</head>"));
-		
+		    insertWicketHeadTag(true);
 		    return tag;
         }
-		
-		if (!(tag instanceof WicketTag))
-		{
-		    return tag;
-		}
-
-		final WicketTag wtag = (WicketTag) tag;
-		if ((withinHead == false) && (wtag.isHeadTag() == true))
-		{
-		    throw new MarkupException("<wicket:head> is only allow within <head> section.");
-		}
 		
 		return tag;
 	}
