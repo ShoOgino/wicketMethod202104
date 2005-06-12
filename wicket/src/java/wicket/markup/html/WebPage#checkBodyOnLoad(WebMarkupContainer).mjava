@@ -1,3 +1,9 @@
+	/**
+	 * Check if the component requires some <body onLoad=".."> attribute to 
+	 * be copied to the page's body tag.
+	 * 
+	 * @param container A child component of Page
+	 */
 	private final void checkBodyOnLoad(final WebMarkupContainer container)
 	{
 		// gracefull getAssociateMarkupStream. Throws no exception in case
@@ -5,19 +11,22 @@
 		final MarkupStream associatedMarkupStream = getApplication().getMarkupCache()
 				.getMarkupStream(container, null, false);
 
-		// No associated markup => no header section
+		// No associated markup => no body tag
 		if (associatedMarkupStream == null)
 		{
 			return;
 		}
 
+		// Remember the current position within markup, where we need to 
+		// back to, at the end.
 		int index = associatedMarkupStream.getCurrentIndex();
 		
 		try
 		{
+		    // Start at the beginning
 		    associatedMarkupStream.setCurrentIndex(0);
 		    
-			// Iterate the markup and find <wicket:head>
+			// Iterate the markup and find <body onLoad="...">
 			do
 			{
 				final MarkupElement element = associatedMarkupStream.get();
@@ -29,8 +38,19 @@
 					    final String onLoad = tag.getAttributes().getString("onload");
 					    if (onLoad != null)
 					    {
-					        ((WebPage)this.getPage()).addBodyOnLoad(onLoad);
+					        // Tell the page to change the Page's 
+					        // body tags.
+						    if (WebPage.this.bodyOnLoad == null)
+						    {
+						        WebPage.this.bodyOnLoad = onLoad;
+						    }
+						    else
+						    {
+						        WebPage.this.bodyOnLoad = WebPage.this.bodyOnLoad + onLoad;
+						    }
 					    }
+					    
+					    // There can only be one body tag
 					    break;
 					}
 				}
@@ -39,6 +59,7 @@
 		}
 		finally
 		{
+		    // Make sure we return to the orginal position in the markup
 		    associatedMarkupStream.setCurrentIndex(index);
 		}
 	}

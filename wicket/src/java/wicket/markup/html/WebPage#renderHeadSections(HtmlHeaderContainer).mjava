@@ -3,13 +3,17 @@
 	 * Page if they have something to contribute to the &lt;head&gt; section 
 	 * of the HTML output. If they have, child components will return a 
 	 * WebMarkupContainer which is (auto) added to the component hierarchie 
-	 * and immediately rendered.
+	 * and immediately rendered.<p>
+	 * Note: HtmlHeaderContainer will be removed from the component hierachie
+	 * at the end of the request (@see #onEndRequest()) and thus can not 
+	 * transport status from one request to the next. This is true for all
+	 * components added to the header as well. 
 	 * 
-	 * @param container
+	 * @param container The header container 
 	 */
 	public final void renderHeadSections(final HtmlHeaderContainer container)
 	{
-		// collect all header parts and render them.
+		// Collect all header parts and render them.
 	    // Only MarkupContainer have associated markup files which
 	    // may contain <wicket:head> regions.
 		visitChildren(WebMarkupContainer.class, new IVisitor()
@@ -21,7 +25,7 @@
 			{
 				if (component.isVisible())
 				{
-				    // The child component 
+				    // The child component found 
 					WebMarkupContainer webMarkupContainer = (WebMarkupContainer)component;
 					
 					// Ask the child component if it has something to contribute
@@ -31,11 +35,14 @@
 					// the header and in case the very same Component has not 
 					// contributed to the page, than ...
 					// A component's header section must only be added once, 
-					// no matter how often the same Component has been added.
+					// no matter how often the same Component has been added 
+					// to the page or any other container in the hierachie.
 					if ((headerPart != null) && (container.get(headerPart.getId()) == null))
 					{
 						container.autoAdd(headerPart);
 						
+						// Check if the component requires some <body onLoad="..">
+						// attribute to be copied to the page's body tag. 
 						checkBodyOnLoad(webMarkupContainer);
 					}
 				}
