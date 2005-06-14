@@ -1,15 +1,13 @@
 	/**
 	 * Check if the component requires some <body onLoad=".."> attribute to 
 	 * be copied to the page's body tag.
-	 * 
-	 * @param container A child component of Page
 	 */
-	private final void checkBodyOnLoad(final WebMarkupContainer container)
+	private void checkBodyOnLoad()
 	{
 		// gracefull getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
 		final MarkupStream associatedMarkupStream = getApplication().getMarkupCache()
-				.getMarkupStream(container, null, false);
+				.getMarkupStream(this, null, false);
 
 		// No associated markup => no body tag
 		if (associatedMarkupStream == null)
@@ -38,16 +36,7 @@
 					    final String onLoad = tag.getAttributes().getString("onload");
 					    if (onLoad != null)
 					    {
-					        // Tell the page to change the Page's 
-					        // body tags.
-						    if (WebPage.this.bodyOnLoad == null)
-						    {
-						        WebPage.this.bodyOnLoad = onLoad;
-						    }
-						    else
-						    {
-						        WebPage.this.bodyOnLoad = WebPage.this.bodyOnLoad + onLoad;
-						    }
+					        ((WebPage)getPage()).appendToBodyOnLoad(onLoad);
 					    }
 					    
 					    // There can only be one body tag

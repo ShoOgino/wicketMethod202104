@@ -1,0 +1,29 @@
+	/**
+	 * Print to the web response what ever the component wants
+	 * to contribute to the head section.
+	 * 
+	 * @see wicket.markup.html.IHeaderContributor#printHead(wicket.markup.html.HtmlHeaderContainer)
+	 * 
+	 * @param container The HtmlHeaderContainer
+	 */
+	public void printHead(final HtmlHeaderContainer container)
+	{
+		// Ask the child component if it has something to contribute
+		WebMarkupContainer headerPart = getHeaderPart();
+
+		// If the child component has something to contribute to 
+		// the header and in case the very same Component has not 
+		// contributed to the page, than ...
+		// A component's header section must only be added once, 
+		// no matter how often the same Component has been added 
+		// to the page or any other container in the hierachie.
+		if ((headerPart != null) && (container.get(headerPart.getId()) == null))
+		{
+			container.autoAdd(headerPart);
+			
+			// Check if the component requires some <body onLoad="..">
+			// attribute to be copied to the page's body tag. 
+			checkBodyOnLoad();
+		}
+	}
+
