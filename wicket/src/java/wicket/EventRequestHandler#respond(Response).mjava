@@ -1,0 +1,27 @@
+	/**
+	 * Respond with resource
+	 * 
+	 * @param response
+	 *            The response to write to
+	 */
+	protected final void respond(final Response response)
+	{
+		try
+		{
+			final OutputStream out = response.getOutputStream();
+			try
+			{
+				Streams.copy(resourceStream.getInputStream(), out);
+			}
+			finally
+			{
+				resourceStream.close();
+				out.flush();
+			}
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException("Unable to render resource stream " + resourceStream, e);
+		}
+	}
+

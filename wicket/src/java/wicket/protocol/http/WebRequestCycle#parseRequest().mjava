@@ -22,7 +22,13 @@
 	protected final boolean parseRequest()
 	{
 		// Try different methods of parsing and dispatching the request
-		if (callComponentListener() || bookmarkablePage() || homePage())
+
+		if (callDispatchedComponentListener())
+		{
+			// if it is, we don't need to update the cluster, etc, and return false
+		}
+		// it wasn't a dispatched listener, try other methods
+		else if (callComponentListener() || bookmarkablePage() || homePage())
 		{
 			// Returning a page
 			return true;
@@ -46,11 +52,11 @@
 					log.error("unable to send 404 for " + getRequest() + ", cause: " + e.getMessage(), e);
 				}
 			}
-			
-			// Don't update the cluster, not returning a page
-			setUpdateCluster(false);
-			setResponsePage(null);
-			return false;
 		}
+
+		// Don't update the cluster, not returning a page
+		setUpdateCluster(false);
+		setResponsePage(null);
+		return false;
 	}
 

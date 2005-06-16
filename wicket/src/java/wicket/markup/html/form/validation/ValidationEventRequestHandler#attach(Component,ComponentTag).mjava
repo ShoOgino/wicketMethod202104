@@ -1,0 +1,20 @@
+	/**
+	 * Attaches the event handler for the given component to the given tag.
+	 * 
+	 * @param component
+	 *            The component
+	 * @param tag
+	 *            The tag to attache
+	 */
+	protected final void attach(final Component component, final ComponentTag tag)
+	{
+		this.component = component;
+
+		final ValueMap attributes = tag.getAttributes();
+
+		final String url = component.urlFor(IEventRequestListener.class) + "&id=" + getId();
+		final String attributeValue = "javascript:validate('" + url + "', this.value);";
+
+		attributes.put(getEventName(), attributeValue);
+	}
+
