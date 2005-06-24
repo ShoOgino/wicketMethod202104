@@ -1,0 +1,21 @@
+		/**
+		 * @see wicket.markup.html.list.ListView#populateItem(wicket.markup.html.list.ListItem)
+		 */
+		protected void populateItem(ListItem item)
+		{
+			final MenuItem menuItem = (MenuItem)item.getModelObject();
+			final String label = menuItem.getLabel();
+			final BookmarkablePageLink pageLink = new BookmarkablePageLink("link", menuItem
+					.getPageClass(), menuItem.getPageParameters());
+			pageLink.setAutoEnable(false);
+			pageLink.add(new Label("label", label));
+			item.add(pageLink);
+			item.add(new AttributeModifier("class", true, new Model()
+			{
+				public Object getObject(final Component component)
+				{
+					return style.getCSSClass(menuItem, MenuRow.this);
+				}
+			}));
+		}
+

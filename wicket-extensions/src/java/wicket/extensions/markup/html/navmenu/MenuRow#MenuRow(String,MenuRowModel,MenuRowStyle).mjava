@@ -1,0 +1,24 @@
+	/**
+	 * Construct.
+	 * @param id component id
+	 * @param model row model
+	 * @param style row style
+	 */
+	public MenuRow(final String id, final MenuRowModel model, final MenuRowStyle style)
+	{
+		super(id, model);
+		this.style = style;
+		WebMarkupContainer rowContainer = new WebMarkupContainer("rowContainer");
+		rowContainer.add(new AttributeModifier("class", true, new Model()
+		{
+			public Object getObject(Component component)
+			{
+				return style.getCssClass();
+			}
+		}));
+		rowContainer.add(new RowListView("columns", model));
+		add(rowContainer);
+
+		addToHeader(new StyleSheetReference("cssStyleResource", style.getStyleSheetResource()));
+	}
+

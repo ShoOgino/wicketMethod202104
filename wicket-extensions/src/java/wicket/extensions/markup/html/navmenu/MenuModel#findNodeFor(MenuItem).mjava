@@ -1,0 +1,22 @@
+	/**
+	 * Finds the tree node that has the given menu item attached.
+	 * @param menuItem the menu item to lookup
+	 * @return the tree node
+	 */
+	protected final DefaultMutableTreeNode findNodeFor(MenuItem menuItem)
+	{
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode)getTreeModel().getRoot();
+		Enumeration all = root.breadthFirstEnumeration();
+		while (all.hasMoreElements())
+		{
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)all.nextElement();
+			Object userObject = node.getUserObject();
+			if (menuItem.equals(userObject))
+			{
+				return node;
+			}
+		}
+
+		throw new IllegalStateException("node for " + menuItem + " not found");
+	}
+
