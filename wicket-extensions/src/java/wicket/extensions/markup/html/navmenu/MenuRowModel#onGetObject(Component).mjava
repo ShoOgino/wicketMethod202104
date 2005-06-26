@@ -8,19 +8,18 @@
 		{
 			row = new ArrayList();
 			Page currentPage = component.getPage();
-			MenuTreePath currentSelection = getCurrentSelection(currentPage);
+			MenuTreePath currentSelection = menuModel.getCurrentSelection(currentPage);
 			if (currentSelection.getPathCount() > level)
 			{
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode)currentSelection.getPathComponent(level);
+				MenuItem node = (MenuItem)currentSelection.getPathComponent(level);
 				int len = node.getChildCount();
 				RequestCycle requestCycle = component.getRequestCycle();
 				for (int i = 0; i < len; i++)
 				{
-					DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
-					MenuItem item = (MenuItem)child.getUserObject();
-					if (item.checkAccess(requestCycle))
+					MenuItem child = (MenuItem)node.getChildAt(i);
+					if (child.checkAccess(requestCycle))
 					{
-						row.add(child.getUserObject());
+						row.add(child);
 					}
 				}
 			}
