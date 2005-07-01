@@ -1,8 +1,10 @@
 	/**
 	 * Helper method to do the actual loading of resources if required.
-	 * 
+	 *
 	 * @param component
 	 *            The component that the resources are being loaded for
+	 * @param componentClass
+	 *            The class that resources are bring loaded for
 	 * @param style
 	 *            The style to load resources for (see {@link wicket.Session})
 	 * @param locale
@@ -11,8 +13,8 @@
 	 *            The cache id to use
 	 * @return The map of loaded resources
 	 */
-	private synchronized ValueMap loadResources(final Component component, final String style,
-			final Locale locale, final String id)
+	private synchronized ValueMap loadResources(final Component component, final Class componentClass,
+			final String style, final Locale locale, final String id)
 	{
 		// Make sure someone else didn't load our resources while we were
 		// waiting
@@ -26,7 +28,7 @@
 		// Do the resource load
 		final Properties properties = new Properties();
 		final IResourceStream resource = component.getApplication().getResourceStreamLocator().locate(
-				component.getClass(), style, locale, "properties");
+				componentClass, style, locale, "properties");
 		if (resource != null)
 		{
 			try

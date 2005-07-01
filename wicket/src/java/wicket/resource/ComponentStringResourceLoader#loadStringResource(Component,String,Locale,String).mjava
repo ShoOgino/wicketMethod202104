@@ -7,7 +7,7 @@
 	 * component is not an instance of <code>Page</code> and has not been
 	 * previously added to a <code>Page</code> then an exception will be
 	 * thrown.
-	 * 
+	 *
 	 * @param component
 	 *            The component to use to find resources to be loaded
 	 * @param key
@@ -46,17 +46,27 @@
 			while (!searchStack.isEmpty())
 			{
 				Component c = (Component)searchStack.pop();
+				Class cc = c.getClass();
 
-				// Locate previously loaded resources from the cache
-				final String id = createCacheId(c, style, locale);
-				ValueMap strings = (ValueMap)resourceCache.get(id);
-				if (strings == null)
-				{
-					// No resources previously loaded, attempt to load them
-					strings = loadResources(c, style, locale, id);
+				while ( value == null ) {
+					// Locate previously loaded resources from the cache
+					final String id = createCacheId(cc, style, locale);
+					ValueMap strings = (ValueMap)resourceCache.get(id);
+					if (strings == null)
+					{
+						// No resources previously loaded, attempt to load them
+						strings = loadResources(c, cc, style, locale, id);
+					}
+
+					// Lookup value
+					value = strings.getString(key);
+					if (value != null)
+						break;
+
+					// Move to next superclass
+					cc = cc.getSuperclass();
+					if (isStopResourceSearch(cc)) break;
 				}
-
-				value = strings.getString(key);
 				if (value != null)
 					break;
 			}
