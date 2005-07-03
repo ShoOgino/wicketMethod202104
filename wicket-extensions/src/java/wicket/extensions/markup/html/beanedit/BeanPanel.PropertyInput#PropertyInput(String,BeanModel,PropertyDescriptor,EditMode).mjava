@@ -1,0 +1,20 @@
+		/**
+		 * Construct.
+		 * @param id component id
+		 * @param beanModel model with the target bean
+		 * @param descriptor property descriptor
+		 * @param editMode the edit mode
+		 */
+		public PropertyInput(String id, final BeanModel beanModel,
+				final PropertyDescriptor descriptor, final EditMode editMode)
+		{
+			super(id, beanModel, descriptor, editMode);
+			Class type = descriptor.getPropertyType();
+			TextField valueTextField = new TextField("value",
+					new BeanPropertyModel(beanModel, descriptor), type);
+			EditModeReplacementModel replacementModel =
+				new EditModeReplacementModel(editMode, descriptor);
+			valueTextField.add(new AttributeModifier("disabled", true, replacementModel));
+			add(valueTextField);
+		}
+
