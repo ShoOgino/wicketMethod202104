@@ -1,43 +1,10 @@
 	/**
-	 * Sets up to handle a runtime exception thrown during rendering
-	 * 
-	 * @param page
-	 *            Any page context where the exception was thrown
-	 * @param e
-	 *            The exception
-	 * @throws ServletException
-	 *             The exception rethrown for the servlet container
+	 * Template method that is called when a runtime exception is thrown, just before the actual
+	 * handling of the runtime exception.
+	 * @param page Any page context where the exception was thrown
+	 * @param e The exception
 	 */
-	protected final void onRuntimeException(final Page page, final RuntimeException e)
-			throws ServletException
+	protected void onRuntimeException(final Page page, final RuntimeException e)
 	{
-		log.error("Unexpected runtime exception [page = " + page + "]", e);
-
-		e.printStackTrace();
-		// Reset page for re-rendering after exception
-		if (page != null)
-		{
-			page.resetMarkupStreams();
-		}
-
-		// If the page we failed to render is an error page
-		if (page != null && page.isErrorPage())
-		{
-			// give up while we're ahead!
-			throw new ServletException("Internal Error: Could not render error page " + page, e);
-		}
-		else
-		{
-			try
-			{
-				redirectToExceptionErrorPage(page, e);
-			}
-			catch (RuntimeException e2)
-			{
-				throw new ServletException(
-						"Internal Error: Could not redirect to exception error page.  Was trying to display exception for page "
-								+ page + ":\n" + Strings.toString(e), e2);
-			}
-		}
 	}
 
