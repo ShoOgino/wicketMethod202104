@@ -1,43 +1,30 @@
 	/**
-	 * Validates the form and updates the models of form components. If the form
-	 * validates successfully, handleValidSubmit() is called. If not,
-	 * handleErrors() is called.
-	 * 
-	 * @return True if the form validated
-	 * 
-	 * @see Form#onSubmit()
-	 * @see Form#onError()
+	 * Validates the form's nested children of type {@link FormComponent}. This method
+	 * is typically called before updating any models.
 	 */
-	protected final boolean validate()
+	protected final void validate()
 	{
 		// Validate model using validation strategy
-		getValidationStrategy().validate(this);
-
-		// If a validation error occurred
-		if (hasError())
+		// Visit all the form components and validate each
+		visitFormComponents(new FormComponent.IVisitor()
 		{
-			// mark all children as invalid
-			invalid();
+			public void formComponent(final FormComponent formComponent)
+			{
+				// Validate form component
+				formComponent.validate();
 
-			// let subclass handle error
-			onError();
-			
-			// Form failed to validate
-			return false;
-		}
-		else
-		{
-			// Update model using form data
-			updateFormComponentModels();
-
-			// Persist FormComponents if requested
-			persistFormComponentData();
-
-			// Model was successfully updated with valid data
-			onSubmit();
-			
-			// Form validated
-			return true;
-		}
+				// If component is not valid (has an error)
+				if (!formComponent.isValid())
+				{
+					// tell component to deal with invalidity
+					formComponent.invalid();
+				}
+				else
+				{
+					// tell component that it is valid now
+					formComponent.valid();
+				}
+			}
+		});
 	}
 

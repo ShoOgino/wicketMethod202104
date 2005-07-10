@@ -1,0 +1,50 @@
+	/**
+	 * Process the form. Though you can override this method to provide your whole own algoritm,
+	 * it is not recommended to do so.
+	 * <p>
+	 * See the class documentation for further details on the form processing
+	 * </p>
+	 */
+	protected void process()
+	{
+		// first, see if the processing was triggered by a Wicket button
+		final Button submittingButton = findSubmittingButton();
+
+		// when processing was triggered by a Wicket button and that button indicates
+		// it wants to be called immediately (without validating), call onSubmit right away.
+		if (submittingButton != null && (submittingButton.isImmediate()))
+		{
+			submittingButton.onSubmit();
+		}
+		else
+		{
+			// as processing was not triggered by a button with immediate == true,
+			// we execute validation now before anything else
+			validate();
+
+			// If a validation error occurred
+			if (hasError())
+			{
+				// mark all children as invalid
+				markFormComponentsInvalid();
+
+				// let subclass handle error
+				onError();
+			}
+			else
+			{
+				// before updating, call the interception method for clients
+				beforeUpdateFormComponentModels();
+
+				// Update model using form data
+				updateFormComponentModels();
+
+				// Persist FormComponents if requested
+				persistFormComponentData();
+
+				// let clients handle further processing
+				delegateSubmit(submittingButton);
+			}
+		}
+	}
+

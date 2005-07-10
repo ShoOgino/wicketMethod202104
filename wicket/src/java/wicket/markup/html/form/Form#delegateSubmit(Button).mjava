@@ -1,0 +1,28 @@
+	/**
+	 * Called (by the default implementation of 'process') when all fields validated,
+	 * the form was updated and it's data was allowed to be persisted. It is meant for delegating
+	 * further processing to clients.
+	 * <p>
+	 * This implementation first finds out whether the form processing was triggered by a nested
+	 * button of this form. If that is the case, that button's onSubmit is called first.
+	 * </p>
+	 * <p>
+	 * Regardless of whether a submitting button was found, the form's onSubmit method is called
+	 * next.
+	 * </p>
+	 * @param submittingButton the button that triggered this form processing, or null if the
+	 * 		processing was triggered by something else (like a non-Wicket submit button or
+	 * 		a javascript execution)
+	 */
+	protected void delegateSubmit(Button submittingButton)
+	{
+		// when the given button is not null, it means that it was the submitting button
+		if (submittingButton != null)
+		{
+			submittingButton.onSubmit();
+		}
+
+		// Model was successfully updated with valid data
+		onSubmit();
+	}
+
