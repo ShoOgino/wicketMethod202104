@@ -3,15 +3,14 @@
 	 */
 	public final void setModelValue(final String value)
 	{
-		Iterator it = getChoices().iterator();
-		int index = -1;
-		while (it.hasNext())
+		List choices = getChoices();
+		for(int index=0;index<choices.size();index++)
 		{
-			index++;
-			Object object = it.next();
-			if (getChoiceRenderer().getIdValue(object, index).equals(value))
+			// Get next choice
+			final Object choice = choices.get(index);
+			if(getChoiceRenderer().getIdValue(choice, index).equals(value))
 			{
-				setModelObject(object);
+				setModelObject(choice);
 				break;
 			}
 		}

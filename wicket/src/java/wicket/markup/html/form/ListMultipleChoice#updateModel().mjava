@@ -23,20 +23,18 @@
 		if (ids != null && ids.length > 0 && !Strings.isEmpty(ids[0]))
 		{
 			// Get values that could be selected
-			final Collection choices = getChoices();
+			final List choices = getChoices();
 
 			// Loop through selected indices
 			for (int i = 0; i < ids.length; i++)
 			{
-				Iterator it = getChoices().iterator();
-				int index = -1;
-				while(it.hasNext())
+				for(int index=0;index<choices.size();index++)
 				{
-					index++;
-					Object object = it.next();
-					if(getChoiceRenderer().getIdValue(object, index).equals(ids[i]))
+					// Get next choice
+					final Object choice = choices.get(index);
+					if(getChoiceRenderer().getIdValue(choice, index).equals(ids[i]))
 					{
-						selectedValues.add(object);
+						selectedValues.add(choice);
 						break;
 					}
 				}
