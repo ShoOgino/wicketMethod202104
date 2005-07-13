@@ -7,8 +7,7 @@
 	 *            The open tag for the body
 	 * @see wicket.Component#onComponentTagBody(MarkupStream, ComponentTag)
 	 */
-	protected void onComponentTagBody(final MarkupStream markupStream,
-			final ComponentTag openTag)
+	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
 		final StringBuffer buffer = new StringBuffer();
 		final Object selected = getModelObject();
@@ -16,9 +15,9 @@
 		// Append default option
 		buffer.append(getDefaultChoice(selected));
 
-		Iterator it = getChoices().iterator();
+		final Iterator it = getChoices().iterator();
 		int index = 0;
-		while(it.hasNext())
+		while (it.hasNext())
 		{
 			final Object object = it.next();
 			if (object != null)
@@ -32,8 +31,8 @@
 				buffer.append("value=\"");
 				buffer.append(renderer.getIdValue(object, index));
 				buffer.append("\">");
-				String display = getLocalizer().getString(
-						getId() + "." + displayValue, this, displayValue);
+				String display = getLocalizer().getString(getId() + "." + displayValue, this,
+						displayValue);
 				String escaped = Strings.escapeMarkup(display, false, true);
 				buffer.append(escaped);
 				buffer.append("</option>");
