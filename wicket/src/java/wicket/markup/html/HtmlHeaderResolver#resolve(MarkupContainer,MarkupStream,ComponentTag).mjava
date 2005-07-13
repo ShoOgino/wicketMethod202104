@@ -26,7 +26,19 @@
 			{
 				// Create, add and render the component
 				HtmlHeaderContainer header = new HtmlHeaderContainer();
-				container.autoAdd(header);
+				
+				try
+				{
+				    container.autoAdd(header);
+				}
+				catch (IllegalArgumentException ex)
+				{
+				    throw new WicketRuntimeException(
+				            "If the root exception says something like " +
+				            "\"A child with id '_header' already exists\"" +
+				            "than you most likely forgot to override autoAdd() " + 
+				            "in your bordered page component.", ex);
+				}
 
 				// Yes, we handled the tag
 				return true;
