@@ -1,5 +1,16 @@
-	public String getString()
+	/**
+	 * Prior to closing the response, the current content of the buffer. After
+	 * closing the response, an exception will be thrown as the buffer is no
+	 * longer available.
+	 * 
+	 * @return String The buffer content
+	 */
+	public final String getString()
 	{
+		if (stringBuffer == null)
+		{
+			throw new WicketRuntimeException("You can call getString() after closing the response.");
+		}
 		return stringBuffer.toString();
 	}
 

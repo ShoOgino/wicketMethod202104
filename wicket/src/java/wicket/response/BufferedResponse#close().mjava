@@ -1,25 +1,16 @@
 	/**
 	 * @see wicket.Response#close()
 	 */
-	public void close()
+	public final void close()
 	{
-		super.close();
-		
-		String mimeCharset = null;
-		if(mimeType != null)
+		if (stringBuffer == null)
 		{
-			int index = mimeType.indexOf("charset");
-			if(index != -1)
-			{
-				index = mimeType.indexOf('=', index+7);
-				if(index != -1)
-				{
-					// TODO better parsing of this charset.. can string be after this..
-					mimeCharset = mimeType.substring(index+1);
-				}
-			}
+			throw new WicketRuntimeException("The response has already been closed.");
 		}
-		byteBuffer = convertToCharset(mimeCharset,charset);
-		stringBuffer = null;
+
+		super.close();
+
+		this.byteBuffer = convertToCharset(getCharacterEncoding());
+		this.stringBuffer = null;
 	}
 
