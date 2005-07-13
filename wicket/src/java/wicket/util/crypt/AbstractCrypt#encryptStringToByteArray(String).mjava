@@ -9,6 +9,13 @@
 	private final byte[] encryptStringToByteArray(final String plainText)
 			throws GeneralSecurityException
 	{
-		return crypt(plainText.getBytes(), Cipher.ENCRYPT_MODE);
+		try
+		{
+			return crypt(plainText.getBytes(CHARACTER_ENCODING), Cipher.ENCRYPT_MODE);
+		}
+		catch (UnsupportedEncodingException ex)
+		{
+			throw new WicketRuntimeException(ex.getMessage());
+		}
 	}
 

@@ -7,6 +7,13 @@
 	 */
 	public final String decrypt(final String text)
 	{
-		return new String(decryptStringToByteArray(text));
+		try
+		{
+			return new String(decryptStringToByteArray(text), CHARACTER_ENCODING);
+		}
+		catch (UnsupportedEncodingException ex)
+		{
+			throw new WicketRuntimeException(ex.getMessage());
+		}
 	}
 
