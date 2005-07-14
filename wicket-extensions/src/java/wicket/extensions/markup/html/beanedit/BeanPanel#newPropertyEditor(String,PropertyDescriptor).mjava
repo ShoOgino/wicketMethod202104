@@ -4,7 +4,7 @@
 	 * @param descriptor property descriptor
 	 * @return the editor
 	 */
-	protected Panel getPropertyEditor(String panelId, PropertyDescriptor descriptor)
+	protected Panel newPropertyEditor(String panelId, PropertyDescriptor descriptor)
 	{
 		Class type = descriptor.getPropertyType();
 		BeanPropertyEditor editor = findCustomEditor(panelId, descriptor);
@@ -13,11 +13,11 @@
 		{
 			if (descriptor instanceof IndexedPropertyDescriptor)
 			{
-				throw new WicketRuntimeException("index properties not supported yet ");
+				throw new WicketRuntimeException("indexed properties not supported yet ");
 			}
 			else
 			{
-				editor = getDefaultEditor(panelId, descriptor);
+				editor = newDefaultEditor(panelId, descriptor);
 			}
 		}
 
