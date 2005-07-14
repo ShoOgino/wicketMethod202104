@@ -20,16 +20,19 @@
 			{
 				public void formComponent(final FormComponent formComponent)
 				{
-					// If peristence is switched on for that FormComponent ...
-					if (formComponent.isPersistent())
+					if(formComponent.isVisibleInHierarchy())
 					{
-						// Save component's data (e.g. in a cookie)
-						persister.save(formComponent);
-					}
-					else
-					{
-						// Remove component's data (e.g. cookie)
-						persister.clear(formComponent);
+						// If peristence is switched on for that FormComponent ...
+						if (formComponent.isPersistent())
+						{
+							// Save component's data (e.g. in a cookie)
+							persister.save(formComponent);
+						}
+						else
+						{
+							// Remove component's data (e.g. cookie)
+							persister.clear(formComponent);
+						}
 					}
 				}
 			});
