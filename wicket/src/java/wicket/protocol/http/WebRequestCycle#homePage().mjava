@@ -12,10 +12,28 @@
 		{
 			try
 			{
-				Page newPage = newPage(application.getPages().getHomePage());
-				// Redirect to the home page so that a homepage has the same url as a post or get to that page.
-				setRedirect(true);
-				setResponsePage(newPage);
+				Class homePage = application.getPages().getHomePage();
+				ApplicationPages.HomePageStrategy homePageStrategy = application.getPages().getHomePageStrategy();
+				if(homePageStrategy == ApplicationPages.BOOKMARK_REDIRECT)
+				{
+					setResponsePage(homePage);
+				}
+				else
+				{
+					Page newPage = newPage(homePage);
+					
+					if(homePageStrategy == ApplicationPages.PAGE_REDIRECT)
+					{
+						//see if we have to redirect the render part by default
+						//so that a homepage has the same url as a post or get to that page.
+						ApplicationSettings.RenderStrategy strategy = getSession().getApplication()
+								.getSettings().getRenderStrategy();
+						boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER
+								|| strategy == ApplicationSettings.REDIRECT_TO_BUFFER);				
+						setRedirect(issueRedirect);
+					}
+					setResponsePage(newPage);
+				}
 				setUpdateCluster(true);
 			}
 			catch (WicketRuntimeException e)
