@@ -1,6 +1,8 @@
 	/**
 	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
 	 * 
+	 * @param application 
+	 * `		  The application object
 	 * @param scope
 	 *            The scope of the resource
 	 * @param path
@@ -11,9 +13,9 @@
 	 *            The style (see {@link wicket.Session})
 	 * @return The localized path
 	 */
-	public static String path(final Class scope, final String path, final Locale locale,
+	public static String path(final Application application, final Class scope, final String path, final Locale locale,
 			final String style)
 	{
-		return scope.getName() + '/' + path(path, locale, style);
+		return application.getPages().aliasForClass(scope) + '/' + path(path, locale, style);
 	}
 
