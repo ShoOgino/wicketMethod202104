@@ -1,0 +1,21 @@
+	/**
+	 * Returns the page class for the given alias or null if the alias is not mapped.
+	 * Returns null if argument alias is null.
+	 * @param alias the alias to look up
+	 * @return The page class for the given alias or null if no mapping was found
+	 */
+	public final Class pageClassForAlias(final String alias)
+	{
+		if(alias == null) return null;
+		
+		for(Iterator i = pageAliases.entrySet().iterator(); i.hasNext();)
+		{
+			Map.Entry entry = (Entry)i.next();
+			if(entry.getValue().equals(alias))
+			{
+				return (Class)entry.getKey();
+			}
+		}
+		return null;
+	}
+
