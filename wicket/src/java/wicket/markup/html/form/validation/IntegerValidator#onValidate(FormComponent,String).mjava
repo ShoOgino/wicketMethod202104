@@ -2,10 +2,9 @@
 	 * Validates the given form component. Ensures that the form component has a
 	 * numeric value. If min and max arguments are given, this validator also
 	 * ensures the value is in bounds.
-	 * 
-	 * @see wicket.markup.html.form.validation.StringValidator#onValidate(java.lang.String)
+	 * @see wicket.markup.html.form.validation.StringValidator#onValidate(wicket.markup.html.form.FormComponent, java.lang.String)
 	 */
-	public void onValidate(String value)
+	public void onValidate(FormComponent formComponent, String value)
 	{
 		// If value is non-empty
 		if (!Strings.isEmpty(value))
@@ -18,12 +17,12 @@
 				// Check range
 				if (longValue < min || longValue > max)
 				{
-                    error();
+                    error(formComponent);
 				}
 			}
 			catch (NumberFormatException e)
 			{
-				error();
+				error(formComponent);
 			}
 		}
 	}

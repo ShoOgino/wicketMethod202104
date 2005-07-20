@@ -2,16 +2,15 @@
 	 * Validates input by trying it to convert to the given type using the
 	 * {@link wicket.util.convert.IConverter}instance of the component doing
 	 * the validation.
-	 * 
-	 * @see wicket.markup.html.form.validation.StringValidator#onValidate(java.lang.String)
+	 * @see wicket.markup.html.form.validation.StringValidator#onValidate(wicket.markup.html.form.FormComponent, java.lang.String)
 	 */
-	public void onValidate(String value)
+	public void onValidate(FormComponent formComponent, String value)
 	{
 		// If value is non-empty
 		if (!Strings.isEmpty(value))
 		{
 			// Check value by attempting to convert it
-			final IConverter converter = getFormComponent().getConverter();
+			final IConverter converter = formComponent.getConverter();
 			try
 			{
 				converter.convert(value, type);
@@ -20,11 +19,11 @@
 			{
 				if (e instanceof ConversionException)
 				{
-					error(messageModel((ConversionException)e));
+					error(formComponent, messageModel(formComponent, (ConversionException)e));
 				}
 				else
 				{
-					error(messageModel(new ConversionException(e)));
+					error(formComponent, messageModel(formComponent, new ConversionException(e)));
 				}
 			}
 		}
