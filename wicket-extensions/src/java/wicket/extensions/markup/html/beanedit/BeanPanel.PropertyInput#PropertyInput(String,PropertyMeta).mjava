@@ -1,0 +1,18 @@
+		/**
+		 * Construct.
+		 * @param id component id
+		 * @param propertyMeta property descriptor
+		 */
+		public PropertyInput(String id, final PropertyMeta propertyMeta)
+		{
+			super(id, propertyMeta);
+			setRenderBodyOnly(true);
+			Class type = propertyMeta.getPropertyType();
+			TextField valueTextField = new TextField("value",
+					new BeanPropertyModel(propertyMeta), type);
+			EditModeReplacementModel replacementModel =
+				new EditModeReplacementModel(propertyMeta);
+			valueTextField.add(new AttributeModifier("disabled", true, replacementModel));
+			add(valueTextField);
+		}
+

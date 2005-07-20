@@ -1,40 +1,34 @@
 	/**
 	 * Finds a possible custom editor by looking for the type name + 'Editor'
-	 * (e.g. mypackage.MyField has editor mypackage.MyFieldEditor).
+	 * (e.g. mypackage.MyBean has editor mypackage.MyBeanEditor).
 	 * @param panelId id of panel; must be used for constructing any panel
-	 * @param field the field
+	 * @param propertyMeta property descriptor
 	 * @return PropertyEditor if found or null
 	 */
-	protected final BeanPropertyEditor findCustomEditor(String panelId, final AbstractBeanField field)
+	protected final BeanPropertyEditor findCustomEditor(String panelId, PropertyMeta propertyMeta)
 	{
-		Class type = field.getClass();
-		if(type == BeanField.class)
-		{
-			return null; // no override
-		}
-
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		if (classLoader == null)
 		{
 			classLoader = getClass().getClassLoader();
 		}
 
+		Class type = propertyMeta.getPropertyType();
 		String editorTypeName = type.getName() + "Editor";
 		try
 		{
 			Class editorClass = classLoader.loadClass(editorTypeName);
 			try
 			{
-				// get the constructor
+				// get constructor
 				Constructor constructor = editorClass.getConstructor(
-						new Class[]{String.class, IModel.class, BeanField.class});
+						new Class[]{String.class, BeanModel.class, PropertyMeta.class, EditMode.class});
 
 				// construct arguments
-				Object[] args = new Object[]{panelId, BeanFieldsPanel.this.getModel(), field};
+				Object[] args = new Object[]{panelId, BeanPanel.this.getModel(), propertyMeta, getEditMode()};
 
-				// create the editor
+				// create editor instance
 				BeanPropertyEditor editor = (BeanPropertyEditor)constructor.newInstance(args);
-
 				return editor;
 			}
 			catch (SecurityException e)
