@@ -7,19 +7,13 @@
 		// gets the model object: should provide us with either an absolute or a relative url
 		String url = getModelObjectAsString();
 
-		if (isAbsolute(url))
+		if (!isAbsolute(url))
 		{
-			// this is an absolute url; just create an URL object with it
-			try
-			{
-				return importUrl(new URL(url));
-			}
-			catch (MalformedURLException e)
-			{
-				throw new WicketRuntimeException(e);
-			}
+			return importRelativeUrl(url);
 		}
-
-		return importRelative(url);
+		else
+		{
+			return importAbsoluteUrl(url);	
+		}
 	}
 
