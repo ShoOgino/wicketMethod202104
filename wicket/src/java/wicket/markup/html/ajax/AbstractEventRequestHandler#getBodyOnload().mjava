@@ -1,0 +1,19 @@
+	/**
+	 * @see wicket.markup.html.IBodyOnloadContributor#getBodyOnload()
+	 */
+	public final String getBodyOnload()
+	{
+		String staticContrib = null;
+		if (bodyOnloadContribHolder.get() == null)
+		{
+			bodyOnloadContribHolder.set(dummy);
+			staticContrib = getBodyOnloadInitContribution();
+		}
+		String contrib = doGetBodyOnload();
+		if (staticContrib != null)
+		{
+			return (contrib != null) ? staticContrib + contrib : staticContrib;
+		}
+		return contrib;
+	}
+

@@ -7,12 +7,15 @@
 	 */
 	public void printHead(final HtmlHeaderContainer container)
 	{
-		EventRequestHandler[] handlers = getEventRequestHandlers();
-		if (handlers != null) for (int i = 0; i < handlers.length; i++)
+		IEventRequestHandler[] handlers = getEventRequestHandlers();
+		if (handlers != null)
 		{
-			if (handlers[i] instanceof IHeaderContributor)
+			for (int i = 0; i < handlers.length; i++)
 			{
-				((IHeaderContributor)handlers[i]).printHead(container);
+				if (handlers[i] instanceof IHeaderContributor)
+				{
+					((IHeaderContributor)handlers[i]).printHead(container);
+				}
 			}
 		}
 	}
