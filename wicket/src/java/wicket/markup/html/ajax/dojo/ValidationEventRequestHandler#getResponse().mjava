@@ -1,0 +1,31 @@
+	/**
+	 * @see wicket.EventRequestHandler#getResourceStream()
+	 */
+	/**
+	 * Gets the resource to render to the requester.
+	 * @return the resource to render to the requester
+	 */
+	protected final IResourceStream getResponse()
+	{
+		StringBufferResourceStream s = new StringBufferResourceStream();
+
+		formComponent.validate();
+
+		// there's a lot that should happen here. For starters, we need to update all components
+		// that are affected by feedback messages (like FeedbackPanel and FormComponentFeedbackBorder,
+		// but it might actually be anything custom too
+
+		// So, for an ajax handler like this it pays of to have a generic ajax rendering cycle,
+		// though for some other cases, that might just be too much.
+
+//		if (!formComponent.isValid())
+//		{
+//			s.append(formComponent.getFeedbackMessage().getMessage());
+//		}
+
+		// for now, just display a simple message
+		s.append("ajax validation executed");
+
+		return s;
+	}
+

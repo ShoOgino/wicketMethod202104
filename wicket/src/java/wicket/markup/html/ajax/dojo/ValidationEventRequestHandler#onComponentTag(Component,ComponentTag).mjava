@@ -9,7 +9,9 @@
 	public final void onComponentTag(final Component component, final ComponentTag tag)
 	{
 		final ValueMap attributes = tag.getAttributes();
-		final String attributeValue = "javascript:validate(this)";
+		final String url = formComponent.urlFor(IEventRequestListener.class) + "&id=" + getId();
+		final String attributeValue =
+			"javascript:validate('" + url + "', '" + formComponent.getPath() + "', this);";
 		attributes.put(getEventName(), attributeValue);
 	}
 
