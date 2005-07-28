@@ -7,6 +7,55 @@
 	 */
 	protected void process()
 	{
+		if (multiPart) 
+		{
+			// Change the request to a multipart web request so parameters are
+			// parsed out correctly
+			final HttpServletRequest request = ((WebRequest)getRequest()).getHttpServletRequest();
+			try
+			{
+				final MultipartWebRequest multipartWebRequest = new MultipartWebRequest(this.maxSize, request);
+				getRequestCycle().setRequest(multipartWebRequest);
+			}
+			catch (FileUploadException e)
+			{
+				// Create model with exception and maximum size values
+				final HashMap model = new HashMap();
+				model.put("exception", e);
+				model.put("maxSize", maxSize);
+
+				if (e instanceof SizeLimitExceededException)
+				{
+					// Resource key should be <form-id>.uploadTooLarge to override default message
+					final String defaultValue = "Upload must be less than " + maxSize;
+					String msg = getString(getId() + ".uploadTooLarge", Model.valueOf(model), defaultValue);
+					error(msg);
+
+					if (log.isDebugEnabled())
+					{
+						log.error(msg, e);
+					}
+					else
+					{
+						log.error(msg);
+					}
+				}
+				else
+				{
+					// Resource key should be <form-id>.uploadFailed to override default message
+					final String defaultValue = "Upload failed: " + e.getLocalizedMessage();
+					String msg = getString(getId() + ".uploadFailed", Model.valueOf(model), defaultValue);
+					error(msg);
+
+					log.error(msg, e);
+				}
+				
+				// don't process the form if there is a FileUploadException
+				return;
+			}
+
+		}
+		
 		// first, see if the processing was triggered by a Wicket button
 		final Button submittingButton = findSubmittingButton();
 
