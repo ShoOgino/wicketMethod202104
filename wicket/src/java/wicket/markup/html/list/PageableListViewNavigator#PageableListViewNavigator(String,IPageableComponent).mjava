@@ -1,0 +1,24 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param id
+	 *            See Component
+	 * @param pageable
+	 *            The pageable component the page links are referring to.
+	 */
+	public PageableListViewNavigator(final String id, final IPageableComponent pageable)
+	{
+		super(id);
+
+		
+		// Get the navigation bar and add it to the hierarchy
+		this.pageableListViewNavigation = newNavigation(pageable);
+		add(pageableListViewNavigation);
+
+		// Add additional page links
+		add(new PageableListViewNavigationLink("first", pageable, 0));
+		add(new PageableListViewNavigationIncrementLink("prev", pageable, -1));
+		add(new PageableListViewNavigationIncrementLink("next", pageable, 1));
+		add(new PageableListViewNavigationLink("last", pageable, -1));
+	}
+

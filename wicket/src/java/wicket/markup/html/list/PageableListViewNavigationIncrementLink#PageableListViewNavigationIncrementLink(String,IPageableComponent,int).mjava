@@ -2,14 +2,14 @@
 	 * Constructor.
 	 * 
 	 * @param id
-	 *			  See Component
-	 * @param pageableListView
-	 *			  The list view the page links are referring to
+	 *            See Component
+	 * @param pageable
+	 *            The pageable component the page links are referring to
 	 * @param increment
-	 *			  increment by
+	 *            increment by
 	 */
 	public PageableListViewNavigationIncrementLink(final String id,
-			final PageableListView pageableListView, final int increment)
+			final IPageableComponent pageable, final int increment)
 	{
 		super(id, new IPageLink()
 		{
@@ -21,21 +21,21 @@
 				// Determine the page number based on the current
 				// PageableListView page
 				// and the increment
-				int idx = pageableListView.getCurrentPage() + increment;
+				int idx = pageable.getCurrentPage() + increment;
 				if (idx < 0)
 				{
 					idx = 0;
 				}
-				else if (idx > (pageableListView.getList().size() - 1))
+				else if (idx > (pageable.getItemCount() - 1))
 				{
-					idx = pageableListView.getList().size() - 1;
+					idx = pageable.getItemCount() - 1;
 				}
 
 				// Tell the PageableListView which page to print next
-				pageableListView.setCurrentPage(idx);
+				pageable.setCurrentPage(idx);
 
 				// Return the PageableListView page the link is referring to
-				return pageableListView.getPage();
+				return pageable.getPage();
 			}
 
 			/**
@@ -43,11 +43,11 @@
 			 */
 			public Class getPageIdentity()
 			{
-				return pageableListView.getPage().getClass();
+				return pageable.getPage().getClass();
 			}
 		});
 
 		this.increment = increment;
-		this.pageableListView = pageableListView;
+		this.pageable = pageable;
 	}
 
