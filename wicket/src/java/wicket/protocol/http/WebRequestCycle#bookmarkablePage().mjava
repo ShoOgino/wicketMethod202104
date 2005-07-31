@@ -27,9 +27,9 @@
 					{
 						getWebResponse().getHttpServletResponse().sendError(
 						        HttpServletResponse.SC_NOT_FOUND, 
-						        "Unable to load Page class: " + bookmarkableName);
+						        "Unable to load Bookmarkable Page");
 						
-						return false;
+						return true;
 					}
 					catch (IOException ex)
 					{
@@ -45,7 +45,11 @@
 				Page newPage = session.getPageFactory().newPage(pageClass,
 						new PageParameters(getRequest().getParameterMap()));
 				
-				setResponsePage(newPage);
+				// If response is set in the construtor of the bookmarkable page.
+				if(getResponsePage() == null)
+				{
+					setResponsePage(newPage);
+				}
 				setUpdateCluster(true);
 				return true;
 		    }
