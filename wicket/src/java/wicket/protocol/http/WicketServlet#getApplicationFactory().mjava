@@ -1,0 +1,62 @@
+	/**
+	 * Creates the web application factory instance.
+	 * 
+	 * If no APP_FACT_PARAM is specified in web.xml
+	 * ContextParamWebApplicationFactory will be used by default.
+	 * 
+	 * @see ContextParamWebApplicationFactory
+	 * 
+	 * @return application factory instance
+	 */
+	protected IWebApplicationFactory getApplicationFactory()
+	{
+		final String appFactoryClassName = getInitParameter(APP_FACT_PARAM);
+
+		if (appFactoryClassName == null)
+		{
+			// if no context param was specified we return the default factory
+			return new ContextParamWebApplicationFactory();
+		}
+		else
+		{
+			try
+			{
+				// try to find the specified factory class
+				final Class factoryClass = getClass().getClassLoader().loadClass(
+						appFactoryClassName);
+
+				if (IWebApplicationFactory.class.isAssignableFrom(factoryClass))
+				{
+					// instantiate the factory
+					return (IWebApplicationFactory)factoryClass.newInstance();
+				}
+				else
+				{
+					throw new WicketRuntimeException("Application factory class "
+							+ appFactoryClassName + " must implement IWebApplicationFactory");
+				}
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new WicketRuntimeException("Unable to create application factory of class "
+						+ appFactoryClassName, e);
+			}
+			catch (InstantiationException e)
+			{
+				throw new WicketRuntimeException("Unable to create application factory of class "
+						+ appFactoryClassName, e);
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new WicketRuntimeException("Unable to create application factory of class "
+						+ appFactoryClassName, e);
+			}
+			catch (SecurityException e)
+			{
+				throw new WicketRuntimeException("Unable to create application factory of class "
+						+ appFactoryClassName, e);
+			}
+
+		}
+	}
+

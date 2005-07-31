@@ -3,50 +3,20 @@
 	 */
 	public void init()
 	{
-		final String applicationClassName = getInitParameter("applicationClassName");
-		try
-		{
-			final Class applicationClass = getClass().getClassLoader().loadClass(applicationClassName); 
-			if (WebApplication.class.isAssignableFrom(applicationClass))
-			{
-				// Construct WebApplication subclass
-				this.webApplication = (WebApplication)applicationClass.newInstance();
+		IWebApplicationFactory factory = getApplicationFactory();
 
-				// Set this WicketServlet as the servlet for the web application
-				this.webApplication.setWicketServlet(this);
+		// Construct WebApplication subclass
+		this.webApplication = factory.createApplication(this);
 
-				// Finished
-				log.info("WicketServlet loaded application " + applicationClass.getName());
+		// Set this WicketServlet as the servlet for the web application
+		this.webApplication.setWicketServlet(this);
 
-				// Call init method of web application
-				this.webApplication.internalInit();
-				this.webApplication.init();
-			}
-			else
-			{
-				throw new WicketRuntimeException("Application class " + applicationClassName
-						+ " must be a subclass of WebApplication");
-			}
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new WicketRuntimeException("Unable to create application of class "
-					+ applicationClassName, e);
-		}
-		catch (InstantiationException e)
-		{
-			throw new WicketRuntimeException("Unable to create application of class "
-					+ applicationClassName, e);
-		}
-		catch (IllegalAccessException e)
-		{
-			throw new WicketRuntimeException("Unable to create application of class "
-					+ applicationClassName, e);
-		}
-		catch (SecurityException e)
-		{
-			throw new WicketRuntimeException("Unable to create application of class "
-					+ applicationClassName, e);
-		}
+		// Finished
+		log.info("WicketServlet loaded application " + this.webApplication.getName() + " via "
+				+ factory.getClass().getName() + " factory");
+
+		// Call init method of web application
+		this.webApplication.internalInit();
+		this.webApplication.init();
 	}
 
