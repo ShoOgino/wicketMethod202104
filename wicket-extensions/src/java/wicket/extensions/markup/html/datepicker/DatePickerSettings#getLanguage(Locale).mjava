@@ -1,0 +1,25 @@
+	/**
+	 * Gets the language.
+	 * @param currentLocale the current locale
+	 * @return language
+	 */
+	public ResourceReference getLanguage(Locale currentLocale)
+	{
+		// if the language was set explicitly, return that
+		if (language != null)
+		{
+			return language;
+		}
+
+		// try to get the reference from our default mapping
+		StaticResourceReference ref = (StaticResourceReference)
+			localeToLanguageReference.get(currentLocale.getLanguage());
+		if (ref != null)
+		{
+			return ref;
+		}
+
+		// we didn't find a mapping; just return English
+		return LANGUAGE_EN;
+	}
+

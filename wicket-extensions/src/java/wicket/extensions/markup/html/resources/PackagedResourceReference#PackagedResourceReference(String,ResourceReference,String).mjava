@@ -4,29 +4,10 @@
 	 * @param resourceReference the reference to the resource
 	 * @param attributeToReplace the attribute to replace of the target tag
 	 */
-	public PackagedResourceReference(String id,
+	public PackagedResourceReference(final String id,
 			final ResourceReference resourceReference,
-			String attributeToReplace)
+			final String attributeToReplace)
 	{
-		super(id);
-
-		if (resourceReference == null)
-		{
-			throw new NullPointerException("resourceReference may not be null");
-		}
-		if (attributeToReplace == null)
-		{
-			throw new NullPointerException("attributeToReplace may not be null");
-		}
-
-		IModel srcReplacement = new Model()
-		{
-			public Object getObject(Component component)
-			{
-				String url = getPage().urlFor(resourceReference.getPath());
-				return url;
-			};
-		};
-		add(new AttributeModifier(attributeToReplace, true, srcReplacement));
+		this(id, new Model(resourceReference), attributeToReplace);
 	}
 

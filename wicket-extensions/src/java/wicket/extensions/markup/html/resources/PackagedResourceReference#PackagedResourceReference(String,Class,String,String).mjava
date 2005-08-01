@@ -6,34 +6,9 @@
 	 * @param file relative location of the packaged file
 	 * @param attributeToReplace the attribute to replace of the target tag
 	 */
-	public PackagedResourceReference(String id, Class referer,
-			String file, String attributeToReplace)
+	public PackagedResourceReference(final String id, final Class referer,
+			final String file, final String attributeToReplace)
 	{
-		super(id);
-
-		if (referer == null)
-		{
-			throw new NullPointerException("referer may not be null");
-		}
-		if (file == null)
-		{
-			throw new NullPointerException("file may not be null");
-		}
-		if (attributeToReplace == null)
-		{
-			throw new NullPointerException("attributeToReplace may not be null");
-		}
-
-		final StaticResourceReference ref = new StaticResourceReference(referer, file);
-
-		IModel srcReplacement = new Model()
-		{
-			public Object getObject(Component component)
-			{
-				String url = getPage().urlFor(ref.getPath());
-				return url;
-			};
-		};
-		add(new AttributeModifier(attributeToReplace, true, srcReplacement));
+		this(id, referer, new Model(file), attributeToReplace);
 	}
 

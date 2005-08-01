@@ -1,8 +1,9 @@
 	/**
 	 * Return the properties as a script.
+	 * @param locale the current locale
 	 * @return the properties as a script
 	 */
-	public String toScript()
+	public String toScript(Locale locale)
 	{
 		StringBuffer b = new StringBuffer();
 		// create the script that represents these properties. Only create entries for
@@ -49,14 +50,11 @@
 		}
 
 		// append date format
-		String ifFormat = getIfFormat();
-		// if null, try some heuristics
-		if (ifFormat == null)
+		String ifFormat = getIfFormat(locale);
+		if (ifFormat != null)
 		{
-			// get the short date format object for the current locale
-			ifFormat = getDatePattern();
+			b.append("\n\t\tifFormat : \"").append(ifFormat).append("\"");
 		}
-		b.append("\n\t\tifFormat : \"").append(ifFormat).append("\"");
 		
 		return b.toString();
 	}
