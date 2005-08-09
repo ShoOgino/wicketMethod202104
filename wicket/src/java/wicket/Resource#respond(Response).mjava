@@ -19,24 +19,31 @@
 				out.flush();
 			}
 		}
-		catch(SocketException se)
+		catch (SocketException se)
 		{
 			String message = se.getMessage();
-			if( message != null && (message.indexOf("Connection reset") != -1 || message.indexOf("socket write error") != -1) )
+			if (message != null
+					&& (message.indexOf("Connection reset") != -1 || message
+							.indexOf("socket write error") != -1))
 			{
-				if(log.isDebugEnabled())
+				if (log.isDebugEnabled())
 				{
-					log.debug("Socket exception ignored for sending Resource response to client (ClientAbort)",se);
+					log
+							.debug(
+									"Socket exception ignored for sending Resource response to client (ClientAbort)",
+									se);
 				}
 			}
 			else
 			{
-				throw new WicketRuntimeException("Unable to render resource stream " + resourceStream, se);
+				throw new WicketRuntimeException("Unable to render resource stream "
+						+ resourceStream, se);
 			}
 		}
 		catch (Exception e)
 		{
-			throw new WicketRuntimeException("Unable to render resource stream " + resourceStream, e);
+			throw new WicketRuntimeException("Unable to render resource stream " + resourceStream,
+					e);
 		}
 	}
 

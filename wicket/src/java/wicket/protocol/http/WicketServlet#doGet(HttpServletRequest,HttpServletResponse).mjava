@@ -33,21 +33,21 @@
 				// PrintWriter pw = servletResponse.getWriter();
 				// pw.write(bufferedResponse.getString());
 				// pw.close();
-				final OutputStream os = servletResponse.getOutputStream();
-				os.write(bufferedResponse.getBytes());
-				os.close();
+				final OutputStream out = servletResponse.getOutputStream();
+				out.write(bufferedResponse.getBytes());
+				out.close();
 
 				return;
 			}
 		}
 
 		// If the request does not provide information about the encoding of its
-		// body (which includes POST parameters), than assume the default encoding
-		// as defined by the wicket application. Bare in mind that the encoding of
-		// the request usually is equal to the previous response. However it is a
-		// known bug of IE that it does not provide this information. Please see
-		// the wiki for more details and why all other browser deliberately copied
-		// that bug.
+		// body (which includes POST parameters), than assume the default
+		// encoding as defined by the wicket application. Bear in mind that the
+		// encoding of the request usually is equal to the previous response.
+		// However it is a known bug of IE that it does not provide this
+		// information. Please see the wiki for more details and why all other
+		// browser deliberately copied that bug.
 		if (servletRequest.getCharacterEncoding() == null)
 		{
 			try

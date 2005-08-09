@@ -10,6 +10,7 @@
 					.substring(WebRequestCycle.resourceReferencePrefix.length());
 
 			final Resource resource = webApplication.getSharedResources().get(resourceReferenceKey);
+			resource.setParameters(new WebRequest(servletRequest).getParameterMap());
 			if (resource != null)
 			{
 				if (resource instanceof StaticResource)
@@ -18,10 +19,11 @@
 				}
 
 				IResourceStream stream = resource.getResourceStream();
-				// first ask the length so the content is created/accessed
+
+				// First ask the length so the content is created/accessed
 				stream.length();
 				Time time = stream.lastModifiedTime();
-				return time != null? time.getMilliseconds():-1;
+				return time != null ? time.getMilliseconds() : -1;
 			}
 		}
 		return -1;
