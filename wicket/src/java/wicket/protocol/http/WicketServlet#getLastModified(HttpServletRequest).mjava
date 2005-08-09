@@ -9,21 +9,39 @@
 			final String resourceReferenceKey = pathInfo
 					.substring(WebRequestCycle.resourceReferencePrefix.length());
 
+			// Try to find shared resource
 			final Resource resource = webApplication.getSharedResources().get(resourceReferenceKey);
-			resource.setParameters(new WebRequest(servletRequest).getParameterMap());
+			
+			// If resource found
 			if (resource != null)
 			{
+				// Set parameters from servlet request
+				resource.setParameters(new WebRequest(servletRequest).getParameterMap());
+				
+				// Bind resource to application if static
 				if (resource instanceof StaticResource)
 				{
 					((StaticResource)resource).setApplication(webApplication);
 				}
 
-				IResourceStream stream = resource.getResourceStream();
+				// If resource is not cacheable, there's no point in getting the
+				// last modified time!
+				if (!resource.isCacheable())
+				{
+					return -1;
+				}
+				else
+				{
+					// Get resource stream
+					IResourceStream stream = resource.getResourceStream();
 
-				// First ask the length so the content is created/accessed
-				stream.length();
-				Time time = stream.lastModifiedTime();
-				return time != null ? time.getMilliseconds() : -1;
+					// First ask the length so the content is created/accessed
+					stream.length();
+
+					// Get last modified time from stream
+					Time time = stream.lastModifiedTime();
+					return time != null ? time.getMilliseconds() : -1;
+				}
 			}
 		}
 		return -1;
