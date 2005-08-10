@@ -1,0 +1,40 @@
+	/**
+	 * Process the form. Though you can override this method to provide your
+	 * whole own algorithm, it is not recommended to do so.
+	 * <p>
+	 * See the class documentation for further details on the form processing
+	 * </p>
+	 * 
+	 * @param submittingButton
+	 *            The button that submitted this form
+	 */
+	protected void process(final Button submittingButton)
+	{
+		// Execute validation now before anything else
+		validate();
+
+		// If a validation error occurred
+		if (hasError())
+		{
+			// mark all children as invalid
+			markFormComponentsInvalid();
+
+			// let subclass handle error
+			onError();
+		}
+		else
+		{
+			// before updating, call the interception method for clients
+			beforeUpdateFormComponentModels();
+
+			// Update model using form data
+			updateFormComponentModels();
+
+			// Persist FormComponents if requested
+			persistFormComponentData();
+
+			// let clients handle further processing
+			delegateSubmit(submittingButton);
+		}
+	}
+
