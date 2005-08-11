@@ -29,6 +29,12 @@
 			// now include the header sections of all components in the component
 			// hierarchie.
 			MarkupContainer parent = getParent();
+			while (parent instanceof MarkupInheritanceContainer)
+			{
+			    // Get the real component
+			    parent = parent.getParent();
+			}
+			
 			if (parent instanceof IHeaderRenderer)
 			{
 				((IHeaderRenderer)parent).renderHeadSections(this);
