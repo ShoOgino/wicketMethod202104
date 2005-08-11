@@ -1,0 +1,18 @@
+	/**
+	 * Gets the language.
+	 * @param currentLocale the current locale
+	 * @return language
+	 */
+	public static ResourceReference getLanguage(Locale currentLocale)
+	{
+		// try to get the reference from our default mapping
+		String ref = (String)localeToLanguageReference.get(currentLocale.getLanguage());
+		if (ref != null)
+		{
+			return new PackageResourceReference(Application.get(), DatePickerSettings.class, ref);
+		}
+
+		// we didn't find a mapping; just return English
+		return new PackageResourceReference(Application.get(), DatePickerSettings.class, LANGUAGE_EN);
+	}
+
