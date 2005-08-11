@@ -1,5 +1,5 @@
 	/**
-	 * Initializes wicket components 
+	 * Initializes wicket components
 	 */
 	private final void initializeComponents()
 	{
@@ -8,17 +8,12 @@
 		{
 			// Load components used by all applications
 			for (Enumeration e = getClass().getClassLoader().getResources(
-					"META-INF/wicket-component-initializers.txt"); e.hasMoreElements();)
+					"wicket.properties"); e.hasMoreElements();)
 			{
-				initializeComponents((URL)e.nextElement());
-			}
-
-			// Initialize components specific to this app
-			for (Enumeration e = getClass().getClassLoader().getResources(
-					"META-INF/" + getName() + "-wicket-component-initializers.txt"); e
-					.hasMoreElements();)
-			{
-				initializeComponents((URL)e.nextElement());
+				final URL url = (URL)e.nextElement();
+				final Properties properties = new Properties();
+				properties.load(url.openStream());
+				initializeComponents(properties);
 			}
 		}
 		catch (IOException e)
