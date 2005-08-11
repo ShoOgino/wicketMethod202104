@@ -15,8 +15,16 @@
 		log.info("WicketServlet loaded application " + this.webApplication.getName() + " via "
 				+ factory.getClass().getName() + " factory");
 
-		// Call init method of web application
-		this.webApplication.internalInit();
-		this.webApplication.init();
+		try
+		{
+			Application.set(webApplication);
+			// Call init method of web application
+			this.webApplication.internalInit();
+			this.webApplication.init();
+		} 
+		finally
+		{
+			Application.set(null);
+		}
 	}
 

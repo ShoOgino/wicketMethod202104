@@ -6,11 +6,11 @@
 	{
 		if(contentType == null || contentType.indexOf("unknown") != -1)
 		{
-			RequestCycle rc = RequestCycle.get();
-			if(rc != null && (rc.getApplication() instanceof WebApplication))
+			Application application = Application.get();
+			if(application instanceof WebApplication)
 			{
 				// TODO for non webapplication another method should be implemented (getMimeType on application?)
-				contentType = ((WebApplication)rc.getApplication()).getWicketServlet().getServletContext().getMimeType(url.getFile());
+				contentType = ((WebApplication)application).getWicketServlet().getServletContext().getMimeType(url.getFile());
 				if(contentType == null)
 				{
 					contentType = URLConnection.getFileNameMap().getContentTypeFor(url.getFile());
