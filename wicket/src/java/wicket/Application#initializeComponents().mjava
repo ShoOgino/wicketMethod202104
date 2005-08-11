@@ -1,0 +1,29 @@
+	/**
+	 * Initializes wicket components 
+	 */
+	private final void initializeComponents()
+	{
+		// Load any wicket components we can find
+		try
+		{
+			// Load components used by all applications
+			for (Enumeration e = getClass().getClassLoader().getResources(
+					"META-INF/wicket-component-initializers.txt"); e.hasMoreElements();)
+			{
+				initializeComponents((URL)e.nextElement());
+			}
+
+			// Initialize components specific to this app
+			for (Enumeration e = getClass().getClassLoader().getResources(
+					"META-INF/" + getName() + "-wicket-component-initializers.txt"); e
+					.hasMoreElements();)
+			{
+				initializeComponents((URL)e.nextElement());
+			}
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException("Unable to load initializers file", e);
+		}
+	}
+

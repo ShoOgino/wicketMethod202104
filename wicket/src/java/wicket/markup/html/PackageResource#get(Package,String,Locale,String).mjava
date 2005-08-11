@@ -12,16 +12,16 @@
 	 *            The style of the resource (see {@link wicket.Session})
 	 * @return The resource
 	 */
-	public static StaticResource get(final Package basePackage, final String path,
+	public static PackageResource get(final Package basePackage, final String path,
 			final Locale locale, final String style)
 	{
 		final String key = basePackage.getName() + '/' + SharedResources.path(path, locale, style);
 		synchronized (resourceMap)
 		{
-			StaticResource resource = (StaticResource)resourceMap.get(key);
+			PackageResource resource = (PackageResource)resourceMap.get(key);
 			if (resource == null)
 			{
-				resource = new StaticResource(basePackage, path, locale, style);
+				resource = new PackageResource(basePackage, path, locale, style);
 				resourceMap.put(key, resource);
 			}
 			return resource;
