@@ -3,9 +3,10 @@
 	 *            The page that went wrong
 	 * @param e
 	 *            The exception that was thrown
-	 * @throws ServletException 
+	 * @throws ServletException
 	 */
-	private final void redirectToExceptionErrorPage(final Page page, final RuntimeException e) throws ServletException
+	private final void redirectToExceptionErrorPage(final Page page, final RuntimeException e)
+			throws ServletException
 	{
 		// If application doesn't want debug info showing up for users
 		final ApplicationSettings settings = application.getSettings();
@@ -13,14 +14,15 @@
 		{
 			Class internalErrorPageClass = application.getPages().getInternalErrorPage();
 			Page responsePage = getResponsePage();
-			Class responseClass = responsePage != null?responsePage.getClass():null;
-			
-			if (responseClass != internalErrorPageClass && settings.getUnexpectedExceptionDisplay() == ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
+			Class responseClass = responsePage != null ? responsePage.getClass() : null;
+
+			if (responseClass != internalErrorPageClass
+					&& settings.getUnexpectedExceptionDisplay() == ApplicationSettings.SHOW_INTERNAL_ERROR_PAGE)
 			{
 				// Show internal error page
 				setResponsePage(session.getPageFactory(page).newPage(internalErrorPageClass));
 			}
-			else if(responseClass != ExceptionErrorPage.class)
+			else if (responseClass != ExceptionErrorPage.class)
 			{
 				// Show full details
 				setResponsePage(new ExceptionErrorPage(e, getResponsePage()));
