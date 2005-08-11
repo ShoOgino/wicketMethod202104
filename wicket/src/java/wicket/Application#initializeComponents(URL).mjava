@@ -15,6 +15,10 @@
 					Class c = Class.forName(className);
 					((IComponentInitializer)c.newInstance()).init(this);
 				}
+				catch (ClassCastException e)
+				{
+					throw new WicketRuntimeException("Unable to initialize " + className, e);
+				}
 				catch (ClassNotFoundException e)
 				{
 					throw new WicketRuntimeException("Unable to initialize " + className, e);
