@@ -1,0 +1,33 @@
+	/**
+	 * @param validator
+	 *            The validator to add to the validators Object (which may be an
+	 *            array of IValidators or a single instance, for efficiency)
+	 */
+	private void validators_add(final IValidator validator)
+	{
+		if (this.validators == null)
+		{
+			this.validators = validator;
+		}
+		else
+		{
+			// Get current list size
+			final int size = validators_size();
+
+			// Create array that holds size + 1 elements
+			final IValidator[] validators = new IValidator[size + 1];
+
+			// Loop through existing validators copying them
+			for (int i = 0; i < size; i++)
+			{
+				validators[i] = validators_get(i);
+			}
+
+			// Add new validator to the end
+			validators[size] = validator;
+
+			// Save new validator list
+			this.validators = validators;
+		}
+	}
+
