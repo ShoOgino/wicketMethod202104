@@ -18,27 +18,22 @@
 	 */
 	public boolean autoAdd(final Component component)
 	{
-/* Replace strategy */
+		/* Replace strategy */
 		if (get(component.getId()) != null)
 		{
-		    this.remove(component.getId());
+			this.remove(component);
 		}
 		component.setAuto(true);
-	    add(component);
+		add(component);
 		component.internalBeginRequest();
 		component.render();
 		return true;
-/* */
-/* re-use strategy 
-		if (get(component.getId()) == null)
-		{
-			component.setAuto(true);
-		    add(component);
-			component.internalBeginRequest();
-			component.render();
-			return true;
-		}
-		return false;
-*/
+		/* */
+		/*
+		 * re-use strategy if (get(component.getId()) == null) {
+		 * component.setAuto(true); add(component);
+		 * component.internalBeginRequest(); component.render(); return true; }
+		 * return false;
+		 */
 	}
 

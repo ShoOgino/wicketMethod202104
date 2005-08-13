@@ -10,13 +10,17 @@
 		super.internalBeginRequest();
 
 		// Loop through child components
-		for (final Iterator iterator = childForId.values().iterator(); iterator.hasNext();)
+		final int size = children_size();
+		for (int i = 0; i < size; i++)
 		{
-			Component child = (Component)iterator.next();
-			if (!(child instanceof IFeedback)) // ignore feedback as that was done in Page
+			// Get next child
+			final Component child = children_get(i);
+
+			// Ignore feedback as that was done in Page
+			if (!(child instanceof IFeedback))
 			{
 				// Call begin request on the child
-				(child).internalBeginRequest();
+				child.internalBeginRequest();
 			}
 		}
 	}
