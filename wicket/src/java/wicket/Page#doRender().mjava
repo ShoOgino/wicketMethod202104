@@ -9,26 +9,26 @@
 		{
 			try
 			{
-				// we have to initialize the page's request now
-	
-				// first, give priority to IFeedback instances, as they have to collect their
-				// message before components like ListViews remove any child components
+				// We have to initialize the page's request now
+
+				// First, give priority to IFeedback instances, as they have to
+				// collect their messages before components like ListViews
+				// remove any child components
 				visitChildren(IFeedback.class, new IVisitor()
 				{
 					public Object component(Component component)
 					{
-						component.internalBeginRequest();
+						((IFeedback)component).updateFeedback();
 						return IVisitor.CONTINUE_TRAVERSAL;
 					}
 				});
-				
-				// now, do the initialization for the other components
+
+				// Now, do the initialization for the other components
 				internalBeginRequest();
-			
-	
+
 				// Handle request by rendering page
 				render();
-	
+
 				// Check rendering if it happened fully
 				checkRendering();
 			}
@@ -38,8 +38,9 @@
 				internalEndRequest();
 			}
 		}
-		// test if the response page is set by the checkAccess and render that one.
-		else if(getRequestCycle().getResponsePage() != this)
+		// test if the response page is set by the checkAccess and render that
+		// one.
+		else if (getRequestCycle().getResponsePage() != this)
 		{
 			getRequestCycle().getResponsePage().doRender();
 		}

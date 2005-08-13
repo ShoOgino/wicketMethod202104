@@ -3,26 +3,22 @@
 	 */
 	protected final void onRender()
 	{
-		// Check access to page, already done in doRender of the page
-		//if (checkAccess())
+		// Set page's associated markup stream
+		final MarkupStream markupStream = getAssociatedMarkupStream();
+		setMarkupStream(markupStream);
+
+		// Configure response object with locale and content type
+		configureResponse();
+
+		// Render all the page's markup
+		setFlag(FLAG_IS_RENDERING, true);
+		try
 		{
-			// Set page's associated markup stream
-			final MarkupStream markupStream = getAssociatedMarkupStream();
-			setMarkupStream(markupStream);
-
-			// Configure response object with locale and content type
-			configureResponse();
-
-			// Render all the page's markup
-			setFlag(FLAG_IS_RENDERING, true);
-			try
-			{
-				renderAll(markupStream);
-			}
-			finally
-			{
-				setFlag(FLAG_IS_RENDERING, false);
-			}
+			renderAll(markupStream);
+		}
+		finally
+		{
+			setFlag(FLAG_IS_RENDERING, false);
 		}
 	}
 

@@ -1,0 +1,34 @@
+		/**
+		 * Construct.
+		 * @param id component id
+		 * @param beanModel model with the JavaBean to be edited or displayed
+		 */
+		public BeanForm(String id, BeanModel beanModel)
+		{
+			super(id, beanModel);
+			add(newBeanPanel("beanPanel", beanModel));
+
+			Button cancel = new Button("cancel")
+			{
+				protected void onSubmit()
+				{
+					onCancel();
+				}
+			};
+			cancel.add(new AttributeModifier("value", true, getLabelModelForCancelButton()));
+			cancel.add(new AttributeModifier("class", true, getCSSClassModelForCancelButton()));
+			cancel.setDefaultFormProcessing(true);
+			add(cancel);
+
+			Button save = new Button("save")
+			{
+				protected void onSubmit()
+				{
+					onSave();
+				}
+			};
+			save.add(new AttributeModifier("value", true, getLabelModelForSaveButton()));
+			save.add(new AttributeModifier("class", true, getCSSClassModelForSaveButton()));
+			add(save);
+		}
+
