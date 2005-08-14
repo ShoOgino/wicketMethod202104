@@ -7,29 +7,37 @@
 	 *            The markup resource stream to load
 	 * @param containerClass
 	 *            The Class the associated stream is directly associated
-	 * @param container 
+	 * @param container
 	 *            The container requesting the markup
 	 * @return The markup
 	 */
 	private final Markup loadMarkup(final String key, final IResourceStream markupResourceStream,
-	        final Class containerClass, final MarkupContainer container)
+			final Class containerClass, final MarkupContainer container)
 	{
 		try
 		{
-			final Markup markup = application.newMarkupParser(container).readAndParse(markupResourceStream);
+		    // read and parse the markup
+			Markup markup = application.newMarkupParser(container).readAndParse(
+					markupResourceStream);
 			markup.setContainerClass(containerClass);
+
+			// Check for markup inheritance. If it contains <wicket:extend>
+			// the two markups get merged.
+			markup = checkForMarkupInheritance(key, markup, containerClass, container);
+
+			// add the markup to the cache
 			synchronized (markupCache)
 			{
 				markupCache.put(key, markup);
 			}
+
+			// trigger all listeners registered on the markup just loaded
+			afterLoadListeners.notifyListeners(markupResourceStream);
+
 			return markup;
 		}
 		catch (ParseException e)
 		{
-			synchronized (markupCache)
-			{
-				markupCache.remove(key);
-			}
 			log.error("Unable to parse markup from " + markupResourceStream, e);
 		}
 		catch (ResourceStreamNotFoundException e)
@@ -40,6 +48,13 @@
 		{
 			log.error("Unable to read markup from " + markupResourceStream, e);
 		}
+
+		synchronized (markupCache)
+		{
+			markupCache.remove(key);
+			afterLoadListeners.remove(markupResourceStream);
+		}
+
 		return Markup.NO_MARKUP;
 	}
 

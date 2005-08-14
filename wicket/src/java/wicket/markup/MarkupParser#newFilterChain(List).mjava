@@ -19,14 +19,11 @@
         
         final WicketLinkTagHandler autolinkHandler = new WicketLinkTagHandler(previewComponentTagRemover);
         autolinkHandler.setAutomaticLinking(this.automaticLinking);
-
-        final WicketExtendHandler extendHandler = new WicketExtendHandler(autolinkHandler);
-        extendHandler.setTagList(tagList);
         
         // Provided the wicket component requesting the markup is known ...
         if (this.container != null)
         {
-	        final BodyOnLoadHandler bodyHandler = new BodyOnLoadHandler(extendHandler);
+	        final BodyOnLoadHandler bodyHandler = new BodyOnLoadHandler(autolinkHandler);
 	
 	        // Pages require additional handlers
 	        if ((this.container != null) && (container instanceof Page))
@@ -41,6 +38,6 @@
 	        return bodyHandler;
         }
         
-        return extendHandler;
+        return autolinkHandler;
 	}
 

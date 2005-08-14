@@ -9,7 +9,6 @@
 	 *            container as well.
 	 * @return Markup resource
 	 */
-	// This method is already prepared for markup inheritance
 	private final Markup getMarkup(final MarkupContainer container, Class clazz)
 	{
 		if (clazz == null)
@@ -28,6 +27,7 @@
 		{
 			// Look up markup tag list by class, locale, style and markup type
 			final String key = markupKey(container, clazz);
+
 			Markup markup = (Markup)markupCache.get(key);
 
 			// If no markup in map
@@ -39,11 +39,12 @@
 
 				while ((markupResource == null) && (containerClass != MarkupContainer.class))
 				{
-				    clazz = containerClass;
-				    
+					clazz = containerClass;
+
 					// Look for markup resource for containerClass
 					markupResource = application.getResourceStreamLocator().locate(containerClass,
 							container.getStyle(), container.getLocale(), container.getMarkupType());
+
 					containerClass = containerClass.getSuperclass();
 				}
 
@@ -58,10 +59,10 @@
 					// flag markup as non-existent (as opposed to null, which
 					// might mean that it's simply not loaded into the cache)
 					markup = Markup.NO_MARKUP;
-				}
 
-				// Save any markup list (or absence of one) for next time
-				markupCache.put(key, markup);
+					// Save any markup list (or absence of one) for next time
+					markupCache.put(key, markup);
+				}
 			}
 
 			return markup;

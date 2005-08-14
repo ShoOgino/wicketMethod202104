@@ -1,0 +1,21 @@
+	/**
+	 * @return Gets the resource for the component.
+	 */
+	public IResourceStream getResourceStream()
+	{
+		if (resourceStream == null)
+		{
+			// Locate resource
+			this.resourceStream = application.getResourceStreamLocator().locate(
+					absolutePath, style, locale, null);
+
+			// Check that resource was found
+			if (this.resourceStream == null)
+			{
+				throw new WicketRuntimeException("Unable to find static resource [path = "
+						+ absolutePath + ", style = " + style + ", locale = " + locale + "]");
+			}
+		}
+		return resourceStream;
+	}
+

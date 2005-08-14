@@ -4,35 +4,31 @@
 	 * 
 	 * @param container
 	 *            The container the markup should be associated with
-	 * @param clazz
-	 *            The class to get the associated markup for. If null, the the
-	 *            container's class is used, but it can be a parent class of
-	 *            container as well.
 	 * @param throwException
 	 * 
 	 * @return A stream of MarkupElement elements
 	 */
-	public final MarkupStream getMarkupStream(final MarkupContainer container, final Class clazz, final boolean throwException)
+	public final MarkupStream getMarkupStream(final MarkupContainer container, 
+			final boolean throwException)
 	{
 		// Look for associated markup
-		final Markup markup = getMarkup(container, clazz);
+		Markup markup = getMarkup(container, container.getClass());
 
 		// If we found markup for this container
 		if (markup != Markup.NO_MARKUP)
 		{
-			// return a MarkupStream for the markup
 			return new MarkupStream(markup);
 		}
-		
-	    if (throwException == true)
+
+		if (throwException == true)
 		{
 			// throw exception since there is no associated markup
 			throw new WicketRuntimeException(
 					"Markup not found. Component class: "
-							+ (clazz != null ? clazz.getName() : container.getClass().getName())
+							+ container.getClass().getName()
 							+ " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried.");
 		}
-	    
-	    return null;
+
+		return null;
 	}
 

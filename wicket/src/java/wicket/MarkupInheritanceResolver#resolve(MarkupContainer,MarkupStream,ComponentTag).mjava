@@ -20,15 +20,18 @@
 			// It must be <wicket:extend...>
 			if (wicketTag.isExtendTag())
 			{
-			    if (markupStream.getCurrentIndex() != 0)
-			    {
-			        log.warn("nothing should precede the <wicket:extend> tag");
-			    }
-
-			    // wicket:extend regions are handled by MarkupInheritanceContainer
-		        final MarkupInheritanceContainer inherit = new MarkupInheritanceContainer();
-	            container.autoAdd(inherit);
-		        
+			    container.getResponse().write(wicketTag);
+			    markupStream.next();
+			    
+			    return true;
+			}
+			
+			// It must be <wicket:child...>
+			if (wicketTag.isChildTag())
+			{
+			    container.getResponse().write(wicketTag);
+			    markupStream.next();
+			    
 			    return true;
 			}
 		}
