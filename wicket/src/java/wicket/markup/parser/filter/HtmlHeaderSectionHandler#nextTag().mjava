@@ -16,59 +16,51 @@
 		{
 			return tag;
 		}
-		
-		// Whatever there is left in the markup, <wicket:head> is no longer allowed
-		if ((status == STATE_BODY_FOUND) || (status == STATE_HEAD_CLOSED))
+
+		// Whatever there is left in the markup, ignore it
+		if (ignoreTheRest == true)
 		{
-		    return tag;
+			return tag;
 		}
 
-		// if it is <head> or <wicket:head>
-		if (HEAD.equalsIgnoreCase(tag.getName()))
-        {
-		    // if <wicket:head>
-			if (tag instanceof WicketTag)
+		// if it is <head> or </head>
+		if (("head".equalsIgnoreCase(tag.getName()) == true) && (tag.getNamespace() == null))
+		{
+			// it is <head>
+			if (tag.isClose())
 			{
-			    if (tag.isOpen() == true)
-			    {
-			        status = STATE_WICKET_HEAD_OPENED;
-			    }
-			    else
-			    {
-			        status = STATE_WICKET_HEAD_CLOSED;
-			    }
+				foundHead = true;
 			}
-			else
+
+			// Usually <head> is not a wicket special tag. But because we want
+			// transparent header support we insert it automatically if mmissing
+			// and while rendering its content all child components are asked if 
+			// they want to contribute something to the header. Thus we have to
+			// handle <head> accordingly.
+			tag.setId(HEADER_ID);
+
+			return tag;
+		}
+
+		// if it is <body>
+		if (("body".equalsIgnoreCase(tag.getName()) == true) && (tag.getNamespace() == null))
+		{
+			// we found no <head> . But because we found <body> we assume it 
+		    // could be a page. And because we need to auto-add <head> to 
+		    // pages only (if missing) ... Note: no one prevent a designer
+		    // to put a <body> in a panel component, for previewabilty.
+		    // Thus more markups than actually required might now have
+			// that tag. It should be a problem, but ... you never know.
+			if (foundHead == false)
 			{
-			    // it is <head>
-			    if (tag.isOpen() == true)
-			    {
-			        status = STATE_HEAD_OPENED;
-			    }
-			    else
-			    {
-			        if (status != STATE_WICKET_HEAD_CLOSED)
-			        {
-			            // we found <head> but no <wicket:head>
-			            insertWicketHeadTag(false);
-			        }
-			        status = STATE_HEAD_CLOSED;
-			    }
+				insertHeadTag();
 			}
-			
-		    return tag;
-        }
-		
-		if ("body".equalsIgnoreCase(tag.getName()))
-        {
-		    // we found neither <head> nor <wicket:head>
-		    insertWicketHeadTag(true);
-		    
-		    // <head> must always be before <body>
-		    status = STATE_BODY_FOUND;
-		    return tag;
-        }
-		
+
+			// <head> must always be before <body>
+			ignoreTheRest = true;
+			return tag;
+		}
+
 		return tag;
 	}
 
