@@ -1,6 +1,6 @@
 	/**
 	 * Locate a resource. See class comments for more details.
-	 * 
+	 * @param classLoader class loader
 	 * @param path
 	 *            The path of the resource without extension
 	 * @param style
@@ -9,15 +9,16 @@
 	 *            The Locale to apply
 	 * @param extension
 	 *            the filname's extensions
+	 * 
 	 * @return The Resource, or null if not found.
 	 */
-	public IResourceStream locate(final String path, final String style, final Locale locale,
-			final String extension)
+	public IResourceStream locate(ClassLoader classLoader, final String path, final String style,
+			final Locale locale, final String extension)
 	{
 		// 1. Try style, locale and extension
 		if (style != null && locale != null)
 		{
-			final IResourceStream resource = locate(path + '_' + style, locale, extension);
+			final IResourceStream resource = locate(classLoader, path + '_' + style, locale, extension);
 			if (resource != null)
 			{
 				return resource;
@@ -27,7 +28,7 @@
 		// 2. Try locale and extension
 		if (locale != null)
 		{
-			final IResourceStream resource = locate(path, locale, extension);
+			final IResourceStream resource = locate(classLoader, path, locale, extension);
 			if (resource != null)
 			{
 				return resource;
@@ -37,7 +38,7 @@
 		// 3. Try style and extension
 		if (style != null)
 		{
-			final IResourceStream resource = locate(path + '_' + style + extension);
+			final IResourceStream resource = locate(classLoader, path + '_' + style + extension);
 			if (resource != null)
 			{
 				return resource;
@@ -45,6 +46,6 @@
 		}
 
 		// 4. Try just extension
-		return locate(path + extension);
+		return locate(classLoader, path + extension);
 	}
 
