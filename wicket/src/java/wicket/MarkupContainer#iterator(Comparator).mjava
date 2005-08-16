@@ -7,14 +7,21 @@
 	public final Iterator iterator(Comparator comparator)
 	{
 		final List sorted;
-		if (children instanceof Component)
+		if (children == null)
 		{
-			sorted = new ArrayList(1);
-			sorted.add(children);
+			sorted = Collections.EMPTY_LIST;
 		}
 		else
 		{
-			sorted = Arrays.asList((Component[])children);
+			if (children instanceof Component)
+			{
+				sorted = new ArrayList(1);
+				sorted.add(children);
+			}
+			else
+			{
+				sorted = Arrays.asList((Component[])children);
+			}
 		}
 		Collections.sort(sorted);
 		return sorted.iterator();
