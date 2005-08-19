@@ -18,8 +18,11 @@
 			// TODO should we test here for
 			// queryString.indexOf("IRedirectListener") ?
 			// only such urls should have a bufferedresponse.
-			String requestUri = servletRequest.getRequestURI() + "?"
-					+ servletRequest.getQueryString();
+			String requestUri = servletRequest.getRequestURI();
+			if (servletRequest.getQueryString() != null)
+			{
+			    requestUri += "?" + servletRequest.getQueryString();
+			}
 
 			BufferedResponse bufferedResponse = (BufferedResponse)webApplication
 					.getBufferedResponse(servletRequest, requestUri);
