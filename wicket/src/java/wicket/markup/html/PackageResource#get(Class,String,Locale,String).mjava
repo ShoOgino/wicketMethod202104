@@ -2,8 +2,10 @@
 	 * Gets the resource for a given set of criteria. Only one resource will be
 	 * loaded for the same criteria.
 	 * 
-	 * @param basePackage
-	 *            The base package to search from
+	 * @param scope
+	 *            This argument will be used to get the class loader for loading the
+	 *            package resource, and to determine what package it is in. Typically
+	 *            this is the calling class/ the class in which you call this method
 	 * @param path
 	 *            The path to the resource
 	 * @param locale
@@ -12,16 +14,16 @@
 	 *            The style of the resource (see {@link wicket.Session})
 	 * @return The resource
 	 */
-	public static PackageResource get(final Package basePackage, final String path,
+	public static PackageResource get(final Class scope, final String path,
 			final Locale locale, final String style)
 	{
-		final String key = basePackage.getName() + '/' + SharedResources.path(path, locale, style);
+		final String key = scope.getPackage().getName() + '/' + SharedResources.path(path, locale, style);
 		synchronized (resourceMap)
 		{
 			PackageResource resource = (PackageResource)resourceMap.get(key);
 			if (resource == null)
 			{
-				resource = new PackageResource(basePackage, path, locale, style);
+				resource = new PackageResource(scope, path, locale, style);
 				resourceMap.put(key, resource);
 			}
 			return resource;
