@@ -1,6 +1,6 @@
 	/**
 	 * Populate the current cell with a page link
-	 * (PageableListViewNavigationLink) enclosing the page number the link is
+	 * (PagingNavigationLink) enclosing the page number the link is
 	 * pointing to. Subclasses may provide there own implementation adding more
 	 * sophisticated page links.
 	 * 
@@ -12,11 +12,20 @@
 		final int pageIndex = getStartIndex() + loopItem.getIteration();
 
 		// Add a page link pointing to the page
-		final PageableListViewNavigationLink link = new PageableListViewNavigationLink("pageLink",
+		final PagingNavigationLink link = new PagingNavigationLink("pageLink",
 				pageable, pageIndex);
 		loopItem.add(link);
 
 		// Add a page number label to the list which is enclosed by the link
-		link.add(new Label("pageNumber", String.valueOf(pageIndex + 1)));
+		String label = "";
+		if(labelProvider != null)
+		{
+			label = labelProvider.getPageLabel(pageIndex);
+		}
+		else
+		{
+			label = String.valueOf(pageIndex + 1);
+		}
+		link.add(new Label("pageNumber", label));
 	}
 
