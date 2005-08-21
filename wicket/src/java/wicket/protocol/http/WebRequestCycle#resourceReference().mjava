@@ -9,15 +9,31 @@
 		if (path.startsWith(resourceReferencePrefix))
 		{
 			final String resourceReferenceKey = path.substring(resourceReferencePrefix.length());
-			final Resource resource = getApplication().getSharedResources().get(resourceReferenceKey);
+			Session session = Session.get();
+			Locale locale = session.getLocale();
+			String localizedResourceReferenceKey = SharedResources.path(resourceReferenceKey, locale, null); // no style because that is already in the key
+			Resource resource = getApplication().getSharedResources().get(localizedResourceReferenceKey);
 			if (resource == null)
 			{
-				throw new WicketRuntimeException("Could not find resource referenced by key " + resourceReferenceKey);
+				if(locale != null && locale.getCountry() != null)
+				{
+					// try only language
+					locale = new Locale(locale.getLanguage());
+					localizedResourceReferenceKey = SharedResources.path(resourceReferenceKey, locale, null);
+					resource = getApplication().getSharedResources().get(localizedResourceReferenceKey);					
+				}
+				// try it without any locale (plain url, could be different locale then the default)
+				if(resource == null)
+				{
+					resource = getApplication().getSharedResources().get(resourceReferenceKey);
+				}
+				// if still null throw an exception
+				if(resource == null)
+				{
+					throw new WicketRuntimeException("Could not find resource referenced by key " + resourceReferenceKey);
+				}
 			}
-			else
-			{
-				resource.onResourceRequested();
-			}
+			resource.onResourceRequested();
 			return true;
 		}
 		return false;
