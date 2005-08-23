@@ -3,11 +3,24 @@
 	 */
 	protected byte[] getImageData()
 	{
-		if (imageData == null)
+		// Prevent image data from getting flushed while we access it
+		byte[] data;
+		synchronized (this)
 		{
-			imageData = render();
+			if (imageData!=null)
+				data = (byte[]) imageData.get();
+			else
+				data = null;
+		}
+		if (data == null)
+		{
+			data = render();
+			synchronized (this)
+			{
+				imageData = new SoftReference(data);
+			}
 			lastModifiedTime = Time.now();
 		}
-		return imageData;
+		return data;
 	}
 

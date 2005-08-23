@@ -1,6 +1,6 @@
 	/**
 	 * Invokes a given interface on a component on a given page
-	 * 
+	 *
 	 * @param page
 	 *            The page where the component is
 	 * @param path
@@ -19,7 +19,7 @@
 			{
 				try
 				{
-					getWebResponse().getHttpServletResponse().sendError(HttpServletResponse.SC_FORBIDDEN, 
+					getWebResponse().getHttpServletResponse().sendError(HttpServletResponse.SC_FORBIDDEN,
 					        "Unable to execute this request");
 				}
 				catch (IOException ex)
@@ -38,19 +38,19 @@
 				{
 					// Clear all feedback messages if it isn't a redirect
 					page.getFeedbackMessages().clear();
-	
+
 					// and see if we have to redirect the render part by default
 					ApplicationSettings.RenderStrategy strategy = getSession().getApplication()
 							.getSettings().getRenderStrategy();
 					boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER
 							|| strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
-	
+
 					setRedirect(issueRedirect);
 				}
-	
+
 				// Invoke interface on component
 				invokeInterface(component, method);
-	
+
 				// Set form component values from cookies
 				setFormComponentValuesFromCookies(page);
 			}

@@ -1,0 +1,27 @@
+	/**
+	 * Returns a task which flushes a DynamicImageResource.
+	 * 
+	 * @param key The key of the resource
+	 * @param resource
+	 *            The DynamicImageResource where a TimerTaks must be made for.
+	 * @return The TimerTaks for that Dymamic Image
+	 */
+	private TimerTask getDynamicImageFlushTask(final String key, final DynamicImageResource resource)
+	{
+		return new TimerTask()
+		{
+			public void run()
+			{
+				// Someone might hit the image while we flush its cache
+				synchronized (resource)
+				{
+					if (log.isDebugEnabled())
+					{
+						log.debug("Resource " + key + " flushed");
+					}
+					resource.invalidate();
+				}
+			}
+		};
+	}
+
