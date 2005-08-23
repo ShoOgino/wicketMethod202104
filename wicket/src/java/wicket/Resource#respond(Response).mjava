@@ -23,23 +23,28 @@
 		{
 			Throwable throwable = e;
 			boolean ignoreException = false;
-			while (throwable!=null)
+			while (throwable != null)
 			{
 				if (throwable instanceof SocketException)
 				{
 					String message = throwable.getMessage();
-					ignoreException = message != null && (message.indexOf("Connection reset by peer") != -1 ||
-										message.indexOf("Software caused connection abort") != -1);
+					ignoreException = message != null
+							&& (message.indexOf("Connection reset by peer") != -1 || message
+									.indexOf("Software caused connection abort") != -1);
 				}
 				else
 				{
-					ignoreException = throwable.getClass().getName().indexOf("ClientAbortException") != 0;
+					ignoreException = throwable.getClass().getName()
+							.indexOf("ClientAbortException") != 0;
 				}
 				if (ignoreException)
 				{
 					if (log.isDebugEnabled())
 					{
-						log.debug("Socket exception ignored for sending Resource response to client (ClientAbort)",e);
+						log
+								.debug(
+										"Socket exception ignored for sending Resource response to client (ClientAbort)",
+										e);
 					}
 					break;
 				}
@@ -47,7 +52,8 @@
 			}
 			if (!ignoreException)
 			{
-				throw new WicketRuntimeException("Unable to render resource stream " + resourceStream, e);
+				throw new WicketRuntimeException("Unable to render resource stream "
+						+ resourceStream, e);
 			}
 		}
 	}
