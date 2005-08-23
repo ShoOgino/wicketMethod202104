@@ -6,9 +6,16 @@
 	 */
 	public final void setLocale(final Locale locale)
 	{
+		if(this.locale != null && !this.locale.equals(locale))
+		{
+			List resources = application.getSharedResources().localeChange(locale);
+			if(resources.size() > 0)
+			{
+				localeChangeResources = resources;
+			}
+		}
 		this.locale = locale;
 		this.converter = null;
-		application.getSharedResources().localeChange();
 		dirty();
 	}
 

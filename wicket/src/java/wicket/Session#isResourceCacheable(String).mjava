@@ -1,0 +1,22 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * <p>
+	 * @param resourceKey The key of the resource
+	 * @return a boolean if the resource is cacheable.
+	 */
+	public boolean isResourceCacheable(String resourceKey)
+	{
+		if(localeChangeResources != null && localeChangeResources.remove(resourceKey))
+		{
+			if(localeChangeResources.size() == 0)
+			{
+				localeChangeResources = null;
+			}
+			// TODO should dirty be called here?
+			// because this method is called from a HEAD request (last modified check) 
+			dirty();
+			return false;
+		}
+		return true;
+	}
+
