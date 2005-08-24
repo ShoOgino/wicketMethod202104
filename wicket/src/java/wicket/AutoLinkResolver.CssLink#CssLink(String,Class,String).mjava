@@ -1,0 +1,18 @@
+		/**
+		 * @param id
+		 * @param clazz
+		 * @param href
+		 */
+		public CssLink(final String id, final Class clazz, final String href)
+		{
+			super(id);
+
+			// Create a shared (static) reference to the resource
+			final SharedResources sharedResources = getApplication().getSharedResources();
+			Resource resource = PackageResource.get(clazz, href);
+			sharedResources.add(href, resource);
+
+			// Create the component implementing the link
+			resourceReference = new PackageResourceReference(getApplication(), href);
+		}
+

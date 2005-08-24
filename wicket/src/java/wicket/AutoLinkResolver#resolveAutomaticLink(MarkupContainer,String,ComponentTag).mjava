@@ -2,7 +2,9 @@
 	 * Resolves the given tag's page class and page parameters by parsing the
 	 * tag component name and then searching for a page class at the absolute or
 	 * relative URL specified by the href attribute of the tag.
-	 *
+	 * <p>
+	 * None html references are treated similar.
+	 * 
 	 * @param container
 	 *            The container where the link is
 	 * @param id
@@ -11,68 +13,73 @@
 	 *            the component tag
 	 * @return A BookmarkablePageLink to handle the href
 	 */
-	private final Component resolveAutomaticLink(final MarkupContainer container,
-			final String id, final ComponentTag tag)
+	private final Component resolveAutomaticLink(final MarkupContainer container, final String id,
+			final ComponentTag tag)
 	{
-	    // Init
 		final Page page = container.getPage();
-		final String originalHref = tag.getAttributes().getString("href");
-		
-		PageParameters pageParameters = null;
-		String classPath = originalHref;
-		
-		// get query string 
-		int pos = originalHref.indexOf("?");
+		final String href = tag.getAttributes().getString("href");
+
+		// If href contains URL query parameters ..
+		final PageParameters pageParameters;
+		String infoPath;
+
+		// get the query string
+		int pos = href.indexOf("?");
 		if (pos != -1)
 		{
-			final String queryString = originalHref.substring(pos + 1);
+			final String queryString = href.substring(pos + 1);
 			pageParameters = new PageParameters(new ValueMap(queryString, "&"));
-			classPath = originalHref.substring(0, pos);
+			infoPath = href.substring(0, pos);
+		}
+		else
+		{
+			pageParameters = null;
+			infoPath = href;
 		}
 
 		// Make the id (page-)unique
 		final String autoId = id + Integer.toString(page.getAutoIndex());
 
-		// By setting the component name, the tag becomes a Wicket component 
-		// tag, which needs a Component attached to it.
+		// By setting the component name, the tag becomes a Wicket component
+		// tag, which must have a associated Component.
 		tag.setId(autoId);
 
-		// remove the file extension, but remember it
+		// remove file extension, but remember it
 		String extension = null;
-		pos = classPath.lastIndexOf(".");
+		pos = infoPath.lastIndexOf(".");
 		if (pos != -1)
 		{
-		    extension = classPath.substring(pos + 1);
-		    classPath = classPath.substring(0, pos);
+			extension = infoPath.substring(pos + 1);
+			infoPath = infoPath.substring(0, pos);
 		}
 
-		// HTML hrefs are validated differently
+		// HTML hrefs are handled first
 		if ("html".equalsIgnoreCase(extension))
-        {
+		{
 			// Obviously a href like href="myPkg.MyLabel.html" will do as well.
 			// Wicket will not throw an exception. It accepts it.
-			classPath = Strings.replaceAll(classPath,"/", ".");
-			
-		    if (!classPath.startsWith("."))
+			infoPath = Strings.replaceAll(infoPath, "/", ".");
+
+			if (!infoPath.startsWith("."))
 			{
-				// Href is relative. Resolve the url given relative to the current
-				// page
-				final String className = page.getClass().getPackage().getName() + "." + classPath;
+				// Href is relative. Resolve the url given relative to the
+				// current page
+				final String className = page.getClass().getPackage().getName() + "." + infoPath;
 				final Class clazz = page.getApplicationSettings().getDefaultClassResolver()
 						.resolveClass(className);
-	
+
 				return new AutolinkBookmarkablePageLink(autoId, clazz, pageParameters);
 			}
 			else
 			{
-				// href is absolute. If class with the same absolute path exists,
-				// use it. Else don't change the href.
-				final String className = classPath.substring(1);
+				// href is absolute. If class with the same absolute path
+				// exists, use it. Else don't change the href.
+				final String className = infoPath.substring(1);
 				try
 				{
 					final Class clazz = page.getApplicationSettings().getDefaultClassResolver()
 							.resolveClass(className);
-	
+
 					return new AutolinkBookmarkablePageLink(autoId, clazz, pageParameters);
 				}
 				catch (WicketRuntimeException ex)
@@ -80,46 +87,42 @@
 					; // fall through
 				}
 			}
-        }
-		// Validate all other hrefs
+		}
+		// It is not "*.html". Create a static resource reference
 		else
 		{
-		    if (classPath.startsWith("/") || classPath.startsWith("\\"))
+			if (infoPath.startsWith("/") || infoPath.startsWith("\\"))
 			{
 				// href is absolute. Don't change it at all.
 			}
-		    else
-		    {
-				// Href is relative, prepend the package name. Thus we keep
-		        // pre-view capabilities in Dreamweaver etc. and creat a proper
-		        // href at runtime.
-		        
-		        // <wicket:head> component are handled differently. We can not use
-		        // the container, because it is the container the header has been
-		        // added to (e.g. the Page). What we need however, is the component
-		        // (e.g. a Panel) which contributed it.
-		        Component relevantContainer = container;
-		        if (container instanceof HtmlHeaderContainer)
-		        {
-		            relevantContainer = findPanelComponent(container);
-		        }
+			else
+			{
+				// Href is relative. Create a resource reference pointing at
+				// this file
 
-		        if (container instanceof BodyOnLoadContainer)
-		        {
-		            relevantContainer = container.getParent();
-		        }
-		        
-		        // Create the runtime href which has the proper package name
-		        // prepended.
-		        String href = relevantContainer.getClass().getPackage().getName();
-		        href = Strings.replaceAll(href, ".", "/") + "/" + originalHref;
-		        
-		        // Create the component implementing the link
-				return new AutolinkExternalLink(autoId, href);
+				// <wicket:head> components are handled differently. We can not
+				// use the container, because it is the container the header
+				// has been added to (e.g. the Page). What we need however, is
+				// the component (e.g. a Panel) which contributed it.
+				Component relevantContainer = container;
+				while (relevantContainer instanceof HtmlHeaderContainer)
+				{
+					relevantContainer = relevantContainer.getParent(); 
+				}
+
+				// BodyOnLoadContainers are "transparent" as well
+				while (relevantContainer instanceof BodyOnLoadContainer)
+				{
+					relevantContainer = relevantContainer.getParent();
+				}
+
+				// Create the component implementing the link
+				return new CssLink(autoId, relevantContainer.getClass(), href);
 			}
 		}
 
-		// Don't change the href. Did not find a proper Wicket page
-		return new AutolinkExternalLink(autoId, originalHref);
+		// We have not been able to find the resource requested
+		// Don't change the href.
+		return new AutolinkExternalLink(autoId, href);
 	}
 
