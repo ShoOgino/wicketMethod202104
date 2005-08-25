@@ -1,6 +1,14 @@
 	/**
-	 * Constructor
+	 * Constructs an ResourceLink from an resourcereference.
+	 * That resource reference will bind its resource to the current SharedResources.
 	 * 
+	 * If you are using non sticky clustering and the resource reference
+	 * is pointing to a Resource that isn't guarenteed to be on every server,
+	 * for example a dynamic image or resources that aren't added with a IInitializer
+	 * at application startup. Then if only that resource is requested from another
+	 * server, without the rendering of the page, the image won't be there and will 
+	 * result in a broken link.
+	 *    
 	 * @param id
 	 *            See Component
 	 * @param resourceReference
@@ -10,5 +18,6 @@
 	{
 		super(id);
 		this.resourceReference = resourceReference;
+		this.resource = null;
 	}
 
