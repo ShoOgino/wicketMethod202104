@@ -20,18 +20,14 @@
 			// It must be <wicket:extend...>
 			if (wicketTag.isExtendTag())
 			{
-			    container.getResponse().write(wicketTag);
-			    markupStream.next();
-			    
+				container.autoAdd(new TransparentWebMarkupContainer("_extend"));
 			    return true;
 			}
 			
 			// It must be <wicket:child...>
 			if (wicketTag.isChildTag())
 			{
-			    container.getResponse().write(wicketTag);
-			    markupStream.next();
-			    
+				container.autoAdd(new TransparentWebMarkupContainer("_child"));
 			    return true;
 			}
 		}
