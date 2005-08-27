@@ -13,22 +13,26 @@
 		if (isEnabled())
 		{
 			final ValueMap attributes = tag.getAttributes();
-			final Object replacementValue = replaceModel.getObject(component);
+			final Object replacementValue = getReplacementOrNull(component);
 
-			// Only do something when we have a replacement
-			if (replacementValue != null)
+			if (attributes.containsKey(attribute))
 			{
-				if (attributes.containsKey(attribute))
+				final String value = attributes.get(attribute).toString();
+				if (pattern == null || value.matches(pattern))
 				{
-					final String value = attributes.get(attribute).toString();
-					if (pattern == null || value.matches(pattern))
+					final String newValue = newValue(value, toStringOrNull(replacementValue));
+					if (newValue != null)
 					{
-						attributes.put(attribute, newValue(value, replacementValue.toString()));
+						attributes.put(attribute, newValue);
 					}
 				}
-				else if (addAttributeIfNotPresent)
+			}
+			else if (addAttributeIfNotPresent)
+			{
+				final String newValue = newValue(null, toStringOrNull(replacementValue));
+				if (newValue != null)
 				{
-					attributes.put(attribute, newValue(null, replacementValue.toString()));
+					attributes.put(attribute, newValue);
 				}
 			}
 		}
