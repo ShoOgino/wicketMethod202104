@@ -1,0 +1,37 @@
+	/**
+	 * Try to resolve the tag, then create a component, add it to the container
+	 * and render it.
+	 * 
+	 * @see wicket.IComponentResolver#resolve(MarkupContainer, MarkupStream,
+	 *      ComponentTag)
+	 * 
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return true, if componentId was handle by the resolver. False, otherwise
+	 */
+	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		// It must be <body onLoad>
+		if (tag instanceof WicketTag)
+		{
+			WicketTag wtag = (WicketTag) tag;
+			if (wtag.isLinkTag() && (wtag.getNamespace() != null))
+			{
+				Component component = new TransparentWebMarkupContainer(
+						"_link_" + container.getPage().getAutoIndex());
+				container.autoAdd(component);
+	
+				// Yes, we handled the tag
+				return true;
+			}
+		}
+
+		// We were not able to handle the tag
+		return false;
+	}
+
