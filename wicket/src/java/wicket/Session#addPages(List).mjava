@@ -19,7 +19,11 @@
 
 				// Add to page map specified in page state info
 				attach(page);
-				getPageMap(pageState.pageMapName).put(page);
+				Page removed = getPageMap(pageState.pageMapName).put(page);
+				if(removed != null)
+				{
+					removeAttribute(removed.getId());
+				}
 
 				// Page has been added to session now
 				pageState.addedToSession = true;
