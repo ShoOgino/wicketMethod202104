@@ -1,9 +1,9 @@
 		/**
 		 * Construct.
 		 * @param attribute the attribute to modify
-		 * @param component the target component
+		 * @param pathProvider the component that provides the path
 		 */
-		public PathAttributeModifier(String attribute, Component component)
+		public PathAttributeModifier(String attribute, final Component pathProvider)
 		{
 			super(attribute, true, new Model()
 			{
@@ -11,9 +11,8 @@
 				{
 					// do this lazily, so we know for sure we have the whole
 					// path including the page etc.
-					return component.getPath();
+					return pathProvider.getPath();
 				}
 			});
-			this.component = component;
 		}
 
