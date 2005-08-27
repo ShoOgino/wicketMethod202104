@@ -1,0 +1,19 @@
+		/**
+		 * Construct.
+		 * @param attribute the attribute to modify
+		 * @param component the target component
+		 */
+		public PathAttributeModifier(String attribute, Component component)
+		{
+			super(attribute, true, new Model()
+			{
+				public Object getObject(Component component)
+				{
+					// do this lazily, so we know for sure we have the whole
+					// path including the page etc.
+					return component.getPath();
+				}
+			});
+			this.component = component;
+		}
+
