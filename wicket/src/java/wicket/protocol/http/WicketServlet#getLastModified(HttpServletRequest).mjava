@@ -12,7 +12,7 @@
 			Locale locale = servletRequest.getLocale();
 			WebSession session = webApplication.getSession(servletRequest, false);
 
-			if(session != null)
+			if (session != null)
 			{
 				locale = session.getLocale();
 			}
@@ -22,7 +22,7 @@
 			Resource resource = webApplication.getSharedResources().get(localizedResourceReferenceKey);
 			if (resource == null)
 			{
-				if(locale != null && locale.getCountry() != null)
+				if ((locale != null) && (locale.getCountry() != null))
 				{
 					// try only language
 					locale = new Locale(locale.getLanguage());
@@ -30,23 +30,24 @@
 					resource = webApplication.getSharedResources().get(localizedResourceReferenceKey);					
 				}
 				// try it without any locale (plain url, could be different locale then the default)
-				if(resource == null)
+				if (resource == null)
 				{
 					localizedResourceReferenceKey = resourceReferenceKey;
 					resource = webApplication.getSharedResources().get(localizedResourceReferenceKey);
 				}
 			}
+			
 			// If resource found and it is cacheable
-			if (resource != null && resource.isCacheable())
+			if ((resource != null) && resource.isCacheable())
 			{
-				if(session == null || session.isResourceCacheable(localizedResourceReferenceKey))
+				if ((session == null) || session.isResourceCacheable(localizedResourceReferenceKey))
 				{
 					try
 					{
 						Application.set(webApplication);
+						
 						// Set parameters from servlet request
 						resource.setParameters(new WebRequest(servletRequest).getParameterMap());
-						
 		
 						// Get resource stream
 						IResourceStream stream = resource.getResourceStream();
