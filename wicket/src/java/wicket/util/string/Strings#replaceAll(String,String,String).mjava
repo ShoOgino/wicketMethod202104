@@ -1,5 +1,5 @@
 	/**
-	 * Replace all occurrences of one string replaceWith another string
+	 * Replace all occurrences of one string replaceWith another string.
 	 * 
 	 * @param s
 	 *            The string to process
@@ -9,8 +9,27 @@
 	 *            The value to searchFor replaceWith
 	 * @return The resulting string with searchFor replaced with replaceWith
 	 */
-	public static String replaceAll(final String s, final String searchFor, final String replaceWith)
+	public static String replaceAll(final String s, final String searchFor, String replaceWith)
 	{
+		if (s == null)
+		{
+			return null;
+		}
+
+		// if searchFor is null or the empty string, then there is nothing to
+		// replace, so returning s is the only option here.
+		if (searchFor == null || "".equals(searchFor))
+		{
+			return s;
+		}
+
+		// if replaceWith is null, then the searchFor should be replaced with
+		// nothing,
+		// which can be seen as the empty string.
+		if (replaceWith == null)
+		{
+			replaceWith = "";
+		}
 		// Look for first occurrence of searchFor
 		int matchIndex = s.indexOf(searchFor);
 		if (matchIndex == -1)
