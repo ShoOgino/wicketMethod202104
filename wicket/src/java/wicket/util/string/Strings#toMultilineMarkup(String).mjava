@@ -1,16 +1,21 @@
 	/**
 	 * Converts a String to multiline HTML markup by replacing newlines with
-	 * line break entities (&lt;br&gt;) and multiple occurrences of newline with
-	 * paragraph break entities (&lt;p&gt;).
+	 * line break entities (&lt;br /&gt;) and multiple occurrences of newline
+	 * with paragraph break entities (&lt;p&gt;).
 	 * 
 	 * @param s
 	 *            String to transform
 	 * @return String with all single occurrences of newline replaced with
-	 *         &lt;br&gt; and all multiple occurrences of newline replaced with
-	 *         &lt;p&gt;.
+	 *         &lt;br /&gt; and all multiple occurrences of newline replaced
+	 *         with &lt;p&gt;.
+	 * @todo TODO make paragraphs xhtml compliant.
 	 */
 	public static String toMultilineMarkup(final String s)
 	{
+		if (s == null)
+		{
+			return null;
+		}
 		final StringBuffer buffer = new StringBuffer();
 		int newlineCount = 0;
 
@@ -30,7 +35,7 @@
 				default :
 					if (newlineCount == 1)
 					{
-						buffer.append("<br>");
+						buffer.append("<br />");
 					}
 					else if (newlineCount > 1)
 					{

@@ -1,4 +1,6 @@
 	/**
+	 * Strips the ending from the string <code>s</code>.
+	 * 
 	 * @param s
 	 *            The string to strip
 	 * @param ending
@@ -8,8 +10,28 @@
 	 */
 	public static String stripEnding(final String s, final String ending)
 	{
+		if (s == null)
+		{
+			return null;
+		}
+
+		// Stripping a null or empty string from the end returns the
+		// original string.
+		if (ending == null || "".equals(ending))
+		{
+			return s;
+		}
+		final int endingLength = ending.length();
+		final int sLength = s.length();
+
+		// When the length of the ending string is larger
+		// than the original string, the original string is returned.
+		if (endingLength > sLength)
+		{
+			return s;
+		}
 		final int index = s.lastIndexOf(ending);
-		final int endpos = s.length() - ending.length();
+		final int endpos = sLength - endingLength;
 
 		if (index == endpos)
 		{
