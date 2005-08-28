@@ -10,7 +10,8 @@
 					.substring(WebRequestCycle.resourceReferencePrefix.length());
 
 			Locale locale = servletRequest.getLocale();
-			WebSession session = webApplication.getSession(servletRequest, false);
+			final WebRequest webRequest = webApplication.newWebRequest(servletRequest);
+			final WebSession session = webApplication.getSession(webRequest, false);
 
 			if (session != null)
 			{
@@ -47,7 +48,7 @@
 						Application.set(webApplication);
 						
 						// Set parameters from servlet request
-						resource.setParameters(new WebRequest(servletRequest).getParameterMap());
+						resource.setParameters(webRequest.getParameterMap());
 		
 						// Get resource stream
 						IResourceStream stream = resource.getResourceStream();

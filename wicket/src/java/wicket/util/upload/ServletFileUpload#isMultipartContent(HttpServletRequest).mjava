@@ -1,0 +1,18 @@
+    /**
+     * Utility method that determines whether the request contains multipart
+     * content.
+     *
+     * @param request The servlet request to be evaluated. Must be non-null.
+     *
+     * @return <code>true</code> if the request is multipart;
+     *         <code>false</code> otherwise.
+     */
+    public static final boolean isMultipartContent(
+            HttpServletRequest request) {
+        if (!"post".equals(request.getMethod().toLowerCase())) {
+            return false;
+        }
+        return FileUploadBase.isMultipartContent(
+                new ServletRequestContext(request));
+    }
+

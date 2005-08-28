@@ -1,0 +1,36 @@
+	/**
+	 * Copy chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>
+	 * using the specified character encoding, and calling flush.
+	 * <p>
+	 * This method buffers the input internally, so there is no need to use a
+	 * <code>BufferedReader</code>.
+	 * <p>
+	 * Character encoding names can be found at <a
+	 * href="http://www.iana.org/assignments/character-sets">IANA</a>.
+	 * <p>
+	 * Due to the implementation of OutputStreamWriter, this method performs a flush.
+	 * <p>
+	 * This method uses {@link OutputStreamWriter}.
+	 * @param input the <code>Reader</code> to read from
+	 * @param output the <code>OutputStream</code> to write to
+	 * @param encoding the encoding to use, null means platform default
+	 * @throws NullPointerException if the input or output is null
+	 * @throws IOException if an I/O error occurs
+	 * @since 1.1
+	 */
+	public static void copy(Reader input, OutputStream output, String encoding) throws IOException
+	{
+		if (encoding == null)
+		{
+			copy(input, output);
+		}
+		else
+		{
+			OutputStreamWriter out = new OutputStreamWriter(output, encoding);
+			copy(input, out);
+			// XXX Unless anyone is planning on rewriting OutputStreamWriter,
+			// we have to flush here.
+			out.flush();
+		}
+	}
+

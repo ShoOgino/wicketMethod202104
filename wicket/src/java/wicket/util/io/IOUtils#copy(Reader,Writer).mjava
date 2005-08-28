@@ -1,0 +1,27 @@
+	// copy from Reader
+	// -----------------------------------------------------------------------
+	/**
+	 * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
+	 * <p>
+	 * This method buffers the input internally, so there is no need to use a
+	 * <code>BufferedReader</code>.
+	 * @param input the <code>Reader</code> to read from
+	 * @param output the <code>Writer</code> to write to
+	 * @return the number of characters copied
+	 * @throws NullPointerException if the input or output is null
+	 * @throws IOException if an I/O error occurs
+	 * @since 1.1
+	 */
+	public static int copy(Reader input, Writer output) throws IOException
+	{
+		char[] buffer = new char[DEFAULT_BUFFER_SIZE];
+		int count = 0;
+		int n = 0;
+		while (-1 != (n = input.read(buffer)))
+		{
+			output.write(buffer, 0, n);
+			count += n;
+		}
+		return count;
+	}
+

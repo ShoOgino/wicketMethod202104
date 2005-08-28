@@ -1,0 +1,25 @@
+	/**
+	 * Copy chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>
+	 * using the default character encoding of the platform, and calling flush.
+	 * <p>
+	 * This method buffers the input internally, so there is no need to use a
+	 * <code>BufferedReader</code>.
+	 * <p>
+	 * Due to the implementation of OutputStreamWriter, this method performs a flush.
+	 * <p>
+	 * This method uses {@link OutputStreamWriter}.
+	 * @param input the <code>Reader</code> to read from
+	 * @param output the <code>OutputStream</code> to write to
+	 * @throws NullPointerException if the input or output is null
+	 * @throws IOException if an I/O error occurs
+	 * @since 1.1
+	 */
+	public static void copy(Reader input, OutputStream output) throws IOException
+	{
+		OutputStreamWriter out = new OutputStreamWriter(output);
+		copy(input, out);
+		// XXX Unless anyone is planning on rewriting OutputStreamWriter, we
+		// have to flush here.
+		out.flush();
+	}
+

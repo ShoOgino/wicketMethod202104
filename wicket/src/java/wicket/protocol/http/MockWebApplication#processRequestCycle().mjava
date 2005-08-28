@@ -20,10 +20,12 @@
             lastRenderedPage = cycle.getResponsePage();
             
             final MockHttpServletRequest httpRequest = 
-                	(MockHttpServletRequest)cycle.getWebRequest().getHttpServletRequest();
+                	(MockHttpServletRequest)((ServletWebRequest)cycle.getWebRequest()).getHttpServletRequest();
             
             httpRequest.setRequestToRedirectString(httpResponse.getRedirectLocation());
-            wicketSession = getSession(servletRequest, true);
+            // TODO adouma: check if this is a valid fix            
+            // wicketSession = getSession(servletRequest);            
+            wicketSession = getSession(wicketRequest, true);
             new WebRequestCycle(wicketSession, wicketRequest,
                     wicketResponse).request();
         }

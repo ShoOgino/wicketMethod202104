@@ -7,13 +7,16 @@
      * @see wicket.protocol.http.MockServletContext
      */
     public MockWebApplication(final String path)
-    {
+    {   
         Application.set(this);
         context = new MockServletContext(this, path);
         servletSession = new MockHttpSession(context);
         servletRequest = new MockHttpServletRequest(this, servletSession, context);
         servletResponse = new MockHttpServletResponse();
-        wicketSession = getSession(servletRequest, true);
+        // TODO adouma: check if the next line can be replaced by the following two        
+        // wicketSession = getSession(servletRequest);
+		wicketRequest = newWebRequest(servletRequest);
+        wicketSession = getSession(wicketRequest, true);
         ApplicationSettings settings = getSettings();
         settings.setRenderStrategy(ApplicationSettings.ONE_PASS_RENDER);
     }

@@ -1,0 +1,25 @@
+    /**
+     * <p>Utility method that determines whether the request contains multipart
+     * content.</p>
+     *
+     * <p><strong>NOTE:</strong>This method will be moved to the
+     * <code>ServletFileUpload</code> class after the FileUpload 1.1 release.
+     * Unfortunately, since this method is static, it is not possible to
+     * provide its replacement until this method is removed.</p>
+     *
+     * @param ctx The request context to be evaluated. Must be non-null.
+     *
+     * @return <code>true</code> if the request is multipart;
+     *         <code>false</code> otherwise.
+     */
+    public static final boolean isMultipartContent(RequestContext ctx) {
+        String contentType = ctx.getContentType();
+        if (contentType == null) {
+            return false;
+        }
+        if (contentType.toLowerCase().startsWith(MULTIPART)) {
+            return true;
+        }
+        return false;
+    }
+

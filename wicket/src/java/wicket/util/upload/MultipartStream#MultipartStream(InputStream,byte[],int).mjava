@@ -1,0 +1,40 @@
+    /**
+     * <p> Constructs a <code>MultipartStream</code> with a custom size buffer.
+     *
+     * <p> Note that the buffer must be at least big enough to contain the
+     * boundary string, plus 4 characters for CR/LF and double dash, plus at
+     * least one byte of data.  Too small a buffer size setting will degrade
+     * performance.
+     *
+     * @param input    The <code>InputStream</code> to serve as a data source.
+     * @param boundary The token used for dividing the stream into
+     *                 <code>encapsulations</code>.
+     * @param bufSize  The size of the buffer to be used, in bytes.
+     *
+     *
+     * @see #MultipartStream()
+     * @see #MultipartStream(InputStream, byte[])
+     *
+     */
+    public MultipartStream(InputStream input,
+                           byte[] boundary,
+                           int bufSize) {
+        this.input = input;
+        this.bufSize = bufSize;
+        this.buffer = new byte[bufSize];
+
+        // We prepend CR/LF to the boundary to chop trailng CR/LF from
+        // body-data tokens.
+        this.boundary = new byte[boundary.length + 4];
+        this.boundaryLength = boundary.length + 4;
+        this.keepRegion = boundary.length + 3;
+        this.boundary[0] = CR;
+        this.boundary[1] = LF;
+        this.boundary[2] = DASH;
+        this.boundary[3] = DASH;
+        System.arraycopy(boundary, 0, this.boundary, 4, boundary.length);
+
+        head = 0;
+        tail = 0;
+    }
+

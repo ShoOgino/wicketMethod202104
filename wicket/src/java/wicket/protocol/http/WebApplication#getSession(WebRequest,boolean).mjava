@@ -8,10 +8,10 @@
 	 * 			  Should the session be created if not there.
 	 * @return The session object
 	 */
-	final WebSession getSession(final HttpServletRequest request, boolean create)
+	final WebSession getSession(final WebRequest request, boolean create)
 	{
 		// Get session, creating if it doesn't exist
-		final HttpSession httpSession = request.getSession(create);
+		final HttpSession httpSession = ((ServletWebRequest)request).getHttpServletRequest().getSession(true);
 		if(!create && httpSession == null) return null;
 
 		// Namespacing for session attributes is provided by adding the servlet
