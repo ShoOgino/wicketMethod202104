@@ -1,13 +1,13 @@
 		private void makeCacheTask(String key)
 		{
-			if (resource instanceof DynamicImageResource)
+			if (resource instanceof DynamicByteArrayResource)
 			{
-				DynamicImageResource dynamicResource = (DynamicImageResource)resource;
+				DynamicByteArrayResource dynamicResource = (DynamicByteArrayResource)resource;
 				Duration cacheTimeout = dynamicResource.getCacheTimeout();
 				long  milliseconds = cacheTimeout.getMilliseconds();
 				if (milliseconds != 0)
 				{
-					this.cacheTask = getDynamicImageFlushTask(key, (DynamicImageResource)resource);
+					this.cacheTask = getDynamicImageFlushTask(key, (DynamicByteArrayResource)resource);
 					idleTimer.schedule(cacheTask, milliseconds);
 				}
 			}
