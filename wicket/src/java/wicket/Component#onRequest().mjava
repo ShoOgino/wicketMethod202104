@@ -1,7 +1,7 @@
 	/**
-	 * @see wicket.IEventRequestListener#onEventRequest()
+	 * @see wicket.markup.html.ajax.IAjaxListener#onRequest()
 	 */
-	public void onEventRequest()
+	public void onRequest()
 	{
 		String id = getRequest().getParameter("id");
 
@@ -10,13 +10,13 @@
 			throw new WicketRuntimeException("parameter id was not provided: unable to locate listener");
 		}
 
-		IEventRequestHandler eventRequestHandler = (IEventRequestHandler)eventRequestHandlers.get(id);
+		IAjaxHandler eventRequestHandler = (IAjaxHandler)eventRequestHandlers.get(id);
 
 		if (eventRequestHandler == null)
 		{
 			throw new WicketRuntimeException("no handler found with id " + id);
 		}
 
-		eventRequestHandler.onEventRequest();
+		eventRequestHandler.onRequest();
 	}
 
