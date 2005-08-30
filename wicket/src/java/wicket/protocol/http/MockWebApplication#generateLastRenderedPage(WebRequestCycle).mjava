@@ -1,0 +1,14 @@
+	private void generateLastRenderedPage(WebRequestCycle cycle)
+	{
+		lastRenderedPage = cycle.getResponsePage();
+		if(lastRenderedPage == null)
+		{
+			Class responseClass = cycle.getResponsePageClass();
+			if(responseClass != null)
+			{
+				Session.set(cycle.getSession());
+				lastRenderedPage = new DefaultPageFactory().newPage(responseClass, cycle.getResponsePagePageParameters());
+			}
+		}
+	}
+
