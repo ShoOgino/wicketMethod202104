@@ -1,0 +1,50 @@
+	/**
+	 * @see wicket.Component#onComponentTagBody(wicket.markup.MarkupStream, wicket.markup.ComponentTag)
+	 */
+	protected final void onComponentTagBody(final MarkupStream markupStream,
+			final ComponentTag openTag)
+	{
+		// Buffer to hold generated body
+		final StringBuffer buffer = new StringBuffer();
+
+		// Iterate through choices
+		final List choices = getChoices();
+
+		// Loop through choices
+		for(int index=0;index<choices.size();index++)
+		{
+			// Get next choice
+			final Object choice = choices.get(index);
+
+			// Get label for choice
+			final String label = getChoiceRenderer().getDisplayValue(choice);
+
+			// If there is a display value for the choice, then we know that the
+			// choice is automatic in some way. If label is /null/ then we know
+			// that the choice is a manually created checkbox tag at some random
+			// location in the page markup!
+			if (label != null)
+			{
+				// Append option suffix
+				buffer.append(getPrefix());
+
+				String id = getChoiceRenderer().getIdValue(choice, index);
+				// Add radio tag
+				buffer.append("<input name=\"" + getPath() + "\"" + " type=\"checkbox\""
+						+ (isSelected(choice,index) ? " checked" : "") + " value=\"" + id
+						+ "\">");
+
+				// Add label for checkbox
+				String display = getLocalizer().getString(getId() + "." + label, this, label);
+				String escaped = Strings.escapeMarkup(display, false, true);
+				buffer.append(escaped);
+
+				// Append option suffix
+				buffer.append(getSuffix());
+			}
+		}
+
+		// Replace body
+		replaceComponentTagBody(markupStream, openTag, buffer.toString());
+	}
+
