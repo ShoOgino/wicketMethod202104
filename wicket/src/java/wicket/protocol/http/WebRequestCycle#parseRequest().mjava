@@ -22,7 +22,6 @@
 	protected final boolean parseRequest()
 	{
 		// Try different methods of parsing and dispatching the request
-
 		if (callDispatchedComponentListener())
 		{
 			// if it is, we don't need to update the cluster, etc, and return false
@@ -33,11 +32,24 @@
 			// Returning a page
 			return true;
 		}
-		else
+		// If it's not a resource reference or static content
+		else if (resourceReference() || staticContent())
+	    {
+			// if it is, we don't need to update the cluster, etc, and return false
+	    }
+		else 
 		{
-			// If it's not a resource reference or static content
-			if (!resourceReference() && !staticContent())
-			{
+		    int rtn = doParseRequest();
+		    if (rtn == 1)
+		    {
+		        return true;
+		    }
+		    else if (rtn == 2)
+		    {
+				// if it is, we don't need to update the cluster, etc, and return false
+		    }
+		    else
+		    {
 				// not found... send 404 to client indicating that no resource was found
 				// for the request uri
 				WebResponse webResponse = (WebResponse)getResponse();
@@ -51,7 +63,7 @@
 					// that seems unlikely... anyway, log exception and forget about it
 					log.error("unable to send 404 for " + getRequest() + ", cause: " + e.getMessage(), e);
 				}
-			}
+		    }
 		}
 
 		// Don't update the cluster, not returning a page

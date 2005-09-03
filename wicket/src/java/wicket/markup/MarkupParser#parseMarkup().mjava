@@ -23,9 +23,18 @@
             }
             
             // Determine wicket namespace: <html xmlns:wicket="http://wicket.sourceforge.net">
+            RawMarkup replaceTag = null;
 			if (tag.isOpen() && "html".equals(tag.getName().toLowerCase()))
 			{
-			    determineWicketNamespace(tag);
+				// if add already true, do not make it false
+			    add |= determineWicketNamespace(tag);
+			    
+			    // If add and tag has no wicket:id, than
+			    if ((add == true) && (tag.getId() == null))
+			    {
+			    	// Replace the current tag
+			    	replaceTag = new RawMarkup(tag.toString());
+			    }
 			}
 
             // Add tag to list?
@@ -53,7 +62,6 @@
                     list.add(new RawMarkup(rawMarkup));
                 }
 
-
                 if ((add == false) && (autoAddList.size() > 0))
                 {
                     xmlParser.setPositionMarker(tag.getPos());
@@ -68,7 +76,14 @@
                 // Add to list unless preview component tag remover flagged as removed
                 if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
                 {
-	                list.add(tag);
+                	if (replaceTag != null)
+                	{
+                		list.add(replaceTag);
+                	}
+                	else
+                	{
+                		list.add(tag);
+                	}
                 }
                 
                 xmlParser.setPositionMarker();

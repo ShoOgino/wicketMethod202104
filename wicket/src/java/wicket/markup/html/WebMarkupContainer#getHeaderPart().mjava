@@ -48,33 +48,14 @@
 					final String headerId = "_" + Classes.name(this.getClass())+ this.getVariation() + "Header";
 					
 					// Create the header container and associate the markup with it
-					WebMarkupContainer headerContainer = new WebMarkupContainer(headerId);
+					WebMarkupContainer headerContainer = new TransparentWebMarkupContainer(headerId, this);
 					headerContainer.setMarkupStream(associatedMarkupStream);
 					headerContainer.setRenderBodyOnly(true);
-					
-					// In case components are part of the region, the user must 
-					// have provided the component objects by means of addToHeader().
-					// All the component provided by the user, must now be added
-					// to the newly created header container.
-					if (this.headerComponents != null)
-					{
-						for (Iterator iter = headerComponents.iterator(); iter.hasNext();)
-						{
-					        headerContainer.add((Component)iter.next());
-						}
-					}
 					
 					// The container does have a header component
 					return headerContainer;
 				}
 			}
-		}
-
-		if (this.headerComponents != null)
-		{
-			throw new MarkupException(
-					"You have added header components but did not specify a <wicket:head> region in your Page markup: "
-							+ this.toString());
 		}
 		
 		// Though the container does have markup, it does not have a 
