@@ -1,10 +1,19 @@
 	/**
-	 * Construct.
 	 * @param id component id
 	 * @param configuration wizard configuration object
 	 */
-	public WizardPanel(String id, WizardConfiguration configuration)
+	public WizardPanel(final String id, WizardConfiguration configuration)
 	{
-		this(id, configuration, null);
+		super(id);
+
+		if (configuration == null)
+		{
+			throw new NullPointerException("configuration must not be null");
+		}
+
+		this.state = configuration.begin();
+
+		WizardForm form = new WizardForm("form");
+		add(form);
 	}
 
