@@ -12,8 +12,8 @@
 			// the client since the resource being requested has nothing to do with pages
 			cycle.setResponsePage((Page)null);
 
-			this.resourceStream = getResponse();
-			if (this.resourceStream == null)
+			resourceStream = getResponse();
+			if (resourceStream == null)
 			{
 				throw new WicketRuntimeException("Could not get resource stream");
 			}
@@ -21,7 +21,7 @@
 			// Get servlet response to use when responding with resource
 			final Response response = cycle.getResponse();
 
-			configure(response);
+			configure(response, resourceStream);
 
 			// Respond with resource
 			respond(response);

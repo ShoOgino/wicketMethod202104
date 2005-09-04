@@ -1,0 +1,24 @@
+	/**
+	 * Registers a handler for an event request.
+	 * @param ajaxHandler handler
+	 */
+	public final void add(AjaxHandler ajaxHandler)
+	{
+		if (ajaxHandler == null)
+		{
+			throw new NullPointerException("argument may not be null");
+		}
+
+		// Lazy create
+		if (ajaxHandlers == null)
+		{
+			ajaxHandlers = new ArrayList(1);
+		}
+
+		int index = ajaxHandlers.size() - 1;
+		ajaxHandlers.add(index, ajaxHandler);
+
+		// Give handler the opportunity to bind this component
+		ajaxHandler.bind(this);
+	}
+
