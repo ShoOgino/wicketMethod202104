@@ -3,11 +3,26 @@
 	 */
 	public final void renderHead(HtmlHeaderContainer container)
 	{
-		if (headContribHolder.get() == null)
+		Set contributors = (Set)headContribHolder.get();
+
+		//	were any contributors set?
+		if (contributors == null)
 		{
-			headContribHolder.set(dummy);
-			renderHeadInitContribution(container);
+			contributors = new HashSet(1);
+			headContribHolder.set(contributors);
 		}
+
+		// get the id of the implementation; we need this trick to be
+		// able to support multiple implementations
+		String implementationId = getImplementationId();
+
+		// was a contribution for this specific implementation done yet?
+		if(!contributors.contains(implementationId))
+		{
+			renderHeadInitContribution(container);
+			contributors.add(implementationId);
+		}
+
 		renderHeadContribution(container);
 	}
 
