@@ -20,9 +20,15 @@
 		add(link1);
 
 		// add a counter label to the link so that we can display it in the body of the link
-		link1.add(new ClickCountLabel("label1", count1));
+        link1.add(new Label("label1", new Model()
+        {
+            public Object getObject(Component component)
+            {
+                return Integer.toString(count1.clicks);
+            }
+        }));
 
-		// we can attach Link components to any HTML tag we want. If it is an anchor (<a href...),
+        // we can attach Link components to any HTML tag we want. If it is an anchor (<a href...),
 		// the url to this component is put in the href attribute. For other components, a
 		// onclick javascript event handler is created that triggers the round trip
 
