@@ -1,0 +1,25 @@
+	/**
+	 * Removes all mappings from this map.
+	 */
+
+	public void clear()
+	{
+		// We don't need all locks at once so long as locks
+		// are obtained in low to high order
+		for (int s = 0; s < segments.length; ++s)
+		{
+			Segment seg = segments[s];
+			synchronized (seg)
+			{
+				Entry[] tab = table;
+				for (int i = s; i < tab.length; i += segments.length)
+				{
+					for (Entry e = tab[i]; e != null; e = e.next)
+						e.value = null;
+					tab[i] = null;
+					seg.count = 0;
+				}
+			}
+		}
+	}
+

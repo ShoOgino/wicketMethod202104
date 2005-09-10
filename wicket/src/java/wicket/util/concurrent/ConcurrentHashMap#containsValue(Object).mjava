@@ -1,0 +1,36 @@
+	/**
+	 * Returns <tt>true</tt> if this map maps one or more keys to the
+	 * specified value. Note: This method requires a full internal traversal of
+	 * the hash table, and so is much slower than method <tt>containsKey</tt>.
+	 * 
+	 * @param value
+	 *            value whose presence in this map is to be tested.
+	 * @return <tt>true</tt> if this map maps one or more keys to the
+	 *         specified value.
+	 * @exception NullPointerException
+	 *                if the value is <code>null</code>.
+	 */
+	public boolean containsValue(Object value)
+	{
+
+		if (value == null)
+			throw new NullPointerException();
+
+		for (int s = 0; s < segments.length; ++s)
+		{
+			Segment seg = segments[s];
+			Entry[] tab;
+			synchronized (seg)
+			{
+				tab = table;
+			}
+			for (int i = s; i < tab.length; i += segments.length)
+			{
+				for (Entry e = tab[i]; e != null; e = e.next)
+					if (value.equals(e.value))
+						return true;
+			}
+		}
+		return false;
+	}
+

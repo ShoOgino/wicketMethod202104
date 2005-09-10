@@ -1,0 +1,15 @@
+		/**
+		 * @see Iterator#next()
+		 */
+		public Object next()
+		{
+			if (currentKey == null && !hasNext())
+				throw new NoSuchElementException();
+
+			Object result = returnValueOfNext();
+			lastReturned = entry;
+			currentKey = currentValue = null;
+			entry = entry.next;
+			return result;
+		}
+

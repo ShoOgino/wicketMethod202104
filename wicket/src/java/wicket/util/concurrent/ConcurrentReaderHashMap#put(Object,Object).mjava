@@ -1,0 +1,69 @@
+	/**
+	 * Maps the specified <code>key</code> to the specified <code>value</code>
+	 * in this table. Neither the key nor the value can be <code>null</code>.
+	 * <p>
+	 * 
+	 * The value can be retrieved by calling the <code>get</code> method with
+	 * a key that is equal to the original key.
+	 * 
+	 * @param key
+	 *            the table key.
+	 * @param value
+	 *            the value.
+	 * @return the previous value of the specified key in this table, or
+	 *         <code>null</code> if it did not have one.
+	 * @exception NullPointerException
+	 *                if the key or value is <code>null</code>.
+	 * @see Object#equals(Object)
+	 * @see #get(Object)
+	 */
+	public Object put(Object key, Object value)
+	{
+		if (value == null)
+			throw new NullPointerException();
+
+		int hash = hash(key);
+		Entry[] tab = table;
+		int index = hash & (tab.length - 1);
+		Entry first = tab[index];
+		Entry e;
+
+		for (e = first; e != null; e = e.next)
+			if (e.hash == hash && eq(key, e.key))
+				break;
+
+		synchronized (this)
+		{
+			if (tab == table)
+			{
+				if (e == null)
+				{
+					// make sure we are adding to correct list
+					if (first == tab[index])
+					{
+						// Add to front of list
+						Entry newEntry = new Entry(hash, key, value, first);
+						tab[index] = newEntry;
+						if (++count >= threshold)
+							rehash();
+						else
+							recordModification(newEntry);
+						return null;
+					}
+				}
+				else
+				{
+					Object oldValue = e.value;
+					if (first == tab[index] && oldValue != null)
+					{
+						e.value = value;
+						return oldValue;
+					}
+				}
+			}
+
+			// retry if wrong list or lost race against concurrent remove
+			return sput(key, value, hash);
+		}
+	}
+

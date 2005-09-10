@@ -1,0 +1,26 @@
+	/**
+	 * Reconstitute the <tt>ConcurrentHashMap</tt> instance from a stream
+	 * (i.e., deserialize it).
+	 */
+	private void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException
+	{
+		// Read in the threshold, loadfactor, and any hidden stuff
+		s.defaultReadObject();
+
+		int cap = s.readInt();
+		table = newTable(cap);
+		for (int i = 0; i < segments.length; ++i)
+			segments[i] = new Segment();
+
+
+		// Read the keys and values, and put the mappings in the table
+		for (;;)
+		{
+			Object key = s.readObject();
+			Object value = s.readObject();
+			if (key == null)
+				break;
+			put(key, value);
+		}
+	}
+
