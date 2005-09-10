@@ -13,6 +13,19 @@
 		// Default handling for component tag
 		super.onComponentTag(tag);
 
+		try
+		{
+			String value = getValue();
+			if(value != null)
+			{
+				tag.put("value", getValue());
+			}
+		} 
+		catch(Exception e) 
+		{
+			// ignore.
+		}
+		
 		// If the subclass specified javascript, use that
 		final String onClickJavaScript = getOnClickScript();
 		if (onClickJavaScript != null)
