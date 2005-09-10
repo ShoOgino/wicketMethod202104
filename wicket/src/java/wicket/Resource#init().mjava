@@ -1,16 +1,15 @@
 	/**
 	 * Set resource field by calling subclass
+	 * @return The resource stream for the current request
 	 */
-	private final void init()
+	private final IResourceStream init()
 	{
-		if (this.resourceStream == null)
+		IResourceStream stream = getResourceStream();
+		
+		if (stream == null)
 		{
-			this.resourceStream = getResourceStream();
-			
-			if (this.resourceStream == null)
-			{
-				throw new WicketRuntimeException("Could not get resource stream");
-			}
+			throw new WicketRuntimeException("Could not get resource stream");
 		}
+		return stream;
 	}
 
