@@ -36,6 +36,12 @@
 		{
 			response.setLastModifiedTime(Time.valueOf(-1));
 		}
+		// this should be done in WebResource. Maybe much more should be moved to WebResource/WebRespone
+		// like cacheable/lastmodified.
+		if(response instanceof WebResponse)
+		{
+			setHeaders((WebResponse)response);
+		}
 
 		// Respond with resource
 		respond(resourceStream, response);
