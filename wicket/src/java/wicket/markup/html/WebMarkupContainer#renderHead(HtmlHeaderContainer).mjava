@@ -25,6 +25,20 @@
 			// attribute to be copied to the page's body tag. 
 			checkBodyOnLoad();
 		}
+		else if(headerPart != null)
+		{
+			// already added but all the components in this header part must be touched (that they are rendered)
+			Response response = getRequestCycle().getResponse();
+			try
+			{
+				getRequestCycle().setResponse(NullResponse.getInstance());
+				container.autoAdd(headerPart);
+			} 
+			finally
+			{
+				getRequestCycle().setResponse(response);
+			}
+		}
 
 		// get head and body contributions in one loop
 		AjaxHandler[] handlers = getAjaxHandlers();
