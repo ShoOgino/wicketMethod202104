@@ -5,18 +5,27 @@
 	public final void updateSession()
 	{
 		// Go through each page map in the session
-		log.debug("updateSession(): Updating session.");
+		if(log.isDebugEnabled())
+		{
+			log.debug("updateSession(): Updating session.");
+		}
 		visitPageMaps(new IVisitor()
 		{
 			public void pageMap(PageMap pageMap)
 			{
-				log.debug("updateSession(): Attaching session to PageMap " + pageMap);
+				if(log.isDebugEnabled())
+				{
+					log.debug("updateSession(): Attaching session to PageMap " + pageMap);
+				}
 				pageMap.setSession(Session.this);
 			}
 		});
 
 		// Get PageStates from session attributes
-		log.debug("updateSession(): Getting PageState attributes.");
+		if(log.isDebugEnabled())
+		{
+			log.debug("updateSession(): Getting PageState attributes.");
+		}
 		final List pageStates = getPageStateAttributes();
 
 		// Sort page states so that they can be added in reverse order of
@@ -25,6 +34,9 @@
 
 		// Adds pages to session
 		addPages(pageStates);
-		log.debug("updateSession(): Done updating session.");
+		if(log.isDebugEnabled())
+		{
+			log.debug("updateSession(): Done updating session.");
+		}
 	}
 

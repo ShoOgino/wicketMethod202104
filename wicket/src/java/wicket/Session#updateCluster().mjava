@@ -6,7 +6,7 @@
 		// If state is dirty
 		if (dirty)
 		{
-			log.debug("updateCluster(): Session is dirty.  Replicating.");
+			if(log.isDebugEnabled()) log.debug("updateCluster(): Session is dirty.  Replicating.");
 
 			// State is no longer dirty
 			this.dirty = false;
@@ -16,7 +16,10 @@
 		}
 		else
 		{
-			log.debug("updateCluster(): Session not dirty.");
+			if(log.isDebugEnabled())
+			{
+				log.debug("updateCluster(): Session not dirty.");
+			}
 		}
 
 		// Go through all pages in all page maps, replicating any dirty pages
