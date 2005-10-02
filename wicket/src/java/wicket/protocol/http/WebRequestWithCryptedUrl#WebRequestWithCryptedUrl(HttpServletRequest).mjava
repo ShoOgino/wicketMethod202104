@@ -36,22 +36,19 @@
 		
 		// If available, add POST parameters as well. They are not encrypted.
 		// The parameters from HttpRequest 
-		final Map params = super.getParameterMap();
-		if ((params != null) && !params.isEmpty())
-		{
-		    // For all parameters (POST + URL query string)
-		    final Iterator iter = params.entrySet().iterator();
-		    while (iter.hasNext())
-		    {
-		        final Map.Entry entry = (Map.Entry)iter.next();
-		        
-		        // Ignore the "x" parameter
-		        if (!"x".equalsIgnoreCase((String)entry.getKey()))
-		        {
-		            // add key/value to our parameter map
-		            this.parameters.put(entry.getKey(), entry.getValue());
-		        }
-		    }
-		}
+		final Enumeration paramNames = request.getParameterNames();
+	    // For all parameters (POST + URL query string)
+	    while (paramNames.hasMoreElements())
+	    {
+	       String paramName = (String)paramNames.nextElement();
+	        
+	        // Ignore the "x" parameter
+	        if (!"x".equalsIgnoreCase(paramName))
+	        {
+	 	       String[] values = request.getParameterValues(paramName);
+	            // add key/value to our parameter map
+	            this.parameters.put(paramName, values);
+	        }
+	    }
 	}
 
