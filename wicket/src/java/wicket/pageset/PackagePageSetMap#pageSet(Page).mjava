@@ -3,13 +3,15 @@
 	 */
 	public PageSet pageSet(final Page page)
 	{
-		for (Package p = page.getClass().getPackage(); p != null; p = Packages.parent(p))
+		String packageName = Packages.extractPackageName( page.getClass() );
+		while ( "".equals( packageName ) == false )
 		{
-			final PageSet pageSet = (PageSet)packageToPageSet.get(p);
+			final PageSet pageSet = (PageSet)packageNameToPageSet.get(packageName);
 			if (pageSet != null)
 			{
 				return pageSet;
 			}
+			packageName = Packages.parent(packageName);
 		}
 		return null;
 	}
