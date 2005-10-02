@@ -1,11 +1,15 @@
 	/**
-	 * Returns a bookmarkable URL that references a given page class using a given set of
-	 * page parameters. Since the URL which is returned contains all information necessary
-	 * to instantiate and render the page, it can be stored in a user's browser as a
-	 * stable bookmark.
-	 * @param pageMapName Name of pagemap to use
-	 * @param pageClass Class of page
-	 * @param parameters Parameters to page
+	 * Returns a bookmarkable URL that references a given page class using a
+	 * given set of page parameters. Since the URL which is returned contains
+	 * all information necessary to instantiate and render the page, it can be
+	 * stored in a user's browser as a stable bookmark.
+	 * 
+	 * @param pageMapName
+	 *            Name of pagemap to use
+	 * @param pageClass
+	 *            Class of page
+	 * @param parameters
+	 *            Parameters to page
 	 * @return Bookmarkable URL to page
 	 */
 	public String urlFor(final String pageMapName, final Class pageClass,
@@ -16,7 +20,7 @@
 			throw new NullPointerException("argument pageClass may not be null");
 		}
 
-		final WebRequestCycle cycle = getWebRequestCycle(); 
+		final WebRequestCycle cycle = getWebRequestCycle();
 		final StringBuffer buffer = urlPrefix(cycle);
 		if (pageMapName == null)
 		{
@@ -33,15 +37,15 @@
 		// "bookmarkablePage=xxx" is required if PageParameters exist,
 		// some sort of redirection takes place, or if we're not dealing
 		// with the homepage.
-		if ((parameters!=null && !parameters.isEmpty()) ||
-		  pages.getHomePageRenderStrategy()!=ApplicationPages.NO_REDIRECT ||
-		  !pages.getHomePage().equals(pageClass))
+		if ((parameters != null && !parameters.isEmpty())
+				|| pages.getHomePageRenderStrategy() != ApplicationPages.NO_REDIRECT
+				|| !pages.getHomePage().equals(pageClass))
 		{
-		  buffer.append("bookmarkablePage=");
-		  String pageReference = cycle.getApplication().getPages().aliasForClass(pageClass);
-		  if (pageReference == null)
-		    pageReference = pageClass.getName();
-		  buffer.append(pageReference);
+			buffer.append("bookmarkablePage=");
+			String pageReference = cycle.getApplication().getPages().aliasForClass(pageClass);
+			if (pageReference == null)
+				pageReference = pageClass.getName();
+			buffer.append(pageReference);
 		}
 		if (parameters != null)
 		{
@@ -59,8 +63,8 @@
 				}
 			}
 		}
-		if (buffer.charAt(buffer.length()-1)=='?')
-			buffer.deleteCharAt(buffer.length()-1);
+		if (buffer.charAt(buffer.length() - 1) == '?')
+			buffer.deleteCharAt(buffer.length() - 1);
 		return cycle.getResponse().encodeURL(buffer.toString());
 	}
 

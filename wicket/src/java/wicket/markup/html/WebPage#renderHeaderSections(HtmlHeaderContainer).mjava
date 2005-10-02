@@ -1,24 +1,26 @@
 	/**
 	 * THIS IS NOT PART OF WICKETS PUBLIC API. DO NOT USE IT YOURSELF.
 	 * <p>
-	 * Invoked by HtmlHeaderContainer it'll ask all child components of the 
-	 * Page if they have something to contribute to the &lt;head&gt; section 
-	 * of the HTML output. Every component interested must implement
-	 * IHeaderContributor.<p>
-	 * Note: HtmlHeaderContainer will be removed from the component hierachie
-	 * at the end of the request (@see #onEndRequest()) and thus can not 
-	 * transport status from one request to the next. This is true for all
-	 * components added to the header. 
+	 * Invoked by HtmlHeaderContainer it'll ask all child components of the Page
+	 * if they have something to contribute to the &lt;head&gt; section of the
+	 * HTML output. Every component interested must implement
+	 * IHeaderContributor.
+	 * <p>
+	 * Note: HtmlHeaderContainer will be removed from the component hierachie at
+	 * the end of the request (@see #onEndRequest()) and thus can not transport
+	 * status from one request to the next. This is true for all components
+	 * added to the header.
 	 * 
 	 * @see IHeaderContributor
-	 * @param container The header component container 
+	 * @param container
+	 *            The header component container
 	 */
 	public final void renderHeaderSections(final HtmlHeaderContainer container)
 	{
-	    // A components interested in contributing to the header must
-	    // implement IHeaderContributor.
+		// A components interested in contributing to the header must
+		// implement IHeaderContributor.
 		visitChildren(IHeaderContributor.class, new IVisitor()
-        {
+		{
 			/**
 			 * @see wicket.Component.IVisitor#component(wicket.Component)
 			 */
@@ -27,12 +29,12 @@
 				if (component.isVisible())
 				{
 					if (component instanceof IHeaderContributor)
-				    {
-			        	((IHeaderContributor)component).renderHead(container);
-				    }
+					{
+						((IHeaderContributor)component).renderHead(container);
+					}
 				}
 				return IVisitor.CONTINUE_TRAVERSAL;
 			}
-        });
+		});
 	}
 

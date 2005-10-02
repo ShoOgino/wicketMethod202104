@@ -3,7 +3,7 @@
 	 * URL is requested from the server at a later time, the interface will be
 	 * called. A URL returned by this method will not be stable across sessions
 	 * and cannot be bookmarked by a user.
-	 *
+	 * 
 	 * @param component
 	 *            The component to reference
 	 * @param listenerInterface
@@ -26,19 +26,20 @@
 		buffer.append("path=");
 		buffer.append(component.getPath());
 		int versionNumber = component.getPage().getCurrentVersionNumber();
-		if(versionNumber > 0)
+		if (versionNumber > 0)
 		{
 			buffer.append("&version=");
 			buffer.append(versionNumber);
 		}
 		String listenerName = Classes.name(listenerInterface);
-		if(!"IRedirectListener".equals(listenerName))
+		if (!"IRedirectListener".equals(listenerName))
 		{
 			buffer.append("&interface=");
 			buffer.append(listenerName);
 		}
 
-		// add an extra parameter for regconition in case we are targetting a dispatched handler
+		// add an extra parameter for regconition in case we are targetting a
+		// dispatched handler
 		if (IAjaxListener.class.isAssignableFrom(listenerInterface))
 		{
 			buffer.append("&dispatched=true");
