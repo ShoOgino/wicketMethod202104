@@ -7,32 +7,33 @@
 	 */
 	private final void skipUntil() throws ParseException
 	{
-		// this is a script tag with script as body skip this until </script> is found.
+		// this is a tag with non-XHTML text as body - skip this until the skipUntilText is found.
 		final int startIndex = this.inputPosition;
 
+		int tagNameLen = skipUntilText.length();
 		int lastPos;
 		while (true)
 		{
 			this.inputPosition = input.indexOf("</", this.inputPosition);
-			
-			if ((this.inputPosition == -1) || ((this.inputPosition + 8) >= input.length()))
+
+			if ((this.inputPosition == -1) || ((this.inputPosition + (tagNameLen+2)) >= input.length()))
 			{
-				throw new ParseException("Script tag not closed (line " + lineNumber + ", column "
-						+ columnNumber + ")", startIndex);							
+				throw new ParseException(skipUntilText + " tag not closed (line " + lineNumber + ", column "
+						+ columnNumber + ")", startIndex);
 			}
-			
+
 			lastPos = this.inputPosition + 2;
-			final String endTagText = input.substring(lastPos, lastPos + 6);
-			if (endTagText.toLowerCase().equals("script"))
+			final String endTagText = input.substring(lastPos, lastPos + tagNameLen);
+			if (endTagText.toLowerCase().equals(skipUntilText))
 			{
 				break;
 			}
-			
+
 			this.inputPosition = lastPos;
 		}
 		
 		// Get index of closing tag and advance past the tag
-		lastPos = input.indexOf('>', lastPos + 6);
+		lastPos = input.indexOf('>', lastPos + tagNameLen);
 		
 		if (lastPos == -1)
 		{

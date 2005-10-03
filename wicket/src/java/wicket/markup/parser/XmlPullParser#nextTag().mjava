@@ -96,9 +96,17 @@
 				{
 					String lowerCase = tagText.toLowerCase();
 					// TODO hard coded wicket:id check?? Can be othername??
-					if ((type == XmlTag.OPEN) && lowerCase.startsWith("script"))
+					// Often save a (longer) comparison at the expense of a extra shorter one for 's' tags
+					if ((type == XmlTag.OPEN) && lowerCase.startsWith("s"))
 					{
-					    this.skipUntilText = "script";
+						if (lowerCase.startsWith("script"))
+						{
+					    	this.skipUntilText = "script";
+						}
+						else if (lowerCase.startsWith("style"))
+						{
+							this.skipUntilText = "style";
+						}
 					}
 						
 					// Parse remaining tag text, obtaining a tag object or null
