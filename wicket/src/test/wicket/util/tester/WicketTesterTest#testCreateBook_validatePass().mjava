@@ -1,0 +1,24 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public void testCreateBook_validatePass() throws Exception
+	{
+		WicketTester tester = new WicketTester();
+		tester.startPage(CreateBook.class);
+
+		FormTester formTester = tester.newFormTester("createForm");
+		
+		formTester.setValue("id", "xxId");
+		formTester.setValue("name", "xxName");
+		formTester.submit();
+
+		tester.assertRenderedPage(SuccessPage.class);
+
+		// assert info message present.
+		tester.assertInfoMessages(new String[] { "book 'xxName' created" });
+
+		// assert previous page expired.
+		tester.assertExpirePreviousPage();
+	}
+

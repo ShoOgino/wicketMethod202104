@@ -1,0 +1,18 @@
+	/**
+	 * Render a wicket WebPage that is defined in TestPageSource.
+	 * 
+	 * @param testPageSource
+	 * @return Page
+	 */
+	public final Page startPage(TestPageSource testPageSource)
+	{
+		getPages().setHomePage(DummyHomePage.class);
+		setupRequestAndResponse();
+		processRequestCycle();
+		DummyHomePage page = (DummyHomePage)getLastRenderedPage();
+		page.setTestPageSource(testPageSource);
+
+		newRequestToComponent(page.getTestPageLink());
+		return getLastRenderedPage();
+	}
+

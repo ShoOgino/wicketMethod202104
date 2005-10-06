@@ -1,0 +1,57 @@
+	/**
+	 * open a web browser and see lastet rendered WebPage.
+	 */
+	public final void viewInBrowser()
+	{
+		int webRootPathIndex = getThisClassFileURL().getPath().indexOf("/WEB-INF");
+
+		// obtain webRootPath, for example:
+		// D:/eclipse/workspace/MyProject/MyWebRoot
+		String webRootPath = getThisClassFileURL().getPath().substring(0, webRootPathIndex);
+
+		File temp = new File(webRootPath + "/" + getTemperaryDumpHtmlFileName());
+		FileOutputStream out = null;
+		try
+		{
+			out = new FileOutputStream(temp);
+			out.write(tester.getServletResponse().getDocument().getBytes(getHtmlEncoding()));
+			out.flush();
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			throw convertoUnexpect(e);
+		}
+		catch (IOException e)
+		{
+			throw convertoUnexpect(e);
+		}
+		finally
+		{
+			if (out != null)
+			{
+				try
+				{
+					out.close();
+				}
+				catch (IOException e)
+				{
+					throw convertoUnexpect(e);
+				}
+			}
+		}
+
+		if (!new File(getBrowserPath()).exists())
+		{
+			throw new IllegalStateException("No browser found at " + getBrowserPath());
+		}
+		// try {
+		throw new RuntimeException("Not yet supported");
+		// new ProcessBuilder(getBrowserPath(),
+		// temp.toURL().toString()).start();
+		// } catch (MalformedURLException e) {
+		// throw convertoUnexpect(e);
+		// } catch (IOException e) {
+		// throw convertoUnexpect(e);
+		// }
+	}
+
