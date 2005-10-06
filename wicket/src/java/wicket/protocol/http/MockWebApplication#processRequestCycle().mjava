@@ -1,15 +1,22 @@
     /**
      * Create and process the request cycle using the current request and
      * response information.
-     * 
-     * @throws ServletException
-     *             If the render cycle fails
      */
-    public void processRequestCycle() throws ServletException
+    public void processRequestCycle()
     {
         WebRequestCycle cycle = new WebRequestCycle(wicketSession, wicketRequest,
                 wicketResponse);
-        cycle.request();
+        
+        try
+        {
+        	cycle.request();
+        }
+        catch (ServletException ex)
+        {
+        	throw new WicketRuntimeException("Error while processing Wicket request cycle.", ex);
+        }
+
+        previousRenderedPage = lastRenderedPage;
         
         // handle redirects which are usually managed by the browser transparently
         final MockHttpServletResponse httpResponse = 
@@ -26,9 +33,20 @@
             // TODO adouma: check if this is a valid fix            
             // wicketSession = getSession(servletRequest);            
             wicketSession = getSession(wicketRequest, true);
-            new WebRequestCycle(wicketSession, wicketRequest,
-                    wicketResponse).request();
+            try
+            {
+            	new WebRequestCycle(wicketSession, wicketRequest, wicketResponse).request();
+            }
+            catch (ServletException ex)
+            {
+            	throw new WicketRuntimeException("Error while processing Wicket redirect request cycle.", ex);
+            }
         }
         generateLastRenderedPage(cycle);
+        
+		if (getLastRenderedPage() instanceof ExceptionErrorPage)
+		{
+			throw new WicketRuntimeException(((ExceptionErrorPage)getLastRenderedPage()).getRootCause());
+		}
     }
 

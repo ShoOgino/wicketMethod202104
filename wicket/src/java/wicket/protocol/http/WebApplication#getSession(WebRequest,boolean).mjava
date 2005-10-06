@@ -12,7 +12,10 @@
 	{
 		// Get session, creating if it doesn't exist
 		final HttpSession httpSession = ((ServletWebRequest)request).getHttpServletRequest().getSession(true);
-		if(!create && httpSession == null) return null;
+		if (!create && (httpSession == null)) 
+		{
+			return null;
+		}
 
 		// Namespacing for session attributes is provided by adding the servlet
 		// path
@@ -26,7 +29,11 @@
 		WebSession webSession = (WebSession)httpSession.getAttribute(sessionAttribute);
 		if (webSession == null)
 		{
-			if(!create) return null;
+			if (!create) 
+			{
+				return null;
+			}
+			
 			// Create session using session factory
 			final Session session = getSessionFactory().newSession();
 			if (session instanceof WebSession)

@@ -1,6 +1,8 @@
 	/**
 	 * Imports from a relative url.
-	 * @param url the url to import
+	 * 
+	 * @param url
+	 *            the url to import
 	 * @return the imported url's contents
 	 */
 	private String importRelativeUrl(String url)
@@ -11,14 +13,13 @@
 		StringBuffer buildUrl = new StringBuffer();
 		String scheme = req.getScheme();
 		int port = req.getServerPort();
-		String urlPath = req.getRequestURI();
-		buildUrl.append(scheme);	// http, https
+		buildUrl.append(scheme); // http, https
 		buildUrl.append("://");
 		buildUrl.append(req.getServerName());
-		if ((scheme.equals ("http") && port != 80)
-			|| (scheme.equals ("https") && port != 443)) {
-			buildUrl.append (':');
-			buildUrl.append (req.getServerPort ());
+		if ((scheme.equals("http") && port != 80) || (scheme.equals("https") && port != 443))
+		{
+			buildUrl.append(':');
+			buildUrl.append(req.getServerPort());
 		}
 		buildUrl.append(req.getContextPath()).append('/').append(url);
 		url = buildUrl.toString();
