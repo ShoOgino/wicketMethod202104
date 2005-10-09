@@ -22,7 +22,6 @@
 	protected final boolean parseRequest()
 	{
 		// Try different methods of parsing and dispatching the request
-
 		if (callDispatchedComponentListener())
 		{
 			// if it is, we don't need to update the cluster, etc, and return false
@@ -33,11 +32,24 @@
 			// Returning a page
 			return true;
 		}
+		// If it's not a resource reference or static content
+		else if (resourceReference() || staticContent())
+	    {
+			// if it is, we don't need to update the cluster, etc, and return false
+	    }
 		else
 		{
-			// If it's not a resource reference or static content
-			if (!resourceReference() && !staticContent())
-			{
+		    int rtn = doParseRequest();
+		    if (rtn == PARSE_REQUEST_RETURNING_PAGE)
+		    {
+		        return true;
+		    }
+		    else if (rtn == PARSE_REQUEST_RETURNING_STATIC_CONTENT)
+		    {
+				// if it is, we don't need to update the cluster, etc, and return false
+		    }
+		    else
+		    {
 				// not found... send 404 to client indicating that no resource was found
 				// for the request uri
 				WebResponse webResponse = (WebResponse)getResponse();
