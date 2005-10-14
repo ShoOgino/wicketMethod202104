@@ -7,11 +7,20 @@
 	 * @param formComponent form component
 	 * @return a map with the variables for interpolation
 	 */
-	protected Map messageModel(FormComponent formComponent)
+	protected Map messageModel(final FormComponent formComponent)
 	{
 		final Map resourceModel = new HashMap(4);
 		resourceModel.put("input", formComponent.getInput());
 		resourceModel.put("name", formComponent.getId());
+		
+		if (formComponent.getLabel() != null)
+		{
+			resourceModel.put("label", formComponent.getLabel().getObject(null));
+		}
+		else
+		{
+			resourceModel.put("label", formComponent.getId());
+		}
 		return resourceModel;
 	}
 

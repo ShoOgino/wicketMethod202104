@@ -4,8 +4,17 @@
 	 * @param formComponent form component
 	 * @param map The model for variable interpolation
 	 */
-	public void error(FormComponent formComponent, final Map map)
+	public void error(final FormComponent formComponent, final Map map)
 	{
-		error(formComponent, resourceKey(formComponent), Model.valueOf(map));
+		IModel model = Model.valueOf(map);
+		try
+		{
+			error(formComponent, resourceKey(formComponent), model);
+		}
+		catch (MissingResourceException ex)
+		{
+			String key = Classes.name(getClass());
+			error(formComponent, key, model);
+		}
 	}
 
