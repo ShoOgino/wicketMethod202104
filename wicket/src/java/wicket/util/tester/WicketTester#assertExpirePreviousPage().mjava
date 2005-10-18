@@ -1,5 +1,5 @@
 	/**
-	 * assert previous page expired.
+	 * Assert that the previous page expired.
 	 */
 	public final void assertExpirePreviousPage()
 	{
@@ -10,8 +10,9 @@
 			internalMapCacheField = pageMap.getClass().getDeclaredField("pages");
 			internalMapCacheField.setAccessible(true);
 			MostRecentlyUsedMap mru = (MostRecentlyUsedMap)internalMapCacheField.get(pageMap);
-			Assert.assertFalse("Previous Page '" + Classes.name(getPreviousRenderedPage().getClass())
-					+ "' not expire", mru.containsValue(getPreviousRenderedPage()));
+			Assert.assertFalse("Previous Page '"
+					+ Classes.name(getPreviousRenderedPage().getClass()) + "' not expire", mru
+					.containsValue(getPreviousRenderedPage()));
 		}
 		catch (SecurityException e)
 		{
