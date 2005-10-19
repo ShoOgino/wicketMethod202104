@@ -1,0 +1,36 @@
+	/**
+	 * @see Component#onComponentTag(ComponentTag)
+	 * @param tag
+	 *            the abstraction representing html tag of this component
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+
+		// must be attached to <input type="radio" .../> tag
+		checkComponentTag(tag, "input");
+		checkComponentTagAttribute(tag, "type", "radio");
+
+		RadioGroup group = (RadioGroup)findParent(RadioGroup.class);
+		if (group == null)
+		{
+			throw new RuntimeException(
+					"RadioChoice component ["
+							+ getPath()
+							+ "] cannot find a parent RadioGroup. All RadioChoice components must be a child of or below in the hierarchy of a RadioGroup component.");
+		}
+
+		// assign name and value
+		tag.put("name", group.getInputName());
+		tag.put("value", getPath());
+
+		// compare the model objects of the group and self, if the same add the
+		// checked attribute
+		if (Objects.equal(group.getModelObject(), getModelObject()))
+		{
+			tag.put("checked", "checked");
+		}
+
+		// Default handling for component tag
+		super.onComponentTag(tag);
+	}
+

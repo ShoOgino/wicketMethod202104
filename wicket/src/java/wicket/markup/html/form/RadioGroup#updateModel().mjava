@@ -1,0 +1,28 @@
+	/**
+	 * @see FormComponent#updateModel()
+	 */
+	public void updateModel()
+	{
+		/*
+		 * the input value contains the full path of the radio unless no choice
+		 * was selected in which case the input contains null
+		 */
+		String path = getInput();
+
+		if (path != null)
+		{
+			/*
+			 * single radio choice component path sans group path = relative
+			 * path from group to choice since we know the choice is child of
+			 * group
+			 */
+			path = path.substring(getPath().length() + 1);
+
+			// retrieve the selected single radio choice component
+			Radio choice = (Radio)get(path);
+
+			// assign the value of the group's model
+			setModelObject(choice.getModelObject());
+		}
+	}
+
