@@ -1,0 +1,37 @@
+	/**
+	 * @see Component#onComponentTag(ComponentTag)
+	 * @param tag
+	 *            the abstraction representing html tag of this component
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+
+		// must be attached to <input type="checkbox" .../> tag
+		checkComponentTag(tag, "input");
+		checkComponentTagAttribute(tag, "type", "checkbox");
+
+		CheckGroup group = (CheckGroup)findParent(CheckGroup.class);
+		if (group == null)
+		{
+			throw new WicketRuntimeException(
+					"Check component ["
+							+ getPath()
+							+ "] cannot find its parent CheckGroup. All Check components must be a child of or below in the hierarchy of a CheckGroup component.");
+		}
+
+		// assign name and value
+		tag.put("name", group.getInputName());
+		tag.put("value", getPath());
+
+		// check if the model collection of the group contains the model object.
+		// if it does check the check box.
+		Collection collection = (Collection)group.getModelObject();
+		if (collection.contains(getModelObject()))
+		{
+			tag.put("checked", "checked");
+		}
+
+		// Default handling for component tag
+		super.onComponentTag(tag);
+	}
+
