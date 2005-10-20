@@ -16,7 +16,7 @@
 	 * <p>
 	 * If all four steps are executed and content cannot be found to satisfy the
 	 * request, then false is returned.
-	 *
+	 * 
 	 * @return True if a Page should be rendered back to the user
 	 */
 	protected final boolean parseRequest()
@@ -24,7 +24,8 @@
 		// Try different methods of parsing and dispatching the request
 		if (callDispatchedComponentListener())
 		{
-			// if it is, we don't need to update the cluster, etc, and return false
+			// if it is, we don't need to update the cluster, etc, and return
+			// false
 		}
 		// it wasn't a dispatched listener, try other methods
 		else if (callComponentListener() || bookmarkablePage() || homePage())
@@ -34,23 +35,26 @@
 		}
 		// If it's not a resource reference or static content
 		else if (resourceReference() || staticContent())
-	    {
-			// if it is, we don't need to update the cluster, etc, and return false
-	    }
+		{
+			// if it is, we don't need to update the cluster, etc, and return
+			// false
+		}
 		else
 		{
-		    int rtn = doParseRequest();
-		    if (rtn == PARSE_REQUEST_RETURNING_PAGE)
-		    {
-		        return true;
-		    }
-		    else if (rtn == PARSE_REQUEST_RETURNING_STATIC_CONTENT)
-		    {
-				// if it is, we don't need to update the cluster, etc, and return false
-		    }
-		    else
-		    {
-				// not found... send 404 to client indicating that no resource was found
+			int rtn = doParseRequest();
+			if (rtn == PARSE_REQUEST_RETURNING_PAGE)
+			{
+				return true;
+			}
+			else if (rtn == PARSE_REQUEST_RETURNING_STATIC_CONTENT)
+			{
+				// if it is, we don't need to update the cluster, etc, and
+				// return false
+			}
+			else
+			{
+				// not found... send 404 to client indicating that no resource
+				// was found
 				// for the request uri
 				WebResponse webResponse = (WebResponse)getResponse();
 				HttpServletResponse httpServletResponse = webResponse.getHttpServletResponse();
@@ -60,8 +64,10 @@
 				}
 				catch (IOException e)
 				{
-					// that seems unlikely... anyway, log exception and forget about it
-					log.error("unable to send 404 for " + getRequest() + ", cause: " + e.getMessage(), e);
+					// that seems unlikely... anyway, log exception and forget
+					// about it
+					log.error("unable to send 404 for " + getRequest() + ", cause: "
+							+ e.getMessage(), e);
 				}
 			}
 		}

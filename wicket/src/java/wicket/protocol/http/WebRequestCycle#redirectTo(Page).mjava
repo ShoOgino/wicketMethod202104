@@ -1,10 +1,10 @@
 	/**
-	 * Redirects browser to the given page.
-	 * NOTE: Usually, you should never call this method directly, but work with
-	 * setResponsePage instead. This method is part of Wicket's internal
-	 * behaviour and should only be used when you want to circumvent the normal
-	 * framework behaviour and issue the redirect directly.
-	 *
+	 * Redirects browser to the given page. NOTE: Usually, you should never call
+	 * this method directly, but work with setResponsePage instead. This method
+	 * is part of Wicket's internal behaviour and should only be used when you
+	 * want to circumvent the normal framework behaviour and issue the redirect
+	 * directly.
+	 * 
 	 * @param page
 	 *            The page to redirect to
 	 * @throws ServletException
@@ -12,18 +12,19 @@
 	protected void redirectTo(final Page page) throws ServletException
 	{
 		String redirectUrl = null;
-		
+
 		// Check if use serverside response for client side redirects
 		ApplicationSettings settings = application.getSettings();
 		if ((settings.getRenderStrategy() == ApplicationSettings.REDIRECT_TO_BUFFER)
-		        && (application instanceof WebApplication))
+				&& (application instanceof WebApplication))
 		{
-		    // remember the current response
+			// remember the current response
 			final Response currentResponse = getResponse();
 			try
 			{
 				// create the redirect response.
-				// override the encodeURL so that it will use the real once encoding.
+				// override the encodeURL so that it will use the real once
+				// encoding.
 				final BufferedResponse redirectResponse = new BufferedResponse()
 				{
 					public String encodeURL(String url)
@@ -36,10 +37,12 @@
 				// redirect the response to the buffer
 				setResponse(redirectResponse);
 
-				// test if the invoker page was the same as the page that is going to be renderd
+				// test if the invoker page was the same as the page that is
+				// going to be renderd
 				if (getInvokePage() == getResponsePage())
 				{
-					// set it to null because it is already ended in the page.doRender()
+					// set it to null because it is already ended in the
+					// page.doRender()
 					setInvokePage(null);
 				}
 
@@ -53,24 +56,28 @@
 				if (responseRedirect != null)
 				{
 					// if the redirectResponse has another redirect url set
-					// then the rendering of this page caused a redirect to something else.
+					// then the rendering of this page caused a redirect to
+					// something else.
 					// set this redirect then.
 					redirectUrl = responseRedirect;
 				}
 				else if (redirectResponse.getContentLength() > 0)
 				{
-					// if no content is created then don't set it in the redirect buffer
-				    // (maybe access failed).
+					// if no content is created then don't set it in the
+					// redirect buffer
+					// (maybe access failed).
 					// Set the encoding of the response (what the browser wants)
 					redirectResponse.setCharacterEncoding(currentResponse.getCharacterEncoding());
 
-					// close it so that the reponse is fixed and encoded from here on.
+					// close it so that the reponse is fixed and encoded from
+					// here on.
 					redirectResponse.close();
 
 					redirectUrl = page.urlFor(page, IRedirectListener.class);
-          // TODO adouma: no Portlets support yet so typecasted for Servlet env.
-					((WebApplication)application).addRedirect(
-					        ((ServletWebRequest)getWebRequest()).getHttpServletRequest(), redirectUrl, redirectResponse);
+					// TODO adouma: no Portlets support yet so typecasted for
+					// Servlet env.
+					((WebApplication)application).addRedirect(((ServletWebRequest)getWebRequest())
+							.getHttpServletRequest(), redirectUrl, redirectResponse);
 				}
 			}
 			catch (RuntimeException ex)
@@ -84,7 +91,8 @@
 		else
 		{
 			session.touch(page);
-			// redirect page can touch its models already (via for example the constructors)
+			// redirect page can touch its models already (via for example the
+			// constructors)
 			page.internalEndRequest();
 		}
 

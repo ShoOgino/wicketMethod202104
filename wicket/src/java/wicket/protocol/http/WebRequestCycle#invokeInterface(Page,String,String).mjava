@@ -1,6 +1,6 @@
 	/**
 	 * Invokes a given interface on a component on a given page
-	 *
+	 * 
 	 * @param page
 	 *            The page where the component is
 	 * @param path
@@ -19,13 +19,15 @@
 			{
 				try
 				{
-					getWebResponse().getHttpServletResponse().sendError(HttpServletResponse.SC_FORBIDDEN,
-					        "Unable to execute this request");
+					getWebResponse().getHttpServletResponse().sendError(
+							HttpServletResponse.SC_FORBIDDEN, "Unable to execute this request");
 				}
 				catch (IOException ex)
 				{
-					// that seems unlikely... anyway, log exception and forget about it
-					log.error("unable to send 403 for " + getRequest() + ", cause: " + ex.getMessage(), ex);
+					// that seems unlikely... anyway, log exception and forget
+					// about it
+					log.error("unable to send 403 for " + getRequest() + ", cause: "
+							+ ex.getMessage(), ex);
 				}
 				return;
 			}
@@ -42,22 +44,22 @@
 					// and see if we have to redirect the render part by default
 					ApplicationSettings.RenderStrategy strategy = getSession().getApplication()
 							.getSettings().getRenderStrategy();
-					boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER
-							|| strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
+					boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
 
 					setRedirect(issueRedirect);
 				}
 
 				// Invoke interface on component
-				invokeInterface(component, method);
+				invokeInterface(component, method, page);
 
-				//TODO code smell: why is this commented code here?
-//				// Set form component values from cookies
-//				setFormComponentValuesFromCookies(page);
+				// TODO code smell: why is this commented code here?
+				// // Set form component values from cookies
+				// setFormComponentValuesFromCookies(page);
 			}
 			else
 			{
-				throw new WicketRuntimeException("Attempt to access unknown interface " + interfaceName);
+				throw new WicketRuntimeException("Attempt to access unknown interface "
+						+ interfaceName);
 			}
 		}
 		else
