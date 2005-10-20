@@ -1,10 +1,12 @@
 	/**
-	 * assert PageLink link to pageClass.
+	 * assert <code>PageLink</code> link to page class.
 	 * 
 	 * @param path
-	 * @param pageClass
+	 *            path to <code>PageLink</code> component
+	 * @param expectedPageClass
+	 *            expected page class to link
 	 */
-	public final void assertPageLink(String path, Class pageClass)
+	public void assertPageLink(String path, Class expectedPageClass)
 	{
 		PageLink pageLink = (PageLink)getComponentFromLastRenderedPage(path);
 		try
@@ -12,7 +14,7 @@
 			Field iPageLinkField = pageLink.getClass().getDeclaredField("pageLink");
 			iPageLinkField.setAccessible(true);
 			IPageLink iPageLink = (IPageLink)iPageLinkField.get(pageLink);
-			Assert.assertEquals(pageClass, iPageLink.getPageIdentity());
+			Assert.assertEquals(expectedPageClass, iPageLink.getPageIdentity());
 		}
 		catch (SecurityException e)
 		{

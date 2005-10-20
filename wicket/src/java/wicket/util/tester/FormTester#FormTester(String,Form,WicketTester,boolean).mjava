@@ -1,0 +1,35 @@
+	/**
+	 * @see WicketTester#newFormTester(String)
+	 * 
+	 * @param path
+	 *            path to form component
+	 * @param workingForm
+	 *            form component to be test
+	 * @param wicketTester
+	 *            wicketTester that create FormTester
+	 * @param fillBlankString
+	 *            specify whether fill all child FormComponents with blank
+	 *            String
+	 */
+	FormTester(final String path, final Form workingForm, final WicketTester wicketTester,
+			boolean fillBlankString)
+	{
+		this.path = path;
+		this.workingForm = workingForm;
+		this.wicketTester = wicketTester;
+		this.wicketTester.setupRequestAndResponse();
+
+		// TODO ingram: skip "disabled" formComponent
+		if (fillBlankString)
+		{
+			workingForm.visitFormComponents(new FormComponent.IVisitor()
+			{
+				public void formComponent(FormComponent formComponent)
+				{
+					setValue(formComponent.getInputName(), "");
+				}
+			});
+		}
+
+	}
+

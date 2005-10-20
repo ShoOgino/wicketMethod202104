@@ -1,8 +1,22 @@
 	/**
-	 * Renders a wicket WebPage that is defined in TestPageSource.
+	 * Render a page defined in <code>TestPageSource</code>. This usually
+	 * used when a page does not have default consturctor. For example, a
+	 * <code>ViewBook</code> page requires a <code>Book</code> instance:
+	 * 
+	 * <pre>
+	 * tester.startPage(new TestPageSource()
+	 * {
+	 * 	public Page getTestPage()
+	 * 	{
+	 * 		Book mockBook = new Book(&quot;myBookName&quot;);
+	 * 		return new ViewBook(mockBook);
+	 * 	}
+	 * });
+	 * </pre>
 	 * 
 	 * @param testPageSource
-	 * @return Page
+	 *            a page factory that creating test page instance
+	 * @return Page rendered page
 	 */
 	public final Page startPage(TestPageSource testPageSource)
 	{
