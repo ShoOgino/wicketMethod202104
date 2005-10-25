@@ -1,0 +1,35 @@
+	/**
+	 * Sets the maximum number of items to show per page. The current page will
+	 * also be set to zero
+	 * 
+	 * @param items
+	 */
+	protected final void internalSetItemsPerPage(int items)
+	{
+		if (items < 1)
+		{
+			throw new IllegalArgumentException("Argument [itemsPerPage] cannot be less then 1");
+		}
+
+		if (itemsPerPage != items)
+		{
+			addStateChange(new Change()
+			{
+				private static final long serialVersionUID = 1L;
+
+				final int old = itemsPerPage;
+
+				public void undo()
+				{
+					itemsPerPage = old;
+				}
+			});
+		}
+
+		itemsPerPage = items;
+
+		// because items per page can effect the total number of pages we always
+		// reset the current page back to zero
+		setCurrentPage(0);
+	}
+

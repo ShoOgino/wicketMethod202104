@@ -1,0 +1,18 @@
+	/**
+	 * Resort data provider according to this link
+	 * 
+	 * @return this
+	 */
+	public OrderByLink sort()
+	{
+		ISortableDataProvider dataProvider = (ISortableDataProvider)list.getModelObject();
+
+		// Add the ordering to the list.
+		list.modelChanging();
+		dataProvider.addSort(sortProperty);
+		list.setCurrentPage(0);
+		list.modelChanged();
+
+		return this;
+	}
+

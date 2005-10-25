@@ -1,0 +1,33 @@
+	/**
+	 * Sets number of columns
+	 * 
+	 * @param cols
+	 *            number of colums
+	 * @return this for chaining
+	 */
+	public GridView setColumns(int cols)
+	{
+		if (cols < 1)
+		{
+			throw new IllegalArgumentException();
+		}
+
+		if (columns != cols)
+		{
+			addStateChange(new Change()
+			{
+				private static final long serialVersionUID = 1L;
+
+				final int old = columns;
+
+				public void undo()
+				{
+					columns = old;
+				}
+			});
+			columns = cols;
+		}
+		updateItemsPerPage();
+		return this;
+	}
+

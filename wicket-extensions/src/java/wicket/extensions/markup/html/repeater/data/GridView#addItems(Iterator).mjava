@@ -1,0 +1,45 @@
+	protected void addItems(Iterator items)
+	{
+		if (items.hasNext())
+		{
+			final int cols = getColumns();
+
+			int row = 0;
+
+			// TODO do we really need this index?
+			int index = 0;
+
+			do
+			{
+				// build a row
+				Item rowItem = newRowItem(newChildId(), row);
+				OrderedRepeatingView rowView = new OrderedRepeatingView("cols");
+				rowItem.add(rowView);
+				add(rowItem);
+
+				// populate the row
+				for (int i = 0; i < cols; i++)
+				{
+					final Item cellItem;
+					if (items.hasNext())
+					{
+						cellItem = (Item)items.next();
+					}
+					else
+					{
+						cellItem = newEmptyItem(newChildId(), index);
+						populateEmptyItem(cellItem);
+					}
+					rowView.add(cellItem);
+					index++;
+				}
+
+				// increase row
+				row++;
+
+			}
+			while (items.hasNext());
+		}
+
+	}
+

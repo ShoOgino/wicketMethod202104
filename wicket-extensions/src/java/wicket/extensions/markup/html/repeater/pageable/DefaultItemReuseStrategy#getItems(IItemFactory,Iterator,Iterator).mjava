@@ -1,0 +1,33 @@
+	/**
+	 * @see wicket.extensions.markup.html.repeater.pageable.IItemReuseStrategy#getItems(wicket.extensions.markup.html.repeater.pageable.IItemFactory, java.util.Iterator, java.util.Iterator)
+	 */
+	public Iterator getItems(final IItemFactory factory, final Iterator newModels,
+			final Iterator existingItems)
+	{
+		return new Iterator()
+		{
+			private int index = 0;
+
+			public void remove()
+			{
+				throw new UnsupportedOperationException();
+			}
+
+			public boolean hasNext()
+			{
+				return newModels.hasNext();
+			}
+
+			public Object next()
+			{
+				final IModel model = (IModel)newModels.next();
+
+				Item item = factory.newItem(index, model);
+				index++;
+
+				return item;
+			}
+
+		};
+	}
+

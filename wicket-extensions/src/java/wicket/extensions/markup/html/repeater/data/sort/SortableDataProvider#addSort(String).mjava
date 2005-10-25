@@ -1,0 +1,17 @@
+	/**
+	 * @see ISortableDataProvider#addSort(String)
+	 */
+	public void addSort(String property)
+	{
+		SortParam sp = findByProperty(property);
+		if (sp != null)
+		{
+			getSortList().remove(sp);
+			addSort(new SortParam(property, !sp.isAscending()));
+		}
+		else
+		{
+			addSort(new SortParam(property, true));
+		}
+	}
+

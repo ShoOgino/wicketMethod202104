@@ -1,0 +1,22 @@
+	/**
+	 * @see wicket.markup.html.navigation.paging.IPageable#getCurrentPage()
+	 */
+	public final int getCurrentPage()
+	{
+		int page = currentPage;
+
+		/*
+		 * trim current page if its out of bounds this can happen if items are
+		 * added/deleted between requests
+		 */
+
+		if (page > getPageCount())
+		{
+			page = Math.max(page - 1, 0);
+			setCurrentPage(page);
+			return page;
+		}
+
+		return page;
+	}
+
