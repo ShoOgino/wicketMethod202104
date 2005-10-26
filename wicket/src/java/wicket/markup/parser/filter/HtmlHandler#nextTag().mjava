@@ -72,8 +72,9 @@
 					// it must be a real mismatch.
 					if (mismatch)
 					{
-						throw new MarkupException("Tag " + top.toUserDebugString()
-								+ " has a mismatched close tag at " + tag.toUserDebugString());
+						throw new ParseException("Tag " + top.toUserDebugString()
+								+ " has a mismatched close tag at " + tag.toUserDebugString(), 
+								top.getPos());
 					}
 				}
 
@@ -82,8 +83,8 @@
 			}
 			else
 			{
-				throw new MarkupException("Tag " + tag.toUserDebugString()
-						+ " does not have a matching open tag");
+				throw new ParseException("Tag " + tag.toUserDebugString()
+						+ " does not have a matching open tag", tag.getPos());
 			}
 		}
 		else if (tag.isOpenClose())

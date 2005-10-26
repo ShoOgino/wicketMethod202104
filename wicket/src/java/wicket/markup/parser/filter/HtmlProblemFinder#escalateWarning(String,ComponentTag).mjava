@@ -4,8 +4,9 @@
 	 * 
 	 * @param msg The message
 	 * @param tag The current tag
+	 * @throws ParseException
 	 */
-	private void escalateWarning(final String msg, final ComponentTag tag)
+	private void escalateWarning(final String msg, final ComponentTag tag) throws ParseException
 	{
 	    if (problemEscalation == ERR_LOG_WARN)
 	    {
@@ -21,7 +22,7 @@
 	    }
 	    else // if (problemEscalation == ERR_THROW_EXCEPTION)
 	    {
-	        throw new MarkupException(msg + tag.toUserDebugString());
+	        throw new ParseException(msg + tag.toUserDebugString(), tag.getPos());
 	    }
 	}
 
