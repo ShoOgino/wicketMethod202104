@@ -1,50 +1,52 @@
-    /**
-     * Create and process the request cycle using the current request and
-     * response information.
-     */
-    public void processRequestCycle()
-    {
-        WebRequestCycle cycle = new WebRequestCycle(wicketSession, wicketRequest,
-                wicketResponse);
-        
-        try
-        {
-        	cycle.request();
-        }
-        catch (ServletException ex)
-        {
-        	throw new WicketRuntimeException("Error while processing Wicket request cycle.", ex);
-        }
+	/**
+	 * Create and process the request cycle using the current request and
+	 * response information.
+	 */
+	public void processRequestCycle()
+	{
+		WebRequestCycle cycle = new WebRequestCycle(wicketSession, wicketRequest, wicketResponse);
 
-        previousRenderedPage = lastRenderedPage;
-        
-        // handle redirects which are usually managed by the browser transparently
-        final MockHttpServletResponse httpResponse = 
-            	(MockHttpServletResponse)cycle.getWebResponse().getHttpServletResponse();
-        
-        if (httpResponse.isRedirect())
-        {
-            generateLastRenderedPage(cycle);
-            
-            final MockHttpServletRequest httpRequest = 
-                	(MockHttpServletRequest)((ServletWebRequest)cycle.getWebRequest()).getHttpServletRequest();
-            
-            httpRequest.setRequestToRedirectString(httpResponse.getRedirectLocation());           
-            wicketSession = getSession(wicketRequest, true);
-            try
-            {
-            	new WebRequestCycle(wicketSession, wicketRequest, wicketResponse).request();
-            }
-            catch (ServletException ex)
-            {
-            	throw new WicketRuntimeException("Error while processing Wicket redirect request cycle.", ex);
-            }
-        }
-        generateLastRenderedPage(cycle);
-        
+		try
+		{
+			cycle.request();
+		}
+		catch (ServletException ex)
+		{
+			throw new WicketRuntimeException("Error while processing Wicket request cycle.", ex);
+		}
+
+		previousRenderedPage = lastRenderedPage;
+
+		// handle redirects which are usually managed by the browser
+		// transparently
+		final MockHttpServletResponse httpResponse = (MockHttpServletResponse)cycle
+				.getWebResponse().getHttpServletResponse();
+
+		if (httpResponse.isRedirect())
+		{
+			generateLastRenderedPage(cycle);
+
+			final MockHttpServletRequest httpRequest = (MockHttpServletRequest)((ServletWebRequest)cycle
+					.getWebRequest()).getHttpServletRequest();
+
+			httpRequest.setRequestToRedirectString(httpResponse.getRedirectLocation());
+			wicketSession = getSession(wicketRequest, true);
+			try
+			{
+				new WebRequestCycle(wicketSession, wicketRequest, wicketResponse).request();
+			}
+			catch (ServletException ex)
+			{
+				throw new WicketRuntimeException(
+						"Error while processing Wicket redirect request cycle.", ex);
+			}
+		}
+		generateLastRenderedPage(cycle);
+
 		if (getLastRenderedPage() instanceof ExceptionErrorPage)
 		{
-			throw new WicketRuntimeException(((ExceptionErrorPage)getLastRenderedPage()).getRootCause());
+			throw new WicketRuntimeException(((ExceptionErrorPage)getLastRenderedPage())
+					.getRootCause());
 		}
-    }
+	}
 
