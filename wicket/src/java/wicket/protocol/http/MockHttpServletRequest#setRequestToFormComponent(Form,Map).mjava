@@ -5,14 +5,14 @@
 	 * each of these components.
 	 * 
 	 * @param form
-	 *			  The for to send the request to
+	 *            The for to send the request to
 	 * @param values
-	 *			  The values for each of the form components
+	 *            The values for each of the form components
 	 */
 	public void setRequestToFormComponent(final Form form, final Map values)
 	{
 		setRequestToComponent(form);
-		
+
 		final Map valuesApplied = new HashMap();
 		form.visitChildren(new Component.IVisitor()
 		{
@@ -23,14 +23,15 @@
 					String value = (String)values.get(component);
 					if (value != null)
 					{
-						parameters.put(((FormComponent)component).getInputName(), values.get(component));
+						parameters.put(((FormComponent)component).getInputName(), values
+								.get(component));
 						valuesApplied.put(component.getId(), component);
 					}
 				}
 				return CONTINUE_TRAVERSAL;
 			}
 		});
-		
+
 		if (values.size() != valuesApplied.size())
 		{
 			Map diff = new HashMap();
@@ -40,8 +41,9 @@
 			{
 				diff.remove(iter.next());
 			}
-			log.error("Parameter mismatch: didn't find all components referenced in parameter 'values': " 
-					+ diff.keySet());
+			log
+					.error("Parameter mismatch: didn't find all components referenced in parameter 'values': "
+							+ diff.keySet());
 		}
 	}
 
