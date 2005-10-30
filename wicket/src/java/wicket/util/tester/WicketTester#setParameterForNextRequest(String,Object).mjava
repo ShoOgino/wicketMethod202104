@@ -1,0 +1,34 @@
+	/**
+	 * Sets a parameter for the component with the given path to be used with
+	 * the next request. NOTE: this method only works when a page was rendered
+	 * first.
+	 * 
+	 * @param componentPath
+	 *            path of the component
+	 * @param value
+	 *            the parameter value to set
+	 */
+	public void setParameterForNextRequest(String componentPath, Object value)
+	{
+		if (getLastRenderedPage() == null)
+		{
+			Assert.fail("before using this method, at least one page has to be rendered");
+		}
+
+		Component c = (Component)getComponentFromLastRenderedPage(componentPath);
+		if (c == null)
+		{
+			Assert.fail("component " + componentPath + " was not found");
+		}
+
+		if (c instanceof FormComponent)
+		{
+			getParametersForNextRequest().put(((FormComponent)c).getInputName(), value);
+		}
+		else
+		{
+			getParametersForNextRequest().put(c.getPath(), value);
+		}
+
+	}
+

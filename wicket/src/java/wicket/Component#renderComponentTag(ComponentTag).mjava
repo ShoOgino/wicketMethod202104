@@ -12,23 +12,23 @@
 		if (!(tag instanceof WicketTag) || !settings.getStripWicketTags())
 		{
 			// Apply attribute modifiers
-			if ((attributeModifiers != null) && (tag.getType() != XmlTag.CLOSE) 
+			if ((attributeModifiers != null) && (tag.getType() != XmlTag.CLOSE)
 					&& (getFlag(FLAG_IGNORE_ATTRIBUTE_MODIFIER) == false))
 			{
 				tag = tag.mutable();
-				
+
 				if (attributeModifiers instanceof AttributeModifier)
 				{
 					((AttributeModifier)attributeModifiers).replaceAttibuteValue(this, tag);
 				}
 				else if (attributeModifiers instanceof Object[])
 				{
-					Object[] array = (Object[])attributeModifiers ;
+					Object[] array = (Object[])attributeModifiers;
 					for (int i = 0; i < array.length; i++)
 					{
 						((AttributeModifier)array[i]).replaceAttibuteValue(this, tag);
 					}
-				}				
+				}
 			}
 
 			if (ajaxHandlers != null)

@@ -9,18 +9,28 @@
 	public final Component setModelObject(final Object object)
 	{
 		final IModel model = getModel();
-		if (model != null)
+
+		// check whether anything can be set at all
+		if (model == null)
 		{
-			if (!getComparator().compareValue(this, object))
-			{
-				modelChanging();
-				model.setObject(this, object);
-				modelChanged();
-			}
+			throw new IllegalStateException(
+					"Attempt to set model object on null model of component: "
+							+ getPageRelativePath());
 		}
-		else
+
+		// check authorization
+		if (!getApplication().getAuthorizationStrategy().allowEnabled(this))
 		{
-			throw new IllegalStateException("Attempt to set model object on null model of component: "  + getPageRelativePath());
+			throw new EnabledNotAllowedException(
+					"operation not allowed in the current authorization context");
+		}
+
+		// check whether this will result in a actual change
+		if (!getComparator().compareValue(this, object))
+		{
+			modelChanging();
+			model.setObject(this, object);
+			modelChanged();
 		}
 		return this;
 	}

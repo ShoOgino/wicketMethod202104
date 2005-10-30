@@ -1,0 +1,29 @@
+	/**
+	 * <p>
+	 * Gets whether a component is allowed to be enabled. If this method returns
+	 * true, a component may decide by itself (typically using it's enabled
+	 * property) whether it is enabled or not. If this method returns false, the
+	 * passed component is marked disabled, regardless it's enabled property.
+	 * </p>
+	 * <p>
+	 * When a component is not allowed to be enabled (in effect disabled through
+	 * the implementation of this interface), Wicket will try to prevent model
+	 * updates too. This is not completely fail safe, as constructs like:
+	 * 
+	 * <pre>
+	 * User u = (User)getModelObject();
+	 * u.setName(&quot;got you there!&quot;);
+	 * </pre>
+	 * 
+	 * can't be prevented. Indeed it can be argued that any model protection is
+	 * best dealt with in your model objects to be completely secured. Wicket
+	 * will catch all normal use though.
+	 * 
+	 * </p>
+	 * 
+	 * @param c
+	 *            the component to check for
+	 * @return whether a component is allowed to be enabled
+	 */
+	boolean allowEnabled(Component c);
+

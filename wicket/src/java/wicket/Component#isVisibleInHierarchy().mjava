@@ -8,11 +8,14 @@
 		Component component = this;
 		while (component != null)
 		{
-			if (!component.isVisible()) 
+			if (renderAllowed && component.isVisible())
+			{
+				component = component.getParent();
+			}
+			else
 			{
 				return false;
 			}
-			component = component.getParent();
 		}
 		return true;
 	}

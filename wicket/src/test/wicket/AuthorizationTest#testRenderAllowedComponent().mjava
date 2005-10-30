@@ -1,0 +1,19 @@
+	/**
+	 * Test that a component will be rendered when authorization is ok.
+	 * 
+	 * @throws Exception
+	 */
+	public void testRenderAllowedComponent() throws Exception
+	{
+		WicketTester app = new WicketTester()
+		{
+			public IAuthorizationStrategy getAuthorizationStrategy()
+			{
+				return new DummyAuthorizationStrategy();
+			}
+		};
+		app.startPage(AuthTestPage1.class);
+		app.assertRenderedPage(AuthTestPage1.class);
+		app.assertLabel("label", "wicked!");
+	}
+

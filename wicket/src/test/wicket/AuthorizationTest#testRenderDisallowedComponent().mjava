@@ -1,0 +1,29 @@
+	/**
+	 * Test that a component will be rendered when authorization is ok.
+	 * 
+	 * @throws Exception
+	 */
+	public void testRenderDisallowedComponent() throws Exception
+	{
+		WicketTester app = new WicketTester()
+		{
+			public IAuthorizationStrategy getAuthorizationStrategy()
+			{
+				return new DummyAuthorizationStrategy()
+				{
+					public boolean allowRender(Component c)
+					{
+						if (c instanceof Label)
+						{
+							return false;
+						}
+						return true;
+					}
+				};
+			}
+		};
+		app.startPage(AuthTestPage1.class);
+		app.assertRenderedPage(AuthTestPage1.class);
+		app.assertInvisible("label");
+	}
+

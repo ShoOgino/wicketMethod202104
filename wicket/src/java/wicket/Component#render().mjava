@@ -3,29 +3,30 @@
 	 */
 	public final void render()
 	{
-		// Determine if component is visible
-		if (!isVisible())
-		{
-			findMarkupStream().skipComponent();
-		}
-		else
+		// Determine if component is visible using it's authorization status
+		// and the isVisible property.
+		if (renderAllowed && isVisible())
 		{
 			// Rendering is beginning
 			if (log.isDebugEnabled())
 			{
 				log.debug("Begin render " + this);
 			}
-	
+
 			// Call implementation to render component
 			onRender();
-	
+
 			// Component has been rendered
 			rendered();
-	
+
 			if (log.isDebugEnabled())
 			{
 				log.debug("End render " + this);
 			}
+		}
+		else
+		{
+			findMarkupStream().skipComponent();
 		}
 	}
 
