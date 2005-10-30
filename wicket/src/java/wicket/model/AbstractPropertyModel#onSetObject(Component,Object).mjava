@@ -9,52 +9,44 @@
 	 */
 	protected void onSetObject(final Component component, Object object)
 	{
-		try
+		final String expression = ognlExpression(component);
+		if (Strings.isEmpty(expression))
 		{
-			final String expression = ognlExpression(component);
-			if (Strings.isEmpty(expression))
+			// No expression will cause OGNL to throw an exception. The OGNL
+			// expression to set the current object is "#this".
+			if (nestedModel instanceof IModel)
 			{
-				// No expression will cause OGNL to throw an exception. The OGNL
-				// expression to set the current object is "#this".
-				if (nestedModel instanceof IModel)
-				{
-					((IModel)nestedModel).setObject(null, object);
-				}
-				else
-				{
-					nestedModel = object;
-				}
+				((IModel)nestedModel).setObject(null, object);
 			}
 			else
 			{
-				// Get the real object
-				Object modelObject = modelObject(component);
-	
-				// If the object is a String
-				if (object instanceof String)
-				{
-					// and that String is not empty
-					final String string = (String)object;
-					if (!Strings.isEmpty(string))
-					{
-						// and there is a non-null property type for the component
-						final Class propertyType = propertyType(component);
-						if (propertyType != null)
-						{
-							// convert the String to the right type
-							object = component.getConverter().convert(string, propertyType);
-						}
-					}
-				}
-	
-				// Let OGNL set the value
-				prepareContext(component);
-				Ognl.setValue(ognlExpression(component), conversionContext, modelObject, object);
+				nestedModel = object;
 			}
 		}
-		catch (OgnlException e)
+		else
 		{
-			throw new WicketRuntimeException(e);
+			// Get the real object
+			Object modelObject = modelObject(component);
+
+			// If the object is a String
+			if (object instanceof String)
+			{
+				// and that String is not empty
+				final String string = (String)object;
+				if (!Strings.isEmpty(string))
+				{
+					// and there is a non-null property type for the component
+					final Class propertyType = propertyType(component);
+					if (propertyType != null)
+					{
+						// convert the String to the right type
+						object = component.getConverter().convert(string, propertyType);
+					}
+				}
+			}
+
+			// Let OGNL set the value
+			Objects.setValue(expression, modelObject, object, component.getConverter());
 		}
 	}
 

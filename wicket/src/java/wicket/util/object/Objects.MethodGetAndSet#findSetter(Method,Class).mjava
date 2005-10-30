@@ -1,0 +1,22 @@
+		private final static Method findSetter(Method getMethod, Class clz)
+		{
+			String name = getMethod.getName();
+			if (name.startsWith("get"))
+			{
+				name = "set" + name.substring(3);
+			}
+			else
+			{
+				name = "set" + name.substring(2);
+			}
+			try
+			{
+				return clz.getMethod(name, new Class[] { getMethod.getReturnType() });
+			}
+			catch (Exception ex)
+			{
+				// TODO LOG
+			}
+			return null;
+		}
+
