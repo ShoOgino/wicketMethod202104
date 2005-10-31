@@ -1,42 +1,48 @@
-      /**
-       * Returns the constant from the NumericTypes interface that best expresses the type
-       * of an operation, which can be either numeric or not, on the two given types.
-       *
-       * @param t1 type of one argument to an operator
-       * @param t2 type of the other argument
-       * @param canBeNonNumeric whether the operator can be interpreted as non-numeric
-       * @return the appropriate constant from the NumericTypes interface
-       */
-    public static int getNumericType( int t1, int t2, boolean canBeNonNumeric )
-    {
-        if ( t1 == t2 )
-            return t1;
+	/**
+	 * Returns the constant from the NumericTypes interface that best expresses
+	 * the type of an operation, which can be either numeric or not, on the two
+	 * given types.
+	 * 
+	 * @param t1
+	 *            type of one argument to an operator
+	 * @param t2
+	 *            type of the other argument
+	 * @param canBeNonNumeric
+	 *            whether the operator can be interpreted as non-numeric
+	 * @return the appropriate constant from the NumericTypes interface
+	 */
+	public static int getNumericType(int t1, int t2, boolean canBeNonNumeric)
+	{
+		if (t1 == t2)
+			return t1;
 
-        if ( canBeNonNumeric && (t1 == NONNUMERIC || t2 == NONNUMERIC || t1 == CHAR || t2 == CHAR) )
-            return NONNUMERIC;
+		if (canBeNonNumeric && (t1 == NONNUMERIC || t2 == NONNUMERIC || t1 == CHAR || t2 == CHAR))
+			return NONNUMERIC;
 
-        if ( t1 == NONNUMERIC ) t1 = DOUBLE;    // Try to interpret strings as doubles...
-        if ( t2 == NONNUMERIC ) t2 = DOUBLE;    // Try to interpret strings as doubles...
+		if (t1 == NONNUMERIC)
+			t1 = DOUBLE; // Try to interpret strings as doubles...
+		if (t2 == NONNUMERIC)
+			t2 = DOUBLE; // Try to interpret strings as doubles...
 
-        if ( t1 >= MIN_REAL_TYPE )
-          {
-            if ( t2 >= MIN_REAL_TYPE )
-                return Math.max(t1,t2);
-            if ( t2 < INT )
-                return t1;
-            if ( t2 == BIGINT )
-                return BIGDEC;
-            return Math.max(DOUBLE,t1);
-          }
-        else if ( t2 >= MIN_REAL_TYPE )
-          {
-            if ( t1 < INT )
-                return t2;
-            if ( t1 == BIGINT )
-                return BIGDEC;
-            return Math.max(DOUBLE,t2);
-          }
-        else
-            return Math.max(t1,t2);
-    }
+		if (t1 >= MIN_REAL_TYPE)
+		{
+			if (t2 >= MIN_REAL_TYPE)
+				return Math.max(t1, t2);
+			if (t2 < INT)
+				return t1;
+			if (t2 == BIGINT)
+				return BIGDEC;
+			return Math.max(DOUBLE, t1);
+		}
+		else if (t2 >= MIN_REAL_TYPE)
+		{
+			if (t1 < INT)
+				return t2;
+			if (t1 == BIGINT)
+				return BIGDEC;
+			return Math.max(DOUBLE, t2);
+		}
+		else
+			return Math.max(t1, t2);
+	}
 

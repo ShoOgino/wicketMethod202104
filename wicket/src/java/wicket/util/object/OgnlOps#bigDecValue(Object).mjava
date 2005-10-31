@@ -1,25 +1,27 @@
-      /**
-       * Evaluates the given object as a BigDecimal.
-       *
-       * @param value an object to interpret as a BigDecimal
-       * @return the BigDecimal value implied by the given object
-       * @throws NumberFormatException if the given object can't be understood as a BigDecimal
-       */
-    public static BigDecimal bigDecValue( Object value ) throws NumberFormatException
-    {
-        if (value == null)
-            return BigDecimal.valueOf(0L);
-        Class c = value.getClass();
-        if ( c == BigDecimal.class )
-            return (BigDecimal)value;
-        if ( c == BigInteger.class )
-            return new BigDecimal( (BigInteger)value );
-        if ( c.getSuperclass() == Number.class )
-            return new BigDecimal( ((Number)value).doubleValue() );
-        if ( c == Boolean.class )
-            return BigDecimal.valueOf( ((Boolean)value).booleanValue()? 1 : 0 );
-        if ( c == Character.class )
-            return BigDecimal.valueOf( ((Character)value).charValue() );
-        return new BigDecimal( stringValue(value, true) );
-    }
+	/**
+	 * Evaluates the given object as a BigDecimal.
+	 * 
+	 * @param value
+	 *            an object to interpret as a BigDecimal
+	 * @return the BigDecimal value implied by the given object
+	 * @throws NumberFormatException
+	 *             if the given object can't be understood as a BigDecimal
+	 */
+	public static BigDecimal bigDecValue(Object value) throws NumberFormatException
+	{
+		if (value == null)
+			return BigDecimal.valueOf(0L);
+		Class c = value.getClass();
+		if (c == BigDecimal.class)
+			return (BigDecimal)value;
+		if (c == BigInteger.class)
+			return new BigDecimal((BigInteger)value);
+		if (c.getSuperclass() == Number.class)
+			return new BigDecimal(((Number)value).doubleValue());
+		if (c == Boolean.class)
+			return BigDecimal.valueOf(((Boolean)value).booleanValue() ? 1 : 0);
+		if (c == Character.class)
+			return BigDecimal.valueOf(((Character)value).charValue());
+		return new BigDecimal(stringValue(value, true));
+	}
 

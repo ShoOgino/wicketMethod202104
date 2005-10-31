@@ -1,35 +1,50 @@
-    /**
-     * Returns true if object1 is equal to object2 in either the
-     * sense that they are the same object or, if both are non-null
-     * if they are equal in the <CODE>equals()</CODE> sense.
-     *
-     * @param v1 First object to compare
-     * @param v2 Second object to compare
-     *
-     * @return true if v1 == v2
-     */
-    public static boolean isEqual(Object object1, Object object2)
-    {
-        boolean     result = false;
+	/**
+	 * Returns true if object1 is equal to object2 in either the sense that they
+	 * are the same object or, if both are non-null if they are equal in the
+	 * <CODE>equals()</CODE> sense.
+	 * 
+	 * @param object1
+	 *            First object to compare
+	 * @param object2
+	 *            Second object to compare
+	 * 
+	 * @return true if v1 == v2
+	 */
+	public static boolean isEqual(Object object1, Object object2)
+	{
+		boolean result = false;
 
-      	if (object1 == object2) {
-      	    result = true;
-      	} else {
-          	if ((object1 != null) && object1.getClass().isArray()) {
-          	    if ((object2 != null) && object2.getClass().isArray() && (object2.getClass() == object1.getClass())) {
-          	        result = (Array.getLength(object1) == Array.getLength(object2));
-                    if (result) {
-                        for (int i = 0, icount = Array.getLength(object1); result && (i < icount); i++) {
-                            result = isEqual(Array.get(object1, i), Array.get(object2, i));
-                        }
-                    }
-          	    }
-          	} else {
-          	    // Check for converted equivalence first, then equals() equivalence
-    	        result = (object1 != null) && (object2 != null) &&
-    	                 ((compareWithConversion(object1, object2) == 0) || object1.equals(object2));
-    	    }
-    	}
-        return result;
-    }
+		if (object1 == object2)
+		{
+			result = true;
+		}
+		else
+		{
+			if ((object1 != null) && object1.getClass().isArray())
+			{
+				if ((object2 != null) && object2.getClass().isArray()
+						&& (object2.getClass() == object1.getClass()))
+				{
+					result = (Array.getLength(object1) == Array.getLength(object2));
+					if (result)
+					{
+						for (int i = 0, icount = Array.getLength(object1); result && (i < icount); i++)
+						{
+							result = isEqual(Array.get(object1, i), Array.get(object2, i));
+						}
+					}
+				}
+			}
+			else
+			{
+				// Check for converted equivalence first, then equals()
+				// equivalence
+				result = (object1 != null)
+						&& (object2 != null)
+						&& ((compareWithConversion(object1, object2) == 0) || object1
+								.equals(object2));
+			}
+		}
+		return result;
+	}
 

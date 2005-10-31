@@ -1,42 +1,48 @@
-      /**
-       * Returns a new Number object of an appropriate type to hold the given integer
-       * value.  The type of the returned object is consistent with the given type
-       * argument, which is a constant from the NumericTypes interface.
-       *
-       * @param type    the nominal numeric type of the result, a constant from the NumericTypes interface
-       * @param value   the integer value to convert to a Number object
-       * @return        a Number object with the given value, of type implied by the type argument
-       */
-    public static Number newInteger( int type, long value )
-    {
-        switch ( type )
-          {
-            case BOOL:
-            case CHAR:
-            case INT:
-                return new Integer( (int)value );
+	/**
+	 * Returns a new Number object of an appropriate type to hold the given
+	 * integer value. The type of the returned object is consistent with the
+	 * given type argument, which is a constant from the NumericTypes interface.
+	 * 
+	 * @param type
+	 *            the nominal numeric type of the result, a constant from the
+	 *            NumericTypes interface
+	 * @param value
+	 *            the integer value to convert to a Number object
+	 * @return a Number object with the given value, of type implied by the type
+	 *         argument
+	 */
+	public static Number newInteger(int type, long value)
+	{
+		switch (type)
+		{
+			case BOOL :
+			case CHAR :
+			case INT :
+				return new Integer((int)value);
 
-            case FLOAT:
-                if ( (long)(float)value == value ) {
-                    return new Float( (float)value );
-                }
-                // else fall through:
-            case DOUBLE:
-                if ( (long)(double)value == value ) {
-                    return new Double( (double)value );
-                }
-                // else fall through:
-            case LONG:
-                return new Long( value );
+			case FLOAT :
+				if ((long)(float)value == value)
+				{
+					return new Float((float)value);
+				}
+			// else fall through:
+			case DOUBLE :
+				if ((long)(double)value == value)
+				{
+					return new Double((double)value);
+				}
+			// else fall through:
+			case LONG :
+				return new Long(value);
 
-            case BYTE:
-                return new Byte( (byte)value );
+			case BYTE :
+				return new Byte((byte)value);
 
-            case SHORT:
-                return new Short( (short)value );
+			case SHORT :
+				return new Short((short)value);
 
-            default:
-                return BigInteger.valueOf( value );
-          }
-    }
+			default :
+				return BigInteger.valueOf(value);
+		}
+	}
 
