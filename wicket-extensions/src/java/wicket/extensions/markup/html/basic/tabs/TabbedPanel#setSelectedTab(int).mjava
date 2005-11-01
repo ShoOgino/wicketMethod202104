@@ -1,0 +1,33 @@
+	/**
+	 * sets the selected tab
+	 * 
+	 * @param index
+	 *            index of the tab to select
+	 * 
+	 */
+	public final void setSelectedTab(int index)
+	{
+		if (getSelectedTab() != index)
+		{
+
+			if (index < 0 || index >= tabs.size())
+			{
+				throw new IndexOutOfBoundsException();
+			}
+
+			setModelObject(new Integer(index));
+
+			Panel panel = ((ITab)tabs.get(index)).getPanel(TAB_PANEL_ID);
+
+			if (get(TAB_PANEL_ID) == null)
+			{
+				add(panel);
+			}
+			else
+			{
+				replace(panel);
+			}
+
+		}
+	}
+
