@@ -1,5 +1,6 @@
 	/**
-	 * @see wicket.Component#onComponentTagBody(wicket.markup.MarkupStream, wicket.markup.ComponentTag)
+	 * @see wicket.Component#onComponentTagBody(wicket.markup.MarkupStream,
+	 *      wicket.markup.ComponentTag)
 	 */
 	protected final void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
@@ -11,7 +12,7 @@
 		final List choices = getChoices();
 
 		// Loop through choices
-		for (int index=0;index<choices.size();index++)
+		for (int index = 0; index < choices.size(); index++)
 		{
 			// Get next choice
 			final Object choice = choices.get(index);
@@ -29,15 +30,18 @@
 				buffer.append(getPrefix());
 
 				String id = getChoiceRenderer().getIdValue(choice, index);
+				final String idAttr = getInputName() + "_" + id;
+
 				// Add checkbox element
 				buffer.append("<input name=\"" + getInputName() + "\"" + " type=\"checkbox\""
-						+ (isSelected(choice,index) ? " checked=\"checked\"" : "") + " value=\"" + id
-						+ "\">");
+						+ (isSelected(choice, index) ? " checked=\"checked\"" : "") + " value=\""
+						+ id + "\" id=\"" + idAttr + "\"/>");
 
 				// Add label for checkbox
 				String display = getLocalizer().getString(getId() + "." + label, this, label);
 				String escaped = Strings.escapeMarkup(display, false, true);
-				buffer.append(escaped);
+
+				buffer.append("<label for=\"" + idAttr + "\">").append(escaped).append("</label>");
 
 				// Append option suffix
 				buffer.append(getSuffix());
