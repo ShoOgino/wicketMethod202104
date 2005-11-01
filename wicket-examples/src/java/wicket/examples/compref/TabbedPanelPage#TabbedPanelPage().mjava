@@ -1,0 +1,48 @@
+	/**
+	 * Constructor
+	 */
+	public TabbedPanelPage()
+	{
+
+		// create links used to switch between css variations
+		addCssSwitchingLinks();
+
+		// create a list of ITab objects used to feed the tabbed panel
+		List tabs = new ArrayList();
+		tabs.add(new AbstractTab(new Model("first tab"))
+		{
+
+			public Panel getPanel(String panelId)
+			{
+				return new TabPanel1(panelId);
+			}
+
+		});
+
+		tabs.add(new AbstractTab(new Model("second tab"))
+		{
+
+			public Panel getPanel(String panelId)
+			{
+				return new TabPanel2(panelId);
+			}
+
+		});
+
+		tabs.add(new AbstractTab(new Model("third tab"))
+		{
+
+			public Panel getPanel(String panelId)
+			{
+				return new TabPanel3(panelId);
+			}
+
+		});
+
+		// add the new tabbed panel, attribute modifier only used to switch
+		// between different css variations
+		add(new TabbedPanel("tabs", tabs).add(new AttributeModifier("class", true,
+				new PropertyModel(this, "var"))));
+
+	}
+
