@@ -11,6 +11,19 @@
 	 */
 	public final void renderComponent(final MarkupStream markupStream)
 	{
+		// Allow the component to be re-rendered without a page. Partial
+		// re-rendering is a requirement of AJAX.
+		if (this.markupStreamPosition < 0)
+		{
+			// Remember the position while rendering the component the first time
+			this.markupStreamPosition = markupStream.getCurrentIndex();
+		}
+		else
+		{
+			// Re-set the markups index to the beginning of the component tag
+			markupStream.setCurrentIndex(this.markupStreamPosition);
+		}
+
 		// Get mutable copy of next tag
 		final ComponentTag tag = markupStream.getTag().mutable();
 
