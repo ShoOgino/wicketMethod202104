@@ -19,14 +19,24 @@
 			final Locale locale, final String style)
 	{
 		// Locate previously loaded resources from the cache
-		final String id = createCacheId(style, locale);
-		ValueMap strings = (ValueMap)resourceCache.get(id);
+		final String id = createCacheId(clazz, style, locale);
+		ValueMap strings = getResourceCache(id);
 		if (strings == null)
 		{
 			// No resources previously loaded, attempt to load them
-			strings = loadResources(style, locale, id);
+			strings = loadResources(clazz, style, locale, id);
 		}
 
-		return strings.getString(key);
+		if (log.isDebugEnabled())
+		{
+			log.debug("Try to load resource from: " + id + "; key: " + key);
+		}
+		String value = strings.getString(key);
+		if (value != null && log.isDebugEnabled())
+		{
+			log.debug("Found resource from: " + id + "; key: " + key);
+		}
+		
+		return value;
 	}
 
