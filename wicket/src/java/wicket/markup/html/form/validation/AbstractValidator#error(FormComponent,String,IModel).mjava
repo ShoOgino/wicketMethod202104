@@ -1,26 +1,41 @@
 	/**
-	 * Returns a formatted validation error message for a given component. The error
-	 * message is retrieved from a message bundle associated with the page in which this
-	 * validator is contained using the given resource key. The resourceModel is used for
-	 * variable interpolation.
-	 * @param formComponent form component
-	 * @param resourceKey The resource key to use
-	 * @param resourceModel The model for variable interpolation
+	 * Returns a formatted validation error message for a given component. The
+	 * error message is retrieved from a message bundle associated with the page
+	 * in which this validator is contained using the given resource key. The
+	 * resourceModel is used for variable interpolation.
+	 * 
+	 * @param formComponent
+	 *            form component
+	 * @param resourceKey
+	 *            The resource key to use
+	 * @param resourceModel
+	 *            The model for variable interpolation
 	 */
 	public void error(final FormComponent formComponent, final String resourceKey,
 			final IModel resourceModel)
 	{
 		// Return formatted error message
 		Localizer localizer = formComponent.getLocalizer();
-		
-		// TODO I didn't find a simpler way to getString() throw a MissingResourceException
-		// without changes the application settings. I guess this is something to change in
+
+		// TODO I didn't find a simpler way to getString() throw a
+		// MissingResourceException
+		// without changes the application settings. I guess this is something
+		// to change in
 		// 1.2 or 1.3
-		String message = localizer.getString(resourceKey, formComponent.getParent(), resourceModel, "");
+		String message = localizer.getString(resourceKey, formComponent.getParent(), resourceModel,
+				"");
 		if ((message == null) || (message.length() == 0))
 		{
-			throw new MissingResourceException("Unable to find resource: " + resourceKey, 
-					formComponent.getClass().getName(), resourceKey);
+			if (formComponent.getApplicationSettings().getThrowExceptionOnMissingResource())
+			{
+				throw new MissingResourceException("Unable to find resource: " + resourceKey,
+						formComponent.getClass().getName(), resourceKey);
+			}
+			else
+			// TODO quick fix for now to get settings working again
+			{
+				message = "[Warning: String resource for '" + resourceKey + "' not found]";
+			}
 		}
 		formComponent.error(message);
 	}
