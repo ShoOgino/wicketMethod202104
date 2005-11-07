@@ -1,5 +1,5 @@
 	/**
-	 * @see wicket.markup.html.ajax.IAjaxListener#onRequest()
+	 * @see wicket.markup.html.ajax.IBehaviourListener#onRequest()
 	 */
 	public void onRequest()
 	{
@@ -12,13 +12,13 @@
 		}
 
 		int IdAsInt = Integer.parseInt(id);
-		AjaxHandler ajaxHandler = (AjaxHandler)ajaxHandlers.get(IdAsInt);
+		IBehaviourListener behaviourListener = (IBehaviourListener)behaviours.get(IdAsInt);
 
-		if (ajaxHandler == null)
+		if (behaviourListener == null)
 		{
-			throw new WicketRuntimeException("no handler found with id " + id);
+			throw new WicketRuntimeException("no behaviour listener found with id " + id);
 		}
 
-		ajaxHandler.onRequest();
+		behaviourListener.onRequest();
 	}
 

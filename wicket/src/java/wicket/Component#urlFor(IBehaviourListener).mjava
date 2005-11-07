@@ -1,0 +1,27 @@
+	/**
+	 * Gets the url for the provided behaviour listener.
+	 * 
+	 * @param behaviourListener
+	 *            the behaviour listener to get the url for
+	 * @return The URL
+	 * @see Page#urlFor(Component, Class)
+	 */
+	public final String urlFor(final IBehaviourListener behaviourListener)
+	{
+		if (behaviourListener == null)
+		{
+			throw new NullPointerException("argument behaviourListener must be not null");
+		}
+
+		List behaviourListeners = getBehaviours(IBehaviourListener.class);
+
+		int index = behaviourListeners.indexOf(behaviourListener);
+		if (index == -1)
+		{
+			throw new IllegalArgumentException("behaviourListener " + behaviourListener
+					+ " was not registered with this component");
+		}
+
+		return urlFor(IBehaviourListener.class) + "&id=" + index;
+	}
+

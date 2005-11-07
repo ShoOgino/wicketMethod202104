@@ -1,0 +1,28 @@
+	/**
+	 * Adds an behaviour modifier to the component.
+	 * 
+	 * @param behaviour
+	 *            The behaviour modifier to be added
+	 * @return this (to allow method call chaining)
+	 */
+	public final Component add(final IBehaviour behaviour)
+	{
+		if (behaviour == null)
+		{
+			throw new NullPointerException("argument may not be null");
+		}
+
+		// Lazy create
+		if (behaviours == null)
+		{
+			behaviours = new ArrayList(1);
+		}
+
+		behaviours.add(behaviour);
+
+		// Give handler the opportunity to bind this component
+		behaviour.bind(this);
+		return this;
+
+	}
+

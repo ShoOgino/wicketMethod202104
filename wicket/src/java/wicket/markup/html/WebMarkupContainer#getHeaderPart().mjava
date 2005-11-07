@@ -19,46 +19,50 @@
 		}
 
 		// Lazy scan the markup for a header component tag, if necessary
-		// 'index' will be where <wicket:head> resides in the markup 
+		// 'index' will be where <wicket:head> resides in the markup
 		int index = Markup.NO_HEADER_FOUND;
 		if (associatedMarkupStream.getHeaderIndex() != Markup.NO_HEADER_FOUND)
 		{
-		    // The markup has been scanned already. Get the index where the 
-		    // header tag resides from the markup
-		    index = associatedMarkupStream.getHeaderIndex();
+			// The markup has been scanned already. Get the index where the
+			// header tag resides from the markup
+			index = associatedMarkupStream.getHeaderIndex();
 		}
-		
+
 		// Ok, finished scanning the markup for header tag
 		// If markup contains a header section, handle it now.
 		if (index != Markup.NO_HEADER_FOUND)
 		{
-		    // Position markup stream at beginning of header tag
-		    associatedMarkupStream.setCurrentIndex(index);
-		    
-		    // Create a HtmlHeaderContainer for the header tag found and
-		    // add all components from addToHeader list
+			// Position markup stream at beginning of header tag
+			associatedMarkupStream.setCurrentIndex(index);
+
+			// Create a HtmlHeaderContainer for the header tag found and
+			// add all components from addToHeader list
 			final MarkupElement element = associatedMarkupStream.get();
 			if (element instanceof WicketTag)
 			{
 				final WicketTag wTag = (WicketTag)element;
 				if ((wTag.isHeadTag() == true) && (wTag.getNamespace() != null))
 				{
-				    // found <wicket:head>
-				    // create a unique id for the HtmlHeaderContainer to be created
-					final String headerId = "_" + Classes.name(this.getClass())+ this.getVariation() + "Header";
-					
-					// Create the header container and associate the markup with it
-					WebMarkupContainer headerContainer = new TransparentWebMarkupContainer(headerId, this);
+					// found <wicket:head>
+					// create a unique id for the HtmlHeaderContainer to be
+					// created
+					final String headerId = "_" + Classes.name(this.getClass())
+							+ this.getVariation() + "Header";
+
+					// Create the header container and associate the markup with
+					// it
+					WebMarkupContainer headerContainer = new TransparentWebMarkupContainer(
+							headerId, this);
 					headerContainer.setMarkupStream(associatedMarkupStream);
 					headerContainer.setRenderBodyOnly(true);
-					
+
 					// The container does have a header component
 					return headerContainer;
 				}
 			}
 		}
-		
-		// Though the container does have markup, it does not have a 
+
+		// Though the container does have markup, it does not have a
 		// <wicket:head> region.
 		return null;
 	}
