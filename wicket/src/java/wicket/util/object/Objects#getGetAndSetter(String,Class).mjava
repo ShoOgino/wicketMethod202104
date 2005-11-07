@@ -11,6 +11,7 @@
 		if (getAndSetter == null)
 		{
 			Method method = null;
+			Field field = null;
 			if(exp.startsWith("["))
 			{
 				// if expression begins with [ skip method finding and use it as a key/index lookup on a map.
@@ -24,8 +25,13 @@
 			else 
 			{
 				method = findGetter(clz, exp);
+				if(method == null)
+				{
+					// find field.
+					field = findField(clz,exp);
+				}
 			}
-			if (method == null)
+			if (method == null && field == null)
 			{
 				if (List.class.isAssignableFrom(clz))
 				{
@@ -50,22 +56,7 @@
 				}
 				else if (Map.class.isAssignableFrom(clz))
 				{
-					if(exp.endsWith("()"))
-					{
-						method = findMethod(clz, exp );
-						if(method != null)
-						{
-							getAndSetter = new MethodGetAndSet(method);
-						}
-						else
-						{
-							throw new WicketRuntimeException("Method " + exp + " not found on class " + clz);
-						}
-					}
-					else
-					{
-						getAndSetter = new MapGetSet(exp);
-					}
+					getAndSetter = new MapGetSet(exp);
 				}
 				else if (clz.isArray())
 				{
@@ -126,6 +117,10 @@
 						getAndSetter = new MethodGetAndSet(method);
 					}
 				}
+			}
+			else if(field != null)
+			{
+				getAndSetter = new FieldGetAndSetter(field);
 			}
 			else
 			{
