@@ -5,19 +5,10 @@
 	{
 		if (requestCycleFactory == null)
 		{
-			this.requestCycleFactory = new IRequestCycleFactory()
-			{
-				private static final long serialVersionUID = 1L;
-
-				public RequestCycle newRequestCycle(Session session, Request request,
-						Response response)
-				{
-					// Respond to request
-					return new WebRequestCycle((WebSession)session, (WebRequest)request,
-							(WebResponse)response);
-				}
-			};
+			this.requestCycleFactory = 
+				((WebApplication)getApplication()).getDefaultRequestCycleFactory();	
 		}
-		return requestCycleFactory;
+		
+		return this.getRequestCycleFactory();
 	}
 
