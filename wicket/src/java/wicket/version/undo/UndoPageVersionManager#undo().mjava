@@ -7,7 +7,14 @@
 	private boolean undo()
 	{
 		// Get the change list that was applied to the previous version
-		final Integer key = new Integer(getCurrentVersionNumber() - 1);
+		int currentVersionNumber = getCurrentVersionNumber();
+		final Integer key = new Integer(currentVersionNumber - 1);
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("UNDO: rollback " + page + " to version " + currentVersionNumber);
+		}
+
 		final ChangeList changeList = (ChangeList)appliedChangeListForVersionNumber.get(key);
 		if (changeList == null)
 		{

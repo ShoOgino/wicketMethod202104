@@ -4,6 +4,11 @@
 	 */
 	ModelChange(final Component component)
 	{
+		if (component == null)
+		{
+			throw new IllegalArgumentException("argument component must be not null");
+		}
+
 		// Save component
 		this.component = component;
 
@@ -51,6 +56,12 @@
 			{
 				originalModel = model;
 			}
+		}
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("RECORD MODEL CHANGE: changed model of " + component.getPath() + "@"
+					+ component.hashCode());
 		}
 	}
 
