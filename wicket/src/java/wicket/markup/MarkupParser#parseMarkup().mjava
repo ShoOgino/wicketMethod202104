@@ -40,7 +40,7 @@
 				}
 	
 	            // Add tag to list?
-	            if (add || (autoAddList.size() > 0))
+	            if (add || (autoAddList.size() > 0) || tag.isModified())
 	            {
 	                final CharSequence text =
 	                    	xmlParser.getInputFromPositionMarker(tag.getPos());
@@ -88,6 +88,11 @@
 	                	}
 	                }
 	                
+	                xmlParser.setPositionMarker();
+	            }
+	            else if (tag.isModified())
+	            {
+                    list.add(new RawMarkup(tag.toString()));
 	                xmlParser.setPositionMarker();
 	            }
 	        }
