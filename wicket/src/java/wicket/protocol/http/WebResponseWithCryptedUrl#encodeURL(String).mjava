@@ -17,10 +17,10 @@
 		    {
 		        // The url's path
 			    String urlPrefix = url.substring(0, pos);
-			    
+
 			    // Extract the querystring 
 			    String queryString = url.substring(pos + 1);
-			    
+
 			    // if the querystring starts with a parameter like 
 			    // "x=", than don#t change the querystring as it 
 			    // has been encoded already
@@ -31,18 +31,17 @@
 			        // make the querystring shorter first without loosing
 			        // information.
 				    queryString = shortenUrl(queryString);
-				    
+
 				    // encrypt the query string
-					
 					final String encryptedQueryString = urlCrypt.encrypt(queryString);
-					
+
 					// build the new complete url
 					final String encryptedUrl = urlPrefix + "?x=" + escapeUrl(encryptedQueryString);
 					return encryptedUrl;
 			    }
 		    }
 		}
-		
+
 		// we didn't change anything
 		return url;
 	}
