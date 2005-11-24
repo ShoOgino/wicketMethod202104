@@ -13,23 +13,35 @@
 	{
 		if (handleMultiPart())
 		{
-			// First, see if the processing was triggered by a Wicket button
-			final Button submittingButton = findSubmittingButton();
 
-			// When processing was triggered by a Wicket button and that button
-			// indicates it wants to be called immediately (without processing),
-			// call Button.onSubmit() right away.
-			if (submittingButton != null && !submittingButton.getDefaultFormProcessing())
+			// Tells FormComponents that a new user input has come
+			registerNewUserInput();
+			
+			String url = getRequest().getParameter(getHiddenFieldId());
+			if(!Strings.isEmpty(url))
 			{
-				submittingButton.onSubmit();
+				new WebEventProcessorStrategy().dispatchEvent(getPage(), url);
 			}
 			else
 			{
-				// process the form for this request
-				if (process())
+				// First, see if the processing was triggered by a Wicket button
+				final Button submittingButton = findSubmittingButton();
+	
+				// When processing was triggered by a Wicket button and that button
+				// indicates it wants to be called immediately (without processing),
+				// call Button.onSubmit() right away.
+				if (submittingButton != null && !submittingButton.getDefaultFormProcessing())
 				{
-					// let clients handle further processing
-					delegateSubmit(submittingButton);
+					submittingButton.onSubmit();
+				}
+				else
+				{
+					// process the form for this request
+					if (process())
+					{
+						// let clients handle further processing
+						delegateSubmit(submittingButton);
+					}
 				}
 			}
 		}

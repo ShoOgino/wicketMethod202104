@@ -5,6 +5,17 @@
 	 */
 	public final String getValue()
 	{
-		return NO_INVALID_INPUT.equals(invalidInput) ? getModelValue() : invalidInput;
+		if(NO_RAW_INPUT.equals(rawInput))
+		{
+			return getModelValue();		
+		}
+		else
+		{
+			if (getEscapeModelStrings())
+			{
+				return Strings.escapeMarkup(rawInput);
+			}
+			return rawInput;
+		}
 	}
 
