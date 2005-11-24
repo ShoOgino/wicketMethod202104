@@ -1,10 +1,16 @@
 	/**
-	 * Gets the current respond page.
+	 * Gets the page that is to be rendered for this request in case the last
+	 * set request target is of type {@link PageRequestTarget}.
 	 * 
-	 * @return The page
+	 * @return the page or null
 	 */
 	public final Page getResponsePage()
 	{
-		return responsePage;
+		IRequestTarget target = (IRequestTarget)getRequestTarget();
+		if (target != null && (target instanceof PageRequestTarget))
+		{
+			return ((PageRequestTarget)target).getPage();
+		}
+		return null;
 	}
 

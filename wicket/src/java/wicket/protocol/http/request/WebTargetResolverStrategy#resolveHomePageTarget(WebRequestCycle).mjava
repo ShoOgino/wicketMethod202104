@@ -1,0 +1,62 @@
+	/**
+	 * Resolves to a home page target.
+	 * 
+	 * @param webRequestCycle
+	 *            the current request cycle.
+	 * @return the home page as a request target
+	 */
+	private IRequestTarget resolveHomePageTarget(WebRequestCycle webRequestCycle)
+	{
+		final IRequestTarget requestTarget;
+		final Session session = webRequestCycle.getSession();
+		final Application application = session.getApplication();
+		try
+		{
+			Class homePage = application.getPages().getHomePage();
+			ApplicationPages.HomePageRenderStrategy homePageStrategy = application.getPages()
+					.getHomePageRenderStrategy();
+			if (homePageStrategy == ApplicationPages.BOOKMARK_REDIRECT)
+			{
+				requestTarget = new PageClassRequestTarget(homePage);
+			}
+			else
+			{
+				final PageParameters parameters = new PageParameters(webRequestCycle
+						.getWebRequest().getParameterMap());
+				Page newPage = session.getPageFactory().newPage(homePage, parameters);
+
+				// check if the home page didn't set a page by itself
+				if (webRequestCycle.getResponsePage() == null)
+				{
+					if (homePageStrategy == ApplicationPages.PAGE_REDIRECT)
+					{
+						// see if we have to redirect the render part by default
+						// so that a homepage has the same url as a post or
+						// get to that page.
+						ApplicationSettings.RenderStrategy strategy = session.getApplication()
+								.getSettings().getRenderStrategy();
+						boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
+						webRequestCycle.setRedirect(issueRedirect);
+					}
+					requestTarget = new PageRequestTarget(newPage);
+				}
+				else
+				{
+					requestTarget = new PageRequestTarget(webRequestCycle.getResponsePage());
+				}
+			}
+
+			// as we have a new page, we should update the cluster
+			// TODO abstract this so that we can decide by looking
+			// at the kind of target and we don't have to bother
+			// users with it?
+			webRequestCycle.setUpdateCluster(true);
+
+			return requestTarget;
+		}
+		catch (WicketRuntimeException e)
+		{
+			throw new WicketRuntimeException("Could not create home page", e);
+		}
+	}
+

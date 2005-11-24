@@ -1,0 +1,18 @@
+	/**
+	 * Respond by looking up the shared resource and delegating the actual
+	 * response to that resource.
+	 * 
+	 * @see wicket.IRequestTarget#respond(wicket.RequestCycle)
+	 */
+	public void respond(RequestCycle requestCycle)
+	{
+		SharedResources sharedResources = requestCycle.getApplication().getSharedResources();
+		Resource resource = sharedResources.get(resourceKey);
+		if (resource == null)
+		{
+			throw new WicketRuntimeException("shared resource " + resourceKey + " not found");
+		}
+		sharedResources.onResourceRequested(resourceKey);
+		resource.onResourceRequested();
+	}
+

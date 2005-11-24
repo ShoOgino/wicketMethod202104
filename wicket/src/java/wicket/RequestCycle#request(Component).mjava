@@ -1,10 +1,13 @@
 	/**
 	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
 	 * <p>
-	 * Responds to a request to re-render a single component. 
+	 * Responds to a request to re-render a single component.
 	 * 
-	 * @param component to be re-rendered
+	 * @param component
+	 *            to be re-rendered
 	 * @throws ServletException
+	 * @deprecated replace this method by integrating it with
+	 *             IRequestCycleProcessor
 	 */
 	public final void request(final Component component) throws ServletException
 	{
@@ -25,23 +28,25 @@
 			}
 			catch (RuntimeException e)
 			{
-				// Handle any runtime exception
-				internalOnRuntimeException(null, e);
+				log.error(e.getMessage(), e);
+				IRequestCycleProcessor processor = getRequestCycleProcessor();
+				processor.respond(e, this);
 			}
 			finally
 			{
-				// make sure the invokerPage is ended correctly.
-				try
-				{
-					if (invokePage != null)
-					{
-						invokePage.internalEndRequest();
-					}
-				}
-				catch (RuntimeException e)
-				{
-					log.error("Exception occurred during invokerPage.internalEndRequest", e);
-				}
+				// // make sure the invokerPage is ended correctly.
+				// try
+				// {
+				// if (invokePage != null)
+				// {
+				// invokePage.internalEndRequest();
+				// }
+				// }
+				// catch (RuntimeException e)
+				// {
+				// log.error("Exception occurred during
+				// invokerPage.internalEndRequest", e);
+				// }
 
 				// Response is ending
 				try

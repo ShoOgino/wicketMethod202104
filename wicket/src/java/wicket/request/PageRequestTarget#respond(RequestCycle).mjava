@@ -1,0 +1,25 @@
+	/**
+	 * @see wicket.IRequestTarget#respond(wicket.RequestCycle)
+	 */
+	public void respond(RequestCycle requestCycle)
+	{
+		// Should page be redirected to?
+		if (requestCycle.getRedirect())
+		{
+			// Redirect to the page
+			try
+			{
+				requestCycle.redirectTo(page);
+			}
+			catch (ServletException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+		else
+		{
+			// Let page render itself
+			page.doRender();
+		}
+	}
+

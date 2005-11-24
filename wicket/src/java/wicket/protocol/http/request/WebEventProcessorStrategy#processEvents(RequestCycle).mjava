@@ -1,0 +1,66 @@
+	/**
+	 * @see wicket.request.compound.IEventProcessorStrategy#processEvents(wicket.RequestCycle)
+	 */
+	public final void processEvents(final RequestCycle requestCycle)
+	{
+		IRequestTarget target = requestCycle.getRequestTarget();
+
+		if (target instanceof PageRequestTarget)
+		{
+			// Get page from path
+			// final Page page = ((PageRequestTarget)requestTarget).getPage();
+			final Page page = requestCycle.getResponsePage();
+
+			// Assume cluster needs to be updated now, unless listener
+			// invocation
+			// change this (for example, with a simple page redirect)
+			requestCycle.setUpdateCluster(true);
+
+			// Execute the user's code
+			final WebRequestCycle webRequestCycle = (WebRequestCycle)requestCycle;
+			final WebRequest webRequest = webRequestCycle.getWebRequest();
+			final String componentPath = webRequest.getParameter("path");
+			if (componentPath != null)
+			{
+				// Invoke interface on the component at the given path on the
+				// page
+				final Component component = page.get(Strings.afterFirstPathComponent(componentPath, ':'));
+
+				if (!component.isVisible())
+				{
+					throw new WicketRuntimeException(
+							"Calling listener methods on components that are not visible is not allowed");
+				}
+				String interfaceName = getInterfaceName(webRequest);
+				Method method = requestCycle.getRequestInterfaceMethod(interfaceName);
+				if (method != null)
+				{
+					// Set the page for the component as the response page
+					requestCycle.setResponsePage(page);
+					if (!interfaceName.equals("IRedirectListener"))
+					{
+						// Clear all feedback messages if it isn't a redirect
+						page.getFeedbackMessages().clear();
+
+						final Application application = requestCycle.getApplication();
+						// and see if we have to redirect the render part by
+						// default
+						ApplicationSettings.RenderStrategy strategy = application.getSettings()
+								.getRenderStrategy();
+						boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
+
+						requestCycle.setRedirect(issueRedirect);
+					}
+
+					// Invoke interface on component
+					invokeInterface(component, method, page);
+				}
+				else
+				{
+					throw new WicketRuntimeException("Attempt to access unknown interface "
+							+ interfaceName);
+				}
+			}
+		}
+	}
+

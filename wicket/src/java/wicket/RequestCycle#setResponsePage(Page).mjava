@@ -1,29 +1,12 @@
 	/**
-	 * Convenience method that sets page on response object.
+	 * Sets the page as the render target of this request.
 	 * 
 	 * @param page
 	 *            The page to render as a response
 	 */
 	public final void setResponsePage(final Page page)
 	{
-		if (responsePageClass != null)
-		{
-			if (log.isDebugEnabled())
-			{
-				log.warn("overwriting response page " + responsePageClass + " with " + page);
-			}
-		}
-		else if (responsePage != null)
-		{
-			if (log.isDebugEnabled())
-			{
-				log.warn("overwriting response page " + responsePage + " with " + page);
-			}
-		}
-
-		this.responsePage = page;
-		// reset response page class, only one of the 2 responses should be set.
-		this.responsePageClass = null;
-		this.responsePageParams = null;
+		IRequestTarget target = new PageRequestTarget(page);
+		setRequestTarget(target);
 	}
 

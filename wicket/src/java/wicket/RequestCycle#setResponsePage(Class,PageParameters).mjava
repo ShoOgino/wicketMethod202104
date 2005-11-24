@@ -1,7 +1,6 @@
 	/**
-	 * Convenience method that sets page class as the response. This will
-	 * generate a redirect to the page with a bookmarkable url and its
-	 * pageparameters.
+	 * Sets the page class with optionally the page parameters as the render
+	 * target of this request.
 	 * 
 	 * @param pageClass
 	 *            The page class to render as a response
@@ -11,28 +10,7 @@
 	 */
 	public final void setResponsePage(final Class pageClass, final PageParameters pageParameters)
 	{
-		if (responsePageClass != null)
-		{
-			if (log.isDebugEnabled())
-			{
-				log.warn("overwriting response page " + responsePageClass + " with " + pageClass);
-			}
-		}
-		else if (responsePage != null)
-		{
-			if (log.isDebugEnabled())
-			{
-				log.warn("overwriting response page " + responsePage + " with " + pageClass);
-			}
-		}
-
-		if (!Page.class.isAssignableFrom(pageClass))
-		{
-			throw new IllegalArgumentException("Class must be a subclass of Page");
-		}
-		this.responsePageClass = pageClass;
-		this.responsePageParams = pageParameters;
-		// reset response page, only one of the 2 responses should be set.
-		this.responsePage = null;
+		IRequestTarget target = new PageClassRequestTarget(pageClass, pageParameters);
+		setRequestTarget(target);
 	}
 

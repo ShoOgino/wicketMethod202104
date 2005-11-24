@@ -9,7 +9,7 @@
 	 *            The page to redirect to
 	 * @throws ServletException
 	 */
-	protected void redirectTo(final Page page) throws ServletException
+	public void redirectTo(final Page page) throws ServletException
 	{
 		String redirectUrl = null;
 
@@ -37,15 +37,6 @@
 				// redirect the response to the buffer
 				setResponse(redirectResponse);
 
-				// test if the invoker page was the same as the page that is
-				// going to be renderd
-				if (getInvokePage() == getResponsePage())
-				{
-					// set it to null because it is already ended in the
-					// page.doRender()
-					setInvokePage(null);
-				}
-
 				// render the page into the buffer
 				page.doRender();
 
@@ -69,7 +60,8 @@
 					// Set the encoding of the response (what the browser wants)
 					redirectResponse.setCharacterEncoding(currentResponse.getCharacterEncoding());
 
-					// call filter() so that any filters can process the response
+					// call filter() so that any filters can process the
+					// response
 					redirectResponse.filter();
 					// close it so that the reponse is fixed and encoded from
 					// here on.
@@ -86,7 +78,10 @@
 			{
 				// re-assign the original response
 				setResponse(currentResponse);
-				internalOnRuntimeException(page, ex);
+				log.error(ex.getMessage(), ex);
+				IRequestCycleProcessor processor = getRequestCycleProcessor();
+				// TODO integrate with IRequestCycleProcessor
+				processor.respond(ex, this);
 				return;
 			}
 		}

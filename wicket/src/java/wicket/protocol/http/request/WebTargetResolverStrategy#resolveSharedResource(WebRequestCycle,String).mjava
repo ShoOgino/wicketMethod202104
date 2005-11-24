@@ -1,0 +1,28 @@
+	/**
+	 * Resolves to a shared resource target.
+	 * 
+	 * @param webRequestCycle
+	 *            the current request cycle
+	 * @param resourceKey
+	 *            the key of the shared resource
+	 * @return the shared resource as a request target
+	 */
+	private IRequestTarget resolveSharedResource(final WebRequestCycle webRequestCycle,
+			final String resourceKey)
+	{
+		final Session session = webRequestCycle.getSession();
+		final Application application = session.getApplication();
+		SharedResources sharedResources = application.getSharedResources();
+		Resource resource = sharedResources.get(resourceKey);
+		if (resource == null)
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("Could not find resource referenced by key " + resourceKey);
+			}
+			return new WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
+					"Unable to load resource " + resourceKey);
+		}
+		return new SharedResourceRequestTarget(resourceKey, resource);
+	}
+

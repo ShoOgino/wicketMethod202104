@@ -7,69 +7,91 @@
 	 */
 	public final void request() throws ServletException
 	{
-		// Serialize renderings on the session object so that only one page
-		// can be rendered at a time for a given session.
-		synchronized (session)
+		// get the processor we delegate the handling of the request
+		// cycle behaviour to
+		IRequestCycleProcessor processor = getRequestCycleProcessor();
+		if (processor == null)
 		{
+			throw new WicketRuntimeException("request cycle processor must be not-null");
+		}
+
+		// Attach thread local resources for request
+		threadAttach();
+
+		// Response is beginning
+		internalOnBeginRequest();
+		onBeginRequest();
+
+		try
+		{
+			// resolve the target of the request
+			IRequestTarget target = processor.resolve(this);
+
+			if (target == null)
+			{
+				throw new WicketRuntimeException(
+						"the processor did not resolve to any request target");
+			}
+
+			// set it as the current target, on the top of the stack
+			setRequestTarget(target);
+
+			// see whether we need to do synchronization
+			Object synchronizeLock = target.getSynchronizationLock();
+
+			// if the lock is not-null, synchronize the rest of the request
+			// cycle processing
+			if (synchronizeLock != null)
+			{
+				synchronized (synchronizeLock)
+				{
+					processEventsAndRespond(processor);
+				}
+			}
+			else
+			{
+				// no lock means no synchronization (e.g. when handling static
+				// resources or external resources)
+				processEventsAndRespond(processor);
+			}
+		}
+		finally
+		{
+			// clean up target stack; calling cleanUp has effects like
+			for (Iterator i = requestTargets.iterator(); i.hasNext();)
+			{
+				IRequestTarget t = (IRequestTarget)i.next();
+				try
+				{
+					t.cleanUp(this);
+				}
+				catch (RuntimeException e)
+				{
+					log.error("there was an error cleaning up target " + t + ".", e);
+				}
+			}
+
+			// Response is ending
 			try
 			{
-				// Attach thread local resources for request
-				threadAttach();
-
-				// Response is beginning
-				internalOnBeginRequest();
-				onBeginRequest();
-
-				// If request is parsed successfully
-				if (parseRequest())
-				{
-					// respond with a page
-					respond();
-				}
-
+				internalOnEndRequest();
 			}
 			catch (RuntimeException e)
 			{
-				// Handle any runtime exception
-				internalOnRuntimeException(null, e);
+				log.error("Exception occurred during internalOnEndRequest", e);
 			}
-			finally
+
+			try
 			{
-				// make sure the invokerPage is ended correctly.
-				try
-				{
-					if (invokePage != null)
-					{
-						invokePage.internalEndRequest();
-					}
-				}
-				catch (RuntimeException e)
-				{
-					log.error("Exception occurred during invokerPage.internalEndRequest", e);
-				}
-
-				// Response is ending
-				try
-				{
-					internalOnEndRequest();
-				}
-				catch (RuntimeException e)
-				{
-					log.error("Exception occurred during internalOnEndRequest", e);
-				}
-
-				try
-				{
-					onEndRequest();
-				}
-				catch (RuntimeException e)
-				{
-					log.error("Exception occurred during onEndRequest", e);
-				}
-
-				// Release thread local resources
-				threadDetach();
+				onEndRequest();
 			}
+			catch (RuntimeException e)
+			{
+				log.error("Exception occurred during onEndRequest", e);
+			}
+
+			// Release thread local resources
+			threadDetach();
 		}
 	}
 

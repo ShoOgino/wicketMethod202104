@@ -1,10 +1,17 @@
 	/**
-	 * Gets the current responde page class.
+	 * Gets the page class that is to be instantiated and rendered for this
+	 * request in case the last set request target is of type
+	 * {@link PageClassRequestTarget}.
 	 * 
-	 * @return The page
+	 * @return the page class or null
 	 */
 	public final Class getResponsePageClass()
 	{
-		return responsePageClass;
+		IRequestTarget target = (IRequestTarget)getRequestTarget();
+		if (target != null && (target instanceof PageClassRequestTarget))
+		{
+			return ((PageClassRequestTarget)target).getPageClass();
+		}
+		return null;
 	}
 
