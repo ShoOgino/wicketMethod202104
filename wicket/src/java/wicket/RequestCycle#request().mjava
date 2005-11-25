@@ -32,24 +32,7 @@
 			// set it as the current target, on the top of the stack
 			setRequestTarget(target);
 
-			// see whether we need to do synchronization
-			Object synchronizeLock = target.getSynchronizationLock();
-
-			// if the lock is not-null, synchronize the rest of the request
-			// cycle processing
-			if (synchronizeLock != null)
-			{
-				synchronized (synchronizeLock)
-				{
-					processEventsAndRespond(processor);
-				}
-			}
-			else
-			{
-				// no lock means no synchronization (e.g. when handling static
-				// resources or external resources)
-				processEventsAndRespond(processor);
-			}
+			processEventsAndRespondWithSync(processor);
 		}
 		finally
 		{

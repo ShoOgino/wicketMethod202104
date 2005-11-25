@@ -10,5 +10,13 @@
 	 *         rendering states of the request handling, or null if
 	 *         synchronization should not be done.
 	 */
-	Object getSynchronizationLock();
+	private Object getSynchronizationLock()
+	{
+		if (getRequestTarget() instanceof ISessionSynchronizable)
+		{
+			return getSession();
+		}
+
+		return null;
+	}
 
