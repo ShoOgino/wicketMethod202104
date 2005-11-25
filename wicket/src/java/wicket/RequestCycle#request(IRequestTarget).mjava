@@ -1,11 +1,14 @@
 	/**
 	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
 	 * <p>
-	 * Responds to a request.
+	 * Responds to a request with the request target.
+	 * 
+	 * @param target
+	 *            request target
 	 * 
 	 * @throws ServletException
 	 */
-	public final void request() throws ServletException
+	public final void request(IRequestTarget target) throws ServletException
 	{
 		// prepare the request
 		prepare();
@@ -20,15 +23,6 @@
 
 		try
 		{
-			// resolve the target of the request
-			IRequestTarget target = processor.resolve(this);
-
-			if (target == null)
-			{
-				throw new WicketRuntimeException(
-						"the processor did not resolve to any request target");
-			}
-
 			// set it as the current target, on the top of the stack
 			setRequestTarget(target);
 

@@ -1,0 +1,44 @@
+	/**
+	 * Clean up the request cycle.
+	 */
+	private void cleanUp()
+	{
+		// clean up target stack; calling cleanUp has effects like
+		// NOTE: don't remove the targets as testing code might need them
+		// furthermore, the targets will be cg-ed with this cycle too
+		for (Iterator i = requestTargets.iterator(); i.hasNext();)
+		{
+			IRequestTarget t = (IRequestTarget)i.next();
+			try
+			{
+				t.cleanUp(this);
+			}
+			catch (RuntimeException e)
+			{
+				log.error("there was an error cleaning up target " + t + ".", e);
+			}
+		}
+
+		// Response is ending
+		try
+		{
+			internalOnEndRequest();
+		}
+		catch (RuntimeException e)
+		{
+			log.error("Exception occurred during internalOnEndRequest", e);
+		}
+
+		try
+		{
+			onEndRequest();
+		}
+		catch (RuntimeException e)
+		{
+			log.error("Exception occurred during onEndRequest", e);
+		}
+
+		// Release thread local resources
+		threadDetach();
+	}
+
