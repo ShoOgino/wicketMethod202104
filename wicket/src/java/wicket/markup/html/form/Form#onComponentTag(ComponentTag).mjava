@@ -5,11 +5,21 @@
 	{
 		checkComponentTag(tag, "form");
 		super.onComponentTag(tag);
-		cssId = (String)tag.getAttributes().get("id");
-		if(Strings.isEmpty(cssId))
+		// If the javascriptid is already generated then use that on even it was before the first render. 
+		// because there could be a component which already uses it to submit the forum.
+		// This should be fixed when we pre parse the markup so that we know the id is at front.
+		if(!Strings.isEmpty(javascriptId))
 		{
-			cssId = getCssId();
-			tag.put("id", cssId);
+			tag.put("id", javascriptId);
+		}
+		else
+		{
+			javascriptId = (String)tag.getAttributes().get("id");
+			if(Strings.isEmpty(javascriptId))
+			{
+				javascriptId = getJavascriptId();
+				tag.put("id", javascriptId);
+			}
 		}
 		tag.put("method", "post");
 		tag.put("action", Strings.replaceAll(urlFor(IFormSubmitListener.class), "&", "&amp;"));
