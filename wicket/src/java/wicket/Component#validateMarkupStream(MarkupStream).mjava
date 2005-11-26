@@ -3,7 +3,7 @@
 	 * of markupStream. Else set the markupStream.setCurrentPosition based the
 	 * position already known to the component.
 	 * <p>
-	 * Note: Parameter markupStream.getCurrentPosition() will be update, if
+	 * Note: Parameter markupStream.getCurrentPosition() will be updated, if
 	 * re-render is allowed.
 	 * 
 	 * @param markupStream
@@ -12,18 +12,22 @@
 	{
 		// Allow the component to be re-rendered without a page. Partial
 		// re-rendering is a requirement of AJAX.
-		if (getFlag(FLAG_NEEDS_FULL_RENDER) == true)
+		final Page page = getPage();
+		if (this.isAuto() || (page != null) && page.isRequiresFullRender())
 		{
 			// Remember the position while rendering the component the first
 			// time
 			this.markupStreamPosition = markupStream.getCurrentIndex();
-			setFlag(FLAG_NEEDS_FULL_RENDER, false);
 		}
 		else if (this.markupStreamPosition < 0)
 		{
-			throw new WicketRuntimeException(
-					"The markup stream of the component should be known by now, but isn't: "
-							+ this.toString());
+			// ListItems are created on the fly, which is why we can not throw an exception.
+			// Because they are created on the fly (similar to autoAdd), they can 
+			// not be re-rendered  
+			this.markupStreamPosition = markupStream.getCurrentIndex();
+//			throw new WicketRuntimeException(
+//					"The markup stream of the component should be known by now, but isn't: " 
+//					+ this.toString());
 		}
 		else
 		{
