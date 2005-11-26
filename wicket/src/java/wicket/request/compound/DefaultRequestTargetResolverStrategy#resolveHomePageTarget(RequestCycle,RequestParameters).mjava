@@ -1,14 +1,17 @@
 	/**
 	 * Resolves to a home page target.
 	 * 
-	 * @param webRequestCycle
+	 * @param requestCycle
 	 *            the current request cycle.
+	 * @param requestParameters
+	 *            the request parameters object
 	 * @return the home page as a request target
 	 */
-	private IRequestTarget resolveHomePageTarget(WebRequestCycle webRequestCycle)
+	private IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
+			RequestParameters requestParameters)
 	{
 		final IRequestTarget requestTarget;
-		final Session session = webRequestCycle.getSession();
+		final Session session = requestCycle.getSession();
 		final Application application = session.getApplication();
 		try
 		{
@@ -21,12 +24,12 @@
 			}
 			else
 			{
-				final PageParameters parameters = new PageParameters(webRequestCycle
-						.getWebRequest().getParameterMap());
+				final PageParameters parameters = new PageParameters(requestParameters
+						.getParameters());
 				Page newPage = session.getPageFactory().newPage(homePage, parameters);
 
 				// check if the home page didn't set a page by itself
-				if (webRequestCycle.getResponsePage() == null)
+				if (requestCycle.getResponsePage() == null)
 				{
 					if (homePageStrategy == ApplicationPages.PAGE_REDIRECT)
 					{
@@ -36,13 +39,13 @@
 						ApplicationSettings.RenderStrategy strategy = session.getApplication()
 								.getSettings().getRenderStrategy();
 						boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
-						webRequestCycle.setRedirect(issueRedirect);
+						requestCycle.setRedirect(issueRedirect);
 					}
 					requestTarget = new PageRequestTarget(newPage);
 				}
 				else
 				{
-					requestTarget = new PageRequestTarget(webRequestCycle.getResponsePage());
+					requestTarget = new PageRequestTarget(requestCycle.getResponsePage());
 				}
 			}
 
@@ -50,7 +53,7 @@
 			// TODO abstract this so that we can decide by looking
 			// at the kind of target and we don't have to bother
 			// users with it?
-			webRequestCycle.setUpdateCluster(true);
+			requestCycle.setUpdateCluster(true);
 
 			return requestTarget;
 		}

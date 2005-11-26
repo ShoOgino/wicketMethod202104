@@ -1,0 +1,42 @@
+	/**
+	 * @see wicket.request.compound.IRequestTargetResolverStrategy#resolve(wicket.RequestCycle,
+	 *      RequestParameters)
+	 */
+	public final IRequestTarget resolve(RequestCycle requestCycle,
+			RequestParameters requestParameters)
+	{
+		String pathInfo = requestCycle.getRequest().getPath();
+		// See whether this request points to a rendered page
+		if (requestParameters.getComponentPath() != null)
+		{
+			return resolveRenderedPage(requestCycle, requestParameters);
+		}
+		// see whether this request points to a bookmarkable page
+		else if (requestParameters.getBookmarkablePageAlias() != null)
+		{
+			return resolveBookmarkablePage(requestCycle, requestParameters);
+		}
+		// see whether this request points to a shared resource
+		else if (requestParameters.getResourceKey() != null)
+		{
+			return resolveSharedResource(requestCycle, requestParameters);
+		}
+		// see whether this request points to the home page
+		else if (Strings.isEmpty(pathInfo) || ("/".equals(pathInfo)))
+		{
+			return resolveHomePageTarget(requestCycle, requestParameters);
+		}
+
+		// if we get here, we have no regconized Wicket target, and thus
+		// regard this as a external (non-wicket) resource request on
+		// this server
+
+		// Get the relative URL we need for loading the resource from
+		// the servlet context
+		// NOTE: we NEED to put the '/' in front as otherwise some versions
+		// of application servers (e.g. Jetty 5.1.x) will fail for requests
+		// like '/mysubdir/myfile.css'
+		final String url = '/' + requestCycle.getRequest().getRelativeURL();
+		return new WebExternalResourceRequestTarget(url);
+	}
+

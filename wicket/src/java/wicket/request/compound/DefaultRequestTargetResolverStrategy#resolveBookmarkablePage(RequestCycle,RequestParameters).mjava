@@ -1,21 +1,22 @@
 	/**
 	 * Resolves to a bookmarkable page target.
 	 * 
-	 * @param webRequestCycle
+	 * @param requestCycle
 	 *            the current request cycle
-	 * @param bookmarkablePageParameter
-	 *            the bookmarkable page parameter
+	 * @param requestParameters
+	 *            the request parameters object
 	 * @return the bookmarkable page as a request target
 	 */
-	private IRequestTarget resolveBookmarkablePage(WebRequestCycle webRequestCycle,
-			final String bookmarkablePageParameter)
+	private IRequestTarget resolveBookmarkablePage(RequestCycle requestCycle,
+			RequestParameters requestParameters)
 	{
+		final String bookmarkablePageAlias = requestParameters.getBookmarkablePageAlias();
 		final IRequestTarget requestTarget;
-		final Session session = webRequestCycle.getSession();
+		final Session session = requestCycle.getSession();
 		final Application application = session.getApplication();
 
 		// first see whether we have a logical mapping
-		Class pageClass = application.getPages().classForAlias(bookmarkablePageParameter);
+		Class pageClass = application.getPages().classForAlias(bookmarkablePageAlias);
 
 		// nope, we don't have a logical mapping, so this should be a
 		// full class name
@@ -23,7 +24,7 @@
 		{
 			try
 			{
-				pageClass = session.getClassResolver().resolveClass(bookmarkablePageParameter);
+				pageClass = session.getClassResolver().resolveClass(bookmarkablePageAlias);
 			}
 			catch (RuntimeException e)
 			{
@@ -35,31 +36,31 @@
 		try
 		{
 			Page newPage = session.getPageFactory().newPage(pageClass,
-					new PageParameters(webRequestCycle.getRequest().getParameterMap()));
+					new PageParameters(requestParameters.getParameters()));
 
 			// the response might have been set in the constructor of
 			// the bookmarkable page
-			if (webRequestCycle.getResponsePage() == null)
+			if (requestCycle.getResponsePage() == null)
 			{
 				requestTarget = new PageRequestTarget(newPage);
 			}
 			else
 			{
-				requestTarget = new PageRequestTarget(webRequestCycle.getResponsePage());
+				requestTarget = new PageRequestTarget(requestCycle.getResponsePage());
 			}
 
 			// as we have a new page, we should update the cluster
 			// TODO abstract this so that we can decide by looking
 			// at the kind of target and we don't have to bother
 			// users with it?
-			webRequestCycle.setUpdateCluster(true);
+			requestCycle.setUpdateCluster(true);
 
 			return requestTarget;
 		}
 		catch (RuntimeException e)
 		{
 			throw new WicketRuntimeException("Unable to instantiate Page class: "
-					+ bookmarkablePageParameter + ". See below for details.", e);
+					+ bookmarkablePageAlias + ". See below for details.", e);
 		}
 	}
 

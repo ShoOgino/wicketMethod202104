@@ -1,0 +1,24 @@
+	/**
+	 * Resolves to a shared resource target.
+	 * 
+	 * @param requestCycle
+	 *            the current request cycle
+	 * @param requestParameters
+	 *            the request parameters object
+	 * @return the shared resource as a request target
+	 */
+	private IRequestTarget resolveSharedResource(final RequestCycle requestCycle,
+			RequestParameters requestParameters)
+	{
+		final Application application = Application.get();
+		final String resourceKey = requestParameters.getResourceKey();
+		final SharedResources sharedResources = application.getSharedResources();
+		final Resource resource = sharedResources.get(resourceKey);
+		if (resource == null)
+		{
+			return new WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
+					"Unable to load resource " + resourceKey);
+		}
+		return new SharedResourceRequestTarget(resourceKey, resource);
+	}
+

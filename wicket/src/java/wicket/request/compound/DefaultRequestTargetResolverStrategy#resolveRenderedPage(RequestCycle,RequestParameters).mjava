@@ -4,24 +4,19 @@
 	 * target. If no corresponding page could be found, a expired page target
 	 * will be returned.
 	 * 
-	 * @param webRequestCycle
+	 * @param requestCycle
 	 *            the current request cycle
-	 * @param componentPath
-	 *            the component path
+	 * @param requestParameters
+	 *            the request parameters object
 	 * @return the previously rendered page as a request target
 	 */
-	private IRequestTarget resolveRenderedPage(WebRequestCycle webRequestCycle,
-			final String componentPath)
+	private IRequestTarget resolveRenderedPage(RequestCycle requestCycle,
+			RequestParameters requestParameters)
 	{
-		final WebRequest webRequest = webRequestCycle.getWebRequest();
-		final String pageMapName = webRequest.getParameter("pagemap");
-		// Get version number
-		final String versionNumberString = webRequest.getParameter("version");
-		final int versionNumber = Strings.isEmpty(versionNumberString) ? 0 : Integer
-				.parseInt(versionNumberString);
-
-		final Session session = webRequestCycle.getSession();
-		final Page page = session.getPage(pageMapName, componentPath, versionNumber);
+		final String componentPath = requestParameters.getComponentPath();
+		final Session session = requestCycle.getSession();
+		final Page page = session.getPage(requestParameters.getPageMapName(), componentPath,
+				requestParameters.getVersionNumber());
 
 		// Does page exist?
 		if (page != null)
@@ -29,10 +24,10 @@
 			// Assume cluster needs to be updated now, unless listener
 			// invocation change this (for example, with a simple page
 			// redirect)
-			webRequestCycle.setUpdateCluster(true);
+			requestCycle.setUpdateCluster(true);
 
 			// see whether this resolves to a component call or just the page
-			final String interfaceName = getInterfaceName(webRequest);
+			final String interfaceName = requestParameters.getInterfaceName();
 			if (interfaceName != null)
 			{
 				if (interfaceName.equals("IRedirectListener"))
@@ -41,7 +36,7 @@
 				}
 				else
 				{
-					final Method listenerMethod = webRequestCycle
+					final Method listenerMethod = requestCycle
 							.getRequestInterfaceMethod(interfaceName);
 					if (listenerMethod == null)
 					{

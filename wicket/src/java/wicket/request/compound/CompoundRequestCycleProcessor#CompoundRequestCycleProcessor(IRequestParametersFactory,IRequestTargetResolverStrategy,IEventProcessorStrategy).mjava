@@ -1,19 +1,21 @@
 	/**
 	 * Construct using the given strategies and
 	 * {@link DefaultResponseProcessorStrategy} and
-	 * {@link DefaultExceptionResponseProcessorStrategy}.
+	 * {@link DefaultExceptionResponseStrategy}.
 	 * 
+	 * @param requestParameterFactory
+	 *            the strategy for constructing request parameters
 	 * @param requestTargetResolverStrategy
 	 *            the strategy for the target resolver method
 	 * @param eventProcessorStrategy
 	 *            the strategy for the event processor method
 	 */
-	public CompoundRequestCycleProcessor(
+	public CompoundRequestCycleProcessor(IRequestParametersFactory requestParameterFactory,
 			IRequestTargetResolverStrategy requestTargetResolverStrategy,
 			IEventProcessorStrategy eventProcessorStrategy)
 	{
-		this(requestTargetResolverStrategy, eventProcessorStrategy,
+		this(requestParameterFactory, requestTargetResolverStrategy, eventProcessorStrategy,
 				new DefaultResponseProcessorStrategy(),
-				new DefaultExceptionResponseProcessorStrategy());
+				new DefaultExceptionResponseStrategy());
 	}
 
