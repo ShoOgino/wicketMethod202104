@@ -3,6 +3,9 @@
 	 */
 	public final void doRender()
 	{
+		// Make sure it is realy empty
+		renderedComponents = null;
+		
 		// check access much earlier then in onRender!
 		// if false in onRender then checkRendering below fails anyway!!
 		if (checkAccess())
@@ -41,10 +44,10 @@
 
 				// Check rendering if it happened fully
 				checkRendering();
-				
-				// Allow per-component re-render after the page has been rendered
-				// completely at least once.
-				setRequiresFullRender(false);
+
+				// Allow per-component re-render after the page has been
+				// rendered completely at least once.
+				setAllowReRender(true);
 			}
 			finally
 			{
