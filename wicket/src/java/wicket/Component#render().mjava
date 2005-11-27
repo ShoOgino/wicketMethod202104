@@ -4,31 +4,40 @@
 	public final void render()
 	{
 		setFlag(FLAG_IS_RENDERED_ONCE, true);
+		
+		rendering = true;
 
-		// Determine if component is visible using it's authorization status
-		// and the isVisible property.
-		if (renderAllowed && isVisible())
+		try
 		{
-			// Rendering is beginning
-			if (log.isDebugEnabled())
+			// Determine if component is visible using it's authorization status
+			// and the isVisible property.
+			if (renderAllowed && isVisible())
 			{
-				log.debug("Begin render " + this);
+				// Rendering is beginning
+				if (log.isDebugEnabled())
+				{
+					log.debug("Begin render " + this);
+				}
+	
+				// Call implementation to render component
+				onRender();
+	
+				// Component has been rendered
+				rendered();
+	
+				if (log.isDebugEnabled())
+				{
+					log.debug("End render " + this);
+				}
 			}
-
-			// Call implementation to render component
-			onRender();
-
-			// Component has been rendered
-			rendered();
-
-			if (log.isDebugEnabled())
+			else
 			{
-				log.debug("End render " + this);
+				findMarkupStream().skipComponent();
 			}
 		}
-		else
+		finally
 		{
-			findMarkupStream().skipComponent();
+			rendering = false;
 		}
 	}
 
