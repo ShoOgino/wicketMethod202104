@@ -8,8 +8,22 @@
 	 */
 	public String encode(RequestCycle requestCycle, IRequestTarget requestTarget)
 	{
-		// TODO implement mounting in a more generic way, and check mounts first
-		// TODO handle more options
-		return encode(requestCycle, (IPageClassRequestTarget)requestTarget);
+		// first check whether the target was mounted
+		// NOTE: it is important that request target object properly
+		// implement their identity for this to work
+		// TODO make sure our default implementations do this
+		String mountPath = (String)mountsOnTarget.get(requestTarget);
+		if (mountPath != null)
+		{
+			return mountPath;
+		}
+
+		if (requestTarget instanceof IPageClassRequestTarget)
+		{
+			return encode(requestCycle, (IPageClassRequestTarget)requestTarget);
+		}
+		// TODO handle more
+
+		throw new WicketRuntimeException("unable to encode " + requestTarget);
 	}
 
