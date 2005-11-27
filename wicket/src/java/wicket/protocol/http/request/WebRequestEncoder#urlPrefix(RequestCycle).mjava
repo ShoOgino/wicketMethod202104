@@ -1,12 +1,15 @@
 	/**
 	 * Creates a prefix for a url.
 	 * 
+	 * @param requestCycle
+	 *            the current request cycle
+	 * 
 	 * @return Prefix for URLs including the context path and servlet path.
 	 */
-	protected StringBuffer urlPrefix()
+	protected StringBuffer urlPrefix(RequestCycle requestCycle)
 	{
 		final StringBuffer buffer = new StringBuffer();
-		final WebRequest request = getWebRequest();
+		final WebRequest request = ((WebRequestCycle)requestCycle).getWebRequest();
 		if (request != null)
 		{
 			final String contextPath = request.getContextPath();

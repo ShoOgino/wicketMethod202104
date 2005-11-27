@@ -10,18 +10,20 @@
 		// prepare the request
 		prepare();
 
-		// get the processor we delegate the handling of the request
-		// cycle behaviour to
-		IRequestCycleProcessor processor = getRequestCycleProcessor();
-		if (processor == null)
-		{
-			throw new WicketRuntimeException("request cycle processor must be not-null");
-		}
+		IRequestCycleProcessor processor = null;
 
 		try
 		{
-			// resolve the target of the request
-			IRequestTarget target = processor.resolve(this);
+			// get the processor we delegate the handling of the request
+			// cycle behaviour to
+			processor = safeGetRequestProcessor();
+
+			// get the request parameters object using the request encoder of
+			// the processor
+			final RequestParameters requestParameters = getRequestParameters(processor);
+
+			// resolve the target of the request using the request parameters
+			final IRequestTarget target = processor.resolve(this, requestParameters);
 
 			if (target == null)
 			{
@@ -32,10 +34,23 @@
 			// set it as the current target, on the top of the stack
 			setRequestTarget(target);
 
-			processEventsAndRespondWithSync(processor);
+			// determine what kind of synchronization is to be used, and
+			// handle any events with that
+			processEventsAndRespond(processor);
+		}
+		catch (Exception e)
+		{
+			// try to play nicely and let the request processor handle the
+			// exception response. If that doesn't work, any runtime exception
+			// will automatically be bubbled up
+			if (processor != null)
+			{
+				processor.respond(e, this);
+			}
 		}
 		finally
 		{
+			// clean up the request
 			cleanUp();
 		}
 	}

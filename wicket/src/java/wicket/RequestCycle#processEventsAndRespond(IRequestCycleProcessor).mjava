@@ -1,26 +1,38 @@
 	/**
 	 * Call the event processing and and respond methods on the request
-	 * processor.
+	 * processor and apply synchronization if needed.
 	 * 
 	 * @param processor
 	 *            the request processor
 	 */
-	private void processEventsAndRespond(IRequestCycleProcessor processor)
+	private final void processEventsAndRespond(IRequestCycleProcessor processor)
 	{
-		try
+		// see whether we need to do synchronization
+		Object synchronizeLock = getSynchronizationLock();
+
+		// if the lock is not-null, synchronize the rest of the request
+		// cycle processing
+		if (synchronizeLock != null)
 		{
+			synchronized (synchronizeLock)
+			{
+				// let the processor handle/ issue any events
+				processor.processEvents(this);
+
+				// generate a response
+				processor.respond(this);
+			}
+		}
+		else
+		{
+			// no lock means no synchronization (e.g. when handling static
+			// resources or external resources)
+
 			// let the processor handle/ issue any events
 			processor.processEvents(this);
 
 			// generate a response
 			processor.respond(this);
-
-		}
-		catch (RuntimeException e)
-		{
-			// Handle any runtime exception
-			log.error(e.getMessage(), e);
-			processor.respond(e, this);
 		}
 	}
 

@@ -1,0 +1,30 @@
+	/**
+	 * Gets the request parameters object using the instance of
+	 * {@link IRequestEncoder} of the provided request cycle processor.
+	 * 
+	 * @param processor
+	 *            the request cycle processor
+	 * @return the request parameters object
+	 */
+	private final RequestParameters getRequestParameters(IRequestCycleProcessor processor)
+	{
+		// get the request encoder to decode the request parameters
+		final IRequestEncoder encoder = processor.getRequestEncoder();
+		if (encoder == null)
+		{
+			throw new WicketRuntimeException("request encoder must be not-null (provided by "
+					+ processor + ")");
+		}
+
+		// decode the request parameters into a strongly typed parameters
+		// object that is to be used by the target resolving
+		final RequestParameters requestParameters = encoder.decode(getRequest());
+
+		if (requestParameters == null)
+		{
+			throw new WicketRuntimeException("request parameters must be not-null (provided by "
+					+ encoder + ")");
+		}
+		return requestParameters;
+	}
+
