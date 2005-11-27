@@ -1,12 +1,17 @@
 	/**
 	 * Encode the given request target. If a mount is found, that mounted url
 	 * will be returned. Otherwise, one of the delegation methods will be
-	 * called.
+	 * called. In case you are using custom targets that are not part of the
+	 * default target hierarchy, you need to override
+	 * {@link #doEncode(RequestCycle, IRequestTarget)}, which will be called
+	 * after the defaults have been tried. When that doesn't provide a url
+	 * either, and exception will be thrown saying that encoding could not be
+	 * done.
 	 * 
 	 * @see wicket.request.IRequestEncoder#encode(wicket.RequestCycle,
 	 *      wicket.IRequestTarget)
 	 */
-	public String encode(RequestCycle requestCycle, IRequestTarget requestTarget)
+	public final String encode(RequestCycle requestCycle, IRequestTarget requestTarget)
 	{
 		// first check whether the target was mounted
 		// NOTE: it is important that request target object properly
@@ -22,8 +27,28 @@
 		{
 			return encode(requestCycle, (IPageClassRequestTarget)requestTarget);
 		}
+		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
+		{
+			return encode(requestCycle, (IListenerInterfaceRequestTarget)requestTarget);
+		}
+		else if (requestTarget instanceof ISharedResourceRequestTarget)
+		{
+			return encode(requestCycle, (ISharedResourceRequestTarget)requestTarget);
+		}
 		// TODO handle more
+		else if (requestTarget instanceof IPageRequestTarget)
+		{
 
+		}
+
+		// fallthough for non-default request targets
+		String url = doEncode(requestCycle, requestTarget);
+		if (url != null)
+		{
+			return url;
+		}
+
+		// this method was not able to produce a url; throw an exception
 		throw new WicketRuntimeException("unable to encode " + requestTarget);
 	}
 

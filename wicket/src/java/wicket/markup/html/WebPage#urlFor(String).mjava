@@ -1,23 +1,16 @@
 	/**
-	 * @param path
-	 *            The path
-	 * @return The url for the path
+	 * Returns a URL that references a shared resource through the provided
+	 * resource key.
+	 * 
+	 * @param resourceKey
+	 *            The application global key of the shared resource
+	 * @return The url for the shared resource
 	 */
-	public final String urlFor(final String path)
+	public final String urlFor(final String resourceKey)
 	{
-		String prefix = urlPrefix(getWebRequestCycle()).toString();
-		if ((path == null) || (path.trim().length() == 0))
-		{
-			return prefix;
-		}
-		else
-		{
-			if (prefix.endsWith("/") || path.startsWith("/"))
-			{
-				return prefix + path;
-			}
-
-			return prefix + "/" + path;
-		}
+		RequestCycle requestCycle = getRequestCycle();
+		String url = requestCycle.getRequestCycleProcessor().getRequestEncoder().encode(
+				requestCycle, new SharedResourceRequestTarget(resourceKey));
+		return url;
 	}
 
