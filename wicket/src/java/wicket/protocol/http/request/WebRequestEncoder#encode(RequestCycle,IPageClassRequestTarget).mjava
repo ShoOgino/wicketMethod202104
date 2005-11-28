@@ -9,13 +9,11 @@
 	 */
 	protected final String encode(RequestCycle requestCycle, IPageClassRequestTarget requestTarget)
 	{
-		// TODO get home page strategy and mounting in here
-
 		final Class pageClass = requestTarget.getPageClass();
 		final PageParameters parameters = requestTarget.getPageParameters();
 		final StringBuffer url = urlPrefix(requestCycle);
 		url.append("?bookmarkablePage=");
-		String pageReference = requestCycle.getApplication().getPages().aliasForClass(pageClass);
+		String pageReference = pageClass.getName();
 		if (pageReference == null)
 		{
 			pageReference = pageClass.getName();

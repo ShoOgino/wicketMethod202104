@@ -14,13 +14,11 @@
 	public final String encode(RequestCycle requestCycle, IRequestTarget requestTarget)
 	{
 		// first check whether the target was mounted
-		// NOTE: it is important that request target object properly
-		// implement their identity for this to work
-		// TODO make sure our default implementations do this
 		String mountPath = (String)mountsOnTarget.get(requestTarget);
 		if (mountPath != null)
 		{
-			return mountPath;
+			final StringBuffer url = urlPrefix(requestCycle);
+			return url.append(mountPath).toString();
 		}
 
 		if (requestTarget instanceof IPageClassRequestTarget)

@@ -4,6 +4,22 @@
 	 */
 	public final void mountPath(String path, IRequestTarget requestTarget)
 	{
+		if (path == null)
+		{
+			throw new NullPointerException("argument path must be not-null");
+		}
+
+		if (requestTarget == null)
+		{
+			throw new NullPointerException("argument requestTarget must be not-null");
+		}
+
+		// sanity check
+		if (!path.startsWith("/"))
+		{
+			path = "/" + path;
+		}
+
 		if (mountsOnPath.containsKey(path))
 		{
 			throw new WicketRuntimeException(path + " is already mounted for "

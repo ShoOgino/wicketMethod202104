@@ -15,47 +15,29 @@
 		final Application application = session.getApplication();
 		try
 		{
-			Class homePage = application.getPages().getHomePage();
-			ApplicationPages.HomePageRenderStrategy homePageStrategy = application.getPages()
-					.getHomePageRenderStrategy();
-			if (homePageStrategy == ApplicationPages.BOOKMARK_REDIRECT)
-			{
-				requestTarget = new PageClassRequestTarget(homePage);
-			}
-			else
-			{
-				final PageParameters parameters = new PageParameters(requestParameters
-						.getParameters());
-				Page newPage = session.getPageFactory().newPage(homePage, parameters);
+			// get the home page class
+			Class homePageClass = application.getPages().getHomePage();
+			// and create a dummy target for looking up whether the home page is
+			// mounted
+			PageClassRequestTarget pokeTarget = new PageClassRequestTarget(homePageClass);
+			IRequestEncoder requestEncoder = requestCycle.getRequestCycleProcessor()
+					.getRequestEncoder();
+			String path = requestEncoder.getMountedPath(pokeTarget);
 
-				// check if the home page didn't set a page by itself
-				if (requestCycle.getResponsePage() == null)
-				{
-					if (homePageStrategy == ApplicationPages.PAGE_REDIRECT)
-					{
-						// see if we have to redirect the render part by default
-						// so that a homepage has the same url as a post or
-						// get to that page.
-						ApplicationSettings.RenderStrategy strategy = session.getApplication()
-								.getSettings().getRenderStrategy();
-						boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
-						requestCycle.setRedirect(issueRedirect);
-					}
-					requestTarget = new PageRequestTarget(newPage);
-				}
-				else
-				{
-					requestTarget = new PageRequestTarget(requestCycle.getResponsePage());
-				}
+			if (path != null)
+			{
+				// the home page was mounted at the given path.
+				// Issue a redirect to that path
+				requestCycle.setRedirect(true);
+				// our poke target is good enough
+				return pokeTarget;
 			}
 
-			// as we have a new page, we should update the cluster
-			// TODO abstract this so that we can decide by looking
-			// at the kind of target and we don't have to bother
-			// users with it?
-			requestCycle.setUpdateCluster(true);
-
-			return requestTarget;
+			// else the home page was not mounted; render it now so
+			// that we will keep a clean path
+			final PageParameters parameters = new PageParameters(requestParameters.getParameters());
+			Page newPage = session.getPageFactory().newPage(homePageClass, parameters);
+			return new PageRequestTarget(newPage);
 		}
 		catch (WicketRuntimeException e)
 		{

@@ -10,27 +10,19 @@
 	private IRequestTarget resolveBookmarkablePage(RequestCycle requestCycle,
 			RequestParameters requestParameters)
 	{
-		final String bookmarkablePageAlias = requestParameters.getBookmarkablePageAlias();
+		final String bookmarkablePageClass = requestParameters.getBookmarkablePageClass();
 		final IRequestTarget requestTarget;
 		final Session session = requestCycle.getSession();
 		final Application application = session.getApplication();
-
-		// first see whether we have a logical mapping
-		Class pageClass = application.getPages().classForAlias(bookmarkablePageAlias);
-
-		// nope, we don't have a logical mapping, so this should be a
-		// full class name
-		if (pageClass == null)
+		final Class pageClass;
+		try
 		{
-			try
-			{
-				pageClass = session.getClassResolver().resolveClass(bookmarkablePageAlias);
-			}
-			catch (RuntimeException e)
-			{
-				return new WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
-						"Unable to load Bookmarkable Page");
-			}
+			pageClass = session.getClassResolver().resolveClass(bookmarkablePageClass);
+		}
+		catch (RuntimeException e)
+		{
+			return new WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
+					"Unable to load Bookmarkable Page");
 		}
 
 		try
@@ -49,18 +41,12 @@
 				requestTarget = new PageRequestTarget(requestCycle.getResponsePage());
 			}
 
-			// as we have a new page, we should update the cluster
-			// TODO abstract this so that we can decide by looking
-			// at the kind of target and we don't have to bother
-			// users with it?
-			requestCycle.setUpdateCluster(true);
-
 			return requestTarget;
 		}
 		catch (RuntimeException e)
 		{
 			throw new WicketRuntimeException("Unable to instantiate Page class: "
-					+ bookmarkablePageAlias + ". See below for details.", e);
+					+ bookmarkablePageClass + ". See below for details.", e);
 		}
 	}
 
