@@ -1,17 +1,23 @@
 	/**
-	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
-	 * <p>
-	 * Gets a url that invokes the given listener interface on the given
-	 * component. The listener interface can be any interface with a single
-	 * method taking no arguments which has been registered with a call to
-	 * {@link RequestCycle#registerRequestListenerInterface(Class)}. The
-	 * component must implement the given interface.
+	 * Returns a URL that references a given interface on a component. When the
+	 * URL is requested from the server at a later time, the interface will be
+	 * called. A URL returned by this method will not be stable across sessions
+	 * and cannot be bookmarked by a user.
 	 * 
 	 * @param component
-	 *            Component implementing listener interface
+	 *            The component to reference
 	 * @param listenerInterface
-	 *            The listener interface to invoke when the URL is requested
-	 * @return A URL that encodes an interface to call on a given component
+	 *            The listener interface on the component
+	 * @return A URL that encodes a page, component and interface to call
 	 */
-	public abstract String urlFor(final Component component, final Class listenerInterface);
+	public final String urlFor(final Component component, final Class listenerInterface)
+	{
+		RequestCycle requestCycle = getRequestCycle();
+		String interfaceName = Classes.name(listenerInterface);
+		String url = requestCycle.getRequestCycleProcessor().getRequestEncoder().encode(
+				requestCycle,
+				new ListenerInterfaceRequestTarget(this, component, requestCycle
+						.getRequestInterfaceMethod(interfaceName)));
+		return url;
+	}
 

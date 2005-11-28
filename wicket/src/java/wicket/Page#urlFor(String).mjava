@@ -1,10 +1,16 @@
 	/**
-	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
-	 * <p>
+	 * Returns a URL that references a shared resource through the provided
+	 * resource key.
 	 * 
-	 * @param path
-	 *            The path
-	 * @return The url for the path
+	 * @param resourceKey
+	 *            The application global key of the shared resource
+	 * @return The url for the shared resource
 	 */
-	public abstract String urlFor(final String path);
+	public final String urlFor(final String resourceKey)
+	{
+		RequestCycle requestCycle = getRequestCycle();
+		String url = requestCycle.getRequestCycleProcessor().getRequestEncoder().encode(
+				requestCycle, new SharedResourceRequestTarget(resourceKey));
+		return url;
+	}
 
