@@ -3,9 +3,10 @@
 	 */
 	public final void setCurrentPage(int page)
 	{
-		if (page < 0 || page >= getPageCount())
+		if (page < 0 || (page >= getPageCount() && getPageCount() > 0))
 		{
-			throw new IndexOutOfBoundsException("argument [page]="+page+", must be 0<=page<"+getPageCount());
+			throw new IndexOutOfBoundsException("argument [page]=" + page + ", must be 0<=page<"
+					+ getPageCount());
 		}
 
 		if (currentPage != page)
@@ -20,10 +21,11 @@
 				{
 					currentPage = old;
 				}
+
 				public String toString()
 				{
-					return "CurrentPageChange[component: " + getPath() + ", currentPage: "
-							+ old + "]";
+					return "CurrentPageChange[component: " + getPath() + ", currentPage: " + old
+							+ "]";
 				}
 			});
 		}
