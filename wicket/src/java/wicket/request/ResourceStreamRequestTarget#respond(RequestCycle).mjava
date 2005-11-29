@@ -1,11 +1,16 @@
 	/**
-	 * Respond.
+	 * Does nothing at all.
 	 * 
-	 * @param response
-	 *            the response to write to
+	 * @see wicket.IRequestTarget#respond(wicket.RequestCycle)
 	 */
-	private final void respond(final Response response)
+	public void respond(RequestCycle requestCycle)
 	{
+		// Get servlet response to use when responding with resource
+		final Response response = requestCycle.getResponse();
+
+		configure(response, resourceStream);
+
+		// Respond with resource
 		try
 		{
 			final OutputStream out = response.getOutputStream();

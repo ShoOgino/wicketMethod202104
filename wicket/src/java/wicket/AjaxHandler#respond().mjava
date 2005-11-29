@@ -1,36 +1,25 @@
 	/**
-	 * Responds on the event request.
+	 * Respond to this request. If you override this method, make sure you set a
+	 * proper request target (call
+	 * {@link RequestCycle#setRequestTarget(IRequestTarget)}. If
+	 * {@link #getResponse()} returns a non-null resource stream, this
+	 * implementation will set the target to
+	 * {@link wicket.request.ResourceStreamRequestTarget}. If
+	 * {@link #getResponse()} returns null, the target will be set to an
+	 * instance of {@link EmptyRequestTarget}.
 	 */
-	private final void respond()
+	protected void respond()
 	{
-		try
+		RequestCycle requestCycle = RequestCycle.get();
+		IResourceStream resourceStream = getResponse();
+		if (resourceStream != null)
 		{
-			// Get request cycle
-			final RequestCycle cycle = RequestCycle.get();
-
-			// The cycle's page is set to null so that it won't be rendered back
-			// to
-			// the client since the resource being requested has nothing to do
-			// with pages
-			cycle.setRequestTarget(new EmptyRequestTarget());
-
-			resourceStream = getResponse();
-			if (resourceStream == null)
-			{
-				throw new WicketRuntimeException("Could not get resource stream");
-			}
-
-			// Get servlet response to use when responding with resource
-			final Response response = cycle.getResponse();
-
-			configure(response, resourceStream);
-
-			// Respond with resource
-			respond(response);
+			requestCycle.setRequestTarget(new ResourceStreamRequestTarget(resourceStream,
+					getResponseType()));
 		}
-		finally
+		else
 		{
-			resourceStream = null;
+			requestCycle.setRequestTarget(new EmptyRequestTarget());
 		}
 	}
 
