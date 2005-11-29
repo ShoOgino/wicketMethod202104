@@ -10,7 +10,6 @@
 	private IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
 			RequestParameters requestParameters)
 	{
-		final IRequestTarget requestTarget;
 		final Session session = requestCycle.getSession();
 		final Application application = session.getApplication();
 		try
@@ -37,8 +36,17 @@
 			// that we will keep a clean path
 			final PageParameters parameters = new PageParameters(requestParameters.getParameters());
 			Page newPage = session.getPageFactory().newPage(homePageClass, parameters);
-			return new PageRequestTarget(newPage);
-		}
+			// the response might have been set in the constructor of the home page
+			IRequestTarget requestTarget = requestCycle.getRequestTarget();
+
+			// is it possible that there is already another request target at this point then the 2 below?
+			if ( !(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IPageClassRequestTarget) )
+			{
+				requestTarget = new PageRequestTarget(newPage);
+			}
+
+			return requestTarget;
+			}
 		catch (WicketRuntimeException e)
 		{
 			throw new WicketRuntimeException("Could not create home page", e);
