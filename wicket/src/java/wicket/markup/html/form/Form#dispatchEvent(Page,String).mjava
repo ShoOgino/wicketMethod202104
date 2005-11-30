@@ -1,6 +1,4 @@
 	/**
-	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
-	 * 
 	 * Method for dispatching/calling a interface on a page from the given url.
 	 * Used by {@link wicket.markup.html.form.Form#onFormSubmitted()} for
 	 * dispatching events
@@ -10,9 +8,8 @@
 	 * @param url
 	 *            The url which describes the component path and the interface
 	 *            to be called.
-	 * @deprecated this method is to be removed and made part of the strategies
 	 */
-	public final void dispatchEvent(final Page page, final String url)
+	private void dispatchEvent(final Page page, final String url)
 	{
 		RequestCycle requestCycle = RequestCycle.get();
 		String decodedUrl = requestCycle.getRequest().decodeURL(url);
@@ -42,7 +39,7 @@
 			Method method = requestCycle.getRequestInterfaceMethod(interfaceName);
 			if (method != null)
 			{
-				invokeInterface(component, method, page);
+				new FormSubmitInterfaceRequestTarget(page,component,method).processEvents(requestCycle);
 			}
 		}
 		else

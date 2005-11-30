@@ -5,31 +5,9 @@
 	{
 		IRequestTarget target = requestCycle.getRequestTarget();
 
-		if (target instanceof ListenerInterfaceRequestTarget)
+		if (target instanceof IListenerInterfaceRequestTarget)
 		{
-			ListenerInterfaceRequestTarget callTarget = (ListenerInterfaceRequestTarget)target;
-			final Page page = callTarget.getPage();
-
-			if (!(target instanceof RedirectPageRequestTarget))
-			{
-				// Assume cluster needs to be updated now, unless listener
-				// invocation changes this
-				requestCycle.setUpdateCluster(true);
-
-				// Clear all feedback messages if it isn't a redirect
-				page.getFeedbackMessages().clear();
-
-				final Application application = requestCycle.getApplication();
-				// and see if we have to redirect the render part by default
-				ApplicationSettings.RenderStrategy strategy = application.getSettings()
-						.getRenderStrategy();
-				boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
-
-				requestCycle.setRedirect(issueRedirect);
-			}
-
-			// Invoke interface on component
-			invokeInterface(callTarget.getComponent(), callTarget.getListenerMethod(), page);
+			((IListenerInterfaceRequestTarget)target).processEvents(requestCycle);
 		}
 	}
 
