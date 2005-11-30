@@ -1,7 +1,8 @@
 	/**
 	 * Throw an exception if not all components rendered.
+	 * @param renderedContainer The page itself if it was a full page render or the container that was rendered standalone 
 	 */
-	private final void checkRendering()
+	private final void checkRendering(final MarkupContainer renderedContainer)
 	{
 		// If the application wants component uses checked and
 		// the response is not a redirect
@@ -11,7 +12,7 @@
 			final Count unrenderedComponents = new Count();
 			final List unrenderedAutoComponents = new ArrayList();
 			final StringBuffer buffer = new StringBuffer();
-			visitChildren(new IVisitor()
+			renderedContainer.visitChildren(new IVisitor()
 			{
 				public Object component(final Component component)
 				{

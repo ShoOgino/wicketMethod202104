@@ -3,7 +3,19 @@
 	 */
 	public void respond(RequestCycle requestCycle)
 	{
+		
+		Page page = component.getPage();
+		if(page != null)
+		{
+			page.startComponentRender(component);
+		}
 		// Let component render itself
 		component.render();
+		
+		if(page != null)
+		{
+			page.endComponentRender(component);
+		}
+		
 	}
 
