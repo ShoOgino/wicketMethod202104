@@ -1,0 +1,27 @@
+	/**
+	 * Loop through the processing steps starting from the current one.
+	 */
+	private final void steps()
+	{
+		try
+		{
+			// TODO catch infinite loops
+			while (currentStep < DONE)
+			{
+				step();
+				currentStep++;
+			}
+		}
+		finally
+		{
+			// set step manually to clean up
+			currentStep = CLEANUP_REQUEST;
+
+			// clean up the request
+			cleanUp();
+
+			// set step manually to done
+			currentStep = DONE;
+		}
+	}
+

@@ -1,0 +1,113 @@
+	/** handle the current step in the request processing. */
+	private final void step()
+	{
+		try
+		{
+			// get the processor
+			IRequestCycleProcessor processor = safeGetRequestProcessor();
+			switch (currentStep)
+			{
+				case PREPARE_REQUEST : {
+
+					// prepare the request
+					prepare();
+
+					break;
+				}
+				case DECODE_PARAMETERS : {
+
+					// get the request parameters object using the request
+					// encoder of the processor
+					requestParameters = getRequestParameters(processor);
+
+					break;
+				}
+				case RESOLVE_TARGET : {
+
+					// resolve the target of the request using the request
+					// parameters
+					final IRequestTarget target = processor.resolve(this, requestParameters);
+					// has to result in a request target
+					if (target == null)
+					{
+						throw new WicketRuntimeException(
+								"the processor did not resolve to any request target");
+					}
+
+					// manually set step to check access
+					currentStep = CHECK_ACCESS;
+
+					if (target instanceof IAccessCheckingTarget)
+					{
+						((IAccessCheckingTarget)target).checkAccess();
+					}
+
+					// check access or earlier (like in a component constructor) might
+					// have called setRequestTarget. If that is the case, put that one
+					// on top; otherwise put our resolved target on top
+					IRequestTarget otherTarget = getRequestTarget();
+					if (otherTarget != null)
+					{
+						// swap targets
+						requestTargets.pop();
+						requestTargets.push(target);
+						requestTargets.push(otherTarget);
+					}
+					else
+					{
+						// set it as the current target, on the top of the stack
+						// NOTE: don't do the checking that is done in
+						// setRequestTarget
+						requestTargets.push(target);
+					}
+
+					break;
+				}
+				case PROCESS_EVENTS : {
+
+					// determine what kind of synchronization is to be used, and
+					// handle any events with that and generate a response in
+					// that same block
+					// NOTE: because of synchronization, we need to take the
+					// steps PROCESS_EVENS and RESPOND together
+					processEventsAndRespond(processor);
+
+					break;
+				}
+				case RESPOND : {
+
+					// generate a response
+					// NOTE: we reach this block when during event processing
+					// and response generation the request target was changed,
+					// causing the request processing to go BACK to RESPOND.
+					// Note that we could still be in a session-synchronized
+					// block here, so be very careful not to do other
+					// synchronization (possibly introducing a deadlock)
+					processor.respond(this);
+
+					break;
+				}
+				default : {
+					// nothing
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			// set step manually to handle exception
+			currentStep = HANDLE_EXCEPTION;
+
+			// probably our last chance the exception can be logged
+			log.error(e.getMessage(), e);
+
+			IRequestCycleProcessor processor = safeGetRequestProcessor();
+			// try to play nicely and let the request processor handle the
+			// exception response. If that doesn't work, any runtime exception
+			// will automatically be bubbled up
+			if (processor != null)
+			{
+				processor.respond(e, this);
+			}
+		}
+	}
+

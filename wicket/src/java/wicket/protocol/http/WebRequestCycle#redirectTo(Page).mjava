@@ -7,9 +7,8 @@
 	 * 
 	 * @param page
 	 *            The page to redirect to
-	 * @throws ServletException
 	 */
-	public void redirectTo(final Page page) throws ServletException
+	public final void redirectTo(final Page page)
 	{
 		String redirectUrl = null;
 
@@ -68,8 +67,6 @@
 					redirectResponse.close();
 
 					redirectUrl = page.urlFor(page, IRedirectListener.class);
-					// TODO adouma: no Portlets support yet so typecasted for
-					// Servlet env.
 					((WebApplication)application).addRedirect(((ServletWebRequest)getWebRequest())
 							.getHttpServletRequest(), redirectUrl, redirectResponse);
 				}
@@ -80,7 +77,6 @@
 				setResponse(currentResponse);
 				log.error(ex.getMessage(), ex);
 				IRequestCycleProcessor processor = getRequestCycleProcessor();
-				// TODO integrate with IRequestCycleProcessor
 				processor.respond(ex, this);
 				return;
 			}

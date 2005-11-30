@@ -10,46 +10,13 @@
 	 */
 	public final void request(IRequestTarget target) throws ServletException
 	{
-		// prepare the request
-		prepare();
+		// set it as the current target, on the top of the stack
+		requestTargets.push(target);
 
-		IRequestCycleProcessor processor = null;
+		// set start step
+		currentStep = PROCESS_EVENTS;
 
-		try
-		{
-			// get the processor we delegate the handling of the request
-			// cycle behaviour to
-			processor = safeGetRequestProcessor();
-
-			// get the request parameters object using the request encoder of
-			// the processor
-			final RequestParameters requestParameters = getRequestParameters(processor);
-
-			// set it as the current target, on the top of the stack
-			setRequestTarget(target);
-
-			// determine what kind of synchronization is to be used, and
-			// handle any events with that
-			processEventsAndRespond(processor);
-		}
-		catch (Exception e)
-		{
-			// probably our last chance the exception can be logged
-			log.error(e.getMessage(), e);
-
-			// try to play nicely and let the request processor handle the
-			// exception response. If that doesn't work, any runtime exception
-			// will automatically be bubbled up
-			if (processor != null)
-			{
-				log.error(e.getMessage(), e);
-				processor.respond(e, this);
-			}
-		}
-		finally
-		{
-			// clean up the request
-			cleanUp();
-		}
+		// loop through steps
+		steps();
 	}
 

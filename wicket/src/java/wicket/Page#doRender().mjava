@@ -5,71 +5,46 @@
 	{
 		// Make sure it is realy empty
 		renderedComponents = null;
-		
-		// check access much earlier then in onRender!
-		// if false in onRender then checkRendering below fails anyway!!
-		if (checkAccess())
+
+		// Add/touch the response page in the session (its pagemap).
+		session.touch(this);
+
+		// Set form component values from cookies
+		setFormComponentValuesFromCookies();
+
+		try
 		{
-			// Add/touch the response page in the session (its pagemap).
-			session.touch(this);
+			// We have to initialize the page's request now
 
-			// Set form component values from cookies
-			setFormComponentValuesFromCookies();
-
-			try
+			// First, give priority to IFeedback instances, as they have to
+			// collect their messages before components like ListViews
+			// remove any child components
+			visitChildren(IFeedback.class, new IVisitor()
 			{
-				// We have to initialize the page's request now
-
-				// First, give priority to IFeedback instances, as they have to
-				// collect their messages before components like ListViews
-				// remove any child components
-				visitChildren(IFeedback.class, new IVisitor()
+				public Object component(Component component)
 				{
-					public Object component(Component component)
-					{
-						((IFeedback)component).updateFeedback();
-						component.internalBeginRequest();
-						return IVisitor.CONTINUE_TRAVERSAL;
-					}
-				});
+					((IFeedback)component).updateFeedback();
+					component.internalBeginRequest();
+					return IVisitor.CONTINUE_TRAVERSAL;
+				}
+			});
 
-				// Now, do the initialization for the other components
-				internalBeginRequest();
+			// Now, do the initialization for the other components
+			internalBeginRequest();
 
-				// Handle request by rendering page
-				render();
+			// Handle request by rendering page
+			render();
 
-				// Size profiling for pages
-				// dumpSize();
+			// Size profiling for pages
+			// dumpSize();
 
-				// Check rendering if it happened fully
-				checkRendering();
-			}
-			finally
-			{
-				// The request is over
-				internalEndRequest();
-			}
+			// Check rendering if it happened fully
+			checkRendering();
 		}
-		// Test if the response page is set by the checkAccess and render that
-		// one.
-		else
+		finally
 		{
-			IRequestTarget requestTarget = getRequestCycle().getRequestTarget();
-			if(requestTarget instanceof IPageRequestTarget)
-			{
-				if( ((IPageRequestTarget)requestTarget).getPage() != this )
-				{
-					requestTarget.respond(getRequestCycle());
-				}
-			}
-			else if(requestTarget instanceof IPageClassRequestTarget)
-			{
-				if( ((IPageClassRequestTarget)requestTarget).getPageClass() != getClass() )
-				{
-					requestTarget.respond(getRequestCycle());
-				}
-			}
+			// The request is over
+			internalEndRequest();
 		}
 	}
 
