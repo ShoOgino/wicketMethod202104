@@ -1,31 +1,32 @@
+	/**
+	 * Refresh the items in the view. Delegates the creation of items to the
+	 * selected item reuse strategy
+	 */
 	protected void internalOnBeginRequest()
 	{
 		super.internalOnBeginRequest();
 
 		if (isVisibleInHierarchy())
 		{
-			int offset = getViewOffset();
-			int size = getViewSize();
 
 			IItemFactory itemFactory = new IItemFactory()
 			{
 
 				public Item newItem(int index, IModel model)
 				{
-					String id = AbstractPageableView.this.newChildId();
-					Item item = AbstractPageableView.this.newItem(id, index, model);
-					AbstractPageableView.this.populateItem(item);
+					String id = RefreshingView.this.newChildId();
+					Item item = RefreshingView.this.newItem(id, index, model);
+					RefreshingView.this.populateItem(item);
 					return item;
 				}
 
 			};
 
-			Iterator models = getItemModels(offset, size);
-			models = new CappedIteratorAdapter(models, size);
-
+			Iterator models = getItemModels();
 			Iterator items = getItemReuseStrategy().getItems(itemFactory, models, getItems());
 			removeAll();
 			addItems(items);
 		}
+
 	}
 
