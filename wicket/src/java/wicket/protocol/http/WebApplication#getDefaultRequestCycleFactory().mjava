@@ -12,16 +12,15 @@
 	protected IRequestCycleFactory getDefaultRequestCycleFactory()
 	{
 		return new IRequestCycleFactory()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public RequestCycle newRequestCycle(Session session, Request request, Response response)
 			{
-				private static final long serialVersionUID = 1L;
-	
-				public RequestCycle newRequestCycle(Session session, Request request,
-						Response response)
-				{
-					// Respond to request
-					return new WebRequestCycle((WebSession)session, (WebRequest)request,
-							(WebResponse)response);
-				}
-			};
+				// Respond to request
+				return new WebRequestCycle((WebSession)session, (WebRequest)request,
+						(WebResponse)response);
+			}
+		};
 	}
 
