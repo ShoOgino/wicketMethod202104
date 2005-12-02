@@ -1,5 +1,8 @@
-	/** handle the current step in the request processing. 
-	 * @param processor the cycle processor that can be used
+	/**
+	 * handle the current step in the request processing.
+	 * 
+	 * @param processor
+	 *            the cycle processor that can be used
 	 */
 	private final void step(IRequestCycleProcessor processor)
 	{
@@ -32,12 +35,11 @@
 					{
 						throw new WicketRuntimeException(
 								"the processor did not resolve to any request target");
-					} 
+					}
 					requestTargets.push(target);
 					break;
 				}
-				case CHECK_ACCESS:
-				{
+				case CHECK_ACCESS : {
 					// manually set step to check access
 
 					IRequestTarget target = getRequestTarget();
@@ -47,14 +49,17 @@
 						((IAccessCheckingTarget)target).checkAccess(this);
 					}
 
-					// check access or earlier (like in a component constructor) might
-					// have called setRequestTarget. If that is the case, put that one
+					// check access or earlier (like in a component constructor)
+					// might
+					// have called setRequestTarget. If that is the case, put
+					// that one
 					// on top; otherwise put our resolved target on top
 					IRequestTarget otherTarget = getRequestTarget();
 					if (otherTarget != target)
 					{
-						// The new target has to be checked again set the current step back one.
-						currentStep = CHECK_ACCESS-1;
+						// The new target has to be checked again set the
+						// current step back one.
+						currentStep = CHECK_ACCESS - 1;
 						// swap targets
 						requestTargets.pop();
 						requestTargets.push(target);

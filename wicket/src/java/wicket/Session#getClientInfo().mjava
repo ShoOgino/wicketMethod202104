@@ -1,0 +1,20 @@
+	/**
+	 * Lazily gets the new agent info object for this session. Typically, this
+	 * method will call {@link RequestCycle#newClientInfo()} to get the info
+	 * object based on the current request, and then caches the returned object;
+	 * we can expect the client to stay the same for the whole session, and
+	 * implementations of {@link RequestCycle#newClientInfo()} might be
+	 * relatively expensive.
+	 * 
+	 * @return the agent info object based on this request
+	 */
+	public ClientInfo getClientInfo()
+	{
+		if (agentInfo == null)
+		{
+//			agentInfo = getRequestCycle().newClientInfo();
+			return getRequestCycle().newClientInfo();
+		}
+		return agentInfo;
+	}
+
