@@ -1,0 +1,24 @@
+    /**
+     * @see junit.framework.TestCase#setUp()
+     */
+	protected void setUp() throws Exception
+	{
+		application = new MockWebApplication(null)
+		{
+			public MarkupParser newMarkupParser(final MarkupContainer container)
+			{
+				final MarkupParser parser = new MarkupParser(container, new XmlPullParser(getSettings()
+						.getDefaultMarkupEncoding()))
+			 	{
+					public void initFilterChain()
+					{
+						appendMarkupFilter(new PrependContextPathHandler());
+					}
+			 	};
+
+				parser.configure(getSettings());
+				return parser;
+			}
+		};
+	}
+

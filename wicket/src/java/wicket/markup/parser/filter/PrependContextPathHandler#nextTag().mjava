@@ -1,0 +1,48 @@
+	/**
+	 * Get the next MarkupElement from the parent MarkupFilter and handle it if
+	 * the specific filter criteria are met. Depending on the filter, it may
+	 * return the MarkupElement unchanged, modified or it remove by asking the
+	 * parent handler for the next tag.
+	 * 
+	 * @see wicket.markup.parser.IMarkupFilter#nextTag()
+	 * @return Return the next eligible MarkupElement
+	 */
+	public MarkupElement nextTag() throws ParseException
+	{
+		// Get the next tag. If null, no more tags are available
+		final ComponentTag tag = (ComponentTag)getParent().nextTag();
+		if (tag == null)
+		{
+			return tag;
+		}
+
+		// A new handler is created for each markup file. Hence it is
+		// sufficient to "create" the context path just once.
+		if (contextPath == null)
+		{
+			contextPath = ((WebRequestCycle)RequestCycle.get()).getWebRequest().getContextPath();
+			if (contextPath == null)
+			{
+				contextPath = "";
+			}
+		}
+
+		if (contextPath.length() > 0)
+		{
+			// Modify all relevant attributes 
+			for (int i=0; i < attributeNames.length; i++)
+			{
+				String attrName = attributeNames[i];
+				String attrValue = tag.getAttributes().getString(attrName);
+				if ((attrValue != null) && attrValue.startsWith("/"))
+				{
+					String url = contextPath + attrValue;
+					tag.getAttributes().put(attrName, url);
+					tag.setModified(true);
+				}
+			}
+		}
+		
+		return tag;
+	}
+

@@ -25,16 +25,13 @@
 				final Class factoryClass = getClass().getClassLoader().loadClass(
 						appFactoryClassName);
 
-				if (IWebApplicationFactory.class.isAssignableFrom(factoryClass))
-				{
-					// instantiate the factory
-					return (IWebApplicationFactory)factoryClass.newInstance();
-				}
-				else
-				{
-					throw new WicketRuntimeException("Application factory class "
-							+ appFactoryClassName + " must implement IWebApplicationFactory");
-				}
+				// instantiate the factory
+				return (IWebApplicationFactory)factoryClass.newInstance();
+			}
+			catch (ClassCastException e)
+			{
+				throw new WicketRuntimeException("Application factory class "
+						+ appFactoryClassName + " must implement IWebApplicationFactory");
 			}
 			catch (ClassNotFoundException e)
 			{
