@@ -15,7 +15,8 @@
 	 * @param locale
 	 *            The locale to get the resource for (optional)
 	 * @param style
-	 *            The style to get the resource for (optional) (see {@link wicket.Session})
+	 *            The style to get the resource for (optional) (see
+	 *            {@link wicket.Session})
 	 * @param defaultValue
 	 *            The default value (optional)
 	 * @return The string resource
@@ -27,27 +28,47 @@
 			final Locale locale, final String style, final String defaultValue)
 			throws MissingResourceException
 	{
-		// The string to return
+		// The key value
 		String string = null;
 
 		// Get application settings
 		final ApplicationSettings settings = application.getSettings();
 
-		// Search each loader in turn and return the string if it is found
-		for (final Iterator iterator = settings.getStringResourceLoaders().iterator(); iterator
-				.hasNext();)
+		// If value is cached already ...
+		String id = createCacheId(component, locale, style, key);
+		if (cachedValues.containsKey(id))
 		{
-			IStringResourceLoader loader = (IStringResourceLoader)iterator.next();
-			string = loader.loadStringResource(component, key, locale, style);
-			if (string != null)
+			if (log.isDebugEnabled())
 			{
-				return substituteOgnl(component, string, model);
+				log.debug("Found message key in cache: " + id);
 			}
+			string = (String)cachedValues.get(id);
+		}
+		else
+		{
+			// Search each loader in turn and return the string if it is found
+			final Iterator iterator = settings.getStringResourceLoaders().iterator();;
+			while (iterator.hasNext())
+			{
+				IStringResourceLoader loader = (IStringResourceLoader)iterator.next();
+				string = loader.loadStringResource(component, key, locale, style);
+
+				if (string != null)
+				{
+					this.cachedValues.put(id, string);
+					break;
+				}
+			}
+		}
+
+		if (string != null)
+		{
+			return substituteOgnl(component, string, model);
 		}
 
 		// Resource not found, so handle missing resources based on application
 		// configuration
-		if (settings.getUseDefaultOnMissingResource() && defaultValue != null)
+		if (settings.getUseDefaultOnMissingResource() && (defaultValue != null))
 		{
 			return defaultValue;
 		}

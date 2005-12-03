@@ -1,10 +1,11 @@
 	/**
-	 * Get the string resource for the given combination of key, locale and
-	 * style. The information is obtained from a single application-wide
-	 * resource bundle.
+	 * If component not null, than call the default implementation (@see
+	 * AbstractStringResourceLoader#loadStringResource(Component, String,
+	 * Locale, String), else use the class provided to the constructor to load
+	 * the resource requested.
 	 * 
 	 * @param component
-	 *            Not used - can be null
+	 *            The component to use to find resources to be loaded
 	 * @param key
 	 *            The key to obtain the string for
 	 * @param locale
@@ -13,30 +14,16 @@
 	 * @param style
 	 *            The (optional) style identifying the resource set to select
 	 *            the strings from (see {@link wicket.Session})
-	 * @return The string resource value or null if resource not loaded
+	 * @return The string resource value or null if resource not found
 	 */
-	public final String loadStringResource(final Component component, final String key,
+	public String loadStringResource(final Component component, final String key,
 			final Locale locale, final String style)
 	{
-		// Locate previously loaded resources from the cache
-		final String id = createCacheId(clazz, style, locale);
-		ValueMap strings = getResourceCache(id);
-		if (strings == null)
+		if (component == null)
 		{
-			// No resources previously loaded, attempt to load them
-			strings = loadResources(clazz, style, locale, id);
+			return loadStringResourceByClass(this.clazz, key, locale, style);
 		}
 
-		if (log.isDebugEnabled())
-		{
-			log.debug("Try to load resource from: " + id + "; key: " + key);
-		}
-		String value = strings.getString(key);
-		if (value != null && log.isDebugEnabled())
-		{
-			log.debug("Found resource from: " + id + "; key: " + key);
-		}
-		
-		return value;
+		return super.loadStringResource(component, key, locale, style);
 	}
 

@@ -1,0 +1,34 @@
+	/**
+	 * Create a unique key to identify the properties file in the cache
+	 * 
+	 * @param componentClass
+	 *            The class that resources are bring loaded for
+	 * @param locale
+	 *            The locale to load reosurces for
+	 * @param style
+	 *            The style to load resources for (see {@link wicket.Session})
+	 * @return The resource key
+	 */
+	public final String createResourceKey(final Class componentClass, 
+			final Locale locale, final String style)
+	{
+		final StringBuffer buffer = new StringBuffer(80);
+		if (componentClass != null)
+		{
+			buffer.append(componentClass.getName());
+		}
+		if (style != null)
+		{
+			buffer.append(':');
+			buffer.append(style);
+		}
+		if (locale != null)
+		{
+			buffer.append(':');
+			buffer.append(locale.toString());
+		}
+
+		final String id = buffer.toString();
+		return id;
+	}
+

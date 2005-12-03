@@ -1,0 +1,23 @@
+	/**
+	 * Helper method to create a unique id for caching previously loaded
+	 * resources.
+	 * 
+	 * @param component
+	 *            The component that the resources are being loaded for
+	 * @param locale
+	 *            The locale of the resources
+	 * @param style
+	 *            The style of the resources (see {@link wicket.Session})
+	 * @param key
+	 *            The message key
+	 * @return The unique cache id
+	 */
+	private String createCacheId(final Component component, final Locale locale,
+			final String style, final String key)
+	{
+		String id = application.getPropertiesFactory().createResourceKey(
+				component != null ? component.getClass() : null, locale, style)
+				+ '.' + key;
+		return id;
+	}
+

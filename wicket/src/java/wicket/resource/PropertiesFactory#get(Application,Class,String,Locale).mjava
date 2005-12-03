@@ -1,0 +1,31 @@
+    /**
+     * Get the properties for ...
+     * 
+     * @param application
+     *            The application object
+	 * @param clazz
+	 *            The class that resources are bring loaded for
+	 * @param style
+	 *            The style to load resources for (see {@link wicket.Session})
+	 * @param locale
+	 *            The locale to load reosurces for
+	 * @return The properties
+	 */
+	public final Properties get(final Application application, final Class clazz, final String style, final Locale locale)
+	{
+		final String key = createResourceKey(clazz, locale, style);
+		Properties props = (Properties)propertiesCache.get(key);
+		if (props == null)
+		{
+			final IResourceStream resource = application.getResourceStreamLocator().locate(
+					clazz, style, locale, "properties");
+
+			if (resource != null)
+			{
+				props = loadPropertiesFileAndWatchForChanges(key, resource, clazz, style, locale);
+			}
+		}
+		
+		return props;
+	}
+
