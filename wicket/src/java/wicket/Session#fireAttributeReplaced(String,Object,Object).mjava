@@ -1,0 +1,25 @@
+	/**
+	 * Calls
+	 * {@link ISessionAttributeListener#attributeReplaced(SessionAttributeEvent)}
+	 * on all registered session listeners.
+	 * 
+	 * @param name
+	 *            the attribute name
+	 * @param value
+	 *            the attribute value
+	 * @param oldValue
+	 *            the old attribute value
+	 */
+	protected final void fireAttributeReplaced(String name, Object value, Object oldValue)
+	{
+		SessionAttributeEvent evt = new SessionAttributeEvent(this, name, oldValue);
+		synchronized (listeners)
+		{
+			for (Iterator i = listeners.iterator(); i.hasNext();)
+			{
+				ISessionAttributeListener l = (ISessionAttributeListener)i.next();
+				l.attributeReplaced(evt);
+			}
+		}
+	}
+

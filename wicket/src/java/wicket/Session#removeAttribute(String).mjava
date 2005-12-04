@@ -1,6 +1,23 @@
 	/**
+	 * Removes the attribute with the given name.
+	 * 
 	 * @param name
-	 *            The name of the attribute to remove
+	 *            the name of the attribute to remove
 	 */
-	protected abstract void removeAttribute(final String name);
+	protected final void removeAttribute(String name)
+	{
+		// get the old value if any
+		Object oldValue = getAttribute(name);
+
+		if (oldValue != null)
+		{
+			fireAttributeRemoved(name);
+
+			doRemoveAttribute(name);
+		}
+		else
+		{
+			log.warn("attribute " + name + " could not be removed as it didn't exist in " + this);
+		}
+	}
 

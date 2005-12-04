@@ -4,14 +4,18 @@
 	protected List getAttributeNames()
 	{
 		final List list = new ArrayList();
-		final Enumeration names = httpSession.getAttributeNames();
-		final String prefix = sessionAttributePrefix + "-";
-		while (names.hasMoreElements())
+		HttpSession httpSession = getHttpSession();
+		if (httpSession != null)
 		{
-			final String name = (String)names.nextElement();
-			if (name.startsWith(prefix))
+			final Enumeration names = httpSession.getAttributeNames();
+			final String prefix = sessionAttributePrefix + "-";
+			while (names.hasMoreElements())
 			{
-				list.add(name.substring(prefix.length()));
+				final String name = (String)names.nextElement();
+				if (name.startsWith(prefix))
+				{
+					list.add(name.substring(prefix.length()));
+				}
 			}
 		}
 		return list;

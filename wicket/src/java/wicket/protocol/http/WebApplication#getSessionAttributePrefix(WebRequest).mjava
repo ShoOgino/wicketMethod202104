@@ -1,0 +1,20 @@
+	/**
+	 * Gets the prefix for storing variables in the actual session (typically
+	 * {@link HttpSession} for this application instance.
+	 * 
+	 * @param request
+	 *            the request
+	 * 
+	 * @return the prefix for storing variables in the actual session
+	 */
+	public final String getSessionAttributePrefix(final WebRequest request)
+	{
+		if (sessionAttributePrefix == null)
+		{
+			sessionAttributePrefix = "wicket-" + request.getServletPath() + "-";
+		}
+		// Namespacing for session attributes is provided by
+		// adding the servlet path
+		return sessionAttributePrefix;
+	}
+

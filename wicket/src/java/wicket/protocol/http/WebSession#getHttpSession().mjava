@@ -1,8 +1,22 @@
 	/**
-	 * @return The underlying HttpSession object
+	 * Gets the underlying HttpSession object or null.
+	 * <p>
+	 * WARNING: it is a bad idea to depend on the http session object directly.
+	 * Please use the classes and methods that are exposed by Wicket instead.
+	 * Send an email to the mailing list in case it is not clear how to do
+	 * things or you think you miss funcionality which causes you to depend on
+	 * this directly.
+	 * </p>
+	 * 
+	 * @return The underlying HttpSession object (null if not created yet).
 	 */
-	public HttpSession getHttpSession()
+	public final HttpSession getHttpSession()
 	{
+		if (httpSession == null)
+		{
+			// try to get it without forcing creation
+			httpSession = getHttpSession(false);
+		}
 		return httpSession;
 	}
 

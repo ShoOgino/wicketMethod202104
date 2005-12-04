@@ -5,13 +5,17 @@
 	 */
 	public void invalidateNow()
 	{
-		try
+		HttpSession httpSession = getHttpSession();
+		if (httpSession != null)
 		{
-			httpSession.invalidate();
-		}
-		catch (IllegalStateException e)
-		{
-			// Ignore
+			try
+			{
+				httpSession.invalidate();
+			}
+			catch (IllegalStateException e)
+			{
+				// Ignore
+			}
 		}
 	}
 
