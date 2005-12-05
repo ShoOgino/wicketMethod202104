@@ -1,17 +1,26 @@
 	/**
-	 * Resort data provider according to this link
+	 * Re-sort data provider according to this link
 	 * 
 	 * @return this
 	 */
-	public OrderByLink sort()
+	public final OrderByLink sort()
 	{
-		ISortableDataProvider dataProvider = (ISortableDataProvider)list.getModelObject();
+		// version the old state
+		Change change = new SortStateChange();
+		addStateChange(change);
 
-		// Add the ordering to the list.
-		list.modelChanging();
-		dataProvider.addSort(sortProperty);
-		list.setCurrentPage(0);
-		list.modelChanged();
+		ISortState state = stateLocator.getSortState();
+
+		int oldDir = state.getPropertyState(property);
+
+		int newDir = ISortState.ASCENDING;
+
+		if (oldDir == ISortState.ASCENDING)
+		{
+			newDir = ISortState.DESCENDING;
+		}
+
+		state.setPropertyState(property, newDir);
 
 		return this;
 	}
