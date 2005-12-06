@@ -13,8 +13,13 @@
 	{
 		final RequestCycle cycle = session.getRequestCycle();
 		IRequestCycleProcessor processor = cycle.getRequestCycleProcessor();
+		IRequestEncoder encoder = processor.getRequestEncoder();
+		// TODO this conflicts with the use of IRequestEncoder. We should get
+		// rid of encodeURL in favor of IRequestEncoder
 		interceptContinuationURL = page.getResponse().encodeURL(cycle.getRequest().getURL());
 		cycle.redirectTo(page);
+
+		// TODO why this?
 		session.dirty();
 	}
 

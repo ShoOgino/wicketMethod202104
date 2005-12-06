@@ -12,13 +12,12 @@
 	 */
 	public final String urlFor(final Component component, final Class listenerInterface)
 	{
-		RequestCycle requestCycle = getRequestCycle();
 		String interfaceName = Classes.name(listenerInterface);
-		IRequestEncoder requestEncoder = requestCycle.getRequestCycleProcessor().getRequestEncoder();
-		String url = requestEncoder.encode(
-				requestCycle,
-				new ListenerInterfaceRequestTarget(this, component, requestCycle
-						.getRequestInterfaceMethod(interfaceName)));
-		return url;
+		RequestCycle requestCycle = getRequestCycle();
+		IRequestTarget target = new ListenerInterfaceRequestTarget(this, component, requestCycle
+				.getRequestInterfaceMethod(interfaceName));
+		IRequestEncoder requestEncoder = requestCycle.getRequestCycleProcessor()
+				.getRequestEncoder();
+		return requestEncoder.encode(requestCycle, target);
 	}
 

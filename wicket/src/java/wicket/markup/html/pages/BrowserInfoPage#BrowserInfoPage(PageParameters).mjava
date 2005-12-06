@@ -1,0 +1,39 @@
+	/**
+	 * Bookmarkable constructor. This is not for normal framework client use. It
+	 * will be called whenever Javascript is not supported, and the browser info
+	 * page's meta refresh fires to this page. Prior to this, the other
+	 * constructor should already have been called.
+	 * 
+	 * @param parameters
+	 *            page parameters with the original url in it
+	 */
+	public BrowserInfoPage(PageParameters parameters)
+	{
+		String to = (String)parameters.get("cto");
+		if (to == null)
+		{
+			throw new IllegalArgumentException("parameter cto must be provided!");
+		}
+		setContinueTo(to);
+		initComps();
+		WebRequestCycle requestCycle = (WebRequestCycle)getRequestCycle();
+		WebSession session = (WebSession)getSession();
+		ClientInfo clientInfo = session.getClientInfo();
+		if (clientInfo == null)
+		{
+			clientInfo = new WebClientInfo(requestCycle);
+			getSession().setClientInfo(clientInfo);
+		}
+		else if (clientInfo instanceof WebClientInfo)
+		{
+			WebClientInfo info = (WebClientInfo)clientInfo;
+			ClientProperties properties = info.getProperties();
+			properties.setProperty(ClientProperties.NAVIGATOR_JAVA_ENABLED, Boolean.FALSE);
+		}
+		else
+		{
+			warnNotUsingWebClientInfo(clientInfo);
+		}
+		continueToPrevious();
+	}
+

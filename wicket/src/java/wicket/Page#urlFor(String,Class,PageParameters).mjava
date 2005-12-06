@@ -15,10 +15,10 @@
 	public final String urlFor(final String pageMapName, final Class pageClass,
 			final PageParameters parameters)
 	{
+		IRequestTarget target = new PageClassRequestTarget(pageMapName, pageClass, parameters);
 		RequestCycle requestCycle = getRequestCycle();
-		IRequestEncoder requestEncoder = requestCycle.getRequestCycleProcessor().getRequestEncoder();
-		String url = requestEncoder.encode(
-				requestCycle, new PageClassRequestTarget(pageMapName, pageClass, parameters));
-		return url;
+		IRequestEncoder requestEncoder = requestCycle.getRequestCycleProcessor()
+				.getRequestEncoder();
+		return requestEncoder.encode(requestCycle, target);
 	}
 
