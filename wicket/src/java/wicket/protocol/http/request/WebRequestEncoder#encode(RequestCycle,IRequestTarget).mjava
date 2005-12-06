@@ -22,9 +22,9 @@
 			url.append(mountPath);
 			
 			// encode page parameters into the url
-			if (requestTarget instanceof PageClassRequestTarget) {
-				PageClassRequestTarget pageTarget=(PageClassRequestTarget)requestTarget;
-				PageClassRequestTarget mountedTarget=(PageClassRequestTarget)targetForPath(mountPath);
+			if (requestTarget instanceof BookmarkablePageRequestTarget) {
+				BookmarkablePageRequestTarget pageTarget=(BookmarkablePageRequestTarget)requestTarget;
+				BookmarkablePageRequestTarget mountedTarget=(BookmarkablePageRequestTarget)targetForPath(mountPath);
 				
 				url.append(mountedTarget.getParamsEncoder().encode(pageTarget.getPageParameters()));
 			}
@@ -32,9 +32,9 @@
 			return url.toString();
 		}
 
-		if (requestTarget instanceof IPageClassRequestTarget)
+		if (requestTarget instanceof IBookmarkablePageRequestTarget)
 		{
-			return encode(requestCycle, (IPageClassRequestTarget)requestTarget);
+			return encode(requestCycle, (IBookmarkablePageRequestTarget)requestTarget);
 		}
 		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
 		{
