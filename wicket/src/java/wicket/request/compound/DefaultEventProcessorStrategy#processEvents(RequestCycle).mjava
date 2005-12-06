@@ -5,9 +5,14 @@
 	{
 		IRequestTarget target = requestCycle.getRequestTarget();
 
-		if (target instanceof IListenerInterfaceRequestTarget)
+		if (target instanceof IEventProcessingRequestTarget)
 		{
-			((IListenerInterfaceRequestTarget)target).processEvents(requestCycle);
+			if (log.isDebugEnabled())
+			{
+				log.debug("commencing event handling for " + target);
+			}
+
+			((IEventProcessingRequestTarget)target).processEvents(requestCycle);
 		}
 	}
 
