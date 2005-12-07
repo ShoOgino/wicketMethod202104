@@ -18,17 +18,18 @@
 		if (mountPath != null)
 		{
 			final StringBuffer url = urlPrefix(requestCycle);
-			
+
 			url.append(mountPath);
-			
+
 			// encode page parameters into the url
-			if (requestTarget instanceof BookmarkablePageRequestTarget) {
-				BookmarkablePageRequestTarget pageTarget=(BookmarkablePageRequestTarget)requestTarget;
-				BookmarkablePageRequestTarget mountedTarget=(BookmarkablePageRequestTarget)targetForPath(mountPath);
-				
+			if (requestTarget instanceof BookmarkablePageRequestTarget)
+			{
+				BookmarkablePageRequestTarget pageTarget = (BookmarkablePageRequestTarget)requestTarget;
+				BookmarkablePageRequestTarget mountedTarget = (BookmarkablePageRequestTarget)targetForPath(mountPath);
+
 				url.append(mountedTarget.getParamsEncoder().encode(pageTarget.getPageParameters()));
 			}
-			
+
 			return url.toString();
 		}
 
