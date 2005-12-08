@@ -2,20 +2,16 @@
 	{
 		final IModel rowModel = item.getModel();
 
+		// TODO does this need to be a refreshing view? since the rows is a
+		// refreshing view this will be recreated anyways. maybe can se
+		// orderedrepeatingview instead to simplify.
 		item.add(new RefreshingView(CELL_REPEATER_ID)
 		{
 			private static final long serialVersionUID = 1L;
 
 			protected Iterator getItemModels()
 			{
-				return new ArrayIteratorAdapter(internalGetPopulators()) {
-
-					protected IModel model(Object object)
-					{
-						return new Model((Serializable)object);
-					}
-					
-				};
+				return getPopulatorsIterator();
 			}
 
 			protected void populateItem(Item item)
@@ -26,16 +22,16 @@
 				if (item.get("cell") == null)
 				{
 					throw new WicketRuntimeException(populator.getClass().getName()
-							+ ".populateItem() failed to add a component with id ["
-							+ CELL_ITEM_ID + "] to the provided [cellItem] argument");
+							+ ".populateItem() failed to add a component with id [" + CELL_ITEM_ID
+							+ "] to the provided [cellItem] argument");
 				}
 
 				internalPostProcessCellItem(item);
-				
+
 			}
 
 		});
-		
+
 		internalPostProcessRowItem(item);
 	}
 
