@@ -14,25 +14,30 @@
 
 		if (this.rows != rows)
 		{
-			addStateChange(new Change()
+			if (isVersioned())
 			{
-				private static final long serialVersionUID = 1L;
-
-				final int old = GridView.this.rows;
-
-				public void undo()
+				addStateChange(new Change()
 				{
-					GridView.this.rows = old;
-				}
+					private static final long serialVersionUID = 1L;
 
-				public String toString()
-				{
-					return "GridViewRowsChange[component: " + getPath() + ", removed rows: " + old
-							+ "]";
-				}
-			});
+					final int old = GridView.this.rows;
+
+					public void undo()
+					{
+						GridView.this.rows = old;
+					}
+
+					public String toString()
+					{
+						return "GridViewRowsChange[component: " + getPath() + ", removed rows: "
+								+ old + "]";
+					}
+				});
+			}
 			this.rows = rows;
 		}
+		// TODO can this be moved into the this.rows!=rows if block for
+		// optimization?
 		updateItemsPerPage();
 		return this;
 	}

@@ -1,0 +1,22 @@
+	/**
+	 * @return total item count
+	 */
+	public final int getRowCount()
+	{
+		if (!isVisibleInHierarchy())
+		{
+			return 0;
+		}
+
+		if (isItemCountCached())
+		{
+			return getCachedItemCount();
+		}
+
+		int count = internalGetItemCount();
+
+		setCachedItemCount(count);
+
+		return count;
+	}
+

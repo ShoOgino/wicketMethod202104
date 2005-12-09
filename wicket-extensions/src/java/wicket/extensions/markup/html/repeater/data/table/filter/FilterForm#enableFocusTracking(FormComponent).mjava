@@ -1,0 +1,22 @@
+	/**
+	 * Adds behaviour to the form component to allow this form to keep track of
+	 * the component's focus which will be restored after a form submit.
+	 * 
+	 * @param fc
+	 *            form component
+	 */
+	public final void enableFocusTracking(FormComponent fc)
+	{
+		fc.add(new AbstractBehaviour()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void onComponentTag(Component component, ComponentTag tag)
+			{
+				tag.put("id", component.getPageRelativePath());
+				tag.put("onfocus", getFocusTrackingHandler(component));
+				super.onComponentTag(component, tag);
+			}
+		});
+	}
+
