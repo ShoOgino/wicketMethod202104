@@ -1,8 +1,8 @@
-    /**
-     * Get the properties for ...
-     * 
-     * @param application
-     *            The application object
+	/**
+	 * Get the properties for ...
+	 * 
+	 * @param application
+	 *            The application object
 	 * @param clazz
 	 *            The class that resources are bring loaded for
 	 * @param style
@@ -11,21 +11,28 @@
 	 *            The locale to load reosurces for
 	 * @return The properties
 	 */
-	public final Properties get(final Application application, final Class clazz, final String style, final Locale locale)
+	public final Properties get(final Application application, final Class clazz,
+			final String style, final Locale locale)
 	{
 		final String key = createResourceKey(clazz, locale, style);
 		Properties props = (Properties)propertiesCache.get(key);
-		if (props == null)
+		if ((props == null) && (propertiesCache.containsKey(key) == false))
 		{
-			final IResourceStream resource = application.getResourceStreamLocator().locate(
-					clazz, style, locale, "properties");
+			final IResourceStream resource = application.getResourceStreamLocator().locate(clazz,
+					style, locale, "properties");
 
 			if (resource != null)
 			{
 				props = loadPropertiesFileAndWatchForChanges(key, resource, clazz, style, locale);
 			}
+
+			// add the markup to the cache
+			synchronized (propertiesCache)
+			{
+				propertiesCache.put(key, props);
+			}
 		}
-		
+
 		return props;
 	}
 
