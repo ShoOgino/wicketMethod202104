@@ -11,15 +11,14 @@
 			IBookmarkablePageRequestTarget requestTarget)
 	{
 		final Class pageClass = requestTarget.getPageClass();
+		final Class homePageClass = requestCycle.getApplication().getPages().getHomePage();
+
+		// TODO fix homepage class
+
 		final PageParameters parameters = requestTarget.getPageParameters();
-		final StringBuffer url = urlPrefix(requestCycle);
+		final StringBuffer url = new StringBuffer(urlPrefix(requestCycle));
 		url.append("?bookmarkablePage=");
-		String pageReference = pageClass.getName();
-		if (pageReference == null)
-		{
-			pageReference = pageClass.getName();
-		}
-		url.append(pageReference);
+		url.append(pageClass.getName());
 
 		String pageMapName = requestTarget.getPageMapName();
 		if (pageMapName == null)

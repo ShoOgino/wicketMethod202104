@@ -13,26 +13,16 @@
 	 */
 	public final String encode(RequestCycle requestCycle, IRequestTarget requestTarget)
 	{
+
 		// first check whether the target was mounted
-		String mountPath = (String)mountsOnTarget.get(requestTarget);
-		if (mountPath != null)
+		IMountEncoder encoder = getMountEncoder(requestTarget);
+		if (encoder != null)
 		{
-			final StringBuffer url = urlPrefix(requestCycle);
-
-			url.append(mountPath);
-
-			// encode page parameters into the url
-			if (requestTarget instanceof BookmarkablePageRequestTarget)
-			{
-				BookmarkablePageRequestTarget pageTarget = (BookmarkablePageRequestTarget)requestTarget;
-				BookmarkablePageRequestTarget mountedTarget = (BookmarkablePageRequestTarget)targetForPath(mountPath);
-
-				url.append(mountedTarget.getParamsEncoder().encode(pageTarget.getPageParameters()));
-			}
-
-			return url.toString();
+			final StringBuffer prefix = new StringBuffer(urlPrefix(requestCycle));
+			return urlPrefix(requestCycle) + pathForTarget(requestTarget);
 		}
 
+		// no mount found; go on with default processing
 		if (requestTarget instanceof IBookmarkablePageRequestTarget)
 		{
 			return encode(requestCycle, (IBookmarkablePageRequestTarget)requestTarget);
@@ -44,11 +34,6 @@
 		else if (requestTarget instanceof ISharedResourceRequestTarget)
 		{
 			return encode(requestCycle, (ISharedResourceRequestTarget)requestTarget);
-		}
-		// TODO handle more
-		else if (requestTarget instanceof IPageRequestTarget)
-		{
-
 		}
 
 		// fallthough for non-default request targets

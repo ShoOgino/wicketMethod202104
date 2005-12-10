@@ -1,0 +1,12 @@
+	/**
+	 * @see wicket.request.target.mixin.IMountEncoder#decode(java.lang.String)
+	 */
+	public IRequestTarget decode(String urlFragment)
+	{
+		String parametersFragment = urlFragment.substring(mountPath.length());
+		PageParameters parameters = decodePageParameters(parametersFragment);
+		BookmarkablePageRequestTarget target = new BookmarkablePageRequestTarget(
+				bookmarkablePageClass, parameters);
+		return target;
+	}
+

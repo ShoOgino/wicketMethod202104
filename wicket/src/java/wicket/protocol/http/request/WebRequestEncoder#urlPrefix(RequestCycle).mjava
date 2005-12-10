@@ -1,27 +1,30 @@
 	/**
-	 * Creates a prefix for a url.
+	 * Gets prefix.
 	 * 
 	 * @param requestCycle
-	 *            the current request cycle
+	 *            the request cycle
 	 * 
-	 * @return Prefix for URLs including the context path and servlet path.
+	 * @return prefix
 	 */
-	protected StringBuffer urlPrefix(RequestCycle requestCycle)
+	protected final String urlPrefix(RequestCycle requestCycle)
 	{
-		final StringBuffer buffer = new StringBuffer();
-		final WebRequest request = ((WebRequestCycle)requestCycle).getWebRequest();
-		if (request != null)
+		if (urlPrefix == null)
 		{
-			final String contextPath = request.getContextPath();
-			buffer.append(contextPath);
-			String path = request.getServletPath();
-			if (path == null || "".equals(path))
+			final StringBuffer buffer = new StringBuffer();
+			final WebRequest request = ((WebRequestCycle)requestCycle).getWebRequest();
+			if (request != null)
 			{
-				path = "/";
+				final String contextPath = request.getContextPath();
+				buffer.append(contextPath);
+				String path = request.getServletPath();
+				if (path == null || "".equals(path))
+				{
+					path = "/";
+				}
+				buffer.append(path);
 			}
-			buffer.append(path);
+			urlPrefix = buffer.toString();
 		}
-
-		return buffer;
+		return urlPrefix;
 	}
 

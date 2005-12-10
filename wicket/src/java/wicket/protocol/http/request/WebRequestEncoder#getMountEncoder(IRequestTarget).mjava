@@ -1,0 +1,22 @@
+	/**
+	 * Gets the mount encoder for the given request target if any.
+	 * 
+	 * @param requestTarget
+	 *            the request target to match
+	 * @return the mount encoder if any
+	 */
+	protected IMountEncoder getMountEncoder(IRequestTarget requestTarget)
+	{
+		// TODO optimize algoritm if possible and/ or cache lookup results
+		for (Iterator i = mountsOnPath.values().iterator(); i.hasNext();)
+		{
+			IMountEncoder encoder = (IMountEncoder)i.next();
+			if (encoder.matches(requestTarget))
+			{
+				return encoder;
+			}
+		}
+
+		return null;
+	}
+

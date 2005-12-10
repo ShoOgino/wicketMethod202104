@@ -1,0 +1,18 @@
+	/**
+	 * @see wicket.request.target.mixin.IMountEncoder#encode(wicket.IRequestTarget)
+	 */
+	public final String encode(IRequestTarget requestTarget)
+	{
+		if (!(requestTarget instanceof IBookmarkablePageRequestTarget))
+		{
+			throw new IllegalArgumentException("this encoder can only be used with instances of "
+					+ IBookmarkablePageRequestTarget.class.getName());
+		}
+		StringBuffer url = new StringBuffer();
+		url.append(getMountPath());
+		IBookmarkablePageRequestTarget target = (IBookmarkablePageRequestTarget)requestTarget;
+		// TODO what to do with the page map?
+		appendPageParameters(url, target.getPageParameters());
+		return url.toString();
+	}
+

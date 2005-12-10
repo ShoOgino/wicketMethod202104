@@ -1,0 +1,21 @@
+	/**
+	 * @see wicket.request.target.mixin.IEventProcessor#processEvents(wicket.RequestCycle)
+	 */
+	public final void processEvents(final RequestCycle requestCycle)
+	{
+		// Assume cluster needs to be updated now, unless listener
+		// invocation changes this
+		requestCycle.setUpdateCluster(true);
+
+		// Clear all feedback messages if it isn't a redirect
+		getPage().getFeedbackMessages().clear();
+
+		final Application application = requestCycle.getApplication();
+		// and see if we have to redirect the render part by default
+		ApplicationSettings.RenderStrategy strategy = application.getSettings().getRenderStrategy();
+		boolean issueRedirect = (strategy == ApplicationSettings.REDIRECT_TO_RENDER || strategy == ApplicationSettings.REDIRECT_TO_BUFFER);
+
+		requestCycle.setRedirect(issueRedirect);
+		invokeInterface(getComponent(), getListenerMethod(), getPage());
+	}
+
