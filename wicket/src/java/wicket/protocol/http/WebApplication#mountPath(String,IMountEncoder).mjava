@@ -8,6 +8,14 @@
 	 */
 	public final void mountPath(String path, IMountEncoder encoder)
 	{
+		// TODO here it is too late to fix the path if it doesnt start with a /
+		// because by this time the encoder is created and it probably has its
+		// own reference to the path. so if we fix the path the encoder's path
+		// and the mount path might not be the same. should we throw an error
+		// here?
+		// 
+		// possible solution might be to add getMountPath() to IMountEncoder and
+		// use that in RequestEncoder.mountPath() instead of passing it in.
 		if (encoder == null)
 		{
 			throw new NullPointerException("encoder must be not null");
