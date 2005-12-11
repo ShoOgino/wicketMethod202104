@@ -1,0 +1,24 @@
+	/**
+	 * Create a new markup resource stream
+	 * 
+	 * @param containerClass
+	 *            The container the markup should be associated with
+	 * @param containerInfo
+	 *            The container the markup should be associated with
+	 * @return A IResourceStream if the resource was found
+	 */
+	private MarkupResourceStream newMarkupResourceStream(final Class containerClass,
+			final ContainerInfo containerInfo)
+	{
+		IResourceStream markupResource = application.getResourceStreamLocator().locate(
+				containerClass, containerInfo.getStyle(), containerInfo.getLocale(),
+				containerInfo.getFileExtension());
+
+		if (markupResource == null)
+		{
+			return null;
+		}
+
+		return new MarkupResourceStream(markupResource, containerInfo, containerClass);
+	}
+

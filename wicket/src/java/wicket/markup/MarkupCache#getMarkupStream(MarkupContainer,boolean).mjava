@@ -5,12 +5,17 @@
 	 * @param container
 	 *            The container the markup should be associated with
 	 * @param throwException
-	 * 
+	 *            If true, throw an exception, if markup could not be found
 	 * @return A stream of MarkupElement elements
 	 */
-	public final MarkupStream getMarkupStream(final MarkupContainer container, 
+	public final MarkupStream getMarkupStream(final MarkupContainer container,
 			final boolean throwException)
 	{
+		if (container == null)
+		{
+			throw new IllegalArgumentException("Parameter 'container' must not be 'null'.");
+		}
+
 		// Look for associated markup
 		Markup markup = getMarkup(new ContainerInfo(container), container.getClass());
 

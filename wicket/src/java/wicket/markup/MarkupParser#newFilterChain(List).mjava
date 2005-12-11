@@ -18,17 +18,17 @@
         filter = new WicketLinkTagHandler(this.automaticLinking, filter); 
         
         // Provided the wicket component requesting the markup is known ...
-        if (this.containerInfo != null)
+        if ((this.resource != null) && (this.resource.getContainerInfo() != null))
         {
         	if (WicketMessageTagHandler.enable)
         	{
-        		filter = new WicketMessageTagHandler(this.containerInfo, filter);
+        		filter = new WicketMessageTagHandler(this.resource.getContainerInfo(), filter);
         	}
         	
 	        filter = new BodyOnLoadHandler(filter);
 	
 	        // Pages require additional handlers
-	        if (Page.class.isAssignableFrom(containerInfo.getContainerClass()))
+	        if (Page.class.isAssignableFrom(this.resource.getContainerInfo().getContainerClass()))
 	        {
 	            filter = new HtmlHeaderSectionHandler(tagList, filter);
 	        }

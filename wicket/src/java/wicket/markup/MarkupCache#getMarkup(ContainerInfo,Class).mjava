@@ -1,19 +1,21 @@
 	/**
-	 * Gets any (immutable) markup resource for this class.
+	 * Gets any (immutable) markup resource for the container or any of its
+	 * parent classes (markup inheritance)
 	 * 
 	 * @param containerInfo
 	 *            The container the markup should be associated with
 	 * @param clazz
-	 *            The class to get the associated markup for. If null, the the
-	 *            container's class is used, but it can be a parent class of
-	 *            container as well.
+	 *            The class to get the associated markup for. If null, the
+	 *            container's class is used, but it can be a parent class of the
+	 *            container as well (markup inheritance)
 	 * @return Markup resource
 	 */
-	private final Markup getMarkup(final ContainerInfo containerInfo, Class clazz)
+	private final Markup getMarkup(final ContainerInfo containerInfo, final Class clazz)
 	{
+		Class containerClass = clazz;
 		if (clazz == null)
 		{
-			clazz = containerInfo.getContainerClass();
+			containerClass = containerInfo.getContainerClass();
 		}
 		else
 		{
@@ -30,20 +32,16 @@
 
 			Markup markup = (Markup)markupCache.get(key);
 
-			// If no markup in map
+			// If no markup in the cache
 			if (markup == null)
 			{
 				// Locate markup resource, searching up class hierarchy
-				IResourceStream markupResource = null;
-				Class containerClass = clazz;
+				MarkupResourceStream markupResource = null;
 
 				while ((markupResource == null) && (containerClass != MarkupContainer.class))
 				{
-					clazz = containerClass;
-
 					// Look for markup resource for containerClass
-					markupResource = application.getResourceStreamLocator().locate(containerClass,
-							containerInfo.getStyle(), containerInfo.getLocale(), containerInfo.getFileExtension());
+					markupResource = newMarkupResourceStream(containerClass, containerInfo);
 
 					containerClass = containerClass.getSuperclass();
 				}
@@ -52,7 +50,7 @@
 				if (markupResource != null)
 				{
 					// load the markup and watch for changes
-					markup = loadMarkupAndWatchForChanges(key, markupResource, clazz, containerInfo);
+					markup = loadMarkupAndWatchForChanges(key, markupResource);
 				}
 				else
 				{

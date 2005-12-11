@@ -1,60 +1,62 @@
-    /**
-     * 
-     * @throws ParseException
-     * @throws ResourceStreamNotFoundException
-     * @throws IOException
-     */
-    public final void testFileDocument() throws ParseException,
-            ResourceStreamNotFoundException, IOException
-    {
-        final MarkupParser parser = new MarkupParser(new XmlPullParser(null), "wcn");
-        
-        ResourceStreamLocator locator = new ResourceStreamLocator(new ClassLoaderResourceStreamLocator());
-        
-        IResourceStream resource = locator.locate(this.getClass(), "1", null, "html");
-        Markup tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+	/**
+	 * 
+	 * @throws ParseException
+	 * @throws ResourceStreamNotFoundException
+	 * @throws IOException
+	 */
+	public final void testFileDocument() throws ParseException, ResourceStreamNotFoundException,
+			IOException
+	{
+		final MarkupParser parser = new MarkupParser(new XmlPullParser(null), "wcn");
 
-        resource = locator.locate(this.getClass(), "2", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		ResourceStreamLocator locator = new ResourceStreamLocator(
+				new ClassLoaderResourceStreamLocator());
 
-        resource = locator.locate(this.getClass(), "3", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		MarkupResourceStream resource = newMarkupResourceStream(locator, this.getClass(), "1", null, "html");
 
-        resource = locator.locate(this.getClass(), "4", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		Markup tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
 
-        // File from jar (URL resource)
-        resource = locator.locate(PageExpiredErrorPage.class, null, null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		resource = newMarkupResourceStream(locator, this.getClass(), "2", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
 
-        resource = locator.locate(this.getClass(), "5", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		resource = newMarkupResourceStream(locator, this.getClass(), "3", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
 
-        resource = locator.locate(this.getClass(), "6", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		resource = newMarkupResourceStream(locator, this.getClass(), "4", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
 
-        resource = locator.locate(this.getClass(), "7", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
+		// File from jar (URL resource)
+		resource = newMarkupResourceStream(locator, PageExpiredErrorPage.class, null, null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
 
-        resource = locator.locate(this.getClass(), "8", null, "html");
-        tokens = parser.readAndParse(resource);
-        log.info("tok(0)=" + tokens.get(0));
-        //Assert.assertEquals(docText, tokens.get(0).toString());
-    }
+		resource = newMarkupResourceStream(locator, this.getClass(), "5", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
+
+		resource = newMarkupResourceStream(locator, this.getClass(), "6", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
+
+		resource = newMarkupResourceStream(locator, this.getClass(), "7", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
+
+		resource = newMarkupResourceStream(locator, this.getClass(), "8", null, "html");
+		tokens = parser.readAndParse(resource);
+		log.info("tok(0)=" + tokens.get(0));
+		// Assert.assertEquals(docText, tokens.get(0).toString());
+	}
 
