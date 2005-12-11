@@ -1,0 +1,50 @@
+	/**
+     * For each StringResourceLoader registered with the application, load the 
+     * properties file associated with the classes in the searchStack, the locale
+     * and the style. The searchStack is traversed in reverse order.<p>
+     * The property is identified by the 'key' or 'path'+'key'. 'path' is
+     * shortened (last element removed) to always represent the page relative
+     * path of the original component associate with it.
+     * 
+	 * @param key
+	 *            The key to obtain the resource for
+	 * @param path
+	 *            The component id path relative to the page
+	 * @param searchStack
+	 *            A stack of classes to get the resource for
+	 * @param locale
+	 *            The locale to get the resource for (optional)
+	 * @param style
+	 *            The style to get the resource for (optional) (see
+	 *            {@link wicket.Session})
+	 * @return The string resource
+	 */
+	private String traverseResourceLoaders(final String key, final String path, 
+			final List searchStack, final Locale locale, final String style)
+	{
+		// Search each loader in turn and return the string if it is found
+		final Iterator iterator = application.getSettings().getStringResourceLoaders().iterator();
+		String string = null;
+		while (iterator.hasNext() && (string == null))
+		{
+			IStringResourceLoader loader = (IStringResourceLoader)iterator.next();
+			
+			String prefix = path;
+			for (int i=searchStack.size() - 1; (i >= 0) && (string == null); i--)
+			{
+				Class clazz = (Class)searchStack.get(i);
+				string = loader.loadStringResource(clazz, key, locale, style);
+				if ((string == null) && (path != null) && (prefix.length() > 0))
+				{
+					string = loader.loadStringResource(clazz, prefix + '.' + key, locale, style);
+					if (string == null)
+					{
+						prefix = Strings.beforeLast(prefix, '.');
+					}
+				}
+			}
+		}
+
+		return string;
+	}
+

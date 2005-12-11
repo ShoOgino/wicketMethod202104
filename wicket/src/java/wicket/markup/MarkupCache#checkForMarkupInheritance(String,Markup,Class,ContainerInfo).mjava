@@ -10,12 +10,12 @@
 	 *            The markup to checked for inheritance
 	 * @param clazz
 	 *            The class directly associated with the markup
-	 * @param container
+	 * @param containerInfo
 	 *            The container associated with the markup
 	 * @return A markup object with the the base markup elements resolved.
 	 */
 	private Markup checkForMarkupInheritance(final String key, final Markup markup,
-			final Class clazz, final MarkupContainer container)
+			final Class clazz, final ContainerInfo containerInfo)
 	{
 		// Check if markup contains <wicket:extend> which tells us that
 		// we need to read the inherited markup as well.
@@ -27,12 +27,12 @@
 		}
 
 		// get the base markup
-		final Markup baseMarkup = getMarkup(container, clazz.getSuperclass());
+		final Markup baseMarkup = getMarkup(containerInfo, clazz.getSuperclass());
 		if (baseMarkup == Markup.NO_MARKUP)
 		{
 			throw new MarkupNotFoundException(
 					"Markup not found. Component class: "
-							+ (clazz != null ? clazz.getName() : container.getClass().getName())
+							+ (clazz != null ? clazz.getName() : containerInfo.getContainerClass().getName())
 							+ " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried.");
 		}
 
@@ -44,7 +44,7 @@
 			public void onChange()
 			{
 				log.info("Reloading derived markup from " + markup.getResource());
-				loadMarkup(key, markup.getResource(), clazz, container);
+				loadMarkup(key, markup.getResource(), clazz, containerInfo);
 			}
 
 			/**

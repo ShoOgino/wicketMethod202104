@@ -7,23 +7,23 @@
 	 *            The markup resource stream to load
 	 * @param containerClass
 	 *            The Class the associated stream is directly associated
-	 * @param container
+	 * @param containerInfo
 	 *            The container requesting the markup
 	 * @return The markup
 	 */
 	private final Markup loadMarkup(final String key, final IResourceStream markupResourceStream,
-			final Class containerClass, final MarkupContainer container)
+			final Class containerClass, final ContainerInfo containerInfo)
 	{
 		try
 		{
 		    // read and parse the markup
-			Markup markup = application.newMarkupParser(container).readAndParse(
+			Markup markup = application.newMarkupParser(containerInfo).readAndParse(
 					markupResourceStream);
 			markup.setContainerClass(containerClass);
 
 			// Check for markup inheritance. If it contains <wicket:extend>
 			// the two markups get merged.
-			markup = checkForMarkupInheritance(key, markup, containerClass, container);
+			markup = checkForMarkupInheritance(key, markup, containerClass, containerInfo);
 
 			// add the markup to the cache
 			synchronized (markupCache)

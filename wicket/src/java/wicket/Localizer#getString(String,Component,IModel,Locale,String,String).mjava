@@ -28,51 +28,34 @@
 			final Locale locale, final String style, final String defaultValue)
 			throws MissingResourceException
 	{
-		// The key value
-		String string = null;
-
 		// Get application settings
 		final ApplicationSettings settings = application.getSettings();
 
 		// If value is cached already ...
-		String id = createCacheId(component, locale, style, key);
-		if (cachedValues.containsKey(id))
-		{
-			if (log.isDebugEnabled())
-			{
-				log.debug("Found message key in cache: " + id);
-			}
-			string = (String)cachedValues.get(id);
-			if (string == NULL)
-			{
-				string = null;
-			}
-		}
-		else
-		{
-			// Search each loader in turn and return the string if it is found
-			final Iterator iterator = settings.getStringResourceLoaders().iterator();
-			while (iterator.hasNext())
-			{
-				IStringResourceLoader loader = (IStringResourceLoader)iterator.next();
-				string = loader.loadStringResource(component, key, locale, style);
-				if (string != null)
-				{
-					break;
-				}
-			}
+		Class clazz = (component != null ? component.getClass() : null);
+		String id = createCacheId(clazz, locale, style, key);
 
-			// cache all values, not matter the key has been found or not
-			if (string != null)
+		// The cached key value
+		String string = getCachedValue(id);
+		
+		// If not found in the cache
+		if (string == null)
+		{
+			final List searchStack;
+			final String path;
+			if (component != null)
 			{
-				this.cachedValues.put(id, string);
+				searchStack = getComponentStack(component);
+				path = Strings.replaceAll(component.getPageRelativePath(), ":", ".");
 			}
 			else
 			{
-				// ConcurrentReaderHashMap does not allow null values. This is a
-				// substitute
-				this.cachedValues.put(id, NULL);
+				searchStack = new ArrayList(0);
+				searchStack.add(Application.get().getClass());
+				path = null;
 			}
+
+			string = getString(key, path, searchStack, locale, style);
 		}
 
 		if (string != null)
@@ -89,8 +72,8 @@
 
 		if (settings.getThrowExceptionOnMissingResource())
 		{
-			throw new MissingResourceException("Unable to find resource: " + key, getClass()
-					.getName(), key);
+			throw new MissingResourceException("Unable to find resource: " + key, 
+					(clazz != null ? getClass().getName() : ""), key);
 		}
 		else
 		{

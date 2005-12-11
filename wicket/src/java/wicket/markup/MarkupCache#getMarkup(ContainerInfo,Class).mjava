@@ -1,7 +1,7 @@
 	/**
 	 * Gets any (immutable) markup resource for this class.
 	 * 
-	 * @param container
+	 * @param containerInfo
 	 *            The container the markup should be associated with
 	 * @param clazz
 	 *            The class to get the associated markup for. If null, the the
@@ -9,15 +9,15 @@
 	 *            container as well.
 	 * @return Markup resource
 	 */
-	private final Markup getMarkup(final MarkupContainer container, Class clazz)
+	private final Markup getMarkup(final ContainerInfo containerInfo, Class clazz)
 	{
 		if (clazz == null)
 		{
-			clazz = container.getClass();
+			clazz = containerInfo.getContainerClass();
 		}
 		else
 		{
-			if (!clazz.isInstance(container))
+			if (!clazz.isAssignableFrom(containerInfo.getContainerClass()))
 			{
 				throw new WicketRuntimeException("Parameter clazz must be instance of container");
 			}
@@ -26,7 +26,7 @@
 		synchronized (markupCache)
 		{
 			// Look up markup tag list by class, locale, style and markup type
-			final String key = markupKey(container, clazz);
+			final String key = markupKey(containerInfo, clazz);
 
 			Markup markup = (Markup)markupCache.get(key);
 
@@ -43,7 +43,7 @@
 
 					// Look for markup resource for containerClass
 					markupResource = application.getResourceStreamLocator().locate(containerClass,
-							container.getStyle(), container.getLocale(), container.getMarkupType());
+							containerInfo.getStyle(), containerInfo.getLocale(), containerInfo.getFileExtension());
 
 					containerClass = containerClass.getSuperclass();
 				}
@@ -52,7 +52,7 @@
 				if (markupResource != null)
 				{
 					// load the markup and watch for changes
-					markup = loadMarkupAndWatchForChanges(key, markupResource, clazz, container);
+					markup = loadMarkupAndWatchForChanges(key, markupResource, clazz, containerInfo);
 				}
 				else
 				{

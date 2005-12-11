@@ -1,18 +1,19 @@
 	/**
 	 * Construct a proper key value for the cache
 	 * 
-	 * @param container
+	 * @param containerInfo
+	 *            The container requesting the markup
 	 * @param clazz
 	 *            The clazz to get the key for
 	 * @return Key that uniquely identifies any markup that might be associated
 	 *         with this markup container.
 	 */
-	private final String markupKey(final MarkupContainer container, final Class clazz)
+	private final String markupKey(final ContainerInfo containerInfo, final Class clazz)
 	{
 		final String classname = clazz.getName();
-		final Locale locale = container.getLocale();
-		final String style = container.getStyle();
-		final String markupType = container.getMarkupType();
+		final Locale locale = containerInfo.getLocale();
+		final String style = containerInfo.getStyle();
+		final String markupType = containerInfo.getFileExtension();
 		
 		final StringBuffer buffer = new StringBuffer(classname.length() + 32);
 		buffer.append(classname);
