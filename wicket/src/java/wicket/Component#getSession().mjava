@@ -7,21 +7,6 @@
 	 */
 	public final Session getSession()
 	{
-		// Fetch page, if possible
-		final Page page = findPage();
-
-		// If this component is attached to a page
-		if (page != null)
-		{
-			// Get Session from Page (which should generally be
-			// faster than a thread local lookup via Session.get())
-			return page.getSessionInternal();
-		}
-		else
-		{
-			// Use ThreadLocal storage to get Session since this
-			// component is apparently not yet attached to a Page.
-			return Session.get();
-		}
+		return Session.get();
 	}
 
