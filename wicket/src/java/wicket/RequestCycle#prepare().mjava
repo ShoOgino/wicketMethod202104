@@ -6,8 +6,12 @@
 		// Attach thread local resources for request
 		threadAttach();
 
-		// Response is beginning
-		internalOnBeginRequest();
+		// Before the beginning of the response, we need to update
+		// our session based on any information that might be in
+		// session attributes
+		session.updateSession();
+
+		// event callback
 		onBeginRequest();
 	}
 

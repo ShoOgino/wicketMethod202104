@@ -22,14 +22,16 @@
 			}
 		}
 
-		// Response is ending
-		try
+		if (updateSession)
 		{
-			internalOnEndRequest();
+			// At the end of our response, we need to set any session
+			// attributes that might be required to update the cluster
+			session.update();
 		}
-		catch (RuntimeException e)
+
+		if (getResponse() instanceof BufferedWebResponse)
 		{
-			log.error("Exception occurred during internalOnEndRequest", e);
+			((BufferedWebResponse)getResponse()).filter();
 		}
 
 		try
