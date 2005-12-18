@@ -5,6 +5,12 @@
 	 */
 	public static Application get()
 	{
-		return (Application)CURRENT.get();
+		Application application = (Application)CURRENT.get();
+		if (application == null)
+		{
+			throw new WicketRuntimeException("there is not application attached to current thread "
+					+ Thread.currentThread().getName());
+		}
+		return application;
 	}
 

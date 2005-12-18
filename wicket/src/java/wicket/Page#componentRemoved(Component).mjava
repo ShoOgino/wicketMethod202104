@@ -1,11 +1,15 @@
 	/**
+	 * A component was removed.
+	 * 
 	 * @param component
 	 *            The component that was removed
 	 */
 	final void componentRemoved(final Component component)
 	{
+		checkHierarchyChange(component);
+
 		setDirty(true);
-		if (isVersioned(component))
+		if (mayTrackChangesFor(component))
 		{
 			versionManager.componentRemoved(component);
 		}

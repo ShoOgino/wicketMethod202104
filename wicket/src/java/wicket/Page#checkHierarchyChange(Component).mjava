@@ -1,0 +1,17 @@
+	/**
+	 * Checks whether the hierarchy may be changed at all, and throws an
+	 * exception if this is not the case.
+	 * 
+	 * @param component
+	 *            the component which is about to be added or removed
+	 */
+	private void checkHierarchyChange(Component component)
+	{
+		// Throw exception if modification is attempted during rendering
+		if ((!component.isAuto()) && getFlag(FLAG_IS_RENDERING))
+		{
+			throw new WicketRuntimeException(
+					"Cannot modify component hierarchy during render phase");
+		}
+	}
+
