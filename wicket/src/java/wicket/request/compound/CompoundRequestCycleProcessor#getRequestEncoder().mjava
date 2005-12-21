@@ -1,8 +1,24 @@
 	/**
+	 * Gets the cached request encoder instance or create one by calling
+	 * {@link #newRequestEncoder()}.
+	 * 
 	 * @see wicket.request.IRequestCycleProcessor#getRequestEncoder()
 	 */
-	public final IRequestEncoder getRequestEncoder()
+	public IRequestEncoder getRequestEncoder()
 	{
+		// lazily create
+		if (requestEncoder == null)
+		{
+			requestEncoder = newRequestEncoder();
+		}
+
+		// still null?
+		if (requestEncoder == null)
+		{
+			throw new IllegalStateException("no requestEncoder set");
+		}
+
+		// return the strategy
 		return requestEncoder;
 	}
 

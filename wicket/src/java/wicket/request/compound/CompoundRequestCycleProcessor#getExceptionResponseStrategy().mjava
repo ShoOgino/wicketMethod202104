@@ -1,8 +1,24 @@
 	/**
+	 * Gets the cached exception response strategy instance or create one by
+	 * calling {@link #newExceptionResponseStrategy()}.
+	 * 
 	 * @see wicket.request.compound.AbstractCompoundRequestCycleProcessor#getExceptionResponseStrategy()
 	 */
-	protected final IExceptionResponseStrategy getExceptionResponseStrategy()
+	protected IExceptionResponseStrategy getExceptionResponseStrategy()
 	{
+		// lazily create
+		if (exceptionResponseStrategy == null)
+		{
+			exceptionResponseStrategy = newExceptionResponseStrategy();
+		}
+
+		// still null?
+		if (exceptionResponseStrategy == null)
+		{
+			throw new IllegalStateException("no exceptionResponseStrategy set");
+		}
+
+		// return the strategy
 		return exceptionResponseStrategy;
 	}
 

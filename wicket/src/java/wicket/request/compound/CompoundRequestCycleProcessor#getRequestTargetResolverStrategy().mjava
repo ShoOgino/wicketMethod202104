@@ -1,8 +1,24 @@
 	/**
+	 * Gets the cached target resolver instance or create one by calling
+	 * {@link #newRequestTargetResolverStrategy()}.
+	 * 
 	 * @see wicket.request.compound.AbstractCompoundRequestCycleProcessor#getRequestTargetResolverStrategy()
 	 */
-	protected final IRequestTargetResolverStrategy getRequestTargetResolverStrategy()
+	protected IRequestTargetResolverStrategy getRequestTargetResolverStrategy()
 	{
+		// lazily create
+		if (requestTargetResolverStrategy == null)
+		{
+			requestTargetResolverStrategy = newRequestTargetResolverStrategy();
+		}
+
+		// still null?
+		if (requestTargetResolverStrategy == null)
+		{
+			throw new IllegalStateException("no requestTargetResolverStrategy set");
+		}
+
+		// return the strategy
 		return requestTargetResolverStrategy;
 	}
 

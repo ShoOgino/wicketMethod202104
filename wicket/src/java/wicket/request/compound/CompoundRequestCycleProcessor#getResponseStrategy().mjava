@@ -1,8 +1,24 @@
 	/**
+	 * Gets the cached response strategy instance or create one by calling
+	 * {@link #newResponseStrategy()}.
+	 * 
 	 * @see wicket.request.compound.AbstractCompoundRequestCycleProcessor#getResponseStrategy()
 	 */
-	protected final IResponseStrategy getResponseStrategy()
+	protected IResponseStrategy getResponseStrategy()
 	{
+		// lazily create
+		if (responseStrategy == null)
+		{
+			responseStrategy = newResponseStrategy();
+		}
+
+		// still null?
+		if (responseStrategy == null)
+		{
+			throw new IllegalStateException("no responseStrategy set");
+		}
+
+		// return the strategy
 		return responseStrategy;
 	}
 

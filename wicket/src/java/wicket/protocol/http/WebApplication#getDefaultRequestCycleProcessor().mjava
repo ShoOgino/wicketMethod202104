@@ -10,14 +10,19 @@
 	{
 		if (requestCycleProcessor == null)
 		{
-			requestCycleProcessor = new CompoundRequestCycleProcessor(new WebRequestEncoder(),
-					new DefaultEventProcessorStrategy(), new DefaultExceptionResponseProcessor()
+			requestCycleProcessor = new DefaultWebRequestCycleProcessor()
+			{
+				protected IExceptionResponseStrategy newExceptionResponseStrategy()
+				{
+					return new DefaultExceptionResponseProcessor()
 					{
 						protected Page onRuntimeException(Page page, RuntimeException e)
 						{
 							return WebApplication.this.onRuntimeException(page, e);
 						}
-					});
+					};
+				}
+			};
 		}
 		return requestCycleProcessor;
 	}
