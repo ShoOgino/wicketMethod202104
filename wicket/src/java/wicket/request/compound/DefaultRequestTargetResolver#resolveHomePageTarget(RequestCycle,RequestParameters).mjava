@@ -7,18 +7,19 @@
 	 *            the request parameters object
 	 * @return the home page as a request target
 	 */
-	private IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
+	protected IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
 			RequestParameters requestParameters)
 	{
-		final Session session = requestCycle.getSession();
-		final Application application = session.getApplication();
+		Session session = requestCycle.getSession();
+		Application application = session.getApplication();
 		try
 		{
 			// get the home page class
 			Class homePageClass = application.getPages().getHomePage();
 			// and create a dummy target for looking up whether the home page is
 			// mounted
-			BookmarkablePageRequestTarget pokeTarget = new BookmarkablePageRequestTarget(homePageClass);
+			BookmarkablePageRequestTarget pokeTarget = new BookmarkablePageRequestTarget(
+					homePageClass);
 			IRequestEncoder requestEncoder = requestCycle.getRequestCycleProcessor()
 					.getRequestEncoder();
 			String path = requestEncoder.pathForTarget(pokeTarget);
@@ -34,19 +35,21 @@
 
 			// else the home page was not mounted; render it now so
 			// that we will keep a clean path
-			final PageParameters parameters = new PageParameters(requestParameters.getParameters());
+			PageParameters parameters = new PageParameters(requestParameters.getParameters());
 			Page newPage = session.getPageFactory().newPage(homePageClass, parameters);
-			// the response might have been set in the constructor of the home page
+			// the response might have been set in the constructor of the home
+			// page
 			IRequestTarget requestTarget = requestCycle.getRequestTarget();
 
-			// is it possible that there is already another request target at this point then the 2 below?
-			if ( !(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IBookmarkablePageRequestTarget) )
+			// is it possible that there is already another request target at
+			// this point then the 2 below?
+			if (!(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IBookmarkablePageRequestTarget))
 			{
 				requestTarget = new PageRequestTarget(newPage);
 			}
 
 			return requestTarget;
-			}
+		}
 		catch (WicketRuntimeException e)
 		{
 			throw new WicketRuntimeException("Could not create home page", e);

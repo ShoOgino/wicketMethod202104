@@ -7,13 +7,13 @@
 	 *            the request parameters object
 	 * @return the bookmarkable page as a request target
 	 */
-	private IRequestTarget resolveBookmarkablePage(RequestCycle requestCycle,
+	protected IRequestTarget resolveBookmarkablePage(RequestCycle requestCycle,
 			RequestParameters requestParameters)
 	{
-		final String bookmarkablePageClass = requestParameters.getBookmarkablePageClass();
-		final Session session = requestCycle.getSession();
-		final Application application = session.getApplication();
-		final Class pageClass;
+		String bookmarkablePageClass = requestParameters.getBookmarkablePageClass();
+		Session session = requestCycle.getSession();
+		Application application = session.getApplication();
+		Class pageClass;
 		try
 		{
 			pageClass = session.getClassResolver().resolveClass(bookmarkablePageClass);
@@ -33,8 +33,9 @@
 			// the bookmarkable page
 			IRequestTarget requestTarget = requestCycle.getRequestTarget();
 
-			// is it possible that there is already another request target at this point then the 2 below?
-			if ( !(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IBookmarkablePageRequestTarget) )
+			// is it possible that there is already another request target at
+			// this point then the 2 below?
+			if (!(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IBookmarkablePageRequestTarget))
 			{
 				requestTarget = new PageRequestTarget(newPage);
 			}
