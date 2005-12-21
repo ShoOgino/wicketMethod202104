@@ -33,12 +33,21 @@
 				final int index = getList().indexOf(item.getModelObject());
 				if (index != -1)
 				{
-					ListView.this.modelChanging();
+					addStateChange(new Change()
+					{
+						private static final long serialVersionUID = 1L;
+
+						final int oldIndex = index;
+
+						public void undo()
+						{
+							Collections.swap(getList(), oldIndex + 1, oldIndex);
+						}
+
+					});
 
 					// Swap list items and invalidate listView
 					Collections.swap(getList(), index, index + 1);
-
-					ListView.this.modelChanged();
 				}
 			}
 		};
