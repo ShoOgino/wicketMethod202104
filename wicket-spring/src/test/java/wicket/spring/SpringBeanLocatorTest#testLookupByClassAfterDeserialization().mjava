@@ -1,0 +1,15 @@
+	/**
+	 * tests if lookup by class is still working after deserialization
+	 */
+	public void testLookupByClassAfterDeserialization()
+	{
+		Bean bean = new Bean();
+		
+		ctx.putBean("bean", bean);
+
+		SpringBeanLocator locator = (SpringBeanLocator) Objects
+				.clone(new SpringBeanLocator(Bean.class, ctxLocator));
+
+		assertNotNull(locator.locateProxyTarget());
+	}
+

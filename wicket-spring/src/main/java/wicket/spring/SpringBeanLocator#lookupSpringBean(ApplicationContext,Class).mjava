@@ -1,0 +1,30 @@
+	/**
+	 * Looks up a bean by its class. Throws IllegalState exception if none or
+	 * more then one beans are found.
+	 * 
+	 * @param ctx
+	 *            spring application context
+	 * 
+	 * @param clazz
+	 *            bean class
+	 * @throws IllegalStateException
+	 * @return found bean
+	 */
+	private final Object lookupSpringBean(ApplicationContext ctx, Class clazz)
+	{
+		Map beans = ctx.getBeansOfType(clazz);
+		if (beans.size() == 0)
+		{
+			throw new IllegalStateException("bean of type ["
+					+ clazz.getName() + "] not found");
+		}
+		if (beans.size() > 1)
+		{
+			throw new IllegalStateException(
+					"more then one bean of type ["
+							+ clazz.getName()
+							+ "] found, you have to specify the name of the bean (@SpringBean(name=\"foo\")) in order to resolve this conflict");
+		}
+		return beans.values().iterator().next();
+	}
+

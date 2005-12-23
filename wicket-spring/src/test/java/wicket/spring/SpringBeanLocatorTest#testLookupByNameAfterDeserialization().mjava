@@ -1,0 +1,14 @@
+	/**
+	 * tests lookup by name after locator has been deserialized
+	 */
+	public void testLookupByNameAfterDeserialization()
+	{
+		Bean bean = new Bean();
+		ctx.putBean("bean", bean);
+
+		SpringBeanLocator locator = (SpringBeanLocator) Objects
+				.clone(new SpringBeanLocator("bean", Bean.class, ctxLocator));
+
+		assertNotNull(locator.locateProxyTarget());
+	}
+

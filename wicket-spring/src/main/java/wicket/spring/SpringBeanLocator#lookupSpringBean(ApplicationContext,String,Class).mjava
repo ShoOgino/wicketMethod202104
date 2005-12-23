@@ -1,0 +1,28 @@
+	/**
+	 * Looks up a bean by its name and class. Throws IllegalState exception if
+	 * bean not found.
+	 * 
+	 * @param ctx
+	 *            spring application context
+	 * 
+	 * @param name
+	 *            bean name
+	 * @param clazz
+	 *            bean class
+	 * @throws IllegalStateException
+	 * @return found bean
+	 */
+	private static Object lookupSpringBean(ApplicationContext ctx, String name,
+			Class clazz)
+	{
+		try
+		{
+			return ctx.getBean(name, clazz);
+		}
+		catch (NoSuchBeanDefinitionException e)
+		{
+			throw new IllegalStateException("bean with name ["
+					+ name + "] and class [" + clazz.getName() + "] not found");
+		}
+	}
+
