@@ -8,12 +8,10 @@
 		// Save the parent's markup stream to re-assign it at the end
 		MarkupContainer parent = getParent();
 		MarkupStream originalMarkupStream = parent.getMarkupStream();
-		
-		// Get the parent's associate markup stream. A MarkupContainer
-		// will delegate it to its parent. A Page, Panel and Border
-		// will return the content of the associated markup file.
-		MarkupStream markupStream = parent.getAssociatedMarkupStream();
-		
+
+		// Get the parent's associated markup stream. 
+		MarkupStream markupStream = findParentWithAssociatedMarkup().getAssociatedMarkupStream();
+
 		// Make sure the markup stream is position at the correct element
 		markupStream.setCurrentIndex(this.markupStreamPosition);
 		
