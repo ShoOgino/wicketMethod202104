@@ -1,0 +1,29 @@
+	/**
+	 * Gets a fresh markup stream that contains the (immutable) markup resource
+	 * for this class.
+	 * 
+	 * @return A stream of MarkupElement elements
+	 */
+	protected MarkupStream getAssociatedMarkupStream()
+	{
+		MarkupStream markupStream = null;
+		
+		// Start here
+		MarkupContainer parent = getParent();
+
+		// Walk up hierarchy until markup found
+		if (parent != null)
+		{
+			markupStream = parent.getAssociatedMarkupStream();
+			if (markupStream == null)
+			{
+				// Failed to find markup stream
+				throw new MarkupNotFoundException(
+						exceptionMessage("No markup found"));
+			}
+		}
+
+		markupStream.setCurrentIndex(this.markupStreamPosition);
+		return markupStream;
+	}
+
