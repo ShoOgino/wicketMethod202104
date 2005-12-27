@@ -1,0 +1,36 @@
+	/**
+	 * Try to resolve the tag, then create a component, add it to the container
+	 * and render it.
+	 * 
+	 * @see wicket.IComponentResolver#resolve(MarkupContainer, MarkupStream,
+	 *      ComponentTag)
+	 */
+	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		MarkupContainer parent = container;
+		while ((parent != null) && (parent.isTransparent()))
+		{
+			// Try to find the component with the parent component.
+			parent = parent.getParent();
+			if (parent != null)
+			{
+				Component component = parent.get(tag.getId());
+				if (component != null)
+				{
+					component.render();
+					return true;
+				}
+			}
+		}
+
+		// If not yet found, restore the original parent and test if it
+		// implement IComponentResolver
+		parent = container.getParent();
+		if (parent instanceof IComponentResolver)
+		{
+			return ((IComponentResolver)parent).resolve(container, markupStream, tag);
+		}
+		return false;
+	}
+
