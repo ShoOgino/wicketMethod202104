@@ -1,5 +1,8 @@
 	/**
 	 * Removes all children from this container.
+	 * <p>
+	 * Note: implementation does not call
+	 * {@link MarkupContainer#remove(Component) } for each component.
 	 */
 	public void removeAll()
 	{
@@ -8,8 +11,9 @@
 			addStateChange(new Change()
 			{
 				private static final long serialVersionUID = 1L;
-				
+
 				final Object removedChildren = MarkupContainer.this.children;
+
 				public void undo()
 				{
 					MarkupContainer.this.children = removedChildren;
