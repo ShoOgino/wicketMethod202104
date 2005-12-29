@@ -1,9 +1,8 @@
 	/**
 	 * @see wicket.IPageMapEvictionStrategy#evict(wicket.PageMap)
 	 */
-	public IPageSource evict(final PageMap pageMap)
+	public void evict(final PageMap pageMap)
 	{
-		final int maxPages = pageMap.getSession().getApplication().getSettings().getMaxPages();
 		if (pageMap.size() > maxPages)
 		{
 			final List list = pageMap.getPageSources();
@@ -23,8 +22,6 @@
 			{
 				pageMap.remove(leastRecentlyUsed);
 			}
-			return leastRecentlyUsed;
 		}
-		return null;
 	}
 
