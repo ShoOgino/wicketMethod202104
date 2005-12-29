@@ -7,38 +7,18 @@
 	 */
 	private final void processEventsAndRespond(IRequestCycleProcessor processor)
 	{
-		// see whether we need to do synchronization
-		Object synchronizeLock = getSynchronizationLock();
-
-		// if the lock is not-null, synchronize the rest of the request
-		// cycle processing
-		if (synchronizeLock != null)
+		// Use any synchronization lock provided by the target
+		Object lock = getRequestTarget().getLock(this);
+		if (lock != null)
 		{
-			synchronized (synchronizeLock)
+			synchronized (lock)
 			{
-				// let the processor handle/ issue any events
-				processor.processEvents(this);
-
-				// set current stage manually this time
-				currentStep = RESPOND;
-
-				// generate a response
-				processor.respond(this);
+				doProcessEventsAndRespond(processor);
 			}
 		}
 		else
 		{
-			// no lock means no synchronization (e.g. when handling static
-			// resources or external resources)
-
-			// let the processor handle/ issue any events
-			processor.processEvents(this);
-
-			// set current stage manually this time
-			currentStep = RESPOND;
-
-			// generate a response
-			processor.respond(this);
+			doProcessEventsAndRespond(processor);
 		}
 	}
 

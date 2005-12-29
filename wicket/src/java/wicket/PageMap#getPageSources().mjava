@@ -1,0 +1,18 @@
+	/**
+	 * @return List of page sources in this page map
+	 */
+	final List getPageSources()
+	{
+		final List attributes = session.getAttributeNames();
+		final List list = new ArrayList();
+		for (final Iterator iterator = attributes.iterator(); iterator.hasNext();)
+		{
+			final String attribute = (String)iterator.next();
+			if (attribute.startsWith(attributePrefix()))
+			{
+				list.add((IPageSource)session.getAttribute(attribute));
+			}
+		}
+		return list;
+	}
+

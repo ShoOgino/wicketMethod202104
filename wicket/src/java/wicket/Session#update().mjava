@@ -25,23 +25,25 @@
 			}
 		}
 
-		// Go through all pages in all page maps, replicating any dirty pages
-		visitPageMaps(new IVisitor()
+		// Go through all page sources, replicating any dirty pages
+		for (final Iterator iterator = getAttributeNames().iterator(); iterator.hasNext();)
 		{
-			public void pageMap(PageMap pageMap)
+			final String attribute = (String)iterator.next();
+			if (attribute.startsWith(pageSourceAttributePrefix))
 			{
-				pageMap.visitPages(new PageMap.IVisitor()
+				// Get next page source
+				IPageSource pageSource = (IPageSource)getAttribute(attribute);
+
+				// If page source is dirty
+				if (pageSource.isDirty())
 				{
-					public void page(Page page)
-					{
-						if (page.isDirty())
-						{
-							page.setDirty(false);
-							replicate(page);
-						}
-					}
-				});
+					// Make it undirty
+					pageSource.setDirty(false);
+
+					// Set session attribute to replicate the page
+					setAttribute(attribute, pageSource);
+				}
 			}
-		});
+		}
 	}
 

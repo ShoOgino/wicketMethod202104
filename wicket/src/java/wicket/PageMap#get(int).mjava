@@ -1,0 +1,23 @@
+	/**
+	 * Retrieves page with given id.
+	 * 
+	 * @param id
+	 *            The page identifier
+	 * @return Any page having the given id
+	 */
+	final Page get(final int id)
+	{
+		final IPageSource pageSource = (IPageSource)session.getAttribute(attributeForId(id));
+		if (pageSource != null)
+		{	
+			// Page source has been accessed
+			session.access(pageSource);
+
+			// Get page as dirty
+			final Page page = pageSource.getPage();
+			page.setDirty(true);
+			return page;
+		}
+		return null;
+	}
+

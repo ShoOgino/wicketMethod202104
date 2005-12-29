@@ -1,0 +1,16 @@
+	/**
+	 * @param processor
+	 *            The request processor
+	 */
+	private final void doProcessEventsAndRespond(IRequestCycleProcessor processor)
+	{
+		// let the processor handle/ issue any events
+		processor.processEvents(this);
+
+		// set current stage manually this time
+		currentStep = RESPOND;
+
+		// generate a response
+		processor.respond(this);
+	}
+
