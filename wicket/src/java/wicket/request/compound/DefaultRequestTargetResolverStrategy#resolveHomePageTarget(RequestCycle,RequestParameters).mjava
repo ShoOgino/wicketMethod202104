@@ -14,8 +14,9 @@
 		Application application = session.getApplication();
 		try
 		{
-			// get the home page class
+			// Get the home page class
 			Class homePageClass = application.getPages().getHomePage();
+
 			// and create a dummy target for looking up whether the home page is
 			// mounted
 			BookmarkablePageRequestTarget pokeTarget = new BookmarkablePageRequestTarget(
@@ -26,7 +27,7 @@
 
 			if (path != null)
 			{
-				// the home page was mounted at the given path.
+				// The home page was mounted at the given path.
 				// Issue a redirect to that path
 				requestCycle.setRedirect(true);
 				// our poke target is good enough
@@ -37,11 +38,11 @@
 			// that we will keep a clean path
 			PageParameters parameters = new PageParameters(requestParameters.getParameters());
 			Page newPage = session.getPageFactory().newPage(homePageClass, parameters);
-			// the response might have been set in the constructor of the home
-			// page
+			
+			// The response might have been set in the home page constructor
 			IRequestTarget requestTarget = requestCycle.getRequestTarget();
 
-			// is it possible that there is already another request target at
+			// Is it possible that there is already another request target at
 			// this point then the 2 below?
 			if (!(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IBookmarkablePageRequestTarget))
 			{
