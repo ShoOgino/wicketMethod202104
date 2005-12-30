@@ -1,18 +1,17 @@
 	/**
-	 * @return List of page sources in this page map
+	 * @param visitor
+	 *            The visitor to call at each Page in this PageMap.
 	 */
-	final List getPageSources()
+	final void visitEntries(final IVisitor visitor)
 	{
 		final List attributes = session.getAttributeNames();
-		final List list = new ArrayList();
 		for (final Iterator iterator = attributes.iterator(); iterator.hasNext();)
 		{
 			final String attribute = (String)iterator.next();
 			if (attribute.startsWith(attributePrefix()))
 			{
-				list.add((IPageSource)session.getAttribute(attribute));
+				visitor.entry((IPageMapEntry)session.getAttribute(attribute));
 			}
 		}
-		return list;
 	}
 

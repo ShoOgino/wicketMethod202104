@@ -25,23 +25,23 @@
 			}
 		}
 
-		// Go through all page sources, replicating any dirty pages
+		// Go through all entries, replicating any dirty pages
 		for (final Iterator iterator = getAttributeNames().iterator(); iterator.hasNext();)
 		{
 			final String attribute = (String)iterator.next();
-			if (attribute.startsWith(pageSourceAttributePrefix))
+			if (attribute.startsWith(pageMapEntryAttributePrefix))
 			{
-				// Get next page source
-				IPageSource pageSource = (IPageSource)getAttribute(attribute);
+				// Get next entry
+				IPageMapEntry entry = (IPageMapEntry)getAttribute(attribute);
 
-				// If page source is dirty
-				if (pageSource.isDirty())
+				// If entry is dirty
+				if (entry.isDirty())
 				{
 					// Make it undirty
-					pageSource.setDirty(false);
+					entry.setDirty(false);
 
 					// Set session attribute to replicate the page
-					setAttribute(attribute, pageSource);
+					setAttribute(attribute, entry);
 				}
 			}
 		}

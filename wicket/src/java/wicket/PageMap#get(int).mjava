@@ -7,14 +7,14 @@
 	 */
 	final Page get(final int id)
 	{
-		final IPageSource pageSource = (IPageSource)session.getAttribute(attributeForId(id));
-		if (pageSource != null)
+		final IPageMapEntry entry = (IPageMapEntry)session.getAttribute(attributeForId(id));
+		if (entry != null)
 		{	
-			// Page source has been accessed
-			session.access(pageSource);
+			// Entry has been accessed
+			session.access(entry);
 
 			// Get page as dirty
-			final Page page = pageSource.getPage();
+			final Page page = entry.getPage();
 			page.setDirty(true);
 			return page;
 		}
