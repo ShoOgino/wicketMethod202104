@@ -25,6 +25,20 @@
 							+ removedChildren + "]";
 				}
 			});
+
+			// Loop through child components
+			int size = children_size();
+			for (int i=0; i < size; i++)
+			{
+				// Get next child
+				final Component child = children_get(i);
+				
+				// Do not call remove() because the state change would than be 
+				// recorded twice.
+				child.detachModel();
+				child.setParent(null);
+			}
+			
 			this.children = null;
 		}
 	}

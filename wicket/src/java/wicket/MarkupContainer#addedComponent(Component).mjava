@@ -10,11 +10,20 @@
 			throw new IllegalArgumentException("Component can't be added to itself");
 		}
 
-		// remove if from another parent.
 		MarkupContainer parent = component.getParent();
 		if (parent != null)
 		{
-			parent.remove(component);
+			// It is ok to replace the component if it is the same parent container
+			if (parent == getParent())
+			{
+				parent.remove(component);
+			}
+			else
+			{
+				throw new WicketRuntimeException(
+					"You can not add the same Component instance to two different parents: " 
+						+ component.toString());
+			}
 		}
 
 		// Set child's parent
