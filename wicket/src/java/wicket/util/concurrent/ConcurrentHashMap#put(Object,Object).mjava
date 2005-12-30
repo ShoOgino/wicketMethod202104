@@ -22,8 +22,9 @@
 	public Object put(Object key, Object value)
 	{
 		if (value == null)
-			throw new NullPointerException();
-
+		{
+			throw new IllegalArgumentException("Value must not be null");
+		}
 		int hash = hash(key);
 		Segment seg = segments[hash & SEGMENT_MASK];
 		int segcount;

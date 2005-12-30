@@ -1,23 +1,26 @@
 	/**
 	 * Construct.
-	 * @param id component id
-	 * @param resourceReference the reference to the resource.
-	 * 		Must return an instance of {@link ResourceReference}
-	 * @param attributeToReplace the attribute to replace of the target tag
+	 * 
+	 * @param id
+	 *            component id
+	 * @param resourceReference
+	 *            the reference to the resource. Must return an instance of
+	 *            {@link ResourceReference}
+	 * @param attributeToReplace
+	 *            the attribute to replace of the target tag
 	 */
-	public PackagedResourceReference(final String id,
-			final IModel resourceReference,
+	public PackagedResourceReference(final String id, final IModel resourceReference,
 			final String attributeToReplace)
 	{
 		super(id);
 
 		if (resourceReference == null)
 		{
-			throw new NullPointerException("resourceReference may not be null");
+			throw new IllegalArgumentException("ResourceReference may not be null");
 		}
 		if (attributeToReplace == null)
 		{
-			throw new NullPointerException("attributeToReplace may not be null");
+			throw new IllegalArgumentException("AttributeToReplace may not be null");
 		}
 
 		IModel srcReplacement = new Model()
@@ -29,16 +32,16 @@
 				Object o = resourceReference.getObject(component);
 				if (o == null)
 				{
-					throw new NullPointerException(
-							"the model must provide a non-null object (component == " +
-							component + ")");
+					throw new IllegalArgumentException(
+							"The model must provide a non-null object (component == " + component
+									+ ")");
 				}
 				if (!(o instanceof ResourceReference))
 				{
-					throw new WicketRuntimeException(
-							"the model must provide an instance of ResourceReference");
+					throw new IllegalArgumentException(
+							"The model must provide an instance of ResourceReference");
 				}
-				
+
 				ResourceReference ref = (ResourceReference)o;
 				String url = getPage().urlFor(ref.getPath());
 				return url;

@@ -1,0 +1,19 @@
+	/**
+	 * Mounts all bookmarkable pages at the given path.
+	 * 
+	 * @param path
+	 *            the path to mount the bookmarkable page class on
+	 * @param packageName
+	 *            the name of the package for which all bookmarkable pages or
+	 *            sharedresources should be mounted
+	 */
+	public final void mount(String path, PackageName packageName)
+	{
+		checkMountPath(path);
+		if (packageName == null)
+		{
+			throw new IllegalArgumentException("PackageName cannot be null");
+		}
+		mount(path, new PackageRequestTargetEncoderDecoder(path, packageName));
+	}
+

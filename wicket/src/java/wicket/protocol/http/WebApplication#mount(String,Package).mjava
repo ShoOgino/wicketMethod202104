@@ -1,0 +1,22 @@
+	/**
+	 * Mounts all bookmarkable pages in a given package.
+	 * 
+	 * @param path
+	 *            The path to mount at
+	 * @param p
+	 *            The package for which all bookmarkable pages or
+	 *            sharedresources should be mounted
+	 */
+	public final void mount(String path, Package p)
+	{
+		if (p == null)
+		{
+			throw new IllegalArgumentException("Null Package argument not allowed.  "
+					+ "If you called Class.getPackage() and it returned null, "
+					+ "there may be no Package object for the given class!  "
+					+ "You can instead call mount(path, PackageName), passing "
+					+ "in wicket.util.lang.PackageName.forClass(c)");
+		}
+		mount(path, PackageName.forPackage(p));
+	}
+
