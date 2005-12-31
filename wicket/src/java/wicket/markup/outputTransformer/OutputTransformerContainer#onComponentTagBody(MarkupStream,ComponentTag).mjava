@@ -1,0 +1,33 @@
+	/**
+	 * @see wicket.Component#onComponentTagBody(wicket.markup.MarkupStream,
+	 *      wicket.markup.ComponentTag)
+	 */
+	protected final void onComponentTagBody(final MarkupStream markupStream,
+			final ComponentTag openTag)
+	{
+		// Temporarily replace the web response with a String response
+		final Response webResponse = this.getResponse();
+
+		try
+		{
+			final Response response = newResponse();
+			if (response == null)
+			{
+				throw new IllegalStateException("newResponse() must not return null");
+			}
+
+			this.getRequestCycle().setResponse(response);
+
+			// Invoke default execution
+			super.onComponentTagBody(markupStream, openTag);
+
+			String output = transform(response.toString());
+			webResponse.write(output);
+		}
+		finally
+		{
+			// Restore the original response
+			this.getRequestCycle().setResponse(webResponse);
+		}
+	}
+
