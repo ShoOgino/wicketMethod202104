@@ -10,12 +10,14 @@
 
 		try
 		{
+			// Create a new response object
 			final Response response = newResponse();
 			if (response == null)
 			{
 				throw new IllegalStateException("newResponse() must not return null");
 			}
 
+			// and make it the current one
 			this.getRequestCycle().setResponse(response);
 
 			// Invoke default execution
@@ -23,6 +25,7 @@
 
 			try
 			{
+				// Tranform the data
 				String output = transform(response.toString());
 				webResponse.write(output);
 			}

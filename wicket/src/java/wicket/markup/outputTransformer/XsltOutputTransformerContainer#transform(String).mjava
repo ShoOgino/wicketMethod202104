@@ -1,0 +1,45 @@
+	/**
+	 * 
+	 * @see wicket.markup.outputTransformer.AbstractOutputTransformerContainer#transform(java.lang.String)
+	 */
+	protected String transform(final String output) throws Exception
+	{
+		String filepath = getParent().getClass().getPackage().getName().replace('.', '/') + "/" + getId();
+		
+		IResourceStream resourceStream = getApplication().getResourceStreamLocator().locate(
+				getClass().getClassLoader(), 
+				filepath, 
+				getStyle(), 
+				getLocale(), 
+				getMarkupType());
+
+		if (resourceStream == null)
+		{
+			throw new FileNotFoundException(
+					"Unable to find XSLT resource for " + this.toString());
+		}
+		
+		try
+		{
+			// 1. Instantiate a TransformerFactory.
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+	
+			// 2. Use the TransformerFactory to process the stylesheet Source and
+			// generate a Transformer.
+			Transformer transformer = tFactory.newTransformer(new StreamSource(resourceStream.getInputStream()));
+	
+			// 3. Use the Transformer to transform an XML Source and send the
+			// output to a Result object.
+			StringWriter writer = new StringWriter();
+			transformer.transform(
+					new StreamSource(new StringReader(output)), 
+					new StreamResult(writer));
+
+			return writer.toString();
+		}
+		finally
+		{
+			resourceStream.close();
+		}
+	}
+
