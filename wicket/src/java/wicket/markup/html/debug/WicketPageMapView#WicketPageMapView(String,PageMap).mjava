@@ -16,6 +16,17 @@
 		// Get pagemaps
 		final List entries = pageMap.getEntries();
 
+		// Sort on access
+		Collections.sort(entries, new Comparator()
+		{
+			public int compare(Object a, Object b)
+			{
+				IPageMapEntry ea = (IPageMapEntry)a;
+				IPageMapEntry eb = (IPageMapEntry)b;
+				return eb.getAccessSequenceNumber() - ea.getAccessSequenceNumber();
+			}
+		});
+
 		// Create the table containing the list the components
 		add(new ListView("entries", entries)
 		{
@@ -37,7 +48,9 @@
 				{
 					size = ObjectProfiler.sizeof(entry);
 				}
-				listItem.add(new Label("size", (entry instanceof WicketInspector) ? "(inspector)" : "" + Bytes.bytes(size)));
+				listItem.add(new Label("size", (entry instanceof WicketInspector)
+						? "(inspector)"
+						: "" + Bytes.bytes(size)));
 			}
 		});
 	}
