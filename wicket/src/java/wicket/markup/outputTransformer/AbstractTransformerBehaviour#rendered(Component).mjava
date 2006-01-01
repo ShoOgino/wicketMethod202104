@@ -1,0 +1,24 @@
+	/**
+	 * @see wicket.IBehaviour#rendered(wicket.Component)
+	 */
+	public void rendered(final Component component)
+	{
+		final RequestCycle requestCycle = RequestCycle.get();
+
+		try
+		{
+			Response response = requestCycle.getResponse();
+
+			// Tranform the data
+			CharSequence output = transform(component, response.toString());
+			this.webResponse.write(output.toString());
+		}
+		catch (Exception ex)
+		{
+			throw new WicketRuntimeException("Error while transforming the output: " + this, ex);
+		}
+
+		// Restore the original response object
+		requestCycle.setResponse(this.webResponse);
+	}
+

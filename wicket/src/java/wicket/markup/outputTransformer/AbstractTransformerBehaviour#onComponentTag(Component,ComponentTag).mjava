@@ -1,0 +1,22 @@
+	/**
+	 * @see wicket.IBehaviour#onComponentTag(wicket.Component,
+	 *      wicket.markup.ComponentTag)
+	 */
+	public void onComponentTag(final Component component, final ComponentTag tag)
+	{
+		final RequestCycle requestCycle = RequestCycle.get();
+
+		// Temporarily replace the web response with a String response
+		this.webResponse = requestCycle.getResponse();
+
+		// Create a new response object
+		final Response response = newResponse();
+		if (response == null)
+		{
+			throw new IllegalStateException("newResponse() must not return null");
+		}
+
+		// and make it the current one
+		requestCycle.setResponse(response);
+	}
+
