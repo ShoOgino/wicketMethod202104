@@ -11,7 +11,8 @@
 	 */
 	public final void renderComponent(final MarkupStream markupStream)
 	{
-		// If yet unknown, set the markup stream position with the current position
+		// If yet unknown, set the markup stream position with the current
+		// position
 		// of markupStream. Else set the markupStream.setCurrentPosition based
 		// on the position already known to the component.
 		validateMarkupStream(markupStream);
@@ -27,18 +28,17 @@
 		if (!tag.isOpenClose() && !tag.isOpen())
 		{
 			// We were something other than <tag> or <tag/>
-			markupStream.throwMarkupException(
-					"Method renderComponent called on bad markup element: "
-					+ tag);
+			markupStream
+					.throwMarkupException("Method renderComponent called on bad markup element: "
+							+ tag);
 		}
 
 		if (tag.isOpenClose() && openTag.isOpen())
 		{
-			markupStream.throwMarkupException(
-					"You can not modify a open tag to open-close: "
-					+ tag);
+			markupStream
+					.throwMarkupException("You can not modify a open tag to open-close: " + tag);
 		}
-		
+
 		// Render open tag
 		if (getRenderBodyOnly() == false)
 		{
@@ -62,12 +62,13 @@
 			}
 			else
 			{
-				// If a open-close tag has been to modified to be open-body-close
+				// If a open-close tag has been to modified to be
+				// open-body-close
 				// than a synthetic close tag must be rendered.
 				if (getRenderBodyOnly() == false)
 				{
-			        // Close the manually opened panel tag.
-			        getResponse().write(openTag.syntheticCloseTagString());
+					// Close the manually opened panel tag.
+					getResponse().write(openTag.syntheticCloseTagString());
 				}
 			}
 		}
