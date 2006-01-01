@@ -3,13 +3,10 @@
 	 */
 	protected Object onGetObject(final Component component)
 	{
-		final String expression = ognlExpression(component);
+		final String expression = propertyExpression(component);
 		if (Strings.isEmpty(expression))
 		{
-			// No expression will cause OGNL to throw an exception. The OGNL
-			// expression to return the current object is "#this". Instead
-			// of throwing that exception, we'll provide a meaningful
-			// return value
+			// Return a meaningful value for an empty property expression
 			return modelObject(component);
 		}
 

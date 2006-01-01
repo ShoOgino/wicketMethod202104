@@ -1,19 +1,17 @@
 	/**
-	 * Applies the Ognl expression on the model object using the given object
-	 * argument (Ognl.setValue).
+	 * Applies the property expression on the model object using the given
+	 * object argument.
 	 * 
 	 * @param object
-	 *            the object that will be used when applying Ognl.setValue on
-	 *            the model object
+	 *            The object that will be used when setting a value on the model
+	 *            object
 	 * @see AbstractDetachableModel#onSetObject(Component, Object)
 	 */
 	protected void onSetObject(final Component component, Object object)
 	{
-		final String expression = ognlExpression(component);
+		final String expression = propertyExpression(component);
 		if (Strings.isEmpty(expression))
 		{
-			// No expression will cause OGNL to throw an exception. The OGNL
-			// expression to set the current object is "#this".
 			if (nestedModel instanceof IModel)
 			{
 				((IModel)nestedModel).setObject(null, object);
@@ -45,7 +43,6 @@
 				}
 			}
 
-			// Let OGNL set the value
 			PropertyResolver.setValue(expression, modelObject, object, component.getConverter());
 		}
 	}
