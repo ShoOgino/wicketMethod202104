@@ -4,16 +4,6 @@
 	 */
 	public void test1() throws Exception
 	{
-		// Do the processing
-	    application.setupRequestAndResponse();
-		application.processRequestCycle();
-
-		final ListView components = (ListView)((MarkupContainer)application.getLastRenderedPage().get("componentList")).get("components");
-		assertEquals(2, components.getList().size());
-		
-		// Validate the document
-		String document = application.getServletResponse().getDocument();
-		log.info(document);
-		assertTrue(validatePage(document, "WicketComponentTreeTestPage_ExpectedResult.html"));
+		this.executeTest(WicketComponentTreeTestPage.class, "WicketComponentTreeTestPage_ExpectedResult.html");
 	}
 
