@@ -4,14 +4,17 @@
 	 */
 	final synchronized void put(final IPageMapEntry entry)
 	{
-		// Entry has been accessed
-		session.access(entry);
-
-		// Store entry in session
-		session.setAttribute(attributeForId(entry.getNumericId()), entry);
-		size++;
-
-		// Evict any page(s) as need be
-		session.getApplication().getSettings().getPageMapEvictionStrategy().evict(this);
+		if (!(entry instanceof WicketInspector))
+		{
+			// Entry has been accessed
+			session.access(entry);
+	
+			// Store entry in session
+			session.setAttribute(attributeForId(entry.getNumericId()), entry);
+			size++;
+	
+			// Evict any page(s) as need be
+			session.getApplication().getSettings().getPageMapEvictionStrategy().evict(this);
+		}
 	}
 
