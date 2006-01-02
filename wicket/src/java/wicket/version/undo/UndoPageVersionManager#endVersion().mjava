@@ -3,14 +3,21 @@
 	 */
 	public void endVersion()
 	{
-		// Store change list under key for previous version, since the change
-		// list is the set of changes to /get/ to the current version.
-		appliedChangeListForVersionNumber.put(new Integer(getCurrentVersionNumber() - 1),
-				changeList);
+		// Push change list onto stack
+		changeListStack.push(changeList);
+		
+		// If stack is overfull, remove oldest entry
+		if (changeListStack.size() > maxVersions)
+		{
+			changeListStack.remove(0);
+		}
+		
+		// Make memory efficient for replication
+		changeListStack.trimToSize();
 
 		if (log.isDebugEnabled())
 		{
-			log.debug("version " + versionNumber + " for page " + page + " stored");
+			log.debug("Version " + currentVersionNumber + " for page " + page + " stored");
 		}
 	}
 

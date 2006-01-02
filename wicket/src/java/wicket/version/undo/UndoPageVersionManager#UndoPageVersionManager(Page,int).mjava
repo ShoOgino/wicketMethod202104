@@ -9,20 +9,7 @@
 	 */
 	public UndoPageVersionManager(final Page page, final int maxVersions)
 	{
-		// Save page that this version manager is working on
 		this.page = page;
-
-		// Create an insertion-ordered MRU map
-		this.appliedChangeListForVersionNumber = new LinkedHashMap()
-		{
-			private static final long serialVersionUID = 1L;
-
-			protected boolean removeEldestEntry(final Map.Entry ignored)
-			{
-				// Tell collections class to remove oldest entry if there are
-				// more than maxVersions entries
-				return size() > maxVersions;
-			}
-		};
+		this.maxVersions = maxVersions;
 	}
 
