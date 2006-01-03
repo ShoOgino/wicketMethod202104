@@ -10,7 +10,7 @@
 	{
 		final IModel model = getModel();
 
-		// check whether anything can be set at all
+		// Check whether anything can be set at all
 		if (model == null)
 		{
 			throw new IllegalStateException(
@@ -18,15 +18,16 @@
 							+ getPageRelativePath());
 		}
 
-		// check authorization
+		// Check authorization
 		if (!getApplication().getAuthorizationStrategy().allowEnabledState(this))
 		{
 			throw new UnauthorizedEnabledStateException(
 					"operation not allowed in the current authorization context");
 		}
 
-		// check whether this will result in a actual change
-		if (!getComparator().compareValue(this, object))
+		// Check whether this will result in an actual change
+		final Object current = model.getObject(this);
+		if (!getModelComparator().compare(current, object))
 		{
 			modelChanging();
 
@@ -40,6 +41,7 @@
 			}
 			modelChanged();
 		}
+		
 		return this;
 	}
 
