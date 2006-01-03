@@ -1,0 +1,42 @@
+	/**
+	 * 
+	 * @param code
+	 */
+	private final void execute(final Runnable code)
+	{
+		// Temporarily replace the web response with a String response
+		final Response webResponse = this.getResponse();
+
+		try
+		{
+			// Create a new response object
+			final Response response = newResponse();
+			if (response == null)
+			{
+				throw new IllegalStateException("newResponse() must not return null");
+			}
+
+			// and make it the current one
+			this.getRequestCycle().setResponse(response);
+
+			// Invoke default execution
+			code.run();
+
+			try
+			{
+				// Tranform the data
+				CharSequence output = transform(this, response.toString());
+				webResponse.write(output.toString());
+			}
+			catch (Exception ex)
+			{
+				throw new WicketRuntimeException("Error while transforming the output: " + this, ex);
+			}
+		}
+		finally
+		{
+			// Restore the original response
+			this.getRequestCycle().setResponse(webResponse);
+		}
+	}
+

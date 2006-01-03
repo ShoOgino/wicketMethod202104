@@ -5,39 +5,20 @@
 	protected final void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 	{
-		// Temporarily replace the web response with a String response
-		final Response webResponse = this.getResponse();
-
-		try
+		if (this.transformBodyOnly == true)
 		{
-			// Create a new response object
-			final Response response = newResponse();
-			if (response == null)
+			execute(new Runnable()
 			{
-				throw new IllegalStateException("newResponse() must not return null");
-			}
-
-			// and make it the current one
-			this.getRequestCycle().setResponse(response);
-
-			// Invoke default execution
-			super.onComponentTagBody(markupStream, openTag);
-
-			try
-			{
-				// Tranform the data
-				CharSequence output = transform(this, response.toString());
-				webResponse.write(output.toString());
-			}
-			catch (Exception ex)
-			{
-				throw new WicketRuntimeException("Error while transforming the output: " + this, ex);
-			}
+				public void run()
+				{
+					// Invoke default execution
+					AbstractOutputTransformerContainer.super.onComponentTagBody(markupStream, openTag);
+				}
+			});
 		}
-		finally
+		else
 		{
-			// Restore the original response
-			this.getRequestCycle().setResponse(webResponse);
+			super.onComponentTagBody(markupStream, openTag);
 		}
 	}
 
