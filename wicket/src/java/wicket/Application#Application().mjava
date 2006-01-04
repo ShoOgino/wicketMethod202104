@@ -13,14 +13,13 @@
 		this.sharedResources = new SharedResources(this);
 
 		// Install default component resolvers
-		List componentResolvers = getRequestCycleSettings().getComponentResolvers();
-		componentResolvers.add(new ParentResolver());
-		componentResolvers.add(new AutoComponentResolver());
-		componentResolvers.add(new MarkupInheritanceResolver());
-		componentResolvers.add(new HtmlHeaderResolver());
-		componentResolvers.add(new BodyOnLoadResolver());
-		componentResolvers.add(new WicketLinkResolver());
-		componentResolvers.add(new WicketMessageResolver());
+		getPageSettings().addComponentResolver(new ParentResolver());
+		getPageSettings().addComponentResolver(new AutoComponentResolver());
+		getPageSettings().addComponentResolver(new MarkupInheritanceResolver());
+		getPageSettings().addComponentResolver(new HtmlHeaderResolver());
+		getPageSettings().addComponentResolver(new BodyOnLoadResolver());
+		getPageSettings().addComponentResolver(new WicketLinkResolver());
+		getPageSettings().addComponentResolver(new WicketMessageResolver());
 
 		// Install button image resource factory
 		getResourceSettings().addResourceFactory("buttonFactory",

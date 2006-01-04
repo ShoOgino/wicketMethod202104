@@ -56,13 +56,11 @@
 			if (supportedPageExtensions.containsKey(extension.toLowerCase()))
 			{
 				// Obviously a href like href="myPkg.MyLabel.html" will do as
-				// well.
-				// Wicket will not throw an exception. It accepts it.
+				// well. Wicket will not throw an exception. It accepts it.
 				infoPath = Strings.replaceAll(infoPath, "/", ".");
 
-				final IRequestCycleSettings appSettings = page.getApplication()
-						.getRequestCycleSettings();
-				final IClassResolver defaultClassResolver = appSettings.getClassResolver();
+				final IClassResolver defaultClassResolver = page.getApplication()
+						.getApplicationSettings().getClassResolver();
 
 				final String className;
 				if (!infoPath.startsWith("."))
@@ -73,7 +71,7 @@
 				}
 				else
 				{
-					// href is absolute. If class with the same absolute path
+					// Href is absolute. If class with the same absolute path
 					// exists, use it. Else don't change the href.
 					className = infoPath.substring(1);
 				}
