@@ -1,0 +1,24 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param cryptClass
+	 *            class that will be instantiated to represent the ICrypt object
+	 * @param encryptionKey
+	 *            encryption key
+	 */
+	public ClassCryptFactory(Class cryptClass, String encryptionKey)
+	{
+		if (cryptClass == null)
+		{
+			throw new IllegalArgumentException("cryptClass cannot be null");
+		}
+
+		if (!ICrypt.class.isAssignableFrom(cryptClass))
+		{
+			throw new IllegalArgumentException("cryptClass must implement ICrypt interface");
+		}
+
+		this.cryptClass = cryptClass;
+		this.encryptionKey=encryptionKey;
+	}
+

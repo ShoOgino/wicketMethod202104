@@ -1,14 +1,11 @@
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
+	/**
+	 * @see junit.framework.TestCase#setUp()
+	 */
 	protected void setUp() throws Exception
 	{
-		application = new MockWebApplication(null)
-		{
-			public IMarkupFilter[] getAdditionalMarkupHandler()
-			{
-				return new IMarkupFilter[] { new PrependContextPathHandler() };
-			}
-		};
+		application = new MockWebApplication(null);
+		
+		application.getMarkupSettings().setMarkupParserFactory(
+				new MarkupParserFactory(application.getMarkupSettings(), new PrependContextPathHandler()));
 	}
 
