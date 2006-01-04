@@ -2,8 +2,8 @@
 	 * Try to resolve the tag, then create a component, add it to the container
 	 * and render it.
 	 * 
-	 * @see wicket.markup.resolver.IComponentResolver#resolve(MarkupContainer, MarkupStream,
-	 *      ComponentTag)
+	 * @see wicket.markup.resolver.IComponentResolver#resolve(MarkupContainer,
+	 *      MarkupStream, ComponentTag)
 	 * 
 	 * @param container
 	 *            The container parsing its markup
@@ -29,8 +29,8 @@
 							"Wrong format of <wicket:message key='xxx'>: attribute 'key' is missing");
 				}
 
-				final String value = container.getApplication().getMarkupSettings().getLocalizer().getString(
-						messageKey, container, "");
+				final String value = container.getApplication().getMarkupSettings().getLocalizer()
+						.getString(messageKey, container, "");
 
 				final String id = "_message_" + container.getPage().getAutoIndex();
 				Component component = null;
@@ -43,8 +43,8 @@
 					component = new WebMarkupContainer(id);
 				}
 
-				component.setRenderBodyOnly(
-						container.getApplicationSettings().getStripWicketTags());
+				component.setRenderBodyOnly(container.getApplication().getMarkupSettings()
+						.getStripWicketTags());
 
 				container.autoAdd(component);
 
