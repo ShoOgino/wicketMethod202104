@@ -19,9 +19,8 @@
 	 *             If resource not found and configuration dictates that
 	 *             exception should be thrown
 	 */
-	public String getString(final String key, final String path, final List searchStack, 
-			final Locale locale, final String style)
-			throws MissingResourceException
+	public String getString(final String key, final String path, final List searchStack,
+			final Locale locale, final String style) throws MissingResourceException
 	{
 		if (searchStack == null)
 		{
@@ -30,19 +29,19 @@
 		}
 
 		// The top element
-		Class componentClass = (searchStack.size() > 0 ? (Class) searchStack.get(0) : null); 
-		
+		Class componentClass = (searchStack.size() > 0 ? (Class)searchStack.get(0) : null);
+
 		// If value is cached already ...
 		String id = createCacheId(componentClass, locale, style, key);
 
 		// The cached key value
 		String string = getCachedValue(id);
-		
+
 		// If not found in the cache
 		if (string == null)
 		{
 			string = traverseResourceLoaders(key, path, searchStack, locale, style);
-			
+
 			// cache all values, not matter the key has been found or not
 			if (string != null)
 			{
