@@ -6,7 +6,7 @@
 	public void testPagedTable() throws Exception
 	{
 		MockWebApplication application = new MockWebApplication(null);
-		application.getSettings().setRenderStrategy(Settings.REDIRECT_TO_BUFFER);
+		application.getRequestCycleSettings().setRenderStrategy(Settings.REDIRECT_TO_BUFFER);
 		application.getRequiredPageSettings().setHomePage(SortableTableHeadersPage.class);
 		application.setupRequestAndResponse();
 		application.processRequestCycle();
@@ -30,7 +30,7 @@
 
 		// Check that redirect was set as expected and invoke it
 		MockHttpServletResponse redirectResponse = application.getServletResponse();
-		
+
 		Assert.assertTrue("Response should be a redirect", redirectResponse.isRedirect());
 		String redirect = application.getServletResponse().getRedirectLocation();
 		application.setupRequestAndResponse();
@@ -51,7 +51,7 @@
 		// Check that wicket:border tag gets removed
 		Assert.assertTrue("Response should be a redirect", application.getServletResponse()
 				.isRedirect());
-		application.getSettings().setStripWicketTags(true);
+		application.getMarkupSettings().setStripWicketTags(true);
 		redirect = application.getServletResponse().getRedirectLocation();
 		application.setupRequestAndResponse();
 		application.getServletRequest().setRequestToRedirectString(redirect);
