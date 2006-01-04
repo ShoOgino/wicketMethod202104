@@ -16,7 +16,7 @@
 		Application.set(webApplication);
 
 		// try to see if there is a redirect stored
-		if (webApplication.getSettings().getRenderStrategy() == Settings.REDIRECT_TO_BUFFER)
+		if (webApplication.getRequestCycleSettings().getRenderStrategy() == Settings.REDIRECT_TO_BUFFER)
 		{
 			String sessionId = servletRequest.getSession(true).getId();
 			String queryString = servletRequest.getQueryString();
@@ -54,7 +54,7 @@
 				// the responses. Thus, it is reasonable to assume the request
 				// has the same encoding. This is especially important for
 				// forms and form parameters.
-				servletRequest.setCharacterEncoding(webApplication.getSettings()
+				servletRequest.setCharacterEncoding(webApplication.getRequestCycleSettings()
 						.getResponseRequestEncoding());
 			}
 			catch (UnsupportedEncodingException ex)
@@ -71,7 +71,8 @@
 		// Create a response object and set the output encoding according to
 		// wicket's application setttings.
 		final WebResponse response = webApplication.newWebResponse(servletResponse);
-		response.setCharacterEncoding(webApplication.getSettings().getResponseRequestEncoding());
+		response.setCharacterEncoding(webApplication.getRequestCycleSettings()
+				.getResponseRequestEncoding());
 
 		try
 		{
