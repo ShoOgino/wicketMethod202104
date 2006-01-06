@@ -1,26 +1,27 @@
 	/**
 	 * Convert the string into the output encoding required
 	 * 
+	 * @param output 
+	  
 	 * @param encoding
 	 *            The output encoding
 	 * @return byte[] The encoded characters converted into bytes
 	 */
-	private byte[] convertToCharset(final String encoding)
+	private static byte[] convertToCharset(final String output, final String encoding)
 	{
 		if (encoding == null)
 		{
 			throw new WicketRuntimeException("Internal error: encoding must not be null");
 		}
 
-		final String string = getString();
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream(string.length());
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream(output.length());
 
 		final OutputStreamWriter osw;
 		final byte[] bytes;
 		try
 		{
 			osw = new OutputStreamWriter(baos, encoding);
-			osw.write(string);
+			osw.write(output);
 			osw.close();
 
 			bytes = baos.toByteArray();

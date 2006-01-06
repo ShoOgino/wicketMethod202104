@@ -10,12 +10,12 @@
 	 * @return the buffered response or null if not found (when this request is
 	 *         on a different box than the original request came in
 	 */
-	final BufferedResponse popBufferedResponse(String sessionId, String bufferId)
+	final BufferedHttpServletResponse popBufferedResponse(String sessionId, String bufferId)
 	{
 		Map responsesPerSession = (Map)bufferedResponses.get(sessionId);
 		if (responsesPerSession != null)
 		{
-			BufferedResponse buffered = (BufferedResponse)responsesPerSession.remove(bufferId);
+			BufferedHttpServletResponse buffered = (BufferedHttpServletResponse)responsesPerSession.remove(bufferId);
 			return buffered;
 		}
 		return null;
