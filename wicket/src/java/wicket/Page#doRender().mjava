@@ -5,9 +5,9 @@
 	{
 		// Make sure it is really empty
 		renderedComponents = null;
-
-		// Add/touch the response page in the session (its pagemap).
-		getSession().touch(this);
+		
+		// Reset it to stateless is false so that 
+		this.stateless = true;
 
 		// Set form component values from cookies
 		setFormComponentValuesFromCookies();
@@ -37,6 +37,10 @@
 
 			// Check rendering if it happened fully
 			checkRendering(this);
+
+			// Add/touch the response page in the session (its pagemap).
+			getSession().touch(this);
+
 		}
 		finally
 		{
