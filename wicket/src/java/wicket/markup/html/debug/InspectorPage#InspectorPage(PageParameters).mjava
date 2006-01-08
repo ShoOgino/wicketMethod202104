@@ -1,0 +1,23 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param parameters
+	 *            The page id of any page to be analyzed
+	 */
+	public InspectorPage(final PageParameters parameters)
+	{
+		add(new ApplicationView("application", Application.get()));
+		add(new SessionView("session", Session.get()));
+		Page page = null;
+		try
+		{
+			page = getPageMap().get(parameters.getInt("pageId"));
+		}
+		catch (StringValueConversionException e)
+		{
+			// Ignore
+		}
+		add(new PageView("page", page));
+		add(new Image("bug"));
+	}
+
