@@ -14,6 +14,13 @@
 
 		try
 		{
+			// Allow currently invisible components to be re-rendered as well
+			if (getParent() != null)
+			{
+				final MarkupStream markupStream = findMarkupStream();
+				validateMarkupStream(markupStream);
+			}
+			
 			// Determine if component is visible using it's authorization status
 			// and the isVisible property.
 			if (renderAllowed && isVisible())
