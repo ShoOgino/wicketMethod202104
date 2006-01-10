@@ -15,9 +15,10 @@
 		try
 		{
 			// Allow currently invisible components to be re-rendered as well
+			MarkupStream markupStream = null;
 			if (getParent() != null)
 			{
-				final MarkupStream markupStream = findMarkupStream();
+				markupStream = findMarkupStream();
 				validateMarkupStream(markupStream);
 			}
 			
@@ -32,7 +33,7 @@
 				}
 
 				// Call implementation to render component
-				onRender();
+				onRender(markupStream);
 
 				// Component has been rendered
 				rendered();
