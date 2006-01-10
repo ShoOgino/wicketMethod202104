@@ -1,0 +1,15 @@
+		@Override
+		public void endElement(String uri, String localName, String qName) throws SAXException {
+			if (componentTags.peek()==true) {
+
+				recordStaticMarkup();
+				
+				endComponent();
+				
+			} else {
+				textBuffer.append("</").append(qName).append(">");
+			}
+			
+			componentTags.pop();
+		}
+
