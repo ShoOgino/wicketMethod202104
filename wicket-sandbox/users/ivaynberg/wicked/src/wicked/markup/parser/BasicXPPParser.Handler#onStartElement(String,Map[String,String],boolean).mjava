@@ -1,0 +1,19 @@
+		public void onStartElement(String name, Map<String, String> attrs,
+				boolean empty) {
+
+			if (hasWicketId(attrs)) {
+
+				recordStaticMarkup();
+
+				Tag tag = createTag(name, attrs, empty);
+				componentTags.push(true);
+				startComponent(tag);
+
+			} else {
+				printTagToTextBuffer(name, attrs, empty);
+				componentTags.push(false);
+			}
+			
+			emptyTags.push(empty);
+		}
+

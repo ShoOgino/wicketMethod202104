@@ -1,9 +1,15 @@
 	public void render(OutputStream stream) {
 		ComponentFragment frag = getFragment();
-		renderOpenTag(stream);
 
-		renderBody(stream, frag.getFragments());
+		if (frag.getTag().isEmpty() && frag.getFragments() == null) {
+			renderEmptyTag(stream);
+		} else {
 
-		renderCloseTag(stream);
+			renderOpenTag(stream);
+
+			renderBody(stream, frag.getFragments());
+
+			renderCloseTag(stream);
+		}
 	}
 
