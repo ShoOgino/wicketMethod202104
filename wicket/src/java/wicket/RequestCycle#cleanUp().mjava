@@ -6,18 +6,18 @@
 		// clean up target stack; calling cleanUp has effects like
 		// NOTE: don't remove the targets as testing code might need them
 		// furthermore, the targets will be cg-ed with this cycle too
-		for (Iterator i = requestTargets.iterator(); i.hasNext();)
+		for (Iterator iter = requestTargets.iterator(); iter.hasNext();)
 		{
-			IRequestTarget t = (IRequestTarget)i.next();
-			if (t != null)
+			IRequestTarget target = (IRequestTarget)iter.next();
+			if (target != null)
 			{
 				try
 				{
-					t.cleanUp(this);
+					target.cleanUp(this);
 				}
 				catch (RuntimeException e)
 				{
-					log.error("there was an error cleaning up target " + t + ".", e);
+					log.error("there was an error cleaning up target " + target + ".", e);
 				}
 			}
 		}
