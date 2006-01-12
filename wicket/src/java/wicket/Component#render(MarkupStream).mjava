@@ -1,0 +1,55 @@
+	/**
+	 * Performs a render of this component as part of a Page level render
+	 * process.
+	 * <p>
+	 * For component level re-render (e.g. AJAX) please call
+	 * Component.doRender(). Though render() does seem to work, it will fail for
+	 * panel children.
+	 * 
+	 * @param markupStream
+	 */
+	public final void render(final MarkupStream markupStream)
+	{
+		setFlag(FLAG_IS_RENDERED_ONCE, true);
+
+		rendering = true;
+
+		try
+		{
+			if (getParent() != null)
+			{
+				validateMarkupStream(markupStream);
+			}
+
+			// Determine if component is visible using it's authorization status
+			// and the isVisible property.
+			if (renderAllowed && isVisible())
+			{
+				// Rendering is beginning
+				if (log.isDebugEnabled())
+				{
+					log.debug("Begin render " + this);
+				}
+
+				// Call implementation to render component
+				onRender(markupStream);
+
+				// Component has been rendered
+				rendered();
+
+				if (log.isDebugEnabled())
+				{
+					log.debug("End render " + this);
+				}
+			}
+			else
+			{
+				findMarkupStream().skipComponent();
+			}
+		}
+		finally
+		{
+			rendering = false;
+		}
+	}
+
