@@ -1,0 +1,17 @@
+	/**
+	 * Gets the session attribute prefix.
+	 * 
+	 * @return the session attribute prefix
+	 */
+	private String getSessionAttributePrefix()
+	{
+		if (sessionAttributePrefix == null)
+		{
+			WebApplication application = (WebApplication)Application.get();
+			WebRequestCycle cycle = (WebRequestCycle)RequestCycle.get();
+			String servletContextName = application.getSessionAttributePrefix(cycle.getWebRequest());
+			sessionAttributePrefix = "wicket:" + servletContextName + ":";
+		}
+		return sessionAttributePrefix;
+	}
+

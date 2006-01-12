@@ -1,14 +1,14 @@
 	/**
-	 * @see Session#getAttributeNames()
+	 * @see wicket.session.ISessionStore#getAttributeNames()
 	 */
-	protected List getAttributeNames()
+	public List getAttributeNames()
 	{
-		final List list = new ArrayList();
+		List list = new ArrayList();
 		HttpSession httpSession = getHttpSession();
 		if (httpSession != null)
 		{
 			final Enumeration names = httpSession.getAttributeNames();
-			final String prefix = sessionAttributePrefix;
+			final String prefix = getSessionAttributePrefix();
 			while (names.hasMoreElements())
 			{
 				final String name = (String)names.nextElement();

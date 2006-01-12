@@ -1,0 +1,19 @@
+	/**
+	 * @see wicket.session.ISessionStore#invalidate()
+	 */
+	public void invalidate()
+	{
+		HttpSession httpSession = getHttpSession();
+		if (httpSession != null)
+		{
+			try
+			{
+				httpSession.invalidate();
+			}
+			catch (IllegalStateException e)
+			{
+				// Ignore
+			}
+		}
+	}
+
