@@ -9,12 +9,12 @@
 		app.getSecuritySettings().setAuthorizationStrategy(new DummyAuthorizationStrategy()
 		{
 			/**
-			 * @see wicket.authorization.IAuthorizationStrategy#allow(wicket.authorization.AuthorizationAction,
-			 *      wicket.Component)
+			 * @see wicket.authorization.IAuthorizationStrategy#allowAction(wicket.Component,
+			 *      wicket.authorization.Action)
 			 */
-			public boolean allow(AuthorizationAction action, Component c)
+			public boolean allowAction(Component component, Action action)
 			{
-				if ((action.equals(IAuthorizationStrategy.ACTION_RENDER)) && c instanceof Label)
+				if (action == Component.RENDER && component instanceof Label)
 				{
 					return false;
 				}

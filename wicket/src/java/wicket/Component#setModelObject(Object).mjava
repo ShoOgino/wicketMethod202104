@@ -19,11 +19,9 @@
 		}
 
 		// Check authorization
-		if (!getApplication().getSecuritySettings().getAuthorizationStrategy().allow(
-				IAuthorizationStrategy.ACTION_ENABLED_STATE, this))
+		if (!getAuthorizationStrategy().allowAction(this, ENABLE))
 		{
-			throw new UnauthorizedEnabledStateException(
-					"operation not allowed in the current authorization context");
+			throw new UnauthorizedActionException(this, Component.ENABLE);
 		}
 
 		// Check whether this will result in an actual change

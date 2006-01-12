@@ -1,15 +1,12 @@
 	/**
 	 * Check whether this component may be created at all. Throws a
 	 * {@link AuthorizationException} when it may not be created
-	 * 
 	 */
 	private final void checkAuthorization()
 	{
-		if (!getApplication().getSecuritySettings().getAuthorizationStrategy().allowInstantiation(
-				getClass()))
+		if (!getAuthorizationStrategy().allowInstantiation(getClass()))
 		{
-			throw new UnauthorizedInstantiationException(
-					"insufficiently authorized to create component " + getClass());
+			throw new UnauthorizedInstantiationException(getClass());
 		}
 	}
 
