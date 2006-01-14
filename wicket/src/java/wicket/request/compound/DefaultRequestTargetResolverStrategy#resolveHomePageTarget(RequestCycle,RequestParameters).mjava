@@ -37,8 +37,16 @@
 			// else the home page was not mounted; render it now so
 			// that we will keep a clean path
 			PageParameters parameters = new PageParameters(requestParameters.getParameters());
-			Page newPage = session.getPageFactory().newPage(homePageClass, parameters);
-			
+			Page newPage = null;
+			if (parameters.size() == 0)
+			{
+				newPage = session.getPageFactory().newPage(homePageClass);
+			}
+			else
+			{
+				newPage = session.getPageFactory().newPage(homePageClass, parameters);
+			}
+
 			// The response might have been set in the home page constructor
 			IRequestTarget requestTarget = requestCycle.getRequestTarget();
 
