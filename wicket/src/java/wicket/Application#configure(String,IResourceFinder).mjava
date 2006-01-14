@@ -1,13 +1,18 @@
 	/**
-	 * Configures application settings for a given configuration type.
+	 * Configures application settings to good defaults for the given
+	 * configuration type (either DEVELOPMENT or DEPLOYMENT).
 	 * 
 	 * @param configurationType
-	 *            The configuration type. Must currently be either "development"
-	 *            or "deployment". If the type is 'development', the given
-	 *            resourceFinder is polled for changes
+	 *            The configuration type. Must currently be either DEVELOPMENT
+	 *            or DEPLOYMENT. Currently, if the configuration type is
+	 *            DEVELOPMENT, resources are polled for changes, component usage
+	 *            is checked, wicket tags are not stripped from ouput and a
+	 *            detailed exception page is used. If the type is DEPLOYMENT,
+	 *            component usage is not checked, wicket tags are stripped from
+	 *            output and a non-detailed exception page is used to display
+	 *            errors.
 	 * @param resourceFinder
-	 *            Finder for looking up resources
-	 * @see File#pathSeparator
+	 *            Resource finder for looking up resources
 	 */
 	public final void configure(final String configurationType, final IResourceFinder resourceFinder)
 	{
@@ -15,7 +20,7 @@
 		{
 			getResourceSettings().setResourceFinder(resourceFinder);
 		}
-		if ("development".equalsIgnoreCase(configurationType))
+		if (DEVELOPMENT.equalsIgnoreCase(configurationType))
 		{
 			getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
 			getDebugSettings().setComponentUseCheck(true);
@@ -23,7 +28,7 @@
 			getExceptionSettings().setUnexpectedExceptionDisplay(
 					IExceptionSettings.SHOW_EXCEPTION_PAGE);
 		}
-		else if ("deployment".equalsIgnoreCase(configurationType))
+		else if (DEPLOYMENT.equalsIgnoreCase(configurationType))
 		{
 			getDebugSettings().setComponentUseCheck(false);
 			getMarkupSettings().setStripWicketTags(true);
