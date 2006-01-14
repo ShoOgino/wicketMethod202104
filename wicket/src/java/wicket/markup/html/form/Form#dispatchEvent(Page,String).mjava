@@ -8,7 +8,8 @@
 	 * @param url
 	 *            The url which describes the component path and the interface
 	 *            to be called.
-	 * @deprecated refactor this to use the {@link wicket.request.IRequestCodingStrategy}
+	 * @deprecated refactor this to use the
+	 *             {@link wicket.request.IRequestCodingStrategy}
 	 */
 	private void dispatchEvent(final Page page, final String url)
 	{
@@ -34,7 +35,8 @@
 			String path = decodedUrl.substring(indexOfPath, indexOfPathEnd);
 			String interfaceName = decodedUrl.substring(indexOfInterface, indexOfInterfaceEnd);
 
-			final Component component = page.get(Strings.afterFirstPathComponent(path, ':'));
+			final Component component = page.get(Strings.afterFirstPathComponent(path,
+					Component.PATH_SEPARATOR));
 
 			if (!component.isVisible())
 			{
@@ -44,7 +46,8 @@
 			Method method = requestCycle.getRequestInterfaceMethod(interfaceName);
 			if (method != null)
 			{
-				new FormSubmitInterfaceRequestTarget(page, component, method).processEvents(requestCycle);
+				new FormSubmitInterfaceRequestTarget(page, component, method)
+						.processEvents(requestCycle);
 			}
 		}
 		else
