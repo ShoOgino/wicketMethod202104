@@ -1,27 +1,30 @@
 	/**
 	 * Component has to implement {@link IBehaviorListener} to be able to pass
-	 * through events to behaviours without ending up with many if/else blocks.
+	 * through events to behaviors without ending up with many if/else blocks.
 	 * 
 	 * @see wicket.behavior.IBehaviorListener#onRequest()
+	 * @throws IllegalStateException
+	 *             Thrown if no behavior listener can be found using request
+	 *             parameter behaviorId
 	 */
 	public void onRequest()
 	{
-		String id = getRequest().getParameter("behaviourId");
+		final String id = getRequest().getParameter("behaviorId");
 
 		if (id == null)
 		{
-			throw new WicketRuntimeException(
-					"Parameter behaviourId was not provided: unable to locate listener");
+			throw new IllegalStateException(
+					"Parameter behaviorId was not provided: unable to locate listener");
 		}
 
-		int idAsInt = Integer.parseInt(id);
-		IBehaviorListener behaviourListener = (IBehaviorListener)behaviours.get(idAsInt);
+		final int idAsInt = Integer.parseInt(id);
+		final IBehaviorListener behaviorListener = (IBehaviorListener)behaviors.get(idAsInt);
 
-		if (behaviourListener == null)
+		if (behaviorListener == null)
 		{
-			throw new WicketRuntimeException("No behaviour listener found with behaviourId " + id);
+			throw new IllegalStateException("No behavior listener found with behaviorId " + id);
 		}
 
-		behaviourListener.onRequest();
+		behaviorListener.onRequest();
 	}
 
