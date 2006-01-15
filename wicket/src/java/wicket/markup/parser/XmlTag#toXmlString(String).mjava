@@ -24,6 +24,7 @@
 
 		buffer.append(name);
 
+		final AttributeMap attributes = getAttributes();
 		if (attributes.size() > 0)
 		{
 			final Iterator iterator = attributes.keySet().iterator();
@@ -36,7 +37,9 @@
 					buffer.append(" ");
 					buffer.append(key);
 					String value = getString(key);
-					if (value != null) // attributes without values are possible, e.g. 'disabled'
+					
+					// Attributes without values are possible, e.g. 'disabled'
+					if (value != null) 
 					{
 						buffer.append("=\"");
 						value = Strings.replaceAll(value,"\"", "\\\"");
