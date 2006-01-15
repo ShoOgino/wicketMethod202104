@@ -12,18 +12,18 @@
 	public final void doGet(final HttpServletRequest servletRequest,
 			final HttpServletResponse servletResponse) throws ServletException, IOException
 	{
-		// first, set the webapplication for this thread
+		// First, set the webapplication for this thread
 		Application.set(webApplication);
 
-		// try to see if there is a redirect stored
+		// Try to see if there is a redirect stored
 		if (webApplication.getRequestCycleSettings().getRenderStrategy() == Settings.REDIRECT_TO_BUFFER)
 		{
 			String sessionId = servletRequest.getSession(true).getId();
 			String queryString = servletRequest.getQueryString();
 			String requestUri = servletRequest.getRequestURI();
 			String bufferId = (queryString == null) ? requestUri : requestUri + "?" + queryString;
-			BufferedHttpServletResponse bufferedResponse = webApplication.popBufferedResponse(sessionId,
-					bufferId);
+			BufferedHttpServletResponse bufferedResponse = webApplication.popBufferedResponse(
+					sessionId, bufferId);
 
 			if (bufferedResponse != null)
 			{
@@ -56,8 +56,9 @@
 			}
 		}
 
-		// create a new webrequest
+		// Create a new webrequest
 		final WebRequest request = webApplication.newWebRequest(servletRequest);
+
 		// Get session for request
 		final WebSession session = webApplication.getSession(request);
 
@@ -69,7 +70,7 @@
 
 		try
 		{
-			// create a new request cycle
+			// Create a new request cycle
 			RequestCycle cycle = session.newRequestCycle(request, response);
 
 			// Process request
@@ -79,7 +80,8 @@
 		{
 			// Close response
 			response.close();
-			// clean up thread local
+
+			// Clean up thread local
 			Application.set(null);
 		}
 	}
