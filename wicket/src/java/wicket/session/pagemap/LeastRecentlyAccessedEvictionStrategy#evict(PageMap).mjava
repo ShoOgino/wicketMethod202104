@@ -3,7 +3,7 @@
 	 */
 	public void evict(final PageMap pageMap)
 	{
-		if (pageMap.size() > maxPages)
+		if (pageMap.size() > maxVersions)
 		{
 			final List list = pageMap.getEntries();
 			IPageMapEntry leastRecentlyUsed = null;
@@ -20,7 +20,18 @@
 			}
 			if (leastRecentlyUsed != null)
 			{
-				pageMap.remove(leastRecentlyUsed);
+				final Page page = leastRecentlyUsed.getPage();
+				int currentVersionNumber = page.getCurrentVersionNumber(); 
+				if (currentVersionNumber > 1)
+				{
+					// Go back to previous version
+					page.getVersion(currentVersionNumber - 1);
+				}
+				else
+				{
+					// Remove the entire page
+					pageMap.remove(leastRecentlyUsed);
+				}
 			}
 		}
 	}
