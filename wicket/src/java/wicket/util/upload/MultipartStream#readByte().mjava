@@ -1,23 +1,26 @@
-    /**
-     * Reads a byte from the <code>buffer</code>, and refills it as
-     * necessary.
-     *
-     * @return The next byte from the input stream.
-     *
-     * @exception IOException if there is no more data available.
-     */
-    public byte readByte()
-        throws IOException {
-        // Buffer depleted ?
-        if (head == tail) {
-            head = 0;
-            // Refill.
-            tail = input.read(buffer, head, bufSize);
-            if (tail == -1) {
-                // No more data available.
-                throw new IOException("No more data is available");
-            }
-        }
-        return buffer[head++];
-    }
+	/**
+	 * Reads a byte from the <code>buffer</code>, and refills it as
+	 * necessary.
+	 * 
+	 * @return The next byte from the input stream.
+	 * 
+	 * @exception IOException
+	 *                if there is no more data available.
+	 */
+	public byte readByte() throws IOException
+	{
+		// Buffer depleted ?
+		if (head == tail)
+		{
+			head = 0;
+			// Refill.
+			tail = input.read(buffer, head, bufSize);
+			if (tail == -1)
+			{
+				// No more data available.
+				throw new IOException("No more data is available");
+			}
+		}
+		return buffer[head++];
+	}
 

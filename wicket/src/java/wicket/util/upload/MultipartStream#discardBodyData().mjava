@@ -1,61 +1,73 @@
-    /**
-     * <p> Reads <code>body-data</code> from the current
-     * <code>encapsulation</code> and discards it.
-     *
-     * <p>Use this method to skip encapsulations you don't need or don't
-     * understand.
-     *
-     * @return The amount of data discarded.
-     *
-     * @exception MalformedStreamException if the stream ends unexpectedly.
-     * @exception IOException              if an i/o error occurs.
-     */
-    public int discardBodyData()
-        throws MalformedStreamException,
-               IOException {
-        boolean done = false;
-        int pad;
-        int pos;
-        int bytesRead;
-        int total = 0;
-        while (!done) {
-            // Is boundary token present somewere in the buffer?
-            pos = findSeparator();
-            if (pos != -1) {
-                // Write the rest of the data before the boundary.
-                total += pos - head;
-                head = pos;
-                done = true;
-            } else {
-                // Determine how much data should be kept in the
-                // buffer.
-                if (tail - head > keepRegion) {
-                    pad = keepRegion;
-                } else {
-                    pad = tail - head;
-                }
-                total += tail - head - pad;
+	/**
+	 * <p>
+	 * Reads <code>body-data</code> from the current
+	 * <code>encapsulation</code> and discards it.
+	 * 
+	 * <p>
+	 * Use this method to skip encapsulations you don't need or don't
+	 * understand.
+	 * 
+	 * @return The amount of data discarded.
+	 * 
+	 * @exception MalformedStreamException
+	 *                if the stream ends unexpectedly.
+	 * @exception IOException
+	 *                if an i/o error occurs.
+	 */
+	public int discardBodyData() throws MalformedStreamException, IOException
+	{
+		boolean done = false;
+		int pad;
+		int pos;
+		int bytesRead;
+		int total = 0;
+		while (!done)
+		{
+			// Is boundary token present somewere in the buffer?
+			pos = findSeparator();
+			if (pos != -1)
+			{
+				// Write the rest of the data before the boundary.
+				total += pos - head;
+				head = pos;
+				done = true;
+			}
+			else
+			{
+				// Determine how much data should be kept in the
+				// buffer.
+				if (tail - head > keepRegion)
+				{
+					pad = keepRegion;
+				}
+				else
+				{
+					pad = tail - head;
+				}
+				total += tail - head - pad;
 
-                // Move the data to the beginning of the buffer.
-                System.arraycopy(buffer, tail - pad, buffer, 0, pad);
+				// Move the data to the beginning of the buffer.
+				System.arraycopy(buffer, tail - pad, buffer, 0, pad);
 
-                // Refill buffer with new data.
-                head = 0;
-                bytesRead = input.read(buffer, pad, bufSize - pad);
+				// Refill buffer with new data.
+				head = 0;
+				bytesRead = input.read(buffer, pad, bufSize - pad);
 
-                // [pprrrrrrr]
-                if (bytesRead != -1) {
-                    tail = pad + bytesRead;
-                } else {
-                    // The last pad amount is left in the buffer.
-                    // Boundary can't be in there so signal an error
-                    // condition.
-                    total += pad;
-                    throw new MalformedStreamException(
-                            "Stream ended unexpectedly");
-                }
-            }
-        }
-        return total;
-    }
+				// [pprrrrrrr]
+				if (bytesRead != -1)
+				{
+					tail = pad + bytesRead;
+				}
+				else
+				{
+					// The last pad amount is left in the buffer.
+					// Boundary can't be in there so signal an error
+					// condition.
+					total += pad;
+					throw new MalformedStreamException("Stream ended unexpectedly");
+				}
+			}
+		}
+		return total;
+	}
 

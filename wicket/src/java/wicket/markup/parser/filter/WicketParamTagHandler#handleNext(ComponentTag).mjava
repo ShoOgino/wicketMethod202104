@@ -33,7 +33,7 @@
 		}
 
 		// By now we know it is a Wicket param tag.
-		// Only empty TEXT is allowed in between the preceding component 
+		// Only empty TEXT is allowed in between the preceding component
 		// tag and the param tag.
 		final CharSequence rawMarkup = xmlParser.getInputSubsequence(lastTag.getPos()
 				+ lastTag.getLength(), tag.getPos());
@@ -46,13 +46,14 @@
 			if (text.length() > 0)
 			{
 				throw new ParseException("There must not be any text between a component tag and "
-						+ "it's related param tag. Only spaces and line breaks are allowed.",
-						tag.getPos());
+						+ "it's related param tag. Only spaces and line breaks are allowed.", tag
+						.getPos());
 			}
 		}
 
-		// TODO: <wicket:params name = "myProperty">My completely free text that
-		// can contain everything</wicket:params> is currently not supported
+		// TODO Enhancement: <wicket:params name = "myProperty">My completely
+		// free text that can contain everything</wicket:params> is currently
+		// not supported
 
 		// Add the parameters to the previous component tag
 		lastTag.getAdditionalAttributes().putAll(tag.getAttributes());
@@ -68,7 +69,8 @@
 			// E.g. An "expected close tag" exception will be thrown if the
 			// component uses replaceComponentTagBody() to replace the body
 			// of the component (see src/test/.../MyLabel.html).
-			log.warn("Be careful. Not stripping <wicket:param> from output may cause subtle errors.");
+			log
+					.warn("Be careful. Not stripping <wicket:param> from output may cause subtle errors.");
 		}
 
 		return tag;
