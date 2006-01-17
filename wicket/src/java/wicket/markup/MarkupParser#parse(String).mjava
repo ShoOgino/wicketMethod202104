@@ -1,5 +1,6 @@
     /**
      * Parse the markup.
+     * 
      * @param string The markup
      * @return The markup
      * @throws ParseException
@@ -9,9 +10,18 @@
     final Markup parse(final String string) throws ParseException, IOException,
     	ResourceStreamNotFoundException
     {
-    	this.resource = null;
-        xmlParser.parse(string);
-        return new Markup(null, parseMarkup(), getXmlDeclaration(), getEncoding(), 
-                this.wicketNamespace);
+    	// Remove all existing markup elements
+    	this.markup.clear();
+    	
+    	// Initialize the xml parser
+        this.xmlParser.parse(string);
+    	
+        // parse the xml markup and tokenize it into wicket relevant markup elements
+        parseMarkup();
+        
+        this.markup.setEncoding(xmlParser.getEncoding());
+        this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
+        
+        return this.markup;
     }
 

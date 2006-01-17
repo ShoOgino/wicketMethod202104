@@ -8,20 +8,14 @@
 	public final void testWicketTag() throws ParseException, ResourceStreamNotFoundException,
 			IOException
 	{
-		final MarkupParser parser = new MarkupParser(new XmlPullParser(null), "wicket");
+		final MarkupParser parser = new MarkupParser(new XmlPullParser(null));
 
 		parser.parse("<span wicket:id=\"test\"/>");
-
 		parser.parse("<span wicket:id=\"test\">Body</span>");
-
 		parser.parse("This is a test <span wicket:id=\"test\"/>");
-
 		parser.parse("This is a test <span wicket:id=\"test\">Body</span>");
-
 		parser.parse("<a wicket:id=\"[autolink]\" href=\"test.html\">Home</a>");
-
 		parser.parse("<span wicket:id=\"test\"/><wicket:param key=value/>");
-
 		parser.parse("<span wicket:id=\"test\"/><wicket:param key=\"value\" />");
 
 		try
@@ -34,22 +28,15 @@
 			// ignore
 		}
 
-		parser
-				.parse("<span wicket:id=\"test\"/><wicket:param key=\"value\" /><wicket:param key2=\"value2\" />");
-
-		parser
-				.parse("<span wicket:id=\"test\"/>   <wicket:param key=\"value\" />   <wicket:param key2=\"value2\" />");
-
-		parser
-				.parse("<span wicket:id=\"test\"/> \n\r   <wicket:param key=\"value\" />\n\r\t   <wicket:param key2=\"value2\" />");
+		parser.parse("<span wicket:id=\"test\"/><wicket:param key=\"value\" /><wicket:param key2=\"value2\" />");
+		parser.parse("<span wicket:id=\"test\"/>   <wicket:param key=\"value\" />   <wicket:param key2=\"value2\" />");
+		parser.parse("<span wicket:id=\"test\"/> \n\r   <wicket:param key=\"value\" />\n\r\t   <wicket:param key2=\"value2\" />");
 
 		// parser.parse("<span wicket:id=\"test\"/><wicket:param
 		// name=myParam>value</wicket>", null);
 
 		parser.parse("<wicket:body/>");
-
 		parser.parse("<wicket:border/>");
-
 		parser.parse("<wicket:panel/>");
 
 		try
@@ -85,14 +72,9 @@
 			// ignore
 		}
 
-		parser
-				.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\"/>");
-		parser
-				.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\">    </wicket:component>");
-		parser
-				.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\">  <span wicket:id=\"msg\">hello world!</span></wicket:component>");
-
-		parser
-				.parse("<wicket:panel><div id=\"definitionsContentBox\"><span wicket:id=\"contentPanel\"/></div></wicket:panel>");
+		parser.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\"/>");
+		parser.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\">    </wicket:component>");
+		parser.parse("<wicket:component name = \"componentName\" class = \"classname\" param1 = \"value1\">  <span wicket:id=\"msg\">hello world!</span></wicket:component>");
+		parser.parse("<wicket:panel><div id=\"definitionsContentBox\"><span wicket:id=\"contentPanel\"/></div></wicket:panel>");
 	}
 

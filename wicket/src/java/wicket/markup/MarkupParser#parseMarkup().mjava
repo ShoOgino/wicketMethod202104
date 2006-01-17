@@ -1,18 +1,17 @@
     /**
      * Scans the given markup string and extracts balancing tags.
-     * @return An immutable list of immutable MarkupElement elements
      * @throws ParseException Thrown if markup is malformed or tags don't balance
      */
-    private List parseMarkup() throws ParseException
+    private void parseMarkup() throws ParseException
     {
         final List autoAddList = new ArrayList();
         
         this.markupFilterChain = newFilterChain(autoAddList);
         initFilterChain();
-        
-        // List to return
-        final List list = new ArrayList();
 
+        boolean stripComments = Application.get().getMarkupSettings().getStripComments();
+        boolean compressWhitespace = Application.get().getMarkupSettings().getCompressWhitespace();
+        
         try
         {
 	        // Loop through tags
@@ -61,7 +60,7 @@
 	                        rawMarkup = rawMarkup.replaceAll("( ?[\\r\\n] ?)+", "\n");
 	                    }
 	
-	                    list.add(new RawMarkup(rawMarkup));
+	                    this.markup.addMarkupElement(new RawMarkup(rawMarkup));
 	                }
 	
 	                if ((add == false) && (autoAddList.size() > 0))
@@ -69,7 +68,10 @@
 	                    xmlParser.setPositionMarker(tag.getPos());
 	                }
 	
-	                list.addAll(autoAddList);
+	                for (int i=0; i < autoAddList.size(); i++)
+	                {
+	                	this.markup.addMarkupElement((MarkupElement)autoAddList.get(i));
+	                }
 	                autoAddList.clear();
 	            }
 	            
@@ -80,11 +82,11 @@
 	                {
 	                	if (replaceTag != null)
 	                	{
-	                		list.add(replaceTag);
+	                		this.markup.addMarkupElement(replaceTag);
 	                	}
 	                	else
 	                	{
-	                		list.add(tag);
+	                		this.markup.addMarkupElement(tag);
 	                	}
 	                }
 	                
@@ -92,7 +94,7 @@
 	            }
 	            else if (tag.isModified())
 	            {
-                    list.add(new RawMarkup(tag.toString()));
+	            	this.markup.addMarkupElement(new RawMarkup(tag.toString()));
 	                xmlParser.setPositionMarker();
 	            }
 	        }
@@ -103,14 +105,14 @@
             final CharSequence text = xmlParser.getInputFromPositionMarker(-1);
             if (text.length() > 0)
             {
-                list.add(new RawMarkup(text));
+            	this.markup.addMarkupElement(new RawMarkup(text));
             }
+
+            this.markup.setEncoding(xmlParser.getEncoding());
+            this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
             
-        	Markup markup = new Markup(this.resource, list, getXmlDeclaration(), getEncoding(), 
-                    this.wicketNamespace);
-        	
         	MarkupStream markupStream = new MarkupStream(markup); 
-        	markupStream.setCurrentIndex(list.size() - 1);
+        	markupStream.setCurrentIndex(this.markup.size() - 1);
         	throw new MarkupException(markupStream, ex.getMessage());
         }
         
@@ -118,25 +120,10 @@
         final CharSequence text = xmlParser.getInputFromPositionMarker(-1);
         if (text.length() > 0)
         {
-            list.add(new RawMarkup(text));
+        	this.markup.addMarkupElement(new RawMarkup(text));
         }
         
-        // Make all tags immutable. Note: We can not make tag immutable 
-        // just prior to adding to the list, because <wicket:param> 
-        // needs to modify its preceding tag (add the attributes). And 
-        // because WicketParamTagHandler and ComponentTag are not in the 
-        // same package, WicketParamTagHandler is not able to modify the
-        // default protected variables of ComponentTag, either.
-        for (int i=0; i < list.size(); i++)
-        {
-            MarkupElement elem = (MarkupElement) list.get(i);
-            if (elem instanceof ComponentTag)
-            {
-                ((ComponentTag)elem).makeImmutable();
-            }
-        }
-        
-        // Return immutable list of all MarkupElements
-        return Collections.unmodifiableList(list);
+        // Make all tags immutable and the list of elements unmodifable
+        this.markup.makeImmutable();
     }
 

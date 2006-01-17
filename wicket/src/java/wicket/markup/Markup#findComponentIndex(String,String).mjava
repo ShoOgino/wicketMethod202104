@@ -1,8 +1,10 @@
 	/**
 	 * Find the markup element index of the component with 'path'
 	 * 
-	 * @param path The component path expression
-	 * @param id The component's id to search for
+	 * @param path
+	 *            The component path expression
+	 * @param id
+	 *            The component's id to search for
 	 * @return -1, if not found
 	 */
 	public int findComponentIndex(String path, final String id)
@@ -11,21 +13,21 @@
 
 		// Find the tag. Rebuild the tree structure
 		Stack markupElements = new Stack();
-		
+
 		// The path of the current tag
 		String elementsPath = "";
-		
+
 		// The return value
 		int position = -1;
-		
+
 		// Iterate through all markup elements
-		for (int pos = 0; pos < markup.size(); pos ++)
+		for (int pos = 0; pos < markup.size(); pos++)
 		{
 			// Only ComponentTags are of interest
 			MarkupElement element = (MarkupElement)markup.get(pos);
 			if (element instanceof ComponentTag)
 			{
-				ComponentTag tag = (ComponentTag) element;
+				ComponentTag tag = (ComponentTag)element;
 				if (tag.isOpen() || tag.isOpenClose())
 				{
 					// If has wicket:id ..
@@ -44,8 +46,9 @@
 							}
 						}
 					}
-					
-					// If open tag, put the path of the current element onto the stack
+
+					// If open tag, put the path of the current element onto the
+					// stack
 					// and adjust the path (walk into the subdirectory)
 					if (tag.isOpen())
 					{
@@ -67,7 +70,7 @@
 				}
 			}
 		}
-		
+
 		return position;
 	}
 

@@ -19,8 +19,8 @@
                 if ((xmlnsUrl == null) || (xmlnsUrl.trim().length() == 0) ||
                         xmlnsUrl.toLowerCase().startsWith("http://wicket.sourceforge.net"))
                 {
-                    this.wicketNamespace = attributeName.substring(6);
-                    this.detectWicketComponents.setWicketNamespace(this.wicketNamespace);
+                    String namespace = attributeName.substring(6);
+                    markup.setWicketNamespace(namespace);
                     attrValue = attributeName;
                 }
             }
@@ -29,7 +29,7 @@
         // Note: <html ...> are usually no wicket tags and thus treated as raw 
         // markup and thus removing xmlns:wicket from markup does not have any 
         // effect. The solution approach does not work.
-        if ((attrValue != null) && stripWicketTag)
+        if ((attrValue != null) && Application.get().getMarkupSettings().getStripWicketTags())
         {
         	attributes.remove(attrValue);
         	return true;
