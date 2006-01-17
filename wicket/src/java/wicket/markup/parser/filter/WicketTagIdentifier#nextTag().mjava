@@ -22,9 +22,11 @@
 			return xmlTag;
 		}
 
+		final String namespace = this.markup.getWicketNamespace();
+		
 		// Identify tags with Wicket namespace
 		ComponentTag tag;
-		if (wicketNamespace.equalsIgnoreCase(xmlTag.getNamespace()))
+		if (namespace.equalsIgnoreCase(xmlTag.getNamespace()))
 		{
 			// It is <wicket:...>
 			tag = new WicketTag(xmlTag);
@@ -39,7 +41,7 @@
 		}
 
 		// If the form <tag wicket:id = "value"> is used
-		final String value = tag.getAttributes().getString(wicketNamespace + ":id");
+		final String value = tag.getAttributes().getString(namespace + ":id");
 		if (value != null)
 		{
 			if (value.trim().length() == 0)
