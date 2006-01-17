@@ -3,11 +3,6 @@
 	 */
 	protected void update()
 	{
-		// TODO Bug: It's doubtful this code works anymore because PageMaps are
-		// no longer referenced by Session (they are independent attributes). To
-		// get clustering to work, we're probably going to have to add a dirty
-		// boolean to PageMap and replicate each dirty pagemap in this method.
-
 		// If state is dirty
 		if (dirty)
 		{
@@ -30,25 +25,30 @@
 			}
 		}
 
-		// Go through all entries, replicating any dirty pages
-		for (final Iterator iterator = getAttributeNames().iterator(); iterator.hasNext();)
+		// Go through all dirty entries, replicating any dirty objects
+		for (final Iterator iterator = dirtyObjects.iterator(); iterator.hasNext();)
 		{
-			final String attribute = (String)iterator.next();
-			if (attribute.startsWith(pageMapEntryAttributePrefix))
+			String attribute = null;
+			Object object = iterator.next();
+			if(object instanceof Page)
 			{
-				// Get next entry
-				IPageMapEntry entry = (IPageMapEntry)getAttribute(attribute);
-
-				// If entry is dirty
-				if (entry.isDirty())
-				{
-					// Make it undirty
-					entry.setDirty(false);
-
-					// Set session attribute to replicate the page
-					setAttribute(attribute, entry);
-				}
+				final Page page = (Page)object;  
+				attribute = page.getPageMap().attributeForId(page.getNumericId());
+				object = page.getPageMapEntry();
+			}
+			else if(object instanceof PageMap)
+			{
+				attribute = attributeForPageMapName(((PageMap)object).getName());
+			}
+			
+			// only replicate if the object was really already in the map.
+			// for example stateless pages will not be in the map so they shouldn't be added
+			Object previous = getAttribute(attribute);
+			if(previous != null)
+			{
+				setAttribute(attribute, object);
 			}
 		}
+		dirtyObjects = null;
 	}
 
