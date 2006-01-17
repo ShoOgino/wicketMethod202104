@@ -19,30 +19,13 @@
 			log.debug("Getting page [path = " + path + ", versionNumber = " + versionNumber + "]");
 		}
 
-		// Retrieve the page for the first path component from this session
-		Page page = getPage(pageMapName, Integer.parseInt(Strings.firstPathComponent(path,
-				Component.PATH_SEPARATOR)));
-
-		// Is there a page with the right id at all?
-		if (page != null)
+		// Get page map by name
+		final PageMap pageMap = getPageMap(pageMapName);
+		if (pageMap != null)
 		{
-			// Get the version of the page requested from the page
-			final Page version = page.getVersion(versionNumber);
-
-			// Is the requested version available?
-			if (version != null)
-			{
-				// Need to update session with new page?
-				if (version != page)
-				{
-					// This is our new page
-					page = version;
-
-					// Replaces old page entry
-					page.getPageMap().put(page);
-				}
-				return page;
-			}
+			// Get page entry for id and version
+			final String id = Strings.firstPathComponent(path, Component.PATH_SEPARATOR);
+			return pageMap.get(Integer.parseInt(id), versionNumber);
 		}
 		return null;
 	}

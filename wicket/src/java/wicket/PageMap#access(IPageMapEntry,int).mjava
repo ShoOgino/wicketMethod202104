@@ -1,0 +1,63 @@
+	/**
+	 * @param entry
+	 *            Add entry to access list
+	 * @param version
+	 *            Version number being accessed
+	 */
+	private final void access(final IPageMapEntry entry, final int version)
+	{
+		// See if the version being accessed is already in the stack
+		boolean add = true;
+		int id = entry.getNumericId();
+		for (int i = 0; i < accessStack.size(); i++)
+		{
+			final Access access = (Access)accessStack.get(i);
+
+			// If we found id and version in access stack
+			if (access.id == id && access.version == version)
+			{
+				// No need to add since id and version are already in stack
+				add = false;
+
+				// Pop entries to reveal that version at top of stack
+				// because the user used the back button
+				while (i < accessStack.size() - 1)
+				{
+					// Pop unreachable access off top of stack
+					final Access topAccess = popAccess();
+
+					// Get entry for access
+					final IPageMapEntry top = getEntry(topAccess.getId());
+
+					// If it's a page we can remove version info
+					if (top instanceof Page)
+					{
+						// If there's more than one version
+						Page topPage = (Page)top;
+						if (topPage.getVersions() > 1)
+						{
+							// Remove versions
+							topPage.getVersion(topAccess.getVersion());
+						}
+						else
+						{
+							// Remove whole page
+							remove(topPage);
+						}
+					}
+					else
+					{
+						// Remove entry
+						remove(top);
+					}
+				}
+			}
+		}
+
+		// If the user did not use the back button
+		if (add)
+		{
+			pushAccess(entry);
+		}
+	}
+

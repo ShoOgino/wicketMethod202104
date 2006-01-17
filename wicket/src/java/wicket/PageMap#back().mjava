@@ -1,0 +1,20 @@
+	/**
+	 * Pops the top entry off the entry access stack and returns it.
+	 * <p>
+	 * NOTE: This method returns the most recently accessed stateful page map
+	 * entry. However, it will not always work perfectly when stateless pages
+	 * are involved. If stateless pages are in the browser, they will not be on
+	 * the access stack. If the user goes back to a stateless page and navigates
+	 * forward, the stack will not be correctly adjusted (unlike with stateful
+	 * pages). Instead the new stateful page will be on top of the access stack
+	 * and any unreachable page versions that the user may have backed up over
+	 * will still be in the session instead of being eliminated. This is not a
+	 * major problem, however as they will expire in the normal way.
+	 * 
+	 * @return Previous pagemap entry in terms of access
+	 */
+	public final IPageMapEntry back()
+	{
+		return getEntry(popAccess().getId());
+	}
+

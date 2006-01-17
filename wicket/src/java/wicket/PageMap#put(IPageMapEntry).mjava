@@ -7,17 +7,10 @@
 		if (!(entry instanceof Page && ((Page)entry).isStateless()))
 		{
 			// Entry has been accessed
-			session.access(entry);
+			pushAccess(entry);
 
 			// Store entry in session
 			final String attribute = attributeForId(entry.getNumericId());
-
-			// If we're adding a new attribute
-			if (session.getAttribute(attribute) == null)
-			{
-				// Increase pagemap size
-				size++;
-			}
 
 			// Set attribute
 			session.setAttribute(attribute, entry);

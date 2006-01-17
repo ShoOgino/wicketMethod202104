@@ -1,8 +1,8 @@
 	/**
-	 * @return Size of this page map, including a sum of the sizes of all the
-	 *         pages it contains.
+	 * @return Size of this page map in bytes, including a sum of the sizes of
+	 *         all the pages it contains.
 	 */
-	public final int getSize()
+	public final int getSizeInBytes()
 	{
 		int size = Objects.sizeof(this);
 		for (Iterator iterator = getEntries().iterator(); iterator.hasNext();)
@@ -10,7 +10,7 @@
 			IPageMapEntry entry = (IPageMapEntry)iterator.next();
 			if (entry instanceof Page)
 			{
-				size += ((Page)entry).getSize();
+				size += ((Page)entry).getSizeInBytes();
 			}
 			else
 			{
