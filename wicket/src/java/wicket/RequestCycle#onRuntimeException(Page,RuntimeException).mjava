@@ -13,6 +13,14 @@
 	 */
 	public Page onRuntimeException(Page page, RuntimeException e)
 	{
+		if (e instanceof UnauthorizedInstantiationException)
+		{
+			final Class componentClass = ((UnauthorizedInstantiationException)e).getComponentClass();
+			if (componentClass.isAssignableFrom(Page.class))
+			{
+				getSession().onUnauthorizedPageAccess();
+			}
+		}
 		return null;
 	}
 
