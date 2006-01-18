@@ -10,25 +10,22 @@
 		{
 			switch (currentStep)
 			{
-				case PREPARE_REQUEST: 
-				{
+				case PREPARE_REQUEST : {
 					// prepare the request
 					prepare();
 					break;
 				}
-				case DECODE_PARAMETERS: 
-				{
+				case DECODE_PARAMETERS : {
 					// get the request parameters object using the request
 					// encoder of the processor
 					requestParameters = getRequestParameters(processor);
 					break;
 				}
-				case RESOLVE_TARGET: 
-				{
+				case RESOLVE_TARGET : {
 					// resolve the target of the request using the request
 					// parameters
 					final IRequestTarget target = processor.resolve(this, requestParameters);
-					
+
 					// has to result in a request target
 					if (target == null)
 					{
@@ -38,8 +35,7 @@
 					requestTargets.push(target);
 					break;
 				}
-				case CHECK_ACCESS: 
-				{
+				case CHECK_ACCESS : {
 					// manually set step to check access
 					IRequestTarget target = getRequestTarget();
 
@@ -50,8 +46,8 @@
 					}
 
 					// check access or earlier (like in a component constructor)
-					// might have called setRequestTarget. If that is the case, 
-					// put that one on top; otherwise put our resolved target 
+					// might have called setRequestTarget. If that is the case,
+					// put that one on top; otherwise put our resolved target
 					// on top
 					IRequestTarget otherTarget = getRequestTarget();
 					if (otherTarget != target)
@@ -71,8 +67,7 @@
 					}
 					break;
 				}
-				case PROCESS_EVENTS: 
-				{
+				case PROCESS_EVENTS : {
 					// determine what kind of synchronization is to be used, and
 					// handle any events with that and generate a response in
 					// that same block
@@ -81,8 +76,7 @@
 					processEventsAndRespond(processor);
 					break;
 				}
-				case RESPOND: 
-				{
+				case RESPOND : {
 					// generate a response
 					// NOTE: we reach this block when during event processing
 					// and response generation the request target was changed,
@@ -93,8 +87,7 @@
 					processor.respond(this);
 					break;
 				}
-				default: 
-				{
+				default : {
 					// nothing
 				}
 			}
