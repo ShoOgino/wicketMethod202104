@@ -10,46 +10,33 @@
 	 */
 	public final void render(final MarkupStream markupStream)
 	{
+		setMarkupStream(markupStream);
 		setFlag(FLAG_IS_RENDERED_ONCE, true);
 
-		rendering = true;
-
-		try
+		// Determine if component is visible using it's authorization status
+		// and the isVisible property.
+		if (renderAllowed && isVisible())
 		{
-			if (getParent() != null)
+			// Rendering is beginning
+			if (log.isDebugEnabled())
 			{
-				validateMarkupStream(markupStream);
+				log.debug("Begin render " + this);
 			}
+			
+			// Call implementation to render component
+			onRender(markupStream);
+			
+			// Component has been rendered
+			rendered();
 
-			// Determine if component is visible using it's authorization status
-			// and the isVisible property.
-			if (renderAllowed && isVisible())
+			if (log.isDebugEnabled())
 			{
-				// Rendering is beginning
-				if (log.isDebugEnabled())
-				{
-					log.debug("Begin render " + this);
-				}
-
-				// Call implementation to render component
-				onRender(markupStream);
-
-				// Component has been rendered
-				rendered();
-
-				if (log.isDebugEnabled())
-				{
-					log.debug("End render " + this);
-				}
-			}
-			else
-			{
-				findMarkupStream().skipComponent();
+				log.debug("End render " + this);
 			}
 		}
-		finally
+		else
 		{
-			rendering = false;
+			findMarkupStream().skipComponent();
 		}
 	}
 
