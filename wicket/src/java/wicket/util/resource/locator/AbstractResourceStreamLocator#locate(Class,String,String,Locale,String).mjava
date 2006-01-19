@@ -1,6 +1,8 @@
 	/**
 	 * Locate a resource. See class comments for more details.
-	 * @param clazz class loader
+	 * 
+	 * @param clazz
+	 *            The class requesting the resource
 	 * @param path
 	 *            The path of the resource without extension
 	 * @param style
@@ -12,7 +14,7 @@
 	 * 
 	 * @return The Resource, or null if not found.
 	 */
-	public IResourceStream locate(Class clazz, final String path, final String style,
+	public IResourceStream locate(final Class clazz, final String path, final String style,
 			final Locale locale, final String extension)
 	{
 		// 1. Try style, locale and extension
@@ -38,7 +40,7 @@
 		// 3. Try style and extension
 		if (style != null)
 		{
-			final IResourceStream resource = locate(clazz.getClassLoader(), path + '_' + style + extension);
+			final IResourceStream resource = locate(clazz, path + '_' + style + extension);
 			if (resource != null)
 			{
 				return resource;
@@ -46,6 +48,6 @@
 		}
 
 		// 4. Try just extension
-		return locate(clazz.getClassLoader(), path + extension);
+		return locate(clazz, path + extension);
 	}
 

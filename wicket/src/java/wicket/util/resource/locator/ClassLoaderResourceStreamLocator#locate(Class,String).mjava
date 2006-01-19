@@ -1,9 +1,15 @@
 	/**
-	 * @see wicket.util.resource.locator.AbstractResourceStreamLocator#locate(java.lang.ClassLoader,
+	 * @see wicket.util.resource.locator.AbstractResourceStreamLocator#locate(Class,
 	 *      java.lang.String)
 	 */
-	protected IResourceStream locate(ClassLoader classLoader, final String path)
+	protected IResourceStream locate(final Class clazz, final String path)
 	{
+		ClassLoader classLoader = null;
+		if (clazz != null)
+		{
+			classLoader = clazz.getClassLoader();
+		}
+
 		if (classLoader == null)
 		{
 			// use context classloader when no specific classloader is set
