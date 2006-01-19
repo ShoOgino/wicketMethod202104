@@ -3,8 +3,8 @@
 	 */
 	public OIRPage()
 	{
-		SortableContactDataProvider dp=new SortableContactDataProvider();
-		
+		SortableContactDataProvider dp = new SortableContactDataProvider();
+
 		final DataView dataView = new DataView("oir", dp)
 		{
 
@@ -49,9 +49,22 @@
 		dataView.setItemsPerPage(8);
 		dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
 
-		add(new OrderByBorder("orderByFirstName", "firstName", dp));
+		add(new OrderByBorder("orderByFirstName", "firstName", dp)
+		{
+			protected void onSortChanged()
+			{
+				dataView.setCurrentPage(0);
+			}
+		});
 
-		add(new OrderByBorder("orderByLastName", "lastName", dp));
+		add(new OrderByBorder("orderByLastName", "lastName", dp)
+		{
+			protected void onSortChanged()
+			{
+				dataView.setCurrentPage(0);
+			}
+		});
+
 
 		add(dataView);
 
