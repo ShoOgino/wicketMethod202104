@@ -11,8 +11,19 @@
 			// FIXME Robustness: Catch infinite loops
 			while (currentStep < DONE)
 			{
-				step(processor);
-				currentStep++;
+				try
+				{
+					step(processor);
+					currentStep++;
+				}
+				catch (RedirectException e)
+				{
+					// if a redirect exception has been issued we abort what we
+					// were doing and begin responding to the top target on the
+					// stack
+					currentStep = RESPOND;
+				}
+
 			}
 		}
 		finally
