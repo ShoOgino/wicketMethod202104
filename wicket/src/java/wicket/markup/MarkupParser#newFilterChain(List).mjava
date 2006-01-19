@@ -1,39 +1,40 @@
 	/**
-	 * Create a new markup filter chain and initialize with all default
-	 * filters required.
+	 * Create a new markup filter chain and initialize with all default filters
+	 * required.
 	 * 
 	 * @param tagList
 	 * @return a preconfigured markup filter chain
 	 */
 	private final IMarkupFilter newFilterChain(final List tagList)
 	{
-        // Chain together all the different markup filters and configure them
-        IMarkupFilter filter = new WicketTagIdentifier(markup, xmlParser);
+		// Chain together all the different markup filters and configure them
+		IMarkupFilter filter = new WicketTagIdentifier(markup, xmlParser);
 
-        filter = new TagTypeHandler(filter);
-        filter = new HtmlHandler(filter);
-        filter = new WicketParamTagHandler(filter);
-        filter = new WicketRemoveTagHandler(filter);
-        filter = new WicketLinkTagHandler(filter); 
-        
-        // Provided the wicket component requesting the markup is known ...
-        MarkupResourceStream resource = markup.getResource();
-        if ((resource != null) && (resource.getContainerInfo() != null))
-        {
-        	if (WicketMessageTagHandler.enable)
-        	{
-        		filter = new WicketMessageTagHandler(resource.getContainerInfo(), filter);
-        	}
-        	
-	        filter = new BodyOnLoadHandler(filter);
-	
-	        // Pages require additional handlers
-	        if (Page.class.isAssignableFrom(resource.getContainerInfo().getContainerClass()))
-	        {
-	            filter = new HtmlHeaderSectionHandler(tagList, filter);
-	        }
-        }
-        
-        return filter;
+		filter = new TagTypeHandler(filter);
+		filter = new HtmlHandler(filter);
+		filter = new WicketParamTagHandler(filter, application.getMarkupSettings());
+		filter = new WicketRemoveTagHandler(filter);
+		filter = new WicketLinkTagHandler(filter, application.getMarkupSettings());
+
+		// Provided the wicket component requesting the markup is known ...
+		MarkupResourceStream resource = markup.getResource();
+		if ((resource != null) && (resource.getContainerInfo() != null))
+		{
+			if (WicketMessageTagHandler.enable)
+			{
+				filter = new WicketMessageTagHandler(filter, resource.getContainerInfo(),
+						application.getResourceSettings());
+			}
+
+			filter = new BodyOnLoadHandler(filter);
+
+			// Pages require additional handlers
+			if (Page.class.isAssignableFrom(resource.getContainerInfo().getContainerClass()))
+			{
+				filter = new HtmlHeaderSectionHandler(tagList, filter);
+			}
+		}
+
+		return filter;
 	}
 

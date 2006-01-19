@@ -1,30 +1,32 @@
-    /**
-     * Reads and parses markup from a file.
-     * 
-     * @param resource The file
-     * @return The markup
-     * @throws ParseException
-     * @throws IOException
-     * @throws ResourceStreamNotFoundException
-     */
-    final Markup readAndParse(final MarkupResourceStream resource) throws ParseException, IOException,
-            ResourceStreamNotFoundException
-    {
-    	// Remove all existing markup elements
-    	this.markup.reset();
-    	
-    	// For diagnostic purposes
-    	this.markup.setResource(resource);
-    	
-    	// Initialize the xml parser
-        this.xmlParser.parse(resource);
- 
-        // parse the xml markup and tokenize it into wicket relevant markup elements
-        parseMarkup();
-        
-        this.markup.setEncoding(xmlParser.getEncoding());
-        this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
-        
-        return this.markup;
-    }
+	/**
+	 * Reads and parses markup from a file.
+	 * 
+	 * @param resource
+	 *            The file
+	 * @return The markup
+	 * @throws ParseException
+	 * @throws IOException
+	 * @throws ResourceStreamNotFoundException
+	 */
+	final Markup readAndParse(final MarkupResourceStream resource) throws ParseException,
+			IOException, ResourceStreamNotFoundException
+	{
+		// Remove all existing markup elements
+		this.markup.reset();
+
+		// For diagnostic purposes
+		this.markup.setResource(resource);
+
+		// Initialize the xml parser
+		this.xmlParser.parse(resource);
+
+		// parse the xml markup and tokenize it into wicket relevant markup
+		// elements
+		parseMarkup();
+
+		this.markup.setEncoding(xmlParser.getEncoding());
+		this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
+
+		return this.markup;
+	}
 

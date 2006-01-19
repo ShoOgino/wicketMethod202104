@@ -1,0 +1,23 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param parent
+	 *            The next MarkupFilter in the processing chain
+	 * @param containerInfo
+	 *            The container requesting the current markup incl class, style
+	 *            and locale
+	 * @param settings
+	 *            The application settings
+	 */
+	public WicketMessageTagHandler(final IMarkupFilter parent, final ContainerInfo containerInfo,
+			final IResourceSettings settings)
+	{
+		super(parent);
+
+		this.containerInfo = containerInfo;
+		this.settings = settings;
+
+		this.searchStack = new ArrayList();
+		searchStack.add(containerInfo.getContainerClass());
+	}
+
