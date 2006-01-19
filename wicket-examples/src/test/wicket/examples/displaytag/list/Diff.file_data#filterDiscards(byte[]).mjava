@@ -1,7 +1,9 @@
 		/**
-		 * Don't really discard the provisional lines except when they occur in a run of
-		 * discardables, with nonprovisionals at the beginning and end.
-		 * @param discards to discard
+		 * Don't really discard the provisional lines except when they occur in
+		 * a run of discardables, with nonprovisionals at the beginning and end.
+		 * 
+		 * @param discards
+		 *            to discard
 		 */
 		private void filterDiscards(final byte[] discards)
 		{
@@ -20,8 +22,8 @@
 					int provisional = 0;
 
 					/*
-					 * Find end of this run of discardable lines. Count how many are
-					 * provisionally discardable.
+					 * Find end of this run of discardable lines. Count how many
+					 * are provisionally discardable.
 					 */
 					for (j = i; j < end; j++)
 					{
@@ -39,14 +41,14 @@
 					}
 
 					/*
-					 * Now we have the length of a run of discardable lines whose first and
-					 * last are not provisional.
+					 * Now we have the length of a run of discardable lines
+					 * whose first and last are not provisional.
 					 */
 					length = j - i;
 
 					/*
-					 * If 1/4 of the lines in the run are provisional, cancel discarding of all
-					 * provisional lines in the run.
+					 * If 1/4 of the lines in the run are provisional, cancel
+					 * discarding of all provisional lines in the run.
 					 */
 					if (provisional * 4 > length)
 					{
@@ -61,17 +63,18 @@
 						int tem = length / 4;
 
 						/*
-						 * MINIMUM is approximate square root of LENGTH/4. A subrun of two or
-						 * more provisionals can stand when LENGTH is at least 16. A subrun of 4
-						 * or more can stand when LENGTH >= 64.
+						 * MINIMUM is approximate square root of LENGTH/4. A
+						 * subrun of two or more provisionals can stand when
+						 * LENGTH is at least 16. A subrun of 4 or more can
+						 * stand when LENGTH >= 64.
 						 */
 						while ((tem = tem >> 2) > 0)
 							minimum *= 2;
 						minimum++;
 
 						/*
-						 * Cancel any subrun of MINIMUM or more provisionals within the larger
-						 * run.
+						 * Cancel any subrun of MINIMUM or more provisionals
+						 * within the larger run.
 						 */
 						for (j = 0, consec = 0; j < length; j++)
 							if (discards[i + j] != 2)
@@ -83,9 +86,10 @@
 								discards[i + j] = 0;
 
 						/*
-						 * Scan from beginning of run until we find 3 or more nonprovisionals in
-						 * a row or until the first nonprovisional at least 8 lines in. Until
-						 * that point, cancel any provisionals.
+						 * Scan from beginning of run until we find 3 or more
+						 * nonprovisionals in a row or until the first
+						 * nonprovisional at least 8 lines in. Until that point,
+						 * cancel any provisionals.
 						 */
 						for (j = 0, consec = 0; j < length; j++)
 						{

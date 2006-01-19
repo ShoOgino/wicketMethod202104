@@ -2,7 +2,8 @@
 	 * Start Jetty Server and the admin monitor.
 	 * 
 	 * @param jettyConfig
-	 *            jetty config location; if null, the next three parameters will be used instead
+	 *            jetty config location; if null, the next three parameters will
+	 *            be used instead
 	 * @param port
 	 *            port for http requests
 	 * @param webappContextRoot
@@ -15,9 +16,12 @@
 	 *            auth key
 	 * @param monitorPort
 	 *            listen port for admin monitor
-	 * @throws MalformedURLException when the url is not valid
-	 * @throws MultiException when Jetty is unable to startup
-	 * @throws JettyHelperException when the server could not be created
+	 * @throws MalformedURLException
+	 *             when the url is not valid
+	 * @throws MultiException
+	 *             when Jetty is unable to startup
+	 * @throws JettyHelperException
+	 *             when the server could not be created
 	 */
 	private static void startServer(String jettyConfig, int port, String webappContextRoot,
 			String contextPath, boolean useJettyPlus, String monitorCommKey, int monitorPort)
@@ -25,7 +29,8 @@
 	{
 		Server jettyServer = null;
 		// get instance of proper Jetty server
-		if (jettyConfig != null) // either start with xml configuration document
+		if (jettyConfig != null) // either start with xml configuration
+		// document
 		{
 			URL jettyConfigURL = null;
 			jettyConfigURL = URLHelper.convertToURL(jettyConfig, JettyStarterPrg.class);
@@ -35,13 +40,14 @@
 		else
 		// or some basic arguments
 		{
-			jettyServer = JettyHelper.getJettyServerInstance(port, webappContextRoot,
-					contextPath, useJettyPlus);
+			jettyServer = JettyHelper.getJettyServerInstance(port, webappContextRoot, contextPath,
+					useJettyPlus);
 		}
 
 		// now, before starting the server, first create the monitor
-		JettyMonitor monitor = JettyMonitor.startMonitor(jettyServer, monitorCommKey,
-				monitorPort); // start admin monitor
+		JettyMonitor monitor = JettyMonitor.startMonitor(jettyServer, monitorCommKey, monitorPort); // start
+		// admin
+		// monitor
 		log.info("Started " + monitor);
 
 		// finally, start the server

@@ -3,18 +3,18 @@
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-    public void testPersistCookieWithPersistenceDisabled() throws IOException, ServletException
-    {
-        // test will call persistFromComponentData(), which is private
+	public void testPersistCookieWithPersistenceDisabled() throws IOException, ServletException
+	{
+		// test will call persistFromComponentData(), which is private
 		this.panel.setPersistent(false);
 		this.form.onFormSubmitted();
-		
+
 		// validate
-        Collection cookies = application.getServletResponse().getCookies();
-        Iterator iter = cookies.iterator();
-        while (iter.hasNext())
-        {
-            Assert.assertEquals(0, ((Cookie)iter.next()).getMaxAge());
-        }
-    }
+		Collection cookies = application.getServletResponse().getCookies();
+		Iterator iter = cookies.iterator();
+		while (iter.hasNext())
+		{
+			Assert.assertEquals(0, ((Cookie)iter.next()).getMaxAge());
+		}
+	}
 

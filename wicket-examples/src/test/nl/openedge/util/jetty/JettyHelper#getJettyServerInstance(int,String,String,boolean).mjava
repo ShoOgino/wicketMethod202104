@@ -10,7 +10,8 @@
 	 * @param useJettyPlus
 	 *            whether to use JettyPlus
 	 * @return jetty server instance
-	 * @throws JettyHelperException when the instance could not be created
+	 * @throws JettyHelperException
+	 *             when the instance could not be created
 	 */
 	public static Server getJettyServerInstance(int port, String webappContextRoot,
 			String contextPath, boolean useJettyPlus) throws JettyHelperException
@@ -18,11 +19,12 @@
 		Server server = null;
 		if (useJettyPlus)
 		{
-			// dynamically load the class to avoid dependency loading problem with the runner
+			// dynamically load the class to avoid dependency loading problem
+			// with the runner
 			try
 			{
 				Class clazz = Class.forName("org.mortbay.jetty.plus.Server");
-				server = (Server) clazz.newInstance();
+				server = (Server)clazz.newInstance();
 			}
 			catch (ClassNotFoundException e)
 			{

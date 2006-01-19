@@ -1,28 +1,30 @@
 	/**
-	 * Get an instance of Jetty using the config url to load the Jetty configuration from.
+	 * Get an instance of Jetty using the config url to load the Jetty
+	 * configuration from.
 	 * 
 	 * @param config
 	 *            configuration url
 	 * @param useJettyPlus
-	 *            Whether to use JettyPlus; if true, org.mortbay.jetty.plus.Server will be
-	 *            instantiated, if false, org.mortbay.jetty.Server will be instantiated
+	 *            Whether to use JettyPlus; if true,
+	 *            org.mortbay.jetty.plus.Server will be instantiated, if false,
+	 *            org.mortbay.jetty.Server will be instantiated
 	 * @return an instance of Jetty (not started)
-	 * @throws JettyHelperException when the instance could not be created
+	 * @throws JettyHelperException
+	 *             when the instance could not be created
 	 */
 	public static Server getJettyServerInstance(URL config, boolean useJettyPlus)
-		throws JettyHelperException
+			throws JettyHelperException
 	{
 		Server server = null;
 		try
 		{
 			if (useJettyPlus)
 			{
-				// dynamically load the class to avoid dependency loading problems
+				// dynamically load the class to avoid dependency loading
+				// problems
 				Class clazz = Class.forName("org.mortbay.jetty.plus.Server");
-				Constructor constructor = clazz.getConstructor(new Class[]
-					{URL.class});
-				server = (Server) constructor.newInstance(new Object[]
-					{config});
+				Constructor constructor = clazz.getConstructor(new Class[] { URL.class });
+				server = (Server)constructor.newInstance(new Object[] { config });
 			}
 			else
 			{

@@ -1,0 +1,17 @@
+	/**
+	 * Suite method.
+	 * 
+	 * @param clazz
+	 * @return Test suite
+	 */
+	public static Test suite(Class clazz)
+	{
+		TestSuite suite = new TestSuite();
+		suite.addTestSuite(clazz);
+		JettyDecorator deco = new JettyDecorator(suite);
+		deco.setPort(8098);
+		deco.setWebappContextRoot("src/webapp");
+		deco.setContextPath("/wicket-examples");
+		return deco;
+	}
+

@@ -1,24 +1,31 @@
 	/**
-	 * Find the midpoint of the shortest edit script for a specified portion of the two
-	 * files. We scan from the beginnings of the files, and simultaneously from the ends,
-	 * doing a breadth-first search through the space of edit-sequence. When the two
-	 * searches meet, we have found the midpoint of the shortest edit sequence. The value
-	 * returned is the number of the diagonal on which the midpoint lies. The diagonal
-	 * number equals the number of inserted lines minus the number of deleted lines
-	 * (counting only lines before the midpoint). The edit cost is stored into COST; this
-	 * is the total number of lines inserted or deleted (counting only lines before the
-	 * midpoint). This function assumes that the first lines of the specified portions of
-	 * the two files do not match, and likewise that the last lines do not match. The
-	 * caller must trim matching lines from the beginning and end of the portions it is
-	 * going to specify. Note that if we return the "wrong" diagonal value, or if the value
-	 * of bdiag at that diagonal is "wrong", the worst this can do is cause suboptimal diff
+	 * Find the midpoint of the shortest edit script for a specified portion of
+	 * the two files. We scan from the beginnings of the files, and
+	 * simultaneously from the ends, doing a breadth-first search through the
+	 * space of edit-sequence. When the two searches meet, we have found the
+	 * midpoint of the shortest edit sequence. The value returned is the number
+	 * of the diagonal on which the midpoint lies. The diagonal number equals
+	 * the number of inserted lines minus the number of deleted lines (counting
+	 * only lines before the midpoint). The edit cost is stored into COST; this
+	 * is the total number of lines inserted or deleted (counting only lines
+	 * before the midpoint). This function assumes that the first lines of the
+	 * specified portions of the two files do not match, and likewise that the
+	 * last lines do not match. The caller must trim matching lines from the
+	 * beginning and end of the portions it is going to specify. Note that if we
+	 * return the "wrong" diagonal value, or if the value of bdiag at that
+	 * diagonal is "wrong", the worst this can do is cause suboptimal diff
 	 * output. It cannot cause incorrect diff output.
-	 * @param xoff x offset
-	 * @param xlim x limit
-	 * @param yoff y offset
-	 * @param ylim y limit
-	 * @return the midpoint of the shortest edit script for a specified portion of the two
-	 *         files
+	 * 
+	 * @param xoff
+	 *            x offset
+	 * @param xlim
+	 *            x limit
+	 * @param yoff
+	 *            y offset
+	 * @param ylim
+	 *            y limit
+	 * @return the midpoint of the shortest edit script for a specified portion
+	 *         of the two files
 	 */
 
 	private int diag(int xoff, int xlim, int yoff, int ylim)
@@ -34,7 +41,8 @@
 		int fmin = fmid, fmax = fmid; // Limits of top-down search.
 		int bmin = bmid, bmax = bmid; // Limits of bottom-up search.
 		/*
-		 * True if southeast corner is on an odd diagonal with respect to the northwest.
+		 * True if southeast corner is on an odd diagonal with respect to the
+		 * northwest.
 		 */
 		final boolean odd = (fmid - bmid & 1) != 0;
 
@@ -115,11 +123,12 @@
 			}
 
 			/*
-			 * Heuristic: check occasionally for a diagonal that has made lots of progress
-			 * compared with the edit distance. If we have any such, find the one that has
-			 * made the most progress and return it as if it had succeeded. With this
-			 * heuristic, for files with a constant small density of changes, the algorithm
-			 * is linear in the file size.
+			 * Heuristic: check occasionally for a diagonal that has made lots
+			 * of progress compared with the edit distance. If we have any such,
+			 * find the one that has made the most progress and return it as if
+			 * it had succeeded. With this heuristic, for files with a constant
+			 * small density of changes, the algorithm is linear in the file
+			 * size.
 			 */
 
 			if (c > 200 && big_snake && heuristic)
@@ -139,8 +148,8 @@
 							int x = fd[fdiagoff + d];
 
 							/*
-							 * We have a good enough best diagonal; now insist that it end with a
-							 * significant snake.
+							 * We have a good enough best diagonal; now insist
+							 * that it end with a significant snake.
 							 */
 							for (k = 1; k <= 20; k++)
 								if (xvec[x - k] != yvec[x - d - k])
@@ -166,12 +175,13 @@
 					int dd = d - bmid;
 					if ((xlim - bd[bdiagoff + d]) * 2 + dd > 12 * (c + (dd > 0 ? dd : -dd)))
 					{
-						if ((xlim - bd[bdiagoff + d]) * 2 + dd > best && xlim - bd[bdiagoff + d] > 20
+						if ((xlim - bd[bdiagoff + d]) * 2 + dd > best
+								&& xlim - bd[bdiagoff + d] > 20
 								&& ylim - (bd[bdiagoff + d] - d) > 20)
 						{
 							/*
-							 * We have a good enough best diagonal; now insist that it end with a
-							 * significant snake.
+							 * We have a good enough best diagonal; now insist
+							 * that it end with a significant snake.
 							 */
 							int k;
 							int x = bd[bdiagoff + d];

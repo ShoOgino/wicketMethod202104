@@ -18,8 +18,8 @@
 			outfile.print("***************");
 
 			/*
-			 * If we looked for and found a function this is part of, include its name in the
-			 * header of the diff section.
+			 * If we looked for and found a function this is part of, include
+			 * its name in the header of the diff section.
 			 */
 			print_function(file0, first0);
 
@@ -35,7 +35,8 @@
 				for (int i = first0; i <= last0; i++)
 				{
 					/*
-					 * Skip past changes that apply (in file 0) only to lines before line I.
+					 * Skip past changes that apply (in file 0) only to lines
+					 * before line I.
 					 */
 
 					while (next != null && next.line0 + next.deleted <= i)
@@ -46,8 +47,9 @@
 					String prefix = " ";
 					if (next != null && next.line0 <= i)
 						/*
-						 * The change NEXT covers this line. If lines were inserted here in file
-						 * 1, this is "changed". Otherwise it is "deleted".
+						 * The change NEXT covers this line. If lines were
+						 * inserted here in file 1, this is "changed". Otherwise
+						 * it is "deleted".
 						 */
 						prefix = (next.inserted > 0) ? "!" : "-";
 
@@ -66,7 +68,8 @@
 				for (int i = first1; i <= last1; i++)
 				{
 					/*
-					 * Skip past changes that apply (in file 1) only to lines before line I.
+					 * Skip past changes that apply (in file 1) only to lines
+					 * before line I.
 					 */
 
 					while (next != null && next.line1 + next.inserted <= i)
@@ -77,8 +80,9 @@
 					String prefix = " ";
 					if (next != null && next.line1 <= i)
 						/*
-						 * The change NEXT covers this line. If lines were deleted here in file
-						 * 0, this is "changed". Otherwise it is "inserted".
+						 * The change NEXT covers this line. If lines were
+						 * deleted here in file 0, this is "changed". Otherwise
+						 * it is "inserted".
 						 */
 						prefix = (next.deleted > 0) ? "!" : "+";
 

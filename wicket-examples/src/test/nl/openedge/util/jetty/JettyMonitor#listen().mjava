@@ -1,5 +1,6 @@
 	/**
-	 * Listen to incomming commands until stop command is issued (method blocks).
+	 * Listen to incomming commands until stop command is issued (method
+	 * blocks).
 	 */
 	private void listen()
 	{
@@ -17,14 +18,16 @@
 				InputStream socketInputStream = socket.getInputStream();
 				InputStreamReader inputStreamReader = new InputStreamReader(socketInputStream);
 				LineNumberReader lnReader = new LineNumberReader(inputStreamReader);
-				String key = lnReader.readLine(); // first line contains auth key
+				String key = lnReader.readLine(); // first line contains auth
+				// key
 				if (!commKey.equals(key))
 				{
 					log.warn("Keys '" + commKey + "' and '" + key + "' do not match!");
 					continue;
 				}
 
-				String cmd = lnReader.readLine(); // second line contains command
+				String cmd = lnReader.readLine(); // second line contains
+				// command
 				OutputStream socketOutputStream = socket.getOutputStream();
 				goOn = handleCommand(cmd, socketOutputStream, goOn);
 
