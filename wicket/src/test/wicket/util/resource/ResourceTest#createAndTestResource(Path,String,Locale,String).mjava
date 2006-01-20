@@ -7,8 +7,8 @@
 	 */
 	public void createAndTestResource(Path sourcePath, String style, Locale locale, String extension)
 	{
-		ResourceStreamLocator locator = new DefaultResourceStreamLocator(sourcePath);
-		IResourceStream resource = locator.locate(this.getClass(), style, locale, "txt");
+		IResourceStreamLocator locator = new CompoundResourceStreamLocator(sourcePath);
+		IResourceStream resource = locator.locate(this.getClass(), this.getClass().getName().replace('.', '/'),style, locale, "txt");
 		compareFilename(resource, extension);
 	}
 
