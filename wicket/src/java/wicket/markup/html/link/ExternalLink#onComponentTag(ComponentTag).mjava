@@ -2,14 +2,14 @@
 	 * Processes the component tag.
 	 * 
 	 * @param tag
-	 *			  Tag to modify
+	 *            Tag to modify
 	 * @see wicket.Component#onComponentTag(wicket.markup.ComponentTag)
 	 */
 	protected void onComponentTag(ComponentTag tag)
 	{
-		if (href != null)
+		if ((href != null) && (href.getObject(this) != null))
 		{
-			tag.put("href", Strings.replaceAll(href,"&", "&amp;"));
+			tag.put("href", Strings.replaceAll(href.getObject(this).toString(), "&", "&amp;"));
 		}
 	}
 
