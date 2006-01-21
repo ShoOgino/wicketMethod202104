@@ -18,27 +18,31 @@
 		// A component's header section must only be added once,
 		// no matter how often the same Component has been added
 		// to the page or any other container in the hierachy.
-		if ((headerPart != null) && (container.get(headerPart.getId()) == null))
+		if (headerPart != null)
 		{
-			container.autoAdd(headerPart);
-
-			// Check if the component requires some <body onload="..">
-			// attribute to be copied to the page's body tag.
-			checkBodyOnLoad();
-		}
-		else if (headerPart != null)
-		{
-			// already added but all the components in this header part must be
-			// touched (that they are rendered)
-			Response response = getRequestCycle().getResponse();
-			try
+			if (container.get(headerPart.getId()) == null)
 			{
-				getRequestCycle().setResponse(NullResponse.getInstance());
 				container.autoAdd(headerPart);
+	
+				// Check if the component requires some <body onload="..">
+				// attribute to be copied to the page's body tag.
+				checkBodyOnLoad();
 			}
-			finally
+			else
 			{
-				getRequestCycle().setResponse(response);
+				// TODO I haven't found a more efficient solution yet
+				// already added but all the components in this header part must be
+				// touched (that they are rendered)
+				Response response = getRequestCycle().getResponse();
+				try
+				{
+					getRequestCycle().setResponse(NullResponse.getInstance());
+					container.autoAdd(headerPart);
+				}
+				finally
+				{
+					getRequestCycle().setResponse(response);
+				}
 			}
 		}
 
