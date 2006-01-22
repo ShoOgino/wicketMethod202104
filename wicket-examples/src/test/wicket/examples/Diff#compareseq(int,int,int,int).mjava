@@ -1,0 +1,65 @@
+	/**
+	 * Compare in detail contiguous subsequences of the two files which are known, as a
+	 * whole, to match each other. The results are recorded in the vectors
+	 * filevec[N].changed_flag, by storing a 1 in the element for each line that is an
+	 * insertion or deletion. The subsequence of file 0 is [XOFF, XLIM) and likewise for
+	 * file 1. Note that XLIM, YLIM are exclusive bounds. All line numbers are origin-0 and
+	 * discarded lines are not counted.
+	 * @param xoff
+	 * @param xlim
+	 * @param yoff
+	 * @param ylim
+	 */
+
+	private void compareseq(int xoff, int xlim, int yoff, int ylim)
+	{
+		/* Slide down the bottom initial diagonal. */
+		while (xoff < xlim && yoff < ylim && xvec[xoff] == yvec[yoff])
+		{
+			++xoff;
+			++yoff;
+		}
+		/* Slide up the top initial diagonal. */
+		while (xlim > xoff && ylim > yoff && xvec[xlim - 1] == yvec[ylim - 1])
+		{
+			--xlim;
+			--ylim;
+		}
+
+		/* Handle simple cases. */
+		if (xoff == xlim)
+			while (yoff < ylim)
+				filevec[1].changed_flag[1 + filevec[1].realindexes[yoff++]] = true;
+		else if (yoff == ylim)
+			while (xoff < xlim)
+				filevec[0].changed_flag[1 + filevec[0].realindexes[xoff++]] = true;
+		else
+		{
+			/* Find a point of correspondence in the middle of the files. */
+
+			int d = diag(xoff, xlim, yoff, ylim);
+			int c = cost;
+			int b = bdiag[bdiagoff + d];
+
+			if (c == 1)
+			{
+				/*
+				 * This should be impossible, because it implies that one of the two
+				 * subsequences is empty, and that case was handled above without calling
+				 * `diag'. Let's verify that this is true.
+				 */
+				throw new IllegalArgumentException("Empty subsequence");
+			}
+			else
+			{
+				/* Use that point to split this problem into two subproblems. */
+				compareseq(xoff, b, yoff, b - d);
+				/*
+				 * This used to use f instead of b, but that is incorrect! It is not
+				 * necessarily the case that diagonal d has a snake from b to f.
+				 */
+				compareseq(b, xlim, b - d, ylim);
+			}
+		}
+	}
+
