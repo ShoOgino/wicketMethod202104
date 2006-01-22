@@ -11,6 +11,12 @@
 		// Set this WicketServlet as the servlet for the web application
 		this.webApplication.setWicketServlet(this);
 
+		// Store instance of this application object in servlet context to make
+		// integration with outside world easier
+		String contextKey = WebApplication
+				.getServletContextKey(getServletConfig().getServletName());
+		getServletContext().setAttribute(contextKey, this.webApplication);
+
 		// Finished
 		log.info("WicketServlet loaded application " + this.webApplication.getName() + " via "
 				+ factory.getClass().getName() + " factory");
