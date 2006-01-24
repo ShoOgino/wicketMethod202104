@@ -11,10 +11,11 @@
 	 *            The component path for looking up the component in the page.
 	 * @param interfaceName
 	 *            The interface to resolve.
+	 * @param requestParameters 
 	 * @return The RequestTarget that was resolved
 	 */
 	protected IRequestTarget resolveListenerInterfaceTarget(RequestCycle requestCycle,
-			final Page page, final String componentPath, final String interfaceName)
+			final Page page, final String componentPath, final String interfaceName, RequestParameters requestParameters)
 	{
 		if (interfaceName.equals("IRedirectListener"))
 		{
@@ -49,9 +50,9 @@
 			}
 			else if (interfaceName.equals("IBehaviorListener"))
 			{
-				return new BehaviorRequestTarget(page, component, listenerMethod);
+				return new BehaviorRequestTarget(page, component, listenerMethod, requestParameters);
 			}
-			return new ListenerInterfaceRequestTarget(page, component, listenerMethod);
+			return new ListenerInterfaceRequestTarget(page, component, listenerMethod, requestParameters);
 		}
 	}
 
