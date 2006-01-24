@@ -1,0 +1,37 @@
+	/**
+	 * Appends the string to this string buffer.
+	 * <p>
+	 * The characters of the <code>String</code> argument are appended, in
+	 * order, to the contents of this string buffer, increasing the length of
+	 * this string buffer by the length of the argument. If <code>str</code>
+	 * is <code>null</code>, then the four characters <code>"null"</code>
+	 * are appended to this string buffer.
+	 * <p>
+	 * Let <i>n</i> be the length of the old character sequence, the one
+	 * contained in the string buffer just prior to execution of the
+	 * <code>append</code> method. Then the character at index <i>k</i> in
+	 * the new character sequence is equal to the character at index <i>k</i>
+	 * in the old character sequence, if <i>k</i> is less than <i>n</i>;
+	 * otherwise, it is equal to the character at index <i>k-n</i> in the
+	 * argument <code>str</code>.
+	 * 
+	 * @param str
+	 *            a string.
+	 * @return a reference to this <code>StringBuffer</code>.
+	 */
+	public StringBuffer append(String str)
+	{
+		if (str == null)
+		{
+			str = String.valueOf(str);
+		}
+
+		int len = str.length();
+		int newcount = count + len;
+		if (newcount > value.length)
+			expandCapacity(newcount);
+		str.getChars(0, len, value, count);
+		count = newcount;
+		return this;
+	}
+

@@ -1,0 +1,28 @@
+	/**
+	 * Appends the string representation of the <code>char</code> array
+	 * argument to this string buffer.
+	 * <p>
+	 * The characters of the array argument are appended, in order, to the
+	 * contents of this string buffer. The length of this string buffer
+	 * increases by the length of the argument.
+	 * <p>
+	 * The overall effect is exactly as if the argument were converted to a
+	 * string by the method {@link String#valueOf(char[])} and the characters of
+	 * that string were then {@link #append(String) appended} to this
+	 * <code>StringBuffer</code> object.
+	 * 
+	 * @param str
+	 *            the characters to be appended.
+	 * @return a reference to this <code>StringBuffer</code> object.
+	 */
+	public StringBuffer append(char str[])
+	{
+		int len = str.length;
+		int newcount = count + len;
+		if (newcount > value.length)
+			expandCapacity(newcount);
+		System.arraycopy(str, 0, value, count, len);
+		count = newcount;
+		return this;
+	}
+
