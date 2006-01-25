@@ -1,0 +1,17 @@
+	/**
+	 * Remove the markup from the cache and trigger all associated listeners
+	 *  
+	 * @param key 
+	 *         The cache key
+	 * @param markupResourceStream 
+	 *         The resource stream
+	 */
+	private void removeMarkup(final AppendingStringBuffer key, final MarkupResourceStream markupResourceStream)
+	{
+		markupCache.remove(key);
+		
+		// trigger all listeners registered on the markup that is removed
+		afterLoadListeners.notifyListeners(markupResourceStream);
+		afterLoadListeners.remove(markupResourceStream);
+	}
+
