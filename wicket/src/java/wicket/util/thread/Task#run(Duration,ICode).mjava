@@ -20,12 +20,18 @@
 				{
 					// Sleep until start time
 					startTime.fromNow().sleep();
+					final Log log = getLog();
 
 					while (true)
 					{
 						// Get the start of the current period
 						final Time startOfPeriod = Time.now();
 
+						if (log.isDebugEnabled())
+						{
+							log.debug("Run the job: " + code.toString());
+						}
+						
 						try
 						{
 							// Run the user's code
@@ -33,8 +39,13 @@
 						}
 						catch (Exception e)
 						{
-							getLog().error(
-									"Unhandled exception thrown by user code in task " + name, e);
+							log.error("Unhandled exception thrown by user code in task " 
+									+ name, e);
+						}
+						
+						if (log.isDebugEnabled())
+						{
+							log.debug("Finished with job: " + code.toString());
 						}
 
 						// Sleep until the period is over (or not at all if it's

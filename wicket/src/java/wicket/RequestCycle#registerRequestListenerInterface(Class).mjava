@@ -4,19 +4,19 @@
 	 * Adds an interface to the map of interfaces that can be invoked by
 	 * outsiders. The interface must extend IRequestListener
 	 * 
-	 * @param i
+	 * @param clazz
 	 *            The interface class, which must extend IRequestListener.
 	 */
-	public static void registerRequestListenerInterface(final Class i)
+	public static void registerRequestListenerInterface(final Class clazz)
 	{
 		// Ensure that i extends IRequestListener
-		if (!IRequestListener.class.isAssignableFrom(i))
+		if (!IRequestListener.class.isAssignableFrom(clazz))
 		{
-			throw new IllegalArgumentException("Class " + i + " must extend IRequestListener");
+			throw new IllegalArgumentException("Class " + clazz + " must extend IRequestListener");
 		}
 
 		// Get interface methods
-		final Method[] methods = i.getMethods();
+		final Method[] methods = clazz.getMethods();
 
 		// If there is only one method
 		if (methods.length == 1)
@@ -25,17 +25,17 @@
 			if (methods[0].getParameterTypes().length == 0)
 			{
 				// Save this interface method by the non-qualified class name
-				listenerRequestInterfaceMethods.put(Classes.name(i), methods[0]);
+				listenerRequestInterfaceMethods.put(Classes.name(clazz), methods[0]);
 			}
 			else
 			{
-				throw new IllegalArgumentException("Method in interface " + i
+				throw new IllegalArgumentException("Method in interface " + clazz
 						+ " cannot have parameters");
 			}
 		}
 		else
 		{
-			throw new IllegalArgumentException("Interface " + i + " can have only one method");
+			throw new IllegalArgumentException("Interface " + clazz + " can have only one method");
 		}
 	}
 
