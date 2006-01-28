@@ -9,13 +9,7 @@
 	 */
 	public CharSequence transform(final Component component, final String output) throws Exception
 	{
-		String filepath = component.findParentWithAssociatedMarkup().getClass().getPackage()
-				.getName().replace('.', '/')
-				+ "/" + component.getId();
-
-		IResourceStream resourceStream = Application.get().getResourceSettings().getResourceStreamLocator().locate(
-				getClass(), filepath, component.getStyle(), component.getLocale(),
-				XsltTransformer.extension);
+		IResourceStream resourceStream = getResourceStream(component);
 
 		if (resourceStream == null)
 		{
@@ -37,8 +31,8 @@
 			// 3. Use the Transformer to transform an XML Source and send the
 			// output to a Result object.
 			StringWriter writer = new StringWriter();
-			transformer.transform(new StreamSource(new StringReader(output)),
-					new StreamResult(writer));
+			transformer.transform(new StreamSource(new StringReader(output)), new StreamResult(
+					writer));
 
 			return writer.getBuffer();
 		}
