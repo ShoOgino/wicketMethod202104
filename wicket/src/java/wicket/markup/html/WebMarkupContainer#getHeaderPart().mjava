@@ -5,7 +5,7 @@
 	 * @return the header part for this markup container or null if it doesn't
 	 *         contribute anything.
 	 */
-	private final WebMarkupContainer getHeaderPart()
+	private final HeaderPartContainer getHeaderPart()
 	{
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
@@ -50,8 +50,8 @@
 
 					// Create the header container and associate the markup with
 					// it
-					WebMarkupContainer headerContainer = new HeaderPartContainer(
-							headerId, this);
+					HeaderPartContainer headerContainer = new HeaderPartContainer(
+							headerId, this, wTag.getAttributes().getString("scope"));
 					headerContainer.setMarkupStream(associatedMarkupStream);
 					headerContainer.setRenderBodyOnly(true);
 
