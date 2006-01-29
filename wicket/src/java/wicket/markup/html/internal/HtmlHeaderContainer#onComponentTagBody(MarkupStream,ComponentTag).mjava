@@ -31,11 +31,16 @@
 			// component hierarchie.
 			MarkupContainer parent = getParent();
 
-			// Usually only Page and Border implement IHeaderRenderer. Border
-			// does in order to support bordered pages.
-			if (parent instanceof IHeaderRenderer)
+			// If bordered page ...
+			while((parent instanceof Border))
 			{
-				((IHeaderRenderer)parent).renderHeaderSections(this);
+			    parent = parent.getParent();
+			}
+			
+			// must be a Page
+			if (parent instanceof WebPage)
+			{
+			    ((WebPage)parent).renderHeaderSections(this);
 			}
 			else
 			{
