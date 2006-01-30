@@ -1,0 +1,14 @@
+	/**
+	 * Returns the model for this Applet component as a resource. This enables
+	 * the client side HostApplet container to retrieve the model object.
+	 * 
+	 * @see wicket.IResourceListener#onResourceRequested()
+	 */
+	public void onResourceRequested()
+	{
+		final Object model = getModelObject();
+		final byte[] bytes = objectToByteArray(model);
+		final ByteArrayResource resource = new ByteArrayResource("application/x-wicket-model", bytes);
+		resource.onResourceRequested();
+	}
+
