@@ -1,0 +1,18 @@
+    /**
+     * Returns the "external" classname, as defined by the 
+     * Java Language Specification, without any parameter
+     * or return type information.  For example, the name for the
+     * String class would be "java.lang.String".  Inner classes
+     * are separated from their outer class with '.'; such as
+     * "java.util.HashMap.Entry".  Unless suppressed, arrays are 
+     * shown as having one or more "[]" characters behind the 
+     * base classname, such as "java.io.Files[]".
+     */
+    public String getExternalName(boolean suppressArrays) {
+        initExternalName();
+        int i;
+        if (suppressArrays && (i = externalName.indexOf('[')) != -1)
+	    return externalName.substring(0, i);
+        return externalName;
+    }
+

@@ -1,0 +1,23 @@
+    public String toString() {
+        StringBuffer sb = new StringBuffer("name=");
+	sb.append(getName());
+        sb.append(" type="); //NOI18N
+        sb.append(getDescriptor());
+	if (getTypeSignature() != null) {
+	    sb.append(", signature="); //NOI18N
+	    sb.append(typeSignature);
+	}
+        loadAnnotations();
+	if (annotations.size() > 0) {
+	    Iterator iter = annotations.values().iterator();
+	    sb.append(", annotations={ ");
+	    while (iter.hasNext()) {
+		sb.append(iter.next().toString());
+		if (iter.hasNext())
+		    sb.append(", ");
+	    }
+	    sb.append(" }");
+	}
+        return sb.toString();
+    }
+

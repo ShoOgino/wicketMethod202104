@@ -1,0 +1,20 @@
+    /* Return the collection of all unique class references in pool.
+     *
+     * @return a Set of ClassNames specifying the referenced classnames.
+     *
+     * @deprecated use <code>ClassFile.getAllClassNames()</code>,
+     * as all class references cannot be reliably determined from just
+     * the constant pool structure.
+     */
+    public final Set getAllClassNames() {
+        Set set = new HashSet();
+
+        // include all class name constants
+        Collection c = getAllConstantsImpl(CPClassInfo.class);
+        for (Iterator i = c.iterator(); i.hasNext();) {
+            CPClassInfo ci = (CPClassInfo)i.next();
+            set.add(ci.getClassName());
+        }
+        return Collections.unmodifiableSet(set);
+    }
+

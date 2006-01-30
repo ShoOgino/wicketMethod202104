@@ -1,0 +1,26 @@
+    /**
+     * Create a new ClassFile object.
+     * @param file a File instance of a class file.
+     * @param includeCode true if this classfile should support operations
+     *                    at the bytecode level.  Specify false to conserve
+     *                    memory if code access isn't needed.
+     * @throws IOException if file cannot be opened or read.
+     **/
+    public ClassFile(File file, boolean  includeCode) throws IOException {
+	InputStream is = null;
+	this.includeCode = includeCode;
+        if( file == null || !file.exists() )
+            throw new FileNotFoundException(file != null ? 
+					    file.getPath() : "null");
+        try {
+            is = new BufferedInputStream( new FileInputStream( file ), BUFFER_SIZE);
+            load(is);
+        } catch (InvalidClassFormatException e) {
+            throw new InvalidClassFormatException(file.getPath() + '(' +
+						  e.getMessage() + ')');
+        } finally {
+            if (is != null)
+                is.close();
+        }                
+    }
+

@@ -1,0 +1,20 @@
+    /**
+     * @return the name of the source file the compiler used to create this class.
+     */    
+    public final String getSourceFileName() {
+	if (sourceFileName == null) {
+	    DataInputStream in = attributes.getStream("SourceFile"); // NOI18N
+	    if (in != null) {
+		try {
+		    int ipool = in.readUnsignedShort();
+		    CPUTF8Info entry = (CPUTF8Info)constantPool.get(ipool);
+		    sourceFileName = entry.getName();
+		    in.close();
+		} catch (IOException e) {
+		    System.err.println("invalid SourceFile attribute");
+		}
+	    }
+	}
+        return sourceFileName;
+    }
+

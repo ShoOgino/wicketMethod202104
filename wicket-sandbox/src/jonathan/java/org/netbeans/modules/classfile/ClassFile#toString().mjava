@@ -1,0 +1,50 @@
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("ClassFile: "); //NOI18N
+        sb.append(Access.toString(classAccess));
+        sb.append(' ');
+        sb.append(classInfo);
+        if (isSynthetic())
+            sb.append(" (synthetic)"); //NOI18N
+        if (isDeprecated())
+            sb.append(" (deprecated)"); //NOI18N
+        sb.append("\n   source: "); //NOI18N
+        sb.append(getSourceFileName());
+        sb.append("\n   super: "); //NOI18N
+        sb.append(superClassInfo);
+	if (getTypeSignature() != null) {
+	    sb.append("\n   signature: "); //NOI18N
+	    sb.append(typeSignature);
+	}
+	if (getEnclosingMethod() != null) {
+	    sb.append("\n   enclosing method: "); //NOI18N
+	    sb.append(enclosingMethod);
+	}
+        sb.append("\n   ");
+	loadAnnotations();
+	if (annotations.size() > 0) {
+	    Iterator iter = annotations.values().iterator();
+	    sb.append("annotations: ");
+	    while (iter.hasNext()) {
+                sb.append("\n      ");
+		sb.append(iter.next().toString());
+	    }
+	    sb.append("\n   ");
+	}
+        if (interfaces.length > 0) {
+            sb.append(arrayToString("interfaces", interfaces)); //NOI18N
+            sb.append("\n   ");
+        }
+        if (getInnerClasses().size() > 0) {
+            sb.append(arrayToString("innerclasses", innerClasses)); //NOI18N
+            sb.append("\n   ");
+        }
+        if (variables.length > 0) {
+            sb.append(arrayToString("variables", variables)); //NOI18N
+            sb.append("\n   ");
+        }
+        if (methods.length > 0)
+            sb.append(arrayToString("methods", methods)); //NOI18N
+        return sb.toString();
+    }
+

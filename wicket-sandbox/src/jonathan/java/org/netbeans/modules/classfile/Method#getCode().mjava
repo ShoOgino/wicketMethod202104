@@ -1,0 +1,22 @@
+    /** 
+     * Get the bytecodes of this method.  This method returns null if
+     * the method is abstract, or if the ClassFile instance was created
+     * with a includeCode parameter of false.
+     *
+     * @return the Code object, or null.
+     */    
+    public final Code getCode() {
+	if (code == null) {
+	    DataInputStream in = attributes.getStream("Code"); // NOI18N
+	    if (in != null) {
+		try {
+		    code = new Code(in, classFile.constantPool);
+		    in.close();
+		} catch (IOException e) {
+		    System.err.println("invalid Code attribute");
+		}
+	    }
+	}
+        return code;  // will be null for abstract methods
+    }
+

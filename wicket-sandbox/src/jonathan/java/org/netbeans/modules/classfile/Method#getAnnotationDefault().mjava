@@ -1,0 +1,23 @@
+    /**
+     * Returns the default annotation value for the element
+     * defined by this method.  Null is returned if no default 
+     * is specified for this element, or if the class that contains 
+     * this method does not define an annotation type.
+     */
+    public ElementValue getAnnotationDefault() {
+	if (annotationDefault == null) {
+	    DataInputStream in = 
+		attributes.getStream("AnnotationDefault"); // NOI18N
+	    if (in != null) {
+		try {
+		    annotationDefault = 
+			ElementValue.load(in, classFile.constantPool, false);
+		    in.close();
+		} catch (IOException e) {
+		    System.err.println("invalid AnnotationDefault attribute");
+		}
+	    }
+	}
+        return annotationDefault;
+    }
+

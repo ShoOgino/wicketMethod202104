@@ -1,0 +1,23 @@
+	/**
+	 * Possibly create a jar file using the specified root classes
+	 */
+	private void maybeCreateJar()
+	{
+		// Get shared resources for this application
+		SharedResources resources = Application.get().getSharedResources();
+
+		// See if resource is already registered
+		Resource resource = resources.get(Applet.class, appletCodeClass.getName(), null, null,
+				false);
+
+		// If no JAR resource yet generated
+		if (resource == null)
+		{
+			// Create JAR resource
+			resource = new ByteArrayResource("jar", jarClasses(classes));
+
+			// Add to application shared resources
+			resources.add(Applet.class, appletCodeClass.getName(), null, null, resource);
+		}
+	}
+

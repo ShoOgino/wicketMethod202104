@@ -1,0 +1,23 @@
+    /**
+     * Returns the generic type information associated with this field.  
+     * If this field does not have generic type information, then null 
+     * is returned.
+     */
+    public String getTypeSignature() {
+	if (typeSignature == null) {
+	    DataInputStream in = attributes.getStream("Signature"); // NOI18N
+	    if (in != null) {
+		try {
+		    int index = in.readUnsignedShort();
+		    CPUTF8Info entry = 
+			(CPUTF8Info)classFile.constantPool.get(index);
+		    typeSignature = entry.getName();
+		    in.close();
+		} catch (IOException e) {
+		    System.err.println("invalid Signature attribute");
+		}
+	    }
+	}
+	return typeSignature;
+    }
+
