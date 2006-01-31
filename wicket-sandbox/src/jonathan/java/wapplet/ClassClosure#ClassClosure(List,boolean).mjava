@@ -26,20 +26,7 @@
 			InputStream in = inputStreamForClassName(classname.getType());
 			try
 			{
-				if (in == null)
-				{
-					throw new IllegalStateException("Unable to find class " + classname.getExternalName());
-				}
-
-				ClassFile classfile;
-				try
-				{
-					classfile = new ClassFile(in);
-				}
-				catch (IOException e)
-				{
-					throw new RuntimeException(e);
-				}
+				ClassFile classfile = new ClassFile(in);
 				closure.add(classfile.getName().getExternalName());
 
 				final ConstantPool pool = classfile.getConstantPool();
@@ -54,8 +41,7 @@
 					}
 					else if (!includeJDK
 							&& (name.startsWith("java.") || name.startsWith("javax.")
-									|| name.startsWith("sun.")
-									|| name.startsWith("com.sun.corba")
+									|| name.startsWith("sun.") || name.startsWith("com.sun.corba")
 									|| name.startsWith("com.sun.image")
 									|| name.startsWith("com.sun.java.swing")
 									|| name.startsWith("com.sun.naming") || name
@@ -72,8 +58,21 @@
 						}
 					}
 				}
-
-				addClass(classfile.getName().getExternalName(), in);
+				
+				// Get the input stream a second time to add to JAR
+				final InputStream in2 = inputStreamForClassName(classname.getType());
+				try
+				{
+					addClass(classfile.getName().getExternalName(), in2);
+				}
+				finally
+				{
+					in2.close();
+				}
+			}
+			catch (IOException e)
+			{
+				throw new WicketRuntimeException(e);
 			}
 			finally
 			{

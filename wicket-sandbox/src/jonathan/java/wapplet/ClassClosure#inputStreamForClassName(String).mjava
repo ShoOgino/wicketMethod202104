@@ -1,10 +1,16 @@
 	/**
-	 * @param className
+	 * @param classname
 	 *            The class name
 	 * @return Class contents as a stream
 	 */
-	protected InputStream inputStreamForClassName(String className)
+	protected InputStream inputStreamForClassName(String classname)
 	{
-		return ClassLoader.getSystemClassLoader().getResourceAsStream(className + ".class");
+		InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(
+				classname + ".class");
+		if (in == null)
+		{
+			throw new IllegalStateException("Unable to find class " + classname);
+		}
+		return in;
 	}
 
