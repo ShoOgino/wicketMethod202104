@@ -4,7 +4,7 @@
 	protected void onComponentTag(final ComponentTag tag)
 	{
 		checkComponentTag(tag, "applet");
-		tag.put("code", HostApplet.class.getName() + ".class");
+		tag.put("code", HostApplet.class.getName());
 		final String jarName = appletCodeClass.getName() + ".jar";
 		final ResourceReference jarResourceReference = new ResourceReference(jarName)
 		{
@@ -14,8 +14,8 @@
 				return new ByteArrayResource("application/x-compressed", jarClasses(classes));
 			}
 		};
-//		tag.put("codebase", Strings.beforeLastPathComponent(jarResourceReference.getPath(), '/') + "/");
-		tag.put("archive", jarResourceReference.getPath());
+		tag.put("codebase", "wapplet/" + Strings.beforeLastPathComponent(jarResourceReference.getPath(), '/') + "/");
+		tag.put("archive", jarName);
 		final int width = getWidth();
 		if (width != -1)
 		{
