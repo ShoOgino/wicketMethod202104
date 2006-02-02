@@ -3,6 +3,13 @@
 	 */
 	public void respond(final RequestCycle requestCycle)
 	{
+		Application app=Application.get();
+		
+		// disable component use check since we want to ignore header contribs
+		final boolean oldUseCheck=app.getDebugSettings().getComponentUseCheck();
+		app.getDebugSettings().setComponentUseCheck(false);
+
+		
 		WebResponse response = (WebResponse)requestCycle.getResponse();
 
 		response.setContentType("text/xml");
@@ -29,5 +36,8 @@
 			respondInvocation(response, js);
 		}
 		response.write("</ajax-response>");
+		
+		// restore component use check
+		app.getDebugSettings().setComponentUseCheck(oldUseCheck);
 	}
 
