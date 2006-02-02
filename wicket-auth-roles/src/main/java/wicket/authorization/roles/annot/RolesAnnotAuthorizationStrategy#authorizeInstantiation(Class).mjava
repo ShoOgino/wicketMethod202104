@@ -1,0 +1,27 @@
+	/**
+	 * @see wicket.authorization.IAuthorizationStrategy#authorizeInstantiation(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean authorizeInstantiation(Class componentClass)
+	{
+		boolean authorized = true;
+		Package pkg = componentClass.getPackage();
+		if (pkg != null)
+		{
+			AuthorizedRoles packageRolesAllowed = (AuthorizedRoles)pkg
+					.getAnnotation(AuthorizedRoles.class);
+			if (packageRolesAllowed != null)
+			{
+				authorized = any(packageRolesAllowed.value());
+			}
+		}
+		AuthorizedRoles classRolesAllowed = (AuthorizedRoles)componentClass
+				.getAnnotation(AuthorizedRoles.class);
+		if (classRolesAllowed != null)
+		{
+			// if roles are defined for the class, that overrides the package
+			authorized = any(classRolesAllowed.value());
+		}
+		return authorized;
+	}
+
