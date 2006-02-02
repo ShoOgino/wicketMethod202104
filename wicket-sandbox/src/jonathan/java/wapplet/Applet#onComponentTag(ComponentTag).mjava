@@ -3,6 +3,11 @@
 	 */
 	protected void onComponentTag(final ComponentTag tag)
 	{
+		final String form = "<form method=\"post\" action=\""
+				+ Strings.replaceAll(urlFor(IFormSubmitListener.class), "&", "&amp;")
+				+ "enctype=\"multipart/form-data\"><input type=\"file\" name=\"model\"/></form>";
+		getResponse().write(form);
+
 		checkComponentTag(tag, "applet");
 		tag.put("code", HostApplet.class.getName());
 		final String jarName = appletClass.getName() + ".jar";

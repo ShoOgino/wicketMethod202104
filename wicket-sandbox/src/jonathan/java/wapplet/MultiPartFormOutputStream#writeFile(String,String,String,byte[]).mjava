@@ -1,0 +1,52 @@
+	/**
+	 * Writes the given bytes. The bytes are assumed to be the contents of a
+	 * file, and will be sent as such. If the data is null, a
+	 * <code>java.lang.IllegalArgumentException</code> will be thrown.
+	 * 
+	 * @param name
+	 *            the field name
+	 * @param mimeType
+	 *            the file content type (optional, recommended)
+	 * @param fileName
+	 *            the file name (required)
+	 * @param data
+	 *            the file data
+	 * @throws java.io.IOException
+	 *             on input/output errors
+	 */
+	public void writeFile(String name, String mimeType, String fileName, byte[] data)
+			throws java.io.IOException
+	{
+		if (data == null)
+		{
+			throw new IllegalArgumentException("Data cannot be null.");
+		}
+		if (fileName == null || fileName.length() == 0)
+		{
+			throw new IllegalArgumentException("File name cannot be null or empty.");
+		}
+		/*
+		 * --boundary\r\n Content-Disposition: form-data; name="<fieldName>";
+		 * filename="<filename>"\r\n Content-Type: <mime-type>\r\n \r\n
+		 * <file-data>\r\n
+		 */
+		// write boundary
+		out.writeBytes(PREFIX);
+		out.writeBytes(boundary);
+		out.writeBytes(NEWLINE);
+		// write content header
+		out.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"; filename=\""
+				+ fileName + "\"");
+		out.writeBytes(NEWLINE);
+		if (mimeType != null)
+		{
+			out.writeBytes("Content-Type: " + mimeType);
+			out.writeBytes(NEWLINE);
+		}
+		out.writeBytes(NEWLINE);
+		// write content
+		out.write(data, 0, data.length);
+		out.writeBytes(NEWLINE);
+		out.flush();
+	}
+

@@ -1,0 +1,26 @@
+	/**
+	 * Creates a new <code>java.net.URLConnection</code> object from the
+	 * specified <code>java.net.URL</code>. This is a convenience method
+	 * which will set the <code>doInput</code>, <code>doOutput</code>,
+	 * <code>useCaches</code> and <code>defaultUseCaches</code> fields to
+	 * the appropriate settings in the correct order.
+	 * 
+	 * @return a <code>java.net.URLConnection</code> object for the URL
+	 * @throws java.io.IOException
+	 *             on input/output errors
+	 */
+	public static URLConnection createConnection(URL url) throws java.io.IOException
+	{
+		URLConnection urlConn = url.openConnection();
+		if (urlConn instanceof HttpURLConnection)
+		{
+			HttpURLConnection httpConn = (HttpURLConnection)urlConn;
+			httpConn.setRequestMethod("POST");
+		}
+		urlConn.setDoInput(true);
+		urlConn.setDoOutput(true);
+		urlConn.setUseCaches(false);
+		urlConn.setDefaultUseCaches(false);
+		return urlConn;
+	}
+
