@@ -1,7 +1,7 @@
 	/**
-	 * Print to the web response what ever the component wants to contribute 
-	 * to the head section. Make sure that all attached behaviors are asked
-	 * as well.
+	 * Print to the web response what ever the component wants to contribute to
+	 * the head section. Make sure that all attached behaviors are asked as
+	 * well.
 	 * 
 	 * @param container
 	 *            The HtmlHeaderContainer
@@ -12,16 +12,16 @@
 		// header or body onLoad tag.
 		if (this.behaviors != null)
 		{
-			final WebPage webPage = (WebPage) getPage();
-			
+			final WebPage webPage = (WebPage)getPage();
+
 			final Iterator iter = this.behaviors.iterator();
 			while (iter.hasNext())
 			{
 				IBehavior behavior = (IBehavior)iter.next();
 				if (behavior instanceof IHeaderContributor)
 				{
-					((IHeaderContributor)behavior).renderHead(container);
-					
+					((IHeaderContributor)behavior).renderHead(container.getResponse());
+
 					String stmt = ((IHeaderContributor)behavior).getBodyOnLoad();
 					if (stmt != null)
 					{

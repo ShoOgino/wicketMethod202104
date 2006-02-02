@@ -1,7 +1,7 @@
 	/**
-	 * @see wicket.markup.html.IHeaderContributor#renderHead(wicket.markup.html.internal.HtmlHeaderContainer)
+	 * @see wicket.markup.html.IHeaderContributor#renderHead(wicket.Response)
 	 */
-	public final void renderHead(HtmlHeaderContainer container)
+	public final void renderHead(Response response)
 	{
 		Set contributors = (Set)headContribHolder.get();
 
@@ -19,10 +19,10 @@
 		// was a contribution for this specific implementation done yet?
 		if (!contributors.contains(implementationId))
 		{
-			renderHeadInitContribution(container);
+			onRenderHeadInitContribution(response);
 			contributors.add(implementationId);
 		}
 
-		renderHeadContribution(container);
+		onRenderHeadContribution(response);
 	}
 

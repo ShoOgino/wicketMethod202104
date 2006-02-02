@@ -1,0 +1,19 @@
+	protected final void onEvent(AjaxRequestTarget target)
+	{
+		FormComponent fc = getFormComponent();
+		fc.registerNewUserInput();
+		fc.validate();
+		if (fc.hasErrorMessage())
+		{
+			fc.invalid();
+		}
+		else
+		{
+			fc.valid();
+			fc.updateModel();
+			// TODO Ajax: do we need to persist values for persistent components
+		}
+
+		onUpdate(target);
+	}
+
