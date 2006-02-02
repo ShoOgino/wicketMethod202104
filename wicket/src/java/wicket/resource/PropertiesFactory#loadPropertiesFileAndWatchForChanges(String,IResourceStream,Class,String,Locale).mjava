@@ -20,15 +20,22 @@
 			final Locale locale)
 	{
 		// Watch file in the future
-		final ModificationWatcher watcher = Application.get().getResourceSettings().getResourceWatcher();
+		final ModificationWatcher watcher = Application.get().getResourceSettings()
+				.getResourceWatcher();
 		if (watcher != null)
 		{
 			watcher.add(resourceStream, new IChangeListener()
 			{
 				public void onChange()
 				{
-					log.info("Reloading properties files from " + resourceStream);
-					loadPropertiesFile(key, resourceStream, componentClass, style, locale);
+					log.info("A properties files has changed. Remove all entries from the cache. Resource: "
+									+ resourceStream);
+
+					// Clear the whole cache as associated localized files may
+					// be
+					// affected and may need reloading as well. We make it easy.
+					// Usually the watcher is activ in dev mode only anyway.
+					clearCache();
 
 					// Inform all listeners
 					for (Iterator iter = afterReloadListeners.iterator(); iter.hasNext();)
