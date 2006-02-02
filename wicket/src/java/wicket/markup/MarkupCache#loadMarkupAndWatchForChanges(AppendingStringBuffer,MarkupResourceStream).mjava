@@ -1,7 +1,7 @@
 	/**
 	 * Load markup from an IResourceStream and add an {@link IChangeListener}to
-	 * the {@link ModificationWatcher}so that if the resource changes, we can
-	 * reload it automatically.
+	 * the {@link ModificationWatcher} so that if the resource changes, we can
+	 * remove it from the cache automatically and subsequently reload when needed.
 	 * 
 	 * @param key
 	 *            The key for the resource
@@ -20,7 +20,7 @@
 			{
 				public void onChange()
 				{
-					log.info("Reloading markup from " + markupResourceStream);
+					log.info("Remove markup from cache: " + markupResourceStream);
 
 					// Remove the markup from the cache. It will be reloaded
 					// next time it the markup is requested.
