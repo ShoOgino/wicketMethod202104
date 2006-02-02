@@ -4,5 +4,21 @@
 	protected WebPage(final IModel model)
 	{
 		super(model);
+		
+		// Add a Body container if the associated markup contains a <body> tag
+		HtmlBodyContainer body = new HtmlBodyContainer();
+		final MarkupStream markupStream = body.getAssociatedMarkupStream(this);
+		if (markupStream != null)
+		{
+			// The default <body> container. It can be accessed, replaced 
+			// and attribute modifiers can be attached. <body> tags without
+			// wicket:id get automatically a wicket:id="body" assigned.
+			add(body);
+		}
+		
+		// TODO If the concept proofs valuable we could add the header container
+		// the same way instead of using a resolver. The advantages would be that
+		// the header container be available at build time already and not only
+		// at render time.
 	}
 
