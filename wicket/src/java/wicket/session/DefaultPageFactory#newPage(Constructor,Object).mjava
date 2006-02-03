@@ -1,6 +1,6 @@
 	/**
 	 * Creates a new Page using the given constructor and argument.
-	 *
+	 * 
 	 * @param constructor
 	 *            The constructor to invoke
 	 * @param argument
@@ -28,6 +28,11 @@
 		}
 		catch (InvocationTargetException e)
 		{
+			// honor redirect exception contract defined in IPageFactory
+			if (e.getTargetException() instanceof AbortAndRespondException)
+			{
+				throw (RuntimeException)e.getTargetException();
+			}
 			throw new WicketRuntimeException("Can't instantiate page using constructor "
 					+ constructor + " and argument " + argument, e);
 		}
