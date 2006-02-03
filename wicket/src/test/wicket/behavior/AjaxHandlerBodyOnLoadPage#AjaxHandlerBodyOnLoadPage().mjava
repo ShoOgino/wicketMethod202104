@@ -1,12 +1,12 @@
 	/**
 	 * Construct.
 	 */
-	public AjaxHandlerBodyOnLoadPage() 
+	public AjaxHandlerBodyOnLoadPage()
 	{
 		getBodyContainer().addOnLoadModifier("function1();");
-		
-	    MarkupContainer panel = new WebMarkupContainer("panel");
-	    panel.add(new AbstractAjaxBehavior()
+
+		MarkupContainer panel = new WebMarkupContainer("panel");
+		panel.add(new AbstractAjaxBehavior()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -14,18 +14,18 @@
 			{
 				return "test";
 			}
-			
+
 			protected void onRenderHeadInitContribution(Response response)
 			{
 				super.onRenderHeadInitContribution(response);
-				getBodyContainer(null).addOnLoadModifier("myFunction();");
+				getBodyContainer().addOnLoadModifier("myFunction();");
 			}
 
 			public void onRequest()
 			{
 			}
 		});
-	    
-	    add(panel);
-    }
+
+		add(panel);
+	}
 
