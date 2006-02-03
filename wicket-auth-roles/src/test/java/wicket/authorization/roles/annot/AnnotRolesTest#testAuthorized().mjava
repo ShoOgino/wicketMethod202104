@@ -1,0 +1,18 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testAuthorized() throws Exception
+	{
+		WicketTester tester = new WicketTester();
+		tester.getSecuritySettings().setAuthorizationStrategy(
+				new RolesAuthorizationStrategy(new UserRolesAuthorizer("ADMIN")));
+		tester.startPage(new ITestPageSource()
+		{
+			public Page getTestPage()
+			{
+				return new AdminPage();
+			}
+		});
+		tester.assertRenderedPage(AdminPage.class);
+	}
+
