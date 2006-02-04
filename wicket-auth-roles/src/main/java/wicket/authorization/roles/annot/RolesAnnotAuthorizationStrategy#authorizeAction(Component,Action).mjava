@@ -4,10 +4,25 @@
 	 */
 	public boolean authorizeAction(Component component, Action action)
 	{
-		AuthorizedActions actions = component.getClass().getAnnotation(AuthorizedActions.class);
-		if (actions != null)
+		// check for a single action
+		AuthorizedAction annotAction = component.getClass().getAnnotation(AuthorizedAction.class);
+		if (annotAction != null)
 		{
-			for (AuthorizedAction a : actions.actions())
+			if (annotAction.action().equals(action.toString()))
+			{
+				if (!any(annotAction.roles()))
+				{
+					return false;
+				}
+			}
+		}
+
+		// check for multiple actions
+		AuthorizedActions annotActions = component.getClass()
+				.getAnnotation(AuthorizedActions.class);
+		if (annotActions != null)
+		{
+			for (AuthorizedAction a : annotActions.actions())
 			{
 				if (a.action().equals(action.toString()))
 				{
@@ -18,6 +33,7 @@
 				}
 			}
 		}
+
 		return true;
 	}
 
