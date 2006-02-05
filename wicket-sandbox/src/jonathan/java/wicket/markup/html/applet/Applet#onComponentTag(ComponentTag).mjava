@@ -11,8 +11,9 @@
 			protected Resource newResource()
 			{
 				// Create JAR resource
-				return new ByteArrayResource("application/x-compressed", jarClasses(classes))
-						.setCacheable(false);
+				final JarResourceFactory factory = new JarResourceFactory();
+				factory.addClassClosures(classes);
+				return factory.getResource();
 			}
 		};
 

@@ -1,0 +1,20 @@
+	/**
+	 * Adds the closure of classes referenced in the list to the JAR being
+	 * constructed by this JarResourceFactory.
+	 * 
+	 * @param classes
+	 *            Classes to jar the closures of
+	 */
+	public void addClassClosures(final List classes)
+	{
+		checkWritable();
+		new ClassClosure(classes, false)
+		{
+
+			protected void addClass(final String name, final InputStream is)
+			{
+				add(name.replace('.', '/'), is);
+			}
+		};
+	}
+
