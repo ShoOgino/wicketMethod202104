@@ -1,0 +1,24 @@
+	/**
+	 * Authorizes the given roles to create component instances of type
+	 * componentClass. This authorization is added to any previously authorized
+	 * roles.
+	 * 
+	 * @param componentClass
+	 *            the component type that is subject for the authorization
+	 * @param roles
+	 *            the roles that are authorized to create component instances of
+	 *            type componentClass
+	 */
+	public static final void authorize(Class componentClass, String[] roles)
+	{
+		Application application = Application.get();
+		ComponentCreationAuthBindings authorizedRoles = (ComponentCreationAuthBindings)application
+				.getMetaData(MD_ROLES_FOR_CREATION);
+		if (authorizedRoles == null)
+		{
+			authorizedRoles = new ComponentCreationAuthBindings();
+			application.setMetaData(MD_ROLES_FOR_CREATION, authorizedRoles);
+		}
+		authorizedRoles.add(componentClass, roles);
+	}
+

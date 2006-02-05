@@ -1,0 +1,18 @@
+	/**
+	 * Resets all authorizations for creation of components of type
+	 * componentClass. This has the effect that everyone is allowed to create
+	 * instances of the component again.
+	 * 
+	 * @param componentClass
+	 */
+	public static final void clear(Class componentClass)
+	{
+		Application application = Application.get();
+		ComponentCreationAuthBindings authorizedRoles = (ComponentCreationAuthBindings)application
+				.getMetaData(MD_ROLES_FOR_CREATION);
+		if (authorizedRoles != null)
+		{
+			authorizedRoles.remove(componentClass);
+		}
+	}
+

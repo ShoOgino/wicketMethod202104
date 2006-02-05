@@ -1,0 +1,17 @@
+	/**
+	 * Uses application level meta data to match roles for component
+	 * instantiation.
+	 * 
+	 * @see wicket.authorization.IAuthorizationStrategy#authorizeInstantiation(java.lang.Class)
+	 */
+	public boolean authorizeInstantiation(Class componentClass)
+	{
+		if (componentClass == null)
+		{
+			throw new IllegalArgumentException("argument componentClass has to be not null");
+		}
+
+		String[] roles = RolesBinder.rolesForCreation(componentClass);
+		return any(roles);
+	}
+
