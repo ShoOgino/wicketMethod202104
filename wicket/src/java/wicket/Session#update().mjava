@@ -26,6 +26,7 @@
 		}
 
 		// Go through all dirty entries, replicating any dirty objects
+		List dirtyObjects = (List)Session.dirtyObjects.get();
 		if (dirtyObjects != null)
 		{
 			for (final Iterator iterator = dirtyObjects.iterator(); iterator.hasNext();)
@@ -52,7 +53,7 @@
 					setAttribute(attribute, object);
 				}
 			}
-			dirtyObjects = null;
+			Session.dirtyObjects.set(null);
 		}
 	}
 
