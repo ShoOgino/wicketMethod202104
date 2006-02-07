@@ -1,0 +1,15 @@
+	/**
+	 * @see wicket.authorization.IAuthorizationStrategy#authorizeInstantiation(java.lang.Class)
+	 */
+	public final boolean authorizeInstantiation(Class/* <Component> */componentClass)
+	{
+		if (componentClass.isAssignableFrom(Page.class))
+		{
+			if (!isAuthorized(componentClass))
+			{
+				throw new RestartResponseAtSignInPageException();
+			}
+		}
+		return true;
+	}
+
