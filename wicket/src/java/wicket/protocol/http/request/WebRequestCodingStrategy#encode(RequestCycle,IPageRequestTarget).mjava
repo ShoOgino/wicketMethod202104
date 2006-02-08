@@ -1,0 +1,33 @@
+	/**
+	 * Encode a page target.
+	 * 
+	 * @param requestCycle
+	 *            the current request cycle
+	 * @param requestTarget
+	 *            the target to encode
+	 * @return the encoded url
+	 */
+	protected final String encode(RequestCycle requestCycle, IPageRequestTarget requestTarget)
+	{
+		final StringBuffer url = new StringBuffer(64);
+		url.append(urlPrefix(requestCycle));
+		url.append("?path=");
+		Page page = requestTarget.getPage();
+		url.append(page.getPath());
+		final PageMap pageMap = page.getPageMap();
+		if (!pageMap.isDefault())
+		{
+			url.append("&pagemap=");
+			url.append(pageMap.getName());
+		}
+		int versionNumber = page.getPage().getCurrentVersionNumber();
+		if (versionNumber > 0)
+		{
+			url.append("&version=");
+			url.append(versionNumber);
+		}
+
+		return requestCycle.getResponse().encodeURL(url.toString());
+
+	}
+
