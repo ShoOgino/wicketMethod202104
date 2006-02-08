@@ -1,6 +1,8 @@
 	/**
 	 * Adds a component instantiation listener. This method should typicaly only
 	 * be called during application startup; it is not thread safe.
+	 * <p>
+	 * Note: wicket does not guarantee the execution order of added listeners
 	 * 
 	 * @param listener
 	 *            the listener to add
@@ -11,6 +13,16 @@
 		{
 			throw new IllegalArgumentException("argument listener may not be null");
 		}
+
+		// if an instance of this listener is already present ignore this call
+		for (int i = 0; i < componentInstantiationListeners.length; i++)
+		{
+			if (listener == componentInstantiationListeners[i])
+			{
+				return;
+			}
+		}
+
 		IComponentInstantiationListener[] newListeners = new IComponentInstantiationListener[componentInstantiationListeners.length + 1];
 		System.arraycopy(componentInstantiationListeners, 0, newListeners, 0,
 				componentInstantiationListeners.length);
