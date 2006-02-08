@@ -26,37 +26,8 @@
 
 		try
 		{
-			Page newPage = null;
-
-			IPageFactory pageFactory = session.getPageFactory();
 			PageParameters params = new PageParameters(requestParameters.getParameters());
-			// FIXME Robustness: Need to take a second look on synchronizing in
-			// the resolve/render phase at this time, the session isn't accessed
-			// in a atomic, isolated manner during the request.
-			synchronized (session)
-			{
-				if (params.size() == 0)
-				{
-					newPage = pageFactory.newPage(pageClass);
-				}
-				else
-				{
-					newPage = pageFactory.newPage(pageClass, params);
-				}
-
-			}
-			// the response might have been set in the constructor of
-			// the bookmarkable page
-			IRequestTarget requestTarget = requestCycle.getRequestTarget();
-
-			// is it possible that there is already another request target at
-			// this point then the 2 below?
-			if (!(requestTarget instanceof IPageRequestTarget || requestTarget instanceof IBookmarkablePageRequestTarget))
-			{
-				requestTarget = new PageRequestTarget(newPage);
-			}
-
-			return requestTarget;
+			return new BookmarkablePageRequestTarget(requestParameters.getPageMapName(),pageClass,params);
 		}
 		catch (RuntimeException e)
 		{
