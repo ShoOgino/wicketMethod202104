@@ -1,0 +1,31 @@
+	/**
+	 * @see wicket.examples.WicketExampleApplication#init()
+	 */
+	protected void init()
+	{
+		getSecuritySettings().setAuthorizationStrategy(new IAuthorizationStrategy()
+		{
+			public boolean authorizeAction(Component component, Action action)
+			{
+				return true;
+			}
+
+			public boolean authorizeInstantiation(Class componentClass)
+			{
+				if (AuthenticatedWebPage.class.isAssignableFrom(componentClass))
+				{
+					// Is user signed in?
+					if (((SignIn2Session)Session.get()).isSignedIn())
+					{
+						// okay to proceed
+						return true;
+					}
+
+					// Force sign in
+					throw new RestartResponseAtInterceptPageException(SignIn2.class);
+				}
+				return true;
+			}
+		});
+	}
+
