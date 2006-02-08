@@ -8,18 +8,13 @@
 			if (requestCycle.getRedirect())
 			{
 				IRequestCycleProcessor processor = requestCycle.getProcessor();
-				String redirectUrl = processor.getRequestCodingStrategy().encode(requestCycle,
-						new BookmarkablePageRequestTarget(pageClass, pageParameters));
+				String redirectUrl = processor.getRequestCodingStrategy().encode(requestCycle,this);
 				requestCycle.getResponse().redirect(redirectUrl);
 			}
 			else
 			{
-				requestCycle.setUpdateSession(true);
-
-				page = getPage(requestCycle);
-
 				// let the page render itself
-				page.doRender();
+				getPage(requestCycle).doRender();
 			}
 		}
 	}
