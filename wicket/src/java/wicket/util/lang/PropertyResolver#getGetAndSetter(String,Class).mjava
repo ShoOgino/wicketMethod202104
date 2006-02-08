@@ -12,23 +12,25 @@
 		{
 			Method method = null;
 			Field field = null;
-			if(exp.startsWith("["))
+			if (exp.startsWith("["))
 			{
-				// if expression begins with [ skip method finding and use it as a key/index lookup on a map.
-				exp = exp.substring(1,exp.length()-1);
+				// if expression begins with [ skip method finding and use it as
+				// a key/index lookup on a map.
+				exp = exp.substring(1, exp.length() - 1);
 			}
-			else if(exp.endsWith("()"))
+			else if (exp.endsWith("()"))
 			{
-				// if expression ends with (), don't test for setters just skip directly to method finding.
+				// if expression ends with (), don't test for setters just skip
+				// directly to method finding.
 				method = findMethod(clz, exp);
 			}
-			else 
+			else
 			{
 				method = findGetter(clz, exp);
-				if(method == null)
+				if (method == null)
 				{
 					// find field.
-					field = findField(clz,exp);
+					field = findField(clz, exp);
 				}
 			}
 			if (method == null && field == null)
@@ -42,15 +44,17 @@
 					}
 					catch (NumberFormatException ex)
 					{
-						// can't parse the exp als a index maybe the exp was a method.
-						method = findMethod(clz, exp );
-						if(method != null)
+						// can't parse the exp als a index maybe the exp was a
+						// method.
+						method = findMethod(clz, exp);
+						if (method != null)
 						{
 							getAndSetter = new MethodGetAndSet(method);
 						}
 						else
 						{
-							throw new WicketRuntimeException("Can parse " + exp + " as an index or look it up as a method for the list " + clz);
+							throw new WicketRuntimeException("Can parse " + exp
+									+ " as an index or look it up as a method for the list " + clz);
 						}
 					}
 				}
@@ -67,20 +71,21 @@
 					}
 					catch (NumberFormatException ex)
 					{
-						if(exp.equals("length") || exp.equals("size"))
+						if (exp.equals("length") || exp.equals("size"))
 						{
 							getAndSetter = new ArrayLengthGetSet();
 						}
 						else
 						{
-							throw new WicketRuntimeException("can't parse the exp " + exp + " as an index for an array lookup");
+							throw new WicketRuntimeException("can't parse the exp " + exp
+									+ " as an index for an array lookup");
 						}
 					}
 				}
 				else
 				{
 					method = findMethod(clz, exp);
-					if(method == null)
+					if (method == null)
 					{
 						int index = exp.indexOf('.');
 						if (index != -1)
@@ -89,27 +94,29 @@
 							String propertyIndex = exp.substring(index + 1);
 							try
 							{
-	
+
 								int parsedIndex = Integer.parseInt(propertyIndex);
-								// if so then it could be a getPropertyIndex(int)
+								// if so then it could be a
+								// getPropertyIndex(int)
 								// and setPropertyIndex(int, object)
 								String name = Character.toUpperCase(propertyName.charAt(0))
 										+ propertyName.substring(1);
 								method = clz.getMethod("get" + name, new Class[] { int.class });
 								getAndSetter = new ArrayPropertyGetSet(method, parsedIndex);
-	
+
 							}
 							catch (Exception e)
 							{
-								throw new WicketRuntimeException("no get method defined for class: "
-										+ clz + " expression: " + propertyName);
+								throw new WicketRuntimeException(
+										"no get method defined for class: " + clz + " expression: "
+												+ propertyName);
 							}
 						}
 						else
 						{
 							// TODO Enhancement: Find a public FIELD
-							throw new WicketRuntimeException("No get method defined for class: " + clz
-									+ " expression: " + exp);
+							throw new WicketRuntimeException("No get method defined for class: "
+									+ clz + " expression: " + exp);
 						}
 					}
 					else
@@ -118,7 +125,7 @@
 					}
 				}
 			}
-			else if(field != null)
+			else if (field != null)
 			{
 				getAndSetter = new FieldGetAndSetter(field);
 			}

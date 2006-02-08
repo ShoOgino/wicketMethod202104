@@ -1,17 +1,17 @@
 	private final static Method findMethod(Class clz, String expression)
 	{
-		if(expression.endsWith("()"))
+		if (expression.endsWith("()"))
 		{
-			expression = expression.substring(0,expression.length()-2);
+			expression = expression.substring(0, expression.length() - 2);
 		}
 		Method method = null;
 		try
 		{
 			method = clz.getMethod(expression, null);
 		}
-		catch (Exception ex)
+		catch (Exception e)
 		{
-			// TODO Robustness: Log exception
+			log.warn("Cannot find method " + clz + "." + expression, e);
 		}
 		return method;
 	}

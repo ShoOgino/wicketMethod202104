@@ -11,7 +11,7 @@
 		{
 			method = clz.getMethod("get" + name, null);
 		}
-		catch (Exception ex)
+		catch (Exception e)
 		{
 		}
 		if (method == null)
@@ -20,9 +20,9 @@
 			{
 				method = clz.getMethod("is" + name, null);
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				// TODO Robustness: Log exception
+				log.warn("Cannot find getter " + clz + "." + expression, e);
 			}
 		}
 		return method;

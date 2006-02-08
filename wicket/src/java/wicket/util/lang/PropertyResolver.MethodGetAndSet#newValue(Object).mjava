@@ -7,10 +7,12 @@
 			{
 				setMethod = findSetter(getMethod, object.getClass());
 			}
-			
-			// TODO Robustness: Log this
+
 			if (setMethod == null)
+			{
+				log.warn("Null setMethod");
 				return null;
+			}
 
 			Class clz = getMethod.getReturnType();
 			Object value = null;
@@ -19,9 +21,9 @@
 				value = clz.newInstance();
 				setMethod.invoke(object, new Object[] { value });
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				// TODO Robustness: Log exception
+				log.warn("Cannot set new value " + value, e);
 			}
 			return value;
 		}

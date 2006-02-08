@@ -1,18 +1,18 @@
 	/**
 	 * @param clz
-	 * @param exp
+	 * @param expression
 	 * @return introspected field
 	 */
-	private static Field findField(Class clz, String exp)
+	private static Field findField(Class clz, String expression)
 	{
 		Field field = null;
 		try
 		{
-			field = clz.getField(exp);
+			field = clz.getField(expression);
 		}
-		catch (Exception ex)
+		catch (Exception e)
 		{
-			// TODO Robustness: Log exception
+			log.warn("Cannot find field " + clz + "." + expression, e);
 		}
 		return field;
 	}
