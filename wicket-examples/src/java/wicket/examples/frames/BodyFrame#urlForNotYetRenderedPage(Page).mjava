@@ -1,0 +1,19 @@
+	/**
+	 * This is a trick to get the URL for the given page without having the need
+	 * to render that page first. NOT RECOMMENDED FOR NORMAL USE, AS
+	 * {@link wicket.Session#touch(Page)} IS A INTERNAL METHOD.
+	 * 
+	 * @param page
+	 *            the page to get the url to
+	 * @return the url to the page
+	 */
+	private String urlForNotYetRenderedPage(Page page)
+	{
+		// add the page to the session so that it will be available for
+		// rendering
+		getSession().touch(page);
+		RequestCycle requestCycle = getRequestCycle();
+		return requestCycle.getProcessor().getRequestCodingStrategy().encode(requestCycle,
+				new PageRequestTarget(page));
+	}
+
