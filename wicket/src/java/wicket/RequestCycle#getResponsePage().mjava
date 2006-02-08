@@ -7,9 +7,13 @@
 	public final Page getResponsePage()
 	{
 		IRequestTarget target = (IRequestTarget)getRequestTarget();
-		if (target != null && (target instanceof PageRequestTarget))
+		if (target instanceof PageRequestTarget)
 		{
 			return ((IPageRequestTarget)target).getPage();
+		}
+		else if(target instanceof BookmarkablePageRequestTarget)
+		{
+			return ((BookmarkablePageRequestTarget)target).getPage();
 		}
 		return null;
 	}
