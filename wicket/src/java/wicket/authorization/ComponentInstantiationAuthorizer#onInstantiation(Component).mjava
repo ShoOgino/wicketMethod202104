@@ -1,0 +1,11 @@
+	/**
+	 * @see wicket.IComponentInstantiationListener#onInstantiation(wicket.Component)
+	 */
+	public void onInstantiation(Component component)
+	{
+		if (!Session.get().getAuthorizationStrategy().authorizeInstantiation(component.getClass()))
+		{
+			throw new UnauthorizedInstantiationException(component.getClass());
+		}
+	}
+

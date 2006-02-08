@@ -1,0 +1,20 @@
+	/**
+	 * Adds a component instantiation listener. This method should typicaly only
+	 * be called during application startup; it is not thread safe.
+	 * 
+	 * @param listener
+	 *            the listener to add
+	 */
+	public final void add(IComponentInstantiationListener listener)
+	{
+		if (listener == null)
+		{
+			throw new IllegalArgumentException("argument listener may not be null");
+		}
+		IComponentInstantiationListener[] newListeners = new IComponentInstantiationListener[componentInstantiationListeners.length + 1];
+		System.arraycopy(componentInstantiationListeners, 0, newListeners, 0,
+				componentInstantiationListeners.length);
+		newListeners[componentInstantiationListeners.length] = listener;
+		componentInstantiationListeners = newListeners;
+	}
+

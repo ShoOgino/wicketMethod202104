@@ -1,0 +1,18 @@
+	/**
+	 * Removes a component instantiation listener. This method should typicaly
+	 * only be called during application startup; it is not thread safe.
+	 * 
+	 * @param listener
+	 *            the listener to remove
+	 */
+	public final void remove(IComponentInstantiationListener listener)
+	{
+		if (listener != null)
+		{
+			List newListeners = Arrays.asList(componentInstantiationListeners);
+			newListeners.remove(listener);
+			componentInstantiationListeners = (IComponentInstantiationListener[])newListeners
+					.toArray(new IComponentInstantiationListener[newListeners.size()]);
+		}
+	}
+
