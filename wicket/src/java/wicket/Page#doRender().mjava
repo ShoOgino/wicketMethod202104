@@ -3,6 +3,34 @@
 	 */
 	public final void doRender()
 	{
+		// first try to check if the page can be rendered:
+		if (!authorize(RENDER))
+		{
+			if(log.isDebugEnabled())
+			{
+				log.debug("Page not allowed to render: " + this);
+			}
+			throw new RestartResponseException(getApplication().getApplicationSettings().getAccessDeniedPage());
+		}
+		
+		// Visit all this page's children to reset markup streams and check
+		// rendering authorization, as appropriate. We set any result; positive
+		// or negative as a temporary boolean in the components, and when a
+		// authorization exception is thrown it will block the rendering of this
+		// page
+		visitChildren(new IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				// Find out if this component can be rendered
+				final boolean renderAllowed = component.authorize(RENDER);
+
+				// Authorize rendering
+				component.setRenderAllowed(renderAllowed);
+				return IVisitor.CONTINUE_TRAVERSAL;
+			}
+		});
+
 		// Make sure it is really empty
 		renderedComponents = null;
 

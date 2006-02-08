@@ -5,34 +5,6 @@
 	 */
 	protected final void onRender(final MarkupStream markupStream)
 	{
-		// first try to check if the page can be rendered:
-		boolean renderAllowed = authorize(RENDER);
-		if (!renderAllowed)
-		{
-			// TODO General: Do we need to do something with this boolean?
-			// throw a redirect to access denied page?  Or maybe just don't render? (add else clause)
-			// FIXME General: How is it that this authorize check keeps the page from rendering.  It's not apparent and should be documented.
-			log.debug("Page not allowed to render: " + this);
-		}
-		
-		// Visit all this page's children to reset markup streams and check
-		// rendering authorization, as appropriate. We set any result; positive
-		// or negative as a temporary boolean in the components, and when a
-		// authorization exception is thrown it will block the rendering of this
-		// page
-		visitChildren(new IVisitor()
-		{
-			public Object component(final Component component)
-			{
-				// Find out if this component can be rendered
-				final boolean renderAllowed = component.authorize(RENDER);
-
-				// Authorize rendering
-				component.setRenderAllowed(renderAllowed);
-				return IVisitor.CONTINUE_TRAVERSAL;
-			}
-		});
-
 		// Set page's associated markup stream
 		final MarkupStream associatedMarkupStream = getAssociatedMarkupStream();
 		setMarkupStream(associatedMarkupStream);
