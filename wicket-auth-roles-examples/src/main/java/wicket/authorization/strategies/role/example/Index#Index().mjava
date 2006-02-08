@@ -4,7 +4,7 @@
 	public Index()
 	{
 		add(new Label("currentUser", new PropertyModel(this, "session.user")));
-		add(new ListView("users", RolesAuthApplication.USERS)
+		add(new ListView("users", RolesApplication.USERS)
 		{
 			@Override
 			protected void populateItem(ListItem item)
@@ -15,7 +15,7 @@
 					@Override
 					public void onClick()
 					{
-						RolesAuthSession session = (RolesAuthSession)Session.get();
+						RolesSession session = (RolesSession)Session.get();
 						session.setUser(user);
 					}
 				}.add(new Label("userId", new Model(user))));
@@ -35,15 +35,15 @@
 		add(new BookmarkablePageLink("panelsPageLink", PanelsPage.class));
 
 		// pages that are protected using annotations
-		add(new BookmarkablePageLink("adminAnnotBookmarkableLink", AdminAnnotBookmarkablePage.class));
+		add(new BookmarkablePageLink("adminAnnotBookmarkableLink", AdminAnnotationsBookmarkablePage.class));
 		add(new Link("adminAnnotInternalLink")
 		{
 			@Override
 			public void onClick()
 			{
-				setResponsePage(new AdminAnnotInternalPage("bar"));
+				setResponsePage(new AdminAnnotationsInternalPage("bar"));
 			}
 		});
-		add(new BookmarkablePageLink("panelsAnnotPageLink", AnnotPanelsPage.class));
+		add(new BookmarkablePageLink("panelsAnnotPageLink", AnnotationsPanelsPage.class));
 	}
 
