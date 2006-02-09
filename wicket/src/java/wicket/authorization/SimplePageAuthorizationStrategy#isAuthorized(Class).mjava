@@ -1,0 +1,33 @@
+	/**
+	 * @see wicket.authorization.AbstractPageAuthorizationStrategy#isAuthorized(java.lang.Class)
+	 */
+	protected boolean isAuthorized(Class componentClass)
+	{
+		// check classes
+		for (Iterator i = classes.iterator(); i.hasNext();)
+		{
+			Class clazz = (Class)i.next();
+			if (clazz.isAssignableFrom(componentClass))
+			{
+				return isAuthorized();
+			}
+		}
+
+		// check packages
+		Package pkg = componentClass.getPackage();
+		if (pkg != null)
+		{
+			for (Iterator i = packages.iterator(); i.hasNext();)
+			{
+				PackageName packageName = (PackageName)i.next();
+				if (packageName.equals(PackageName.forPackage(pkg)))
+				{
+					return isAuthorized();
+				}
+			}
+		}
+
+		// no match found: allow construction
+		return true;
+	}
+
