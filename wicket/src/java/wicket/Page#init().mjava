@@ -4,8 +4,17 @@
 	private final void init()
 	{
 		// Set the pagemap
-		setPageMap(getRequestCycle() != null ? getRequestCycle().getRequest().getParameter(
-				"pagemap") : null);
+		RequestCycle cycle = getRequestCycle();
+		if (cycle != null)
+		{
+			RequestParameters parameters = cycle.getProcessor().getRequestCodingStrategy().decode(
+					cycle.getRequest());
+			String pagemapName = parameters.getPageMapName();
+			if (pagemapName != null)
+			{
+				setPageMap(pagemapName);
+			}
+		}
 
 		// Set the numeric id on this page
 		setNumericId(getPageMap().nextId());
