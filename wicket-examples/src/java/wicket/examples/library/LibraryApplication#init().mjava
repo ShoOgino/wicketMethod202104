@@ -9,8 +9,10 @@
 		// set the sign in page
 		getApplicationSettings().setSignInPage(SignIn.class);
 
-		// create a simple authorization strategy
-		SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy()
+		// create a simple authorization strategy, that checks all pages of type
+		// Authenticated web page.
+		SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
+				AuthenticatedWebPage.class)
 		{
 			protected boolean isAuthorized()
 			{
@@ -18,9 +20,6 @@
 				return (((LibrarySession)Session.get()).isSignedIn());
 			}
 		};
-		// all pages of type AuthenticatedWebPage must be checked for
-		// authorization
-		authorizationStrategy.add(AuthenticatedWebPage.class);
 
 		// set the strategy
 		getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
