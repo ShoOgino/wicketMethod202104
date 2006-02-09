@@ -3,27 +3,14 @@
 	 */
 	private final void init()
 	{
-		// Set the pagemap
 		RequestCycle cycle = getRequestCycle();
+		String pagemapName = null;
 		if (cycle != null)
 		{
 			RequestParameters parameters = cycle.getProcessor().getRequestCodingStrategy().decode(
 					cycle.getRequest());
-			String pagemapName = parameters.getPageMapName();
-			if (pagemapName != null)
-			{
-				setPageMap(pagemapName);
-			}
+			pagemapName = parameters.getPageMapName();
 		}
-
-		// Set the numeric id on this page
-		setNumericId(getPageMap().nextId());
-
-		// Set versioning of page based on default
-		setVersioned(Application.get().getPageSettings().getVersionPagesByDefault());
-
-		// All Pages are born dirty so they get clustered right away
-		dirty();
-
+		init(pagemapName);
 	}
 

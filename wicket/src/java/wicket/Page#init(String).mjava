@@ -1,0 +1,24 @@
+	/**
+	 * Initializes Page by adding it to the Session and initializing it.
+	 * 
+	 * @param pageMapName
+	 *            the name of the page map to put in.
+	 */
+	private final void init(String pageMapName)
+	{
+		// Set the pagemap
+		if (pageMapName != null)
+		{
+			setPageMap(pageMapName);
+		}
+
+		// Set the numeric id on this page
+		setNumericId(getPageMap().nextId());
+
+		// Set versioning of page based on default
+		setVersioned(Application.get().getPageSettings().getVersionPagesByDefault());
+
+		// All Pages are born dirty so they get clustered right away
+		dirty();
+	}
+
