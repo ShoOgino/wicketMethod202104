@@ -5,7 +5,7 @@
 	 * @see wicket.authorization.IAuthorizationStrategy#authorizeAction(wicket.Component,
 	 *      wicket.authorization.Action)
 	 */
-	public boolean authorizeAction(Component component, Action action)
+	public boolean authorizeAction(final Component component, final Action action)
 	{
 		if (component == null)
 		{
@@ -16,7 +16,6 @@
 			throw new IllegalArgumentException("argument action has to be not null");
 		}
 
-		String[] roles = rolesForAction(component, action);
-		return hasAny(roles);
+		return hasAny((String[])rolesAuthorizedToPerformAction(component, action).toArray());
 	}
 

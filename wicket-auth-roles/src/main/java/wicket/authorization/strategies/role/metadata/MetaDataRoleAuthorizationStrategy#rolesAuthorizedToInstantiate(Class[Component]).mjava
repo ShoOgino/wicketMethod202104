@@ -7,16 +7,14 @@
 	 * @return the roles that are authorized for creation of the componentClass,
 	 *         or null if no specific authorization was configured
 	 */
-	private static String[] rolesForInstantiation(Class componentClass)
+	private static Set<String> rolesAuthorizedToInstantiate(final Class<Component> componentClass)
 	{
-		Application application = Application.get();
-		ComponentCreationAuthBindings authorizedRoles = (ComponentCreationAuthBindings)application
-				.getMetaData(MD_ROLES_FOR_INSTANTIATION);
-		if (authorizedRoles != null)
+		final InstantiationPermissions permissions = (InstantiationPermissions)Application.get()
+				.getMetaData(INSTANTIATION_PERMISSIONS);
+		if (permissions != null)
 		{
-			return authorizedRoles.rolesFor(componentClass);
+			return permissions.authorizedRoles(componentClass);
 		}
-
 		return null;
 	}
 

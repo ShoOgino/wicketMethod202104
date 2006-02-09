@@ -1,0 +1,35 @@
+	/**
+	 * Remove the given authorized role from an action.
+	 * 
+	 * @param action
+	 *            The action
+	 * @param role
+	 *            The role to remove
+	 */
+	public final void unauthorize(final Action action, final String role)
+	{
+		if (action == null)
+		{
+			throw new IllegalArgumentException("Argument action cannot be null");
+		}
+		
+		if (role == null)
+		{
+			throw new IllegalArgumentException("Argument role cannot be null");
+		}
+		
+		Set<String> roles = rolesForAction.get(action);
+		if (roles != null)
+		{
+			roles.remove(role);
+		}
+
+		// If we removed the last authorized role, we authorize the empty role
+		// so that removing authorization can't suddenly open something up to
+		// everyone.
+		if (roles.size() == 0)
+		{
+			roles.add(MetaDataRoleAuthorizationStrategy.NO_ROLE);
+		}
+	}
+

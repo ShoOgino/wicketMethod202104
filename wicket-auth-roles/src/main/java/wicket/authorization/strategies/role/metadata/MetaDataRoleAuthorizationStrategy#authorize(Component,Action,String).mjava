@@ -1,15 +1,24 @@
 	/**
-	 * Authorizes the given role to do perform the given action with component.
+	 * Authorizes the given role to perform the given action on the given
+	 * component.
 	 * 
 	 * @param component
-	 *            the component that is subject to the authorization
+	 *            The component that is subject to the authorization
 	 * @param action
-	 *            the action to authorize
+	 *            The action to authorize
 	 * @param role
-	 *            the role to authorize
+	 *            The role to authorize
 	 */
-	public static final void authorize(Component component, Action action, String role)
+	public static final void authorize(final Component component, final Action action,
+			final String role)
 	{
-		authorize(component, action, new String[] { role });
+		ActionPermissions permissions = (ActionPermissions)component
+				.getMetaData(ACTION_PERMISSIONS);
+		if (permissions == null)
+		{
+			permissions = new ActionPermissions();
+			component.setMetaData(ACTION_PERMISSIONS, permissions);
+		}
+		permissions.authorize(action, role);
 	}
 

@@ -1,0 +1,27 @@
+	/**
+	 * Removes permission for the given role to perform the given action on the
+	 * given component. There is no danger in removing authorization by calling
+	 * this method. If the last authorization grant is removed for a given
+	 * action, the internal role NO_ROLE will automatically be added,
+	 * effectively denying access to all roles (if this was not done, all roles
+	 * would suddenly have access since no authorization is equivalent to full
+	 * access).
+	 * 
+	 * @param component
+	 *            The component
+	 * @param action
+	 *            The action
+	 * @param role
+	 *            The role that is no longer allowed to perform the given action
+	 */
+	public static final void unauthorize(final Component component, final Action action,
+			final String role)
+	{
+		final ActionPermissions permissions = (ActionPermissions)component
+				.getMetaData(ACTION_PERMISSIONS);
+		if (permissions != null)
+		{
+			permissions.unauthorize(action, role);
+		}
+	}
+

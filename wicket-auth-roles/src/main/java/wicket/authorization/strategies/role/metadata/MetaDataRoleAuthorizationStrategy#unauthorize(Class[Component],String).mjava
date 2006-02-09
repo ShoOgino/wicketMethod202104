@@ -1,0 +1,25 @@
+	/**
+	 * Removes permission for the given role to create instances of the given
+	 * component class. There is no danger in removing authorization by calling
+	 * this method. If the last authorization grant is removed for a given
+	 * componentClass, the internal role NO_ROLE will automatically be added,
+	 * effectively denying access to all roles (if this was not done, all roles
+	 * would suddenly have access since no authorization is equivalent to full
+	 * access).
+	 * 
+	 * @param componentClass
+	 *            The component type
+	 * @param role
+	 *            The role that is no longer to be authorized to create
+	 *            instances of type componentClass
+	 */
+	public static final void unauthorize(final Class<Component> componentClass, final String role)
+	{
+		final InstantiationPermissions permissions = (InstantiationPermissions)Application.get()
+				.getMetaData(INSTANTIATION_PERMISSIONS);
+		if (permissions != null)
+		{
+			permissions.unauthorize(componentClass, role);
+		}
+	}
+
