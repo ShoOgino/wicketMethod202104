@@ -3,31 +3,26 @@
 	 */
 	protected void init()
 	{
-        getExceptionSettings().setThrowExceptionOnMissingResource(false);
+		getExceptionSettings().setThrowExceptionOnMissingResource(false);
 		getRequestCycleSettings().setRenderStrategy(Settings.REDIRECT_TO_RENDER);
-		getSecuritySettings().setAuthorizationStrategy(new IAuthorizationStrategy()
+
+		// set the sign in page
+		getApplicationSettings().setSignInPage(SignIn.class);
+
+		// create a simple authorization strategy
+		SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy()
 		{
-			public boolean authorizeAction(Component component, Action action)
+			protected boolean isAuthorized()
 			{
-				return true;
+				// check whether the user is logged on
+				return (((LibrarySession)Session.get()).isSignedIn());
 			}
-		
-			public boolean authorizeInstantiation(Class componentClass)
-			{
-				if(AuthenticatedWebPage.class.isAssignableFrom(componentClass))
-				{
-			        // Is user signed in?
-			        if (((LibrarySession)Session.get()).isSignedIn())
-			        {
-			            // okay to proceed
-			            return true;
-			        }
-			        
-			        // Force sign in
-			        throw new RestartResponseAtInterceptPageException(SignIn.class);
-				}
-				return true;
-			}
-		});
+		};
+		// all pages of type AuthenticatedWebPage must be checked for
+		// authorization
+		authorizationStrategy.add(AuthenticatedWebPage.class);
+
+		// set the strategy
+		getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
 	}
 
