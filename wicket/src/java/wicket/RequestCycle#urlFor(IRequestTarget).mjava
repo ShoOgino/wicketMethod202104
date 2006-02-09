@@ -1,15 +1,14 @@
 	/**
 	 * Returns a URL that references the given request target.
 	 * 
-	 * @see RequestCycle#urlFor(IRequestTarget)
-	 * 
 	 * @param requestTarget
 	 *            the request target to reference
-	 * 
 	 * @return a URL that references the given request target
 	 */
 	public final String urlFor(final IRequestTarget requestTarget)
 	{
-		return getRequestCycle().urlFor(requestTarget);
+		IRequestCodingStrategy requestCodingStrategy = getProcessor()
+				.getRequestCodingStrategy();
+		return requestCodingStrategy.encode(this, requestTarget);
 	}
 

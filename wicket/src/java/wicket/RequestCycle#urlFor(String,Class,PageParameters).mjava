@@ -4,21 +4,22 @@
 	 * all information necessary to instantiate and render the page, it can be
 	 * stored in a user's browser as a stable bookmark.
 	 * 
-	 * @see RequestCycle#urlFor(String, Class, PageParameters)
-	 * 
 	 * @param pageMapName
 	 *            Name of pagemap to use
 	 * @param pageClass
 	 *            Class of page
 	 * @param parameters
 	 *            Parameters to page
-	 * 
-	 * 
 	 * @return Bookmarkable URL to page
 	 */
 	public final String urlFor(final String pageMapName, final Class pageClass,
 			final PageParameters parameters)
 	{
-		return getRequestCycle().urlFor(pageMapName, pageClass, parameters);
+		IRequestTarget target = new BookmarkablePageRequestTarget(pageMapName, pageClass,
+				parameters);
+		
+		IRequestCodingStrategy requestCodingStrategy = getProcessor()
+				.getRequestCodingStrategy();
+		return requestCodingStrategy.encode(this, target);
 	}
 

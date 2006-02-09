@@ -6,13 +6,14 @@
 		// first try to check if the page can be rendered:
 		if (!authorize(RENDER))
 		{
-			if(log.isDebugEnabled())
+			if (log.isDebugEnabled())
 			{
 				log.debug("Page not allowed to render: " + this);
 			}
-			throw new RestartResponseException(getApplication().getApplicationSettings().getAccessDeniedPage());
+			throw new RestartResponseException(getApplication().getApplicationSettings()
+					.getAccessDeniedPage());
 		}
-		
+
 		// Visit all this page's children to reset markup streams and check
 		// rendering authorization, as appropriate. We set any result; positive
 		// or negative as a temporary boolean in the components, and when a

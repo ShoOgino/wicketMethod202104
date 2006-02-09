@@ -4,8 +4,6 @@
 	 * called. A URL returned by this method will not be stable across sessions
 	 * and cannot be bookmarked by a user.
 	 * 
-	 * @see RequestCycle#urlFor(Component, Class)
-	 * 
 	 * @param component
 	 *            The component to reference
 	 * @param listenerInterface
@@ -14,6 +12,14 @@
 	 */
 	public final String urlFor(final Component component, final Class listenerInterface)
 	{
-		return getRequestCycle().urlFor(component, listenerInterface);
+		final Page page=component.getPage();
+		
+		page.setStateless(false);
+		
+		String interfaceName = Classes.name(listenerInterface);
+		IRequestTarget target = new ListenerInterfaceRequestTarget(page, component, getRequestInterfaceMethod(interfaceName));
+		IRequestCodingStrategy requestCodingStrategy = getProcessor()
+				.getRequestCodingStrategy();
+		return requestCodingStrategy.encode(this, target);
 	}
 

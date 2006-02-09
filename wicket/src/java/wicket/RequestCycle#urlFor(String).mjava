@@ -2,14 +2,14 @@
 	 * Returns a URL that references a shared resource through the provided
 	 * resource key.
 	 * 
-	 * @see RequestCycle#urlFor(String)
-	 * 
 	 * @param resourceKey
 	 *            The application global key of the shared resource
 	 * @return The url for the shared resource
 	 */
 	public final String urlFor(final String resourceKey)
 	{
-		return getRequestCycle().urlFor(resourceKey);
+		String url = getProcessor().getRequestCodingStrategy().encode(this,
+				new SharedResourceRequestTarget(resourceKey));
+		return url;
 	}
 
