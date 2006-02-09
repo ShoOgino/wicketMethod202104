@@ -1,11 +1,11 @@
 	/**
 	 * @see wicket.authorization.IAuthorizationStrategy#authorizeInstantiation(java.lang.Class)
 	 */
-	public final boolean authorizeInstantiation(Class/* <Component> */componentClass)
+	public final boolean authorizeInstantiation(final Class/* <Component> */componentClass)
 	{
-		if (Page.class.isAssignableFrom(componentClass))
+		if (isPageClass(componentClass))
 		{
-			if (!isSigninPage(componentClass) && !isAuthorized(componentClass))
+			if (!isSignInPage(componentClass) && !isAuthorized(componentClass))
 			{
 				throw new RestartResponseAtSignInPageException();
 			}

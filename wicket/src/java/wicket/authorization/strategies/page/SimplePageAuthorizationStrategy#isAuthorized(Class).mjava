@@ -1,14 +1,14 @@
 	/**
 	 * @see wicket.authorization.strategies.page.AbstractPageAuthorizationStrategy#isAuthorized(java.lang.Class)
 	 */
-	protected boolean isAuthorized(Class componentClass)
+	protected boolean isAuthorized(final Class pageClass)
 	{
-		if (needsAuthorization.isAssignableFrom(componentClass))
+		if (instanceOf(pageClass, securePageSuperType))
 		{
 			return isAuthorized();
 		}
 
-		// allow construction by default
+		// Allow construction by default
 		return true;
 	}
 
