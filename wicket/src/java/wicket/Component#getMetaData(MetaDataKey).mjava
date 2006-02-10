@@ -8,10 +8,16 @@
 	 */
 	public final Serializable getMetaData(final MetaDataKey key)
 	{
-		Page page = findPage();
-		if (page != null)
+		if (metaData != null)
 		{
-			page.getMetaData(this, key);
+			for (int i = 0; i < metaData.length; i++)
+			{
+				MetaDataEntry m = metaData[i];
+				if (key.equals(m.key))
+				{
+					return m.object;
+				}
+			}
 		}
 		return null;
 	}
