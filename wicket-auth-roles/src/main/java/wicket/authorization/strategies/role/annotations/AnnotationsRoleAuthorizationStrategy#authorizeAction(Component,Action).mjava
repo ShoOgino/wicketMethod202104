@@ -5,12 +5,12 @@
 	public boolean authorizeAction(Component component, Action action)
 	{
 		// check for a single action
-		AuthorizedAction annotAction = component.getClass().getAnnotation(AuthorizedAction.class);
-		if (annotAction != null)
+		final AuthorizedAction authorizedAction = component.getClass().getAnnotation(AuthorizedAction.class);
+		if (authorizedAction != null)
 		{
-			if (annotAction.action().equals(action.toString()))
+			if (authorizedAction.action().equals(action.toString()))
 			{
-				if (!hasAny(annotAction.roles()))
+				if (!hasAny(toSet(authorizedAction.roles())))
 				{
 					return false;
 				}
@@ -18,15 +18,15 @@
 		}
 
 		// check for multiple actions
-		AuthorizedActions annotActions = component.getClass()
+		AuthorizedActions authorizedActions = component.getClass()
 				.getAnnotation(AuthorizedActions.class);
-		if (annotActions != null)
+		if (authorizedActions != null)
 		{
-			for (AuthorizedAction a : annotActions.actions())
+			for (AuthorizedAction a : authorizedActions.actions())
 			{
 				if (a.action().equals(action.toString()))
 				{
-					if (!hasAny(a.roles()))
+					if (!hasAny(toSet(a.roles())))
 					{
 						return false;
 					}
