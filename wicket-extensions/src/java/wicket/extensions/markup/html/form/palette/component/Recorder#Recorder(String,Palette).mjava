@@ -1,0 +1,30 @@
+	/**
+	 * @param id
+	 *            component id
+	 * @param palette
+	 *            parent palette object
+	 */
+	public Recorder(String id, Palette palette)
+	{
+		super(id);
+		this.palette = palette;
+
+		// construct the model string based on selection collection
+		IChoiceRenderer renderer = getPalette().getChoiceRenderer();
+		StringBuffer modelStringBuffer = new StringBuffer();
+		Iterator selection = getPalette().getModelCollection().iterator();
+		while (selection.hasNext())
+		{
+			modelStringBuffer.append(renderer.getIdValue(selection.next(), 0));
+			if (selection.hasNext())
+			{
+				modelStringBuffer.append(",");
+			}
+		}
+
+		// set model and update ids array
+		String modelString = modelStringBuffer.toString();
+		setModel(new Model(modelString));
+		ids = modelString.split(",");
+	}
+
