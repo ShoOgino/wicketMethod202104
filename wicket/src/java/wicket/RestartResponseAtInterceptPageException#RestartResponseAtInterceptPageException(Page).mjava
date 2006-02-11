@@ -4,8 +4,12 @@
 	 * @param interceptPage
 	 *            redirect page
 	 */
-	public RestartResponseAtInterceptPageException(Page interceptPage)
+	public RestartResponseAtInterceptPageException(final Page interceptPage)
 	{
+		if (interceptPage == null)
+		{
+			throw new IllegalStateException("Argument interceptPage cannot be null");
+		}
 		Session.get().redirectToInterceptPage(interceptPage);
 	}
 
