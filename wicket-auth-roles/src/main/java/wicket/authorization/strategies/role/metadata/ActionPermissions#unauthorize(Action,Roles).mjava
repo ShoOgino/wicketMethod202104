@@ -3,25 +3,25 @@
 	 * 
 	 * @param action
 	 *            The action
-	 * @param role
-	 *            The role to remove
+	 * @param rolesToRemove
+	 *            The comma separated list of roles to remove
 	 */
-	public final void unauthorize(final Action action, final String role)
+	public final void unauthorize(final Action action, final Roles rolesToRemove)
 	{
 		if (action == null)
 		{
 			throw new IllegalArgumentException("Argument action cannot be null");
 		}
 
-		if (role == null)
+		if (rolesToRemove == null)
 		{
-			throw new IllegalArgumentException("Argument role cannot be null");
+			throw new IllegalArgumentException("Argument rolesToRemove cannot be null");
 		}
 
-		Set<String> roles = rolesForAction.get(action);
+		Roles roles = rolesForAction.get(action);
 		if (roles != null)
 		{
-			roles.remove(role);
+			roles.removeAll(rolesToRemove);
 		}
 
 		// If we removed the last authorized role, we authorize the empty role

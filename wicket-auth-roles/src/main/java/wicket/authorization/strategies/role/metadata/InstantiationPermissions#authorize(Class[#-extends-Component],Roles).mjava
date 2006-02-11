@@ -1,0 +1,29 @@
+	/**
+	 * Gives the given role permission to instantiate the given class.
+	 * 
+	 * @param componentClass
+	 *            The component class
+	 * @param rolesToAdd
+	 *            The roles to add
+	 */
+	public final void authorize(final Class< ? extends Component> componentClass, final Roles rolesToAdd)
+	{
+		if (componentClass == null)
+		{
+			throw new IllegalArgumentException("Argument componentClass cannot be null");
+		}
+
+		if (rolesToAdd == null)
+		{
+			throw new IllegalArgumentException("Argument rolesToadd cannot be null");
+		}
+
+		Roles roles = rolesForComponentClass.get(componentClass);
+		if (roles == null)
+		{
+			roles = new Roles();
+			rolesForComponentClass.put(componentClass, roles);
+		}
+		roles.addAll(rolesToAdd);
+	}
+

@@ -1,0 +1,35 @@
+	/**
+	 * Gives permission for the given roles to perform the given action
+	 * 
+	 * @param action
+	 *            The action
+	 * @param rolesToAdd
+	 *            The roles
+	 */
+	public final void authorize(final Action action, final Roles rolesToAdd)
+	{
+		// FIXME Documentation: What is this magic looking code here for?
+		rolesForAction.put(new Action("")
+		{
+			private static final long serialVersionUID = 1L;
+		}, null);
+		
+		if (action == null)
+		{
+			throw new IllegalArgumentException("Argument action cannot be null");
+		}
+
+		if (rolesToAdd == null)
+		{
+			throw new IllegalArgumentException("Argument rolesToAdd cannot be null");
+		}
+
+		Roles roles = rolesForAction.get(action);
+		if (roles == null)
+		{
+			roles = new Roles();
+			rolesForAction.put(action, roles);
+		}
+		roles.addAll(rolesToAdd);
+	}
+

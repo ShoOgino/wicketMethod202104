@@ -3,26 +3,26 @@
 	 * 
 	 * @param componentClass
 	 *            The class
-	 * @param role
+	 * @param rolesToRemove
 	 *            The role to deny
 	 */
 	public final void unauthorize(final Class< ? extends Component> componentClass,
-			final String role)
+			final Roles rolesToRemove)
 	{
 		if (componentClass == null)
 		{
 			throw new IllegalArgumentException("Argument componentClass cannot be null");
 		}
 
-		if (role == null)
+		if (rolesToRemove == null)
 		{
-			throw new IllegalArgumentException("Argument role cannot be null");
+			throw new IllegalArgumentException("Argument rolesToRemove cannot be null");
 		}
 
-		final Set<String> roles = rolesForComponentClass.get(componentClass);
+		final Roles roles = rolesForComponentClass.get(componentClass);
 		if (roles != null)
 		{
-			roles.remove(role);
+			roles.removeAll(rolesToRemove);
 		}
 
 		// If we removed the last authorized role, we authorize the empty role

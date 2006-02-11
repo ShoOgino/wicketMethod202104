@@ -6,11 +6,11 @@
 	 *            The component that is subject to the authorization
 	 * @param action
 	 *            The action to authorize
-	 * @param role
-	 *            The role to authorize
+	 * @param roles
+	 *            The comma separated roles to authorize
 	 */
 	public static final void authorize(final Component component, final Action action,
-			final String role)
+			final String roles)
 	{
 		ActionPermissions permissions = (ActionPermissions)component
 				.getMetaData(ACTION_PERMISSIONS);
@@ -19,6 +19,6 @@
 			permissions = new ActionPermissions();
 			component.setMetaData(ACTION_PERMISSIONS, permissions);
 		}
-		permissions.authorize(action, role);
+		permissions.authorize(action, new Roles(roles));
 	}
 

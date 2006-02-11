@@ -12,7 +12,7 @@
 					.getAnnotation(AuthorizedRoles.class);
 			if (packageRolesAllowed != null)
 			{
-				authorized = hasAny(toSet(packageRolesAllowed.value()));
+				authorized = hasAny(new Roles(packageRolesAllowed.value()));
 			}
 		}
 		AuthorizedRoles classRolesAllowed = (AuthorizedRoles)componentClass
@@ -20,7 +20,7 @@
 		if (classRolesAllowed != null)
 		{
 			// if roles are defined for the class, that overrides the package
-			authorized = hasAny(toSet(classRolesAllowed.value()));
+			authorized = hasAny(new Roles(classRolesAllowed.value()));
 		}
 		return authorized;
 	}

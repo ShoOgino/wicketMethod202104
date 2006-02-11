@@ -5,12 +5,12 @@
 	 * 
 	 * @param componentClass
 	 *            The component type that is subject for the authorization
-	 * @param role
-	 *            The role that is authorized to create component instances of
-	 *            type componentClass
+	 * @param roles
+	 *            The comma separated roles that are authorized to create
+	 *            component instances of type componentClass
 	 */
 	public static final void authorize(final Class< ? extends Component> componentClass,
-			final String role)
+			final String roles)
 	{
 		final Application application = Application.get();
 		InstantiationPermissions permissions = (InstantiationPermissions)application
@@ -20,6 +20,6 @@
 			permissions = new InstantiationPermissions();
 			application.setMetaData(INSTANTIATION_PERMISSIONS, permissions);
 		}
-		permissions.authorize(componentClass, role);
+		permissions.authorize(componentClass, new Roles(roles));
 	}
 
