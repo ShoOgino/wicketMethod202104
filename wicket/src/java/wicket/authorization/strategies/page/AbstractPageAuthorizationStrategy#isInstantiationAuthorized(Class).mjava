@@ -3,12 +3,9 @@
 	 */
 	public final boolean isInstantiationAuthorized(final Class/* <Component> */componentClass)
 	{
-		if (isPageClass(componentClass))
+		if (instanceOf(componentClass, Page.class))
 		{
-			if (!isSignInPage(componentClass) && !isAuthorized(componentClass))
-			{
-				throw new RestartResponseAtSignInPageException();
-			}
+			return isPageAuthorized(componentClass);
 		}
 		return true;
 	}

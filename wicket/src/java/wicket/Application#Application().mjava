@@ -25,7 +25,24 @@
 		getResourceSettings().addResourceFactory("buttonFactory",
 				new DefaultButtonImageResourceFactory());
 
-		// Install default component instantiation listener
-		addComponentInstantiationListener(new ComponentInstantiationAuthorizer());
+		// Install default component instantiation listener that uses
+		// authorization strategy to check component instantiations.
+		addComponentInstantiationListener(new IComponentInstantiationListener()
+		{
+			/**
+			 * @see wicket.application.IComponentInstantiationListener#onInstantiation(wicket.Component)
+			 */
+			public void onInstantiation(final Component component)
+			{
+				// If component instantiation is not authorized
+				if (!Session.get().getAuthorizationStrategy().isInstantiationAuthorized(
+						component.getClass()))
+				{
+					// then call any unauthorized component instantiation listener
+					getSecuritySettings().getUnauthorizedComponentInstantiationListener()
+							.onUnauthorizedInstantiation(component);
+				}
+			}
+		});
 	}
 
