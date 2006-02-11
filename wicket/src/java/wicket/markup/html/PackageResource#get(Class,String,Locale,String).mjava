@@ -3,9 +3,9 @@
 	 * loaded for the same criteria.
 	 * 
 	 * @param scope
-	 *            This argument will be used to get the class loader for loading the
-	 *            package resource, and to determine what package it is in. Typically
-	 *            this is the calling class/ the class in which you call this method
+	 *            This argument will be used to get the class loader for loading
+	 *            the package resource, and to determine what package it is in.
+	 *            Typically this is the class in which you call this method
 	 * @param path
 	 *            The path to the resource
 	 * @param locale
@@ -14,19 +14,17 @@
 	 *            The style of the resource (see {@link wicket.Session})
 	 * @return The resource
 	 */
-	public static PackageResource get(final Class scope, final String path,
-			final Locale locale, final String style)
+	public static PackageResource get(final Class scope, final String path, final Locale locale,
+			final String style)
 	{
-		final String packageResourceKey = scope.getPackage().getName() + '/' + SharedResources.resourceKey(path, locale, style);
-		synchronized (resourceMap)
+		final SharedResources sharedResources = Application.get().getSharedResources();
+		PackageResource resource = (PackageResource)sharedResources.get(scope, path, locale, style,
+				true);
+		if (resource == null)
 		{
-			PackageResource resource = (PackageResource)resourceMap.get(packageResourceKey);
-			if (resource == null)
-			{
-				resource = new PackageResource(scope, path, locale, style);
-				resourceMap.put(packageResourceKey, resource);
-			}
-			return resource;
+			resource = new PackageResource(scope, path, locale, style);
+			sharedResources.add(scope, path, locale, style, resource);
 		}
+		return resource;
 	}
 

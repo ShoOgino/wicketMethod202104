@@ -1,27 +1,22 @@
 	/**
-	 * Binds a the resource to the given application object
-	 * Will create the resource if not already in the shared resources of the application object.
+	 * Binds a the resource to the given application object. Will create the
+	 * resource if not already in the shared resources of the application
+	 * object.
 	 * 
 	 * @param application
-	 * 			The application to bind to.
+	 *            The application to bind to.
 	 * @param scope
-	 * 			The scope of the resource.
+	 *            The scope of the resource.
 	 * @param name
-	 * 			The name of the resource.
+	 *            The name of the resource.
 	 * @param locale
-	 * 			The locale of the resource.
+	 *            The locale of the resource.
 	 * @param style
-	 * 			The style of the resource.
+	 *            The style of the resource.
 	 */
-	public static void bind(Application application, Class scope, String name, Locale locale, String style)
+	public static void bind(Application application, Class scope, String name, Locale locale,
+			String style)
 	{
-		Resource resource = application.getSharedResources().get(scope, name, locale, style, true);
-		// Not available yet?
-		if (resource == null)
-		{
-			// Share through application
-			resource = get(scope, name, locale, style);
-			application.getSharedResources().add(scope, name, ((PackageResource)resource).locale, style, resource);
-		}
+		get(scope, name, locale, style);
 	}
 
