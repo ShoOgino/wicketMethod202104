@@ -7,15 +7,12 @@
 	 *            The component's id to search for
 	 * @return -1, if not found
 	 */
-	public int findComponentIndex(String path, String id)
+	public int findComponentIndex(final String path, final String id)
 	{
-		final String wicketId = ComponentTag.DEFAULT_WICKET_NAMESPACE + ":id";
-
-		// Find the tag. Rebuild the tree structure
-		Stack markupElements = new Stack();
-
-		// The path of the current tag
-		String elementsPath = "";
+		if ((id == null) || (id.length() == 0))
+		{
+			throw new IllegalArgumentException("Parameter 'id' must not be null");
+		}
 
 		// TODO General: a component path e.g. "panel:label" does not match 1:1
 		// with the markup in case of ListView, where the path contains a number
@@ -25,94 +22,22 @@
 		// delegate to the various components recursivly to search within there
 		// realm only for the components markup. ListItem could than simply
 		// do nothing and delegate to there parents.
-		if (path == null)
-		{
-			path = "";
-		}
-		else if (path.indexOf(":") != -1)
-		{
-			// s/:\d+//g
-			Pattern re = Pattern.compile(":\\d+");
-			Matcher matcher = re.matcher(path);
-			path = matcher.replaceAll("");
-		}
-		else if (id != null)
-		{
-			// In case of "list:0" where the list item shall be rendered
-			// the number will be removed as well.
-			try
-			{
-				Integer.parseInt(id);
-				id = Strings.afterLast(path, ':');
-				if (id.length() == 0)
-				{
-					id = path;
-					path = "";
-				}
-				else
-				{
-					path = Strings.beforeLast(path, ':');
-				}
-			}
-			catch (NumberFormatException ex)
-			{
-				// No need to do anything
-			}
-		}
-		
-		// The return value
-		int position = -1;
+		String completePath = (path == null || path.length() == 0 ? id : path + ":" + id);
 
-		// Iterate through all markup elements
-		for (int pos = 0; pos < markup.size(); pos++)
-		{
-			// Only ComponentTags are of interest
-			MarkupElement element = (MarkupElement)markup.get(pos);
-			if (element instanceof ComponentTag)
-			{
-				ComponentTag tag = (ComponentTag)element;
-				if (tag.isOpen() || tag.isOpenClose())
-				{
-					// If has wicket:id ..
-					boolean hasWicketId = tag.getAttributes().containsKey(wicketId);
-					if (hasWicketId)
-					{
-						// .. and wicket:id is equals to what I'm looking for
-						if (tag.getId().equals(id))
-						{
-							// .. and the path is right as well
-							if (elementsPath.equals(path))
-							{
-								// .. than we found it.
-								position = pos;
-								break;
-							}
-						}
-					}
+		// s/:\d+//g
+		Pattern re = Pattern.compile(":\\d+");
+		Matcher matcher = re.matcher(completePath);
+		completePath = matcher.replaceAll("");
 
-					// If open tag, put the path of the current element onto the
-					// stack and adjust the path (walk into the subdirectory)
-					if (tag.isOpen())
-					{
-						markupElements.push(elementsPath);
-						if (hasWicketId)
-						{
-							if (elementsPath.length() > 0)
-							{
-								elementsPath += ":";
-							}
-							elementsPath += tag.getId();
-						}
-					}
-				}
-				else if (tag.isClose())
-				{
-					// return to the parent "directory"
-					elementsPath = (String)markupElements.pop();
-				}
-			}
+		// All component tags are registered with the cache
+		final Integer value = (Integer)this.componentMap.get(completePath);
+		if (value == null)
+		{
+			// not found
+			return -1;
 		}
 
-		return position;
+		// return the components position in the markup stream
+		return value.intValue();
 	}
 
