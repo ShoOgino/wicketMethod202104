@@ -3,6 +3,15 @@
 	 */
 	public final IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path)
 	{
+		if (path != null && path.equals("/"))
+		{
+			// make sure path / is always the home page even if a package or a
+			// page was mounted
+			// FIXME Request Processing: maybe we should disallow mounting of a
+			// page onto a / path
+			return null;
+		}
+
 		if (path == null)
 		{
 			return (IRequestTargetUrlCodingStrategy)mountsOnPath.get(null);
