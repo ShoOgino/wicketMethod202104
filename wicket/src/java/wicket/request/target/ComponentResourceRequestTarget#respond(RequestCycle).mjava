@@ -3,6 +3,12 @@
 	 */
 	public void respond(RequestCycle requestCycle)
 	{
+		// Check authorization
+		if (!component.isActionAuthorized(Component.ENABLE))
+		{
+			throw new UnauthorizedActionException(component, Component.ENABLE);
+		}
+
 		page.beforeCallComponent(component, listenerMethod);
 
 		try
@@ -19,6 +25,6 @@
 		finally
 		{
 			page.afterCallComponent(component, listenerMethod);
-		}		
+		}
 	}
 

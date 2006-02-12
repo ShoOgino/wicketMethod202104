@@ -11,6 +11,12 @@
 	protected final void invokeInterface(final Component component, final Method method,
 			final Page page)
 	{
+		// Check authorization
+		if (!component.isActionAuthorized(Component.ENABLE))
+		{
+			throw new UnauthorizedActionException(component, Component.ENABLE);
+		}
+
 		page.beforeCallComponent(component, method);
 
 		try
