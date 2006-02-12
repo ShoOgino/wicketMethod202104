@@ -1,0 +1,36 @@
+	/**
+	 * Constructor
+	 */
+	public FormPage()
+	{
+
+		// add feedback panel with a markup id setter so it can be updated via
+		// ajax
+		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		add(feedback.add(MarkupIdSetter.INSTANCE));
+
+		// add form with markup id setter so it can be updated via ajax
+		Form form = new Form("form", new CompoundPropertyModel(bean));
+		add(form);
+		form.add(MarkupIdSetter.INSTANCE);
+
+		FormComponent fc;
+
+		// add form components to the form as usual
+
+		fc = new RequiredTextField("name");
+		fc.add(LengthValidator.min(4));
+
+		form.add(fc);
+
+		fc = new RequiredTextField("email");
+		fc.add(EmailAddressPatternValidator.getInstance());
+
+		form.add(fc);
+
+		// add ajax form validating behavior to onblur event of all form
+		// components
+		AjaxFormValidatingBehavior.addToAllFormComponents(form, "onblur");
+
+	}
+
