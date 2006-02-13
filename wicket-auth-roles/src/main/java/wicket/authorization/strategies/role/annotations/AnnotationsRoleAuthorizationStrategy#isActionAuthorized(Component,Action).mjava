@@ -2,34 +2,29 @@
 	 * @see wicket.authorization.IAuthorizationStrategy#isActionAuthorized(wicket.Component,
 	 *      wicket.authorization.Action)
 	 */
-	public boolean isActionAuthorized(Component component, Action action)
+	public boolean isActionAuthorized(final Component component, final Action action)
 	{
-		// check for a single action
-		final AuthorizeAction authorizedAction = component.getClass().getAnnotation(AuthorizeAction.class);
-		if (authorizedAction != null)
+		// Check for a single action
+		final AuthorizeAction authorizeAction = component.getClass().getAnnotation(
+				AuthorizeAction.class);
+		if (authorizeAction != null)
 		{
-			if (authorizedAction.action().equals(action.toString()))
+			if (!check(action, authorizeAction))
 			{
-				if (!hasAny(new Roles(authorizedAction.roles())))
-				{
-					return false;
-				}
+				return false;
 			}
 		}
 
-		// check for multiple actions
-		AuthorizeActions authorizedActions = component.getClass()
-				.getAnnotation(AuthorizeActions.class);
+		// Check for multiple actions
+		final AuthorizeActions authorizedActions = component.getClass().getAnnotation(
+				AuthorizeActions.class);
 		if (authorizedActions != null)
 		{
-			for (AuthorizeAction a : authorizedActions.actions())
+			for (final AuthorizeAction a : authorizedActions.actions())
 			{
-				if (a.action().equals(action.toString()))
+				if (!check(action, a))
 				{
-					if (!hasAny(new Roles(a.roles())))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 		}

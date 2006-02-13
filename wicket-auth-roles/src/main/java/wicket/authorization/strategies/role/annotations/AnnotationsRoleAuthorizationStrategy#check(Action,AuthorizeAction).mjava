@@ -1,0 +1,19 @@
+	/**
+	 * @param action
+	 *            The action to check
+	 * @param authorizedAction
+	 *            The annotations information
+	 * @return False if the action is not authorized
+	 */
+	private boolean check(Action action, final AuthorizeAction authorizedAction)
+	{
+		if (authorizedAction.action().equals(action.toString()))
+		{
+			if (!hasAny(new Roles(authorizedAction.roles())))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
