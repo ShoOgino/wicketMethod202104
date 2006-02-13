@@ -1,23 +1,21 @@
 	/**
 	 * Invokes a given interface on a component.
 	 * 
+	 * @param page
+	 *            The Page that contains the component
 	 * @param component
 	 *            The component
-	 * @param method
-	 *            The name of the method to call
-	 * @param page
-	 *            The page on which the component resides
 	 */
-	protected final void invokeInterface(final Component component, final Method method,
-			final Page page)
+	public final void invoke(final Page page, final Component component)
 	{
 		// Check authorization
+		// FIXME Bug: Why is Component.ENABLE hardwired into this code (which came from AbstractListenerInterfaceRequestTarget)!?
 		if (!component.isActionAuthorized(Component.ENABLE))
 		{
 			throw new UnauthorizedActionException(component, Component.ENABLE);
 		}
 
-		page.beforeCallComponent(component, method);
+		page.beforeCallComponent(component, this);
 
 		try
 		{
@@ -26,7 +24,7 @@
 		}
 		catch (InvocationTargetException e)
 		{
-			// honor redirect exception contract defined in IPageFactory
+			// Honor redirect exception contract defined in IPageFactory
 			if (e.getTargetException() instanceof AbstractRestartResponseException)
 			{
 				throw (RuntimeException)e.getTargetException();
@@ -43,7 +41,7 @@
 		}
 		finally
 		{
-			page.afterCallComponent(component, method);
+			page.afterCallComponent(component, this);
 		}
 	}
 

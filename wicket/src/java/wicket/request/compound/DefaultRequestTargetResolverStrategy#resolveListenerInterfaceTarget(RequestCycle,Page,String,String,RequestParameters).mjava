@@ -11,11 +11,12 @@
 	 *            The component path for looking up the component in the page.
 	 * @param interfaceName
 	 *            The interface to resolve.
-	 * @param requestParameters 
+	 * @param requestParameters
 	 * @return The RequestTarget that was resolved
 	 */
 	protected IRequestTarget resolveListenerInterfaceTarget(RequestCycle requestCycle,
-			final Page page, final String componentPath, final String interfaceName, RequestParameters requestParameters)
+			final Page page, final String componentPath, final String interfaceName,
+			RequestParameters requestParameters)
 	{
 		if (interfaceName.equals("IRedirectListener"))
 		{
@@ -23,42 +24,44 @@
 		}
 		else
 		{
-			Method listenerMethod = requestCycle.getRequestInterfaceMethod(interfaceName);
-			if (listenerMethod == null)
+			final RequestListenerInterface listener = RequestCycle
+					.requestListenerInterfaceForName(interfaceName);
+			if (listener == null)
 			{
-				throw new WicketRuntimeException("Attempt to access unknown interface "
-						+ interfaceName);
+				throw new WicketRuntimeException(
+						"Attempt to access unknown request listener interface " + interfaceName);
 			}
-			String componentPart = Strings.afterFirstPathComponent(componentPath,
+			final String componentPart = Strings.afterFirstPathComponent(componentPath,
 					Component.PATH_SEPARATOR);
 			if (Strings.isEmpty(componentPart))
 			{
-				// we have an interface that is not redirect, but no
+				// We have an interface that is not redirect, but no
 				// component... that must be wrong
-				throw new WicketRuntimeException("when trying to call " + listenerMethod
+				throw new WicketRuntimeException("When trying to call " + listener
 						+ ", a component must be provided");
 			}
-			Component component = page.get(componentPart);
+			final Component component = page.get(componentPart);
 			if (component == null)
 			{
 				throw new WicketRuntimeException(
-					"Calling listener methods on non-existing component: " + componentPath);
+						"Calling listener methods on non-existing component: " + componentPath);
 			}
 			if (!component.isVisible())
 			{
 				throw new WicketRuntimeException(
-						"Calling listener methods on components that are not visible is not allowed: " 
-						+ componentPath);
+						"Calling listener methods on components that are not visible is not allowed: "
+								+ componentPath);
 			}
 			if (interfaceName.equals("IResourceListener"))
 			{
-				return new ComponentResourceRequestTarget(page, component, listenerMethod);
+				return new ComponentResourceRequestTarget(page, component, listener);
 			}
 			else if (interfaceName.equals("IBehaviorListener"))
 			{
-				return new BehaviorRequestTarget(page, component, listenerMethod, requestParameters);
+				return new BehaviorRequestTarget(page, component, listener, requestParameters);
 			}
-			return new ListenerInterfaceRequestTarget(page, component, listenerMethod, requestParameters);
+			return new ListenerInterfaceRequestTarget(page, component, listener,
+					requestParameters);
 		}
 	}
 
