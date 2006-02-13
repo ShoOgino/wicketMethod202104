@@ -6,21 +6,20 @@
 	 * 
 	 * @param component
 	 *            The component to reference
-	 * @param listenerInterface
+	 * @param listener
 	 *            The listener interface on the component
 	 * @return A URL that encodes a page, component and interface to call
 	 */
-	public final String urlFor(final Component component, final Class listenerInterface)
+	public final String urlFor(final Component component, final RequestListenerInterface listener)
 	{
 		// Get Page holding component and mark it as stateful.
 		final Page page = component.getPage();
 		page.setStateless(false);
 
 		// Get the listener interface name
-		final String interfaceName = Classes.name(listenerInterface);
-		final IRequestTarget target = new ListenerInterfaceRequestTarget(page, component,
-				requestListenerInterfaceForName(interfaceName));
-		final IRequestCodingStrategy requestCodingStrategy = getProcessor().getRequestCodingStrategy();
+		final IRequestTarget target = new ListenerInterfaceRequestTarget(page, component, listener);
+		final IRequestCodingStrategy requestCodingStrategy = getProcessor()
+				.getRequestCodingStrategy();
 		return requestCodingStrategy.encode(this, target);
 	}
 
