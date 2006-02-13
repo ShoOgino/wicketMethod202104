@@ -5,10 +5,6 @@
 	 * locate this component in the generated markup for post-wicket processing
 	 * such as javascript or an xslt transform.
 	 * <p>
-	 * If the id attribute is present in the markup attributes of this component
-	 * it will be used, otherwise the page-relative path of this component will
-	 * be used.
-	 * <p>
 	 * Note: The component must have been added (directly or indirectly) to a
 	 * container with an associated markup file (Page, Panel or Border).
 	 * 
@@ -16,11 +12,25 @@
 	 */
 	public final String getMarkupId()
 	{
-		String id = getMarkupAttributes().getString("id");
-		if (id == null)
-		{
-			id = getPageRelativePath();
-		}
-		return id;
+		/*
+		 * TODO POST 1.2 restore the code below after the constructor refactor,
+		 * right now its causing too much pain for components inside listviews
+		 * and borders.
+		 * 
+		 * CODE:
+		 * 
+		 * String id = getMarkupAttributes().getString("id"); if (id == null) {
+		 * id = getPageRelativePath(); } return id;
+		 * 
+		 * JAVADOC:
+		 * 
+		 * If the id attribute is present in the markup attributes of this
+		 * component it will be used, otherwise the page-relative path of this
+		 * component will be used. <p>
+		 * 
+		 * 
+		 */
+
+		return getPageRelativePath();
 	}
 
