@@ -14,13 +14,12 @@
 		}
 
 		// Check for multiple actions
-		final AuthorizeActions authorizedActions = componentClass
-				.getAnnotation(AuthorizeActions.class);
-		if (authorizedActions != null)
+		final AuthorizeActions authorizeActionsAnnotation = componentClass.getAnnotation(AuthorizeActions.class);
+		if (authorizeActionsAnnotation != null)
 		{
-			for (final AuthorizeAction authorizeAction : authorizedActions.actions())
+			for (final AuthorizeAction authorizeActionAnnotation : authorizeActionsAnnotation.actions())
 			{
-				if (!check(action, authorizeAction))
+				if (!check(action, authorizeActionAnnotation))
 				{
 					return false;
 				}
