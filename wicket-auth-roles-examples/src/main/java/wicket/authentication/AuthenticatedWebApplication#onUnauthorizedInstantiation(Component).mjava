@@ -1,0 +1,31 @@
+	/**
+	 * Called when an unauthorized component instantiation is about to take
+	 * place (but before it happens).
+	 * 
+	 * @param component
+	 *            The partially constructed component (only the id is guaranteed
+	 *            to be valid).
+	 */
+	public void onUnauthorizedInstantiation(final Component component)
+	{
+		// If there is a sign in page class declared, and the unauthorized
+		// component is a page, but it's not the sign in page
+		if (component instanceof Page)
+		{
+			if (!AuthenticatedWebSession.get().isSignedIn())
+			{
+				// Redirect to intercept page to let the user sign in
+				throw new RestartResponseAtInterceptPageException(SignInPage.class);
+			}
+			else
+			{
+				onUnauthorizedPage((Page)component);
+			}
+		}
+		else
+		{
+			// The component was not a page, so throw an exception
+			throw new UnauthorizedInstantiationException(component.getClass());
+		}
+	}
+
