@@ -20,12 +20,12 @@
 		}
 
 		// Get page map by name, creating the default page map automatically
-		currentPageMap = pageMapForName(pageMapName, pageMapName == PageMap.DEFAULT_NAME);
-		if (currentPageMap != null)
+		PageMap pageMap = pageMapForName(pageMapName, pageMapName == PageMap.DEFAULT_NAME);
+		if (pageMap != null)
 		{
 			// Get page entry for id and version
 			final String id = Strings.firstPathComponent(path, Component.PATH_SEPARATOR);
-			return currentPageMap.get(Integer.parseInt(id), versionNumber);
+			return pageMap.get(Integer.parseInt(id), versionNumber);
 		}
 		return null;
 	}
