@@ -12,12 +12,12 @@
 	 * @param requestListenerInterface
 	 *            The request listener interface object
 	 */
-	static final void registerRequestListenerInterface(
+	private final void registerRequestListenerInterface(
 			final RequestListenerInterface requestListenerInterface)
 	{
 		// Check that a different interface method with the same name has not
 		// already been registered
-		final RequestListenerInterface existingInterface = requestListenerInterfaceForName(requestListenerInterface
+		final RequestListenerInterface existingInterface = RequestListenerInterface.forName(requestListenerInterface
 				.getName());
 		if (existingInterface != null
 				&& existingInterface.getMethod() != requestListenerInterface.getMethod())
@@ -27,8 +27,8 @@
 					+ " because it conflicts with the already registered interface "
 					+ existingInterface);
 		}
-
+	
 		// Save this interface method by the non-qualified class name
-		requestListenerInterfaces.put(requestListenerInterface.getName(), requestListenerInterface);
+		interfaces.put(requestListenerInterface.getName(), requestListenerInterface);
 	}
 
