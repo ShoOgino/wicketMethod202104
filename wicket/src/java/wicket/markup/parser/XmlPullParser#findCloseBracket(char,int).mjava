@@ -1,0 +1,36 @@
+	/**
+	 * Find the char but ignore any text within ".." and '..'
+	 * 
+	 * @param ch
+	 *            The character to search
+	 * @param startIndex
+	 *            Start index
+	 * @return -1 if not found, else the index
+	 */
+	private int findCloseBracket(final char ch, int startIndex)
+	{
+		char quote = 0;
+
+		for (; startIndex < this.input.size(); startIndex++)
+		{
+			char charAt = this.input.charAt(startIndex);
+			if (quote != 0)
+			{
+				if (quote == charAt)
+				{
+					quote = 0;
+				}
+			}
+			else if ((charAt == '"') || (charAt == '\''))
+			{
+				quote = charAt;
+			}
+			else if (charAt == ch)
+			{
+				return startIndex;
+			}
+		}
+
+		return -1;
+	}
+

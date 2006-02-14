@@ -1,70 +1,75 @@
 	/**
 	 * Gets the next tag from the input string.
-	 *
+	 * 
 	 * @return The extracted tag (will always be of type XmlTag).
 	 * @throws ParseException
 	 */
 	public final MarkupElement nextTag() throws ParseException
 	{
-	    if (this.skipUntilText != null)
-	    {
-	        skipUntil();
-	    }
-	    
+		if (this.skipUntilText != null)
+		{
+			skipUntil();
+		}
+
 		// Index of open bracket
-		int openBracketIndex = input.indexOf('<', this.inputPosition);
+		int openBracketIndex = this.input.find('<');
 
 		// While we can find an open tag, parse the tag
 		if (openBracketIndex != -1)
 		{
 			// Determine line number
-			countLinesTo(input, openBracketIndex);
+			this.input.countLinesTo(openBracketIndex);
 
 			// Get index of closing tag and advance past the tag
-			int closeBracketIndex = input.indexOf('>', openBracketIndex);
+			int closeBracketIndex = this.input.find('>', openBracketIndex + 1);
 
 			if (closeBracketIndex == -1)
 			{
 				throw new ParseException("No matching close bracket at position "
-						+ openBracketIndex, this.inputPosition);
+						+ openBracketIndex, this.input.getPosition());
 			}
 
 			// Get the tagtext between open and close brackets
-			String tagText = input.substring(openBracketIndex + 1, closeBracketIndex);
+			String tagText = this.input.getSubstring(openBracketIndex + 1, closeBracketIndex)
+					.toString();
 
 			// Handle comments
 			if (tagText.startsWith("!--"))
 			{
-				// Skip ahead to -->
-				this.inputPosition = input.indexOf("-->", openBracketIndex + 4) + 3;
-
-				if (this.inputPosition == -1)
+				// Skip ahead to "-->". Note that you can not simply test for
+				// tagText.endsWith("--") as the comment might contain a '>'
+				// inside.
+				int pos = this.input.find("-->", openBracketIndex + 1);
+				if (pos == -1)
 				{
-					throw new ParseException("Unclosed comment beginning at " + openBracketIndex,
+					throw new ParseException("Unclosed comment beginning at line:"
+							+ input.getLineNumber() + " column:" + input.getColumnNumber(),
 							openBracketIndex);
 				}
 
+				this.input.setPosition(pos + 3);
 				return nextTag();
 			}
-			
+
 			// CDATA sections might contain "<" which is not part of an XML tag.
 			// Make sure escaped "<" are treated right
 			final String startText = (tagText.length() <= 8 ? tagText : tagText.substring(0, 8));
 			if (startText.toUpperCase().equals("![CDATA["))
 			{
 				// Get index of closing tag and advance past the tag
-				closeBracketIndex = findCloseBracket(input, '>', openBracketIndex);
+				closeBracketIndex = findCloseBracket('>', openBracketIndex);
 
 				if (closeBracketIndex == -1)
 				{
 					throw new ParseException("No matching close bracket at position "
-							+ openBracketIndex, this.inputPosition);
+							+ openBracketIndex, this.input.getPosition());
 				}
 
 				// Get the tagtext between open and close brackets
-				tagText = input.substring(openBracketIndex + 1, closeBracketIndex);
+				tagText = this.input.getSubstring(openBracketIndex + 1, closeBracketIndex)
+						.toString();
 			}
-			
+
 			{
 				// Type of tag
 				XmlTag.Type type = XmlTag.OPEN;
@@ -87,7 +92,7 @@
 				if (tagText.startsWith("!") || tagText.startsWith("?"))
 				{
 					// Move to position after the tag
-					this.inputPosition = closeBracketIndex + 1;
+					this.input.setPosition(closeBracketIndex + 1);
 
 					// Return next tag
 					return nextTag();
@@ -96,43 +101,45 @@
 				{
 					String lowerCase = tagText.toLowerCase();
 
-					// Often save a (longer) comparison at the expense of a extra shorter one for 's' tags
+					// Often save a (longer) comparison at the expense of a
+					// extra shorter one for 's' tags
 					if ((type == XmlTag.OPEN) && lowerCase.startsWith("s"))
 					{
 						if (lowerCase.startsWith("script"))
 						{
-					    	this.skipUntilText = "script";
+							this.skipUntilText = "script";
 						}
 						else if (lowerCase.startsWith("style"))
 						{
 							this.skipUntilText = "style";
 						}
 					}
-						
+
 					// Parse remaining tag text, obtaining a tag object or null
 					// if it's invalid
 					final XmlTag tag = parseTagText(tagText);
-
 					if (tag != null)
 					{
 						// Populate tag fields
 						tag.type = type;
 						tag.pos = openBracketIndex;
 						tag.length = (closeBracketIndex + 1) - openBracketIndex;
-						tag.text = input.substring(openBracketIndex, closeBracketIndex + 1);
-						tag.lineNumber = lineNumber;
-						tag.columnNumber = columnNumber;
+						tag.text = this.input.getSubstring(openBracketIndex, closeBracketIndex + 1)
+								.toString();
+						tag.lineNumber = this.input.getLineNumber();
+						tag.columnNumber = this.input.getColumnNumber();
 
 						// Move to position after the tag
-						this.inputPosition = closeBracketIndex + 1;
+						this.input.setPosition(closeBracketIndex + 1);
 
 						// Return the tag we found!
 						return tag;
 					}
 					else
 					{
-						throw new ParseException("Malformed tag (line " + lineNumber + ", column "
-								+ columnNumber + ")", openBracketIndex);
+						throw new ParseException("Malformed tag (line "
+								+ this.input.getLineNumber() + ", column "
+								+ this.input.getColumnNumber() + ")", openBracketIndex);
 					}
 				}
 			}

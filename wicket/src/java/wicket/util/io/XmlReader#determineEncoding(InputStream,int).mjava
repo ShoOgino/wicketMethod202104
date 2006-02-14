@@ -3,7 +3,7 @@
 	 * encoding=".." ?&gt;, than set this.encoding and return null. If not,
 	 * return all characters read so far. determineEncoding will read-ahead at
 	 * max. the very first line of the markup.
-	 *
+	 * 
 	 * @param in
 	 *            The markup file
 	 * @param readAheadSize
@@ -17,8 +17,12 @@
 			throws IOException
 	{
 		// Max one line
-		StringBuffer pushBack = new StringBuffer(readAheadSize);
+		final StringBuffer pushBack = new StringBuffer(readAheadSize);
 
+		// True if '<' has been found
+		boolean foundOpenBracket = false;
+		
+		// The current char from the markup file
 		int value;
 		while ((value = in.read()) != -1)
 		{
@@ -43,7 +47,7 @@
 
 		// Save the whole <?xml ..> string for later
 		this.xmlDeclarationString = pushBack.toString().trim();
-		
+
 		// Extract the encoding
 		String encoding = matcher.group(3);
 		if ((encoding == null) || (encoding.length() == 0))

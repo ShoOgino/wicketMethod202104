@@ -1,0 +1,48 @@
+	/**
+	 * Reads and parses markup from a resource such as file.
+	 * 
+	 * @throws IOException
+	 */
+	public void init() throws IOException
+	{
+		// reset: Must come from markup
+		this.encoding = null;
+
+		if (!this.inputStream.markSupported())
+		{
+			throw new IOException("BufferedInputStream does not support mark/reset");
+		}
+
+		// read ahead buffer required for the first line of the markup
+		// (encoding)
+		final int readAheadSize = 80;
+		this.inputStream.mark(readAheadSize);
+
+		// read-ahead the input stream if it starts with <?xml
+		// encoding=".."?>. If yes, set this.encoding.
+		// If no, return the whole line. determineEncoding will read-ahead
+		// at max. the very first line of the markup.
+		final String encoding = determineEncoding(this.inputStream, readAheadSize);
+		if (encoding != null)
+		{
+			this.encoding = encoding;
+		}
+
+		// Depending on the encoding determined from the markup-file, read
+		// the rest either with specific encoding or JVM default
+		final String markup;
+		if (this.encoding == null)
+		{
+			// Use JVM default
+			this.inputStream.reset();
+			this.reader = new BufferedReader(new InputStreamReader(this.inputStream));
+		}
+		else
+		{
+			// Use the encoding as specified in <?xml encoding=".." ?>
+			// Don't re-read <?xml ..> again.
+			// Ignore ALL characters preceding <?xml>
+			this.reader = new BufferedReader(new InputStreamReader(this.inputStream, this.encoding));
+		}
+	}
+
