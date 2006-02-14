@@ -1,19 +1,20 @@
 	/**
-	 * Get session factory
-	 * 
-	 * @return The Session factory
+	 * @see wicket.Application#getSessionFactory()
 	 */
 	@Override
 	protected final ISessionFactory getSessionFactory()
 	{
 		return new ISessionFactory()
 		{
+			private static final long serialVersionUID = 1L;
+
 			public Session newSession()
 			{
 				try
 				{
-					return webSessionClass.getDeclaredConstructor(AuthenticatedWebApplication.class)
-							.newInstance(AuthenticatedWebApplication.this);
+					return webSessionClass
+							.getDeclaredConstructor(AuthenticatedWebApplication.class).newInstance(
+									AuthenticatedWebApplication.this);
 				}
 				catch (Exception e)
 				{
