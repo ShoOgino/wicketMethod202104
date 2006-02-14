@@ -19,6 +19,11 @@
 		}
 		catch (Exception e)
 		{
+			if (!(e.getCause() instanceof InvocationTargetException && ((InvocationTargetException)e
+					.getCause()).getTargetException() instanceof UnauthorizedInstantiationException))
+			{
+				throw e;
+			}
 		}
 	}
 
