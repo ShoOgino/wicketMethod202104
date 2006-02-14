@@ -1,21 +1,35 @@
-    /**
-     * Creates and returns a {@link java.io.File File} representing a uniquely
-     * named temporary file in the configured repository path. The lifetime of
-     * the file is tied to the lifetime of the <code>FileItem</code> instance;
-     * the file will be deleted when the instance is garbage collected.
-     *
-     * @return The {@link java.io.File File} to be used for temporary storage.
-     */
-    protected File getTempFile() {
-        File tempDir = repository;
-        if (tempDir == null) {
-            tempDir = new File(System.getProperty("java.io.tmpdir"));
-        }
+	/**
+	 * Creates and returns a {@link java.io.File File} representing a uniquely
+	 * named temporary file in the configured repository path. The lifetime of
+	 * the file is tied to the lifetime of the <code>FileItem</code> instance;
+	 * the file will be deleted when the instance is garbage collected.
+	 * 
+	 * @return The {@link java.io.File File} to be used for temporary storage.
+	 */
+	protected File getTempFile()
+	{
+		File tempDir = repository;
+		if (tempDir == null)
+		{
+			String systemTmp = null;
+			try
+			{
+				systemTmp = System.getProperty("java.io.tmpdir");
+			}
+			catch (SecurityException e)
+			{
+				throw new WicketRuntimeException(
+						"Reading property java.io.tmpdir is not allowed"
+								+ " for the current security settings. The repository location needs to be"
+								+ " set manually, or upgrade permissions to allow reading the tmpdir property.");
+			}
+			tempDir = new File(systemTmp);
+		}
 
-        String fileName = "upload_" + getUniqueId() + ".tmp";
+		String fileName = "upload_" + getUniqueId() + ".tmp";
 
-        File f = new File(tempDir, fileName);
-        FileCleaner.track(f, this);
-        return f;
-    }
+		File f = new File(tempDir, fileName);
+		FileCleaner.track(f, this);
+		return f;
+	}
 
