@@ -1,11 +1,15 @@
 	/**
 	 * Write the tag to the response
 	 * 
-	 * @param response The response to write to
-	 * @param stripWicketAttributes if true, wicket:id are removed from output
-	 * @param namespace Wicket's namespace to use
+	 * @param response
+	 *            The response to write to
+	 * @param stripWicketAttributes
+	 *            if true, wicket:id are removed from output
+	 * @param namespace
+	 *            Wicket's namespace to use
 	 */
-	public final void writeOutput(final Response response, final boolean stripWicketAttributes, final String namespace)
+	public final void writeOutput(final Response response, final boolean stripWicketAttributes,
+			final String namespace)
 	{
 		String attributeToBeIgnored = null;
 		if (stripWicketAttributes == true)
@@ -34,18 +38,19 @@
 			for (; iterator.hasNext();)
 			{
 				final String key = (String)iterator.next();
-				if ((key != null) && ((attributeToBeIgnored == null) || 
-						!key.equalsIgnoreCase(attributeToBeIgnored)))
+				if ((key != null)
+						&& ((attributeToBeIgnored == null) || !key
+								.equalsIgnoreCase(attributeToBeIgnored)))
 				{
 					response.write(" ");
 					response.write(key);
 					String value = getString(key);
-					
+
 					// attributes without values are possible, e.g. 'disabled'
-					if (value != null) 
+					if (value != null)
 					{
 						response.write("=\"");
-						value = Strings.replaceAll(value,"\"", "\\\"");
+						value = Strings.replaceAll(value, "\"", "\\\"");
 						response.write(value);
 						response.write("\"");
 					}
