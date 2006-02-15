@@ -2,21 +2,19 @@
 	 * <p>
 	 * Reads the <code>header-part</code> of the current
 	 * <code>encapsulation</code>.
-	 * 
 	 * <p>
 	 * Headers are returned verbatim to the input stream, including the trailing
 	 * <code>CRLF</code> marker. Parsing is left to the application.
 	 * 
-	 * <p>
-	 * TODO Robustness: Allow limiting maximum header size to protect against
-	 * abuse.
+	 * @param maxSize
+	 *            The maximum amount to read before giving up
 	 * 
 	 * @return The <code>header-part</code> of the current encapsulation.
 	 * 
 	 * @exception MalformedStreamException
 	 *                if the stream ends unexpecetedly.
 	 */
-	public String readHeaders() throws MalformedStreamException
+	public String readHeaders(final int maxSize) throws MalformedStreamException
 	{
 		int i = 0;
 		byte[] b = new byte[1];
@@ -35,6 +33,10 @@
 				throw new MalformedStreamException("Stream ended unexpectedly");
 			}
 			size++;
+			if (size > maxSize)
+			{
+				throw new MalformedStreamException("Stream exceeded maximum of " + maxSize + " bytes");
+			}
 			if (b[0] == HEADER_SEPARATOR[i])
 			{
 				i++;
