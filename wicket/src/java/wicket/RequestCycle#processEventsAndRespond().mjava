@@ -1,11 +1,8 @@
 	/**
 	 * Call the event processing and and respond methods on the request
 	 * processor and apply synchronization if needed.
-	 * 
-	 * @param processor
-	 *            the request processor
 	 */
-	private final void respond(IRequestCycleProcessor processor)
+	private final void processEventsAndRespond()
 	{
 		// Use any synchronization lock provided by the target
 		Object lock = getRequestTarget().getLock(this);
@@ -13,12 +10,12 @@
 		{
 			synchronized (lock)
 			{
-				processor.respond(this);
+				doProcessEventsAndRespond(processor);
 			}
 		}
 		else
 		{
-			processor.respond(this);
+			doProcessEventsAndRespond(processor);
 		}
 	}
 
