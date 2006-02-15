@@ -2,13 +2,18 @@
 	 * Gets the request parameters object using the instance of
 	 * {@link IRequestCodingStrategy} of the provided request cycle processor.
 	 * 
-	 * @param processor
-	 *            the request cycle processor
 	 * @return the request parameters object
 	 */
-	private final RequestParameters getRequestParameters(IRequestCycleProcessor processor)
+	public final RequestParameters getRequestParameters()
 	{
+		// reused cached parameters
+		if (requestParameters != null)
+		{
+			return requestParameters;
+		}
+
 		// get the request encoder to decode the request parameters
+		IRequestCycleProcessor processor = RequestCycle.get().getProcessor();
 		final IRequestCodingStrategy encoder = processor.getRequestCodingStrategy();
 		if (encoder == null)
 		{
@@ -18,7 +23,7 @@
 
 		// decode the request parameters into a strongly typed parameters
 		// object that is to be used by the target resolving
-		final RequestParameters requestParameters = encoder.decode(getRequest());
+		requestParameters = encoder.decode(this);
 		if (requestParameters == null)
 		{
 			throw new WicketRuntimeException("request parameters must be not-null (provided by "
