@@ -32,11 +32,17 @@
 		// If value is cached already ...
 		String id = createCacheId(componentClass, locale, style, key);
 
-		// The cached key value, NULL can be returned so that we don't search a second time for the same id.
+		// The cached key value, NULL can be returned so that we don't search a
+		// second time for the same id.
 		String string = getCachedValue(id);
 
+		// Check now if the string was NULL (not found the last time)
+		if (string == NULL)
+		{
+			string = null;
+		}
 		// If not found in the cache
-		if (string == null)
+		else if (string == null)
 		{
 			string = traverseResourceLoaders(key, path, searchStack, locale, style);
 
@@ -52,7 +58,7 @@
 				this.cachedValues.put(id, NULL);
 			}
 		}
-		// Check now if the string was NULL (not found the last time)
-		return string == NULL?null:string;
+
+		return string;
 	}
 
