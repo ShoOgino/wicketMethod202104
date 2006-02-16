@@ -1,5 +1,7 @@
 	/**
-	 * Test Tree put on a page with a border. Tests first render, and render after a node click.
+	 * Test Tree put on a page with a border. Tests first render, and render
+	 * after a node click.
+	 * 
 	 * @throws Exception
 	 */
 	public void testRenderTreePageWithBorder_1() throws Exception
@@ -8,10 +10,13 @@
 
 		Page page = application.getLastRenderedPage();
 		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToRedirectString("?wicket:interface=:0:tree:tree:3:node:junctionLink::ILinkListener");
+		application.getServletRequest().setRequestToRedirectString(
+				'?' + WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME
+						+ "=:0:tree:tree:3:node:junctionLink::ILinkListener");
 		application.processRequestCycle();
 		String document = application.getServletResponse().getDocument();
 
-		assertTrue(DiffUtil.validatePage(document, this.getClass(), "TreePageWithBorderExpectedResult_1-1.html"));
+		assertTrue(DiffUtil.validatePage(document, this.getClass(),
+				"TreePageWithBorderExpectedResult_1-1.html"));
 	}
 
