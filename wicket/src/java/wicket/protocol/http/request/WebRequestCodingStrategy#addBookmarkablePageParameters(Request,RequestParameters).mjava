@@ -4,14 +4,28 @@
 	 * hence if a mount is found, this method will not be called.
 	 * 
 	 * @param request
-	 *            the incomming request
+	 *            the incoming request
 	 * @param parameters
 	 *            the parameters object to set the found values on
 	 */
-	protected void addBookmarkablePageParameters(Request request, RequestParameters parameters)
+	protected void addBookmarkablePageParameters(final Request request, final RequestParameters parameters)
 	{
-		String pageClass = request.getParameter(PageParameters.BOOKMARKABLE_PAGE);
-		parameters.setBookmarkablePageClass(pageClass);
-		parameters.setParameters(request.getParameterMap());
+		final String requestString = request.getParameter(PageParameters.BOOKMARKABLE_PAGE);
+		if (requestString != null)
+		{
+			final String[] components = Strings.split(requestString, Component.PATH_SEPARATOR);
+			if (components.length != 2)
+			{
+				throw new WicketRuntimeException("Invalid bookmarkablePage parameter");
+			}
+			
+			// Extract any pagemap name
+			final String pageMapName = components[0];
+			parameters.setPageMapName(pageMapName.length() == 0 ? PageMap.DEFAULT_NAME : pageMapName);
+			
+			// Extract bookmarkable page class name
+			final String pageClassName = components[1];
+			parameters.setBookmarkablePageClass(pageClassName);			
+		}
 	}
 

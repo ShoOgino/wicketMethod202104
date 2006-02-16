@@ -10,14 +10,17 @@
 	protected final String encode(RequestCycle requestCycle,
 			IBookmarkablePageRequestTarget requestTarget)
 	{
-		final Class pageClass = requestTarget.getPageClass();
-
-		final PageParameters parameters = requestTarget.getPageParameters();
+		// Begin encoding URL
 		final StringBuffer url = new StringBuffer(64);
 		url.append(urlPrefix(requestCycle));
-		url.append("?bookmarkablePage=");
-		url.append(pageClass.getName());
+		url.append('?');
+		url.append(PageParameters.BOOKMARKABLE_PAGE);
+		url.append('=');
+		
+		// Get page Class
+		final Class pageClass = requestTarget.getPageClass();
 
+		// Find pagemap name
 		String pageMapName = requestTarget.getPageMapName();
 		if (pageMapName == null)
 		{
@@ -26,19 +29,26 @@
 			{
 				Page currentPage = ((IPageRequestTarget)currentTarget).getPage();
 				final PageMap pageMap = currentPage.getPageMap();
-				if (!pageMap.isDefault())
+				if (pageMap.isDefault())
 				{
-					url.append("&pagemap=");
-					url.append(pageMap.getName());
+					pageMapName = "";
+				}
+				else
+				{
+					pageMapName = pageMap.getName();
 				}
 			}
-		}
-		else
-		{
-			url.append("&pagemap=");
-			url.append(pageMapName);
+			else
+			{
+				pageMapName = "";
+			}
 		}
 
+		// Add <page-map-name>:<bookmarkable-page-class>
+		url.append(pageMapName + Component.PATH_SEPARATOR + pageClass.getName());
+
+		// Get page parameters
+		final PageParameters parameters = requestTarget.getPageParameters();
 		if (parameters != null)
 		{
 			for (final Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();)
