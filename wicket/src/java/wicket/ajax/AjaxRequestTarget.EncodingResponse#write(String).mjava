@@ -1,0 +1,14 @@
+		/**
+		 * @see wicket.Response#write(java.lang.String)
+		 */
+		public void write(String string)
+		{
+			if (encoder.needsEncoding(string))
+			{
+				string = encoder.encode(string);
+				escaped = true;
+			}
+
+			buffer.append(string);
+		}
+

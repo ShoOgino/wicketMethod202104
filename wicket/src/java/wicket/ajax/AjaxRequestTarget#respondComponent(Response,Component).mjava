@@ -5,11 +5,13 @@
 	 */
 	private void respondComponent(final Response response, final Component component)
 	{
-		String id=component.getMarkupId();
+		String id = component.getMarkupId();
 
-		response.write("<component id=\"" + id + "\">");
-
-		response.write("<![CDATA[");
+		// substitute our encoding response for the real one so we can capture
+		// component's markup in a manner safe for transport inside CDATA block
+		final Response originalResponse = response;
+		tempResponse.reset();
+		RequestCycle.get().setResponse(tempResponse);
 
 		// Initialize temporary variables
 		Page page = component.getPage();
@@ -31,8 +33,24 @@
 			page.endComponentRender(component);
 		}
 
-		response.write("]]>");
+		// restore original response
+		RequestCycle.get().setResponse(originalResponse);
 
-		response.write("</component>");
+
+		response.write("<component id=\"" + id + "\" ");
+		if (tempResponse.isContentsEncoded())
+		{
+			response.write(" encoding=\"");
+			response.write(tempResponse.getEncodingName());
+			response.write("\" ");
+		}
+		response.write("><![CDATA[");
+
+
+		response.write(tempResponse.getContents());
+
+		response.write("]]></component>");
+		
+		tempResponse.reset();
 	}
 
