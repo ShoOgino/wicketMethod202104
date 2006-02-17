@@ -1,18 +1,18 @@
 	/**
 	 * @see wicket.request.target.coding.IRequestTargetUrlCodingStrategy#encode(wicket.IRequestTarget)
 	 */
-	public final String encode(IRequestTarget requestTarget)
+	public final String encode(final IRequestTarget requestTarget)
 	{
 		if (!(requestTarget instanceof IBookmarkablePageRequestTarget))
 		{
-			throw new IllegalArgumentException("this encoder can only be used with instances of "
+			throw new IllegalArgumentException("This encoder can only be used with instances of "
 					+ IBookmarkablePageRequestTarget.class.getName());
 		}
-		StringBuffer url = new StringBuffer();
+		final StringBuffer url = new StringBuffer();
 		url.append(getMountPath());
-		IBookmarkablePageRequestTarget target = (IBookmarkablePageRequestTarget)requestTarget;
+		final IBookmarkablePageRequestTarget target = (IBookmarkablePageRequestTarget)requestTarget;
 
-		// FIXME General: What to do with the page map?
+		target.getPageParameters().put("wicket:pageMapName", pageMapName);
 		appendPageParameters(url, target.getPageParameters());
 		return url.toString();
 	}
