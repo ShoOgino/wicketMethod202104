@@ -16,9 +16,10 @@
 		Application.set(webApplication);
 
 		// Try to see if there is a redirect stored
-		if (webApplication.getRequestCycleSettings().getRenderStrategy() == Settings.REDIRECT_TO_BUFFER)
+		HttpSession httpSession = servletRequest.getSession(false);
+		if (httpSession != null && webApplication.getRequestCycleSettings().getRenderStrategy() == Settings.REDIRECT_TO_BUFFER)
 		{
-			String sessionId = servletRequest.getSession(true).getId();
+			String sessionId = httpSession.getId();
 			String queryString = servletRequest.getQueryString();
 			String requestUri = servletRequest.getRequestURI();
 			String bufferId = requestUri;
