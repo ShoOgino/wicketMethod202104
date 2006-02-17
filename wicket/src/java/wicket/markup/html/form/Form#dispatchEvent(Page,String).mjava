@@ -8,29 +8,22 @@
 	 * @param url
 	 *            The url which describes the component path and the interface
 	 *            to be called.
-	 * @deprecated refactor this to use the
-	 *             {@link wicket.request.IRequestCodingStrategy}
 	 */
-	// TODO Post 1.2: Remove this method?
 	private void dispatchEvent(final Page page, final String url)
 	{
-		final RequestParameters requestParameters = getRequest().getRequestParameters();
-		final Component component = page.get(requestParameters.getComponentPath());
-		if (component == null)
+		RequestCycle rc = RequestCycle.get();
+		IRequestCycleProcessor processor = rc.getProcessor();
+		final RequestParameters requestParameters = processor.getRequestCodingStrategy().decode(new FormDispatchRequest(rc.getRequest(),url));
+		IRequestTarget rt = processor.resolve(rc, requestParameters);
+		if(rt instanceof ListenerInterfaceRequestTarget)
 		{
-			throw new WicketRuntimeException(
-					"Component not found: " + requestParameters.getComponentPath());
+			ListenerInterfaceRequestTarget interfaceTarget = ((ListenerInterfaceRequestTarget)rt);
+			interfaceTarget.getRequestListenerInterface().invoke(page, interfaceTarget.getTarget());
 		}
-		if (!component.isVisible())
+		else
 		{
-			throw new WicketRuntimeException(
-					"Calling listener methods on components that are not visible is not allowed");
-		}
-		final RequestListenerInterface listener = requestParameters.getInterface();
-		if (listener != null)
-		{
-			new FormSubmitInterfaceRequestTarget(page, component, listener)
-					.processEvents(getRequestCycle());
+			throw new WicketRuntimeException("Attempt to access unknown request listener interface " + 
+					requestParameters.getInterfaceName());
 		}
 	}
 
