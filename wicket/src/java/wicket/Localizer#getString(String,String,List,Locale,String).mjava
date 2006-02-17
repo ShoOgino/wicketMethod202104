@@ -30,35 +30,7 @@
 		Class componentClass = (searchStack.size() > 0 ? (Class)searchStack.get(0) : null);
 
 		// If value is cached already ...
-		String id = createCacheId(componentClass, locale, style, key);
-
-		// The cached key value, NULL can be returned so that we don't search a
-		// second time for the same id.
-		String string = getCachedValue(id);
-
-		// Check now if the string was NULL (not found the last time)
-		if (string == NULL)
-		{
-			string = null;
-		}
-		// If not found in the cache
-		else if (string == null)
-		{
-			string = traverseResourceLoaders(key, path, searchStack, locale, style);
-
-			// cache all values, not matter the key has been found or not
-			if (string != null)
-			{
-				this.cachedValues.put(id, string);
-			}
-			else
-			{
-				// ConcurrentReaderHashMap does not allow null values. This is a
-				// substitute
-				this.cachedValues.put(id, NULL);
-			}
-		}
-
+		String string = traverseResourceLoaders(key, path, searchStack, locale, style);
 		return string;
 	}
 

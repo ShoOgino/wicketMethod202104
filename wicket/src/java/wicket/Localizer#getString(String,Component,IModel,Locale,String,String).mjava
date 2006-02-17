@@ -27,60 +27,24 @@
 			final Locale locale, final String style, final String defaultValue)
 			throws MissingResourceException
 	{
-		// Create the cache key
-		Class clazz = (component != null ? component.getClass() : null);
-		String id = createCacheId(clazz, locale, style, key);
+		final List searchStack;
+		final String path;
 		if (component != null)
 		{
-			id += ":" + component.getId();
+			searchStack = getComponentStack(component);
+			path = Strings.replaceAll(component.getPageRelativePath(), ":", ".");
 		}
-
-		// The cached key value, NULL can be returned so that we don't search a
-		// second time for the same id.
-		// TODO juergen? Is this cached value not totally depended on the
-		// searchStack? (getComponentStack(component))
-		// Depending on where the component is used different values could be
-		// returned?
-		String string = getCachedValue(id);
-
-		// If not found in the cache
-		if (string == null)
+		else
 		{
-			final List searchStack;
-			final String path;
-			if (component != null)
-			{
-				searchStack = getComponentStack(component);
-				path = Strings.replaceAll(component.getPageRelativePath(), ":", ".");
-			}
-			else
-			{
-				searchStack = new ArrayList(0);
-				searchStack.add(Application.get().getClass());
-				path = null;
-			}
-
-			string = traverseResourceLoaders(key, path, searchStack, locale, style);
-
-			// cache all values, not matter the key has been found or not
-			if (string != null)
-			{
-				this.cachedValues.put(id, string);
-			}
-			else
-			{
-				// ConcurrentReaderHashMap does not allow null values. This is a
-				// substitute
-				this.cachedValues.put(id, NULL);
-			}
+			searchStack = new ArrayList(0);
+			searchStack.add(Application.get().getClass());
+			path = null;
 		}
+
+		String string = traverseResourceLoaders(key, path, searchStack, locale, style);
 
 		// Check now if the string was NULL (not found the last time)
-		if (string == NULL)
-		{
-			string = null;
-		}
-		else if (string != null)
+		if (string != null)
 		{
 			return substitutePropertyExpressions(component, string, model);
 		}
@@ -95,9 +59,8 @@
 
 		if (resourceSettings.getThrowExceptionOnMissingResource())
 		{
-			throw new MissingResourceException("Unable to find resource: " + key, (clazz != null
-					? getClass().getName()
-					: ""), key);
+			throw new MissingResourceException("Unable to find resource: " + key, 
+					(component != null ? component.getClass().getName() : ""), key);
 		}
 		else
 		{
