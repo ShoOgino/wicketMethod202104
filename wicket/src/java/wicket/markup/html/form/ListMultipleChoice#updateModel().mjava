@@ -5,30 +5,27 @@
 	{
 		final String[] ids = inputAsStringArray();
 
-		// if input was null then value was not submitted (disabled field), ignore it
-		// FIXME General: This can't be done! null is nothing selected! we need check for isEnabled for this.
-//		if (ids != null)
+		// If component is disabled, ignore it
+		if (isEnabled())
 		{
 			// Get the list of selected values
 			Collection selectedValues = (Collection)getModelObject();
-	
 			if (selectedValues != null)
 			{
 				selectedValues.clear();
 			}
-	
-			// Get indices selected from request
-	
+
 			// If one or more ids is selected
 			if (ids != null && ids.length > 0 && !Strings.isEmpty(ids[0]))
 			{
-				if(selectedValues == null)
+				if (selectedValues == null)
 				{
 					selectedValues = new ArrayList();
 				}
+				
 				// Get values that could be selected
 				final List choices = getChoices();
-	
+
 				// Loop through selected indices
 				for (int i = 0; i < ids.length; i++)
 				{
