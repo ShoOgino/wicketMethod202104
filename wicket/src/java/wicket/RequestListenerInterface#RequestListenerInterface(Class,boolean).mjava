@@ -1,0 +1,51 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param listenerInterfaceClass
+	 *            The interface class, which must extend IRequestListener.
+	 * @param recordsPageVersion
+	 *            Whether or not urls encoded for this interface contain the
+	 *            page version. If set to false the latest page version is
+	 *            always used.
+	 */
+	public RequestListenerInterface(final Class listenerInterfaceClass, boolean recordsPageVersion)
+	{
+		// Ensure that i extends IRequestListener
+		if (!IRequestListener.class.isAssignableFrom(listenerInterfaceClass))
+		{
+			throw new IllegalArgumentException("Class " + listenerInterfaceClass
+					+ " must extend IRequestListener");
+		}
+
+		this.recordsPageVersion = recordsPageVersion;
+
+		// Get interface methods
+		final Method[] methods = listenerInterfaceClass.getMethods();
+
+		// If there is only one method
+		if (methods.length == 1)
+		{
+			// and that method takes no parameters
+			if (methods[0].getParameterTypes().length == 0)
+			{
+				this.method = methods[0];
+			}
+			else
+			{
+				throw new IllegalArgumentException("Method " + methods[0] + " in interface "
+						+ listenerInterfaceClass + " cannot take any arguments");
+			}
+		}
+		else
+		{
+			throw new IllegalArgumentException("Interface " + listenerInterfaceClass
+					+ " can have only one method");
+		}
+
+		// Save short class name
+		this.name = Classes.name(listenerInterfaceClass);
+
+		// Register this listener
+		register();
+	}
+

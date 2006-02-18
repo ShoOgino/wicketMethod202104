@@ -13,7 +13,7 @@
 		// If we're still the original Page and that's what's desired
 		if (versionManager == null)
 		{
-			if (versionNumber == 0)
+			if (versionNumber == 0 || versionNumber == LATEST_VERSION)
 			{
 				return this;
 			}
@@ -28,6 +28,7 @@
 		{
 			// Save original change tracking state
 			final boolean originalTrackChanges = getFlag(FLAG_TRACK_CHANGES);
+
 			try
 			{
 				// While the version manager is potentially playing around with
@@ -36,7 +37,15 @@
 				setFlag(FLAG_TRACK_CHANGES, false);
 
 				// Get page of desired version
-				final Page page = versionManager.getVersion(versionNumber);
+				final Page page;
+				if (versionNumber != LATEST_VERSION)
+				{
+					page = versionManager.getVersion(versionNumber);
+				}
+				else
+				{
+					page = versionManager.getVersion(versionManager.getVersions());
+				}
 
 				// If we went all the way back to the original page
 				if (page != null && page.getCurrentVersionNumber() == 0)

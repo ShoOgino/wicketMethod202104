@@ -8,9 +8,11 @@
 	 * @param parameters
 	 *            the parameters object to set the found values on
 	 */
-	protected void addBookmarkablePageParameters(final Request request, final RequestParameters parameters)
+	protected void addBookmarkablePageParameters(final Request request,
+			final RequestParameters parameters)
 	{
-		final String requestString = request.getParameter(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME);
+		final String requestString = request
+				.getParameter(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME);
 		if (requestString != null)
 		{
 			final String[] components = Strings.split(requestString, Component.PATH_SEPARATOR);
@@ -18,14 +20,16 @@
 			{
 				throw new WicketRuntimeException("Invalid bookmarkablePage parameter");
 			}
-			
+
 			// Extract any pagemap name
 			final String pageMapName = components[0];
-			parameters.setPageMapName(pageMapName.length() == 0 ? PageMap.DEFAULT_NAME : pageMapName);
-			
+			parameters.setPageMapName(pageMapName.length() == 0
+					? PageMap.DEFAULT_NAME
+					: pageMapName);
+
 			// Extract bookmarkable page class name
 			final String pageClassName = components[1];
-			parameters.setBookmarkablePageClass(pageClassName);			
+			parameters.setBookmarkablePageClass(pageClassName);
 		}
 	}
 
