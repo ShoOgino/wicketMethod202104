@@ -36,14 +36,16 @@
 		}
 		else
 		{
-			searchStack = new ArrayList(0);
-			searchStack.add(Application.get().getClass());
+			searchStack = null;
 			path = null;
 		}
 
-		String string = traverseResourceLoaders(key, path, searchStack, locale, style);
+		// Iterate over all registered string resource loaders until the
+		// property has been found
+		String string = visitResourceLoaders(key, path, searchStack, locale, style);
 
-		// Check now if the string was NULL (not found the last time)
+		// If a property value has been found, than replace the placeholder
+		// and we are done
 		if (string != null)
 		{
 			return substitutePropertyExpressions(component, string, model);
@@ -59,7 +61,7 @@
 
 		if (resourceSettings.getThrowExceptionOnMissingResource())
 		{
-			throw new MissingResourceException("Unable to find resource: " + key, 
+			throw new MissingResourceException("Unable to find resource: " + key,
 					(component != null ? component.getClass().getName() : ""), key);
 		}
 		else

@@ -1,5 +1,5 @@
 	/**
-	 * Note: This implementation does NOT allow variable substitution
+	 * Note: This implementation does NOT perform variable substitution
 	 * 
 	 * @param key
 	 *            The key to obtain the resource for
@@ -27,10 +27,15 @@
 		}
 
 		// The top element
-		Class componentClass = (searchStack.size() > 0 ? (Class)searchStack.get(0) : null);
+		Class componentClass = null;
+		if ((searchStack != null) && (searchStack.size() > 0))
+		{
+			componentClass = (Class)searchStack.get(0);
+		}
 
-		// If value is cached already ...
-		String string = traverseResourceLoaders(key, path, searchStack, locale, style);
+		// Get the property by iterating over the register string resouce loader
+		// until the property has been found. Null, if not found.
+		String string = visitResourceLoaders(key, path, searchStack, locale, style);
 		return string;
 	}
 

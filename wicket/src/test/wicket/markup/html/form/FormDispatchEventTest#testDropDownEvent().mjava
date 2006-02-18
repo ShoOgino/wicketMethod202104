@@ -7,21 +7,21 @@
 		{
 			private static final long serialVersionUID = 1L;
 
-			protected void onSubmit() 
+			protected void onSubmit()
 			{
-				throw new WicketRuntimeException("on submit shouldn't be reached");
-			};
+				assertTrue("on submit shouldn't be reached", true);
+			}
 		};
-		
+
 		DropDownChoice dropDown = new DropDownChoice("dropdown")
 		{
 			private static final long serialVersionUID = 1L;
 
-			protected void onSelectionChanged(Object newSelection) 
+			protected void onSelectionChanged(Object newSelection)
 			{
 				selection = true;
-			};
-			
+			}
+
 			/**
 			 * @see wicket.markup.html.form.DropDownChoice#wantOnSelectionChangedNotifications()
 			 */
@@ -31,34 +31,32 @@
 			}
 		};
 
-		
+
 		form.add(dropDown);
-		
+
 		MockPage page = new MockPage();
 		page.add(form);
-		
+
 		application.setupRequestAndResponse();
 		RequestCycle cycle = application.createRequestCycle();
-		
+
 		page.urlFor(IRedirectListener.INTERFACE);
 		cycle.getSession().touch(page);
-		
+
 		try
 		{
 			form.onFormSubmitted();
-			throw new Exception("form should throw an error");
-		} catch(WicketRuntimeException ex)
-		{
-			
+			assertTrue("form should throw an error", true);
 		}
-		
-		application.getServletRequest().setParameter(form.getHiddenFieldId(), dropDown.urlFor(IOnChangeListener.INTERFACE));
-		
+		catch (WicketRuntimeException ex)
+		{
+			// nothing to do
+		}
+
+		application.getServletRequest().setParameter(form.getHiddenFieldId(),
+				dropDown.urlFor(IOnChangeListener.INTERFACE));
+
 		form.onFormSubmitted();
-		
-		if(!selection)
-		{
-			throw new Exception("Selection should be called");
-		}
+		assertTrue("Selection should be called", selection);
 	}
 

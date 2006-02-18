@@ -8,17 +8,19 @@
 	 */
 	private List getComponentStack(final Component component)
 	{
+		// No component, no stack
 		if (component == null)
 		{
 			return null;
 		}
 
-		// Build search stack
-		List searchStack = new ArrayList();
+		// Build the search stack
+		final List searchStack = new ArrayList();
 		searchStack.add(component.getClass());
 
 		if (!(component instanceof Page))
 		{
+			// Add all the component on the way to the Page
 			MarkupContainer container = component.getParent();
 			while (container != null)
 			{
