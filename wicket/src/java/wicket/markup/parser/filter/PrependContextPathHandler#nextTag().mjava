@@ -22,19 +22,15 @@
 			return tag;
 		}
 
-		// A new handler is created for each markup file. Hence it is
-		// sufficient to "create" the context path just once.
+		// this call should always get the default of the application or the overriden one.
+		String contextPath = application.getApplicationSettings().getContextPath();
 		if (contextPath == null)
 		{
-			contextPath = ((WebRequestCycle)RequestCycle.get()).getWebRequest().getContextPath();
-			if (contextPath == null)
-			{
-				contextPath = "";
-			}
-			else if (contextPath.endsWith("/") == false)
-			{
-				contextPath += "/";
-			}
+			contextPath = "";
+		}
+		else if (contextPath.endsWith("/") == false)
+		{
+			contextPath += "/";
 		}
 
 		if (contextPath.length() > 0)
