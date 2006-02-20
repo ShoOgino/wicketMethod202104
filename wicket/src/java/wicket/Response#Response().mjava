@@ -3,7 +3,12 @@
      */
     public Response()
     {
-		lineSeparator = (String) java.security.AccessController.doPrivileged(
-	            new sun.security.action.GetPropertyAction("line.separator"));
+		lineSeparator = (String)AccessController.doPrivileged(new PrivilegedAction()
+		{
+			public Object run()
+			{
+				return System.getProperty("line.separator");
+			}
+		});
     }
 
