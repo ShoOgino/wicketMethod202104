@@ -8,38 +8,18 @@
 		// Skip the components body. It will be replaced by the fragment
 		markupStream.skipRawMarkup();
 
-		// remember the current position in the markup. Will have to come back
-		// to it.
-		int currentIndex = markupStream.getCurrentIndex();
-
-		// Find the markup fragment
-		int index = markupStream.findComponentIndex(null, markupId);
-		if (index == -1)
+		if (this.markupProvider == null)
 		{
-			throw new MarkupException("Markup does not contain a fragment with id=" + markupId
-					+ "; Component: " + toString());
+			renderFragment(markupStream, openTag);
 		}
-
-		// Set the markup stream position to where the fragment begins
-		markupStream.setCurrentIndex(index);
-
-		try
+		else
 		{
-			// Get the fragments open tag
-			ComponentTag fragmentOpenTag = markupStream.getTag();
+			// The following statement assumes that the markup provider is a
+			// parent
+			// along the line up to the Page
+			final MarkupStream providerMarkupStream = this.markupProvider.getMarkupStream();
 
-			// We'll completely ignore the fragments open tag. It'll not be
-			// rendered
-			markupStream.next();
-
-			// Render the body of the fragment
-			super.onComponentTagBody(markupStream, fragmentOpenTag);
-		}
-		finally
-		{
-			// Make sure the markup stream is positioned where we started back
-			// at the original component
-			markupStream.setCurrentIndex(currentIndex);
+			renderFragment(providerMarkupStream, openTag);
 		}
 	}
 
