@@ -8,7 +8,9 @@
 			/* Determine range of line numbers involved in each file. */
 			analyze_hunk(hunk);
 			if (deletes == 0 && inserts == 0)
+			{
 				return;
+			}
 
 			/* Print out the line number header for this hunk */
 			print_number_range(',', first0, last0);
@@ -22,7 +24,9 @@
 				{
 					/* Resume the insert, if we stopped. */
 					if (!inserting)
+					{
 						outfile.println(i - first1 + first0 + "a");
+					}
 					inserting = true;
 
 					/*
@@ -40,13 +44,17 @@
 						inserting = false;
 					}
 					else
+					{
 						/* Line is not `.', so output it unmodified. */
 						print_1_line("", file1[i]);
+					}
 				}
 
 				/* End insert mode, if we are still in it. */
 				if (inserting)
+				{
 					outfile.println(".");
+				}
 			}
 		}
 

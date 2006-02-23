@@ -6,7 +6,9 @@
 			analyze_hunk(hunk);
 
 			if (deletes == 0 && inserts == 0)
+			{
 				return;
+			}
 
 			/* Include a context's width before and after. */
 
@@ -39,17 +41,21 @@
 					 */
 
 					while (next != null && next.line0 + next.deleted <= i)
+					{
 						next = next.link;
+					}
 
 					/* Compute the marking for line I. */
 
 					String prefix = " ";
 					if (next != null && next.line0 <= i)
+					{
 						/*
 						 * The change NEXT covers this line. If lines were inserted here in file
 						 * 1, this is "changed". Otherwise it is "deleted".
 						 */
 						prefix = (next.inserted > 0) ? "!" : "-";
+					}
 
 					print_1_line(prefix, file0[i]);
 				}
@@ -70,17 +76,21 @@
 					 */
 
 					while (next != null && next.line1 + next.inserted <= i)
+					{
 						next = next.link;
+					}
 
 					/* Compute the marking for line I. */
 
 					String prefix = " ";
 					if (next != null && next.line1 <= i)
+					{
 						/*
 						 * The change NEXT covers this line. If lines were deleted here in file
 						 * 0, this is "changed". Otherwise it is "inserted".
 						 */
 						prefix = (next.deleted > 0) ? "!" : "+";
+					}
 
 					print_1_line(prefix, file1[i]);
 				}

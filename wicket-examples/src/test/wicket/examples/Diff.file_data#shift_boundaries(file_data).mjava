@@ -30,16 +30,20 @@
 				while (i < i_end && !changed[1 + i])
 				{
 					while (other_changed[1 + j++])
+					{
 						/*
 						 * Non-corresponding lines in the other file will count as the preceding
 						 * batch of changes.
 						 */
 						other_preceding = j;
+					}
 					i++;
 				}
 
 				if (i == i_end)
+				{
 					break;
+				}
 
 				start = i;
 				other_start = j;
@@ -49,7 +53,9 @@
 					/* Now find the end of this run of changes. */
 
 					while (i < i_end && changed[1 + i])
+					{
 						i++;
+					}
 					end = i;
 
 					/*
@@ -80,7 +86,9 @@
 						++j;
 					}
 					else
+					{
 						break;
+					}
 				}
 
 				preceding = i;
