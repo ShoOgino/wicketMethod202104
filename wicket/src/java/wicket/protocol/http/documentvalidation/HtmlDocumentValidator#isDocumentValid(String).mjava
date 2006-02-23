@@ -29,22 +29,32 @@
                 case HtmlDocumentParser.COMMENT :
                     valid = validateComment(expectedElements, parser);
                     if (!valid)
-                        end = true;
+					{
+						end = true;
+					}
                     break;
                 case HtmlDocumentParser.OPEN_TAG :
                     valid = validateTag(expectedElements, parser);
                     if (!valid)
-                        end = true;
-                    else
-                        expectedElements = saveOpenTagState(iteratorStack, expectedElements,
+					{
+						end = true;
+					}
+					else
+					{
+						expectedElements = saveOpenTagState(iteratorStack, expectedElements,
                                 tagNameStack);
+					}
                     break;
                 case HtmlDocumentParser.OPENCLOSE_TAG :
                     valid = validateTag(expectedElements, parser);
                     if (valid)
-                        valid = checkOpenCloseTag();
+					{
+						valid = checkOpenCloseTag();
+					}
                     if (!valid)
-                        end = true;
+					{
+						end = true;
+					}
                     break;
                 case HtmlDocumentParser.CLOSE_TAG :
                     expectedElements = validateCloseTag(tagNameStack, parser, expectedElements,
@@ -58,7 +68,9 @@
                 case HtmlDocumentParser.TEXT :
                     valid = validateText(expectedElements, parser);
                     if (!valid)
-                        end = true;
+					{
+						end = true;
+					}
                     break;
             }
         }

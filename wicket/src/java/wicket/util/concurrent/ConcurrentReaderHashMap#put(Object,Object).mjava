@@ -30,8 +30,12 @@
 		Entry e;
 
 		for (e = first; e != null; e = e.next)
+		{
 			if (e.hash == hash && eq(key, e.key))
+			{
 				break;
+			}
+		}
 
 		synchronized (this)
 		{
@@ -46,9 +50,13 @@
 						Entry newEntry = new Entry(hash, key, value, first);
 						tab[index] = newEntry;
 						if (++count >= threshold)
+						{
 							rehash();
+						}
 						else
+						{
 							recordModification(newEntry);
+						}
 						return null;
 					}
 				}

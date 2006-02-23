@@ -52,19 +52,25 @@
 			tab[index] = newEntry;
 
 			if ((segcount = ++seg.count) < threshold)
+			{
 				return null;
+			}
 
 			int bit = (1 << (hash & SEGMENT_MASK));
 			votes = votesForResize;
 			if ((votes & bit) == 0)
+			{
 				votes = votesForResize |= bit;
+			}
 		}
 
 		// Attempt resize if 1/4 segs vote,
 		// or if this seg itself reaches the overall threshold.
 		// (The latter check is just a safeguard to avoid pathological cases.)
 		if (bitcount(votes) >= CONCURRENCY_LEVEL / 4 || segcount > (threshold * CONCURRENCY_LEVEL))
+		{
 			resize(0, tab);
+		}
 
 		return null;
 	}

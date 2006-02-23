@@ -48,21 +48,33 @@
 
 			/* Extend the top-down search by an edit step in each diagonal. */
 			if (fmin > dmin)
+			{
 				fd[fdiagoff + --fmin - 1] = -1;
+			}
 			else
+			{
 				++fmin;
+			}
 			if (fmax < dmax)
+			{
 				fd[fdiagoff + ++fmax + 1] = -1;
+			}
 			else
+			{
 				--fmax;
+			}
 			for (d = fmax; d >= fmin; d -= 2)
 			{
 				int x, y, oldx, tlo = fd[fdiagoff + d - 1], thi = fd[fdiagoff + d + 1];
 
 				if (tlo >= thi)
+				{
 					x = tlo + 1;
+				}
 				else
+				{
 					x = thi;
+				}
 				oldx = x;
 				y = x - d;
 				while (x < xlim && y < ylim && xv[x] == yv[y])
@@ -71,7 +83,9 @@
 					++y;
 				}
 				if (x - oldx > 20)
+				{
 					big_snake = true;
+				}
 				fd[fdiagoff + d] = x;
 				if (odd && bmin <= d && d <= bmax && bd[bdiagoff + d] <= fd[fdiagoff + d])
 				{
@@ -82,21 +96,33 @@
 
 			/* Similar extend the bottom-up search. */
 			if (bmin > dmin)
+			{
 				bd[bdiagoff + --bmin - 1] = Integer.MAX_VALUE;
+			}
 			else
+			{
 				++bmin;
+			}
 			if (bmax < dmax)
+			{
 				bd[bdiagoff + ++bmax + 1] = Integer.MAX_VALUE;
+			}
 			else
+			{
 				--bmax;
+			}
 			for (d = bmax; d >= bmin; d -= 2)
 			{
 				int x, y, oldx, tlo = bd[bdiagoff + d - 1], thi = bd[bdiagoff + d + 1];
 
 				if (tlo < thi)
+				{
 					x = tlo;
+				}
 				else
+				{
 					x = thi - 1;
+				}
 				oldx = x;
 				y = x - d;
 				while (x > xoff && y > yoff && xv[x - 1] == yv[y - 1])
@@ -105,7 +131,9 @@
 					--y;
 				}
 				if (oldx - x > 20)
+				{
 					big_snake = true;
+				}
 				bd[bdiagoff + d] = x;
 				if (!odd && fmin <= d && d <= fmax && bd[bdiagoff + d] <= fd[fdiagoff + d])
 				{
@@ -143,8 +171,12 @@
 							 * significant snake.
 							 */
 							for (k = 1; k <= 20; k++)
+							{
 								if (xvec[x - k] != yvec[x - d - k])
+								{
 									break;
+								}
+							}
 
 							if (k == 21)
 							{
@@ -177,8 +209,12 @@
 							int x = bd[bdiagoff + d];
 
 							for (k = 0; k < 20; k++)
+							{
 								if (xvec[x + k] != yvec[x - d + k])
+								{
 									break;
+								}
+							}
 							if (k == 20)
 							{
 								best = (xlim - bd[bdiagoff + d]) * 2 + dd;
