@@ -17,8 +17,11 @@
 		{
 			throw new WicketRuntimeException("Error while transforming the output: " + this, ex);
 		}
-
-		// Restore the original response object
-		requestCycle.setResponse(this.webResponse);
+		finally
+		{
+			// Restore the original response object
+			requestCycle.setResponse(this.webResponse);
+			this.webResponse = null;
+		}
 	}
 
