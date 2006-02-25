@@ -1,15 +1,14 @@
     /**
      * Will write the export. The default behavior is to write directly to the response. If the ResponseOverrideFilter
      * is configured for this request, will instead write the export content to a StringBuffer in the Request object.
-     * @param cycle
      * @param mimeType mime type to set in the response
      * @param exportString String
      * @param filename name of the file to be saved. Can be null, if set the content-disposition header will be added.
      * @return int
      */
-    protected int writeExport(final RequestCycle cycle, final String mimeType, final String exportString, final String filename)
+    protected int writeExport(final String mimeType, final String exportString, final String filename)
     {
-        WebResponse response = (WebResponse)cycle.getResponse();
+        WebResponse response = (WebResponse)getResponse();
         HttpServletResponse servletResponse = response.getHttpServletResponse();
 
         // response can't be already committed at this time
