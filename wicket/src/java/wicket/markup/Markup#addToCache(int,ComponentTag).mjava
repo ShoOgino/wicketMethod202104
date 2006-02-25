@@ -2,9 +2,10 @@
 	 * Add the tag to the local cache if open or open-close and if wicket:id is
 	 * present
 	 * 
+	 * @param index
 	 * @param tag
 	 */
-	private void addToCache(final ComponentTag tag)
+	private void addToCache(final int index, final ComponentTag tag)
 	{
 		// Only if the tag has wicket:id="xx" and open or open-close
 		if ((tag.isOpen() || tag.isOpenClose()) && tag.getAttributes().containsKey(wicketId))
@@ -15,9 +16,16 @@
 				this.componentMap = new HashMap();
 			}
 
-			final String key = (tag.getPath() != null ? tag.getPath() + ":" + tag.getId() : tag
-					.getId());
-			this.componentMap.put(key, new Integer(this.markup.size() - 1));
+			final String key;
+			if (tag.getPath() != null)
+			{
+				key = tag.getPath() + ":" + tag.getId();
+			}
+			else
+			{
+				key = tag.getId();
+			}
+			this.componentMap.put(key, new Integer(index));
 		}
 	}
 

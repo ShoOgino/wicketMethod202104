@@ -1,5 +1,5 @@
 	/**
-	 * Make all tags immutable and the list of elements unmodifable
+	 * Make all tags immutable and the list of elements unmodifable.
 	 */
 	final void makeImmutable()
 	{
@@ -8,12 +8,17 @@
 			MarkupElement elem = (MarkupElement)this.markup.get(i);
 			if (elem instanceof ComponentTag)
 			{
+				// Make the tag immutable
 				((ComponentTag)elem).makeImmutable();
 			}
 		}
 
 		this.markup = Collections.unmodifiableList(this.markup);
 
+		// We assume all markup elements have now been added. It is 
+		// now time to initialize all remaining variables based
+		// on the markup loaded, which could not be initialized
+		// earlier on.
 		initialize();
 	}
 

@@ -3,6 +3,9 @@
 	 */
 	private void initialize()
 	{
+		// Reset
+		this.componentMap = null;
+		
 		if (markup != null)
 		{
 			// Initialize the index where <wicket:extend> can be found.
@@ -17,6 +20,25 @@
 						headerIndex = i;
 						break;
 					}
+				}
+			}
+
+			// HTML tags like <img> may not have a close tag. But because that
+			// can only be detected until later on in the sequential markup 
+			// reading loop, we only can do it now.
+			StringBuffer componentPath = null;
+			for (int i = 0; i < this.markup.size(); i++)
+			{
+				MarkupElement elem = (MarkupElement)this.markup.get(i);
+				if (elem instanceof ComponentTag)
+				{
+					ComponentTag tag = (ComponentTag) elem;
+					
+					// Set the tags components path 
+					componentPath = setComponentPathForTag(componentPath, tag);
+					
+					// and add it to the local cache to be found fast if required
+					addToCache(i, tag);
 				}
 			}
 		}

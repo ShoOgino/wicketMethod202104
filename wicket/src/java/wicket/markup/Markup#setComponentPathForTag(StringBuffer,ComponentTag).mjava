@@ -2,16 +2,19 @@
 	 * Set the components path within the markup and add the component tag to
 	 * the local cache
 	 * 
+	 * @param componentPath
 	 * @param tag
+	 * @return componentPath
 	 */
-	private void setComponentPath(final ComponentTag tag)
+	private StringBuffer setComponentPathForTag(final StringBuffer componentPath, final ComponentTag tag)
 	{
 		// Only if the tag has wicket:id="xx" and open or open-close
 		if ((tag.isOpen() || tag.isOpenClose()) && tag.getAttributes().containsKey(wicketId))
 		{
 			// With open-close the path does not change. It can/will not have
-			// children
-			if (tag.isOpenClose())
+			// children. The same is true for HTML tags like <br> or <img>
+			// which might not have close tags.
+			if (tag.isOpenClose() || tag.hasNoCloseTag())
 			{
 				// Set the components path.
 				if ((this.currentPath != null) && (this.currentPath.length() > 0))
@@ -50,5 +53,7 @@
 				this.currentPath.setLength(0);
 			}
 		}
+		
+		return this.currentPath;
 	}
 
