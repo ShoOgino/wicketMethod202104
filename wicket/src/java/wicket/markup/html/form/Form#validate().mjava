@@ -4,17 +4,27 @@
 	 */
 	protected void validate()
 	{
-		// Validate model using validation strategy
-		// Visit all the form components and validate each
-		visitFormComponents(new FormComponent.IVisitor()
+		visitFormComponents(new ValidationVisitor()
 		{
-			public void formComponent(final FormComponent formComponent)
+			public void validate(final FormComponent formComponent)
 			{
-				if (formComponent.isVisibleInHierarchy())
-				{
-					// Validate form component
-					formComponent.validate();
-				}
+				formComponent.validateRequired();
+			}
+		});
+
+		visitFormComponents(new ValidationVisitor()
+		{
+			public void validate(final FormComponent formComponent)
+			{
+				formComponent.convertAndValidate();
+			}
+		});
+
+		visitFormComponents(new ValidationVisitor()
+		{
+			public void validate(final FormComponent formComponent)
+			{
+				formComponent.validate();
 			}
 		});
 	}
