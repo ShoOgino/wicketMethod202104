@@ -1,0 +1,25 @@
+	/**
+	 * 
+	 */
+	public void testClickLink()
+	{
+		application.setupRequestAndResponse();
+		application.processRequestCycle();
+		MockLoginPage loginPage = (MockLoginPage)application.getLastRenderedPage();
+		assertEquals(application.getLoginPage(), loginPage.getClass());
+
+		application.setupRequestAndResponse();
+		application.getServletRequest().setRequestToComponent(loginPage.getForm());
+		application.getServletRequest().setParameter(loginPage.getTextField().getInputName(), "admin");
+		application.processRequestCycle();
+
+		// continueToInterceptPage seems to return the same call, causing it to
+		// login twice as a result the lastrendered page is null
+		assertEquals(application.getHomePage(), application.getLastRenderedPage().getClass());
+
+		application.setupRequestAndResponse();
+		application.getServletRequest().setRequestToComponent(application.getLastRenderedPage().get("link"));
+		application.processRequestCycle();
+		assertEquals(application.getApplicationSettings().getAccessDeniedPage(), application.getLastRenderedPage());
+	}
+
