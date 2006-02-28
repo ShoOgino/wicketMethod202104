@@ -9,8 +9,19 @@
 	 */
 	public boolean process()
 	{
-		// Execute validation now before anything else
-		validate();
+		// Validation pass 1: validate required fields
+		validateRequired();
+		if (!hasError())
+		{
+			// Validation pass 2: convert raw input to desired type and check
+			// for errors
+			convertAndValidate();
+			if (!hasError())
+			{
+				// Validation pass 3: run validators
+				validate();
+			}
+		}
 
 		// If a validation error occurred
 		if (hasError())

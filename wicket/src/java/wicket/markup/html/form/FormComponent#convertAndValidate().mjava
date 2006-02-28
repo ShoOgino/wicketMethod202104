@@ -1,0 +1,30 @@
+	/**
+	 * Converts raw input string into the object specified by
+	 * {@link FormComponent#setType(Class)} and records any errors
+	 */
+	public final void convertAndValidate()
+	{
+		if (type == null)
+		{
+			convertedInput = getInput();
+		}
+		else if (!Strings.isEmpty(getInput()))
+		{
+			// FIXME General: how and where do we set conversion locale?
+			// Check value by attempting to convert it
+			final IConverter converter = getConverter();
+			try
+			{
+				convertedInput = converter.convert(getInput(), type);
+			}
+			catch (Exception e)
+			{
+				// FIXME General: for now we do conversion twice because its
+				// easier.
+				// need to figure out a way to generate error message outside of
+				// validators. maybe a static util class?
+				new TypeValidator(type).validate(this);
+			}
+		}
+	}
+
