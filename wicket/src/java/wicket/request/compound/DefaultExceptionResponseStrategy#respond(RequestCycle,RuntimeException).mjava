@@ -15,6 +15,13 @@
 		{
 			requestCycle.setResponsePage(override);
 		}
+		else if(e instanceof AuthorizationException)
+		{
+			// are authorization exceptions always thrown before the real render?
+			// else we need to make a page (see below) or set it hard to a redirect.
+			Class accessDeniedPageClass = application.getApplicationSettings().getAccessDeniedPage();
+			requestCycle.setRequestTarget(new BookmarkablePageRequestTarget(accessDeniedPageClass));
+		}
 		else if (settings.getUnexpectedExceptionDisplay() != IExceptionSettings.SHOW_NO_EXCEPTION_PAGE)
 		{
 			Class internalErrorPageClass = application.getApplicationSettings().getInternalErrorPage();
