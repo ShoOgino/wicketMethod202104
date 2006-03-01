@@ -3,26 +3,16 @@
 	 */
 	protected byte[] getImageData()
 	{
-		// Prevent image data from getting flushed while we access it
-		byte[] data;
-		synchronized (this)
+		// get image data is always called in sync block
+		byte[] data = null;
+		if (imageData!=null)
 		{
-			if (imageData!=null)
-			{
-				data = (byte[]) imageData.get();
-			}
-			else
-			{
-				data = null;
-			}
+			data = (byte[]) imageData.get();
 		}
 		if (data == null)
 		{
 			data = render();
-			synchronized (this)
-			{
-				imageData = new SoftReference(data);
-			}
+			imageData = new SoftReference(data);
 			setLastModifiedTime(Time.now());
 		}
 		return data;
