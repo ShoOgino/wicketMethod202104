@@ -1,0 +1,98 @@
+	/**
+	 * Builds and reports an error message
+	 * 
+	 * @param resourceKeys
+	 *            list of resource keys to try
+	 * @param args
+	 *            argument substituion map
+	 */
+	public void error(Collection/* <String> */resourceKeys, Map/* <String,String> */args)
+	{
+		final Map fullArgs = new HashMap(args.size() + 4);
+		fullArgs.putAll(args);
+		if (!fullArgs.containsKey("input"))
+		{
+			fullArgs.put("input", getInput());
+		}
+		if (!fullArgs.containsKey("name"))
+		{
+			fullArgs.put("name", getId());
+		}
+		if (!fullArgs.containsKey("label"))
+		{
+			Object label = null;
+			if (getLabel() != null)
+			{
+				label = getLabel().getObject(this);
+			}
+			if (label != null)
+			{
+				fullArgs.put("label", label);
+			}
+			else
+			{
+				// apply default value (component id) if key/value can not be
+				// found
+				fullArgs.put("label", getLocalizer().getString(getId(), getParent(), getId()));
+			}
+		}
+
+		final IModel argsModel = new Model((Serializable)fullArgs);
+
+		final Localizer localizer = getLocalizer();
+
+		final Iterator keys = resourceKeys.iterator();
+
+		String message = null;
+
+		while (keys.hasNext())
+		{
+			final String key = (String)keys.next();
+
+			String resource = getId() + "." + key;
+
+			System.out.println("trying key: " + resource);
+
+			// Note: It is important that the default value of "" is provided
+			// to getString() not to throw a MissingResourceException or to
+			// return a default string like "[Warning: String ..."
+			message = localizer.getString(resource, getParent(), argsModel, "");
+
+			// If not found, than ..
+			if (Strings.isEmpty(message))
+			{
+				// Have a 2nd try with the class name as the key. This makes for
+				// keys like "RequiredValidator" in any of the properties files
+				// along the path.
+
+				// Note: It is important that the default value of "" is NOT
+				// provided
+				// to getString() throw either MissingResourceException or to to
+				// return a default string like "[Warning: String ..." in case
+				// the
+				// property could not be found.
+
+				resource = key;
+
+				System.out.println("trying key: " + resource);
+
+				if (keys.hasNext())
+				{
+					message = localizer.getString(resource, getParent(), argsModel, "");
+				}
+				else
+				{
+					message = localizer.getString(resource, getParent(), argsModel);
+				}
+			}
+
+			if (!Strings.isEmpty(message))
+			{
+				break;
+			}
+
+		}
+
+		error(message);
+	}
+

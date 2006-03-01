@@ -1,6 +1,7 @@
 	/**
 	 * Converts raw input string into the object specified by
-	 * {@link FormComponent#setType(Class)} and records any errors
+	 * {@link FormComponent#setType(Class)} and records any errors. Converted
+	 * value is available thorugh {@link FormComponent#getConvertedInput()}
 	 */
 	public final void convertAndValidate()
 	{
@@ -10,8 +11,6 @@
 		}
 		else if (!Strings.isEmpty(getInput()))
 		{
-			// FIXME General: how and where do we set conversion locale?
-			// Check value by attempting to convert it
 			final IConverter converter = getConverter();
 			try
 			{
@@ -19,11 +18,7 @@
 			}
 			catch (Exception e)
 			{
-				// FIXME General: for now we do conversion twice because its
-				// easier.
-				// need to figure out a way to generate error message outside of
-				// validators. maybe a static util class?
-				new TypeValidator(type).validate(this);
+				error(Collections.singleton("TypeValidator"), new HashMap());
 			}
 		}
 	}
