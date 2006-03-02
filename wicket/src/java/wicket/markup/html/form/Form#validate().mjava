@@ -1,31 +1,15 @@
 	/**
-	 * Validates the form's nested children of type {@link FormComponent}. This
-	 * method is typically called before updating any models.
+	 * Validates the form. This method is typically called before updating any
+	 * models.
 	 */
 	protected void validate()
 	{
-		visitFormComponents(new ValidationVisitor()
-		{
-			public void validate(final FormComponent formComponent)
-			{
-				formComponent.validateRequired();
-			}
-		});
+		validateRequired();
 
-		visitFormComponents(new ValidationVisitor()
-		{
-			public void validate(final FormComponent formComponent)
-			{
-				formComponent.validateTypeConversion();
-			}
-		});
+		validateConversion();
 
-		visitFormComponents(new ValidationVisitor()
-		{
-			public void validate(final FormComponent formComponent)
-			{
-				formComponent.validate();
-			}
-		});
+		validateValidators();
+
+		validateMultiValidators();
 	}
 

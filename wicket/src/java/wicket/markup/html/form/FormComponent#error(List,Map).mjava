@@ -1,14 +1,23 @@
 	/**
 	 * Builds and reports an error message. Typically called from a validator.
-	 * This
+	 * 
+	 * TODO Form: Javadoc this more
 	 * 
 	 * @param resourceKeys
 	 *            list of resource keys to try
 	 * @param args
 	 *            argument substituion map
 	 */
-	public final void error(Collection/* <String> */resourceKeys, Map/* <String,String> */args)
+	public final void error(List/* <String> */resourceKeys, Map/* <String,String> */args)
 	{
+		String prefix = getValidatorKeyPrefix();
+		if (Strings.isEmpty(prefix))
+		{
+			prefix = "";
+		}
+
+		// prepare the arguments map by adding default arguments such as input,
+		// name, and label
 		final Map fullArgs = new HashMap(args.size() + 4);
 		fullArgs.putAll(args);
 		if (!fullArgs.containsKey("input"))
@@ -40,15 +49,16 @@
 
 		final IModel argsModel = new Model((Serializable)fullArgs);
 
-		final Localizer localizer = getLocalizer();
+		// iterate through keys in order they were provided
 
+		final Localizer localizer = getLocalizer();
 		final Iterator keys = resourceKeys.iterator();
 
 		String message = null;
 
 		while (keys.hasNext())
 		{
-			final String key = (String)keys.next();
+			final String key = prefix + (String)keys.next();
 
 			String resource = getId() + "." + key;
 
@@ -64,14 +74,7 @@
 				// keys like "RequiredValidator" in any of the properties files
 				// along the path.
 
-				// Note: It is important that the default value of "" is NOT
-				// provided
-				// to getString() throw either MissingResourceException or to to
-				// return a default string like "[Warning: String ..." in case
-				// the
-				// property could not be found.
-
-				resource = key;
+				resource = prefix + key;
 
 				if (keys.hasNext())
 				{
@@ -79,6 +82,13 @@
 				}
 				else
 				{
+					/*
+					 * Note: This is the last key we are going to try. It is
+					 * important that the default value of "" is NOT provided to
+					 * getString() throw either MissingResourceException or to
+					 * to return a default string like "[Warning: String ..." in
+					 * case the property could not be found.
+					 */
 					message = localizer.getString(resource, getParent(), argsModel);
 				}
 			}

@@ -1,0 +1,34 @@
+	/**
+	 * @param validator
+	 *            The form validator to add to the formValidators Object
+	 *            (which may be an array of IFormValidators or a single
+	 *            instance, for efficiency)
+	 */
+	private void formValidators_add(final IFormValidator validator)
+	{
+		if (this.formValidators == null)
+		{
+			this.formValidators = validator;
+		}
+		else
+		{
+			// Get current list size
+			final int size = formValidators_size();
+
+			// Create array that holds size + 1 elements
+			final IFormValidator[] validators = new IFormValidator[size + 1];
+
+			// Loop through existing validators copying them
+			for (int i = 0; i < size; i++)
+			{
+				validators[i] = formValidators_get(i);
+			}
+
+			// Add new validator to the end
+			validators[size] = validator;
+
+			// Save new validator list
+			this.formValidators = validators;
+		}
+	}
+

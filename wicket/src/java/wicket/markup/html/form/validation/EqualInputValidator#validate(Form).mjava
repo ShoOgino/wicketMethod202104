@@ -1,0 +1,18 @@
+	/**
+	 * @see wicket.markup.html.form.validation.IFormValidator#validate(wicket.markup.html.form.Form)
+	 */
+	public void validate(Form form)
+	{
+		// we have a choice to validate the type converted values or the raw
+		// input values, we validate the raw input
+
+		final FormComponent fc0 = comps[0];
+		final FormComponent fc1 = comps[1];
+
+		if (!Objects.equal(fc0.getInput(), fc1.getInput()))
+		{
+			final String key=Classes.simpleName(getClass());
+			fc1.error(Collections.singletonList(key), messageModel());
+		}
+	}
+
