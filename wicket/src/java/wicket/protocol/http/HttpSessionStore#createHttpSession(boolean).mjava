@@ -1,9 +1,12 @@
 	/**
 	 * Create the http session.
 	 * 
+	 * @param createWhenNeeded 
+	 * 					Create the session when there is not one yet. 
+	 * 
 	 * @return The http session
 	 */
-	private final HttpSession createHttpSession()
+	private final HttpSession createHttpSession(boolean createWhenNeeded)
 	{
 		RequestCycle requestCycle = RequestCycle.get();
 		if (requestCycle != null)
@@ -12,10 +15,7 @@
 			if (request instanceof WebRequest)
 			{
 				WebRequest webRequest = (WebRequest)request;
-				if (webRequest != null)
-				{
-					return webRequest.getHttpServletRequest().getSession(true);
-				}
+				return webRequest.getHttpServletRequest().getSession(createWhenNeeded);
 			}
 		}
 		return null;
