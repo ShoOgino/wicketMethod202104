@@ -1,18 +1,18 @@
 	/**
 	 * @param servletResponse
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void writeTo(HttpServletResponse servletResponse) throws IOException
 	{
-		if(headers != null)
+		if (headers != null)
 		{
 			Iterator it = headers.entrySet().iterator();
-			while(it.hasNext())
+			while (it.hasNext())
 			{
 				Map.Entry entry = (Map.Entry)it.next();
 				String name = (String)entry.getKey();
 				Object value = entry.getValue();
-				if(value instanceof List)
+				if (value instanceof List)
 				{
 					List lst = (List)value;
 					for (int i = 0; i < lst.size(); i++)
@@ -26,8 +26,8 @@
 				}
 			}
 		}
-		
-		if(cookies != null)
+
+		if (cookies != null)
 		{
 			for (int i = 0; i < this.cookies.size(); i++)
 			{
@@ -35,7 +35,7 @@
 				servletResponse.addCookie(cookie);
 			}
 		}
-		if(locale != null)
+		if (locale != null)
 		{
 			servletResponse.setLocale(locale);
 		}
@@ -46,6 +46,6 @@
 		final OutputStream out = servletResponse.getOutputStream();
 		out.write(this.byteBuffer);
 		out.close();
-		
+
 	}
 
