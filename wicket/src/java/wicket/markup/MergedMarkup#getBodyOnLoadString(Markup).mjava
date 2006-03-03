@@ -1,0 +1,26 @@
+	/**
+	 * Return the body onLoad attribute of the markup
+	 * 
+	 * @param markup
+	 * @return onLoad attribute
+	 */
+	private String getBodyOnLoadString(final Markup markup)
+	{
+		for (int i=0; i < markup.size(); i++)
+		{
+			MarkupElement elem = markup.get(i);
+			if (elem instanceof ComponentTag)
+			{
+				ComponentTag tag = (ComponentTag) elem;
+				
+				if (tag.isOpen() && "body".equalsIgnoreCase(tag.getName()) && (tag.getNamespace() == null))
+				{
+					String onLoad = tag.getAttributes().getString("onLoad");
+					return onLoad;
+				}
+			}
+		}
+		
+		return null;
+	}
+
