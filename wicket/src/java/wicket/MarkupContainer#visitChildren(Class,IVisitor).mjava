@@ -17,7 +17,7 @@
 			// Get next child component
 			final Component child = children_get(i);
 			Object value = null;
-			
+
 			// Is the child of the correct class (or was no class specified)?
 			if (clazz == null || clazz.isInstance(child))
 			{
@@ -25,23 +25,23 @@
 				value = visitor.component(child);
 
 				// If visitor returns a non-null value, it halts the traversal
-				if ((value != IVisitor.CONTINUE_TRAVERSAL) && 
-						(value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
+				if ((value != IVisitor.CONTINUE_TRAVERSAL)
+						&& (value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
 				{
 					return value;
 				}
 			}
 
 			// If child is a container
-			if ((child instanceof MarkupContainer) && 
-					(value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
+			if ((child instanceof MarkupContainer)
+					&& (value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
 			{
 				// visit the children in the container
 				value = ((MarkupContainer)child).visitChildren(clazz, visitor);
 
 				// If visitor returns a non-null value, it halts the traversal
-				if ((value != IVisitor.CONTINUE_TRAVERSAL) && 
-						(value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
+				if ((value != IVisitor.CONTINUE_TRAVERSAL)
+						&& (value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
 				{
 					return value;
 				}
