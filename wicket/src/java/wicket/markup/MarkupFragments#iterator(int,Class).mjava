@@ -1,0 +1,41 @@
+	/**
+	 * Create an iterator for the tags being an istance of 'matchClass'
+	 * 
+	 * @param startIndex
+	 *            The index to start with
+	 * @param matchClass
+	 *            Iterate over elements matching the class
+	 * @return Iterator
+	 */
+	public final Iterator iterator(final int startIndex, final Class matchClass)
+	{
+		return new Iterator()
+		{
+			int index = startIndex - 1;
+
+			public boolean hasNext()
+			{
+				while (++index < size())
+				{
+					MarkupElement element = get(index);
+					if ((matchClass == null) || matchClass.isInstance(element))
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+
+			public Object next()
+			{
+				return get(index);
+			}
+
+			public void remove()
+			{
+				markupElements.remove(index);
+				index -= 1;
+			}
+		};
+	}
+
