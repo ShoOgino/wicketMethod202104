@@ -20,29 +20,44 @@
 					setLocale(request.getLocale());
 				}
 			});
-			
+
 			RequiredTextField stringTextField = new RequiredTextField("stringProperty");
 			stringTextField.setLabel(new Model("String"));
 			add(stringTextField);
-			RequiredTextField integerTextField = new RequiredTextField("integerProperty", Integer.class);
+			RequiredTextField integerTextField = new RequiredTextField("integerProperty",
+					Integer.class);
 			add(integerTextField);
 			add(new RequiredTextField("doubleProperty", Double.class));
-			// we have a component attached to the label here, as we want to synchronize the
-			// id's of the label, textfield and datepicker. Note that you can perfectly
+			// we have a component attached to the label here, as we want to
+			// synchronize the
+			// id's of the label, textfield and datepicker. Note that you can
+			// perfectly
 			// do without labels
 			WebMarkupContainer dateLabel = new WebMarkupContainer("dateLabel");
 			add(dateLabel);
 			TextField datePropertyTextField = new TextField("dateProperty", Date.class);
 			add(datePropertyTextField);
 			add(new DatePicker("datePicker", dateLabel, datePropertyTextField));
-			add(new RequiredTextField("integerInRangeProperty", Integer.class).add(
-			        IntegerValidator.range(0, 100)));
+			add(new RequiredTextField("integerInRangeProperty", Integer.class).add(IntegerValidator
+					.range(0, 100)));
 			add(new CheckBox("booleanProperty"));
 			RadioChoice rc = new RadioChoice("numberRadioChoice", NUMBERS).setSuffix("");
 			rc.setLabel(new Model("number"));
 			rc.setRequired(true);
 			add(rc);
-			
+
+			RadioGroup group = new RadioGroup("numbersGroup");
+			add(group);
+			ListView persons = new ListView("numbers", NUMBERS)
+			{
+				protected void populateItem(ListItem item)
+				{
+					item.add(new Radio("radio", item.getModel()));
+					item.add(new Label("number", item.getModelObjectAsString()));
+				};
+			};
+			group.add(persons);
+
 			add(new ListMultipleChoice("siteSelection", SITES));
 
 			// as an example, we use a custom converter here.
