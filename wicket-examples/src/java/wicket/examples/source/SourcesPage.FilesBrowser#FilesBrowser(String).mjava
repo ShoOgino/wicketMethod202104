@@ -1,0 +1,28 @@
+		/**
+		 * Constructor.
+		 * 
+		 * @param id
+		 *            the component identifier
+		 */
+		public FilesBrowser(String id)
+		{
+			super(id);
+			ListView lv = new ListView("file", new PackagedResourcesModel())
+			{
+				protected void populateItem(ListItem item)
+				{
+					AjaxFallbackLink link = new AjaxFallbackLink("link", item.getModel())
+					{
+						public void onClick(AjaxRequestTarget target)
+						{
+							setName(getModelObjectAsString());
+							target.addComponent(codePanel);
+						}
+					};
+					link.add(new Label("name", item.getModelObjectAsString()));
+					item.add(link);
+				}
+			};
+			add(lv);
+		}
+

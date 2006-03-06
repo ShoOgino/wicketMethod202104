@@ -1,0 +1,31 @@
+		/**
+		 * Retrieves the package contents for the given URL.
+		 * 
+		 * @param packageListing
+		 *            the url to list.
+		 */
+		private void getPackageContents(URL packageListing)
+		{
+			BufferedReader br = null;
+			try
+			{
+				br = new BufferedReader(new InputStreamReader((InputStream)packageListing.openStream()));
+
+				while (br.ready())
+				{
+					String listing = br.readLine();
+					String extension = Strings.afterLast(listing, '.');
+					if (!listing.endsWith("class"))
+						resources.add(listing);
+				}
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace(System.err);
+			}
+			finally
+			{
+				IOUtils.closeQuietly(br);
+			}
+		}
+
