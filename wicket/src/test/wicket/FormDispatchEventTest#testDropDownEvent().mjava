@@ -3,15 +3,7 @@
 	 */
 	public void testDropDownEvent() throws Exception
 	{
-		Form form = new Form("form")
-		{
-			private static final long serialVersionUID = 1L;
-
-			protected void onSubmit()
-			{
-				submit= true;
-			}
-		};
+		MyForm form = new MyForm("form");
 
 		DropDownChoice dropDown = new DropDownChoice("dropdown")
 		{
@@ -42,11 +34,12 @@
 
 		page.urlFor(IRedirectListener.INTERFACE);
 		cycle.getSession().touch(page);
+		cycle.getSession().update();
 
 		form.onFormSubmitted();
 		assertTrue("form should should set value ", submit);
 
-		application.getServletRequest().setParameter(form.getHiddenFieldId(),
+		application.getServletRequest().setParameter(form.getHiddenField(),
 				dropDown.urlFor(IOnChangeListener.INTERFACE));
 
 		form.onFormSubmitted();
