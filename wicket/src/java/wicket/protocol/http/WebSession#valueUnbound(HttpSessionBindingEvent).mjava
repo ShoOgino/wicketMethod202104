@@ -1,0 +1,19 @@
+	/**
+	 * @see javax.servlet.http.HttpSessionBindingListener#valueUnbound(javax.servlet.http.HttpSessionBindingEvent)
+	 */
+	public void valueUnbound(HttpSessionBindingEvent event)
+	{
+		// will happen when the session gets invalidated or a timeout.
+		String id = event.getSession().getId();
+		Application application = getApplication();
+		if(application instanceof WebApplication)
+		{
+			((WebApplication)application).sessionDestroyed(id);
+		}
+		else
+		{
+			// couldn't clean up the sessions because application not found for this session.
+			// TODO we could try to get it through the servletcontext, but how to get the context key?
+		}
+	}
+
