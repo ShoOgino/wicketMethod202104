@@ -9,7 +9,7 @@
 		// See if the version being accessed is already in the stack
 		boolean add = true;
 		int id = entry.getNumericId();
-		for (int i = 0; i < accessStack.size(); i++)
+		for (int i = accessStack.size()-1; i >=0 ; i--)
 		{
 			final Access access = (Access)accessStack.get(i);
 
@@ -36,8 +36,8 @@
 						Page topPage = (Page)top;
 						if (topPage.getVersions() > 1)
 						{
-							// Remove versions
-							topPage.getVersion(topAccess.getVersion());
+							// Remove version the top access version (-1)
+							topPage.getVersion(topAccess.getVersion()-1);
 						}
 						else
 						{
@@ -51,6 +51,7 @@
 						removeEntry(top);
 					}
 				}
+				break;
 			}
 		}
 

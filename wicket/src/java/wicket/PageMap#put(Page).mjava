@@ -17,7 +17,9 @@
 			final String attribute = attributeForId(entry.getNumericId());
 
 			// Set attribute
-			session.setAttribute(attribute, entry);
+			//session.setAttribute(attribute, entry);
+			// Don't set it directly but add to the dirty map
+			session.dirtyPage(page);
 
 			// Evict any page(s) as need be
 			session.getApplication().getSessionSettings().getPageMapEvictionStrategy().evict(this);
