@@ -41,23 +41,25 @@
 		// attribute
 		String reference = referenceResolver.getReference(tag);
 
+		// create the path info object
+		PathInfo pathInfo = new PathInfo(reference);
 		// now get the resolver delegate
 		IAutolinkResolverDelegate autolinkResolverDelegate = (IAutolinkResolverDelegate)tagNameToAutolinkResolverDelegates
 				.get(tagName);
-		if (autolinkResolverDelegate == null)
+		Component autoComponent = null;
+		if (autolinkResolverDelegate != null)
 		{
-			// fallback on default
-			autolinkResolverDelegate = DEFAULT_RESOLVER_DELEGATE;
+			autoComponent = autolinkResolverDelegate.newAutoComponent(container, autoId, pathInfo);
 		}
 
-		PathInfo pathInfo = new PathInfo(reference);
-		Component autoComponent = autolinkResolverDelegate.newAutoComponent(container, autoId,
-				pathInfo);
 		if (autoComponent == null)
 		{
-			// resolving didn't have the desired result; fallback on the default
-			// resolving
-			autoComponent = DEFAULT_RESOLVER_DELEGATE.newAutoComponent(container, autoId, pathInfo);
+			// resolving didn't have the desired result or there was no delegate
+			// found;
+			// fallback on the default resolving which is a simple component
+			// that leaves
+			// the tag unchanged
+			autoComponent = new AutolinkExternalLink(autoId, pathInfo.reference);
 		}
 
 		return autoComponent;
