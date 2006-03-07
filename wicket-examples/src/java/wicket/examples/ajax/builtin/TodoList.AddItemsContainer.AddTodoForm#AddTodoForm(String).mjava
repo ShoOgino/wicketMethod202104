@@ -1,0 +1,31 @@
+			/**
+			 * Constructor.
+			 * 
+			 * @param id
+			 *            the component id.
+			 */
+			public AddTodoForm(String id)
+			{
+				super(id, new CompoundPropertyModel(new TodoItem()));
+				setOutputMarkupId(true);
+				add(new TextField("text"));
+				add(new AjaxSubmitButton("add", this)
+				{
+					protected void onSubmit(AjaxRequestTarget target)
+					{
+						// retrieve the todo item
+						TodoItem item = (TodoItem)getParent().getModelObject();
+
+						// add the item
+						onAdd(item, target);
+					}
+				});
+				add(new AjaxSubmitButton("cancel", this)
+				{
+					public void onSubmit(AjaxRequestTarget target)
+					{
+						onCancelTodo(target);
+					}
+				});
+			}
+
