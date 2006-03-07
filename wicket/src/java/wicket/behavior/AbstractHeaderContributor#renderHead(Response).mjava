@@ -1,0 +1,35 @@
+	/**
+	 * @see wicket.markup.html.IHeaderContributor#renderHead(wicket.Response)
+	 */
+	public final void renderHead(final Response response)
+	{
+		IHeaderContributor[] contributors = getHeaderContributors();
+		// do nothing if we don't need to
+		if (contributors == null)
+		{
+			return;
+		}
+
+		// get the processed entries for this request
+		Set entries = (Set)processedEntries.get();
+
+		int len = contributors.length;
+		// were any contributors set?
+		if (entries == null)
+		{
+			entries = new HashSet(len);
+			processedEntries.set(entries);
+		}
+
+		for (int i = 0; i < len; i++)
+		{
+			if (!entries.contains(contributors[i]))
+			{
+				// not yet printed for this request: print it
+				contributors[i].renderHead(response);
+				entries.add(contributors[i]);
+			}
+			// else the reference was already printed out: ignore it
+		}
+	}
+
