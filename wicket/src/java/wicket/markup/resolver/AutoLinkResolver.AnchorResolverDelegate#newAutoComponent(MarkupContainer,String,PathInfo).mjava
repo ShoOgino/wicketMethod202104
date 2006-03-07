@@ -1,0 +1,54 @@
+		/**
+		 * @see wicket.markup.resolver.AutoLinkResolver.IAutolinkResolverDelegate#newAutoComponent(wicket.MarkupContainer,
+		 *      java.lang.String,
+		 *      wicket.markup.resolver.AutoLinkResolver.PathInfo)
+		 */
+		public Component newAutoComponent(final MarkupContainer container, final String autoId,
+				PathInfo pathInfo)
+		{
+			if (pathInfo.extension != null && supportedPageExtensions.contains(pathInfo.extension))
+			{
+				// Obviously a href like href="myPkg.MyLabel.html" will do as
+				// well. Wicket will not throw an exception. It accepts it.
+				String infoPath = Strings.replaceAll(pathInfo.path, "/", ".");
+
+				Page page = container.getPage();
+				final IClassResolver defaultClassResolver = page.getApplication()
+						.getApplicationSettings().getClassResolver();
+
+				final String className;
+				if (!infoPath.startsWith("."))
+				{
+					// Href is relative. Resolve the url given relative to the
+					// current page
+					className = Packages.extractPackageName(page.getClass()) + "." + infoPath;
+				}
+				else
+				{
+					// Href is absolute. If class with the same absolute path
+					// exists, use it. Else don't change the href.
+					className = infoPath.substring(1);
+				}
+
+				try
+				{
+					final Class clazz = defaultClassResolver.resolveClass(className);
+					return new AutolinkBookmarkablePageLink(autoId, clazz, pathInfo.pageParameters);
+				}
+				catch (WicketRuntimeException ex)
+				{
+					log.warn("Did not find corresponding java class: " + className);
+					// fall through
+				}
+			}
+			else
+			{
+				// not a registered type for bookmarkable pages; create a link
+				// to a resource instead
+				return newPackageResourceReferenceAutoComponent(container, autoId, pathInfo);
+			}
+
+			// fallthrough
+			return null;
+		}
+

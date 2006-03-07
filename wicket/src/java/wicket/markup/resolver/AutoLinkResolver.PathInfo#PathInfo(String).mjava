@@ -1,0 +1,40 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param reference
+		 *            the original reference (e.g the full value of a href
+		 *            attribute)
+		 */
+		public PathInfo(final String reference)
+		{
+			this.reference = reference;
+			// If href contains URL query parameters ..
+			String infoPath;
+			// get the query string
+			int queryStringPos = reference.indexOf("?");
+			if (queryStringPos != -1)
+			{
+				final String queryString = reference.substring(queryStringPos + 1);
+				pageParameters = new PageParameters(new ValueMap(queryString, "&"));
+				infoPath = reference.substring(0, queryStringPos);
+			}
+			else
+			{
+				pageParameters = null;
+				infoPath = reference;
+			}
+
+			this.absolute = (infoPath.startsWith("/") || infoPath.startsWith("\\"));
+
+			// remove file extension, but remember it
+			String extension = null;
+			int pos = infoPath.lastIndexOf(".");
+			if (pos != -1)
+			{
+				extension = infoPath.substring(pos + 1);
+				infoPath = infoPath.substring(0, pos);
+			}
+			this.path = infoPath;
+			this.extension = extension;
+		}
+
