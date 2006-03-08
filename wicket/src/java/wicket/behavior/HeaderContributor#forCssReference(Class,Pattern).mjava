@@ -1,0 +1,28 @@
+	/**
+	 * Returns a new instance of {@link HeaderContributor} with a set of header
+	 * contributors that reference CSS files that live in a package.
+	 * 
+	 * @param scope
+	 *            The scope of the package resource (typically the class of the
+	 *            caller, or a class that lives in the package where the
+	 *            resource lives).
+	 * @param pattern
+	 *            The regexp pattern to match resources on
+	 * @return the new header contributor instance
+	 */
+	public static final HeaderContributor forCssReference(final Class scope, final Pattern pattern)
+	{
+		PackageResource[] resources = PackageResource.get(scope, pattern);
+		HeaderContributor contributor = new HeaderContributor();
+		if (resources != null)
+		{
+			int len = resources.length;
+			for (int i = 0; i < len; i++)
+			{
+				contributor.addContributor(new CSSReferenceHeaderContributor(scope, resources[i]
+						.getPath()));
+			}
+		}
+		return contributor;
+	}
+
