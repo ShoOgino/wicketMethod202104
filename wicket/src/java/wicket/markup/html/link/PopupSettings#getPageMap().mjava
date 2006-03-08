@@ -1,8 +1,18 @@
 	/**
-	 * @return The pagemap where the popup page must be created in. 
+	 * Gets the pagemap where the popup page must be created in.
+	 * 
+	 * @return The pagemap where the popup page must be created in
 	 */
 	public PageMap getPageMap()
 	{
-		return PageMap.forName(pageMapName);
+		if (pageMapName != null)
+		{
+			return PageMap.forName(pageMapName);
+		}
+		else
+		{
+			// fallback on the current page map
+			return RequestCycle.get().getRequest().getPage().getPageMap();
+		}
 	}
 
