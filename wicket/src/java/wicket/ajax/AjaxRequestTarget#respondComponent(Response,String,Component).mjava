@@ -1,12 +1,14 @@
 	/**
 	 * 
 	 * @param response
+	 * @param markupId
+	 *            id of client-side dom element
 	 * @param component
+	 *            component to render
 	 */
-	private void respondComponent(final Response response, final Component component)
+	private void respondComponent(final Response response, final String markupId,
+			final Component component)
 	{
-		String id = component.getMarkupId();
-
 		// substitute our encoding response for the real one so we can capture
 		// component's markup in a manner safe for transport inside CDATA block
 		final Response originalResponse = response;
@@ -37,7 +39,7 @@
 		RequestCycle.get().setResponse(originalResponse);
 
 
-		response.write("<component id=\"" + id + "\" ");
+		response.write("<component id=\"" + markupId + "\" ");
 		if (encodingResponse.isContentsEncoded())
 		{
 			response.write(" encoding=\"");
