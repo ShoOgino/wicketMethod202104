@@ -7,9 +7,24 @@
 	 */
 	protected void onComponentTag(ComponentTag tag)
 	{
-		if ((href != null) && (href.getObject(this) != null))
+		if (href != null)
 		{
-			tag.put("href", Strings.replaceAll(href.getObject(this).toString(), "&", "&amp;"));
+			Object hrefValue = href.getObject(this);
+			if (hrefValue != null)
+			{
+				// generate a popup script by asking popup settings for one
+				if (popupSettings != null)
+				{
+					popupSettings.setTarget("'" + hrefValue.toString() + "'");
+					String popupScript = popupSettings.getPopupJavaScript();
+					tag.put("onclick", popupScript);
+				}
+				else
+				{
+					// or generate an onclick JS handler directly
+					tag.put("href", Strings.replaceAll(hrefValue.toString(), "&", "&amp;"));
+				}
+			}
 		}
 	}
 
