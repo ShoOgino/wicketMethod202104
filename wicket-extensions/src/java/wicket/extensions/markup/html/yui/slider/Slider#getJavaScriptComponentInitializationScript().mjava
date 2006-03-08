@@ -1,0 +1,16 @@
+	/**
+	 * Gets the initilization script for the javascript component.
+	 * 
+	 * @return the initilization script
+	 */
+	protected String getJavaScriptComponentInitializationScript()
+	{
+		String script = getPackagedTextFileContents("init.js");
+		Map variables = new MiniMap(3);
+		variables.put("javaScriptId", javaScriptId);
+		variables.put("backGroundElementId", backgroundElementId);
+		variables.put("imageElementId", imageElementId);
+		MapVariableInterpolator interpolator = new MapVariableInterpolator(script, variables);
+		return interpolator.toString();
+	}
+
