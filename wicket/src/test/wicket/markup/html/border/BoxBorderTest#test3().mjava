@@ -1,26 +1,27 @@
 	/**
 	 * Test a simply page containing the debug component
+	 * 
 	 * @throws Exception
 	 */
 	public void test3() throws Exception
 	{
 		executeTest(BoxBorderTestPage_3.class, "BoxBorderTestPage_ExpectedResult_3.html");
 
-        Border border = (Border) application.getLastRenderedPage().get("border");
-        Form form = (Form) application.getLastRenderedPage().get("border:myForm");
-        
-        TextField input = (TextField) application.getLastRenderedPage().get("border:name");
-        assertEquals("", input.getModelObjectAsString());
-        
-        application.setupRequestAndResponse();
+		Border border = (Border)application.getLastRenderedPage().get("border");
+		Form form = (Form)application.getLastRenderedPage().get("border:myForm");
 
-        MockHttpServletRequest mockRequest = application.getServletRequest();
-        mockRequest.setRequestToComponent(form);
-        mockRequest.setParameter(input.getInputName(), "jdo");
+		TextField input = (TextField)application.getLastRenderedPage().get("border:name");
+		assertEquals("", input.getModelObjectAsString());
 
-        application.processRequestCycle();      
+		application.setupRequestAndResponse();
 
-        input = (TextField) application.getLastRenderedPage().get("border:name");
-        assertEquals("jdo", input.getModelObjectAsString());
+		MockHttpServletRequest mockRequest = application.getServletRequest();
+		mockRequest.setRequestToComponent(form);
+		mockRequest.setParameter(input.getInputName(), "jdo");
+
+		application.processRequestCycle();
+
+		input = (TextField)application.getLastRenderedPage().get("border:name");
+		assertEquals("jdo", input.getModelObjectAsString());
 	}
 
