@@ -1,7 +1,7 @@
 	/**
-	 * @see FormComponent#updateModel()
+	 * @see wicket.markup.html.form.FormComponent#convertValue(java.lang.String)
 	 */
-	public void updateModel()
+	protected Object convertValue(String value) throws ConversionException
 	{
 		/*
 		 * the input value contains the full path of the radio unless no choice
@@ -25,21 +25,17 @@
 			{
 				throw new WicketRuntimeException(
 						"submitted http post value ["
-								+ path
-								+ "] for RadioGroup component ["
-								+ getPath()
-								+ "] is illegal because it does not contain relative path to a Radio componnet. "
-								+ "Due to this the RadioGroup component cannot resolve the selected Radio component pointed to by the illegal value. A possible reason is that componment hierarchy changed between rendering and form submission.");
+						+ path
+						+ "] for RadioGroup component ["
+						+ getPath()
+						+ "] is illegal because it does not contain relative path to a Radio componnet. "
+						+ "Due to this the RadioGroup component cannot resolve the selected Radio component pointed to by the illegal value. A possible reason is that componment hierarchy changed between rendering and form submission.");
 			}
 
-
+			
 			// assign the value of the group's model
-			setModelObject(choice.getModelObject());
+			return choice.getModelObject();
 		}
-		else
-		{
-			// no choice selected - set model object to null
-			setModelObject(null);
-		}
+		return null;
 	}
 

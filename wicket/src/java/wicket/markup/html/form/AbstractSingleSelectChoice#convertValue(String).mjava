@@ -1,7 +1,7 @@
 	/**
-	 * @see FormComponent#setModelValue(java.lang.String)
+	 * @see wicket.markup.html.form.FormComponent#convertValue(java.lang.String)
 	 */
-	public final void setModelValue(final String value)
+	protected final Object convertValue(final String value)
 	{
 		List choices = getChoices();
 		for (int index = 0; index < choices.size(); index++)
@@ -10,10 +10,9 @@
 			final Object choice = choices.get(index);
 			if (getChoiceRenderer().getIdValue(choice, index).equals(value))
 			{
-				setModelObject(choice);
-				return;
+				return choice;
 			}
 		}
-		setModelObject(null);
+		return null;
 	}
 
