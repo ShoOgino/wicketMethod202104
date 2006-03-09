@@ -3,11 +3,16 @@
 	 */
 	public String getId()
 	{
-		HttpSession httpSession = getHttpSession(false);
-		if (httpSession != null)
+		if(id == null)
 		{
-			return httpSession.getId();
+			HttpSession httpSession = getHttpSession(false);
+			if (httpSession != null)
+			{
+				id = httpSession.getId();
+				return id;
+			}
+			return String.valueOf(hashCode());
 		}
-		return String.valueOf(hashCode());
+		return id;
 	}
 
