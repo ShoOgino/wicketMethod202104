@@ -15,10 +15,11 @@
 		while (markupStream == null)
 		{
 			markupStream = parentWithAssociatedMarkup.getAssociatedMarkupStream(true);
-	
+
 			// Make sure the markup stream is positioned at the correct element
 			String componentPath = parent.getPageRelativePath();
-			String parentWithAssociatedMarkupPath = parentWithAssociatedMarkup.getPageRelativePath();
+			String parentWithAssociatedMarkupPath = parentWithAssociatedMarkup
+					.getPageRelativePath();
 			String relativePath = componentPath.substring(parentWithAssociatedMarkupPath.length());
 			if (relativePath.startsWith(":"))
 			{
@@ -36,22 +37,24 @@
 			{
 				// Not found, reset the stream
 				markupStream = null;
-				
+
 				// Yet another exception for Border in the code base.
-				// However if the container with the markup is a Border, than ...
+				// However if the container with the markup is a Border, than
+				// ...
 				if (parentWithAssociatedMarkup instanceof Border)
 				{
-					parentWithAssociatedMarkup = parentWithAssociatedMarkup.findParentWithAssociatedMarkup();
+					parentWithAssociatedMarkup = parentWithAssociatedMarkup
+							.findParentWithAssociatedMarkup();
 				}
 			}
 		}
-		
+
 		if (markupStream == null)
 		{
 			throw new WicketRuntimeException("Unable to determine markup for component: "
 					+ this.toString());
 		}
-		
+
 		return markupStream;
 	}
 
