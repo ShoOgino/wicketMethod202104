@@ -4,6 +4,11 @@
 	 */
 	protected String getEventHandler()
 	{
-		return "wicketAjaxGet('" + getCallbackUrl() + "');";
+		String handler = getCallbackScript();
+		if (event.equalsIgnoreCase("href"))
+		{
+			handler = "javascript:" + handler;
+		}
+		return handler;
 	}
 

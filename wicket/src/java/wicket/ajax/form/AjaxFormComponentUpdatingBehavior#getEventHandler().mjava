@@ -1,17 +1,8 @@
 	/**
-	 * 
 	 * @see wicket.ajax.AjaxEventBehavior#getEventHandler()
 	 */
 	protected final String getEventHandler()
 	{
-		FormComponent fc = getFormComponent();
-
-		String url = getCallbackUrl();
-		AppendingStringBuffer buff = new AppendingStringBuffer(url.length() + 128);
-		buff.append("wicketAjaxGet('");
-		buff.append(url);
-		buff.append("&'+wicketSerialize(this))");
-
-		return buff.toString();
+		return getCallbackScript("wicketAjaxPost('"+getCallbackUrl()+"', wicketSerialize(this)");
 	}
 

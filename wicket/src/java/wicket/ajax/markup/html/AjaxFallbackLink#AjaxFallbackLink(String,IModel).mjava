@@ -17,10 +17,12 @@
 				onClick(target);
 			}
 
-			protected String getEventHandler()
+			protected IAjaxCallDecorator getAjaxCallDecorator()
 			{
-				return AjaxFallbackLink.this.getEventHandler("return !" + super.getEventHandler());
+				return new AjaxCallDecoratorMutator(AjaxFallbackLink.this.getAjaxCallDecorator())
+						.setPostAfterScript("return !" + IAjaxCallDecorator.WICKET_CALL_MADE_VAR);
 			}
+
 		});
 	}
 
