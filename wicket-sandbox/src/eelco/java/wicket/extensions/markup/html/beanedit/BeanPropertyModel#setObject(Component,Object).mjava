@@ -1,0 +1,24 @@
+	/**
+	 * @see wicket.model.IModel#setObject(wicket.Component, java.lang.Object)
+	 */
+	public void setObject(Component component, Object object)
+	{
+		Method method = propertyMeta.getPropertyDescriptor().getWriteMethod();
+		if (method != null)
+		{
+			Object bean = propertyMeta.getBeanModel().getBean();
+			try
+			{
+				method.invoke(bean, new Object[]{object});
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+			catch (InvocationTargetException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+	}
+

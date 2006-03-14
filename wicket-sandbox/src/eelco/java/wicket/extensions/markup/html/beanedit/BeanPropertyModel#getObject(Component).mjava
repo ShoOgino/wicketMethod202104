@@ -1,0 +1,26 @@
+	/**
+	 * @see wicket.model.IModel#getObject(wicket.Component)
+	 */
+	public Object getObject(Component component)
+	{
+		Method method = propertyMeta.getPropertyDescriptor().getReadMethod();
+		if (method != null)
+		{
+			Object bean = propertyMeta.getBeanModel().getBean();
+			try
+			{
+				Object value = method.invoke(bean, null);
+				return value;
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+			catch (InvocationTargetException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+		return null;
+	}
+
