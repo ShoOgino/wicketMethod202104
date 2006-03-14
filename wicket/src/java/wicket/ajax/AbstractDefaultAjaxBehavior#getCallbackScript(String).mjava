@@ -20,8 +20,14 @@
 		final String success = (callDecorator == null) ? null : callDecorator.getOnSuccessScript();
 		final String failure = (callDecorator == null) ? null : callDecorator.getOnFailureScript();
 
+		String indicatorId = findIndicatorId();
 
 		StringBuilder buff = new StringBuilder(128);
+
+		if (!Strings.isEmpty(indicatorId))
+		{
+			buff.append("wicketShow('").append(indicatorId).append("');");
+		}
 
 		if (!Strings.isEmpty(before))
 		{
@@ -36,9 +42,20 @@
 
 		buff.append(partialCall);
 
-		if (!Strings.isEmpty(success))
+		if (!Strings.isEmpty(success)||!Strings.isEmpty(indicatorId))
 		{
-			buff.append(", function() { ").append(success).append("}");
+			buff.append(", function() { ");
+			if (!Strings.isEmpty(indicatorId))
+			{
+				buff.append("wicketHide('").append(indicatorId).append("');");
+			}
+			if (!Strings.isEmpty(success)) {
+				buff.append(success);
+				if (!success.endsWith(";")) {
+					buff.append(";");
+				}
+			}
+			buff.append("}");
 		}
 
 		buff.append(");");
