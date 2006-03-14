@@ -6,5 +6,17 @@
 	 */
 	protected void internalInit()
 	{
+		settingsAccessible = true;
+		// Install default component resolvers
+		getPageSettings().addComponentResolver(new ParentResolver());
+		getPageSettings().addComponentResolver(new AutoComponentResolver());
+		getPageSettings().addComponentResolver(new MarkupInheritanceResolver());
+		getPageSettings().addComponentResolver(new HtmlHeaderResolver());
+		getPageSettings().addComponentResolver(new WicketLinkResolver());
+		getPageSettings().addComponentResolver(new WicketMessageResolver());
+
+		// Install button image resource factory
+		getResourceSettings().addResourceFactory("buttonFactory",
+				new DefaultButtonImageResourceFactory());
 	}
 
