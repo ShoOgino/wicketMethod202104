@@ -4,25 +4,26 @@
 	 * @see wicket.Component#onComponentTagBody(wicket.markup.MarkupStream,
 	 *      wicket.markup.ComponentTag)
 	 */
-	protected final void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
+	protected final void onComponentTagBody(final MarkupStream markupStream,
+			final ComponentTag openTag)
 	{
 		// Save open tag for callback later to render body
 		this.openTag = openTag;
-		
+
 		// initialize
-        this.haveSeenBodyTag = false;
+		this.haveSeenBodyTag = false;
 
 		// Render the associated markup
 		renderAssociatedMarkup("border",
 				"Markup for a border component must begin a tag like '<wicket:border>'");
 
-        // There shall exactly only one body tag per border
-        if (haveSeenBodyTag == false)
-        {
-			markupStream.throwMarkupException(
-			        "There must be exactly one <wicket:body> tag for each border compoment.");
-        }
-        
-        setMarkupStream(null);
+		// There shall exactly only one body tag per border
+		if (haveSeenBodyTag == false)
+		{
+			markupStream
+					.throwMarkupException("There must be exactly one <wicket:body> tag for each border compoment.");
+		}
+
+		setMarkupStream(null);
 	}
 

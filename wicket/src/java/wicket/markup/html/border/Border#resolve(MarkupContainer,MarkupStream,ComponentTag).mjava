@@ -1,16 +1,17 @@
 	/**
-	 * Border makes use of a &lt;wicket:body&gt; tag to identify the position
-	 * to insert within the border's body. As &lt;wicket:body&gt; is a special
-     * tag and MarkupContainer is not able to handle it, we do that here.
-     * <p>
-     * You have two options. Either use &lt;wicket:body/&gt; (open-close tag) 
-     * which will automatically be expanded to 
-     * &lt;wicket:body&gt;body content&lt;/wicket:body&gt; or use
-     * &lt;wicket:body&gt;preview region&lt;/wicket:body&gt; in your border's
-     * markup. The preview region (everything in between the open and close tag)
-     * will automatically be removed.
-	 *
-	 * @see IComponentResolver#resolve(MarkupContainer, MarkupStream, ComponentTag)
+	 * Border makes use of a &lt;wicket:body&gt; tag to identify the position to
+	 * insert within the border's body. As &lt;wicket:body&gt; is a special tag
+	 * and MarkupContainer is not able to handle it, we do that here.
+	 * <p>
+	 * You have two options. Either use &lt;wicket:body/&gt; (open-close tag)
+	 * which will automatically be expanded to &lt;wicket:body&gt;body
+	 * content&lt;/wicket:body&gt; or use &lt;wicket:body&gt;preview
+	 * region&lt;/wicket:body&gt; in your border's markup. The preview region
+	 * (everything in between the open and close tag) will automatically be
+	 * removed.
+	 * 
+	 * @see IComponentResolver#resolve(MarkupContainer, MarkupStream,
+	 *      ComponentTag)
 	 * 
 	 * @param container
 	 *            The container parsing its markup
@@ -26,39 +27,42 @@
 		// Determine if tag is a <wicket:body> tag
 		// If we're being asked to resolve a component for a <wicket:body> tag
 		if (!(tag instanceof WicketTag))
-        {
-            return false;
-        }
-		
-		final WicketTag wtag = (WicketTag) tag;
-        if (!wtag.isBodyTag())
-        {
-            return false;
-        }
+		{
+			return false;
+		}
 
-        // Ok, it is a wicket:body tag. Now render its body
-        ComponentTag bodyTag = tag;
-        if (tag.isOpen())
-        {
-            // It is open-preview-close already.
-            // Only RawMarkup is allowed within the preview region, which
-            // gets stripped from output
-            markupStream.next();
-            markupStream.skipRawMarkup();
-        }
-        else if (tag.isOpenClose())
-        {
-            // Automatically expand <wicket:body/> to <wicket:body>...</wicket:body>
-            // in order for the html to look right: insert the body in between the
-            // wicket tags instead of behind the open-close tag.
-            bodyTag = tag.mutable();
-            bodyTag.setType(XmlTag.OPEN);
-        }
-        else
-        {
-			markupStream.throwMarkupException("A <wicket:body> tag must be an open or open-close tag.");
-        }
-        
+		final WicketTag wtag = (WicketTag)tag;
+		if (!wtag.isBodyTag())
+		{
+			return false;
+		}
+
+		// Ok, it is a wicket:body tag. Now render its body
+		ComponentTag bodyTag = tag;
+		if (tag.isOpen())
+		{
+			// It is open-preview-close already.
+			// Only RawMarkup is allowed within the preview region, which
+			// gets stripped from output
+			markupStream.next();
+			markupStream.skipRawMarkup();
+		}
+		else if (tag.isOpenClose())
+		{
+			// Automatically expand <wicket:body/> to
+			// <wicket:body>...</wicket:body>
+			// in order for the html to look right: insert the body in between
+			// the
+			// wicket tags instead of behind the open-close tag.
+			bodyTag = tag.mutable();
+			bodyTag.setType(XmlTag.OPEN);
+		}
+		else
+		{
+			markupStream
+					.throwMarkupException("A <wicket:body> tag must be an open or open-close tag.");
+		}
+
 		// Render the body tag
 		renderComponentTag(bodyTag);
 
@@ -88,24 +92,24 @@
 
 		// Restore border markup so it can continue rendering
 		border.setMarkupStream(borderMarkup);
-		
+
 		// Render body close tag: </wicket:body>
 		if (tag.isOpenClose())
 		{
 			markupStream.next();
-		    bodyTag.setType(XmlTag.CLOSE);
+			bodyTag.setType(XmlTag.CLOSE);
 			renderComponentTag(bodyTag);
 		}
 
-        // There shall exactly only one body tag per border
-        if (border.haveSeenBodyTag == true)
-        {
-			markupStream.throwMarkupException(
-			        "There must be exactly one <wicket:body> tag for each border compoment.");
-        }
-        
-        border.haveSeenBodyTag = true;
-		
+		// There shall exactly only one body tag per border
+		if (border.haveSeenBodyTag == true)
+		{
+			markupStream
+					.throwMarkupException("There must be exactly one <wicket:body> tag for each border compoment.");
+		}
+
+		border.haveSeenBodyTag = true;
+
 		return true;
 	}
 
