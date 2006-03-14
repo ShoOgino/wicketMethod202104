@@ -6,27 +6,11 @@
 	 */
 	public final void setChoices(List choices)
 	{
-		if ((this.choices != null) && (this.choices != choices))
+		if ((this.choices != null))
 		{
 			if (isVersioned())
 			{
-				addStateChange(new Change()
-				{
-					private static final long serialVersionUID = 1L;
-
-					final IModel oldList = AbstractChoice.this.choices;
-
-					public void undo()
-					{
-						AbstractChoice.this.choices = oldList;
-					}
-
-					public String toString()
-					{
-						return "ChoiceListChange[component: " + getPath() + ", old choices: "
-								+ oldList + "]";
-					}
-				});
+				addStateChange(new ChoicesListChange());
 			}
 		}
 		this.choices = new Model((Serializable)choices);
