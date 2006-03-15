@@ -1,6 +1,5 @@
 	/**
-	 * Constructor
-	 * 
+	 * Constructor.
 	 */
 	public ChoicePage()
 	{
@@ -12,12 +11,10 @@
 
 		IModel makeChoices = new AbstractReadOnlyModel()
 		{
-
 			public Object getObject(Component component)
 			{
 				Set keys = modelsMap.keySet();
-				List list = new ArrayList(keys.size());
-				list.addAll(keys);
+				List list = new ArrayList(keys);
 				return list;
 			}
 
@@ -25,7 +22,6 @@
 
 		IModel modelChoices = new AbstractReadOnlyModel()
 		{
-
 			public Object getObject(Component component)
 			{
 				List models = (List)modelsMap.get(selectedMake);
@@ -62,14 +58,12 @@
 		form.add(modelsContainer);
 		modelsContainer.add(models);
 
-
 		makes.add(new AjaxFormComponentUpdatingBehavior("onchange")
 		{
 
 			protected void onUpdate(AjaxRequestTarget target)
 			{
 				target.addComponent(modelsContainer);
-
 			}
 		});
 	}
