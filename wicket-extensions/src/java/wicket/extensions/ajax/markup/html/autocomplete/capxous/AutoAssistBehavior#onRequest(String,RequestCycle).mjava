@@ -1,13 +1,15 @@
-	protected void onRequest(final String val, RequestCycle requestCycle)
+	protected final void onRequest(final String val, RequestCycle requestCycle)
 	{
-		IRequestTarget target=new IRequestTarget() {
+		IRequestTarget target = new IRequestTarget()
+		{
 
 			public void respond(RequestCycle requestCycle)
 			{
-				Response r=requestCycle.getResponse();
-				Iterator comps=getCompletions(val);
-				while (comps.hasNext()) {
-					final Object comp=comps.next();
+				Response r = requestCycle.getResponse();
+				Iterator comps = getAssists(val);
+				while (comps.hasNext())
+				{
+					final Object comp = comps.next();
 					renderer.render(comp, r);
 				}
 			}
@@ -20,7 +22,7 @@
 			{
 				return requestCycle.getSession();
 			}
-			
+
 		};
 		requestCycle.setRequestTarget(target);
 	}
