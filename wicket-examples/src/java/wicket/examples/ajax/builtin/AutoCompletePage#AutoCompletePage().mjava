@@ -3,35 +3,34 @@
 	 */
 	public AutoCompletePage()
 	{
-		Form form=new Form("form");
+		Form form = new Form("form");
 		add(form);
-		
-		TextField tf1=new TextField("tf1", new Model());
-		form.add(tf1);
-		
-		tf1.add(new AutoAssistBehavior(new StringAutoAssistRenderer()) {
 
-			protected Iterator getCompletions(String val)
+		TextField tf1 = new AutoAssistTextField("tf1", new Model())
+		{
+
+			protected Iterator getAssists(String input)
 			{
-				List completions=new ArrayList();
-				completions.add(val+"1");
-				completions.add(val+"2");
-				completions.add(val+"3");
+				List completions = new ArrayList();
+				completions.add(input + "1");
+				completions.add(input + "2");
+				completions.add(input + "3");
 				return completions.iterator();
 			}
-			
-		});
-		
-		
-		IAutoAssistRenderer randomRenderer=new AbstractAutoAssistRenderer() {
+
+		};
+		form.add(tf1);
+
+		IAutoAssistRenderer randomRenderer = new AbstractAutoAssistRenderer()
+		{
 
 			protected void renderAssist(Object object, Response r)
 			{
-				String val=object.toString();
+				String val = object.toString();
 				r.write("<div style='float:left; color:red; '>");
 				r.write(val);
 				r.write("</div><div style='text-align:right; width:100%;'>");
-				r.write(""+Math.random());
+				r.write("" + Math.random());
 				r.write("</div>");
 			}
 
@@ -39,24 +38,24 @@
 			{
 				return object.toString();
 			}
-			
-		};
-		
-		TextField tf2=new TextField("tf2", new Model());
-		form.add(tf2);
-		
-		tf2.add(new AutoAssistBehavior(randomRenderer) {
 
-			protected Iterator getCompletions(String input)
+		};
+
+		TextField tf2 = new AutoAssistTextField("tf2", new Model(), randomRenderer)
+		{
+
+			protected Iterator getAssists(String input)
 			{
-				List completions=new ArrayList();
-				completions.add(input+"1");
-				completions.add(input+"2");
-				completions.add(input+"3");
+				List completions = new ArrayList();
+				completions.add(input + "1");
+				completions.add(input + "2");
+				completions.add(input + "3");
 				return completions.iterator();
 			}
-		});
-		
-		
+
+		};
+		form.add(tf2);
+
+
 	}
 
