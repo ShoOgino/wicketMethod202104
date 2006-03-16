@@ -1,0 +1,17 @@
+	/**
+	 * Test clean-up of auto added components after removal of the
+	 * HtmlHeaderContainer.
+	 */
+	public void testCleanUpOfAutoAddedComponents()
+	{
+		application.setHomePage(ComponentResolvingPage.class);
+		application.setupRequestAndResponse();
+		application.processRequestCycle();
+
+		// onEndRequest() of auto added component was not called in
+		// MarkupContainer#internalEndRequest() using an iterator
+		ComponentResolvingPage page = (ComponentResolvingPage)application.getLastRenderedPage();
+		assertTrue("onEndRequest() should be called",
+				page.onEndRequestWasCalledOnAutoAddedComponent);
+	}
+
