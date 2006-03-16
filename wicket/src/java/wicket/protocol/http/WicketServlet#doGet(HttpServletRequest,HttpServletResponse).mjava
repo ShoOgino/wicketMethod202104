@@ -79,8 +79,12 @@
 			// Create a new request cycle
 			RequestCycle cycle = session.newRequestCycle(request, response);
 
-			// Process request
-			cycle.request();
+			try {
+				// Process request
+				cycle.request();
+			} catch (AbortException e) {
+				// noop
+			}
 		}
 		finally
 		{
