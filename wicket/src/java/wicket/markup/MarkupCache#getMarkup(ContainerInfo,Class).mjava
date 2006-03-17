@@ -35,7 +35,7 @@
 			synchronized (markupCache)
 			{
 				markup = (Markup)markupCache.get(key);
-	
+
 				// If no markup in the cache
 				if (markup == null)
 				{
@@ -45,10 +45,10 @@
 					{
 						// Look for markup resource for containerClass
 						markupResource = newMarkupResourceStream(containerClass, containerInfo);
-	
+
 						containerClass = containerClass.getSuperclass();
 					}
-	
+
 					// Found markup?
 					if (markupResource != null)
 					{
@@ -57,11 +57,14 @@
 					}
 					else
 					{
-						// flag markup as non-existent (as opposed to null, which
-						// might mean that it's simply not loaded into the cache)
+						// flag markup as non-existent (as opposed to null,
+						// which
+						// might mean that it's simply not loaded into the
+						// cache)
 						markup = Markup.NO_MARKUP;
-	
-						// Save any markup list (or absence of one) for next time
+
+						// Save any markup list (or absence of one) for next
+						// time
 						markupCache.put(key, markup);
 					}
 				}
