@@ -37,7 +37,29 @@
 		}
 
 		upload.setSizeMax(maxSize.bytes());
-		final List items = upload.parseRequest(request);
+
+		final List items;
+
+		if (wantUploadProgressUpdates())
+		{
+			ServletRequestContext ctx = new ServletRequestContext(request)
+			{
+				public InputStream getInputStream() throws IOException
+				{
+					return new CountingInputStream(super.getInputStream());
+				}
+			};
+			totalBytes = request.getContentLength();
+
+			onUploadStarted(totalBytes);
+			items = upload.parseRequest(ctx);
+			onUploadCompleted();
+
+		}
+		else
+		{
+			items = upload.parseRequest(request);
+		}
 
 		// Loop through items
 		for (Iterator i = items.iterator(); i.hasNext();)
