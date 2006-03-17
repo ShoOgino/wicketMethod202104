@@ -1,19 +1,18 @@
 	/**
 	 * Create a new markup resource stream
 	 * 
+	 * @param container
+	 *            The original requesting container
 	 * @param containerClass
 	 *            The container the markup should be associated with
 	 * @param containerInfo
 	 *            The container the markup should be associated with
 	 * @return A IResourceStream if the resource was found
 	 */
-	private MarkupResourceStream newMarkupResourceStream(final Class containerClass,
-			final ContainerInfo containerInfo)
+	private MarkupResourceStream newMarkupResourceStream(final MarkupContainer container,
+			final Class containerClass, final ContainerInfo containerInfo)
 	{
-		IResourceStream markupResource = application.getResourceSettings()
-				.getResourceStreamLocator().locate(containerClass,
-						containerClass.getName().replace('.', '/'), containerInfo.getStyle(),
-						containerInfo.getLocale(), containerInfo.getFileExtension());
+		IResourceStream markupResource = container.getMarkupResourceStream();
 
 		if (markupResource == null)
 		{

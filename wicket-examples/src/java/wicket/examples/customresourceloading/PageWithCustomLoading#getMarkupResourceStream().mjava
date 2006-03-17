@@ -1,0 +1,23 @@
+	/**
+	 * This implementation loads from a custom name/ location. While not
+	 * advisable as the default way of loading resources, overriding this method
+	 * can provide a component specific break out so that you e.g. can load a
+	 * template from a database without any other component or the application
+	 * having to know about it.
+	 * 
+	 * @see wicket.MarkupContainer#getMarkupResourceStream()
+	 */
+	public IResourceStream getMarkupResourceStream()
+	{
+		// load a template with a totally different name from this package using
+		// this component's class loader
+		final URL url = PageWithCustomLoading.class.getResource("CustomLoadedTemplate.html");
+		if (url != null)
+		{
+			return new UrlResourceStream(url);
+		}
+
+		// not resource was not found
+		return null;
+	}
+

@@ -1,0 +1,49 @@
+		/**
+		 * @see wicket.util.resource.locator.IResourceStreamLocator#locate(java.lang.Class,
+		 *      java.lang.String, java.lang.String, java.util.Locale,
+		 *      java.lang.String)
+		 */
+		public IResourceStream locate(Class clazz, String path, String style, Locale locale,
+				String extension)
+		{
+			// Log attempt
+			if (log.isDebugEnabled())
+			{
+				log.debug("Attempting to locate resource '" + path
+						+ "' using classloader the servlet context");
+			}
+
+			String location;
+			if (clazz == AlternativePageFromWebContext.class)
+			{
+				// this custom case disregards the path and tries it's own
+				// scheme
+				location = "/WEB-INF/templates/"
+						+ Strings.lastPathComponent(AlternativePageFromWebContext.class.getName(),
+								'.') + "." + extension;
+			}
+			else
+			{
+				// use the normal package to path conversion of the passed in
+				// path variable
+				location = "/WEB-INF/templates/" + path + "." + extension;
+			}
+			URL url;
+			try
+			{
+				// try to load the resource from the web context
+				url = getWicketServlet().getServletContext().getResource(location);
+				if (url != null)
+				{
+					return new UrlResourceStream(url);
+				}
+			}
+			catch (MalformedURLException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+
+			// resource not found; fall back on class loading
+			return classLoaderLocator.locate(clazz, path, style, locale, extension);
+		}
+

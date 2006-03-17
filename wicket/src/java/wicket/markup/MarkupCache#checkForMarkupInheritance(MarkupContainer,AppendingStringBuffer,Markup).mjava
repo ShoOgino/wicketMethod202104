@@ -4,13 +4,17 @@
 	 * load the base markups and merge the markup elements to create an updated
 	 * (merged) list of markup elements.
 	 * 
+	 * @param container
+	 *            The original markup container for which the markup is to be
+	 *            loaded
 	 * @param key
 	 *            Key under which markup should be cached
 	 * @param markup
 	 *            The markup to checked for inheritance
 	 * @return A markup object with the the base markup elements resolved.
 	 */
-	private Markup checkForMarkupInheritance(final AppendingStringBuffer key, final Markup markup)
+	private Markup checkForMarkupInheritance(final MarkupContainer container,
+			final AppendingStringBuffer key, final Markup markup)
 	{
 		// Check if markup contains <wicket:extend> which tells us that
 		// we need to read the inherited markup as well.
@@ -22,8 +26,10 @@
 		}
 
 		// get the base markup
-		final Markup baseMarkup = getMarkup(markup.getResource().getContainerInfo(), markup
-				.getResource().getMarkupClass().getSuperclass());
+		// NOTE: we can still use the original container to pass in, as
+		// even with markup inheritance, it is the same instance
+		final Markup baseMarkup = getMarkup(container, markup.getResource().getMarkupClass()
+				.getSuperclass());
 
 		if (baseMarkup == Markup.NO_MARKUP)
 		{

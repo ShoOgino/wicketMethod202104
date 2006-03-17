@@ -1,0 +1,24 @@
+	/**
+	 * Gets the markup resource stream for this container. For <strong>very
+	 * specific situations</strong>, you may override this method to load from
+	 * a different location, e.g. if this particular component loads it's markup
+	 * from a database or some other alternative location. However, the prefered
+	 * way of doing things when you need customized resource loading, is to
+	 * provide an application specific override by setting your custom loader in
+	 * {@link Application#init()} with method
+	 * {@link IResourceSettings#setResourceStreamLocator(wicket.util.resource.locator.IResourceStreamLocator)}.
+	 * 
+	 * @return The the markup resource stream for this container
+	 */
+	public IResourceStream getMarkupResourceStream()
+	{
+		// creating this container info object as there currently is some
+		// hackery going on regarding style and variants
+		ContainerInfo containerInfo = new ContainerInfo(this);
+		IResourceStream markupResource = Application.get().getResourceSettings()
+				.getResourceStreamLocator().locate(getClass(),
+						getClass().getName().replace('.', '/'), containerInfo.getStyle(),
+						containerInfo.getLocale(), containerInfo.getFileExtension());
+		return markupResource;
+	}
+

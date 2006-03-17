@@ -1,14 +1,17 @@
 	/**
 	 * Loads markup from a resource stream.
 	 * 
+	 * @param container
+	 *            The original markup container for which the markup is to be
+	 *            loaded
 	 * @param key
 	 *            Key under which markup should be cached
 	 * @param markupResourceStream
 	 *            The markup resource stream to load
 	 * @return The markup
 	 */
-	private final Markup loadMarkup(final AppendingStringBuffer key,
-			final MarkupResourceStream markupResourceStream)
+	private final Markup loadMarkup(final MarkupContainer container,
+			final AppendingStringBuffer key, final MarkupResourceStream markupResourceStream)
 	{
 		try
 		{
@@ -18,7 +21,7 @@
 
 			// Check for markup inheritance. If it contains <wicket:extend>
 			// the two markups get merged.
-			markup = checkForMarkupInheritance(key, markup);
+			markup = checkForMarkupInheritance(container, key, markup);
 
 			// add the markup to the cache
 			markupCache.put(key, markup);

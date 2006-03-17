@@ -4,14 +4,17 @@
 	 * remove it from the cache automatically and subsequently reload when
 	 * needed.
 	 * 
+	 * @param container
+	 *            The original markup container for which the markup is to be
+	 *            loaded
 	 * @param key
 	 *            The key for the resource
 	 * @param markupResourceStream
 	 *            The markup stream to load and begin to watch
 	 * @return The markup in the stream
 	 */
-	private final Markup loadMarkupAndWatchForChanges(final AppendingStringBuffer key,
-			final MarkupResourceStream markupResourceStream)
+	private final Markup loadMarkupAndWatchForChanges(final MarkupContainer container,
+			final AppendingStringBuffer key, final MarkupResourceStream markupResourceStream)
 	{
 		// Watch file in the future
 		final ModificationWatcher watcher = application.getResourceSettings().getResourceWatcher();
@@ -32,6 +35,6 @@
 		}
 
 		log.info("Loading markup from " + markupResourceStream);
-		return loadMarkup(key, markupResourceStream);
+		return loadMarkup(container, key, markupResourceStream);
 	}
 
