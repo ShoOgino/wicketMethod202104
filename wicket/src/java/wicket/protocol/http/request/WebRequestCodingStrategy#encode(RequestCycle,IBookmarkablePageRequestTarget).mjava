@@ -13,12 +13,10 @@
 		// Begin encoding URL
 		final StringBuffer url = new StringBuffer(64);
 		url.append(urlPrefix(requestCycle));
-		url.append('?');
-		url.append(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME);
-		url.append('=');
 
 		// Get page Class
 		final Class pageClass = requestTarget.getPageClass();
+		final Application application = Application.get();
 
 		// Find pagemap name
 		String pageMapName = requestTarget.getPageMapName();
@@ -44,8 +42,18 @@
 			}
 		}
 
-		// Add <page-map-name>:<bookmarkable-page-class>
-		url.append(pageMapName + Component.PATH_SEPARATOR + pageClass.getName());
+		boolean firstParameter = true;
+		if (!application.getHomePage().equals(pageClass) || !"".equals(pageMapName))
+		{
+			firstParameter = false;
+			url.append('?');
+			url.append(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME);
+			url.append('=');
+
+
+			// Add <page-map-name>:<bookmarkable-page-class>
+			url.append(pageMapName + Component.PATH_SEPARATOR + pageClass.getName());
+		}
 
 		// Get page parameters
 		final PageParameters parameters = requestTarget.getPageParameters();
@@ -60,14 +68,20 @@
 					String escapedValue = value;
 					try
 					{
-						escapedValue = URLEncoder.encode(escapedValue, Application.get()
+						escapedValue = URLEncoder.encode(escapedValue, application
 								.getRequestCycleSettings().getResponseRequestEncoding());
 					}
 					catch (UnsupportedEncodingException ex)
 					{
 						log.error(ex.getMessage(), ex);
 					}
-					url.append('&');
+					if (!firstParameter)
+						url.append('&');
+					else
+					{
+						firstParameter = false;
+						url.append('?');
+					}
 					url.append(key);
 					url.append('=');
 					url.append(escapedValue);
