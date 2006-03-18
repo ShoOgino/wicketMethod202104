@@ -2,7 +2,7 @@
 	 * Create a new markup resource stream
 	 * 
 	 * @param container
-	 *            The original requesting container
+	 *            The original requesting markup container
 	 * @param containerClass
 	 *            The container the markup should be associated with
 	 * @param containerInfo
@@ -12,10 +12,30 @@
 	private MarkupResourceStream newMarkupResourceStream(final MarkupContainer container,
 			final Class containerClass, final ContainerInfo containerInfo)
 	{
-		IResourceStream markupResource = container.getMarkupResourceStream();
+		IResourceStream markupResource = null;
+
+		// If the original requestee is the same as the container class we are
+		// trying to load from, see whether there is an override, meaning that
+		// the component wants to load the markup resource stream in it's own
+		// fashion
+		if (container.getClass() == containerClass)
+		{
+			markupResource = container.getMarkupResourceStreamOverride();
+		}
 
 		if (markupResource == null)
 		{
+			// The container didn't return an override, so we are dealing with
+			// markup inheritance
+			markupResource = application.getResourceSettings().getResourceStreamLocator().locate(
+					containerClass, containerClass.getName().replace('.', '/'),
+					containerInfo.getStyle(), containerInfo.getLocale(),
+					containerInfo.getFileExtension());
+		}
+
+		if (markupResource == null)
+		{
+			// nothing was found, let the caller handle any the error stuff
 			return null;
 		}
 

@@ -5,8 +5,7 @@
 	 * (merged) list of markup elements.
 	 * 
 	 * @param container
-	 *            The original markup container for which the markup is to be
-	 *            loaded
+	 *            The original requesting markup container
 	 * @param key
 	 *            Key under which markup should be cached
 	 * @param markup
@@ -26,10 +25,8 @@
 		}
 
 		// get the base markup
-		// NOTE: we can still use the original container to pass in, as
-		// even with markup inheritance, it is the same instance
-		final Markup baseMarkup = getMarkup(container, markup.getResource().getMarkupClass()
-				.getSuperclass());
+		final Markup baseMarkup = getMarkup(container, markup.getResource().getContainerInfo(),
+				markup.getResource().getMarkupClass().getSuperclass());
 
 		if (baseMarkup == Markup.NO_MARKUP)
 		{
