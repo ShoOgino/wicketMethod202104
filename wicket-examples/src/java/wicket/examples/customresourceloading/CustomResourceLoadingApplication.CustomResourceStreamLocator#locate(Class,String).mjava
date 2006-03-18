@@ -1,10 +1,8 @@
 		/**
-		 * @see wicket.util.resource.locator.IResourceStreamLocator#locate(java.lang.Class,
-		 *      java.lang.String, java.lang.String, java.util.Locale,
+		 * @see wicket.util.resource.locator.AbstractResourceStreamLocator#locate(java.lang.Class,
 		 *      java.lang.String)
 		 */
-		public IResourceStream locate(Class clazz, String path, String style, Locale locale,
-				String extension)
+		protected IResourceStream locate(Class clazz, String path)
 		{
 			// Log attempt
 			if (log.isDebugEnabled())
@@ -18,15 +16,15 @@
 			{
 				// this custom case disregards the path and tries it's own
 				// scheme
-				location = "/WEB-INF/templates/"
-						+ Strings.lastPathComponent(AlternativePageFromWebContext.class.getName(),
-								'.') + "." + extension;
+				String extension = path.substring(path.lastIndexOf('.') + 1);
+				String simpleFileName = Strings.lastPathComponent(clazz.getName(), '.');
+				location = "/WEB-INF/templates/" + simpleFileName + "." + extension;
 			}
 			else
 			{
 				// use the normal package to path conversion of the passed in
 				// path variable
-				location = "/WEB-INF/templates/" + path + "." + extension;
+				location = "/WEB-INF/templates/" + path;
 			}
 			URL url;
 			try
@@ -44,6 +42,6 @@
 			}
 
 			// resource not found; fall back on class loading
-			return classLoaderLocator.locate(clazz, path, style, locale, extension);
+			return classLoaderLocator.locate(clazz, path);
 		}
 
