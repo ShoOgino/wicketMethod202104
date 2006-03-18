@@ -1,0 +1,33 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param mask
+	 *            The mask to use for this converter instance
+	 * @param type
+	 *            The type to convert string values to. WARNING: adding anything
+	 *            that implements charsequence here will probably not have the
+	 *            desired effect as then only {@link #toString(Object)} will be
+	 *            called. Consider wrapping your string value in a custom class
+	 *            so that conversion will be triggered properly. That class
+	 *            should have a public constructor with a single string
+	 *            argument. That constructor will be used by
+	 *            {@link MaskFormatter} to construct instances.
+	 * @see MaskFormatter
+	 * @throws ParseException
+	 *             If the mask does not contain valid mask characters
+	 */
+	public MaskConverter(String mask, Class type)
+	{
+		try
+		{
+			maskFormatter = new MaskFormatter(mask);
+			maskFormatter.setValueClass(type);
+			maskFormatter.setAllowsInvalid(true);
+			maskFormatter.setValueContainsLiteralCharacters(true);
+		}
+		catch (ParseException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+
