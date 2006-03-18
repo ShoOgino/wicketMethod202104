@@ -9,6 +9,14 @@
 	private void respondComponent(final Response response, final String markupId,
 			final Component component)
 	{
+		if (component.getRenderBodyOnly() == true)
+		{
+			throw new IllegalStateException(
+					"Ajax render cannot be called on component that has setRenderBodyOnly enabled. Component: "
+							+ component.toString());
+		}
+
+		
 		// substitute our encoding response for the real one so we can capture
 		// component's markup in a manner safe for transport inside CDATA block
 		final Response originalResponse = response;
@@ -22,13 +30,8 @@
 			page.startComponentRender(component);
 		}
 
-		boolean old = component.getRenderBodyOnly();
-		component.setRenderBodyOnly(true);
-
 		// Render the component
 		component.doRender();
-
-		component.setRenderBodyOnly(old);
 
 		if (page != null)
 		{
