@@ -37,16 +37,16 @@
 				else
 				{
 					ignoreException = throwable.getClass().getName()
-							.indexOf("ClientAbortException") != 0;
-				}
-				if (ignoreException)
-				{
-					if (log.isDebugEnabled())
+							.indexOf("ClientAbortException") >= 0;
+					if (ignoreException)
 					{
-						log.debug("Socket exception ignored for sending Resource "
-								+ "response to client (ClientAbort)", e);
+						if (log.isDebugEnabled())
+						{
+							log.debug("Socket exception ignored for sending Resource "
+									+ "response to client (ClientAbort)", e);
+						}
+						break;
 					}
-					break;
 				}
 				throwable = throwable.getCause();
 			}
