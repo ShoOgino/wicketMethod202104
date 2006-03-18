@@ -1,0 +1,23 @@
+	/**
+	 * If class c is a string type (or more precice, assignable from
+	 * {@link CharSequence}), this method will delegate type conversion to
+	 * {@link #toString(Object)}. Otherwise, it will delegate type conversion
+	 * to {@link #toObject(String)} using the object's {@link Object#toString()}
+	 * value to convert it to a string first (or passing in null in case the
+	 * value is null).
+	 * 
+	 * @see wicket.util.convert.IConverter#convert(java.lang.Object,
+	 *      java.lang.Class)
+	 */
+	public final Object convert(Object value, Class c)
+	{
+		if (CharSequence.class.isAssignableFrom(c))
+		{
+			return toString(value);
+		}
+		else
+		{
+			return toObject((value != null) ? value.toString() : (String)value);
+		}
+	}
+
