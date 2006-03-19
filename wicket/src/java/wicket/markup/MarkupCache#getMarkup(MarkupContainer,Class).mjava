@@ -4,32 +4,29 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param containerInfo
-	 *            The container the markup should be associated with
 	 * @param clazz
 	 *            The class to get the associated markup for. If null, the
 	 *            container's class is used, but it can be a parent class of the
 	 *            container as well (markup inheritance)
 	 * @return Markup resource
 	 */
-	private final Markup getMarkup(final MarkupContainer container,
-			final ContainerInfo containerInfo, final Class clazz)
+	private final Markup getMarkup(final MarkupContainer container, final Class clazz)
 	{
 		Class containerClass = clazz;
 		if (clazz == null)
 		{
-			containerClass = containerInfo.getContainerClass();
+			containerClass = container.getClass();
 		}
 		else
 		{
-			if (!clazz.isAssignableFrom(containerInfo.getContainerClass()))
+			if (!clazz.isAssignableFrom(container.getClass()))
 			{
 				throw new WicketRuntimeException("Parameter clazz must be instance of container");
 			}
 		}
 
 		// Look up markup tag list by class, locale, style and markup type
-		final CharSequence key = markupKey(containerInfo, clazz);
+		final CharSequence key = markupKey(container, clazz);
 		Markup markup = (Markup)markupCache.get(key);
 
 		// If no markup in the cache
@@ -43,14 +40,14 @@
 				if (markup == null)
 				{
 					// Ask the container to locate its associated markup
-					IResourceStream resourceStream = container.newMarkupResourceStream(
-							containerClass, containerInfo);
+					final IResourceStream resourceStream = container
+							.newMarkupResourceStream(containerClass);
 
 					// Found markup?
 					if (resourceStream != null)
 					{
 						final MarkupResourceStream markupResource = new MarkupResourceStream(
-								resourceStream, containerInfo, containerClass);
+								resourceStream, new ContainerInfo(container), containerClass);
 
 						// load the markup and watch for changes
 						markup = loadMarkupAndWatchForChanges(container, key, markupResource);
