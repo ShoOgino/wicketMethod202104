@@ -29,7 +29,7 @@
 		}
 
 		// Look up markup tag list by class, locale, style and markup type
-		final AppendingStringBuffer key = markupKey(containerInfo, clazz);
+		final CharSequence key = markupKey(containerInfo, clazz);
 		Markup markup = (Markup)markupCache.get(key);
 
 		// If no markup in the cache
@@ -39,32 +39,27 @@
 			{
 				markup = (Markup)markupCache.get(key);
 
-				// If no markup in the cache
+				// If no markup is in the cache
 				if (markup == null)
 				{
-					// Locate markup resource, searching up class hierarchy
-					MarkupResourceStream markupResource = null;
-					while ((markupResource == null) && (containerClass != MarkupContainer.class))
-					{
-						// Look for markup resource for containerClass
-						markupResource = newMarkupResourceStream(container, containerClass,
-								containerInfo);
-
-						containerClass = containerClass.getSuperclass();
-					}
+					// Ask the container to locate its associated markup
+					IResourceStream resourceStream = container.newMarkupResourceStream(
+							containerClass, containerInfo);
 
 					// Found markup?
-					if (markupResource != null)
+					if (resourceStream != null)
 					{
+						final MarkupResourceStream markupResource = new MarkupResourceStream(
+								resourceStream, containerInfo, containerClass);
+
 						// load the markup and watch for changes
 						markup = loadMarkupAndWatchForChanges(container, key, markupResource);
 					}
 					else
 					{
 						// flag markup as non-existent (as opposed to null,
-						// which
-						// might mean that it's simply not loaded into the
-						// cache)
+						// which might mean that it's simply not loaded into
+						// the cache)
 						markup = Markup.NO_MARKUP;
 
 						// Save any markup list (or absence of one) for next
