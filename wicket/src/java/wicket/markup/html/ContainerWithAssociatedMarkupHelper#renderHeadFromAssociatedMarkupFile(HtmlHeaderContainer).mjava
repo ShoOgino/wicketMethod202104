@@ -13,44 +13,60 @@
 	 */
 	protected final void renderHeadFromAssociatedMarkupFile(final HtmlHeaderContainer htmlContainer)
 	{
-		// Ask the Panel/Border if it has something to contribute to the header
-		final HeaderPartContainer headerPart = getHeaderPart();
+		// Gracefully getAssociateMarkupStream. Throws no exception in case
+		// markup is not found
+		final MarkupStream associatedMarkupStream = container.getAssociatedMarkupStream(false);
 
-		// If the panel/border component has something to contribute to
-		// the header ...
-		if (headerPart != null)
+		// No associated markup => no header section
+		if (associatedMarkupStream == null)
 		{
-			// A component's header section must only be added once,
-			// no matter how often the same Component has been added
-			// to the page or any other container in the hierachy.
-			if (htmlContainer.get(headerPart.getId()) == null)
-			{
-				htmlContainer.autoAdd(headerPart);
+			return;
+		}
 
-				// Check if the Panel/Border requires some <body onload="..">
-				// attribute to be copied to the page's body tag.
-				if (checkedBody == false)
-				{
-					checkedBody = true;
-					checkBodyOnLoad();
-				}
-			}
-			else
+		// Position pointer at current (first) header
+		while (nextHeaderMarkup(associatedMarkupStream) != -1)
+		{
+			// Create a HeaderPartContainer and associate the markup
+			final HeaderPartContainer headerPart = getHeaderPart(associatedMarkupStream.getCurrentIndex());
+			if (headerPart != null)
 			{
-				// TODO Performance: I haven't found a more efficient solution yet
-				// Already added but all the components in this header part must
-				// be touched (that they are rendered)
-				Response response = container.getRequestCycle().getResponse();
-				try
+				// A component's header section must only be added once,
+				// no matter how often the same Component has been added
+				// to the page or any other container in the hierachy.
+				if (htmlContainer.get(headerPart.getId()) == null)
 				{
-					container.getRequestCycle().setResponse(NullResponse.getInstance());
 					htmlContainer.autoAdd(headerPart);
+
+					// Check if the Panel/Border requires some <body
+					// onload=".."> attribute to be copied to the page's body
+					// tag.
+					if (checkedBody == false)
+					{
+						checkedBody = true;
+						checkBodyOnLoad();
+					}
 				}
-				finally
+				else
 				{
-					container.getRequestCycle().setResponse(response);
+					// TODO Performance: I haven't found a more efficient
+					// solution yet.
+					// Already added but all the components in this header part
+					// must be touched (that they are rendered)
+					Response response = container.getRequestCycle().getResponse();
+					try
+					{
+						container.getRequestCycle().setResponse(NullResponse.getInstance());
+						htmlContainer.autoAdd(headerPart);
+					}
+					finally
+					{
+						container.getRequestCycle().setResponse(response);
+					}
 				}
 			}
+
+			// Position the stream after <wicket:head>
+			associatedMarkupStream.skipComponent();
 		}
 	}
 

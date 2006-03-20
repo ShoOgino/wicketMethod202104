@@ -1,0 +1,47 @@
+	/**
+	 * Gets the header part of the Panel/Border. Returns null if it doesn't have
+	 * a header tag.
+	 * 
+	 * @param index
+	 * @return the header part for this panel/border or null if it doesn't have
+	 *         a wicket:head tag.
+	 */
+	private final HeaderPartContainer getHeaderPart(final int index)
+	{
+		// Gracefully getAssociateMarkupStream. Throws no exception in case
+		// markup is not found
+		final MarkupStream associatedMarkupStream = container.getAssociatedMarkupStream(false);
+
+		// Position markup stream at beginning of header tag
+		associatedMarkupStream.setCurrentIndex(index);
+
+		// Create a HtmlHeaderContainer for the header tag found
+		final MarkupElement element = associatedMarkupStream.get();
+		if (element instanceof WicketTag)
+		{
+			final WicketTag wTag = (WicketTag)element;
+			if ((wTag.isHeadTag() == true) && (wTag.getNamespace() != null))
+			{
+				// found <wicket:head>
+				// create a unique id for the HtmlHeaderContainer to be
+				// created
+				final String headerId = "_" + Classes.simpleName(container.getClass())
+						+ container.getVariation() + "Header" + index;
+
+				// Create the header container and associate the markup with
+				// it
+				HeaderPartContainer headerContainer = new HeaderPartContainer(headerId, container,
+						wTag.getAttributes().getString(
+								associatedMarkupStream.getWicketNamespace() + ":scope"));
+				headerContainer.setMyMarkupStream(associatedMarkupStream);
+				headerContainer.setRenderBodyOnly(true);
+
+				// The container does have a header component
+				return headerContainer;
+			}
+		}
+
+		throw new WicketRuntimeException("Programming error: expected a WicketTag: "
+				+ associatedMarkupStream.toString());
+	}
+
