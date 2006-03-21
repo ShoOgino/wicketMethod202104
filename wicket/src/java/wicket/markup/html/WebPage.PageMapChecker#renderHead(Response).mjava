@@ -1,0 +1,17 @@
+		/**
+		 * @see wicket.markup.html.IHeaderContributor#renderHead(wicket.Response)
+		 */
+		public void renderHead(Response response)
+		{
+			//if(!isStateless()) TODO this shouldn't be done for stateless pages.. This will make all pages statefull!
+			// but how do we know that if it stateless because that is only know after render.
+			// Should we use a Response Filter??
+			ArrayListStack accessStack = getPageMap().getAccessStack();
+			if(accessStack.size() > 1)
+			{
+				response.write("<script language=\"JavaScript\">if(history.length == 1){document.location.href = '");
+				response.write(urlFor(INewBrowserWindowListener.INTERFACE));
+				response.write("'}</script>");
+			}
+		}
+
