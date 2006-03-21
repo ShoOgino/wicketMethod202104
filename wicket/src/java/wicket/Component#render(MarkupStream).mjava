@@ -26,7 +26,15 @@
 			try
 			{
 				// Call implementation to render component
-				onRender(markupStream);
+				onBeforeRender();
+				try
+				{
+					onRender(markupStream);
+				}
+				finally
+				{
+					onAfterRender();
+				}
 
 				// Component has been rendered
 				rendered();

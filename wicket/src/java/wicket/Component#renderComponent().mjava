@@ -1,0 +1,44 @@
+	/**
+	 * Page.renderPage() is used to render a whole page. With AJAX however it must
+	 * be possible to render any one component contained in a page. That is what
+	 * Component.doRender() is for.
+	 * <p>
+	 * Note: it is not necessary that the page has previously been rendered. But
+	 * the component must have been added (directly or indirectly) to a
+	 * container with an associated markup file (Page, Panel or Border).
+	 */
+	public final void renderComponent()
+	{
+		// If this Component is a Page
+		if (this instanceof Page)
+		{
+			// Render as Page, with all the special logic that entails
+			((Page)this).renderPage();
+		}
+		else
+		{
+			// Save the parent's markup stream to re-assign it at the end
+			MarkupContainer parent = getParent();
+			MarkupStream originalMarkupStream = parent.getMarkupStream();
+	
+			MarkupStream markupStream = initializeMarkupStream();
+	
+			try
+			{
+				// Make sure that while rendering the markup stream is found
+				parent.setMarkupStream(markupStream);
+	
+				// Render the component and all its children
+				internalAttach();
+				onBeforeRender();
+				render(markupStream);
+			}
+			finally
+			{
+				// Make sure the original markup stream is back in place
+				parent.setMarkupStream(originalMarkupStream);
+				onAfterRender();
+			}
+		}
+	}
+
