@@ -26,14 +26,19 @@
 		// Position pointer at current (first) header
 		while (nextHeaderMarkup(markupStream) != -1)
 		{
+			Class markupClass = ((WicketTag)markupStream.getTag()).getWicketHeaderClass();
+			if (markupClass == null)
+			{
+				markupClass = markupStream.getContainerClass();
+			}
 			// Create a HeaderPartContainer and associate the markup
-			final HeaderPartContainer headerPart = getHeaderPart(markupStream.getCurrentIndex());
+			final HeaderPartContainer headerPart = getHeaderPart(markupClass, markupStream.getCurrentIndex());
 			if (headerPart != null)
 			{
 				// A component's header section must only be added once,
 				// no matter how often the same Component has been added
 				// to the page or any other container in the hierachy.
-				if (htmlContainer.get(headerPart.getId()) == null)
+				if (htmlContainer.okToRenderComponent(headerPart.getScope(), headerPart.getId()))
 				{
 					htmlContainer.autoAdd(headerPart);
 

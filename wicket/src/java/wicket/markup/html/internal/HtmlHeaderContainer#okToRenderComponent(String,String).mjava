@@ -1,0 +1,36 @@
+	/**
+	 * Check if the header component is ok to render within the scope given.
+	 * 
+	 * @param scope
+	 *            The scope of the header component
+	 * @param id
+	 *            The component's id
+	 * @return true, if the component ok to render
+	 */
+	public final boolean okToRenderComponent(final String scope, final String id)
+	{
+		if (this.renderedComponentsPerScope == null)
+		{
+			this.renderedComponentsPerScope = new HashMap();
+		}
+
+//		if (scope == null)
+//		{
+//			scope = header.getMarkupStream().getContainerClass().getName();
+//		}
+		
+		List componentScope = (List)this.renderedComponentsPerScope.get(scope);
+		if (componentScope == null)
+		{
+			componentScope = new ArrayList();
+			this.renderedComponentsPerScope.put(scope, componentScope);
+		}
+
+		if (componentScope.contains(id))
+		{
+			return false;
+		}
+		componentScope.add(id);
+		return true;
+	}
+

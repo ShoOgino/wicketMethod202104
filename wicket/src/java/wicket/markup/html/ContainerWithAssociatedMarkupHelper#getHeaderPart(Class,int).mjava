@@ -2,15 +2,16 @@
 	 * Gets the header part of the Panel/Border. Returns null if it doesn't have
 	 * a header tag.
 	 * 
-	 * @param index
+	 * @param index A unique index
+	 * @param markupClass The java class the wicket:head tag is directly associated with
 	 * @return the header part for this panel/border or null if it doesn't have
 	 *         a wicket:head tag.
 	 */
-	private final HeaderPartContainer getHeaderPart(final int index)
+	private final HeaderPartContainer getHeaderPart(final Class markupClass, final int index)
 	{
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
-		final MarkupStream markupStream = container.getAssociatedMarkupStream(false);
+		final MarkupStream markupStream = this.container.getAssociatedMarkupStream(false);
 
 		// Position markup stream at beginning of header tag
 		markupStream.setCurrentIndex(index);
@@ -25,15 +26,15 @@
 				// found <wicket:head>
 				// create a unique id for the HtmlHeaderContainer to be
 				// created
-				final String headerId = "_" + Classes.simpleName(container.getClass())
-						+ container.getVariation() + "Header" + index;
+				final String headerId = "_" + Classes.simpleName(markupClass)
+						+ this.container.getVariation() + "Header" + index;
 
 				// Create the header container and associate the markup with
 				// it
-				final String scope = wTag.getAttributes().getString(
+				String scope = wTag.getAttributes().getString(
 						markupStream.getWicketNamespace() + ":scope");
 				final HeaderPartContainer headerContainer = new HeaderPartContainer(headerId,
-						container, scope);
+						this.container, scope);
 				headerContainer.setMyMarkupStream(markupStream);
 				headerContainer.setRenderBodyOnly(true);
 
