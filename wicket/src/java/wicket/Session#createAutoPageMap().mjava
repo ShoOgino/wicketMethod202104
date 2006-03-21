@@ -8,13 +8,8 @@
 	 *            does not exist
 	 * @return PageMap for name
 	 */
-	public final PageMap pageMapForName(String pageMapName, final boolean autoCreate)
+	public final PageMap createAutoPageMap()
 	{
-		PageMap pageMap =  (PageMap)getAttribute(attributeForPageMapName(pageMapName));
-		if (pageMap == null && autoCreate)
-		{
-			pageMap = newPageMap(pageMapName);
-		}
-		return pageMap;
+		return newPageMap("wicket-" + (autoCreatePageMapCounter++));
 	}
 

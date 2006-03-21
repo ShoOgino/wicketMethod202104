@@ -9,15 +9,16 @@
 	{
 		// Check that session doesn't have too many page maps already
 		final int maxPageMaps = getApplication().getSessionSettings().getMaxPageMaps();
-		if (++pageMaps > maxPageMaps)
+		if (usedPageMaps.size() >= maxPageMaps)		
 		{
-			throw new IllegalStateException("Session cannot contain more than " + maxPageMaps
-					+ " page maps");
+			PageMap pm = (PageMap)usedPageMaps.getFirst();
+			pm.remove();
 		}
 
 		// Create new page map
 		final PageMap pageMap = new PageMap(name, this);
 		setAttribute(attributeForPageMapName(name), pageMap);
+		dirty();
 		return pageMap;
 	}
 
