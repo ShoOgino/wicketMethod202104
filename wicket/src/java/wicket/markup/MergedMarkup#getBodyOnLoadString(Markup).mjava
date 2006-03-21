@@ -7,7 +7,7 @@
 	private String getBodyOnLoadString(final Markup markup)
 	{
 		int i = 0;
-		
+
 		// The markup must have a <wicket:head> region, else copying the
 		// body onLoad attributes doesn't make sense
 		for (; i < markup.size(); i++)
@@ -15,7 +15,7 @@
 			MarkupElement elem = markup.get(i);
 			if (elem instanceof WicketTag)
 			{
-				WicketTag tag = (WicketTag) elem;
+				WicketTag tag = (WicketTag)elem;
 				if (tag.isClose() && tag.isHeadTag())
 				{
 					// Ok, we found <wicket:head>
@@ -30,7 +30,7 @@
 			}
 			else if (elem instanceof ComponentTag)
 			{
-				ComponentTag tag = (ComponentTag) elem;
+				ComponentTag tag = (ComponentTag)elem;
 				if (TagUtils.isBodyTag(tag))
 				{
 					// Short cut: We found <body> but no <wicket:head>.
@@ -46,7 +46,7 @@
 			MarkupElement elem = markup.get(i);
 			if (elem instanceof ComponentTag)
 			{
-				ComponentTag tag = (ComponentTag) elem;
+				ComponentTag tag = (ComponentTag)elem;
 				if (tag.isOpen() && TagUtils.isBodyTag(tag))
 				{
 					String onLoad = tag.getAttributes().getString("onLoad");
@@ -54,7 +54,7 @@
 				}
 			}
 		}
-		
+
 		return null;
 	}
 

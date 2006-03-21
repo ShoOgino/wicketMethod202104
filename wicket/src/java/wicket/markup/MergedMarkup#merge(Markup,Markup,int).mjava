@@ -12,7 +12,7 @@
 	{
 		// Get the body onLoad attribute from derived markup
 		final String onLoad = getBodyOnLoadString(markup);
-		
+
 		// True if either <wicket:head> or <head> has been processed
 		boolean wicketHeadProcessed = false;
 		boolean headProcessed = false;
@@ -41,131 +41,128 @@
 
 			// If element in base markup is </wicket:head>, scan the derived
 			// markup for <wicket:head> and add all elements of that tag body
-			// the new markup list. 
+			// the new markup list.
 			if ((wicketHeadProcessed == false) && (element instanceof WicketTag))
 			{
-			    final WicketTag tag = (WicketTag) element;
-			    
-			    boolean hitPanel = tag.isOpen() && "panel".equalsIgnoreCase(tag.getName()) 
-			            && (tag.getNamespace() != null);
+				final WicketTag tag = (WicketTag)element;
 
-			    // If we reached <wicket:panel> and have not yet seen <wicket:head>, than
-			    // automatically add <wicket:head> into the stream
-		    	WicketTag openTag = null;
-			    if (hitPanel)
-			    {
-			    	openTag = new WicketTag(new XmlTag());
-			    	openTag.setName("head");
-			    	openTag.setNamespace(tag.getNamespace());
-			    	openTag.setType(XmlTag.OPEN);
-			    	
-			    	addMarkupElement(openTag);
-			    }
-			    	
-			    boolean hitHead = tag.isClose() && "head".equalsIgnoreCase(tag.getName()) 
-			            && (tag.getNamespace() != null);
-			    
-			    if (hitHead || hitPanel)
-			    {
-			        // Before close the tag, add the <wicket:head> body from the 
-			        // derived markup
-			        boolean copy = false;
-			        for (int i=0; i < extendIndex; i++)
-			        {
-			            MarkupElement elem = markup.get(i);
-			            if (elem instanceof WicketTag)
-			            {
-			                WicketTag etag = (WicketTag) elem;
-						    if ("head".equalsIgnoreCase(etag.getName()) 
-						            && (etag.getNamespace() != null))
-						    {
-						        if (etag.isOpen())
-						        {
-						            wicketHeadProcessed = true;
-						            copy = true;
-						        }
-						        else
-						        {
-						            copy = false;
-						            break;
-						        }
-						        
-						        continue;
-						    }
-			            }
-					    
-			            if (copy == true)
-					    {
-			            	addMarkupElement(elem);
-					    }
-			        }
-			    }
+				// If we reached <wicket:panel> and have not yet seen
+				// <wicket:head>, than
+				// automatically add <wicket:head> into the stream
+				boolean hitPanel = tag.isOpen() && (tag.isPanelTag() || tag.isBorderTag());
+				WicketTag openTag = null;
+				if (hitPanel)
+				{
+					openTag = new WicketTag(new XmlTag());
+					openTag.setName("head");
+					openTag.setNamespace(tag.getNamespace());
+					openTag.setType(XmlTag.OPEN);
 
-			    // If we reached <wicket:panel> and have not yet seen <wicket:head>, than
-			    // automatically add <wicket:head> into the stream
-			    if (hitPanel)
-			    {
-			    	WicketTag closeTag = new WicketTag(new XmlTag());
-			    	closeTag.setName("head");
-			    	closeTag.setNamespace(tag.getNamespace());
-			    	closeTag.setType(XmlTag.CLOSE);
-			    	closeTag.setOpenTag(openTag);
-			    	
-			    	addMarkupElement(closeTag);
-			    }
+					addMarkupElement(openTag);
+				}
+
+				boolean hitHead = tag.isClose() && tag.isHeadTag();
+
+				if (hitHead || hitPanel)
+				{
+					// Before close the tag, add the <wicket:head> body from the
+					// derived markup
+					boolean copy = false;
+					for (int i = 0; i < extendIndex; i++)
+					{
+						MarkupElement elem = markup.get(i);
+						if (elem instanceof WicketTag)
+						{
+							WicketTag etag = (WicketTag)elem;
+							if (etag.isHeadTag())
+							{
+								if (etag.isOpen())
+								{
+									wicketHeadProcessed = true;
+									copy = true;
+								}
+								else
+								{
+									copy = false;
+									break;
+								}
+
+								continue;
+							}
+						}
+
+						if (copy == true)
+						{
+							addMarkupElement(elem);
+						}
+					}
+				}
+
+				// If we reached <wicket:panel> and have not yet seen
+				// <wicket:head>, than
+				// automatically add <wicket:head> into the stream
+				if (hitPanel)
+				{
+					WicketTag closeTag = new WicketTag(new XmlTag());
+					closeTag.setName("head");
+					closeTag.setNamespace(tag.getNamespace());
+					closeTag.setType(XmlTag.CLOSE);
+					closeTag.setOpenTag(openTag);
+
+					addMarkupElement(closeTag);
+				}
 			}
 
 			// If element in base markup is </head>, scan the derived
 			// markup for <wicket:head> and add all elements of that tag body
-			// the new markup list. 
+			// the new markup list.
 			if ((headProcessed == false) && (element instanceof ComponentTag))
 			{
-			    final ComponentTag tag = (ComponentTag) element;
-			    
-			    if (tag.isClose() && "head".equalsIgnoreCase(tag.getName()) 
-			            && (tag.getNamespace() == null))
-			    {
-			        // Before close the tag, add the <wicket:head> body from the 
-			        // derived markup
-			        boolean copy = false;
-			        for (int i=0; i < extendIndex; i++)
-			        {
-			            MarkupElement elem = markup.get(i);
-			            if (elem instanceof WicketTag)
-			            {
-			                WicketTag etag = (WicketTag) elem;
-						    if ("head".equalsIgnoreCase(etag.getName()) 
-						            && (etag.getNamespace() != null))
-						    {
-						        if (etag.isOpen())
-						        {
-						            headProcessed = true;
-						            copy = true;
-						        }
-						        else
-						        {
-						            copy = false;
-						            break;
-						        }
-						        
-						        continue;
-						    }
-			            }
-					    
-			            if (copy == true)
-					    {
-			            	addMarkupElement(elem);
-					    }
-			        }
-			    }
+				final ComponentTag tag = (ComponentTag)element;
+
+				if (tag.isClose() && TagUtils.isHeadTag(tag))
+				{
+					// Before close the tag, add the <wicket:head> body from the
+					// derived markup
+					boolean copy = false;
+					for (int i = 0; i < extendIndex; i++)
+					{
+						MarkupElement elem = markup.get(i);
+						if (elem instanceof WicketTag)
+						{
+							WicketTag etag = (WicketTag)elem;
+							if (etag.isHeadTag())
+							{
+								if (etag.isOpen())
+								{
+									headProcessed = true;
+									copy = true;
+								}
+								else
+								{
+									copy = false;
+									break;
+								}
+
+								continue;
+							}
+						}
+
+						if (copy == true)
+						{
+							addMarkupElement(elem);
+						}
+					}
+				}
 			}
 
-			// Make sure the body onLoad attribute from the extended markup is copied 
+			// Make sure the body onLoad attribute from the extended markup is
+			// copied
 			// to the new markup
 			if (element instanceof ComponentTag)
 			{
-				ComponentTag tag = (ComponentTag) element;
-				if (tag.isOpen() && "body".equalsIgnoreCase(tag.getName()) && (tag.getNamespace() == null))
+				ComponentTag tag = (ComponentTag)element;
+				if (tag.isOpen() && TagUtils.isBodyTag(tag))
 				{
 					String onLoadBase = tag.getAttributes().getString("onLoad");
 					if (onLoadBase == null)
@@ -186,7 +183,7 @@
 					}
 				}
 			}
-			
+
 			// Add the element to the merged list
 			addMarkupElement(element);
 		}

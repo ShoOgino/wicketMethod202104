@@ -15,19 +15,19 @@
 	{
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
-		final MarkupStream associatedMarkupStream = container.getAssociatedMarkupStream(false);
+		final MarkupStream markupStream = container.getAssociatedMarkupStream(false);
 
 		// No associated markup => no header section
-		if (associatedMarkupStream == null)
+		if (markupStream == null)
 		{
 			return;
 		}
 
 		// Position pointer at current (first) header
-		while (nextHeaderMarkup(associatedMarkupStream) != -1)
+		while (nextHeaderMarkup(markupStream) != -1)
 		{
 			// Create a HeaderPartContainer and associate the markup
-			final HeaderPartContainer headerPart = getHeaderPart(associatedMarkupStream.getCurrentIndex());
+			final HeaderPartContainer headerPart = getHeaderPart(markupStream.getCurrentIndex());
 			if (headerPart != null)
 			{
 				// A component's header section must only be added once,
@@ -66,7 +66,7 @@
 			}
 
 			// Position the stream after <wicket:head>
-			associatedMarkupStream.skipComponent();
+			markupStream.skipComponent();
 		}
 	}
 
