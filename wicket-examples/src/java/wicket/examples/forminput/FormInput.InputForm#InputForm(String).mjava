@@ -58,6 +58,18 @@
 			};
 			group.add(persons);
 
+			CheckGroup checks = new CheckGroup("numbersCheckGroup");
+			add(checks);
+			ListView checksList = new ListView("numbers", NUMBERS)
+			{
+				protected void populateItem(ListItem item)
+				{
+					item.add(new Check("check", item.getModel()));
+					item.add(new Label("number", item.getModelObjectAsString()));
+				};
+			};
+			checks.add(checksList);
+			
 			add(new ListMultipleChoice("siteSelection", SITES));
 
 			// TextField using a custom converter.
