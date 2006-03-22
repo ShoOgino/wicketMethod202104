@@ -1,0 +1,17 @@
+	/**
+	 * Convinience method that copies the input stream returned by
+	 * {@link #getInputStream()} into a temporary file.
+	 * <p>
+	 * Only use this if you actually need a {@link File} to work with, in all
+	 * other cases use {@link #getInputStream()}
+	 * 
+	 * @return temporary file containing the contents of this file upload
+	 * @throws IOException
+	 */
+	public final File writeToTempFile() throws IOException
+	{
+		File temp = File.createTempFile(Session.get().getId(), item.getFieldName());
+		writeTo(temp);
+		return temp;
+	}
+
