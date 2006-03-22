@@ -5,7 +5,24 @@
 	 */
 	public final void setMarkupTagReferenceId(final String markupId)
 	{
-		// FIXME General: does this need to be versioned?
+		if (markupId == null)
+		{
+			throw new IllegalArgumentException("markupId cannot be null");
+		}
+		if (!Objects.equal(this.markupId, markupId))
+		{
+			addStateChange(new Change()
+			{
+				private static final long serialVersionUID = 1L;
+				private final String oldMarkupId = Fragment.this.markupId;
+
+				public void undo()
+				{
+					Fragment.this.markupId = oldMarkupId;
+				}
+
+			});
+		}
 		this.markupId = markupId;
 	}
 
