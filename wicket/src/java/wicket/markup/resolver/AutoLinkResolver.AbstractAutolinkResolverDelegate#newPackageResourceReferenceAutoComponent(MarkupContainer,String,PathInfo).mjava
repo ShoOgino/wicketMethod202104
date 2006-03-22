@@ -23,8 +23,16 @@
 				// header has been added to (e.g. the Page). What we need
 				// however, is the component (e.g. a Panel) which
 				// contributed it.
-				Class clazz = ((MarkupResourceStream)container.getMarkupStream().getResource())
-						.getMarkupClass();
+				Class clazz = container.getMarkupStream().getContainerClass();
+
+				// However if the markup stream is a merged markup stream
+				// (inheritance),
+				// than we need the class of the markup file which contained the
+				// tag.
+				if (container.getMarkupStream().getTag().getMarkupClass() != null)
+				{
+					clazz = container.getMarkupStream().getTag().getMarkupClass();
+				}
 
 				// Create the component implementing the link
 				PackageResourceReferenceAutolink autoLink = new PackageResourceReferenceAutolink(

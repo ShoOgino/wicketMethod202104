@@ -1,0 +1,21 @@
+	/**
+	 * Register (add or replace) a new resolver with the tagName and
+	 * attributeName. The resolver will be invoked each time an appropriate tag
+	 * and attribute is found.
+	 * 
+	 * @param tagName
+	 *            The tag name
+	 * @param attributeName
+	 *            The attribute name
+	 * @param resolver
+	 *            Implements what to do based on the tag and the attribute
+	 */
+	public static final void addTagReferenceResolver(final String tagName, final String attributeName,
+			final IAutolinkResolverDelegate resolver)
+	{
+		TagReferenceResolver tagReferenceResolver = new TagReferenceResolver(attributeName);
+		tagNameToTagReferenceResolvers.put(tagName, tagReferenceResolver);
+
+		tagNameToAutolinkResolverDelegates.put(tagName, resolver);
+	}
+
