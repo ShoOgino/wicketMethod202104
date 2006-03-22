@@ -1,0 +1,34 @@
+		public UploadResourceState()
+		{
+
+			RequestCycle rc = RequestCycle.get();
+			HttpServletRequest req = ((WebRequest)rc.getRequest()).getHttpServletRequest();
+			UploadInfo info = UploadWebRequest.getUploadInfo(req);
+
+			if (info == null)
+			{
+
+				// status = "70.1 KB of 1.9 MB at 61.0 KB/s; half a minute
+				// remaining<script>if($('UploadProgressBar1')){$('UploadProgressBar1').firstChild.firstChild.style.width='3%'}</script>";
+				status = "0|0|0|0";
+			}
+			else
+			{
+				if (info.getTotalBytes() > 0)
+				{
+
+					// status = "70.1 KB of 1.9 MB at 61.0 KB/s; half a minute
+					// remaining<script>if($('UploadProgressBar1')){$('UploadProgressBar1').firstChild.firstChild.style.width='"+percentageComplete+"%'}</script>";
+					status = "" + info.getPercentageComplete() + "|"
+							+ info.getBytesUploadedString() + "|"
+							+ info.getTotalBytesString() + "|"
+							+ info.getTransferRateString() + "|"
+							+ info.getRemainingTimeString();
+				}
+				else
+				{
+					status = "0|0|0|0";
+				}
+			}
+		}
+
