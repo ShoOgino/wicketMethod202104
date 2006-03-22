@@ -3,14 +3,20 @@
 		 */
 		public void renderHead(final Response response)
 		{
-			// if(!isStateless()) TODO this shouldn't be done for stateless pages. 
-			// This will make all pages statefull. But how do we know that if 
+			// if(!isStateless()) TODO this shouldn't be done for stateless pages.
+			// This will make all pages statefull. But how do we know that if
 			// it is stateless because that is only know after render.
 			// Should we use a Response Filter??
-			final ArrayListStack accessStack = getPageMap().getAccessStack();
-			if (accessStack.size() > 1)
+			int initialAccessStackSize = 0;
+			if (getApplication().getRequestCycleSettings().getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_RENDER
+					&& getRequestCycle().getRequestTarget() instanceof RedirectPageRequestTarget)
 			{
-				response.write("<script language=\"JavaScript\">if(history.length == 1){document.location.href = '");
+				initialAccessStackSize = 1;
+			}
+			final ArrayListStack accessStack = getPageMap().getAccessStack();
+			if (accessStack.size() > initialAccessStackSize)
+			{
+				response.write("<script language=\"JavaScript\">if((history.length == 0 && document.all) || (history.length == 1 && !document.all)){ if (!document.all) window.location.hash='some-random-hash!'; document.location.href = '");
 				response.write(urlFor(INewBrowserWindowListener.INTERFACE));
 				response.write("'}</script>");
 			}
