@@ -1,12 +1,17 @@
+	/**
+	 * @param id
+	 * @param form
+	 */
 	public UploadProgressBar(String id, Form form)
 	{
 		super(id);
-		this.form=form;
+		this.form = form;
+		setOutputMarkupId(true);
 		form.setOutputMarkupId(true);
 		
-		add(new ProgressbarAjaxBehavior());
+		add(new ProgressbarScriptIncluder());
 
-		Label progressBarCSS = new Label("progressBarCSS", new AbstractReadOnlyModel()
+		ScriptLabel progressBarCSS = new ScriptLabel("progressBarCSS", new AbstractReadOnlyModel()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -18,11 +23,9 @@
 				return getCSSComponentInitializationScript();
 			}
 		});
-		progressBarCSS.setEscapeModelStrings(false);
-		progressBarCSS.setRenderBodyOnly(true);
 		add(progressBarCSS);
 
-		Label progressBarJS = new Label("progressBarJS", new AbstractReadOnlyModel()
+		ScriptLabel progressBarJS = new ScriptLabel("progressBarJS", new AbstractReadOnlyModel()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -34,8 +37,6 @@
 				return getJavaScriptComponentInitializationScript();
 			}
 		});
-		progressBarJS.setEscapeModelStrings(false);
-		progressBarJS.setRenderBodyOnly(true);
 		add(progressBarJS);
 
 		form.add(new AttributeModifier("onsubmit", true, new Model("startupload();")));
