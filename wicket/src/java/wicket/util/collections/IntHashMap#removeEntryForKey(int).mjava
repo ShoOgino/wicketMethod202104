@@ -1,0 +1,32 @@
+	/**
+	 * Removes and returns the entry associated with the specified key in the
+	 * HashMap. Returns null if the HashMap contains no mapping for this key.
+	 * @param key 
+	 * @return The Entry object that was removed
+	 */
+	Entry removeEntryForKey(int key)
+	{
+		int i = indexFor(key, table.length);
+		Entry prev = table[i];
+		Entry e = prev;
+
+		while (e != null)
+		{
+			Entry next = e.next;
+			if ( key == e.key)
+			{
+				modCount++;
+				size--;
+				if (prev == e)
+					table[i] = next;
+				else
+					prev.next = next;
+				return e;
+			}
+			prev = e;
+			e = next;
+		}
+
+		return e;
+	}
+

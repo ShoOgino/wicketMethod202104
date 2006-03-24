@@ -1,0 +1,19 @@
+	/**
+	 * Add a new entry with the specified key, value and hash code to the
+	 * specified bucket. It is the responsibility of this method to resize the
+	 * table if appropriate.
+	 * 
+	 * Subclass overrides this to alter the behavior of put method.
+	 * 
+	 * @param hash
+	 * @param key
+	 * @param value
+	 * @param bucketIndex
+	 */
+	void addEntry(int key, Object value, int bucketIndex)
+	{
+		table[bucketIndex] = new Entry(key, value, table[bucketIndex]);
+		if (size++ >= threshold)
+			resize(2 * table.length);
+	}
+

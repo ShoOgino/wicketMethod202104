@@ -1,0 +1,28 @@
+	/**
+	 * This method is used instead of put by constructors and pseudoconstructors
+	 * (clone, readObject). It does not resize the table, check for
+	 * comodification, etc. It calls createEntry rather than addEntry.
+	 * @param key 
+	 * @param value 
+	 */
+	private void putForCreate(int key, Object value)
+	{
+		int i = indexFor(key, table.length);
+
+		/**
+		 * Look for preexisting entry for key. This will never happen for clone
+		 * or deserialize. It will only happen for construction if the input Map
+		 * is a sorted map whose ordering is inconsistent w/ equals.
+		 */
+		for (Entry e = table[i]; e != null; e = e.next)
+		{
+			if (key == e.key)
+			{
+				e.value = value;
+				return;
+			}
+		}
+
+		createEntry(key, value, i);
+	}
+

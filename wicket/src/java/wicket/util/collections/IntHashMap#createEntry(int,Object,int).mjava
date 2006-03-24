@@ -1,0 +1,19 @@
+	/**
+	 * Like addEntry except that this version is used when creating entries as
+	 * part of Map construction or "pseudo-construction" (cloning,
+	 * deserialization). This version needn't worry about resizing the table.
+	 * 
+	 * Subclass overrides this to alter the behavior of HashMap(Map), clone, and
+	 * readObject.
+	 * 
+	 * @param hash
+	 * @param key
+	 * @param value
+	 * @param bucketIndex
+	 */
+	void createEntry(int key, Object value, int bucketIndex)
+	{
+		table[bucketIndex] = new Entry( key, value, table[bucketIndex]);
+		size++;
+	}
+

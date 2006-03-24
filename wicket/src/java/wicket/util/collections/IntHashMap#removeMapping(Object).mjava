@@ -1,0 +1,36 @@
+	/**
+	 * Special version of remove for EntrySet.
+	 * @param o 
+	 * @return The entry that was removed
+	 */
+	Entry removeMapping(Object o)
+	{
+		if (!(o instanceof Entry))
+			return null;
+
+		Entry entry = (Entry)o;
+		int key = entry.getKey();
+		int i = indexFor(key, table.length);
+		Entry prev = table[i];
+		Entry e = prev;
+
+		while (e != null)
+		{
+			Entry next = e.next;
+			if (e.key == key && e.equals(entry))
+			{
+				modCount++;
+				size--;
+				if (prev == e)
+					table[i] = next;
+				else
+					prev.next = next;
+				return e;
+			}
+			prev = e;
+			e = next;
+		}
+
+		return e;
+	}
+

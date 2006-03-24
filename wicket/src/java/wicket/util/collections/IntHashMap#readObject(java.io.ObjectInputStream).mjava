@@ -1,0 +1,31 @@
+	/**
+	 * Reconstitute the <tt>HashMap</tt> instance from a stream (i.e.,
+	 * deserialize it).
+	 * 
+	 * @param s
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException
+	{
+		// Read in the threshold, loadfactor, and any hidden stuff
+		s.defaultReadObject();
+
+		// Read in number of buckets and allocate the bucket array;
+		int numBuckets = s.readInt();
+		table = new Entry[numBuckets];
+
+		init(); // Give subclass a chance to do its thing.
+
+		// Read in size (number of Mappings)
+		int size = s.readInt();
+
+		// Read the keys and values, and put the mappings in the HashMap
+		for (int i = 0; i < size; i++)
+		{
+			int key = s.readInt();
+			Object value = s.readObject();
+			putForCreate(key, value);
+		}
+	}
+
