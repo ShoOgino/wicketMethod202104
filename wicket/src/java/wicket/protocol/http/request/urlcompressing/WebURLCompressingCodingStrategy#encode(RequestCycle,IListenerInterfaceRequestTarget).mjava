@@ -1,0 +1,69 @@
+	/**
+	 * Encode a listener interface target.
+	 * 
+	 * @param requestCycle
+	 *            the current request cycle
+	 * @param requestTarget
+	 *            the target to encode
+	 * @return the encoded url
+	 */
+	protected String encode(RequestCycle requestCycle,
+			IListenerInterfaceRequestTarget requestTarget)
+	{
+		final RequestListenerInterface rli = requestTarget.getRequestListenerInterface();
+
+		// Start string buffer for url
+		final AppendingStringBuffer url = new AppendingStringBuffer(64);
+		url.append(urlPrefix(requestCycle));
+		url.append('?');
+		url.append(INTERFACE_PARAMETER_NAME);
+		url.append('=');
+
+		// Get component and page for request target
+		final Component component = requestTarget.getTarget();
+		final Page page = component.getPage();
+
+		// Add pagemap
+		final PageMap pageMap = page.getPageMap();
+		if (!pageMap.isDefault())
+		{
+			url.append(pageMap.getName());
+		}
+		url.append(Component.PATH_SEPARATOR);
+
+		String listenerName = rli.getName();
+		// Add path to component
+		if (page instanceof ICompressingUrlPage && !"IResourceListener".equals(listenerName))
+		{
+			url.append(page.getId());
+			url.append(Component.PATH_SEPARATOR);
+			url.append(((ICompressingUrlPage)page).getUrlCompressor().getUIDForComponentAndInterface(component,listenerName));
+			listenerName = null;
+		}
+		else
+		{
+			url.append(component.getPath());
+		}
+		url.append(Component.PATH_SEPARATOR);
+
+		// Add version
+		final int versionNumber = component.getPage().getCurrentVersionNumber();
+		if (!rli.getRecordsPageVersion())
+		{
+			url.append(Page.LATEST_VERSION);
+		}
+		else if (versionNumber > 0)
+		{
+			url.append(versionNumber);
+		}
+		url.append(Component.PATH_SEPARATOR);
+
+		// Add listener interface
+		if (listenerName != null && !IRedirectListener.INTERFACE.getName().equals(listenerName))
+		{
+			url.append(listenerName);
+		}
+
+		return requestCycle.getResponse().encodeURL(url.toString());
+	}
+
