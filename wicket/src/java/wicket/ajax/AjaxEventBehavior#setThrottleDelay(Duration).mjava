@@ -1,5 +1,22 @@
-	public final AjaxEventBehavior setThrottleDelay(Duration throttleDelay) {
-		throttlingSettings=new ThrottlingSettings("th"+(++sequence), throttleDelay);
+	/**
+	 * Sets the throttle delay for this behavior. Throttled behaviors only
+	 * execute once withing the given delay even though they are triggered
+	 * multiple times.
+	 * <p>
+	 * For example, this is useful when attaching this behavior to the
+	 * onkeypress event. It is not desirable to have an ajax call made every
+	 * time the user types so we throttle that call to a desirable delay, such
+	 * as once per second. This gives us a near real time ability to provide
+	 * feedback without overloading the server with ajax calls.
+	 * 
+	 * 
+	 * @param throttleDelay
+	 *            throttle delay
+	 * @return this for chaining
+	 */
+	public final AjaxEventBehavior setThrottleDelay(Duration throttleDelay)
+	{
+		throttlingSettings = new ThrottlingSettings("th" + (++sequence), throttleDelay);
 		return this;
 	}
 
