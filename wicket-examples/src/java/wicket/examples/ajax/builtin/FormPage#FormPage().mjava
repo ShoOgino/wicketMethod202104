@@ -3,8 +3,7 @@
 	 */
 	public FormPage()
 	{
-		// add feedback panel with a markup id setter so it can be updated via
-		// ajax
+		// create feedback panel to show errors
 		final FeedbackPanel feedback = new FeedbackPanel("feedback");
 		feedback.setOutputMarkupId(true);
 		add(feedback);
@@ -33,7 +32,13 @@
 		form.add(fc);
 		form.add(new SimpleFormComponentLabel("email-label", fc));
 
+
+		// attach an ajax validation behavior to all form component's onkeypress
+		// event and throttle it down to once per second
+
 		AjaxFormValidatingBehavior.addToAllFormComponents(form, "onkeypress", Duration.ONE_SECOND);
+
+		// add a button that can be used to submit the form via ajax
 
 		form.add(new AjaxSubmitButton("ajax-submit-button", form)
 		{
