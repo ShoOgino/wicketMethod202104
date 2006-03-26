@@ -17,7 +17,7 @@
 			throws IOException
 	{
 		// Max one line
-		final StringBuffer pushBack = new StringBuffer(readAheadSize);
+		final AppendingStringBuffer pushBack = new AppendingStringBuffer(readAheadSize);
 
 		// The current char from the markup file
 		int value;
@@ -25,7 +25,7 @@
 		{
 			pushBack.append((char)value);
 
-			// Stop at end of the first tag or end of line. If it is HTML
+			// Stop at the end of the first tag or end of line. If it is HTML
 			// without newlines, stop after X bytes (= characters)
 			if ((value == '>') || (value == '\n') || (value == '\r')
 					|| (pushBack.length() >= (readAheadSize - 1)))

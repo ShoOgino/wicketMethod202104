@@ -1,14 +1,20 @@
 	/**
-	 * Scans the given markup string and extracts balancing tags.
+	 * Scans the given markup and extracts balancing tags.
 	 * 
 	 */
 	private void parseMarkup()
 	{
+		// Handlers may add MarkupElements which were not found in the markup
+		// file.
 		final List autoAddList = new ArrayList();
 
+		// Initialize the markup filter chain
 		this.markupFilterChain = newFilterChain(autoAddList);
+		
+		// Allow subclasses to extend the filter chain
 		initFilterChain();
 
+		// Get relevant settings from the Application
 		boolean stripComments = this.markupSettings.getStripComments();
 		boolean compressWhitespace = this.markupSettings.getCompressWhitespace();
 

@@ -5,12 +5,9 @@
 	 */
 	public void init() throws IOException
 	{
-		// reset: Must come from markup
-		this.encoding = null;
-
 		if (!this.inputStream.markSupported())
 		{
-			throw new IOException("BufferedInputStream does not support mark/reset");
+			throw new IOException("The InputStream must support mark/reset");
 		}
 
 		// read ahead buffer required for the first line of the markup
@@ -21,7 +18,7 @@
 		// read-ahead the input stream if it starts with <?xml
 		// encoding=".."?>. If yes, set this.encoding.
 		// If no, return the whole line. determineEncoding will read-ahead
-		// at max. the very first line of the markup.
+		// at max the very first line of the markup.
 		final String encoding = determineEncoding(this.inputStream, readAheadSize);
 		if (encoding != null)
 		{
