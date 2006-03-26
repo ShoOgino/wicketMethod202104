@@ -12,9 +12,9 @@
 
 		filter = new TagTypeHandler(filter);
 		filter = new HtmlHandler(filter);
-		filter = new WicketParamTagHandler(filter, application.getMarkupSettings());
+		filter = new WicketParamTagHandler(filter);
 		filter = new WicketRemoveTagHandler(filter);
-		filter = new WicketLinkTagHandler(filter, application.getMarkupSettings());
+		filter = new WicketLinkTagHandler(filter);
 
 		// Provided the wicket component requesting the markup is known ...
 		MarkupResourceStream resource = markup.getResource();
@@ -22,8 +22,7 @@
 		{
 			if (WicketMessageTagHandler.enable)
 			{
-				filter = new WicketMessageTagHandler(filter, resource.getContainerInfo(),
-						application.getResourceSettings());
+				filter = new WicketMessageTagHandler(filter, resource.getContainerInfo());
 			}
 
 			filter = new BodyOnLoadHandler(filter);
