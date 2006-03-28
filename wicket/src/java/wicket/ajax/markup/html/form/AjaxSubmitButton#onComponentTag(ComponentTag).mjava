@@ -1,7 +1,15 @@
 	protected void onComponentTag(ComponentTag tag)
 	{
 		checkComponentTag(tag, "input");
-		checkComponentTagAttribute(tag, "type", "button");
+
+		final String type = tag.getAttributes().getString("type");
+		if (!"button".equals(type) && !"image".equals(type))
+		{
+			findMarkupStream().throwMarkupException(
+					"Component " + getId() + " must be applied to a tag with 'type'"
+							+ " attribute matching 'button' or 'image', not '" + type + "'");
+		}
+
 		super.onComponentTag(tag);
 	}
 
