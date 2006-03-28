@@ -1,20 +1,17 @@
-	/**
-	 * @return The image data for this dynamic image
-	 */
-	protected byte[] getImageData()
-	{
-		// get image data is always called in sync block
-		byte[] data = null;
-		if (imageData != null)
-		{
-			data = (byte[])imageData.get();
-		}
-		if (data == null)
-		{
-			data = render();
-			imageData = new SoftReference(data);
-			setLastModifiedTime(Time.now());
-		}
-		return data;
-	}
+  protected byte[] getImageData()
+  {
+    // get image data is always called in sync block
+    byte[] data = null;
+    if (imageData != null)
+    {
+      data = (byte[])imageData.get();
+    }
+    if (data == null)
+    {
+      data = render();
+      imageData = new SoftReference(data);
+      setLastModifiedTime(Time.now());
+    }
+    return data;
+  }
 

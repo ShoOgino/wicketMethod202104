@@ -1,4 +1,6 @@
 	/**
+	 * Adds a resource.
+	 *
 	 * @param scope
 	 *            Scope of resource
 	 * @param name
@@ -14,19 +16,17 @@
 			final String style, final Resource resource)
 	{
 		// Store resource
-		final String resourceKey = resourceKey(scope, name, locale, style);
-		ResourceState resourceState;
+		final String key = resourceKey(scope, name, locale, style);
 		synchronized (resourceMap)
 		{
-			resourceState = (ResourceState)resourceMap.get(resourceKey);
-		}
-		if (resourceState == null)
-		{
-			resourceState = new ResourceState(resourceKey, resource);
-		}
-		synchronized (resourceMap)
-		{
-			resourceMap.put(resourceKey, resourceState);
+			Resource value = (Resource) resourceMap.get(key);
+			if (value == null)
+				resourceMap.put(key, resource);
+			else if (!value.equals(resource))
+      {
+				throw new IllegalArgumentException(key + " has a different resource " +
+          "already associated with it: " + value);
+      }
 		}
 	}
 
