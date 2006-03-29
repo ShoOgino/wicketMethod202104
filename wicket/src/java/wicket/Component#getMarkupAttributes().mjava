@@ -1,4 +1,6 @@
 	/**
+	 * THIS IS WICKET INTERNAL ONLY. DO NOT USE IT.
+	 * 
 	 * Get a copy of the markup's attributes which are associated with the
 	 * component.
 	 * <p>
@@ -12,7 +14,8 @@
 	 */
 	public final ValueMap getMarkupAttributes()
 	{
-		ValueMap attrs=new ValueMap(initializeMarkupStream().getTag().getAttributes());
+		MarkupStream markupStream = new MarkupFragmentFinder().find(this);
+		ValueMap attrs = new ValueMap(markupStream.getTag().getAttributes());
 		attrs.makeImmutable();
 		return attrs;
 	}

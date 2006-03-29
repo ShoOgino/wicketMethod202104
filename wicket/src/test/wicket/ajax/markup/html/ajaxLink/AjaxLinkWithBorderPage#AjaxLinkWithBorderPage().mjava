@@ -3,7 +3,8 @@
 	 */
 	public AjaxLinkWithBorderPage()
 	{
-		add(new AjaxTestBorder("border"));
+		add(new AjaxTestBorder("border").setTransparentResolver(true));
+		
 		final Label label = new Label("ajaxLabel", new PropertyModel(this, "labelText"));
 		label.setOutputMarkupId(true);
 		add(label);
@@ -14,9 +15,8 @@
 			public void onClick(AjaxRequestTarget target)
 			{
 				labelText = "Updated!";
-				// target.addComponent(label);
+				target.addComponent(label);
 			}
-
 		});
 	}
 
