@@ -13,17 +13,6 @@
 	 */
 	public static final HeaderContributor forJavaScript(final Class scope, final Pattern pattern)
 	{
-		PackageResource[] resources = PackageResource.get(scope, pattern);
-		HeaderContributor contributor = new HeaderContributor();
-		if (resources != null)
-		{
-			int len = resources.length;
-			for (int i = 0; i < len; i++)
-			{
-				contributor.addContributor(new JavaScriptReferenceHeaderContributor(scope,
-						resources[i].getPath()));
-			}
-		}
-		return contributor;
+		return forJavaScript(scope, pattern, false);
 	}
 

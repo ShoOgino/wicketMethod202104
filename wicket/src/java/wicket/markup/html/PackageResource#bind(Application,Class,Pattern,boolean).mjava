@@ -1,7 +1,9 @@
 	/**
 	 * Binds the resources that match the provided pattern to the given
 	 * application object. Will create any resources if not already in the
-	 * shared resources of the application object.
+	 * shared resources of the application object and does that recursively when
+	 * the recurse parameter is true, or just for the scoped package if that
+	 * parameter is false
 	 * 
 	 * @param application
 	 *            The application to bind to.
@@ -15,9 +17,9 @@
 	 * @param recurse
 	 *            Whether this method should recurse into sub packages
 	 */
-	public static void bind(Application application, Class scope, Pattern pattern)
+	public static void bind(Application application, Class scope, Pattern pattern, boolean recurse)
 	{
-		// bind using the pattern without recursing
-		bind(application, scope, pattern, false);
+		// bind using the pattern
+		get(scope, pattern, recurse);
 	}
 

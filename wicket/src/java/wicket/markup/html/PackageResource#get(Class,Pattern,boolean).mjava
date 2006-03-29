@@ -1,0 +1,71 @@
+	/**
+	 * Gets non-localized resources for a given set of criteria. Multiple
+	 * resource can be loaded for the same criteria if they match the pattern.
+	 * If no resources were found, this method returns null.
+	 * 
+	 * @param scope
+	 *            This argument will be used to get the class loader for loading
+	 *            the package resource, and to determine what package it is in.
+	 *            Typically this is the calling class/ the class in which you
+	 *            call this method
+	 * @param pattern
+	 *            Regexp pattern to match resources
+	 * @param recurse
+	 *            Whether this method should recurse into sub packages
+	 * @return The resources, never null but may be empty
+	 */
+	public static PackageResource[] get(Class scope, Pattern pattern, boolean recurse)
+	{
+		final List resources = new ArrayList();
+		String packageRef = Strings.replaceAll(PackageName.forClass(scope).getName(), ".", "/");
+		ClassLoader loader = scope.getClassLoader();
+		try
+		{
+			// loop through the resources of the package
+			Enumeration packageResources = loader.getResources(packageRef);
+			while (packageResources.hasMoreElements())
+			{
+				URL resource = (URL)packageResources.nextElement();
+				URLConnection connection = resource.openConnection();
+				if (connection instanceof JarURLConnection)
+				{
+					JarFile jf = ((JarURLConnection)connection).getJarFile();
+					Enumeration enumeration = jf.entries();
+					while (enumeration.hasMoreElements())
+					{
+						JarEntry je = (JarEntry)enumeration.nextElement();
+						String name = je.getName();
+						if (name.startsWith(packageRef))
+						{
+							name = name.substring(packageRef.length() + 1);
+							if (pattern.matcher(name).matches()
+									&& (recurse || (name.indexOf('/') == -1)))
+							{
+								// we add the entry as a package resource
+								resources.add(get(scope, name, null, null));
+							}
+						}
+					}
+				}
+				else
+				{
+					String absolutePath = scope.getResource("").getPath();
+					File basedir = new File(absolutePath);
+					if (!basedir.isDirectory())
+					{
+						throw new IllegalStateException("unable to read resources from directory "
+								+ basedir);
+					}
+					addResources(scope, pattern, resources, new StringBuffer(""), basedir, recurse);
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+
+		return (resources != null) ? (PackageResource[])resources
+				.toArray(new PackageResource[resources.size()]) : null;
+	}
+

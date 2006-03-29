@@ -1,0 +1,17 @@
+	/**
+	 * Interpolate the map of variables. Variables are denoted in this string by
+	 * the syntax ${variableName}. The contents will be altered by replacing
+	 * each variable of the form ${variableName} with the value returned by
+	 * variables.getValue("variableName").
+	 * 
+	 * @param variables
+	 *            The variables to interpolate
+	 * @return This for chaining
+	 */
+	public final PackagedTextTemplate interpolate(Map variables)
+	{
+		String result = new MapVariableInterpolator(buffer.toString(), variables).toString();
+		replaceContents(result);
+		return this;
+	}
+
