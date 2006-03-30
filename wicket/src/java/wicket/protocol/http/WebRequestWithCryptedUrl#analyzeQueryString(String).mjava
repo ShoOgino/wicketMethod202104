@@ -1,7 +1,8 @@
 	/**
 	 * Extract key/value pairs from query string
 	 * 
-	 * @param queryString The query string
+	 * @param queryString
+	 *            The query string
 	 * @return A map of query string parameter keys and values
 	 */
 	private ValueMap analyzeQueryString(final String queryString)
@@ -24,33 +25,33 @@
 				String[] prevValue = (String[])params.get(pair);
 				if (prevValue != null)
 				{
-					String[] newValue = new String[prevValue.length+1];
+					String[] newValue = new String[prevValue.length + 1];
 					System.arraycopy(prevValue, 0, newValue, 0, prevValue.length);
 					newValue[prevValue.length] = "";
-					params.put(pair,newValue);
+					params.put(pair, newValue);
 				}
 				else
 				{
-				    // Parameter without value
-					params.put(pair, new String[] {""});
+					// Parameter without value
+					params.put(pair, new String[] { "" });
 				}
 			}
 			else
 			{
-			    final String key = pair.substring(0, pos);
-			    final String value = pair.substring(pos + 1);
+				final String key = pair.substring(0, pos);
+				final String value = pair.substring(pos + 1);
 				String[] prevValue = (String[])params.get(key);
 				if (prevValue != null)
 				{
-					String[] newValue = new String[prevValue.length+1];
+					String[] newValue = new String[prevValue.length + 1];
 					System.arraycopy(prevValue, 0, newValue, 0, prevValue.length);
 					newValue[prevValue.length] = value;
-					params.put(key,newValue);
+					params.put(key, newValue);
 				}
 				else
 				{
-				    // Parameter without value
-					params.put(key, new String[] {value});
+					// Parameter without value
+					params.put(key, new String[] { value });
 				}
 			}
 		}

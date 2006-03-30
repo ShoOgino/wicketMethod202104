@@ -10,47 +10,47 @@
 
 		queryString = request.getQueryString();
 		this.path = request.getPathInfo();
-		
+
 		if (this.path == null)
 		{
-		    return;
+			return;
 		}
-		
+
 		if (this.path.startsWith("/") && this.path.endsWith(".wic"))
 		{
-		    String path = this.path.substring(1, this.path.length() - 4);
-			
+			String path = this.path.substring(1, this.path.length() - 4);
+
 			path = Strings.replaceAll(path, "/", ".");
 			this.parameters = new ValueMap();
 			this.parameters.put(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME, path);
-			
+
 			this.path = null;
 		}
-		
+
 		if (queryString != null)
 		{
-		    if (parameters == null)
-		    {
-		        parameters = new ValueMap();
-		    }
-		    
+			if (parameters == null)
+			{
+				parameters = new ValueMap();
+			}
+
 			// extract parameter key/value pairs from the query string
-		    this.parameters.putAll(analyzeQueryString(this.queryString));
+			this.parameters.putAll(analyzeQueryString(this.queryString));
 		}
-		
-		// If available, add POST parameters as well. 
-		// The parameters from HttpRequest 
+
+		// If available, add POST parameters as well.
+		// The parameters from HttpRequest
 		final Map params = super.getParameterMap();
 		if ((params != null) && !params.isEmpty())
 		{
-		    // For all parameters (POST + URL query string)
-		    final Iterator iter = params.entrySet().iterator();
-		    while (iter.hasNext())
-		    {
-		        final Map.Entry entry = (Map.Entry)iter.next();
-	            // add key/value to our parameter map
-	            this.parameters.put(entry.getKey(), entry.getValue());
-		    }
+			// For all parameters (POST + URL query string)
+			final Iterator iter = params.entrySet().iterator();
+			while (iter.hasNext())
+			{
+				final Map.Entry entry = (Map.Entry)iter.next();
+				// add key/value to our parameter map
+				this.parameters.put(entry.getKey(), entry.getValue());
+			}
 		}
 	}
 

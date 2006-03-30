@@ -4,20 +4,23 @@
 	public String decodeURL(final String url)
 	{
 		int startIndex = url.indexOf("x=");
-		if(startIndex != -1)
+		if (startIndex != -1)
 		{
-			startIndex = startIndex +2;
+			startIndex = startIndex + 2;
 			final String secureParam;
 			final int endIndex = url.indexOf("&", startIndex);
 			try
 			{
-				if(endIndex == -1)
+				if (endIndex == -1)
 				{
-					secureParam = URLDecoder.decode(url.substring(startIndex),Application.get().getRequestCycleSettings().getResponseRequestEncoding());
+					secureParam = URLDecoder.decode(url.substring(startIndex), Application.get()
+							.getRequestCycleSettings().getResponseRequestEncoding());
 				}
 				else
 				{
-					secureParam = URLDecoder.decode(url.substring(startIndex, endIndex),Application.get().getRequestCycleSettings().getResponseRequestEncoding());
+					secureParam = URLDecoder.decode(url.substring(startIndex, endIndex),
+							Application.get().getRequestCycleSettings()
+									.getResponseRequestEncoding());
 				}
 			}
 			catch (UnsupportedEncodingException ex)
@@ -25,15 +28,16 @@
 				// should never happen
 				throw new WicketRuntimeException(ex);
 			}
-			 
+
 			// Get the crypt implementation from the application
-			final ICrypt urlCrypt = Application.get().getSecuritySettings().getCryptFactory().newCrypt();
-			
-		    // Decrypt the query string
+			final ICrypt urlCrypt = Application.get().getSecuritySettings().getCryptFactory()
+					.newCrypt();
+
+			// Decrypt the query string
 			final String queryString = urlCrypt.decrypt(secureParam);
-	
+
 			// The querystring might have been shortened (length reduced).
-			// In that case, lengthen the query string again. 
+			// In that case, lengthen the query string again.
 			return rebuildUrl(queryString);
 		}
 		return url;
