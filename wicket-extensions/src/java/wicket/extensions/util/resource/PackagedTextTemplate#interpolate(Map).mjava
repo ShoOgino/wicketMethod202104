@@ -1,8 +1,14 @@
 	/**
-	 * Interpolate the map of variables. Variables are denoted in this string by
-	 * the syntax ${variableName}. The contents will be altered by replacing
-	 * each variable of the form ${variableName} with the value returned by
+	 * Interpolate the map of variables with the content and replace the content
+	 * with the result. Variables are denoted in this string by the syntax
+	 * ${variableName}. The contents will be altered by replacing each variable
+	 * of the form ${variableName} with the value returned by
 	 * variables.getValue("variableName").
+	 * <p>
+	 * WARNING there is no going back to the original contents after the
+	 * interpolation is done. if you need to do different interpolations on the
+	 * same original contents, use method {@link #asString(Map)} instead.
+	 * </p>
 	 * 
 	 * @param variables
 	 *            The variables to interpolate
@@ -10,8 +16,12 @@
 	 */
 	public final PackagedTextTemplate interpolate(Map variables)
 	{
-		String result = new MapVariableInterpolator(buffer.toString(), variables).toString();
-		replaceContents(result);
+		if (variables != null)
+		{
+			String result = new MapVariableInterpolator(buffer.toString(), variables).toString();
+			buffer.delete(0, buffer.length());
+			buffer.append(result);
+		}
 		return this;
 	}
 
