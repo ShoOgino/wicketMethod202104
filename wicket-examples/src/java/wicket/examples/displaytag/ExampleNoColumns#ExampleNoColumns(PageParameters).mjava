@@ -1,21 +1,31 @@
-    /**
-     * Constructor.
-     * 
-     * @param parameters Page parameters
-     */
-    public ExampleNoColumns(final PageParameters parameters)
-    {
-        // Test data
-        List data = new TestList(10, false);
-        
-        // Add table
-        add(new TableWithAlternatingRowStyle("entries", data)
-        {
-            public void populateItem(final ListItem listItem)
-            {
-                final ListObject value = (ListObject) listItem.getModelObject();
-                listItem.add(new Label("entry", value.getName()));
-            }
-        });
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param parameters
+	 *            Page parameters
+	 */
+	public ExampleNoColumns(final PageParameters parameters)
+	{
+		// Test data
+		List data = new TestList(10, false);
+
+		// ListVieweWithAlternatingRowStyle is a very simple extension
+		// to ListView implementing alternating row styles by changing
+		// the tags class attribute accordingly.
+		// Note: This is not the simplest way Wicket offers to render
+		// list, but it shows how ListViews work in general.
+		add(new ListVieweWithAlternatingRowStyle("entries", data)
+		{
+			/**
+			 * populateItem() is called for each item of the list. ListItem
+			 * provides, beside the IModel, the current index while iterating
+			 * over the data provided.
+			 */
+			public void populateItem(final ListItem listItem)
+			{
+				final ListObject value = (ListObject)listItem.getModelObject();
+				listItem.add(new Label("entry", value.getName()));
+			}
+		});
+	}
 
