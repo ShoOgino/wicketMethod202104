@@ -1,0 +1,23 @@
+	/**
+	 * Replace all email and URL addresses
+	 * 
+	 * @param text
+	 *            Text to be modified
+	 * @return Modified Text
+	 */
+	static CharSequence smartLink(final CharSequence text)
+	{
+		if (text == null)
+		{
+			return text;
+		}
+
+		Matcher matcher = emailPattern.matcher(text);
+		String work = matcher.replaceAll(emailReplacePattern);
+
+		matcher = urlPattern.matcher(work);
+		work = matcher.replaceAll(urlReplacePattern);
+
+		return work;
+	}
+

@@ -1,0 +1,54 @@
+	/**
+	 * Generates an image resource based on the attribute values on tag
+	 * 
+	 * @param value
+	 *            The value to parse
+	 */
+	private void newImage(final CharSequence value)
+	{
+		// Parse value
+		final ImageValueParser valueParser = new ImageValueParser(value);
+
+		// Does value match parser?
+		if (valueParser.matches())
+		{
+			final String imageReferenceName = valueParser.getImageReferenceName();
+			final String specification = Strings.replaceHtmlEscapeNumber(valueParser.getSpecification());
+			final String factoryName = valueParser.getFactoryName();
+			final Application application = component.getApplication();
+			
+			// Do we have a reference?
+			if (!Strings.isEmpty(imageReferenceName))
+			{
+				// Is resource already available via the application?
+				if (application.getSharedResources().get(Application.class, imageReferenceName, locale, style, true) == null)
+				{
+					// Resource not available yet, so create it with factory and
+					// share via Application
+					final Resource imageResource = getResourceFactory(application, factoryName)
+							.newResource(specification, locale, style);
+					application.getSharedResources().add(Application.class, imageReferenceName, locale, style,
+							imageResource);
+				}
+
+				// Create resource reference
+				this.resourceReference = new ResourceReference(Application.class,
+						imageReferenceName);
+				resourceReference.setLocale(locale);
+				resourceReference.setStyle(style);
+			}
+			else
+			{
+				this.resource = getResourceFactory(application, factoryName)
+						.newResource(specification, locale, style);
+			}
+		}
+		else
+		{
+			throw new WicketRuntimeException(
+					"Could not generate image for value attribute '"
+							+ value
+							+ "'.  Was expecting a value attribute of the form \"[resourceFactoryName]:[resourceReferenceName]?:[factorySpecification]\".");
+		}
+	}
+

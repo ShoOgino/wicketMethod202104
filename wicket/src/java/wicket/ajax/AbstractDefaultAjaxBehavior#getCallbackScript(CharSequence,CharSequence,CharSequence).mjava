@@ -1,0 +1,69 @@
+	/**
+	 * Returns javascript that performs an ajax callback to this behavior. The
+	 * script is decorated by the ajax callback decorator from
+	 * {@link AbstractDefaultAjaxBehavior#getAjaxCallDecorator()}.
+	 * 
+	 * @param partialCall
+	 *            Javascript of a partial call to the function performing the
+	 *            actual ajax callback. Must be in format
+	 *            <code>function(params,</code> with signature
+	 *            <code>function(params, onSuccessHandler, onFailureHandler</code>.
+	 *            Example: <code>wicketAjaxGet('callbackurl'</code>
+	 * @param onSuccessScript
+	 *            javascript that will run when the ajax call finishes
+	 *            successfully
+	 * @param onFailureScript
+	 *            javascript that will run when the ajax call finishes with an
+	 *            error status
+	 * 
+	 * @return script that peforms ajax callback to this behavior
+	 */
+	protected CharSequence getCallbackScript(final CharSequence partialCall, final CharSequence onSuccessScript,
+			final CharSequence onFailureScript)
+	{
+		final IAjaxCallDecorator decorator = getAjaxCallDecorator();
+
+		String indicatorId = findIndicatorId();
+
+		CharSequence success = (onSuccessScript == null) ? "" : onSuccessScript;
+		CharSequence failure = (onFailureScript == null) ? "" : onFailureScript;
+
+		if (decorator != null)
+		{
+			success = decorator.decorateOnSuccessScript(success);
+		}
+
+		if (!Strings.isEmpty(indicatorId))
+		{
+			String hide=";wicketHide('" + indicatorId + "');";
+			success = success + hide;
+			failure = failure + hide;
+		}
+
+
+		if (decorator != null)
+		{
+			failure = decorator.decorateOnFailureScript(failure);
+		}
+
+
+		AppendingStringBuffer buff = new AppendingStringBuffer(256);
+		buff.append("var ").append(IAjaxCallDecorator.WICKET_CALL_RESULT_VAR).append("=");
+		buff.append(partialCall).append(", function() { ").append(success);
+		buff.append("}, function() { ").append(failure).append("});");
+
+		CharSequence call = buff;
+
+		if (decorator != null)
+		{
+			call = decorator.decorateScript(call);
+		}
+
+		if (!Strings.isEmpty(indicatorId))
+		{
+			call = new AppendingStringBuffer("wicketShow('").append(indicatorId).append("');").append(call);
+		}
+
+		return call;
+	}
+

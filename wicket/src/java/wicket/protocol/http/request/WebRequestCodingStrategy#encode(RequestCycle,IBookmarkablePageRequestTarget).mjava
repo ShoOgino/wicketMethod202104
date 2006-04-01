@@ -11,11 +11,11 @@
 	 *            the target to encode
 	 * @return the encoded url
 	 */
-	protected String encode(RequestCycle requestCycle,
+	protected CharSequence encode(RequestCycle requestCycle,
 			IBookmarkablePageRequestTarget requestTarget)
 	{
 		// Begin encoding URL
-		final StringBuffer url = new StringBuffer(64);
+		final AppendingStringBuffer url = new AppendingStringBuffer(64);
 		url.append(urlPrefix(requestCycle));
 
 		// Get page Class
@@ -95,6 +95,6 @@
 			}
 		}
 
-		return requestCycle.getResponse().encodeURL(url.toString());
+		return requestCycle.getResponse().encodeURL(url);
 	}
 

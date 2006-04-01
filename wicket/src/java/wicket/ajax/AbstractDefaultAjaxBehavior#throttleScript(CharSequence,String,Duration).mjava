@@ -1,0 +1,44 @@
+	/**
+	 * Wraps the provided javascript with a throttled block. Throttled behaviors
+	 * only execute once within the given delay even though they are triggered
+	 * multiple times.
+	 * <p>
+	 * For example, this is useful when attaching an event behavior to the
+	 * onkeypress event. It is not desirable to have an ajax call made every
+	 * time the user types so we throttle that call to a desirable delay, such
+	 * as once per second. This gives us a near real time ability to provide
+	 * feedback without overloading the server with ajax calls.
+	 * 
+	 * @param script
+	 *            javascript to be throttled
+	 * @param throttleId
+	 *            the id of the throttle to be used. Usually this should remain
+	 *            constant for the same javascript block.
+	 * @param throttleDelay
+	 *            time span within which the javascript block will only execute
+	 *            once
+	 * @return wrapped javascript
+	 */
+	public static final CharSequence throttleScript(CharSequence script, String throttleId,
+			Duration throttleDelay)
+	{
+		if (Strings.isEmpty(script))
+		{
+			throw new IllegalArgumentException("script cannot be empty");
+		}
+
+		if (Strings.isEmpty(throttleId))
+		{
+			throw new IllegalArgumentException("throttleId cannot be empty");
+		}
+
+		if (throttleDelay == null)
+		{
+			throw new IllegalArgumentException("throttleDelay cannot be null");
+		}
+
+		// XXX change to appending string buffer?
+		return "wicketThrottler.throttle( '" + throttleId + "', " + throttleDelay.getMilliseconds()
+				+ ", function() { " + script + "});";
+	}
+

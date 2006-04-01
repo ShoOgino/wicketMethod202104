@@ -8,7 +8,7 @@
 	 * 
 	 * @return the url that references this handler
 	 */
-	public final String getCallbackUrl(final boolean recordPageVersion)
+	public final CharSequence getCallbackUrl(final boolean recordPageVersion)
 	{
 		if (getComponent() == null)
 		{
@@ -40,7 +40,7 @@
 			rli = IUnversionedBehaviorListener.INTERFACE;
 		}
 
-		return getComponent().urlFor(rli) + '&'
-				+ WebRequestCodingStrategy.BEHAVIOR_ID_PARAMETER_NAME + '=' + index;
+		return new AppendingStringBuffer(getComponent().urlFor(rli)).append('&').append(
+				WebRequestCodingStrategy.BEHAVIOR_ID_PARAMETER_NAME).append('=').append(index);
 	}
 

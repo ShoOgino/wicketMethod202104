@@ -5,9 +5,9 @@
 	 * @param attributeToBeIgnored	
 	 * @return A xml string matching the tag
 	 */
-	public String toXmlString(final String attributeToBeIgnored)
+	public CharSequence toXmlString(final String attributeToBeIgnored)
 	{
-		final StringBuffer buffer = new StringBuffer();
+		final AppendingStringBuffer buffer = new AppendingStringBuffer();
 
 		buffer.append('<');
 
@@ -36,7 +36,7 @@
 				{
 					buffer.append(" ");
 					buffer.append(key);
-					String value = getString(key);
+					CharSequence value = getString(key);
 					
 					// Attributes without values are possible, e.g. 'disabled'
 					if (value != null) 
@@ -57,6 +57,6 @@
 
 		buffer.append('>');
 
-		return buffer.toString();
+		return buffer;
 	}
 
