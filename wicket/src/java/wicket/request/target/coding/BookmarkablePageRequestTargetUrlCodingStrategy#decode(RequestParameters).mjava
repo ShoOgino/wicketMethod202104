@@ -1,0 +1,17 @@
+	/**
+	 * @see wicket.request.target.coding.IRequestTargetUrlCodingStrategy#decode(wicket.request.RequestParameters)
+	 */
+	public IRequestTarget decode(RequestParameters requestParameters)
+	{
+		final String parametersFragment = requestParameters.getPath().substring(getMountPath().length());
+		final PageParameters parameters = new PageParameters(decodeParameters(parametersFragment));
+
+		// Merge with query-string arguments
+		parameters.putAll(requestParameters.getParameters());
+
+		final String pageMapName = parameters.getString("wicket:pageMapName");
+		final BookmarkablePageRequestTarget target = new BookmarkablePageRequestTarget(pageMapName,
+				bookmarkablePageClass, parameters);
+		return target;
+	}
+

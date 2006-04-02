@@ -1,9 +1,9 @@
 	/**
-	 * @see wicket.request.target.coding.IRequestTargetUrlCodingStrategy#decode(java.lang.String)
+	 * @see wicket.request.target.coding.IRequestTargetUrlCodingStrategy#decode(wicket.request.RequestParameters)
 	 */
-	public IRequestTarget decode(String urlFragment)
+	public IRequestTarget decode(RequestParameters requestParameters)
 	{
-		String remainder = urlFragment.substring(getMountPath().length());
+		String remainder = requestParameters.getPath().substring(getMountPath().length());
 		final String parametersFragment;
 		int ix = remainder.indexOf('/', 1);
 		if (ix == -1)
@@ -24,7 +24,11 @@
 		final String bookmarkablePageClassName = packageName + "."+ remainder.substring(0, ix);
 		Class bookmarkablePageClass = Session.get().getClassResolver().resolveClass(
 				bookmarkablePageClassName);
-		PageParameters parameters = decodePageParameters(parametersFragment);
+		PageParameters parameters = new PageParameters(decodeParameters(parametersFragment));
+
+		// Merge with query-string arguments
+		parameters.putAll(requestParameters.getParameters());
+
 		BookmarkablePageRequestTarget target = new BookmarkablePageRequestTarget(
 				bookmarkablePageClass, parameters);
 		return target;

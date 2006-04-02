@@ -1,15 +1,13 @@
 	/**
 	 * @see wicket.request.compound.IRequestTargetResolverStrategy#resolve(wicket.RequestCycle,
-	 *      RequestParameters)
+	 *      wicket.request.RequestParameters)
 	 */
 	public final IRequestTarget resolve(final RequestCycle requestCycle,
 			final RequestParameters requestParameters)
 	{
-		String path = requestCycle.getRequest().getPath();
-
 		// first, see whether we can find any mount
 		IRequestTarget mounted = requestCycle.getProcessor().getRequestCodingStrategy()
-				.targetForPath(path);
+				.targetForRequest(requestParameters);
 		if (mounted != null)
 		{
 			// the path was mounted, so return that directly
@@ -17,6 +15,7 @@
 		}
 
 		// See whether this request points to a rendered page
+		final String path = requestParameters.getPath();
 		if (requestParameters.getComponentPath() != null)
 		{
 			return resolveRenderedPage(requestCycle, requestParameters);
