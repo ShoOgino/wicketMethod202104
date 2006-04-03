@@ -1,43 +1,28 @@
-    /**
-     * Constructor.
-     *
-     * @param parameters Page parameters
-     */
-    public ExampleStyles(final PageParameters parameters)
-    {
-        // my model object
-        List data = new TestList(10, false);
+	/**
+	 * Constructor.
+	 * 
+	 * @param parameters
+	 *            Page parameters
+	 */
+	public ExampleStyles(final PageParameters parameters)
+	{
+		// my model object
+		List data = new TestList(10, false);
 
-        // Add Links to handle the different styles
-        add(new BookmarkablePageLink("isis", this.getClass()).setParameter("class", "isis").setAutoEnable(false));
-        add(new BookmarkablePageLink("its", this.getClass()).setParameter("class", "its").setAutoEnable(false));
-        add(new BookmarkablePageLink("mars", this.getClass()).setParameter("class", "mars").setAutoEnable(false));
-        add(new BookmarkablePageLink("simple", this.getClass()).setParameter("class", "simple").setAutoEnable(false));
-        add(new BookmarkablePageLink("report", this.getClass()).setParameter("class", "report").setAutoEnable(false));
-        add(new BookmarkablePageLink("mark", this.getClass()).setParameter("class", "mark").setAutoEnable(false));
+		// Add Links to handle the different styles
+		addStyleLink("isis");
+		addStyleLink("its");
+		addStyleLink("mars");
+		addStyleLink("simple");
+		addStyleLink("report");
+		addStyleLink("mark");
 
-        // Apply style on current tag (based on URL parameter)
-        WebMarkupContainer htmlTable = new WebMarkupContainer("htmlTable");
-        htmlTable.add(
-                new AttributeModifier(
-                        "class", 
-                        new Model(parameters.getString("class"))));
-        
-        add(htmlTable);
-        
-        // Add table 
-        htmlTable.add(new ListVieweWithAlternatingRowStyle("rows", data)
-        {
-            public void populateItem(final ListItem listItem)
-            {
-                final ListObject value = (ListObject) listItem.getModelObject();
+		// Apply the style to the <table> tag
+		WebMarkupContainer htmlTable = new WebMarkupContainer("htmlTable");
+		add(htmlTable);
+		htmlTable.add(new AttributeModifier("class", new Model(parameters.getString("class"))));
 
-                listItem.add(new Label("id", Integer.toString(value.getId())));
-                listItem.add(new Label("name", value.getName()));
-                listItem.add(new Label("email", value.getEmail()));
-                listItem.add(new Label("status", value.getStatus()));
-                listItem.add(new Label("comments", value.getDescription()));
-            }
-        });
-    }
+		// Add the rows to the list
+		htmlTable.add(new SimpleListView("rows", data));
+	}
 
