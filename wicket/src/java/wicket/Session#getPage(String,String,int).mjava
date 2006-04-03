@@ -25,6 +25,18 @@
 		{
 			// Get page entry for id and version
 			final String id = Strings.firstPathComponent(path, Component.PATH_SEPARATOR);
+			while(usedPages.contains(id))
+			{
+				try
+				{
+					wait();
+				}
+				catch (InterruptedException ex)
+				{
+					throw new WicketRuntimeException(ex);
+				}
+			}
+			usedPages.add(id);
 			return pageMap.get(Integer.parseInt(id), versionNumber);
 		}
 		return null;
