@@ -2,7 +2,8 @@
 	 * Compares this AppendingStringBuffer to the specified object. The result
 	 * is <code>true</code> if and only if the argument is not
 	 * <code>null</code> and is a <code>AppendingStringBuffer</code> object
-	 * that represents the same sequence of characters as this object.
+	 * or another charsequence object! that represents the same sequence of 
+	 * characters as this object.
 	 * 
 	 * @param anObject
 	 *            the object to compare this <code>AppendingStringBuffer</code>
@@ -25,10 +26,27 @@
 				char v1[] = value;
 				char v2[] = anotherString.value;
 				int i = 0;
-				int j = 0;
 				while (n-- != 0)
 				{
-					if (v1[i++] != v2[j++])
+					if (v1[i] != v2[i++])
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		else if (anObject instanceof CharSequence)
+		{
+			CharSequence sequence = (CharSequence)anObject;
+			int n = count;
+			if(sequence.length() == count)
+			{
+				char v1[] = value;
+				int i = 0;
+				while (n-- != 0)
+				{
+					if (v1[i] != sequence.charAt(i++))
 					{
 						return false;
 					}
