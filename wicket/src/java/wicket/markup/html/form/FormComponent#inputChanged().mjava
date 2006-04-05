@@ -3,7 +3,7 @@
 	 */
 	public final void inputChanged()
 	{
-		if (isVisibleInHierarchy())
+		if (isVisibleInHierarchy() && isEnabled())
 		{
 			// Get input as String array
 			final String[] input = inputAsStringArray();
@@ -14,10 +14,14 @@
 				// join the values together with ";", for example, "id1;id2;id3"
 				rawInput = StringList.valueOf(input).join(";");
 			}
-			else
+			else if ( isInputNullable() )
 			{
 				// no input
 				rawInput = null;
+			}
+			else
+			{
+				rawInput = NO_RAW_INPUT;
 			}
 		}
 	}
