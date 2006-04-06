@@ -11,13 +11,13 @@
 	 *            the target to encode
 	 * @return the encoded url
 	 */
-	protected String encode(RequestCycle requestCycle, ISharedResourceRequestTarget requestTarget)
+	protected CharSequence encode(RequestCycle requestCycle, ISharedResourceRequestTarget requestTarget)
 	{
 		final CharSequence prefix = urlPrefix(requestCycle);
 		final String sharedResourceKey = requestTarget.getResourceKey();
 		if ((sharedResourceKey == null) || (sharedResourceKey.trim().length() == 0))
 		{
-			return prefix.toString();
+			return prefix;
 		}
 		else
 		{
@@ -34,7 +34,10 @@
 				buffer.append("/resources/");
 			}
 			buffer.append(sharedResourceKey);
-			return buffer.toString();
+			// TODO do we need to urlEncode this yes or no?
+			// For static resources it is a bit stupid, but if the shared resource
+			// is a dynamic resource that gets session info?
+			return buffer;
 		}
 	}
 
