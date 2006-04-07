@@ -4,9 +4,17 @@
 	public void onNewBrowserWindow()
 	{
 		// if the browser reports a history of 0 then make a new webpage
-		final WebPage clonedPage = (WebPage)Objects.cloneObject(this);
-		final PageMap map = getSession().createAutoPageMap();
-		clonedPage.moveToPageMap(map);
+		WebPage clonedPage = this;
+		try
+		{
+			clonedPage = (WebPage)Objects.cloneObject(this);
+			final PageMap map = getSession().createAutoPageMap();
+			clonedPage.moveToPageMap(map);
+		} 
+		catch (Exception e)
+		{
+			log.error("Page couldn't be cloned to move to another pagemap: " + clonedPage.getClass(), e);
+		}
 		setResponsePage(clonedPage);
 	}
 
