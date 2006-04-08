@@ -3,10 +3,11 @@
 		 */
 		public void valueUnbound(HttpSessionBindingEvent arg0)
 		{
+			WebApplication application = (WebApplication)arg0.getSession().getServletContext()
+					.getAttribute(servletContextPath);
 			if (application != null)
 			{
 				application.sessionDestroyed(id);
-				this.application = null;
 			}
 		}
 

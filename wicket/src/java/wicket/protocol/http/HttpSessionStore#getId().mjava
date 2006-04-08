@@ -3,16 +3,7 @@
 	 */
 	public String getId()
 	{
-		if (id == null)
-		{
-			HttpSession httpSession = getHttpSession(false);
-			if (httpSession != null)
-			{
-				id = httpSession.getId();
-				return id;
-			}
-			return String.valueOf(hashCode());
-		}
-		return id;
+		// if ask for id then we have to have the real session else id will change in time.
+		return getHttpSession(true).getId();
 	}
 

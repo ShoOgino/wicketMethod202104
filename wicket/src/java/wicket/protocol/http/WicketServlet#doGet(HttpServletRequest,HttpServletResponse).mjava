@@ -21,26 +21,21 @@
 		{
 			// Try to see if there is a redirect stored
 			HttpSession httpSession = servletRequest.getSession(false);
-			if (httpSession == null)
+			if (httpSession != null)
 			{
-				httpSession = servletRequest.getSession(true);
-				SessionBindingListener sessionBindingListener = new SessionBindingListener(
-						webApplication, httpSession.getId());
-				httpSession.setAttribute("wicket-" + sessionBindingListener.hashCode(),
-						sessionBindingListener);
-			}
-			String sessionId = httpSession.getId();
-			String queryString = servletRequest.getQueryString();
-			if (queryString != null)
-			{
-				BufferedHttpServletResponse bufferedResponse = webApplication.popBufferedResponse(
-						sessionId, queryString);
-
-				if (bufferedResponse != null)
+				String sessionId = httpSession.getId();
+				String queryString = servletRequest.getQueryString();
+				if (queryString != null)
 				{
-					bufferedResponse.writeTo(servletResponse);
-					// redirect responses are ignored for the request logger...
-					return;
+					BufferedHttpServletResponse bufferedResponse = webApplication.popBufferedResponse(
+							sessionId, queryString);
+	
+					if (bufferedResponse != null)
+					{
+						bufferedResponse.writeTo(servletResponse);
+						// redirect responses are ignored for the request logger...
+						return;
+					}
 				}
 			}
 		}
@@ -107,7 +102,7 @@
 			{
 				requestLogger.requestTime((System.currentTimeMillis() - time));
 			}
-
+			
 			// Clean up thread local session
 			Session.unset();
 

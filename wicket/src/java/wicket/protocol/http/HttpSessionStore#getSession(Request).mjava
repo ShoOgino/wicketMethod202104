@@ -1,0 +1,25 @@
+	/**
+	 * @see wicket.session.ISessionStore#getSession(wicket.Request)
+	 */
+	public Session getSession(Request req)
+	{
+		WebRequest request = (WebRequest)req;
+		// Get session, creating if it doesn't exist
+		// do not create it as we try to defer the actual
+		// creation as long as we can
+		final HttpSession httpSession = request.getHttpServletRequest().getSession(false);
+
+		// The actual attribute for the session is
+		// "wicket-<servletName>-session"
+		final String sessionAttribute = getSessionAttributePrefix(request)
+				+ Session.SESSION_ATTRIBUTE_NAME;
+
+
+		if (httpSession != null)
+		{
+			// Get Session abstraction from httpSession attribute
+			return (Session)httpSession.getAttribute(sessionAttribute);
+		}
+		return null;
+	}
+
