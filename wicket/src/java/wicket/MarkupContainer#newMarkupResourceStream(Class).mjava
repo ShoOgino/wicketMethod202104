@@ -1,12 +1,12 @@
 	/**
-	 * Create a new markup resource stream for the container. 
+	 * Create a new markup resource stream for the container.
 	 * <p>
-	 * Note: it will only called once, the IResourceStream will be
-	 * cached by MarkupCache.
+	 * Note: it will only called once, the IResourceStream will be cached by
+	 * MarkupCache.
 	 * <p>
-	 * Note: IResourceStreamLocators should be used in case the strategy
-	 * to find a markup resource should be extended for ALL components
-	 * of your application.
+	 * Note: IResourceStreamLocators should be used in case the strategy to find
+	 * a markup resource should be extended for ALL components of your
+	 * application.
 	 * 
 	 * @see wicket.util.resource.locator.IResourceStreamLocator
 	 * @see wicket.markup.MarkupCache
@@ -15,30 +15,32 @@
 	 *            The container the markup should be associated with
 	 * @return A IResourceStream if the resource was found
 	 */
-	public IResourceStream newMarkupResourceStream(Class containerClass)
+	public MarkupResourceStream newMarkupResourceStream(Class containerClass)
 	{
-		// Get locator to search for the resource 
-		final IResourceStreamLocator locator = getApplication().getResourceSettings().getResourceStreamLocator();
-		
-		// Markup is associated with the containers class. Walk up the class 
-		// hierarchy up to MarkupContainer to find the containers markup resource. 
+		// Get locator to search for the resource
+		final IResourceStreamLocator locator = getApplication().getResourceSettings()
+				.getResourceStreamLocator();
+
+		// Markup is associated with the containers class. Walk up the class
+		// hierarchy up to MarkupContainer to find the containers markup
+		// resource.
 		while (containerClass != MarkupContainer.class)
 		{
-			final IResourceStream resourceStream = locator.locate(
-					containerClass, containerClass.getName().replace('.', '/'),
-					getStyle(), getLocale(), getMarkupType());
-			
+			final IResourceStream resourceStream = locator.locate(containerClass, containerClass
+					.getName().replace('.', '/'), getStyle(), getLocale(), getMarkupType());
+
 			// Did we find it already?
 			if (resourceStream != null)
 			{
-				return resourceStream;
+				return new MarkupResourceStream(resourceStream, new ContainerInfo(this),
+						containerClass);
 			}
 
-			// Walk up the class hierarchy one level, if markup has not 
+			// Walk up the class hierarchy one level, if markup has not
 			// yet been found
 			containerClass = containerClass.getSuperclass();
 		}
-		
+
 		return null;
 	}
 

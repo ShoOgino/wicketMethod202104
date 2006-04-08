@@ -20,13 +20,18 @@
 				WicketTag tag = (WicketTag)elem;
 				if (tag.isOpen() && tag.isHeadTag())
 				{
+					if (this.noMoreWicketHeadTagsAllowed == true)
+					{
+						throw new MarkupException(
+								"<wicket:head> tags are only allowed before <body>, </head>, <wicket:panel> etc. tag");
+					}
 					return associatedMarkupStream.getCurrentIndex();
 				}
 				// wicket:head must be before border, panel or extend
 				else if (tag.isOpen()
 						&& (tag.isPanelTag() || tag.isBorderTag() || tag.isExtendTag()))
 				{
-					break;
+					this.noMoreWicketHeadTagsAllowed = true;
 				}
 			}
 			else if (elem instanceof ComponentTag)
@@ -35,12 +40,12 @@
 				// wicket:head must be before </head>
 				if (tag.isClose() && TagUtils.isHeadTag(tag))
 				{
-					break;
+					this.noMoreWicketHeadTagsAllowed = true;
 				}
 				// wicket:head must be before <body>
 				else if (tag.isOpen() && TagUtils.isBodyTag(tag))
 				{
-					break;
+					this.noMoreWicketHeadTagsAllowed = true;
 				}
 			}
 			elem = associatedMarkupStream.next();
