@@ -1,8 +1,8 @@
 	/**
 	 * Create the http session.
 	 * 
-	 * @param createWhenNeeded 
-	 * 					Create the session when there is not one yet. 
+	 * @param createWhenNeeded
+	 *            Create the session when there is not one yet.
 	 * 
 	 * @return The http session
 	 */
@@ -15,7 +15,16 @@
 			if (request instanceof WebRequest)
 			{
 				WebRequest webRequest = (WebRequest)request;
-				return webRequest.getHttpServletRequest().getSession(createWhenNeeded);
+				HttpSession httpSession = webRequest.getHttpServletRequest().getSession(
+						createWhenNeeded);
+				if (httpSession != null)
+				{
+					// register listener object so that we'll get notified
+					// when the session is being destroyed
+					String key = getSessionAttributePrefix() + "-SessionBindingListener";
+					httpSession.setAttribute(key, new SessionBindingListener());
+				}
+				return httpSession;
 			}
 		}
 		return null;
