@@ -1,0 +1,19 @@
+	/**
+	 * Unbinds the session with the provided session id.
+	 * <p>
+	 * <strong>It is the full responsibility of subclasses of the session facade
+	 * to call the unbind method.
+	 * </p>
+	 * 
+	 * @param applicationKey
+	 *            The unique key of the application within this web application
+	 * @param sessionId
+	 *            The id of the session to be unbinded
+	 */
+	protected final void unbind(String applicationKey, String sessionId)
+	{
+		onUnbind(applicationKey, sessionId);
+		ISessionStore sessionStore = getSessionStore(sessionId);
+		sessionStore.destroy();
+	}
+
