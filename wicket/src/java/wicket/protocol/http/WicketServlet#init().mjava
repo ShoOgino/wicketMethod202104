@@ -13,10 +13,8 @@
 
 		// Store instance of this application object in servlet context to make
 		// integration with outside world easier
-		String contextKey = WebApplication
-				.getServletContextKey(getServletConfig().getServletName());
+		String contextKey = "wicket:" + getServletConfig().getServletName();
 		getServletContext().setAttribute(contextKey, this.webApplication);
-		
 
 		// Finished
 		log.info("WicketServlet loaded application " + this.webApplication.getName() + " via "
@@ -26,10 +24,9 @@
 		{
 			Application.set(webApplication);
 
-			// Call internal init method of web application for default initialisation
+			// Call internal init method of web application for default
+			// initialisation
 			this.webApplication.internalInit();
-			// store the servlet context key in the settings
-			this.webApplication.getApplicationSettings().setServletContextKey(contextKey);
 			// Call init method of web application
 			this.webApplication.init();
 			// We initialize components here rather than in the constructor or

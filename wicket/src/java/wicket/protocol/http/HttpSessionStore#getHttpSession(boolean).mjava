@@ -22,16 +22,8 @@
 			if (request instanceof WebRequest)
 			{
 				WebRequest webRequest = (WebRequest)request;
-				HttpSession httpSession = webRequest.getHttpServletRequest().getSession(createWhenNeeded);
-				String bindingListenerKey = getSessionAttributePrefix() + "SessionBindingListener";
-				if (httpSession != null && httpSession.getAttribute(bindingListenerKey) == null)
-				{
-					SessionBindingListener sessionBindingListener = new SessionBindingListener(
-							Application.get().getApplicationSettings().getServletContextKey(),
-							httpSession.getId());
-					httpSession.setAttribute(bindingListenerKey, sessionBindingListener);
-
-				}
+				HttpSession httpSession = webRequest.getHttpServletRequest().getSession(
+						createWhenNeeded);
 				return httpSession;
 			}
 		}

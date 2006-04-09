@@ -1,0 +1,26 @@
+	/**
+	 * Gets the session store for the given request.
+	 * 
+	 * @param request
+	 *            The request
+	 * @return An instance of {@link ISessionStore}
+	 */
+	public final ISessionStore getSessionStore(Request request)
+	{
+		String sessionId = getId(request);
+		ISessionStore sessionStore = (ISessionStore)sessionIdToSessionStore.get(sessionId);
+		if (sessionStore == null)
+		{
+			ISessionStoreFactory sessionStoreFactory = Application.get().getSessionSettings()
+					.getSessionStoreFactory();
+			sessionStore = sessionStoreFactory.newSessionStore();
+			if (sessionStore == null)
+			{
+				throw new IllegalStateException("factory " + sessionStoreFactory
+						+ " did not produce a session store instance");
+			}
+			sessionIdToSessionStore.put(sessionId, sessionStore);
+		}
+		return sessionStore;
+	}
+

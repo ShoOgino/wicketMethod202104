@@ -8,30 +8,34 @@
 	 */
 	final WebSession getSession(final WebRequest request)
 	{
-		WebSession webSession = (WebSession)getSessionStore().getSession(request);
+		SessionFacade sessionFacade = getSessionFacade();
+		Session session = sessionFacade.getSession(request);
 
-		if (webSession == null)
+		if (session == null)
 		{
 			// Create session using session factory
-			final Session session = getSessionFactory().newSession();
-			if (session instanceof WebSession)
-			{
-				webSession = (WebSession)session;
-			}
-			else
-			{
-				throw new WicketRuntimeException(
-						"Session created by a WebApplication session factory must be a subclass of WebSession");
-			}
+			session = getSessionFactory().newSession();
 
 			// Set the client Locale for this session
-			webSession.setLocale(request.getLocale());
+			session.setLocale(request.getLocale());
 
-			getSessionStore().storeInitialSession(request, webSession);
-
+			// Bind the session to the facade
+			sessionFacade.bind(request, session);
 		}
+
+		WebSession webSession;
+		if (session instanceof WebSession)
+		{
+			webSession = (WebSession)session;
+		}
+		else
+		{
+			throw new WicketRuntimeException("Session created by a WebApplication session factory "
+					+ "must be a subclass of WebSession");
+		}
+
 		// Set application on session
-		webSession.setApplication(this);
+		session.setApplication(this);
 
 		// Set session attribute name and attach/reattach http servlet session
 		webSession.initForRequest();

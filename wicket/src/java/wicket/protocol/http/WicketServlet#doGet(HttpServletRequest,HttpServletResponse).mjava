@@ -27,13 +27,14 @@
 				String queryString = servletRequest.getQueryString();
 				if (queryString != null)
 				{
-					BufferedHttpServletResponse bufferedResponse = webApplication.popBufferedResponse(
-							sessionId, queryString);
-	
+					BufferedHttpServletResponse bufferedResponse = webApplication
+							.popBufferedResponse(sessionId, queryString);
+
 					if (bufferedResponse != null)
 					{
 						bufferedResponse.writeTo(servletResponse);
-						// redirect responses are ignored for the request logger...
+						// redirect responses are ignored for the request
+						// logger...
 						return;
 					}
 				}
@@ -102,7 +103,7 @@
 			{
 				requestLogger.requestTime((System.currentTimeMillis() - time));
 			}
-			
+
 			// Clean up thread local session
 			Session.unset();
 
