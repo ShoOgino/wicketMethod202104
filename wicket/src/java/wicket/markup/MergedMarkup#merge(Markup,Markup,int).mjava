@@ -40,7 +40,7 @@
 			if (element instanceof WicketTag)
 			{
 				WicketTag wtag = (WicketTag)element;
-				
+
 				// Found <wicket.child/>
 				if (wtag.isChildTag() && wtag.isOpenClose())
 				{
@@ -59,20 +59,20 @@
 					if (wtag.isClose() && wtag.isHeadTag())
 					{
 						wicketHeadProcessed = true;
-						
+
 						// Add the current close tag
 						addMarkupElement(wtag);
 
 						// Add the <wicket:head> body from the derived markup.
 						copyWicketHead(markup, extendIndex);
-						
-						// Do not add the current tag. It has already been added.
+
+						// Do not add the current tag. It has already been
+						// added.
 						continue;
 					}
 
 					// if <wicket:panel> or ... in base markup
-					if (wtag.isOpen()
-							&& (wtag.isPanelTag() || wtag.isBorderTag() || wtag.isExtendTag()))
+					if (wtag.isOpen() && wtag.isMajorWicketComponentTag())
 					{
 						wicketHeadProcessed = true;
 
