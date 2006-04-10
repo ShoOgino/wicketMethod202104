@@ -1,0 +1,12 @@
+	/**
+	 * @see wicket.protocol.http.AbstractHttpSessionFacade#onBind(wicket.Request,
+	 *      wicket.Session)
+	 */
+	protected final void onBind(Request request, Session newSession)
+	{
+		WebRequest webRequest = toWebRequest(request);
+		String sessionObjectAttribute = getSessionObjectAttribute(webRequest);
+		ISessionStore store = getSessionStore(request);
+		store.setAttribute(sessionObjectAttribute, newSession);
+	}
+

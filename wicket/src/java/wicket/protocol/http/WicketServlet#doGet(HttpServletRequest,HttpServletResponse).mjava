@@ -20,23 +20,28 @@
 		if (webApplication.getRequestCycleSettings().getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER)
 		{
 			// Try to see if there is a redirect stored
-			HttpSession httpSession = servletRequest.getSession(false);
-			if (httpSession != null)
+			SessionFacade sessionFacade = webApplication.getSessionFacade();
+			if (!(sessionFacade instanceof AbstractHttpSessionFacade))
 			{
-				String sessionId = httpSession.getId();
-				String queryString = servletRequest.getQueryString();
-				if (queryString != null)
-				{
-					BufferedHttpServletResponse bufferedResponse = webApplication
-							.popBufferedResponse(sessionId, queryString);
+				throw new IllegalStateException(
+						"in a servlet environment with the redirect to buffer strategy"
+								+ ", the session facade has to be of type (extend from) "
+								+ AbstractHttpSessionFacade.class);
+			}
+			String sessionId = ((AbstractHttpSessionFacade)sessionFacade)
+					.getSessionId(servletRequest);
+			String queryString = servletRequest.getQueryString();
+			if (queryString != null)
+			{
+				BufferedHttpServletResponse bufferedResponse = webApplication.popBufferedResponse(
+						sessionId, queryString);
 
-					if (bufferedResponse != null)
-					{
-						bufferedResponse.writeTo(servletResponse);
-						// redirect responses are ignored for the request
-						// logger...
-						return;
-					}
+				if (bufferedResponse != null)
+				{
+					bufferedResponse.writeTo(servletResponse);
+					// redirect responses are ignored for the request
+					// logger...
+					return;
 				}
 			}
 		}
