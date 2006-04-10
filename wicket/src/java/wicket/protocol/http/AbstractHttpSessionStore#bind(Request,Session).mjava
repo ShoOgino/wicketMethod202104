@@ -1,0 +1,14 @@
+	/**
+	 * @see wicket.session.ISessionStore#bind(wicket.Request, wicket.Session)
+	 */
+	public final void bind(Request request, Session newSession)
+	{
+		WebRequest webRequest = toWebRequest(request);
+		HttpSession httpSession = getHttpSession(webRequest);
+		// register an unbinding listener for cleaning up
+		String applicationKey = application.getApplicationKey();
+		httpSession.setAttribute("Wicket:SessionUnbindingListener-" + applicationKey,
+				new SessionBindingListener(applicationKey, httpSession.getId()));
+		setAttribute(webRequest, Session.SESSION_ATTRIBUTE_NAME, newSession);
+	}
+

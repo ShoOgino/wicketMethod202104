@@ -17,19 +17,14 @@
 		// First, set the webapplication for this thread
 		Application.set(webApplication);
 
+		// Create a new webrequest
+		final WebRequest request = webApplication.newWebRequest(servletRequest);
+
 		if (webApplication.getRequestCycleSettings().getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER)
 		{
 			// Try to see if there is a redirect stored
-			SessionFacade sessionFacade = webApplication.getSessionFacade();
-			if (!(sessionFacade instanceof AbstractHttpSessionFacade))
-			{
-				throw new IllegalStateException(
-						"in a servlet environment with the redirect to buffer strategy"
-								+ ", the session facade has to be of type (extend from) "
-								+ AbstractHttpSessionFacade.class);
-			}
-			String sessionId = ((AbstractHttpSessionFacade)sessionFacade)
-					.getSessionId(servletRequest);
+			ISessionStore sessionStore = webApplication.getSessionStore();
+			String sessionId = sessionStore.getSessionId(request);
 			String queryString = servletRequest.getQueryString();
 			if (queryString != null)
 			{
@@ -69,9 +64,6 @@
 				throw new WicketRuntimeException(ex.getMessage());
 			}
 		}
-
-		// Create a new webrequest
-		final WebRequest request = webApplication.newWebRequest(servletRequest);
 
 		// Get session for request
 		final WebSession session = webApplication.getSession(request);

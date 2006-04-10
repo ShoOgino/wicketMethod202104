@@ -8,8 +8,8 @@
 	 */
 	final WebSession getSession(final WebRequest request)
 	{
-		SessionFacade sessionFacade = getSessionFacade();
-		Session session = sessionFacade.getSession(request);
+		ISessionStore sessionStore = getSessionStore();
+		Session session = sessionStore.lookup(request);
 
 		if (session == null)
 		{
@@ -20,7 +20,7 @@
 			session.setLocale(request.getLocale());
 
 			// Bind the session to the facade
-			sessionFacade.bind(request, session);
+			sessionStore.bind(request, session);
 		}
 
 		WebSession webSession;
