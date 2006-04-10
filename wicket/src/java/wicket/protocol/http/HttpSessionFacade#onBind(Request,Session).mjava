@@ -5,8 +5,8 @@
 	protected final void onBind(Request request, Session newSession)
 	{
 		WebRequest webRequest = toWebRequest(request);
+		HttpSession httpSession = getHttpSession(webRequest);
 		String sessionObjectAttribute = getSessionObjectAttribute(webRequest);
-		ISessionStore store = getSessionStore(request);
-		store.setAttribute(sessionObjectAttribute, newSession);
+		httpSession.setAttribute(sessionObjectAttribute, newSession);
 	}
 
