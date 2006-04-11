@@ -1,9 +1,12 @@
 	/**
 	 * Returns a uid for the combination component and the to call interface.
-	 * Will return the same uid if it was already called for this specific combination.
+	 * Will return the same uid if it was already called for this specific
+	 * combination.
 	 * 
-	 * @param component The Component 
-	 * @param interfaceName The interface name
+	 * @param component
+	 *            The Component
+	 * @param interfaceName
+	 *            The interface name
 	 * @return int The uid for the component/interfaceName combination
 	 */
 	public int getUIDForComponentAndInterface(Component component, String interfaceName)
@@ -12,8 +15,8 @@
 		Iterator it = directComponentRefs.entrySet().iterator();
 		while (it.hasNext())
 		{
-			IntHashMap.Entry entry = (IntHashMap.Entry) it.next();
-			ComponentAndInterface cai = (ComponentAndInterface) entry.getValue();
+			IntHashMap.Entry entry = (IntHashMap.Entry)it.next();
+			ComponentAndInterface cai = (ComponentAndInterface)entry.getValue();
 			if (cai.getInterfaceName().equals(interfaceName) && cai.getComponent() == component)
 			{
 				uid = entry.getKey();
@@ -23,8 +26,8 @@
 		if (uid == 0)
 		{
 			uid = getNewUID();
-			IntKeyWeakReference ref = new IntKeyWeakReference(uid,component,queue);
-			directComponentRefs.put(uid,new ComponentAndInterface(ref,interfaceName));
+			IntKeyWeakReference ref = new IntKeyWeakReference(uid, component, queue);
+			directComponentRefs.put(uid, new ComponentAndInterface(ref, interfaceName));
 		}
 		return uid;
 	}
