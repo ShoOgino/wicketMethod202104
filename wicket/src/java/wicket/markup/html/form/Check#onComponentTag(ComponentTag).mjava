@@ -5,6 +5,8 @@
 	 */
 	protected void onComponentTag(final ComponentTag tag)
 	{
+		// Default handling for component tag
+		super.onComponentTag(tag);
 
 		// must be attached to <input type="checkbox" .../> tag
 		checkComponentTag(tag, "input");
@@ -45,9 +47,6 @@
 		{
 			tag.put("checked", "checked");
 		}
-
-		// Default handling for component tag
-		super.onComponentTag(tag);
 		
 		if (group.wantOnSelectionChangedNotifications())
 		{
@@ -66,6 +65,11 @@
 						+ "=' + this.value;");
 			}
 		}
+		
+		if (!isActionAuthorized(ENABLE) || !isEnabled()) {
+			tag.put(ATTR_DISABLED, ATTR_DISABLED);
+		}
+
 		
 	}
 
