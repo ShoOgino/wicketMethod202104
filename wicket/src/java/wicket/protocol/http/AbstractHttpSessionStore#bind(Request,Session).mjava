@@ -5,10 +5,14 @@
 	{
 		WebRequest webRequest = toWebRequest(request);
 		HttpSession httpSession = getHttpSession(webRequest);
+
 		// register an unbinding listener for cleaning up
 		String applicationKey = application.getApplicationKey();
 		httpSession.setAttribute("Wicket:SessionUnbindingListener-" + applicationKey,
 				new SessionBindingListener(applicationKey, httpSession.getId()));
 		setAttribute(webRequest, Session.SESSION_ATTRIBUTE_NAME, newSession);
+
+		// call template method
+		onBind(request, newSession);
 	}
 
