@@ -1,0 +1,23 @@
+	/**
+	 * Add a new AttributeModifier to the body container which appends the
+	 * 'value' to the onLoad attribute of the body tag.
+	 * 
+	 * @param model
+	 *            The model that holds the value that must be appended to 'onLoad'
+	 * @return this
+	 */
+	public final BodyContainer addOnLoadModifier(final Model model)
+	{
+		final Component bodyContainer = page.get(id);
+		bodyContainer.add(new AttributeModifier("onLoad", true, model)
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected String newValue(String currentValue, String replacementValue)
+			{
+				return (currentValue == null ? replacementValue : currentValue + replacementValue);
+			}
+		});
+		return this;
+	}	
+
