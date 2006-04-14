@@ -1,0 +1,19 @@
+	/**
+	 * Get the client's time zone if that could be detected.
+	 * 
+	 * @return The client's time zone
+	 */
+	public final TimeZone getTimeZone()
+	{
+		String utcOffset = (String)data.get(ClientProperties.UTC_OFFSET);
+		if (utcOffset != null)
+		{
+			int offset = Integer.parseInt(utcOffset);
+			TimeZone timeZone = TimeZone
+					.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") + utcOffset);
+			return timeZone;
+		}
+
+		return null;
+	}
+
