@@ -20,7 +20,7 @@
 		if (tag instanceof WicketTag)
 		{
 			WicketTag wtag = (WicketTag)tag;
-			if (wtag.isMessageTag() && (wtag.getNamespace() != null))
+			if (wtag.isMessageTag())
 			{
 				String messageKey = wtag.getAttributes().getString("key");
 				if ((messageKey == null) || (messageKey.trim().length() == 0))
@@ -40,6 +40,7 @@
 				}
 				else
 				{
+					log.info("No value found for message key: " + messageKey);
 					component = new WebMarkupContainer(id);
 				}
 
