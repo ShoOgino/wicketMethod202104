@@ -1,0 +1,37 @@
+	/**
+	 * Test page for FormTester.select()
+	 * 
+	 * @param candidateChoices
+	 */
+	public ChoicePage(List candidateChoices)
+	{
+		ChoiceRenderer bookChoiceRenderer = new ChoiceRenderer("name", "id");
+
+		Form form = new Form("choiceForm");
+		add(form);
+
+		form.setModel(new CompoundPropertyModel(this));
+
+		// single select family
+		form.add(new DropDownChoice("dropDownChoice", candidateChoices, bookChoiceRenderer));
+		form.add(new ListChoice("listChoice", candidateChoices, bookChoiceRenderer).setMaxRows(4));
+		form.add(new RadioChoice("radioChoice", candidateChoices, bookChoiceRenderer));
+		form.add(newRadioGroup(candidateChoices));
+
+		// mulitple select family
+		form.add(new ListMultipleChoice("listMultipleChoice", candidateChoices, bookChoiceRenderer)
+				.setMaxRows(4));
+		form.add(new CheckBoxMultipleChoice("checkBoxMultipleChoice", candidateChoices,
+				bookChoiceRenderer));
+		form.add(newCheckGroup(candidateChoices));
+		form.add(new Button("anotherButton")
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onSubmit()
+			{
+				anotherButtonPressed = true;
+			}
+		});
+	}
+

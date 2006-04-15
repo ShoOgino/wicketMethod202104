@@ -8,30 +8,40 @@
 	 * @param wicketTester
 	 *            wicketTester that create FormTester
 	 * @param fillBlankString
-	 *            specify whether fill all child FormComponents with blank
+	 *            specify whether filling child Text Components with blank
 	 *            String
 	 */
-	FormTester(final String path, final Form workingForm, final WicketTester wicketTester,
-			boolean fillBlankString)
+	protected FormTester(final String path, final Form workingForm,
+			final WicketTester wicketTester, final boolean fillBlankString)
 	{
 		this.path = path;
 		this.workingForm = workingForm;
 		this.wicketTester = wicketTester;
 		this.wicketTester.setupRequestAndResponse();
 
-		if (fillBlankString)
+		// fill blank String for Text Component.
+		workingForm.visitFormComponents(new FormComponent.IVisitor()
 		{
-			workingForm.visitFormComponents(new FormComponent.IVisitor()
+			public void formComponent(FormComponent formComponent)
 			{
-				public void formComponent(FormComponent formComponent)
+				// do nothing for invisible component
+				if (!formComponent.isVisibleInHierarchy())
 				{
-					if (formComponent.isEnabled())
+					return;
+				}
+
+				// if component is text field and do not have exist value, fill
+				// blank String if required
+				if (formComponent instanceof AbstractTextComponent)
+				{
+					if (fillBlankString && Strings.isEmpty(formComponent.getValue()))
 					{
-						setValue(formComponent.getInputName(), "");
+						setFormComponentValue(formComponent, "");
+						return;
 					}
 				}
-			});
-		}
+			}
 
+		});
 	}
 

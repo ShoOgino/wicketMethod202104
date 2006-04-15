@@ -1,0 +1,24 @@
+	/**
+	 * A convenient method to select multiple options for the form component.
+	 * The method only support multiple selectable form component.
+	 * 
+	 * @see #select(String, int)
+	 * 
+	 * @param formComponentId
+	 *            relative path (from form) to selectable formComponent
+	 * @param indexes
+	 *            index of selectable option, start from 0
+	 */
+	public void selectMultiple(String formComponentId, int[] indexes)
+	{
+		checkClosed();
+
+		ChoiceSelector choiceSelector = choiceSelectorFactory
+				.createForMultiple((FormComponent)workingForm.get(formComponentId));
+
+		for (int i = 0; i < indexes.length; i++)
+		{
+			choiceSelector.doSelect(indexes[i]);
+		}
+	}
+
