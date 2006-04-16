@@ -13,21 +13,7 @@
         this.data.addAll(list);
 
         // Add a table 
-        final PagedTableWithAlternatingRowStyle table = new PagedTableWithAlternatingRowStyle("rows", list, 10)
-        {
-            public void populateItem(final ListItem listItem)
-            {
-                super.populateItem(listItem);
-                
-                final ListObject value = (ListObject) listItem.getModelObject();
-
-                listItem.add(new Label("id", Integer.toString(value.getId())));
-                listItem.add(new Label("name", value.getName()));
-                listItem.add(new Label("email", value.getEmail()));
-                listItem.add(new Label("status", value.getStatus()));
-                listItem.add(new Label("comments", value.getDescription()));
-            }
-        };
+        final SimplePageableListView table = new SimplePageableListView("rows", list, 10);
         add(table);
 
         // Add a sortable header to the table
@@ -68,26 +54,10 @@
         });
 
         // Add a headline
-        add(new Label("headline", new Model(null))
-        {
-            protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
-            {
-                int firstCell = table.getCurrentPage() * table.getRowsPerPage();
-                
-                String text = 
-                    String.valueOf(list.size()) 
-                    + " items found, displaying "
-                    + String.valueOf(firstCell + 1)
-                    + " to "
-                    + String.valueOf(firstCell + table.getRowsPerPage())
-                    + ".";
-                
-                replaceComponentTagBody(markupStream, openTag, text);
-            }
-        });
+        add(new TableHeaderLabel("headline", table));
 
-        final PagingNavigation tableNavigation = new PagingNavigation("navigation", table /* , 5, 2 */);
-        add(tableNavigation);
+        // Add navigation
+        add(new PagingNavigation("navigation", table));
 
         // Add some navigation links
         add(new PagingNavigationLink("first", table, 0));

@@ -8,7 +8,8 @@
         // Test data
         final ReportList data = new ReportList();
         final Map groups = new LinkedHashMap(); // Keep the insertion order
-        
+
+        // Fill the 'groups' map
         ReportableListObject previousValue = (ReportableListObject) data.get(0);
         groups.put(previousValue.getCity(), new Integer(0));
         int startIdx = 0;
@@ -16,8 +17,7 @@
         {
             final ReportableListObject value = (ReportableListObject) data.get(i);
 
-            boolean equal = value.getCity().equals(previousValue.getCity());
-            if (!equal)
+            if (!value.getCity().equals(previousValue.getCity()))
             {
                 groups.put(previousValue.getCity(), new Integer(i - startIdx));
                 groups.put(value.getCity(), new Integer(0));
@@ -25,7 +25,6 @@
                 startIdx = i;
             }
         }
-
         groups.put(previousValue.getCity(), new Integer(data.size() - startIdx));
         
         // add the table
@@ -39,6 +38,7 @@
             {
                 SubtotalTable subtable = new SubtotalTable("rows", data);
                 subtable.setStartIndex(startIndex);
+                
                 String group = listItem.getModelObjectAsString();
                 int size = ((Integer)groups.get(group)).intValue();
                 subtable.setViewSize(size);
