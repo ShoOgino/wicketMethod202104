@@ -1,0 +1,32 @@
+	/**
+	 * Determine the encoding from the xml decl.
+	 * 
+	 * @param string The xmlDecl string
+	 * @return The encoding. Null, if not found
+	 * @throws IOException
+	 */
+	private final String determineEncoding(final String string)
+	{
+		// Does the string match the <?xml .. ?> pattern
+		final Matcher matcher = encodingPattern.matcher(string);
+		if (!matcher.find())
+		{
+			// No
+			return null;
+		}
+
+		// Extract the encoding
+		String encoding = matcher.group(2);
+		if ((encoding == null) || (encoding.length() == 0))
+		{
+			encoding = matcher.group(3);
+		}
+
+		if (encoding != null)
+		{
+			encoding = encoding.trim();
+		}
+
+		return encoding;
+	}
+

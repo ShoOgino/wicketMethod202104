@@ -15,29 +15,26 @@
 		final int readAheadSize = 80;
 		this.inputStream.mark(readAheadSize);
 
-		// read-ahead the input stream if it starts with <?xml
-		// encoding=".."?>. If yes, set this.encoding.
-		// If no, return the whole line. determineEncoding will read-ahead
-		// at max the very first line of the markup.
-		final String encoding = determineEncoding(this.inputStream, readAheadSize);
-		if (encoding != null)
+		// read-ahead the input stream and check if it starts with <?xml..?>. 
+		if (getXmlDeclaration(this.inputStream, readAheadSize))
 		{
-			// Use the encoding as specified in <?xml encoding=".." ?>
-			// Don't re-read <?xml ..> again.
-			// Ignore ALL characters preceding <?xml>
-			this.encoding = encoding;
-			this.reader = new BufferedReader(new InputStreamReader(this.inputStream, this.encoding));
+			// If yes than determine the encoding from the xml decl
+			this.encoding = determineEncoding(this.xmlDeclarationString);
 		}
-		else if (this.encoding == null)
+		else
+		{
+			// If not, reset the input stream to the begining of the file
+			this.inputStream.reset();
+		}
+		
+		if (this.encoding == null)
 		{
 			// Use JVM default
-			this.inputStream.reset();
 			this.reader = new BufferedReader(new InputStreamReader(this.inputStream));
 		}
 		else
 		{
-			// Use JVM default
-			this.inputStream.reset();
+			// Use the encoding provided
 			this.reader = new BufferedReader(new InputStreamReader(this.inputStream, this.encoding));
 		}
 	}

@@ -1,19 +1,19 @@
 	/**
-	 * Read-ahead the input stream (markup file). If it starts with &lt;?xml
-	 * encoding=".." ?&gt;, than set this.encoding and return null. If not,
-	 * return all characters read so far. determineEncoding will read-ahead at
-	 * max. the very first line of the markup.
+	 * Read-ahead the input stream (markup file). If the first line contains
+	 * &lt;?xml...?&gt;, than remember the xml decl for later to determine the
+	 * encoding. 
+	 * <p>
+	 * The xml decl will not be forwarded to the user.
 	 * 
 	 * @param in
 	 *            The markup file
 	 * @param readAheadSize
 	 *            The read ahead buffer available to read the xml encoding
 	 *            information
-	 * @return Null, if &lt;?xml ..?&gt; has been found; else all characters
-	 *         read ahead
+	 * @return true, if &lt;?xml ..?&gt; has been found
 	 * @throws IOException
 	 */
-	private final String determineEncoding(final InputStream in, final int readAheadSize)
+	private final boolean getXmlDeclaration(final InputStream in, final int readAheadSize)
 			throws IOException
 	{
 		// Max one line
@@ -35,23 +35,15 @@
 		}
 
 		// Does the string match the <?xml .. ?> pattern
-		final Matcher matcher = encodingPattern.matcher(pushBack);
+		final Matcher matcher = xmlDecl.matcher(pushBack);
 		if (!matcher.matches())
 		{
 			// No
-			return null;
+			return false;
 		}
 
 		// Save the whole <?xml ..> string for later
 		this.xmlDeclarationString = pushBack.toString().trim();
-
-		// Extract the encoding
-		String encoding = matcher.group(3);
-		if ((encoding == null) || (encoding.length() == 0))
-		{
-			encoding = matcher.group(4);
-		}
-
-		return encoding;
+		return true;
 	}
 
