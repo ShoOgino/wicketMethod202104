@@ -1,25 +1,26 @@
-    /**
-     * Escaping for csv format.
-     * <ul>
-     * <li>Quotes inside quoted strings are escaped with a /</li>
-     * <li>Fields containings newlines or , are surrounded by ""</li>
-     * </ul>
-     * Note this is the standard CVS format and it's not handled well by excel.
-     * @see wicket.examples.displaytag.export.BaseExportView#escapeColumnValue(java.lang.Object)
-     */
-    protected Object escapeColumnValue(Object value)
-    {
-        if (value != null)
-        {
-            String stringValue = StringUtils.trim(value.toString());
-            if (!StringUtils.containsNone(stringValue, new char[] { '\n', ',' }))
-            {
-                return "\"" + StringUtils.replace(stringValue, "\"", "\\\"") + "\"";
-            }
+	/**
+	 * Escaping for csv format.
+	 * <ul>
+	 * <li>Quotes inside quoted strings are escaped with a /</li>
+	 * <li>Fields containings newlines or , are surrounded by ""</li>
+	 * </ul>
+	 * Note this is the standard CVS format and it's not handled well by excel.
+	 * 
+	 * @see wicket.examples.displaytag.export.BaseExportView#escapeColumnValue(java.lang.Object)
+	 */
+	protected Object escapeColumnValue(Object value)
+	{
+		if (value != null)
+		{
+			String stringValue = StringUtils.trim(value.toString());
+			if (!StringUtils.containsNone(stringValue, new char[] { '\n', ',' }))
+			{
+				return "\"" + StringUtils.replace(stringValue, "\"", "\\\"") + "\"";
+			}
 
-            return stringValue;
-        }
+			return stringValue;
+		}
 
-        return null;
-    }
+		return null;
+	}
 

@@ -1,19 +1,23 @@
 	/**
 	 * Constructor
 	 */
-	public RadioGroupPage() {
-		
-		final RadioGroup group=new RadioGroup("group", new Model());
-		Form form=new Form("form") {
-			protected void onSubmit() {
-				info("selected person: "+group.getModelObjectAsString());
+	public RadioGroupPage()
+	{
+
+		final RadioGroup group = new RadioGroup("group", new Model());
+		Form form = new Form("form")
+		{
+			protected void onSubmit()
+			{
+				info("selected person: " + group.getModelObjectAsString());
 			}
 		};
-		
+
 		add(form);
 		form.add(group);
-		
-		ListView persons=new ListView("persons", ComponentReferenceApplication.getPersons()) {
+
+		ListView persons = new ListView("persons", ComponentReferenceApplication.getPersons())
+		{
 
 			protected void populateItem(ListItem item)
 			{
@@ -21,11 +25,11 @@
 				item.add(new Label("name", new PropertyModel(item.getModel(), "name")));
 				item.add(new Label("lastName", new PropertyModel(item.getModel(), "lastName")));
 			}
-			
+
 		};
-		
+
 		group.add(persons);
-		
+
 		add(new FeedbackPanel("feedback"));
 	}
 

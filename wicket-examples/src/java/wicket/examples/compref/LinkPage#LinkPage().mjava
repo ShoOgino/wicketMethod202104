@@ -19,20 +19,25 @@
 		};
 		add(link1);
 
-		// add a counter label to the link so that we can display it in the body of the link
-        link1.add(new Label("label1", new Model()
-        {
-            public Object getObject(Component component)
-            {
-                return Integer.toString(count1.clicks);
-            }
-        }));
+		// add a counter label to the link so that we can display it in the body
+		// of the link
+		link1.add(new Label("label1", new Model()
+		{
+			public Object getObject(Component component)
+			{
+				return Integer.toString(count1.clicks);
+			}
+		}));
 
-        // we can attach Link components to any HTML tag we want. If it is an anchor (<a href...),
-		// the url to this component is put in the href attribute. For other components, a
-		// onclick javascript event handler is created that triggers the round trip
+		// we can attach Link components to any HTML tag we want. If it is an
+		// anchor (<a href...),
+		// the url to this component is put in the href attribute. For other
+		// components, a
+		// onclick javascript event handler is created that triggers the round
+		// trip
 
-		// it is ofcourse possible to - instead of the above approach - hide as much of the
+		// it is ofcourse possible to - instead of the above approach - hide as
+		// much of the
 		// component as possible within a class.
 		class CustomLink extends Link
 		{
@@ -40,6 +45,7 @@
 
 			/**
 			 * Construct.
+			 * 
 			 * @param id
 			 */
 			public CustomLink(String id)
@@ -56,7 +62,8 @@
 		}
 		add(new CustomLink("link2"));
 
-		// and if we know we are going to attach it to a <input type="button> tag, we shouldn't
+		// and if we know we are going to attach it to a <input type="button>
+		// tag, we shouldn't
 		// use a label, but an AttributeModifier instead.
 		class ButtonLink extends Link
 		{
@@ -64,6 +71,7 @@
 
 			/**
 			 * Construct.
+			 * 
 			 * @param id
 			 */
 			public ButtonLink(String id)
@@ -74,8 +82,10 @@
 				{
 					public Object getObject(Component component)
 					{
-						// we just replace the whole string. You could use custom
-						// AttributeModifiers to e.g. just replace one part of the
+						// we just replace the whole string. You could use
+						// custom
+						// AttributeModifiers to e.g. just replace one part of
+						// the
 						// string if you want
 						return "this button is clicked " + count3.clicks + " times";
 					}

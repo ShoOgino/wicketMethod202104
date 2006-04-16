@@ -3,15 +3,16 @@
 	 */
 	public RefreshingPage()
 	{
-		final List contacts=new ArrayList(10);
-		
+		final List contacts = new ArrayList(10);
+
 		// populate list of contacts to be displayed
-		ContactDataProvider dp=new ContactDataProvider();
-		Iterator it=dp.iterator(0, 10);
-		while (it.hasNext()) {
+		ContactDataProvider dp = new ContactDataProvider();
+		Iterator it = dp.iterator(0, 10);
+		while (it.hasNext())
+		{
 			contacts.add(dp.model(it.next()));
 		}
-		
+
 		// create the refreshing view
 		RefreshingView view = new RefreshingView("view")
 		{
@@ -23,7 +24,6 @@
 				return contacts.iterator();
 			}
 
-			
 			protected void populateItem(final Item item)
 			{
 				Contact contact = (Contact)item.getModelObject();
@@ -37,29 +37,22 @@
 
 				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel()
 				{
-
 					public Object getObject(Component component)
 					{
 						return (item.getIndex() % 2 == 1) ? "even" : "odd";
 					}
-
 				}));
-
 			}
-
-
 		};
 
 		add(view);
 
-		add(new Link("refreshLink") {
-
+		add(new Link("refreshLink")
+		{
 			public void onClick()
 			{
 				// noop
-				
 			}
-			
 		});
 	}
 

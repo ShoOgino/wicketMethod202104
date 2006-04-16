@@ -1,43 +1,44 @@
-    /**
-     * Write table header.
-     * @return String rendered header
-     */
-    protected String doHeaders()
-    {
-        if ((headerData == null) || headerData.isEmpty())
-        {
-            return "";
-        }
-        
-        final String ROW_START = getRowStart();
-        final String ROW_END = getRowEnd();
-        final String CELL_START = getCellStart();
-        final String CELL_END = getCellEnd();
-        final boolean ALWAYS_APPEND_CELL_END = getAlwaysAppendCellEnd();
+	/**
+	 * Write table header.
+	 * 
+	 * @return String rendered header
+	 */
+	protected String doHeaders()
+	{
+		if ((headerData == null) || headerData.isEmpty())
+		{
+			return "";
+		}
 
-        StringBuffer buffer = new StringBuffer(1000);
+		final String ROW_START = getRowStart();
+		final String ROW_END = getRowEnd();
+		final String CELL_START = getCellStart();
+		final String CELL_END = getCellEnd();
+		final boolean ALWAYS_APPEND_CELL_END = getAlwaysAppendCellEnd();
 
-        // start row
-        buffer.append(ROW_START);
+		StringBuffer buffer = new StringBuffer(1000);
 
-        Iterator iterator = headerData.iterator();
-        while (iterator.hasNext())
-        {
-            log.debug("iterator.hasNext()");
-            String headerCell = (String) iterator.next();
-            String columnHeader = headerCell;
+		// start row
+		buffer.append(ROW_START);
 
-            buffer.append(CELL_START);
-            buffer.append(escapeColumnValue(columnHeader));
+		Iterator iterator = headerData.iterator();
+		while (iterator.hasNext())
+		{
+			log.debug("iterator.hasNext()");
+			String headerCell = (String)iterator.next();
+			String columnHeader = headerCell;
 
-            if (ALWAYS_APPEND_CELL_END || iterator.hasNext())
-            {
-                buffer.append(CELL_END);
-            }
-        }
+			buffer.append(CELL_START);
+			buffer.append(escapeColumnValue(columnHeader));
 
-        // end row
-        buffer.append(ROW_END);
-        return buffer.toString();
-    }
+			if (ALWAYS_APPEND_CELL_END || iterator.hasNext())
+			{
+				buffer.append(CELL_END);
+			}
+		}
+
+		// end row
+		buffer.append(ROW_END);
+		return buffer.toString();
+	}
 

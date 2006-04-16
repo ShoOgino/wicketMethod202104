@@ -1,47 +1,49 @@
-    /**
-     * Write the rendered table.
-     * @return String rendered table body
-     */
-    public String doExport() 
-    {
-        StringBuffer buffer = new StringBuffer(8000);
+	/**
+	 * Write the rendered table.
+	 * 
+	 * @return String rendered table body
+	 */
+	public String doExport()
+	{
+		StringBuffer buffer = new StringBuffer(8000);
 
-        final String DOCUMENT_START = getDocumentStart();
-        final String DOCUMENT_END = getDocumentEnd();
-        final String ROW_START = getRowStart();
-        final String ROW_END = getRowEnd();
-        final String CELL_START = getCellStart();
-        final String CELL_END = getCellEnd();
-        final boolean ALWAYS_APPEND_CELL_END = getAlwaysAppendCellEnd();
-        final boolean ALWAYS_APPEND_ROW_END = getAlwaysAppendRowEnd();
+		final String DOCUMENT_START = getDocumentStart();
+		final String DOCUMENT_END = getDocumentEnd();
+		final String ROW_START = getRowStart();
+		final String ROW_END = getRowEnd();
+		final String CELL_START = getCellStart();
+		final String CELL_END = getCellEnd();
+		final boolean ALWAYS_APPEND_CELL_END = getAlwaysAppendCellEnd();
+		final boolean ALWAYS_APPEND_ROW_END = getAlwaysAppendRowEnd();
 
-        // document start
-        buffer.append(DOCUMENT_START);
+		// document start
+		buffer.append(DOCUMENT_START);
 
-        if (this.header)
-        {
-            buffer.append(doHeaders());
-        }
+		if (this.header)
+		{
+			buffer.append(doHeaders());
+		}
 
-        //get the correct iterator (full or partial list according to the exportFull field)
-        Iterator rowIterator = model.iterator();
+		// get the correct iterator (full or partial list according to the
+		// exportFull field)
+		Iterator rowIterator = model.iterator();
 
-        // iterator on rows
-        while (rowIterator.hasNext())
-        {
-            Object row = rowIterator.next();
+		// iterator on rows
+		while (rowIterator.hasNext())
+		{
+			Object row = rowIterator.next();
 
-            buffer.append(ROW_START);
-            buffer.append(escapeColumnValue(row.toString()));
-            
-            if (ALWAYS_APPEND_ROW_END || rowIterator.hasNext())
-            {
-                buffer.append(ROW_END);
-            }
-        }
+			buffer.append(ROW_START);
+			buffer.append(escapeColumnValue(row.toString()));
 
-        // document start
-        buffer.append(DOCUMENT_END);
-        return buffer.toString();
-    }
+			if (ALWAYS_APPEND_ROW_END || rowIterator.hasNext())
+			{
+				buffer.append(ROW_END);
+			}
+		}
+
+		// document start
+		buffer.append(DOCUMENT_END);
+		return buffer.toString();
+	}
 

@@ -4,9 +4,8 @@
 	public GridViewPage()
 	{
 		IDataProvider dataProvider = new ContactDataProvider();
-		GridView dv = new GridView("rows", dataProvider)
+		GridView gridView = new GridView("rows", dataProvider)
 		{
-
 			protected void populateItem(Item item)
 			{
 				final Contact contact = (Contact)item.getModelObject();
@@ -20,12 +19,10 @@
 			}
 		};
 
-		dv.setRows(4);
-		dv.setColumns(3);
+		gridView.setRows(4);
+		gridView.setColumns(3);
 
-		add(dv);
-
-		add(new PagingNavigator("navigator", dv));
-
+		add(gridView);
+		add(new PagingNavigator("navigator", gridView));
 	}
 
