@@ -26,7 +26,10 @@
 				bookmarkablePageClassName);
 		PageParameters parameters = new PageParameters(decodeParameters(parametersFragment, requestParameters.getParameters()));
 
-		BookmarkablePageRequestTarget target = new BookmarkablePageRequestTarget(
+		final String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
+		requestParameters.setPageMapName(pageMapName);
+
+		BookmarkablePageRequestTarget target = new BookmarkablePageRequestTarget(pageMapName,
 				bookmarkablePageClass, parameters);
 		return target;
 	}
