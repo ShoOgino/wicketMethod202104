@@ -7,18 +7,20 @@
 	 * after the defaults have been tried. When that doesn't provide a url
 	 * either, and exception will be thrown saying that encoding could not be
 	 * done.
-	 *
+	 * 
 	 * @see wicket.request.IRequestCodingStrategy#encode(wicket.RequestCycle,
 	 *      wicket.IRequestTarget)
 	 */
-	public final CharSequence encode(final RequestCycle requestCycle, final IRequestTarget requestTarget)
+	public final CharSequence encode(final RequestCycle requestCycle,
+			final IRequestTarget requestTarget)
 	{
 		// first check whether the target was mounted
 		CharSequence path = pathForTarget(requestTarget);
 		if (path != null)
 		{
 			CharSequence prefix = urlPrefix(requestCycle);
-			final AppendingStringBuffer buffer = new AppendingStringBuffer(prefix.length() + path.length());
+			final AppendingStringBuffer buffer = new AppendingStringBuffer(prefix.length()
+					+ path.length());
 			buffer.append(prefix);
 			buffer.append(path);
 			return requestCycle.getOriginalResponse().encodeURL(buffer);

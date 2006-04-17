@@ -1,17 +1,18 @@
 	/**
 	 * Encode a shared resource target.
-	 *
+	 * 
 	 * If you override this method to behave different then also
-	 * {@link #addResourceParameters(Request, RequestParameters)} should be overridden
-	 * to by in sync with that behaviour.
-	 *
+	 * {@link #addResourceParameters(Request, RequestParameters)} should be
+	 * overridden to by in sync with that behaviour.
+	 * 
 	 * @param requestCycle
 	 *            the current request cycle
 	 * @param requestTarget
 	 *            the target to encode
 	 * @return the encoded url
 	 */
-	protected CharSequence encode(RequestCycle requestCycle, ISharedResourceRequestTarget requestTarget)
+	protected CharSequence encode(RequestCycle requestCycle,
+			ISharedResourceRequestTarget requestTarget)
 	{
 		final CharSequence prefix = urlPrefix(requestCycle);
 		final String sharedResourceKey = requestTarget.getResourceKey();
@@ -25,7 +26,7 @@
 					.length()
 					+ prefix.length() + 11);
 			buffer.append(prefix);
-			if (buffer.charAt(buffer.length()-1) == '/')
+			if ((buffer.length() > 0) && buffer.charAt(buffer.length() - 1) == '/')
 			{
 				buffer.append("resources/");
 			}
