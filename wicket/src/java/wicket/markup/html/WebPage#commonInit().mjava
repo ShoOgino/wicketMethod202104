@@ -1,0 +1,48 @@
+	/**
+	 * Common code executed by constructors.
+	 */
+	private void commonInit()
+	{
+		// Add a Body container if the associated markup contains a <body> tag
+		// get markup stream gracefully
+		MarkupStream markupStream = getAssociatedMarkupStream(false);
+		if (markupStream != null)
+		{
+			// The default <body> container. It can be accessed, replaced
+			// and attribute modifiers can be attached. <body> tags without
+			// wicket:id get automatically a wicket:id="body" assigned.
+			// find the body tag
+			while (markupStream.hasMore())
+			{
+				final MarkupElement element = markupStream.next();
+				if (element instanceof ComponentTag)
+				{
+					final ComponentTag tag = (ComponentTag)element;
+					if (tag.isOpen() && TagUtils.isBodyTag(tag))
+					{
+						// Add a default container if the tag has the default
+						// name
+						if (BodyOnLoadHandler.BODY_ID.equals(tag.getId()))
+						{
+							add(new HtmlBodyContainer(tag.getId()));
+						}
+						// remember the id of the tag
+						bodyContainer = new BodyContainer(this, tag.getId());
+						break;
+					}
+				}
+			}
+		}
+
+		// if automatic multi window support is on, add a page checker instance
+		if (getApplication().getPageSettings().getAutomaticMultiWindowSupport())
+		{
+			add(new PageMapChecker());
+		}
+
+		// TODO Post 1.2: If the concept proofs valuable we could add the header
+		// container the same way instead of using a resolver. The advantages
+		// would be that the header container be available at build time already
+		// and not only at render time.
+	}
+
