@@ -22,7 +22,12 @@
 			// first print the last cause
 			int length = al.size()-1;
 			cause = (Throwable)al.get(length);
-			
+			if(throwable instanceof WicketRuntimeException)
+			{
+				sb.append("WicketMessage: ");
+				sb.append(throwable.getMessage());
+				sb.append("\n\n");
+			}
 			sb.append("Root cause:\n\n");
 			outputThrowable(cause, sb,false);
 
