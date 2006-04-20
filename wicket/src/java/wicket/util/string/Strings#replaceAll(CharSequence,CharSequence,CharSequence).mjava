@@ -9,7 +9,8 @@
 	 *            The value to searchFor replaceWith
 	 * @return The resulting string with searchFor replaced with replaceWith
 	 */
-	public static CharSequence replaceAll(final CharSequence s, final CharSequence searchFor, CharSequence replaceWith)
+	public static CharSequence replaceAll(final CharSequence s, final CharSequence searchFor,
+			CharSequence replaceWith)
 	{
 		if (s == null)
 		{
@@ -29,10 +30,10 @@
 		{
 			replaceWith = "";
 		}
-		
+
 		String searchString = searchFor.toString();
 		// Look for first occurrence of searchFor
-		int matchIndex = search(s, searchString,0);
+		int matchIndex = search(s, searchString, 0);
 		if (matchIndex == -1)
 		{
 			// No replace operation needs to happen
@@ -40,7 +41,8 @@
 		}
 		else
 		{
-			// Allocate a AppendingStringBuffer that will hold one replacement with a
+			// Allocate a AppendingStringBuffer that will hold one replacement
+			// with a
 			// little extra room.
 			int size = s.length();
 			final int replaceWithLength = replaceWith.length();
@@ -55,7 +57,7 @@
 			do
 			{
 				// Append text up to the match`
-				append(buffer, s, pos,matchIndex);
+				append(buffer, s, pos, matchIndex);
 
 				// Add replaceWith text
 				buffer.append(replaceWith);
@@ -67,7 +69,7 @@
 			while (matchIndex != -1);
 
 			// Add tail of s
-			buffer.append(s.subSequence(pos,s.length()));
+			buffer.append(s.subSequence(pos, s.length()));
 
 			// Return processed buffer
 			return buffer;
