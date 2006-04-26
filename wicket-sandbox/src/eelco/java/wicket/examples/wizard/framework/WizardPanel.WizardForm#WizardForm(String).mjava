@@ -1,6 +1,8 @@
 		/**
 		 * Construct.
-		 * @param id component id
+		 * 
+		 * @param id
+		 *            component id
 		 */
 		public WizardForm(String id)
 		{
@@ -13,7 +15,7 @@
 				protected void onSubmit()
 				{
 					Node current = state.getCurrentNode();
-					if(current instanceof Step)
+					if (current instanceof Step)
 					{
 						record(current);
 						TransitionLabel result = ((Step)current).previous(WizardForm.this);
@@ -36,7 +38,7 @@
 				protected void onSubmit()
 				{
 					Node current = state.getCurrentNode();
-					if(current instanceof Step)
+					if (current instanceof Step)
 					{
 						record(current);
 						TransitionLabel result = ((Step)current).next(WizardForm.this);
@@ -69,7 +71,7 @@
 
 				public boolean isVisible()
 				{
-					return ( state.getCurrentNode() instanceof Exit );
+					return (state.getCurrentNode() instanceof Exit);
 				}
 			};
 			exitButton.add(new AttributeModifier("value", new Model()
@@ -77,7 +79,7 @@
 				public Object getObject(wicket.Component component)
 				{
 					Node current = state.getCurrentNode();
-					if(current instanceof Exit)
+					if (current instanceof Exit)
 					{
 						return ((Exit)current).getLabel();
 					}
