@@ -1,0 +1,22 @@
+	/**
+	 * 
+	 * 
+	 */
+	public void test_1()
+	{
+		// Add the string resource loader with the special Bundle like
+		// behavior
+		application.getResourceSettings().addStringResourceLoader(
+				new WicketBundleStringResourceLoader(application, application.getClass()));
+
+		application.setupRequestAndResponse();
+		WebRequestCycle cycle = application.createRequestCycle();
+		TestPage page = new TestPage();
+		cycle.getSession().setStyle("mystyle");
+
+		String str = page.getString("test1");
+		str = page.getString("test2");
+		str = page.getString("test3");
+		str = page.getString("test4");
+	}
+
