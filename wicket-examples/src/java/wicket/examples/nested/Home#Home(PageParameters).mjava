@@ -26,7 +26,23 @@
 
 		// create a tree
 		TreeModel treeModel = convertToTreeModel(l1);
-		MyTree tree = new MyTree("tree", treeModel);
+		Tree tree = new Tree("tree", treeModel)
+		{
+			protected String getNodeLabel(DefaultMutableTreeNode node)
+			{
+				Object userObject = node.getUserObject();
+				return (userObject instanceof List) ? "<sub>" : String
+						.valueOf(node.getUserObject());
+			}
+		};
 		add(tree);
+
+		// and another one
+		Tree tree2 = new MyTree("tree2", treeModel);
+		add(tree2);
+
+		// and yet another one
+		Tree tree3 = new AnotherTree("tree3", treeModel);
+		add(tree3);
 	}
 
