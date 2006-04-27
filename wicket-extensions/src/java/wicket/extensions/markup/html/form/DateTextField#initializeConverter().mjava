@@ -1,0 +1,17 @@
+	/**
+	 * Creates an appropriate converter for this <code>TextField</code>
+	 *
+	 * @return A converter that handles <code>String</code>-<code>Date</code>
+	 *         conversions according to the <code>datePattern</code> field. 
+	 */
+	private Converter initializeConverter() {
+		StringConverter stringConverter = new StringConverter();
+		stringConverter.set(Date.class, new DateToStringPatternConverter());
+		
+		Converter converter = new Converter(getSession().getLocale());
+		converter.set(String.class, stringConverter);
+		converter.set(Date.class, new StringPatternToDateConverter());
+		
+		return converter;
+	}
+
