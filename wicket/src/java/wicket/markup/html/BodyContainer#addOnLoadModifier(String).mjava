@@ -1,6 +1,8 @@
 	/**
 	 * Add a new AttributeModifier to the body container which appends the
 	 * 'value' to the onLoad attribute of the body tag.
+	 * <p>
+	 * Note: This method is not suitable for
 	 * 
 	 * @param value
 	 *            The value to append to 'onLoad'
@@ -10,18 +12,10 @@
 	{
 		final Model model = new Model(value);
 		final Component bodyContainer = page.get(id);
-		
+
 		// TODO Post 1.2: Move all attribute modifier into a separate package
 		// and add an AppendingAttributeModifier to that package
-		bodyContainer.add(new AttributeModifier("onLoad", true, model)
-		{
-			private static final long serialVersionUID = 1L;
-
-			protected String newValue(String currentValue, String replacementValue)
-			{
-				return (currentValue == null ? replacementValue : currentValue + replacementValue);
-			}
-		});
+		bodyContainer.add(new AppendingAttributeModifier("onLoad", model));
 		return this;
 	}
 

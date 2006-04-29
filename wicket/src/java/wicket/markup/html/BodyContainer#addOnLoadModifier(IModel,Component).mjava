@@ -1,0 +1,29 @@
+	/**
+	 * Add a new AttributeModifier to the body container which appends the
+	 * 'value' to the onLoad attribute of the body tag. Remember the component
+	 * which requested to add the modified to the body container. This for
+	 * example is required in cases where on a dynamic page the Component (e.g.
+	 * a Panel) gets removed and/or replaced and the body attribute modifier
+	 * must be removed/replaced as well.
+	 * 
+	 * @param model
+	 *            The model which holds the value to be appended to 'onLoad'
+	 * @param behaviorOwner
+	 *            The component which 'owns' the attribute modifier
+	 * @return this
+	 * 
+	 * @TODO Post 1.2: A listener hook on IBheavior which gets called on removal
+	 *       of the component would be the better solution
+	 */
+	public final BodyContainer addOnLoadModifier(final IModel model, final Component behaviorOwner)
+	{
+		if (behaviorOwner == null)
+		{
+			return addOnLoadModifier(model);
+		}
+
+		final Component bodyContainer = page.get(id);
+		bodyContainer.add(new BodyTagAttributeModifier("onLoad", true, model, behaviorOwner));
+		return this;
+	}
+
