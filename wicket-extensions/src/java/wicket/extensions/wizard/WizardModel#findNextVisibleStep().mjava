@@ -1,0 +1,21 @@
+	/**
+	 * Finds the next visible step based on the active step.
+	 * 
+	 * @return The next visible step based on the active step
+	 */
+	protected final IWizardStep findNextVisibleStep()
+	{
+		int startIndex = (activeStep == null) ? 0 : steps.indexOf(activeStep) + 1;
+
+		for (int i = startIndex; i < conditions.size(); i++)
+		{
+			ICondition condition = (ICondition)conditions.get(i);
+			if (condition.evaluate())
+			{
+				return (IWizardStep)steps.get(i);
+			}
+		}
+
+		throw new IllegalStateException("Wizard contains no more visible steps");
+	}
+

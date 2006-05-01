@@ -1,0 +1,24 @@
+	/**
+	 * @see wicket.extensions.wizard.WizardButton#doAction()
+	 */
+	public void doAction()
+	{
+		IWizardModel wizardModel = getWizardModel();
+		IWizardStep step = wizardModel.getActiveStep();
+
+		// let the step apply any state
+		step.applyState();
+
+		// if the step completed after applying the state, move the
+		// model onward
+		if (step.isComplete())
+		{
+			wizardModel.next();
+		}
+		else
+		{
+			error(getLocalizer().getString(
+					"wicket.extensions.wizard.NextButton.step.did.not.complete", this));
+		}
+	}
+
