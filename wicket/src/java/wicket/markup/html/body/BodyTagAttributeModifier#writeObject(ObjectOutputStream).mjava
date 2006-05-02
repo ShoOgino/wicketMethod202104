@@ -1,0 +1,22 @@
+	/**
+	 * AttributeModifiers must be Serialzable but WeakReferences are not. Hence,
+	 * we need to implement our read/write methods to properly support it.
+	 * 
+	 * @see Serializable
+	 * 
+	 * @param outputStream
+	 * @throws IOException
+	 */
+	private void writeObject(final ObjectOutputStream outputStream) throws IOException
+	{
+		outputStream.defaultWriteObject();
+		if (componentReference != null)
+		{
+			outputStream.writeObject(componentReference.get());
+		}
+		else
+		{
+			outputStream.writeObject(null);
+		}
+	}
+
