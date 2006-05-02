@@ -1,6 +1,6 @@
 	/**
 	 * Append an additional hidden input tag to support anchor tags that can
-	 * submit a form
+	 * submit a form.
 	 * 
 	 * @param markupStream
 	 *            The markup stream
@@ -9,8 +9,22 @@
 	 */
 	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
+		// get the hidden field id
 		String nameAndId = getHiddenFieldId();
-		getResponse().write(new AppendingStringBuffer("<input type=\"hidden\" name=\"").append(nameAndId).append("\" id=\"").append(nameAndId).append("\"/>"));
+
+		// render the hidden field
+		AppendingStringBuffer buffer = new AppendingStringBuffer("<input type=\"hidden\" name=\"")
+				.append(nameAndId).append("\" id=\"").append(nameAndId).append("\" />");
+		getResponse().write(buffer);
+
+		// if a default button was set, handle the rendering of that
+		if (defaultButton != null && defaultButton.isVisibleInHierarchy()
+				&& defaultButton.isEnabled())
+		{
+			appendDefaultButtonField(markupStream, openTag);
+		}
+
+		// do the rest of the processing
 		super.onComponentTagBody(markupStream, openTag);
 	}
 
