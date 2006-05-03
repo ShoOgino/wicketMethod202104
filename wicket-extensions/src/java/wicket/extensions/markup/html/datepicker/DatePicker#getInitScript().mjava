@@ -13,7 +13,17 @@
 		String pattern = null;
 		if(dateConverter == null)
 		{
-			dateConverter = new DateConverter();
+			// TODO this should be much easier and nicer to do in 2.0
+			IConverter converter = target.getConverter();
+			if(converter instanceof Converter)
+			{
+				ITypeConverter typeConverter = ((Converter)converter).get(Date.class);
+				if(typeConverter instanceof DateConverter)
+				{
+					dateConverter = (DateConverter)typeConverter;
+				}
+			}
+			if(dateConverter == null) dateConverter = new DateConverter();
 		}
 		DateFormat df = dateConverter.getDateFormat(target.getLocale());
 		if(df instanceof SimpleDateFormat)
