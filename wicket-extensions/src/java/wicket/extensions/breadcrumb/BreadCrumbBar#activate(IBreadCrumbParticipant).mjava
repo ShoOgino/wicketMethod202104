@@ -1,0 +1,22 @@
+	/**
+	 * Activates the bread crumb participant.
+	 * 
+	 * @param breadCrumbParticipant
+	 *            The participant to activate
+	 */
+	protected final void activate(final IBreadCrumbParticipant breadCrumbParticipant)
+	{
+		// get old value
+		IBreadCrumbParticipant previousParticipant = this.activeParticipant;
+
+		// and set the provided participant as the active one
+		this.activeParticipant = breadCrumbParticipant;
+
+		// fire bread crumb activated event
+		listenerSupport.fireBreadCrumbActivated(previousParticipant, breadCrumbParticipant);
+
+		// signal the bread crumb participant that it is selected as the
+		// currently active one
+		breadCrumbParticipant.onActivate(previousParticipant);
+	}
+
