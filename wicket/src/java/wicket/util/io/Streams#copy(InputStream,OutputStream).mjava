@@ -6,19 +6,23 @@
 	 *            The input stream
 	 * @param out
 	 *            The output stream
+	 * @return Number of bytes copied from one stream to the other
 	 * @throws IOException
 	 */
-	public static void copy(final InputStream in, final OutputStream out) throws IOException
+	public static int copy(final InputStream in, final OutputStream out) throws IOException
 	{
 		final byte[] buffer = new byte[4096];
+		int bytesCopied = 0;
 		while (true)
 		{
-		    int byteCount = in.read(buffer, 0, buffer.length);
-		    if (byteCount <= 0)
-		    {
-		        break;
-		    }
+			int byteCount = in.read(buffer, 0, buffer.length);
+			if (byteCount <= 0)
+			{
+				break;
+			}
 			out.write(buffer, 0, byteCount);
+			bytesCopied += byteCount;
 		}
+		return bytesCopied;
 	}
 
