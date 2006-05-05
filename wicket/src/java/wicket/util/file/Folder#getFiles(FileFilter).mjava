@@ -1,20 +1,23 @@
 	/**
 	 * @param filter
-	 *            Filename fiter
+	 *            File filter
 	 * @return Files
 	 */
-	public File[] getFiles(final Filter filter)
+	public File[] getFiles(final FileFilter filter)
 	{
-		final java.io.File[] files = listFiles(new FileFilter()
+		// Get list of java.io files
+		final java.io.File[] files = listFiles(new java.io.FileFilter()
 		{
 			/**
 			 * @see java.io.FileFilter#accept(java.io.File)
 			 */
 			public boolean accept(java.io.File file)
 			{
-				return filter.accept(new File(file));
+				return file.isFile() && filter.accept(new File(file));
 			}
 		});
+
+		// Convert java.io files to wicket files
 		final File[] wicketFiles = new File[files.length];
 		for (int i = 0; i < files.length; i++)
 		{
