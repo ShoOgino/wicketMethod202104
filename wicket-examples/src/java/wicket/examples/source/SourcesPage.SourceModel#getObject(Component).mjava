@@ -17,7 +17,12 @@
 			{
 				StringBuffer sb = new StringBuffer();
 
-				br = new BufferedReader(new InputStreamReader(page.getResourceAsStream(name)));
+				InputStream resourceAsStream = page.getResourceAsStream(name);
+				if (resourceAsStream == null)
+				{
+					return "Unable to read the source for " + name;
+				}
+				br = new BufferedReader(new InputStreamReader(resourceAsStream));
 
 				while (br.ready())
 				{
@@ -28,7 +33,8 @@
 			}
 			catch (IOException e)
 			{
-				log.error("Unable to read resource stream for: " + name + "; Page=" + page.toString(), e);
+				log.error("Unable to read resource stream for: " + name + "; Page="
+						+ page.toString(), e);
 				return "";
 			}
 			finally
