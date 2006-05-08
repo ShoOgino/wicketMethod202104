@@ -8,23 +8,13 @@
 		// Skip the components body. It will be replaced by the fragment
 		markupStream.skipRawMarkup();
 
-		if (this.markupProvider == null)
+		final MarkupStream providerMarkupStream = chooseMarkupStream(markupStream);
+		if (providerMarkupStream == null)
 		{
-			renderFragment(markupStream, openTag);
+			throw new IllegalStateException(
+					"no markup stream found for providing markup container " + markupProvider);
 		}
-		else
-		{
-			// The following statement assumes that the markup provider is a
-			// parent along the line up to the Page
-			final MarkupStream providerMarkupStream = this.markupProvider.getMarkupStream();
 
-			if (providerMarkupStream == null)
-			{
-				throw new IllegalStateException(
-						"no markup stream found for providing markup container " + markupProvider);
-			}
-
-			renderFragment(providerMarkupStream, openTag);
-		}
+		renderFragment(providerMarkupStream, openTag);
 	}
 
