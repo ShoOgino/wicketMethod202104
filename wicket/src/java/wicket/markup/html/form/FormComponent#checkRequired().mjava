@@ -1,7 +1,9 @@
 	/**
-	 * Checks if the raw input value is not null if this component is required
+	 * Checks if the form component's 'required' requirement is met
+	 * 
+	 * @return true if the 'required' requirement is met, false otherwise
 	 */
-	protected final void checkRequired()
+	public final boolean checkRequired()
 	{
 		if (isRequired())
 		{
@@ -14,15 +16,15 @@
 			{
 				// this value must have come from a disabled field
 				// do not perform validation
-				return;
+				return true;
 			}
 
 			// peform validation by looking whether the value is null or empty
 			if (Strings.isEmpty(input))
 			{
-				error(Collections.singletonList("RequiredValidator"), new HashMap());
+				return false;
 			}
-
 		}
+		return true;
 	}
 
