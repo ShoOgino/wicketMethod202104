@@ -1,9 +1,10 @@
-    /**
-     * The javascript which trigges this link
-     * @return The javascript
-     */
-    private String getTriggerJavaScript()
-    {
+	/**
+	 * The javascript which trigges this link
+	 * 
+	 * @return The javascript
+	 */
+	private String getTriggerJavaScript()
+	{
 		Form form = getForm();
 		StringBuffer sb = new StringBuffer(100);
 		sb.append("document.getElementById('");
@@ -11,9 +12,19 @@
 		sb.append("').name=\'");
 		sb.append(getInputName());
 		sb.append("';");
-		sb.append("document.getElementById('");
+
+		sb.append("var f=document.getElementById('");
 		sb.append(form.getJavascriptId());
-		sb.append("').submit();return false;");
+		sb.append("');");
+
+		if (shouldInvokeFormOnsubmit())
+		{
+
+			sb.append("if (f.onsubmit != undefined) { if (f.onsubmit()==false) return false; }");
+		}
+
+
+		sb.append("f.submit();return false;");
 		return sb.toString();
-    }
+	}
 

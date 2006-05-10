@@ -1,34 +1,34 @@
-    /**
-     * @inheritDoc
-     * @see wicket.Component#onComponentTag(wicket.markup.ComponentTag)
-     */
-    protected void onComponentTag(ComponentTag tag)
-    {
-//   	 If we're disabled
- 		if (!isEnabled())
- 		{
- 			// if the tag is an anchor proper
- 			if (tag.getName().equalsIgnoreCase("a"))
- 			{
- 				// Change anchor link to span tag
- 				tag.setName("span");
+	/**
+	 * @inheritDoc
+	 * @see wicket.Component#onComponentTag(wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTag(ComponentTag tag)
+	{
+		// If we're disabled
+		if (!isEnabled())
+		{
+			// if the tag is an anchor proper
+			if (tag.getName().equalsIgnoreCase("a"))
+			{
+				// Change anchor link to span tag
+				tag.setName("span");
 
- 				// Remove any href from the old link
- 				tag.remove("href");
- 			}
- 			else
- 			{
- 				// Remove any onclick design time code
- 				tag.remove("onclick");
- 			}
- 		}
- 		else
- 		{
- 			if(tag.getName().equalsIgnoreCase("a"))
- 			{
+				// Remove any href from the old link
+				tag.remove("href");
+			}
+			else
+			{
+				// Remove any onclick design time code
+				tag.remove("onclick");
+			}
+		}
+		else
+		{
+			if (tag.getName().equalsIgnoreCase("a"))
+			{
 				tag.put("href", "#");
 			}
 			tag.put("onclick", getTriggerJavaScript());
- 		}
-    }
+		}
+	}
 
