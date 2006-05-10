@@ -9,13 +9,15 @@
 		 *            The bread crumb model
 		 * @param breadCrumbParticipant
 		 *            The bread crumb
+		 * @param enableLink
+		 *            Whether the link should be enabled
 		 */
 		public BreadCrumbComponent(String id, int index, IBreadCrumbModel breadCrumbModel,
-				final IBreadCrumbParticipant breadCrumbParticipant)
+				final IBreadCrumbParticipant breadCrumbParticipant, boolean enableLink)
 		{
 			super(id);
-			add(new Label("sep", (index > 0) ? "&nbsp;&nbsp;>&nbsp;" : "").setEscapeModelStrings(
-					false).setRenderBodyOnly(true));
+			add(new Label("sep", (index > 0) ? "/" : "").setEscapeModelStrings(false)
+					.setRenderBodyOnly(true));
 			BreadCrumbLink link = new BreadCrumbLink("link", breadCrumbModel)
 			{
 				private static final long serialVersionUID = 1L;
@@ -25,6 +27,7 @@
 					return breadCrumbParticipant;
 				}
 			};
+			link.setEnabled(enableLink);
 			add(link);
 			link.add(new Label("label", breadCrumbParticipant.getTitle()).setRenderBodyOnly(true));
 		}
