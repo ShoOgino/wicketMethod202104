@@ -3,14 +3,11 @@
 		 * <code>DateToStringPatternConverter</code> and
 		 * <code>StringPatternToDateConverter</code> as it is appropriate.
 		 */
-		public DateTextFieldConverter() 
+		private DateTextFieldConverter() 
 		{
 			super(getSession().getLocale());
-			
-			StringConverter stringConverter = new StringConverter();
-			stringConverter.set(Date.class, new DateToStringPatternConverter());
-			
-			set(String.class, stringConverter);
+
+			set(String.class, new DateToStringPatternConverter());
 			set(Date.class, new StringPatternToDateConverter());
 		}
 
