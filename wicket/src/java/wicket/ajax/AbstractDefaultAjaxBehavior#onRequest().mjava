@@ -4,10 +4,11 @@
 	public final void onRequest()
 	{
 		boolean isPageVersioned = true;
+		Page page = getComponent().getPage();
 		try
 		{
-			isPageVersioned = getComponent().getPage().isVersioned();
-			getComponent().getPage().setVersioned(false);
+			isPageVersioned = page.isVersioned();
+			page.setVersioned(false);
 
 			AjaxRequestTarget target = new AjaxRequestTarget();
 			RequestCycle.get().setRequestTarget(target);
@@ -15,7 +16,7 @@
 		}
 		finally
 		{
-			getComponent().getPage().setVersioned(isPageVersioned);
+			page.setVersioned(isPageVersioned);
 		}
 	}
 
