@@ -1,9 +1,8 @@
 	/**
-	 * Gets a String array by key.
-	 * If the value was a String[] it will be returned directly.
-	 * If it was a String it will be converted to a String array of one.
-	 * If it was an array of another type a String array will be made and
-	 * the elements will be converted to a string.
+	 * Gets a String array by key. If the value was a String[] it will be
+	 * returned directly. If it was a String it will be converted to a String
+	 * array of one. If it was an array of another type a String array will be
+	 * made and the elements will be converted to a string.
 	 * 
 	 * @param key
 	 * @return The String array of that key
@@ -11,28 +10,28 @@
 	public String[] getStringArray(final String key)
 	{
 		final Object o = get(key);
-		if(o == null)
+		if (o == null)
 		{
 			return null;
 		}
-		else if(o instanceof String[])
+		else if (o instanceof String[])
 		{
 			return (String[])o;
 		}
-		else if(o.getClass().isArray())
+		else if (o.getClass().isArray())
 		{
 			int length = Array.getLength(o);
 			String[] array = new String[length];
 			for (int i = 0; i < length; i++)
 			{
 				final Object arrayValue = Array.get(o, i);
-				if(arrayValue != null)
+				if (arrayValue != null)
 				{
 					array[i] = arrayValue.toString();
 				}
 			}
 			return array;
 		}
-		return new String[] {o.toString()};
+		return new String[] { o.toString() };
 	}
 
