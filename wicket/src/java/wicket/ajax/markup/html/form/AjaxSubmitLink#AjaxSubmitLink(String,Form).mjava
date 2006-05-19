@@ -7,7 +7,9 @@
 	public AjaxSubmitLink(String id, final Form form)
 	{
 		super(id);
-
+		
+		form.setOutputMarkupId(true);
+		
 		add(new AjaxFormSubmitBehavior(form, "onclick")
 		{
 
@@ -17,7 +19,7 @@
 			{
 				AjaxSubmitLink.this.onSubmit(target, form);
 			}
-			
+
 			protected CharSequence getEventHandler()
 			{
 				return new AppendingStringBuffer(super.getEventHandler()).append("; return false;");
