@@ -1,38 +1,38 @@
 	/**
 	 * @see java.util.Map#entrySet()
 	 */
-	public Set entrySet()
+	public Set<Map.Entry<K, V>> entrySet()
 	{
-		return new AbstractSet()
+		return new AbstractSet<Map.Entry<K,V>>()
 		{
-			public Iterator iterator()
+			public Iterator<Map.Entry<K,V>> iterator()
 			{
-				return new Iterator()
+				return new Iterator<Map.Entry<K,V>>()
 				{
 					public boolean hasNext()
 					{
 						return index < MicroMap.this.size();
 					}
 
-					public Object next()
+					public Map.Entry<K,V> next()
 					{
 						index++;
 
-						return new Map.Entry()
+						return new Map.Entry<K,V>()
 						{
-							public Object getKey()
+							public K getKey()
 							{
 								return key;
 							}
 
-							public Object getValue()
+							public V getValue()
 							{
 								return value;
 							}
 
-							public Object setValue(final Object value)
+							public V setValue(final V value)
 							{
-								final Object oldValue = MicroMap.this.value;
+								final V oldValue = MicroMap.this.value;
 
 								MicroMap.this.value = value;
 

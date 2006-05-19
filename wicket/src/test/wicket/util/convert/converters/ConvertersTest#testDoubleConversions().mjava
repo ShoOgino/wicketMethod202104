@@ -4,26 +4,25 @@
 	public void testDoubleConversions()
 	{
 		DoubleConverter converter = new DoubleConverter();
-		assertEquals(new Double(1.1), converter.convert(new Double(1.1),Locale.US));
-		assertEquals(new Double(1.1), converter.convert("1.1",Locale.US));
-		assertEquals("1.1", new StringConverter().convert(new Double(1.1),Locale.US));
-        try
-        {
-            converter.convert("whatever",Locale.US);
-            fail("Conversion should have thrown an exception");
-        }
-        catch (ConversionException e)
-        {
-            // this is correct
-        }
-        try
-        {
-            converter.convert("1.1whatever",Locale.US);
-            fail("Conversion should have thrown an exception");
-        }
-        catch (ConversionException e)
-        {
-            // this is correct
-        }
+		assertEquals(new Double(1.1), converter.convertToObject("1.1", Locale.US));
+		assertEquals("1.1", converter.convertToString(new Double(1.1), Locale.US));
+		try
+		{
+			converter.convertToObject("whatever", Locale.US);
+			fail("Conversion should have thrown an exception");
+		}
+		catch (ConversionException e)
+		{
+			// this is correct
+		}
+		try
+		{
+			converter.convertToObject("1.1whatever", Locale.US);
+			fail("Conversion should have thrown an exception");
+		}
+		catch (ConversionException e)
+		{
+			// this is correct
+		}
 	}
 

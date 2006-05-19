@@ -12,6 +12,7 @@
 	 *            The markup to checked for inheritance
 	 * @return A markup object with the the base markup elements resolved.
 	 */
+	@SuppressWarnings("unchecked")
 	private Markup checkForMarkupInheritance(final MarkupContainer container,
 			final CharSequence key, final Markup markup)
 	{
@@ -24,9 +25,9 @@
 			return markup;
 		}
 
+		Class<? extends MarkupContainer> markupClass = markup.getResource().getMarkupClass();
 		// get the base markup
-		final Markup baseMarkup = getMarkup(container, markup.getResource().getMarkupClass()
-				.getSuperclass());
+		final Markup baseMarkup = getMarkup(container, (Class<? extends MarkupContainer>)markupClass.getSuperclass());
 
 		if (baseMarkup == Markup.NO_MARKUP)
 		{

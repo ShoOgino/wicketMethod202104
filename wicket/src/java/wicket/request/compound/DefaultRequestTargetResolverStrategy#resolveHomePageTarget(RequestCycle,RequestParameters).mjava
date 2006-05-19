@@ -15,22 +15,29 @@
 		try
 		{
 			// Get the home page class
-			Class homePageClass = application.getHomePage();
+			Class<? extends Page> homePageClass = application.getHomePage();
 
-			PageParameters parameters = new PageParameters(requestParameters.getParameters());
+			PageParameters<String,Object> parameters = new PageParameters<String,Object>(requestParameters.getParameters());
 			// and create a dummy target for looking up whether the home page is
 			// mounted
-			BookmarkablePageRequestTarget homepageTarget = new BookmarkablePageRequestTarget(
-					homePageClass, parameters);
-			IRequestCodingStrategy requestCodingStrategy = requestCycle.getProcessor()
-					.getRequestCodingStrategy();
-			CharSequence path = requestCodingStrategy.pathForTarget(homepageTarget);
-
-			if (path != null)
+			BookmarkablePageRequestTarget homepageTarget = null;
+			if(requestParameters.getBookmarkableFormName() != null)
 			{
-				// The home page was mounted at the given path.
-				// Issue a redirect to that path
-				requestCycle.setRedirect(true);
+				homepageTarget = new BookmarkableFormPageRequestTarget(null,homePageClass, parameters,requestParameters.getBookmarkableFormName());
+			}
+			else
+			{
+				homepageTarget = new BookmarkablePageRequestTarget(homePageClass, parameters);
+				IRequestCodingStrategy requestCodingStrategy = requestCycle.getProcessor()
+						.getRequestCodingStrategy();
+				CharSequence path = requestCodingStrategy.pathForTarget(homepageTarget);
+	
+				if (path != null)
+				{
+					// The home page was mounted at the given path.
+					// Issue a redirect to that path
+					requestCycle.setRedirect(true);
+				}
 			}
 
 			// else the home page was not mounted; render it now so

@@ -1,0 +1,28 @@
+	protected ValueMap<String, Object> decodeParameters(String urlFragment, Map<String,? extends Object> urlParameters)
+	{
+		PageParameters<String, Object> params = new PageParameters<String, Object>();
+		if (urlFragment == null)
+		{
+			return params;
+		}
+		if (urlFragment.startsWith("/"))
+		{
+			urlFragment = urlFragment.substring(1);
+		}
+
+		String[] parts = urlFragment.split("/");
+		for (int i = 0; i < parts.length; i++)
+		{
+			if(WebRequestCodingStrategy.PAGEMAP.equals(parts[i]))
+			{
+				i++;
+				params.put(WebRequestCodingStrategy.PAGEMAP,parts[i]);
+			}
+			else
+			{
+				params.put(String.valueOf(i), parts[i]);
+			}
+		}
+		return params;
+	}
+

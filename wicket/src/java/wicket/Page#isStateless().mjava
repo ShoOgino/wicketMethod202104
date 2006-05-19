@@ -1,9 +1,27 @@
 	/**
-	 * @return Return true from this method if you want to keep a page out of
-	 *         the session.
+	 * @return Returns true if this page can be seen as stateless so it won't go into the session 
 	 */
-	final boolean isStateless()
+	public final boolean isStateless()
 	{
+		if(stateless == null)
+		{
+			Object returnValue = visitChildren(Component.class, new IVisitor<Component>()
+			{
+				public Object component(Component component)
+				{
+					if(!component.isStateless()) return false;
+					return CONTINUE_TRAVERSAL;
+				}
+			});
+			if(returnValue == null)
+			{
+				stateless = Boolean.TRUE;
+			}
+			else if(returnValue instanceof Boolean)
+			{
+				stateless = (Boolean)returnValue;
+			}
+		}
 		return stateless;
 	}
 

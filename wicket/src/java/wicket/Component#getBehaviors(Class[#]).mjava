@@ -1,0 +1,31 @@
+	/**
+	 * Gets the subset of the currently coupled {@link IBehavior}s that are of
+	 * the provided type as a unmodifiable list or null if there are no
+	 * behaviors attached. Returns an empty list rather than null if there are
+	 * no behaviors coupled to this component.
+	 * 
+	 * @param type
+	 *            The type
+	 * 
+	 * @return The subset of the currently coupled behaviors that are of the
+	 *         provided type as a unmodifiable list or null
+	 */
+	protected final List<IBehavior> getBehaviors(Class<?> type)
+	{
+		if (behaviors == null)
+		{
+			return Collections.emptyList();
+		}
+
+		List<IBehavior> subset = new ArrayList<IBehavior>(behaviors.size()); // avoid growing
+		for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
+		{
+			IBehavior behavior = i.next();
+			if (type.isAssignableFrom(behavior.getClass()))
+			{
+				subset.add(behavior);
+			}
+		}
+		return Collections.unmodifiableList(subset);
+	}
+

@@ -17,7 +17,15 @@
 			// made in a new window/ tab, in which case it should go in a
 			// different page map so that we don't intermangle the history of
 			// those windows
-			final ArrayListStack accessStack = getPageMap().getAccessStack();
+			final ArrayListStack accessStack;
+			if(getPageMap() instanceof AccessStackPageMap)
+			{
+				 accessStack = ((AccessStackPageMap)getPageMap()).getAccessStack();
+			}
+			else
+			{
+				accessStack = new ArrayListStack();
+			}
 			CharSequence url = null;
 			if (target instanceof IBookmarkablePageRequestTarget)
 			{
@@ -50,7 +58,7 @@
 						meta = new MissingBodyTagLoggedMetaData();
 						app.setMetaData(MISSING_BODY_TAG_LOGGED_MDK, meta);
 					}
-					Class pageClass = WebPage.this.getClass();
+					Class<? extends WebPage> pageClass = WebPage.this.getClass();
 					if (!meta.missingBodyTagsLogged.contains(pageClass))
 					{
 						log
@@ -79,14 +87,14 @@
 				// we know that we have a new window/ tab instance
 				if (onUnLoadModel == null)
 				{
-					onUnLoadModel = new Model()
+					onUnLoadModel = new Model<String>()
 					{
 						private static final long serialVersionUID = 1L;
 
 						/**
 						 * @see wicket.model.Model#getObject(wicket.Component)
 						 */
-						public Object getObject(Component component)
+						public String getObject(Component component)
 						{
 							Application application = Application.get();
 							return "deleteWicketCookie('pm-" + getPageMap().getName()

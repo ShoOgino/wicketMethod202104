@@ -1,0 +1,26 @@
+	/**
+	 * @param entry
+	 *            Entry that was accessed
+	 */
+	private final void pushAccess(IPageMapEntry entry)
+	{
+		// Create new access entry
+		final Access access = new Access();
+		access.id = entry.getNumericId();
+		access.version = versionOf(entry);
+		if(accessStack.size() > 0)
+		{
+			if(peekAccess().equals(access))
+			{
+				return;
+			}
+			int index = accessStack.indexOf(access);
+			if (index >= 0)
+			{
+				accessStack.remove(index);
+			}
+		}
+		accessStack.push(access);
+		dirty();
+	}
+

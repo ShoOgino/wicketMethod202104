@@ -1,7 +1,7 @@
 	/**
 	 * @see wicket.model.AbstractDetachableModel#onGetObject(wicket.Component)
 	 */
-	protected Object onGetObject(final Component component)
+	protected V onGetObject(final Component component)
 	{
 		final String expression = propertyExpression(component);
 		if (Strings.isEmpty(expression))
@@ -13,7 +13,7 @@
 		final Object modelObject = modelObject(component);
 		if (modelObject != null)
 		{
-			return PropertyResolver.getValue(expression, modelObject);
+			return (V)PropertyResolver.getValue(expression, modelObject);
 		}
 		return null;
 	}

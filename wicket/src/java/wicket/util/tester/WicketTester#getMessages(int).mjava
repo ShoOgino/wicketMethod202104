@@ -7,7 +7,7 @@
 	 * @return List list of messages (in String)
 	 * @see FeedbackMessage
 	 */
-	public List getMessages(final int level)
+	public List<String> getMessages(final int level)
 	{
 		FeedbackMessages feedbackMessages = getLastRenderedPage().getFeedbackMessages();
 		List allMessages = feedbackMessages.messages(new IFeedbackMessageFilter()
@@ -19,7 +19,7 @@
 				return message.getLevel() == level;
 			}
 		});
-		List actualMessages = new ArrayList();
+		List<String> actualMessages = new ArrayList<String>();
 		for (Iterator iter = allMessages.iterator(); iter.hasNext();)
 		{
 			actualMessages.add(((FeedbackMessage)iter.next()).getMessage());

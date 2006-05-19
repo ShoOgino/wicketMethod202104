@@ -5,18 +5,18 @@
 	 *            Filter for selecting messages
 	 * @return The messages or an empty list if no messages are found
 	 */
-	public final List messages(final IFeedbackMessageFilter filter)
+	public final List<FeedbackMessage> messages(final IFeedbackMessageFilter filter)
 	{
 		if (messages == null)
 		{
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		else
 		{
-			final List list = new ArrayList();
-			for (final Iterator iterator = messages.iterator(); iterator.hasNext();)
+			final List<FeedbackMessage> list = new ArrayList<FeedbackMessage>();
+			for (final Iterator<FeedbackMessage> iterator = messages.iterator(); iterator.hasNext();)
 			{
-				final FeedbackMessage message = (FeedbackMessage)iterator.next();
+				final FeedbackMessage message = iterator.next();
 				if (filter == null || filter.accept(message))
 				{
 					list.add(message);

@@ -31,15 +31,15 @@
 			}
 
 			// Check all the parent paths, until a match is found.
-			ArrayListStack paths;
+			ArrayListStack<TreePath> paths;
 
 			if (tempStacks.size() == 0)
 			{
-				paths = new ArrayListStack();
+				paths = new ArrayListStack<TreePath>();
 			}
 			else
 			{
-				paths = (ArrayListStack)tempStacks.pop();
+				paths = tempStacks.pop();
 			}
 
 			try
@@ -55,7 +55,7 @@
 						// paths.
 						while (node != null && paths.size() > 0)
 						{
-							path = (TreePath) paths.pop();
+							path = paths.pop();
 							node = node.createChildFor(path.getLastPathComponent());
 						}
 						return node;
