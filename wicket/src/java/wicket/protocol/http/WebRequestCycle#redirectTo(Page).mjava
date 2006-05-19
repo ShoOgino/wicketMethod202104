@@ -70,6 +70,7 @@
 			{
 				// re-assign the original response
 				setResponse(currentResponse);
+				if(ex instanceof AbortException) throw ex;
 				log.error(ex.getMessage(), ex);
 				IRequestCycleProcessor processor = getProcessor();
 				processor.respond(ex, this);
