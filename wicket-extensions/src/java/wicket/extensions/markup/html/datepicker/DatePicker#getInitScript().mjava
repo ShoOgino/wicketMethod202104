@@ -14,14 +14,10 @@
 		if(dateConverter == null)
 		{
 			// TODO this should be much easier and nicer to do in 2.0
-			IConverter converter = target.getConverter();
-			if(converter instanceof Converter)
+			IConverter typeConverter = target.getConverter(Date.class);
+			if(typeConverter instanceof DateConverter)
 			{
-				ITypeConverter typeConverter = ((Converter)converter).get(Date.class);
-				if(typeConverter instanceof DateConverter)
-				{
-					dateConverter = (DateConverter)typeConverter;
-				}
+				dateConverter = (DateConverter)typeConverter;
 			}
 			if(dateConverter == null) dateConverter = new DateConverter();
 		}
