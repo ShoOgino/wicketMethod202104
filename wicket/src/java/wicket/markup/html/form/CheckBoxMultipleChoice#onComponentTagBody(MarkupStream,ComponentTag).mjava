@@ -2,6 +2,7 @@
 	 * @see wicket.Component#onComponentTagBody(wicket.markup.MarkupStream,
 	 *      wicket.markup.ComponentTag)
 	 */
+	@Override
 	protected final void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 	{
@@ -23,7 +24,7 @@
 			Object displayValue = getChoiceRenderer().getDisplayValue(choice);
 			Class objectClass = displayValue == null?null:displayValue.getClass();
 			// Get label for choice
-			final String label = (String)getConverter(objectClass).convertToString(displayValue, getLocale());
+			final String label = getConverter(objectClass).convertToString(displayValue, getLocale());
 
 			// If there is a display value for the choice, then we know that the
 			// choice is automatic in some way. If label is /null/ then we know
