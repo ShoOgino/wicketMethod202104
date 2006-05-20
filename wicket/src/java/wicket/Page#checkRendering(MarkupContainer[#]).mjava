@@ -5,7 +5,7 @@
 	 *            The page itself if it was a full page render or the container
 	 *            that was rendered standalone
 	 */
-	private final void checkRendering(final MarkupContainer renderedContainer)
+	private final void checkRendering(final MarkupContainer<?> renderedContainer)
 	{
 		// If the application wants component uses checked and
 		// the response is not a redirect
@@ -15,7 +15,7 @@
 			final Count unrenderedComponents = new Count();
 			final List<Component> unrenderedAutoComponents = new ArrayList<Component>();
 			final StringBuffer buffer = new StringBuffer();
-			renderedContainer.visitChildren(new IVisitor()
+			renderedContainer.visitChildren(new IVisitor<Component>()
 			{
 				public Object component(final Component component)
 				{

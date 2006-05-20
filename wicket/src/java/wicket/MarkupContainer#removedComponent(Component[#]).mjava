@@ -2,7 +2,7 @@
 	 * @param component
 	 *            Component being removed
 	 */
-	private final void removedComponent(final Component component)
+	private final void removedComponent(final Component<?> component)
 	{
 		// Notify Page that component is being removed
 		final Page page = component.findPage();
@@ -14,7 +14,7 @@
 		// detach children models
 		if (component instanceof MarkupContainer)
 		{
-			((MarkupContainer)component).visitChildren(new IVisitor()
+			((MarkupContainer<?>)component).visitChildren(new IVisitor<Component>()
 			{
 				public Object component(Component component)
 				{
