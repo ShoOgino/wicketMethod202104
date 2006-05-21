@@ -2,15 +2,15 @@
 	 * @see wicket.markup.html.form.FormComponent#convertValue(String[])
 	 */
 	@Override
-	protected Object convertValue(String[] ids) throws ConversionException
+	protected Collection<V> convertValue(String[] ids) throws ConversionException
 	{
-		ArrayList selectedValues = new ArrayList();
+		ArrayList<V> selectedValues = new ArrayList<V>();
 
 		// If one or more ids is selected
 		if (ids != null && ids.length > 0 && !Strings.isEmpty(ids[0]))
 		{
 			// Get values that could be selected
-			final List choices = getChoices();
+			final List<V> choices = getChoices();
 
 			// Loop through selected indices
 			for (int i = 0; i < ids.length; i++)
@@ -18,7 +18,7 @@
 				for (int index = 0; index < choices.size(); index++)
 				{
 					// Get next choice
-					final Object choice = choices.get(index);
+					final V choice = choices.get(index);
 					if (getChoiceRenderer().getIdValue(choice, index).equals(ids[i]))
 					{
 						selectedValues.add(choice);

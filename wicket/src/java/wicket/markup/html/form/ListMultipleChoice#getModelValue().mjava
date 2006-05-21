@@ -1,18 +1,17 @@
 	/**
 	 * @see FormComponent#getModelValue()
 	 */
-	@Override
 	public final String getModelValue()
 	{
 		// Get the list of selected values
-		final Collection selectedValues = (Collection)getModelObject();
+		final Collection<V> selectedValues = getModelObject();
 		final AppendingStringBuffer buffer = new AppendingStringBuffer();
 		if (selectedValues != null)
 		{
-			final List choices = getChoices();
-			for (final Iterator iterator = selectedValues.iterator(); iterator.hasNext();)
+			final List<V> choices = getChoices();
+			for (final Iterator<V> iterator = selectedValues.iterator(); iterator.hasNext();)
 			{
-				final Object object = iterator.next();
+				final V object = iterator.next();
 
 				int index = choices.indexOf(object);
 				buffer.append(getChoiceRenderer().getIdValue(object, index));
