@@ -1,0 +1,22 @@
+	/**
+	 * 
+	 * @param id
+	 */
+	public LocaleSelector(MarkupContainer parent,final String id)
+	{
+		super(parent,id);
+
+		// Dropdown for selecting locale
+		add(new LocaleDropDownChoice(this,"localeSelect"));
+
+		// Link to return to default locale
+		add(new Link(this,"defaultLocaleLink")
+		{
+			public void onClick()
+			{
+				WebRequest request = (WebRequest)getRequest();
+				setLocale(request.getLocale());
+			}
+		});
+	}
+

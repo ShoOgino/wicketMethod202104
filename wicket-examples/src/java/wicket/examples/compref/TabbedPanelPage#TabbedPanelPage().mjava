@@ -13,9 +13,9 @@
 		tabs.add(new AbstractTab(new Model("first tab"))
 		{
 
-			public Panel getPanel(String panelId)
+			public Panel getPanel(MarkupContainer<?> parent,String panelId)
 			{
-				return new TabPanel1(panelId);
+				return new TabPanel1(parent,panelId);
 			}
 
 		});
@@ -23,9 +23,9 @@
 		tabs.add(new AbstractTab(new Model("second tab"))
 		{
 
-			public Panel getPanel(String panelId)
+			public Panel getPanel(MarkupContainer<?> parent,String panelId)
 			{
-				return new TabPanel2(panelId);
+				return new TabPanel2(parent,panelId);
 			}
 
 		});
@@ -33,16 +33,16 @@
 		tabs.add(new AbstractTab(new Model("third tab"))
 		{
 
-			public Panel getPanel(String panelId)
+			public Panel getPanel(MarkupContainer<?> parent,String panelId)
 			{
-				return new TabPanel3(panelId);
+				return new TabPanel3(parent,panelId);
 			}
 
 		});
 
 		// add the new tabbed panel, attribute modifier only used to switch
 		// between different css variations
-		add(new TabbedPanel("tabs", tabs).add(new AttributeModifier("class", true,
+		add(new TabbedPanel(this,"tabs", tabs).add(new AttributeModifier("class", true,
 				TabbedPanelPage.this.getModel())));
 
 	}
