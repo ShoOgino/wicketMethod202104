@@ -1,0 +1,33 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            component id
+	 * @param form
+	 *            filter form of the filter toolbar
+	 * @param goModel
+	 *            model for the label of the 'go' button
+	 * @param clearModel
+	 *            model for the label of the 'clear' button
+	 */
+	public GoAndClearFilter(MarkupContainer parent,final String id, FilterForm form, IModel goModel, IModel clearModel)
+	{
+		super(parent,id, goModel);
+
+		originalState = Objects.cloneModel(form.getModelObject());
+
+		clear = new Button(this,"clear", clearModel)
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onSubmit()
+			{
+				onClearSubmit(this);
+			}
+		};
+
+		clear.setDefaultFormProcessing(false);
+
+		add(clear);
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 * @param model
+	 */
+	public AjaxEditableLabel(MarkupContainer parent,final String id, IModel model)
+	{
+		super(parent,id);
+		setOutputMarkupId(true);
+
+		label = new Label(this,"label", model);
+		label.setOutputMarkupId(true);
+		label.add(new LabeAjaxBehavior("onClick"));
+
+		editor = new TextField(this,"editor", model);
+		editor.setOutputMarkupId(true);
+		editor.setVisible(false);
+		editor.add(new EditorAjaxBehavior());
+
+		add(label);
+		add(editor);
+	}
+

@@ -5,15 +5,16 @@
 	 */
 	protected Component newDownComponent()
 	{
-		return new WebMarkupContainer("moveDownButton")
-		{
-			private static final long serialVersionUID = 1L;
-
-			protected void onComponentTag(ComponentTag tag)
-			{
-				super.onComponentTag(tag);
-				tag.getAttributes().put("onclick", Palette.this.getDownOnClickJS());
-			}
-		}.add(new Image("image", downImage));
+		WebMarkupContainer webMarkupContainer = new WebMarkupContainer(this,"moveDownButton")
+				{
+					private static final long serialVersionUID = 1L;
+		
+					protected void onComponentTag(ComponentTag tag)
+					{
+						super.onComponentTag(tag);
+						tag.getAttributes().put("onclick", Palette.this.getDownOnClickJS());
+					}
+				};
+		return webMarkupContainer.add(new Image(webMarkupContainer,"image", downImage));
 	}
 

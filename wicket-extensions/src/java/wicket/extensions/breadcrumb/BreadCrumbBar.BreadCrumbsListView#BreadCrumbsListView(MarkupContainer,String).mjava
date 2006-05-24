@@ -1,0 +1,24 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param id
+		 *            Component id
+		 */
+		public BreadCrumbsListView(MarkupContainer parent,final String id)
+		{
+			super(parent,id);
+			setReuseItems(false);
+			setModel(new LoadableDetachableModel()
+			{
+				private static final long serialVersionUID = 1L;
+
+				protected Object load()
+				{
+					// save a copy
+					List l = new ArrayList(allBreadCrumbParticipants());
+					size = l.size();
+					return l;
+				}
+			});
+		}
+

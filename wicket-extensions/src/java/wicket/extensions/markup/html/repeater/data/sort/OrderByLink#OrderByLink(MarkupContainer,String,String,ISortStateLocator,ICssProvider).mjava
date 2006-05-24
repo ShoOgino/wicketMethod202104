@@ -1,0 +1,40 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param id
+	 *            the component id of the link
+	 * @param property
+	 *            the name of the sortable property this link represents. this
+	 *            value will be used as parameter for sort state object methods.
+	 *            sort state object will be located via the stateLocator
+	 *            argument.
+	 * @param stateLocator
+	 *            locator used to locate sort state object that this will use to
+	 *            read/write state of sorted properties
+	 * @param cssProvider
+	 *            CSS provider that will be used generate the value of class
+	 *            attribute for this link
+	 * 
+	 * @see OrderByLink.ICssProvider
+	 * 
+	 */
+	public OrderByLink(MarkupContainer parent,final String id, String property, ISortStateLocator stateLocator,
+			ICssProvider cssProvider)
+	{
+		super(parent,id);
+
+		if (cssProvider == null)
+		{
+			throw new IllegalArgumentException("argument [cssProvider] cannot be null");
+		}
+
+		if (property == null)
+		{
+			throw new IllegalArgumentException("argument [sortProperty] cannot be null");
+		}
+
+		this.property = property;
+		this.stateLocator = stateLocator;
+		add(new CssModifier(this, cssProvider));
+	}
+
