@@ -2,9 +2,9 @@
 	 * @see wicket.markup.html.form.FormComponent#convertValue(String[])
 	 */
 	@Override
-	protected Object convertValue(String[] paths) throws ConversionException
+	protected Collection<V> convertValue(String[] paths) throws ConversionException
 	{
-		List<Object> collection = new ArrayList<Object>();
+		List<V> collection = new ArrayList<V>();
 
 		/*
 		 * if the input is null we do not need to do anything since the model
@@ -28,7 +28,7 @@
 					path = path.substring(getPath().length() + 1);
 
 					// retrieve the selected checkbox component
-					Check checkbox = (Check)get(path);
+					Check<V> checkbox = (Check)get(path);
 
 					if (checkbox == null)
 					{

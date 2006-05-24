@@ -3,11 +3,11 @@
 	 */
 	public void testLoaderUnknownResources()
 	{
-		Component c = new DummyComponent("hello", application)
+		DummyPage page = new DummyPage();
+		Component c = new DummyComponent(page,"hello", application)
 		{
 			private static final long serialVersionUID = 1L;
 		};
-		DummyPage page = new DummyPage();
 		page.add(c);
 		IStringResourceLoader loader = new ComponentStringResourceLoader(new DummyApplication());
 		Assert.assertNull("Missing resource should return null", loader.loadStringResource(c.getClass(), "test.string.bad",

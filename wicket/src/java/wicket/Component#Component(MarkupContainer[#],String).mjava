@@ -1,0 +1,26 @@
+	/**
+	 * Constructor. All components have names. A component's id cannot be null.
+	 * This is the minimal constructor of component. It does not register a
+	 * model.
+	 * 
+	 * @param parent 
+	 * 			  The parent of this component.
+	 * @param id
+	 *            The non-null id of this component.
+	 * @throws WicketRuntimeException
+	 *             Thrown if the component has been given a null id.
+	 */
+	public Component(MarkupContainer<?> parent, final String id)
+	{
+		if(parent == null)
+		{
+			if (!(this instanceof Page))
+			{
+				throw new WicketRuntimeException("component without a parent is not allowed.");
+			}
+		}
+		this.parent = parent;
+		setId(id);
+		getApplication().notifyComponentInstantiationListeners(this);
+	}
+

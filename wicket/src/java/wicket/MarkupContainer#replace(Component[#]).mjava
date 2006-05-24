@@ -19,7 +19,7 @@
 			log.debug("Replacing " + child.getId() + " in " + this);
 		}
 
-		if (child.getParent() != this)
+		if (child.getParent() == this)
 		{
 			// Add to map
 			final Component replaced = put(child);
@@ -37,6 +37,8 @@
 
 			// The position of the associated markup remains the same
 			child.markupIndex = replaced.markupIndex;
+			
+			replaced.setFlag(FLAG_REMOVED_FROM_PARENT, true);
 		}
 
 		return this;

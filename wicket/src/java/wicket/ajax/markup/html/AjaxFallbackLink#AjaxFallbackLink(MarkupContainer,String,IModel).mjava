@@ -1,0 +1,30 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 * @param model
+	 */
+	public AjaxFallbackLink(MarkupContainer parent, final String id, final IModel model)
+	{
+		super(parent,id, model);
+
+		add(new AjaxEventBehavior("onclick")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target)
+			{
+				onClick(target);
+			}
+
+			@Override
+			protected IAjaxCallDecorator getAjaxCallDecorator()
+			{
+				return new CancelEventIfNoAjaxDecorator(AjaxFallbackLink.this
+						.getAjaxCallDecorator());
+			}
+
+		});
+	}
+
