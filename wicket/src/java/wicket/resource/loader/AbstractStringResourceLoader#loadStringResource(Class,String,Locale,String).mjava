@@ -15,14 +15,14 @@
 	 *            the strings from (see {@link wicket.Session})
 	 * @return The string resource value or null if resource not found
 	 */
-	public String loadStringResource(Class clazz, final String key,
-			final Locale locale, final String style)
+	public String loadStringResource(Class clazz, final String key, final Locale locale,
+			final String style)
 	{
 		if (clazz == null)
 		{
 			return null;
 		}
-		
+
 		String value = null;
 		while (true)
 		{
@@ -32,7 +32,7 @@
 			if (props != null)
 			{
 				ValueMap strings = props.getAll();
-	
+
 				// Lookup value
 				if (log.isDebugEnabled())
 				{
@@ -45,16 +45,16 @@
 					{
 						log.debug("Found resource from: " + props + "; key: " + key);
 					}
-	
+
 					break;
 				}
 			}
-			
+
 			if (isStopResourceSearch(clazz))
 			{
 				break;
 			}
-			
+
 			// Move to the next superclass
 			clazz = clazz.getSuperclass();
 		}
