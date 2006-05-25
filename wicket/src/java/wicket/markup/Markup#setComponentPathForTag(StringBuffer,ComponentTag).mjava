@@ -6,7 +6,8 @@
 	 * @param tag
 	 * @return componentPath
 	 */
-	private StringBuffer setComponentPathForTag(final StringBuffer componentPath, final ComponentTag tag)
+	private StringBuffer setComponentPathForTag(final StringBuffer componentPath,
+			final ComponentTag tag)
 	{
 		// Only if the tag has wicket:id="xx" and open or open-close
 		if ((tag.isOpen() || tag.isOpenClose()) && tag.getAttributes().containsKey(wicketId))
@@ -43,7 +44,8 @@
 		else if (tag.isClose() && (this.currentPath != null))
 		{
 			// For example <wicket:message> does not have an id
-			if ((tag.getOpenTag() == null) || tag.getOpenTag().getAttributes().containsKey(wicketId))
+			if ((tag.getOpenTag() == null)
+					|| tag.getOpenTag().getAttributes().containsKey(wicketId))
 			{
 				// Remove the last element from the component path
 				int index = this.currentPath.lastIndexOf(":");
@@ -57,7 +59,7 @@
 				}
 			}
 		}
-		
+
 		return this.currentPath;
 	}
 

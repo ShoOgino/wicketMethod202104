@@ -9,7 +9,8 @@
 	 * @return the header part for this panel/border or null if it doesn't have
 	 *         a wicket:head tag.
 	 */
-	private final HeaderPartContainer getHeaderPart(MarkupContainer parent,final Class markupClass, final int index)
+	private final HeaderPartContainer getHeaderPart(MarkupContainer parent,
+			final Class markupClass, final int index)
 	{
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
@@ -28,15 +29,16 @@
 				// found <wicket:head>
 				// create a unique id for the HtmlHeaderContainer to be
 				// created
-				final String headerId = Component.AUTO_COMPONENT_PREFIX + Classes.simpleName(markupClass)
-						+ this.container.getVariation() + "Header" + index;
+				final String headerId = Component.AUTO_COMPONENT_PREFIX
+						+ Classes.simpleName(markupClass) + this.container.getVariation()
+						+ "Header" + index;
 
 				// Create the header container and associate the markup with
 				// it
 				String scope = wTag.getAttributes().getString(
 						markupStream.getWicketNamespace() + ":scope");
-				final HeaderPartContainer headerContainer = this.container.newHeaderPartContainer(parent,
-						headerId, scope);
+				final HeaderPartContainer headerContainer = this.container.newHeaderPartContainer(
+						parent, headerId, scope);
 				headerContainer.setMyMarkupStream(markupStream);
 				headerContainer.setRenderBodyOnly(true);
 

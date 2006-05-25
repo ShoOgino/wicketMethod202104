@@ -1,71 +1,70 @@
-    /**
-     * @see wicket.markup.resolver.IComponentResolver#resolve(MarkupContainer, MarkupStream,
-     *      ComponentTag)
-     * @param container
-     *            The container parsing its markup
-     * @param markupStream
-     *            The current markupStream
-     * @param tag
-     *            The current component tag while parsing the markup
-     * @return true, if componentId was handle by the resolver. False,
-     *         otherwise
-     */
-    public final boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
-            final ComponentTag tag)
-    {
-        // It must be <wicket:...>
-        if (tag instanceof WicketTag)
-        {
-            // It must be <wicket:component...>
-            final WicketTag wicketTag = (WicketTag)tag;
-            if (wicketTag.isComponentTag())
-            {
-                // Create and initialize the component
-                final Component component = createComponent(container, wicketTag);
-                if (component != null)
-                {
-                    // 1. push the current component onto the stack
-                    nestedComponents.put(component, null);
-                    
-                    try
-                    {
-	                    // 2. Add it to the hierarchy and render it
-                    	component.autoAdded();
-                    }
-                    finally
-                    {
-                        // 3. remove it from the stack
-                        nestedComponents.remove(component);
-                    }
-                    
-                    return true;
-                }
-            }
-        }
-        
-        // Re-parent children of <wicket:component>. 
-        if ((tag.getId() != null) && nestedComponents.containsKey(container))
-        {
-            MarkupContainer parent = container.getParent();
-            
-            // Take care of nested <wicket:component>
-            while ((parent != null) && nestedComponents.containsKey(parent))
-            {
-                parent = parent.getParent();
-            }
-            
-            if (parent != null)
-            {
-                final Component component = parent.get(tag.getId());
-                if (component != null)
-                {
-                    component.render(markupStream);
-                    return true;
-                }
-            }
-        }
+	/**
+	 * @see wicket.markup.resolver.IComponentResolver#resolve(MarkupContainer,
+	 *      MarkupStream, ComponentTag)
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return true, if componentId was handle by the resolver. False, otherwise
+	 */
+	public final boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		// It must be <wicket:...>
+		if (tag instanceof WicketTag)
+		{
+			// It must be <wicket:component...>
+			final WicketTag wicketTag = (WicketTag)tag;
+			if (wicketTag.isComponentTag())
+			{
+				// Create and initialize the component
+				final Component component = createComponent(container, wicketTag);
+				if (component != null)
+				{
+					// 1. push the current component onto the stack
+					nestedComponents.put(component, null);
 
-        // We were not able to handle the componentId
-        return false;
-    }
+					try
+					{
+						// 2. Add it to the hierarchy and render it
+						component.autoAdded();
+					}
+					finally
+					{
+						// 3. remove it from the stack
+						nestedComponents.remove(component);
+					}
+
+					return true;
+				}
+			}
+		}
+
+		// Re-parent children of <wicket:component>.
+		if ((tag.getId() != null) && nestedComponents.containsKey(container))
+		{
+			MarkupContainer parent = container.getParent();
+
+			// Take care of nested <wicket:component>
+			while ((parent != null) && nestedComponents.containsKey(parent))
+			{
+				parent = parent.getParent();
+			}
+
+			if (parent != null)
+			{
+				final Component component = parent.get(tag.getId());
+				if (component != null)
+				{
+					component.render(markupStream);
+					return true;
+				}
+			}
+		}
+
+		// We were not able to handle the componentId
+		return false;
+	}
 

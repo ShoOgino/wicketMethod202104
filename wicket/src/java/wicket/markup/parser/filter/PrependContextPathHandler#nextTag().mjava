@@ -11,18 +11,19 @@
 	{
 		// Get the next tag. If null, no more tags are available
 		final ComponentTag tag = (ComponentTag)getParent().nextTag();
-		if (tag == null  || tag.getId() != null)
+		if (tag == null || tag.getId() != null)
 		{
 			return tag;
 		}
-		
+
 		// Don't touch any wicket:id component
 		if (tag.getId() != null)
 		{
 			return tag;
 		}
 
-		// this call should always get the default of the application or the overriden one.
+		// this call should always get the default of the application or the
+		// overriden one.
 		String contextPath = application.getApplicationSettings().getContextPath();
 		if (contextPath == null)
 		{
@@ -35,10 +36,8 @@
 
 		if (contextPath.length() > 0)
 		{
-			// Modify all relevant attributes
-			for (int i = 0; i < attributeNames.length; i++)
+			for (String attrName : attributeNames)
 			{
-				String attrName = attributeNames[i];
 				String attrValue = tag.getAttributes().getString(attrName);
 				if ((attrValue != null) && (attrValue.startsWith("/") == false)
 						&& (attrValue.indexOf(":") < 0) && !(attrValue.startsWith("#")))

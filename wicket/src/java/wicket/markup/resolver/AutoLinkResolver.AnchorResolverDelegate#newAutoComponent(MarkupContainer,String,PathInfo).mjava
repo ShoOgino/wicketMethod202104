@@ -6,7 +6,8 @@
 		public Component newAutoComponent(final MarkupContainer container, final String autoId,
 				PathInfo pathInfo)
 		{
-			if ((pathInfo.extension != null) && supportedPageExtensions.contains(pathInfo.extension))
+			if ((pathInfo.extension != null)
+					&& supportedPageExtensions.contains(pathInfo.extension))
 			{
 				// Obviously a href like href="myPkg.MyLabel.html" will do as
 				// well. Wicket will not throw an exception. It accepts it.
@@ -32,8 +33,10 @@
 
 				try
 				{
-					final Class<? extends Page> clazz = defaultClassResolver.resolveClass(className);
-					return new AutolinkBookmarkablePageLink(container,autoId, clazz, pathInfo.pageParameters, pathInfo.anchor);
+					final Class<? extends Page> clazz = defaultClassResolver
+							.resolveClass(className);
+					return new AutolinkBookmarkablePageLink(container, autoId, clazz,
+							pathInfo.pageParameters, pathInfo.anchor);
 				}
 				catch (WicketRuntimeException ex)
 				{
@@ -46,17 +49,20 @@
 				if ((parentWithContainer instanceof Page) && !infoPath.startsWith(".")
 						&& page.getMarkupStream().isMergedMarkup())
 				{
-					Class<? extends Page> clazz = container.getMarkupStream().getTag().getMarkupClass();
+					Class<? extends Page> clazz = container.getMarkupStream().getTag()
+							.getMarkupClass();
 					if (clazz != null)
 					{
-						// Href is relative. Resolve the url given relative to the
+						// Href is relative. Resolve the url given relative to
+						// the
 						// current page
 						className = Packages.extractPackageName(clazz) + "." + infoPath;
-	
+
 						try
 						{
 							clazz = defaultClassResolver.resolveClass(className);
-							return new AutolinkBookmarkablePageLink(container,autoId, clazz, pathInfo.getPageParameters(), pathInfo.anchor);
+							return new AutolinkBookmarkablePageLink(container, autoId, clazz,
+									pathInfo.getPageParameters(), pathInfo.anchor);
 						}
 						catch (WicketRuntimeException ex)
 						{

@@ -4,9 +4,10 @@
 	 * @param recurse
 	 * @param resources
 	 * @param packageRef
-	 * @param jf
-=	 */
-	private static void scanJarFile(Class scope, Pattern pattern, boolean recurse, final List<PackageResource> resources, String packageRef, JarFile jf)
+	 * @param jf =
+	 */
+	private static void scanJarFile(Class scope, Pattern pattern, boolean recurse,
+			final List<PackageResource> resources, String packageRef, JarFile jf)
 	{
 		Enumeration enumeration = jf.entries();
 		while (enumeration.hasMoreElements())
@@ -16,8 +17,7 @@
 			if (name.startsWith(packageRef))
 			{
 				name = name.substring(packageRef.length() + 1);
-				if (pattern.matcher(name).matches()
-						&& (recurse || (name.indexOf('/') == -1)))
+				if (pattern.matcher(name).matches() && (recurse || (name.indexOf('/') == -1)))
 				{
 					// we add the entry as a package resource
 					resources.add(get(scope, name, null, null));

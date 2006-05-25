@@ -13,24 +13,24 @@
 		{
 			public Object component(final Component component)
 			{
-			    if (!component.getPath().startsWith(PageView.this.getPath()))
-			    {
+				if (!component.getPath().startsWith(PageView.this.getPath()))
+				{
 					final ComponentData componentData = new ComponentData();
-	
+
 					// anonymous class? Get the parent's class name
 					String name = component.getClass().getName();
 					if (name.indexOf("$") > 0)
 					{
 						name = component.getClass().getSuperclass().getName();
 					}
-	
+
 					// remove the path component
 					name = Strings.lastPathComponent(name, Component.PATH_SEPARATOR);
-	
+
 					componentData.path = component.getPageRelativePath();
 					componentData.size = component.getSizeInBytes();
 					componentData.type = name;
-					try 
+					try
 					{
 						componentData.value = component.getModelObjectAsString();
 					}
@@ -38,10 +38,10 @@
 					{
 						componentData.value = e.getMessage();
 					}
-						
+
 					data.add(componentData);
-			    }
-			    
+				}
+
 				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
