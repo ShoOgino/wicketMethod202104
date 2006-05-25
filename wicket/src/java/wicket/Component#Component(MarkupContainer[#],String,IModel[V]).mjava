@@ -12,6 +12,7 @@
 	 * @throws WicketRuntimeException
 	 *             Thrown if the component has been given a null id.
 	 */
+	@SuppressWarnings("null")
 	public Component(MarkupContainer<?> parent, final String id, final IModel<V> model)
 	{
 		if(parent == null)
@@ -31,6 +32,13 @@
 			setFlag(FLAG_HAS_ROOT_MODEL, true);
 		}
 		getApplication().notifyComponentInstantiationListeners(this);
-
+		if(id.startsWith(AUTO_COMPONENT_PREFIX))
+		{
+			parent.autoAdd(this);
+		}
+		else
+		{
+			parent.add(this);
+		}
 	}
 

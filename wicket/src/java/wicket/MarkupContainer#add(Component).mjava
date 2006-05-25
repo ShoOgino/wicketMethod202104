@@ -26,12 +26,16 @@
 
 		// Add to map
 		addedComponent(child);
-		if (put(child) != null)
-		{
-			throw new IllegalArgumentException(exceptionMessage("A child with id '" + child.getId()
-					+ "' already exists"));
-		}
+		Component replaced = put(child);
 		child.setFlag(FLAG_REMOVED_FROM_PARENT, false);
+		if(replaced != null)
+		{
+			replaced.setFlag(FLAG_REMOVED_FROM_PARENT, true);
+			removedComponent(replaced);
+			// The position of the associated markup remains the same
+			child.markupIndex = replaced.markupIndex;
+			
+		}
 		return this;
 	}
 
