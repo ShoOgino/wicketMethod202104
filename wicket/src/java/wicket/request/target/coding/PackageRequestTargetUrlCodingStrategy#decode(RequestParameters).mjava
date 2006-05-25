@@ -15,16 +15,18 @@
 		{
 			parametersFragment = remainder.substring(ix);
 		}
-		
-		if (remainder.startsWith("/")) {
-			remainder=remainder.substring(1);
+
+		if (remainder.startsWith("/"))
+		{
+			remainder = remainder.substring(1);
 			ix--;
 		}
-		
-		final String bookmarkablePageClassName = packageName + "."+ remainder.substring(0, ix);
-		Class<? extends Page> bookmarkablePageClass = Session.get().getClassResolver().resolveClass(
-				bookmarkablePageClassName);
-		PageParameters parameters = new PageParameters(decodeParameters(parametersFragment, requestParameters.getParameters()));
+
+		final String bookmarkablePageClassName = packageName + "." + remainder.substring(0, ix);
+		Class<? extends Page> bookmarkablePageClass = Session.get().getClassResolver()
+				.resolveClass(bookmarkablePageClassName);
+		PageParameters parameters = new PageParameters(decodeParameters(parametersFragment,
+				requestParameters.getParameters()));
 
 		final String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
 		requestParameters.setPageMapName(pageMapName);

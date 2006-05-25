@@ -39,21 +39,22 @@
 					if (propertyType != null && component != null)
 					{
 						// convert the String to the right type
-						object = (T)component.getConverter(propertyType).convertToObject(string, component.getLocale());
+						object = (T)component.getConverter(propertyType).convertToObject(string,
+								component.getLocale());
 					}
 				}
 			}
 
 			PropertyResolverConverter prc = null;
-			if(component != null)
+			if (component != null)
 			{
-				prc = new PropertyResolverConverter(component,component.getLocale());
+				prc = new PropertyResolverConverter(component, component.getLocale());
 			}
 			else
 			{
-				prc = new PropertyResolverConverter(Session.get(),Session.get().getLocale());
+				prc = new PropertyResolverConverter(Session.get(), Session.get().getLocale());
 			}
-			
+
 			PropertyResolver.setValue(expression, modelObject, object, prc);
 		}
 	}

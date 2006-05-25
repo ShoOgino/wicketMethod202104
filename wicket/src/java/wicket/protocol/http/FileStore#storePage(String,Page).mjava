@@ -1,12 +1,14 @@
 	/**
-	 * @see wicket.protocol.http.SecondLevelCacheSessionStore.IStore#storePage(java.lang.String, wicket.Page)
+	 * @see wicket.protocol.http.SecondLevelCacheSessionStore.IStore#storePage(java.lang.String,
+	 *      wicket.Page)
 	 */
 	public void storePage(String sessionId, Page page)
 	{
 		File sessionDir = new File(workDir, sessionId);
 		sessionDir.mkdirs();
 		File pageFile = getPageFile(page.getNumericId(), page.getCurrentVersionNumber(), sessionDir);
-		// TODO check can this be called everytime at this place? Putting should be called after the rendering so it should be ok. 
+		// TODO check can this be called everytime at this place? Putting should
+		// be called after the rendering so it should be ok.
 		page.detachModels();
 		byte[] bytes = Objects.objectToByteArray(page);
 		FileOutputStream fos = null;
@@ -18,20 +20,24 @@
 		}
 		catch (Exception e)
 		{
-			log.debug("Error saving page " + page.getId() + " with version " + page.getCurrentVersionNumber() + " for the sessionid " + sessionId + " from disc", e);
+			log.debug("Error saving page " + page.getId() + " with version "
+					+ page.getCurrentVersionNumber() + " for the sessionid " + sessionId
+					+ " from disc", e);
 		}
 		finally
 		{
 			try
 			{
-				if(fos != null)
+				if (fos != null)
+				{
 					fos.close();
+				}
 			}
 			catch (IOException ex)
 			{
 				// ignore
 			}
 		}
-		
+
 	}
 

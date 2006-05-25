@@ -1,41 +1,41 @@
-    /**
-     * Reset the response ready for reuse.
-     */
-    public void initialize()
-    {
-        cookies.clear();
-        headers.clear();
-        code = HttpServletResponse.SC_OK;
-        errorMessage = null;
-        redirectLocation = null;
-        status = HttpServletResponse.SC_OK;
-        characterEncoding = "UTF-8";
-        locale = null;
+	/**
+	 * Reset the response ready for reuse.
+	 */
+	public void initialize()
+	{
+		cookies.clear();
+		headers.clear();
+		code = HttpServletResponse.SC_OK;
+		errorMessage = null;
+		redirectLocation = null;
+		status = HttpServletResponse.SC_OK;
+		characterEncoding = "UTF-8";
+		locale = null;
 
-        byteStream = new ByteArrayOutputStream();
-        servletStream = new ServletOutputStream()
-        {
-            @Override
+		byteStream = new ByteArrayOutputStream();
+		servletStream = new ServletOutputStream()
+		{
+			@Override
 			public void write(int b)
-            {
-                byteStream.write(b);
-            }
-        };
-        stringWriter = new StringWriter();
-        printWriter = new PrintWriter(stringWriter)
-        {
-            @Override
+			{
+				byteStream.write(b);
+			}
+		};
+		stringWriter = new StringWriter();
+		printWriter = new PrintWriter(stringWriter)
+		{
+			@Override
 			public void close()
-            {
-                // Do nothing
-            }
+			{
+				// Do nothing
+			}
 
-            @Override
+			@Override
 			public void flush()
-            {
-                // Do nothing
-            }
-        };
-        mode = MODE_NONE;
-    }
+			{
+				// Do nothing
+			}
+		};
+		mode = MODE_NONE;
+	}
 
