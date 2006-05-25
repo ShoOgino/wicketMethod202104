@@ -3,53 +3,58 @@
 	 * 
 	 * @return The client's time zone
 	 */
-	public final TimeZone getTimeZone()
+	public TimeZone getTimeZone()
 	{
-		String utcOffset = (String)data.get(ClientProperties.UTC_OFFSET);
-		if (utcOffset != null)
+		if (timeZone == null)
 		{
-			// apparently it is platform dependent on whether you get the
-			// offset in a decimal form or not. This parses the decimal
-			// form of the UTC offset, taking into account several possibilities
-			// such as getting the format in +2.5 or -1.2
-
-			int dotPos = utcOffset.indexOf('.');
-			if (dotPos >= 0)
+			String utcOffset = (String)data.get(ClientProperties.UTC_OFFSET);
+			if (utcOffset != null)
 			{
-				String hours = utcOffset.substring(0, dotPos);
-				String hourPart = utcOffset.substring(dotPos + 1);
+				// apparently it is platform dependent on whether you get the
+				// offset in a decimal form or not. This parses the decimal
+				// form of the UTC offset, taking into account several
+				// possibilities
+				// such as getting the format in +2.5 or -1.2
 
-				if (hours.startsWith("+"))
+				int dotPos = utcOffset.indexOf('.');
+				if (dotPos >= 0)
 				{
-					hours = hours.substring(1);
+					String hours = utcOffset.substring(0, dotPos);
+					String hourPart = utcOffset.substring(dotPos + 1);
+
+					if (hours.startsWith("+"))
+					{
+						hours = hours.substring(1);
+					}
+					int offsetHours = Integer.parseInt(hours);
+					int offsetMins = (int)(Double.parseDouble(hourPart) * 6);
+
+					// construct a GMT timezone offset string from the retrieved
+					// offset which can be parsed by the TimeZone class.
+
+					AppendingStringBuffer sb = new AppendingStringBuffer("GMT");
+					sb.append(offsetHours > 0 ? "+" : "-");
+					sb.append(Math.abs(offsetHours));
+					sb.append(":");
+					if (offsetMins < 10)
+					{
+						sb.append("0");
+					}
+					sb.append(offsetMins);
+					timeZone = TimeZone.getTimeZone(sb.toString());
 				}
-				int offsetHours = Integer.parseInt(hours);
-				int offsetMins = (int)(Double.parseDouble(hourPart) * 6);
-
-				// construct a GMT timezone offset string from the retrieved 
-				// offset which can be parsed by the TimeZone class.
-
-				AppendingStringBuffer sb = new AppendingStringBuffer("GMT");
-				sb.append(offsetHours > 0 ? "+" : "-");
-				sb.append(Math.abs(offsetHours));
-				sb.append(":");
-				if (offsetMins < 10)
+				else
 				{
-					sb.append("0");
+					int offset = Integer.parseInt(utcOffset);
+					if (offset < 0)
+					{
+						utcOffset = utcOffset.substring(1);
+					}
+					timeZone = TimeZone.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") + utcOffset);
 				}
-				sb.append(offsetMins);
-				return TimeZone.getTimeZone(sb.toString());
 			}
-			int offset = Integer.parseInt(utcOffset);
-			if (offset < 0)
-			{
-				utcOffset = utcOffset.substring(1);
-			}
-			TimeZone timeZone = TimeZone
-					.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") + utcOffset);
-			return timeZone;
 		}
 
-		return null;
+		return timeZone;
 	}
 
