@@ -1,0 +1,60 @@
+	/**
+	 * Applies the property expression on the model object using the given
+	 * object argument.
+	 * 
+	 * @param object
+	 *            The object that will be used when setting a value on the model
+	 *            object
+	 * @see AbstractDetachableModel#onSetObject(Component, Object)
+	 */
+	@Override
+	protected void onSetObject(final Component component, T object)
+	{
+		final String expression = propertyExpression(component);
+		if (Strings.isEmpty(expression))
+		{
+			if (nestedModel instanceof IModel)
+			{
+				((IModel)nestedModel).setObject(null, object);
+			}
+			else
+			{
+				nestedModel = object;
+			}
+		}
+		else
+		{
+			// Get the real object
+			Object modelObject = modelObject(component);
+
+			// If the object is a String
+			if (object instanceof String)
+			{
+				// and that String is not empty
+				final String string = (String)object;
+				if (!Strings.isEmpty(string))
+				{
+					// and there is a non-null property type for the component
+					final Class propertyType = propertyType(component);
+					if (propertyType != null && component != null)
+					{
+						// convert the String to the right type
+						object = (T)component.getConverter(propertyType).convertToObject(string, component.getLocale());
+					}
+				}
+			}
+
+			PropertyResolverConverter prc = null;
+			if(component != null)
+			{
+				prc = new PropertyResolverConverter(component,component.getLocale());
+			}
+			else
+			{
+				prc = new PropertyResolverConverter(Session.get(),Session.get().getLocale());
+			}
+			
+			PropertyResolver.setValue(expression, modelObject, object, prc);
+		}
+	}
+

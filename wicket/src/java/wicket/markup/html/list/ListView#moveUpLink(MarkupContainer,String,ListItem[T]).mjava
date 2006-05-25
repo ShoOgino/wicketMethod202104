@@ -1,0 +1,59 @@
+	/**
+	 * Returns a link that will move the given item "up" (towards the beginning)
+	 * in the listView.
+	 * 
+	 * @param id
+	 *            Name of move-up link component to create
+	 * @param item
+	 * @return The link component
+	 */
+	public final Link moveUpLink(MarkupContainer parent, final String id, final ListItem<T> item)
+	{
+		return new Link(item,id)
+		{
+			private static final long serialVersionUID = 1L;
+
+			/**
+			 * @see wicket.Component#onAttach()
+			 */
+			@Override
+			protected void onAttach()
+			{
+				setAutoEnable(false);
+				if (getList().indexOf(item.getModelObject()) == 0)
+				{
+					setEnabled(false);
+				}
+			}
+
+			/**
+			 * @see wicket.markup.html.link.Link#onClick()
+			 */
+			@Override
+			public void onClick()
+			{
+				final int index = getList().indexOf(item.getModelObject());
+				if (index != -1)
+				{
+
+					addStateChange(new Change()
+					{
+						private static final long serialVersionUID = 1L;
+
+						final int oldIndex = index;
+
+						@Override
+						public void undo()
+						{
+							Collections.swap(getList(), oldIndex - 1, oldIndex);
+						}
+
+					});
+
+					// Swap items and invalidate listView
+					Collections.swap(getList(), index, index - 1);
+				}
+			}
+		};
+	}
+

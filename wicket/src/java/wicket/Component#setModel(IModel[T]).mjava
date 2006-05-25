@@ -1,0 +1,38 @@
+	/**
+	 * Sets the given model.
+	 * <p>
+	 * WARNING: DO NOT OVERRIDE THIS METHOD UNLESS YOU HAVE A VERY GOOD REASON
+	 * FOR IT. OVERRIDING THIS MIGHT OPEN UP SECURITY LEAKS AND BREAK
+	 * BACK-BUTTON SUPPORT.
+	 * </p>
+	 * 
+	 * @param model
+	 *            The model
+	 * @return This
+	 */
+	public Component setModel(final IModel<T> model)
+	{
+		// Detach current model
+		if (this.model != null)
+		{
+			this.model.detach();
+		}
+
+		// Change model
+		if (this.model != model)
+		{
+			addStateChange(new ComponentModelChange(this.model));
+			this.model = model;
+		}
+
+		// If a compound model is explicitly set on this component
+		if (model instanceof ICompoundModel)
+		{
+			// we need to remember this for getModelObject()
+			setFlag(FLAG_HAS_ROOT_MODEL, true);
+		}
+
+		modelChanged();
+		return this;
+	}
+

@@ -1,0 +1,20 @@
+	/**
+	 * Subclasses may provide their own ListItemModel with extended
+	 * functionality. The default ListItemModel works fine with mostly static
+	 * lists where index remains valid. In cases where the underlying list
+	 * changes a lot (many users using the application), it may not longer be
+	 * appropriate. In that case your own ListItemModel implementation should
+	 * use an id (e.g. the database' record id) to identify and load the list
+	 * item model object.
+	 * 
+	 * @param listViewModel
+	 *            The ListView's model
+	 * @param index
+	 *            The list item index
+	 * @return The ListItemModel created
+	 */
+	protected IModel<T> getListItemModel(final IModel<List<T>> listViewModel, final int index)
+	{
+		return new ListItemModel<T>(this, index);
+	}
+

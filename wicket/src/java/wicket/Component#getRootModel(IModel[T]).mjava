@@ -1,0 +1,27 @@
+	/**
+	 * Finds the root object for an IModel
+	 * 
+	 * @param model
+	 *            The model
+	 * @return The root object
+	 */
+	private final IModel<T> getRootModel(final IModel<T> model)
+	{
+		IModel<T> nestedModelObject = model;
+		while (true)
+		{
+			final IModel<T> next = nestedModelObject.getNestedModel();
+			if (next == null)
+			{
+				break;
+			}
+			if (nestedModelObject == next)
+			{
+				throw new WicketRuntimeException("Model for " + nestedModelObject
+						+ " is self-referential");
+			}
+			nestedModelObject = next;
+		}
+		return nestedModelObject;
+	}
+

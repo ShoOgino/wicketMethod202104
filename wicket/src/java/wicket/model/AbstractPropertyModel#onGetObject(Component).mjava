@@ -2,19 +2,19 @@
 	 * @see wicket.model.AbstractDetachableModel#onGetObject(wicket.Component)
 	 */
 	@Override
-	protected V onGetObject(final Component component)
+	protected T onGetObject(final Component component)
 	{
 		final String expression = propertyExpression(component);
 		if (Strings.isEmpty(expression))
 		{
 			// Return a meaningful value for an empty property expression
-			return (V)modelObject(component);
+			return (T)modelObject(component);
 		}
 
 		final Object modelObject = modelObject(component);
 		if (modelObject != null)
 		{
-			return (V)PropertyResolver.getValue(expression, modelObject);
+			return (T)PropertyResolver.getValue(expression, modelObject);
 		}
 		return null;
 	}
