@@ -1,0 +1,33 @@
+	/**
+	 * @see wicket.markup.html.tree.Tree#getNodeImage(javax.swing.tree.DefaultMutableTreeNode)
+	 */
+	@Override
+	protected Image getNodeImage(MarkupContainer parent,final DefaultMutableTreeNode node)
+	{
+		if (node.isLeaf())
+		{
+			Image img = new Image(parent,NODE_IMAGE_NAME, nodeImage);
+			return img;
+		}
+		else
+		{
+			// we want the image to be dynamic, yet resolve to a static image.
+			return new Image(parent,NODE_IMAGE_NAME)
+			{
+				private static final long serialVersionUID = 1L;
+
+				protected ResourceReference getImageResourceReference()
+				{
+					if (isExpanded(node))
+					{
+						return folderOpen;
+					}
+					else
+					{
+						return folder;
+					}
+				}
+			};
+		}
+	}
+

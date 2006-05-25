@@ -1,25 +1,28 @@
 		/**
 		 * Constructor.
 		 * 
+		 * @param parent
+		 *            The parent Component
+		 * 
 		 * @param id
 		 *            the component identifier.
 		 */
 		public TodoItemsContainer(MarkupContainer parent, String id)
 		{
-			super(parent,id);
+			super(parent, id);
 
 			// let wicket generate a markup-id so the contents can be
 			// updated through an AJAX call.
 			setOutputMarkupId(true);
 
 			// add the listview to the container
-			add(new ListView(this,"item", items)
+			add(new ListView<TodoItem>(this, "item", items)
 			{
 				protected void populateItem(ListItem item)
 				{
 					// add an AJAX checkbox to the item
-					item.add(new AjaxCheckBox(item,"check",
-							new PropertyModel(item.getModel(), "checked"))
+					item.add(new AjaxCheckBox(item, "check", new PropertyModel(item.getModel(),
+							"checked"))
 					{
 						protected void onUpdate(AjaxRequestTarget target)
 						{
@@ -30,7 +33,7 @@
 						}
 					});
 					// display the text of the todo item
-					item.add(new Label(item,"text", new PropertyModel(item.getModel(), "text")));
+					item.add(new Label(item, "text", new PropertyModel(item.getModel(), "text")));
 				}
 			});
 		}

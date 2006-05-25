@@ -1,0 +1,44 @@
+	/**
+	 * Constructor. All components have names. A component's id cannot be null.
+	 * This constructor includes a model.
+	 * 
+	 * @param parent 
+	 * 			  The parent of this component.
+	 * @param id
+	 *            The non-null id of this component
+	 * @param model
+	 *            The component's model
+	 * 
+	 * @throws WicketRuntimeException
+	 *             Thrown if the component has been given a null id.
+	 */
+	@SuppressWarnings("null")
+	public Component(MarkupContainer parent, final String id, final IModel<V> model)
+	{
+		if(parent == null)
+		{
+			if (!(this instanceof Page))
+			{
+				throw new WicketRuntimeException("component without a parent is not allowed.");
+			}
+		}
+		this.parent = parent;
+		setId(id);
+		this.model = model;
+		// If a compound model is explicitly set on this component
+		if (model instanceof ICompoundModel)
+		{
+			// we need to remember this for getModelObject()
+			setFlag(FLAG_HAS_ROOT_MODEL, true);
+		}
+		getApplication().notifyComponentInstantiationListeners(this);
+		if(id.startsWith(AUTO_COMPONENT_PREFIX))
+		{
+			parent.autoAdd(this);
+		}
+		else
+		{
+			parent.add(this);
+		}
+	}
+

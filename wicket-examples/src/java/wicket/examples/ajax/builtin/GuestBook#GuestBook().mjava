@@ -4,32 +4,32 @@
 	public GuestBook()
 	{
 		// Add comment form
-		CommentForm commentForm = new CommentForm(this,"commentForm");
+		CommentForm commentForm = new CommentForm(this, "commentForm");
 		add(commentForm);
 
 		// the WebMarkupContainer is used to update the listview in an ajax call
-		comments = new WebMarkupContainer(this,"comments");
+		comments = new WebMarkupContainer(this, "comments");
 		add(comments.setOutputMarkupId(true));
-		
+
 		// Add commentListView of existing comments
-		comments.add(commentListView = new ListView(comments,"comments", new PropertyModel(this,
-				"commentList"))
+		comments.add(commentListView = new ListView<Comment>(comments, "comments",
+				new PropertyModel<List<Comment>>(this, "commentList"))
 		{
-			public void populateItem(final ListItem listItem)
+			public void populateItem(final ListItem<Comment> listItem)
 			{
-				final Comment comment = (Comment)listItem.getModelObject();
-				listItem.add(new Label(listItem,"date", new Model(comment.getDate())));
-				listItem.add(new MultiLineLabel(listItem,"text", comment.getText()));
+				final Comment comment = listItem.getModelObject();
+				listItem.add(new Label(listItem, "date", new Model<Date>(comment.getDate())));
+				listItem.add(new MultiLineLabel(listItem, "text", comment.getText()));
 			}
 		});
-		
-		// we need to cancel the standard submit of the form in the onsubmit handler,
-		// otherwise we'll get double submits. To do so, we return false after the
-		// ajax submit has occurred.
-		
-		// The AjaxFormSubmitBehavior already calls the onSubmit of the form, all
-		// we need to do in the onSubmit(AjaxRequestTarget) handler is do our Ajax
-		// specific stuff, like rendering our components.
+
+		// we need to cancel the standard submit of the form in the onsubmit
+		// handler, otherwise we'll get double submits. To do so, we
+		// return false after the ajax submit has occurred.
+
+		// The AjaxFormSubmitBehavior already calls the onSubmit of the form,
+		// all we need to do in the onSubmit(AjaxRequestTarget) handler
+		// is do our Ajax specific stuff, like rendering our components.
 		commentForm.add(new AjaxFormSubmitBehavior(commentForm, "onsubmit")
 		{
 			protected IAjaxCallDecorator getAjaxCallDecorator()
@@ -48,7 +48,7 @@
 				// add the list of components that need to be updated
 				target.addComponent(comments);
 				target.addComponent(text);
-				
+
 				// focus the textarea again
 				target.addJavascript("document.getElementById('" + text.getMarkupId()
 						+ "').focus();");

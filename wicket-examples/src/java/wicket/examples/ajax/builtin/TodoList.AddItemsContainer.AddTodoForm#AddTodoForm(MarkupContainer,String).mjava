@@ -1,15 +1,18 @@
 			/**
 			 * Constructor.
 			 * 
+			 * @param parent
+			 *            The parent
+			 * 
 			 * @param id
 			 *            the component id.
 			 */
 			public AddTodoForm(MarkupContainer parent, String id)
 			{
-				super(parent,id, new CompoundPropertyModel(new TodoItem()));
+				super(parent, id, new CompoundPropertyModel<TodoItem>(new TodoItem()));
 				setOutputMarkupId(true);
-				add(new TextField(this,"text"));
-				add(new AjaxSubmitButton(this,"add", this)
+				add(new TextField(this, "text"));
+				add(new AjaxSubmitButton(this, "add", this)
 				{
 					protected void onSubmit(AjaxRequestTarget target, Form form)
 					{
@@ -20,8 +23,8 @@
 						onAdd(item, target);
 					}
 				});
-				
-				add(new AjaxSubmitButton(this,"cancel", this)
+
+				add(new AjaxSubmitButton(this, "cancel", this)
 				{
 					public void onSubmit(AjaxRequestTarget target, Form form)
 					{
