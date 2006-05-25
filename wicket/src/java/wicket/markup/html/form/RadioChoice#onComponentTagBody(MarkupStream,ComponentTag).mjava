@@ -7,9 +7,9 @@
 	{
 		// Iterate through choices
 		final List choices = getChoices();
-		
+
 		// Buffer to hold generated body
-		final AppendingStringBuffer buffer = new AppendingStringBuffer((choices.size()+1) * 70);
+		final AppendingStringBuffer buffer = new AppendingStringBuffer((choices.size() + 1) * 70);
 
 		// The selected value
 		final String selected = getValue();
@@ -21,9 +21,10 @@
 			final Object choice = choices.get(index);
 
 			Object displayValue = getChoiceRenderer().getDisplayValue(choice);
-			Class objectClass = displayValue == null?null:displayValue.getClass();
+			Class objectClass = displayValue == null ? null : displayValue.getClass();
 			// Get label for choice
-			final String label = getConverter(objectClass).convertToString(displayValue, getLocale());
+			final String label = getConverter(objectClass).convertToString(displayValue,
+					getLocale());
 
 			// If there is a display value for the choice, then we know that the
 			// choice is automatic in some way. If label is /null/ then we know
@@ -38,9 +39,11 @@
 				final String idAttr = getInputName() + "_" + id;
 
 				// Add radio tag
-				buffer.append("<input name=\"").append(getInputName()).append("\"").append(" type=\"radio\"").append(
-						(isSelected(choice, index, selected) ? " checked=\"checked\"" : "")).append(" value=\"").append(
-						id).append("\" id=\"").append(idAttr).append("\"");
+				buffer.append("<input name=\"").append(getInputName()).append("\"").append(
+						" type=\"radio\"").append(
+						(isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
+						.append(" value=\"").append(id).append("\" id=\"").append(idAttr).append(
+								"\"");
 
 				// Should a roundtrip be made (have onSelectionChanged called)
 				// when the option is clicked?
@@ -51,14 +54,16 @@
 					try
 					{
 						Form form = getForm();
-						buffer.append(" onclick=\"").append(form.getJsForInterfaceUrl(url)).append(";\"");
+						buffer.append(" onclick=\"").append(form.getJsForInterfaceUrl(url)).append(
+								";\"");
 					}
 					catch (WicketRuntimeException ex)
 					{
-						// NOTE: do not encode the url as that would give invalid
+						// NOTE: do not encode the url as that would give
+						// invalid
 						// JavaScript
-						buffer.append(" onclick=\"").append(url).append("&" + getInputName()).append("=").append(
-								id).append("';\"");
+						buffer.append(" onclick=\"").append(url).append("&" + getInputName())
+								.append("=").append(id).append("';\"");
 					}
 				}
 
@@ -66,12 +71,13 @@
 
 				// Add label for radio button
 				String display = label;
-				if(localizeDisplayValues())
+				if (localizeDisplayValues())
 				{
 					display = getLocalizer().getString(label, this, label);
 				}
 				CharSequence escaped = Strings.escapeMarkup(display, false, true);
-				buffer.append("<label for=\"").append(idAttr).append("\">").append(escaped).append("</label>");
+				buffer.append("<label for=\"").append(idAttr).append("\">").append(escaped).append(
+						"</label>");
 
 				// Append option suffix
 				buffer.append(getSuffix());

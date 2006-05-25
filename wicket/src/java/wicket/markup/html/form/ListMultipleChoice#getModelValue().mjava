@@ -1,6 +1,7 @@
 	/**
 	 * @see FormComponent#getModelValue()
 	 */
+	@Override
 	public final String getModelValue()
 	{
 		// Get the list of selected values
@@ -9,10 +10,8 @@
 		if (selectedValues != null)
 		{
 			final List<T> choices = getChoices();
-			for (final Iterator<T> iterator = selectedValues.iterator(); iterator.hasNext();)
+			for (T object : selectedValues)
 			{
-				final T object = iterator.next();
-
 				int index = choices.indexOf(object);
 				buffer.append(getChoiceRenderer().getIdValue(object, index));
 				buffer.append(VALUE_SEPARATOR);

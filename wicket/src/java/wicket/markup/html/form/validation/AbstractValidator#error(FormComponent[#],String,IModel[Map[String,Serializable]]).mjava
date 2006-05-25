@@ -2,20 +2,21 @@
 	 * Returns a formatted validation error message for a given component. The
 	 * error message is retrieved from a message bundle associated with the page
 	 * in which this validator is contained using the given resource key. The
-	 * resourceModel is used for variable interpolation. If that one is null
-	 * the default one is created from messageModel(formComponent)
+	 * resourceModel is used for variable interpolation. If that one is null the
+	 * default one is created from messageModel(formComponent)
 	 * 
 	 * @param formComponent
 	 *            form component
 	 * @param resourceKey
 	 *            The resource key to use
 	 * @param resourceModel
-	 *            The model for variable interpolation, it needs to have a map inside it.
+	 *            The model for variable interpolation, it needs to have a map
+	 *            inside it.
 	 */
 	public void error(final FormComponent<?> formComponent, final String resourceKey,
 			IModel<Map<String, Serializable>> resourceModel)
 	{
-		if(resourceModel == null)
+		if (resourceModel == null)
 		{
 			resourceModel = Model.valueOf(messageModel(formComponent));
 		}
@@ -37,7 +38,7 @@
 			keys.add(defaultKey);
 		}
 
-		Map<String, Serializable> args = (Map<String, Serializable>)resourceModel.getObject(formComponent);
+		Map<String, Serializable> args = resourceModel.getObject(formComponent);
 
 		formComponent.error(keys, args);
 	}
