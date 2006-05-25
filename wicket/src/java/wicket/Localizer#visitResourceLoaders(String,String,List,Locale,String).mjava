@@ -29,13 +29,13 @@
 
 		// The return value
 		String string = null;
-		
+
 		// Iterate until a property has been found
 		while (iterator.hasNext() && (string == null))
 		{
 			IStringResourceLoader loader = (IStringResourceLoader)iterator.next();
 
-			// The key prefix is equal to the component path relativ to the 
+			// The key prefix is equal to the component path relativ to the
 			// current component on the top of the stack.
 			String prefix = path;
 			if ((searchStack != null) && (searchStack.size() > 0))
@@ -44,18 +44,21 @@
 				for (int i = searchStack.size() - 1; (i >= 0) && (string == null); i--)
 				{
 					Class clazz = (Class)searchStack.get(i);
-					
-					// First check if a property with the 'key' provided by the user
+
+					// First check if a property with the 'key' provided by the
+					// user
 					// is available.
 					string = loader.loadStringResource(clazz, key, locale, style);
-					
+
 					// If not, prepend the component relativ path to the key
 					if ((string == null) && (path != null) && (prefix.length() > 0))
 					{
-						string = loader.loadStringResource(clazz, prefix + '.' + key, locale, style);
-						
+						string = loader
+								.loadStringResource(clazz, prefix + '.' + key, locale, style);
+
 						// If still not found, adjust the component relativ path
-						// for the next component on the path from the page down.  
+						// for the next component on the path from the page
+						// down.
 						if (string == null)
 						{
 							prefix = Strings.afterFirst(prefix, '.');
@@ -65,7 +68,8 @@
 			}
 			else
 			{
-				// A default string resource loader, e.g. the ApplicationStringResourceLoader,
+				// A default string resource loader, e.g. the
+				// ApplicationStringResourceLoader,
 				// does not necessarily require the component hierachy
 				string = loader.loadStringResource(null, key, locale, style);
 				if ((string == null) && (path != null) && (prefix.length() > 0))
