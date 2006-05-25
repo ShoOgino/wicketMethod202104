@@ -1,0 +1,31 @@
+	/**
+	 * Replaces this component with another. The replacing component must have
+	 * the same component id as this component. This method serves as a shortcut
+	 * to <code>this.getParent().replace(replacement)</code> and provides a
+	 * better context for errors.
+	 * 
+	 * @since 1.2.1
+	 * 
+	 * @param replacement
+	 *            component to replace this one
+	 */
+	public void replaceWith(Component replacement)
+	{
+		if (replacement == null)
+		{
+			throw new IllegalArgumentException("Argument [[replacement]] cannot be null.");
+		}
+		if (!getId().equals(replacement.getId()))
+		{
+			throw new IllegalArgumentException(
+					"Replacement component must have the same id as the component it will replace. Replacement id [["
+							+ replacement.getId() + "]], replaced id [[" + getId() + "]].");
+		}
+		if (parent == null)
+		{
+			throw new IllegalStateException(
+					"This method can only be called on a component that has already been added to its parent.");
+		}
+		parent.replace(replacement);
+	}
+
