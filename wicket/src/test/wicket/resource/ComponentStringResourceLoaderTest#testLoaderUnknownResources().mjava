@@ -1,16 +1,17 @@
 	/**
 	 * @see wicket.resource.StringResourceLoaderTestBase#testLoaderUnknownResources()
 	 */
+	@Override
 	public void testLoaderUnknownResources()
 	{
 		DummyPage page = new DummyPage();
-		Component c = new DummyComponent(page,"hello", application)
+		Component c = new DummyComponent(page, "hello", application)
 		{
 			private static final long serialVersionUID = 1L;
 		};
 		page.add(c);
 		IStringResourceLoader loader = new ComponentStringResourceLoader(new DummyApplication());
-		Assert.assertNull("Missing resource should return null", loader.loadStringResource(c.getClass(), "test.string.bad",
-				Locale.getDefault(), null));
+		Assert.assertNull("Missing resource should return null", loader.loadStringResource(c
+				.getClass(), "test.string.bad", Locale.getDefault(), null));
 	}
 

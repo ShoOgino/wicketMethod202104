@@ -1,11 +1,15 @@
 		/**
-		 * Adjust inserts/deletes of blank lines to join changes as much as possible. We do
-		 * something when a run of changed lines include a blank line at one end and have an
-		 * excluded blank line at the other. We are free to choose which blank line is
-		 * included. `compareseq' always chooses the one at the beginning, but usually it is
-		 * cleaner to consider the following blank line to be the "change". The only
-		 * exception is if the preceding blank line would join this change to other changes.
-		 * @param f the file being compared against
+		 * Adjust inserts/deletes of blank lines to join changes as much as
+		 * possible. We do something when a run of changed lines include a blank
+		 * line at one end and have an excluded blank line at the other. We are
+		 * free to choose which blank line is included. `compareseq' always
+		 * chooses the one at the beginning, but usually it is cleaner to
+		 * consider the following blank line to be the "change". The only
+		 * exception is if the preceding blank line would join this change to
+		 * other changes.
+		 * 
+		 * @param f
+		 *            the file being compared against
 		 */
 
 		void shift_boundaries(file_data f)
@@ -23,8 +27,8 @@
 				int start, end, other_start;
 
 				/*
-				 * Scan forwards to find beginning of another run of changes. Also keep track
-				 * of the corresponding point in the other file.
+				 * Scan forwards to find beginning of another run of changes.
+				 * Also keep track of the corresponding point in the other file.
 				 */
 
 				while (i < i_end && !changed[1 + i])
@@ -32,8 +36,8 @@
 					while (other_changed[1 + j++])
 					{
 						/*
-						 * Non-corresponding lines in the other file will count as the preceding
-						 * batch of changes.
+						 * Non-corresponding lines in the other file will count
+						 * as the preceding batch of changes.
 						 */
 						other_preceding = j;
 					}
@@ -59,15 +63,16 @@
 					end = i;
 
 					/*
-					 * If the first changed line matches the following unchanged one, and this
-					 * run does not follow right after a previous run, and there are no lines
-					 * deleted from the other file here, then classify the first changed line
-					 * as unchanged and the following line as changed in its place.
+					 * If the first changed line matches the following unchanged
+					 * one, and this run does not follow right after a previous
+					 * run, and there are no lines deleted from the other file
+					 * here, then classify the first changed line as unchanged
+					 * and the following line as changed in its place.
 					 */
 
 					/*
-					 * You might ask, how could this run follow right after another? Only
-					 * because the previous run was shifted here.
+					 * You might ask, how could this run follow right after
+					 * another? Only because the previous run was shifted here.
 					 */
 
 					if (end != i_end
@@ -80,8 +85,9 @@
 						changed[1 + start++] = false;
 						++i;
 						/*
-						 * Since one line-that-matches is now before this run instead of after,
-						 * we must advance in the other file to keep in synch.
+						 * Since one line-that-matches is now before this run
+						 * instead of after, we must advance in the other file
+						 * to keep in synch.
 						 */
 						++j;
 					}

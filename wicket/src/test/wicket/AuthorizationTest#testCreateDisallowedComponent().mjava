@@ -9,6 +9,7 @@
 		WicketTester app = new WicketTester();
 		app.getSecuritySettings().setAuthorizationStrategy(new DummyAuthorizationStrategy()
 		{
+			@Override
 			public boolean isInstantiationAuthorized(Class c)
 			{
 				return false;
@@ -16,7 +17,7 @@
 		});
 		try
 		{
-			WebComponent c = new WebComponent(new EmptyPage(),"test");
+			WebComponent c = new WebComponent(new EmptyPage(), "test");
 			// bad: authorization should have failed
 			fail("authorization check failed to throw an exception");
 		}

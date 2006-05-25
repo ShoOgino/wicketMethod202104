@@ -4,12 +4,13 @@
 	public void testDropDownEvent() throws Exception
 	{
 		MockPage page = new MockPage();
-		MyForm form = new MyForm(page,"form");
+		MyForm form = new MyForm(page, "form");
 
-		DropDownChoice dropDown = new DropDownChoice(form,"dropdown",new Model(), new ArrayList())
+		DropDownChoice dropDown = new DropDownChoice(form, "dropdown", new Model(), new ArrayList())
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSelectionChanged(Object newSelection)
 			{
 				selection = true;
@@ -18,6 +19,7 @@
 			/**
 			 * @see wicket.markup.html.form.DropDownChoice#wantOnSelectionChangedNotifications()
 			 */
+			@Override
 			protected boolean wantOnSelectionChangedNotifications()
 			{
 				return true;
@@ -39,7 +41,8 @@
 		form.onFormSubmitted();
 		assertTrue("form should should set value ", submit);
 
-		application.getServletRequest().setParameter(form.getHiddenField(Form.HIDDEN_FIELD_FAKE_SUBMIT),
+		application.getServletRequest().setParameter(
+				form.getHiddenField(Form.HIDDEN_FIELD_FAKE_SUBMIT),
 				dropDown.urlFor(IOnChangeListener.INTERFACE).toString());
 
 		form.onFormSubmitted();

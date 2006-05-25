@@ -10,7 +10,8 @@
 
 		application.setupRequestAndResponse();
 		application.getServletRequest().setRequestToComponent(loginPage.getForm());
-		application.getServletRequest().setParameter(loginPage.getTextField().getInputName(), "admin");
+		application.getServletRequest().setParameter(loginPage.getTextField().getInputName(),
+				"admin");
 		application.processRequestCycle();
 
 		// continueToInterceptPage seems to return the same call, causing it to
@@ -18,7 +19,8 @@
 		assertEquals(application.getHomePage(), application.getLastRenderedPage().getClass());
 
 		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(application.getLastRenderedPage().get("link"));
+		application.getServletRequest().setRequestToComponent(
+				application.getLastRenderedPage().get("link"));
 		application.processRequestCycle();
 		assertEquals(PageA.class, application.getLastRenderedPage().getClass());
 	}

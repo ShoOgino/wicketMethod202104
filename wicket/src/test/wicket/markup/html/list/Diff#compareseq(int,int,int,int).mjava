@@ -1,10 +1,12 @@
 	/**
-	 * Compare in detail contiguous subsequences of the two files which are known, as a
-	 * whole, to match each other. The results are recorded in the vectors
-	 * filevec[N].changed_flag, by storing a 1 in the element for each line that is an
-	 * insertion or deletion. The subsequence of file 0 is [XOFF, XLIM) and likewise for
-	 * file 1. Note that XLIM, YLIM are exclusive bounds. All line numbers are origin-0 and
-	 * discarded lines are not counted.
+	 * Compare in detail contiguous subsequences of the two files which are
+	 * known, as a whole, to match each other. The results are recorded in the
+	 * vectors filevec[N].changed_flag, by storing a 1 in the element for each
+	 * line that is an insertion or deletion. The subsequence of file 0 is
+	 * [XOFF, XLIM) and likewise for file 1. Note that XLIM, YLIM are exclusive
+	 * bounds. All line numbers are origin-0 and discarded lines are not
+	 * counted.
+	 * 
 	 * @param xoff
 	 * @param xlim
 	 * @param yoff
@@ -52,9 +54,9 @@
 			if (c == 1)
 			{
 				/*
-				 * This should be impossible, because it implies that one of the two
-				 * subsequences is empty, and that case was handled above without calling
-				 * `diag'. Let's verify that this is true.
+				 * This should be impossible, because it implies that one of the
+				 * two subsequences is empty, and that case was handled above
+				 * without calling `diag'. Let's verify that this is true.
 				 */
 				throw new IllegalArgumentException("Empty subsequence");
 			}
@@ -63,8 +65,9 @@
 				/* Use that point to split this problem into two subproblems. */
 				compareseq(xoff, b, yoff, b - d);
 				/*
-				 * This used to use f instead of b, but that is incorrect! It is not
-				 * necessarily the case that diagonal d has a snake from b to f.
+				 * This used to use f instead of b, but that is incorrect! It is
+				 * not necessarily the case that diagonal d has a snake from b
+				 * to f.
 				 */
 				compareseq(b, xlim, b - d, ylim);
 			}

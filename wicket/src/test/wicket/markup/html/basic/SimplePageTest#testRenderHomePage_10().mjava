@@ -3,14 +3,16 @@
 	 */
 	public void testRenderHomePage_10() throws Exception
 	{
-	    executeTest(SimplePage_10.class, "SimplePageExpectedResult_10.html");
+		executeTest(SimplePage_10.class, "SimplePageExpectedResult_10.html");
 
-	    Panel panel = (Panel)application.getLastRenderedPage().get("myPanel");
-	    assertNotNull(panel);
-	    panel.setVisible(true);
+		Panel panel = (Panel)application.getLastRenderedPage().get("myPanel");
+		assertNotNull(panel);
+		panel.setVisible(true);
 		application.processRequestCycle(panel);
 		String document = application.getServletResponse().getDocument();
 		assertNotNull(document);
-		assertEquals("<wicket:panel>Inside the panel<span wicket:id=\"label\">mein Label</span></wicket:panel>", document);
+		assertEquals(
+				"<wicket:panel>Inside the panel<span wicket:id=\"label\">mein Label</span></wicket:panel>",
+				document);
 	}
 
