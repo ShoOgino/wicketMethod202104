@@ -10,8 +10,9 @@
 
 		// add a link which, when clicked, increases our counter
 		// when a link is clicked, its onClick method is called
-		Link link1 = new Link(this,"link1")
+		Link link1 = new Link(this, "link1")
 		{
+			@Override
 			public void onClick()
 			{
 				count1.clicks++;
@@ -21,8 +22,9 @@
 
 		// add a counter label to the link so that we can display it in the body
 		// of the link
-		link1.add(new Label(link1,"label1", new Model()
+		link1.add(new Label(link1, "label1", new Model()
 		{
+			@Override
 			public Object getObject(Component component)
 			{
 				return Integer.toString(count1.clicks);
@@ -50,17 +52,18 @@
 			 */
 			public CustomLink(MarkupContainer parent, String id)
 			{
-				super(parent,id);
+				super(parent, id);
 				count2 = new ClickCount();
-				add(new ClickCountLabel(this,"label2", count2));
+				add(new ClickCountLabel(this, "label2", count2));
 			}
 
+			@Override
 			public void onClick()
 			{
 				count2.clicks++;
 			}
 		}
-		add(new CustomLink(this,"link2"));
+		add(new CustomLink(this, "link2"));
 
 		// and if we know we are going to attach it to a <input type="button>
 		// tag, we shouldn't
@@ -76,10 +79,11 @@
 			 */
 			public ButtonLink(MarkupContainer parent, String id)
 			{
-				super(parent,id);
+				super(parent, id);
 				count3 = new ClickCount();
 				add(new AttributeModifier("value", new Model()
 				{
+					@Override
 					public Object getObject(Component component)
 					{
 						// we just replace the whole string. You could use
@@ -92,11 +96,12 @@
 				}));
 			}
 
+			@Override
 			public void onClick()
 			{
 				count3.clicks++;
 			}
 		}
-		add(new ButtonLink(this,"link3"));
+		add(new ButtonLink(this, "link3"));
 	}
 

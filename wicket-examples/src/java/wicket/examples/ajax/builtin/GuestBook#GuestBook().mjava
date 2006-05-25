@@ -15,6 +15,7 @@
 		comments.add(commentListView = new ListView<Comment>(comments, "comments",
 				new PropertyModel<List<Comment>>(this, "commentList"))
 		{
+			@Override
 			public void populateItem(final ListItem<Comment> listItem)
 			{
 				final Comment comment = listItem.getModelObject();
@@ -32,10 +33,12 @@
 		// is do our Ajax specific stuff, like rendering our components.
 		commentForm.add(new AjaxFormSubmitBehavior(commentForm, "onsubmit")
 		{
+			@Override
 			protected IAjaxCallDecorator getAjaxCallDecorator()
 			{
 				return new AjaxCallDecorator()
 				{
+					@Override
 					public CharSequence decorateScript(CharSequence script)
 					{
 						return script + "return false;";
@@ -43,6 +46,7 @@
 				};
 			}
 
+			@Override
 			protected void onSubmit(AjaxRequestTarget target)
 			{
 				// add the list of components that need to be updated

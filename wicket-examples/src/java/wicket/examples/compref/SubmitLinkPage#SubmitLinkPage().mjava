@@ -4,15 +4,16 @@
 	public SubmitLinkPage()
 	{
 		// Add a FeedbackPanel for displaying our messages
-		FeedbackPanel feedbackPanel = new FeedbackPanel(this,"feedback");
+		FeedbackPanel feedbackPanel = new FeedbackPanel(this, "feedback");
 		add(feedbackPanel);
 
 		// Add a form with 2 SubmitLinks that can be called
-		Form form = new Form(this,"form");
+		Form form = new Form(this, "form");
 		add(form);
 
-		SubmitLink internal = new SubmitLink(form,"internal")
+		SubmitLink internal = new SubmitLink(form, "internal")
 		{
+			@Override
 			protected void onSubmit()
 			{
 				info("internal onsubmit");
@@ -20,8 +21,9 @@
 		};
 		form.add(internal);
 
-		SubmitLink external = new SubmitLink(this,"external", form)
+		SubmitLink external = new SubmitLink(this, "external", form)
 		{
+			@Override
 			protected void onSubmit()
 			{
 				info("external onsubmit");

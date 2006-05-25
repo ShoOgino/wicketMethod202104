@@ -1,6 +1,7 @@
 		private void get(Class scope)
 		{
-			String packageRef = Strings.replaceAll(PackageName.forClass(scope).getName(), ".", "/").toString();
+			String packageRef = Strings.replaceAll(PackageName.forClass(scope).getName(), ".", "/")
+					.toString();
 			ClassLoader loader = scope.getClassLoader();
 			try
 			{
@@ -32,27 +33,42 @@
 						{
 							basedir = new File(uri);
 						}
-						catch(IllegalArgumentException e)
+						catch (IllegalArgumentException e)
 						{
 							log.debug("Can't construct the uri as a file: " + absolutePath);
-							// if this is throwen then the path is not really a file. but could be a zip.
+							// if this is throwen then the path is not really a
+							// file. but could be a zip.
 							String jarZipPart = uri.getSchemeSpecificPart();
-							// lowercased for testing if jar/zip, but leave the real filespec unchanged
+							// lowercased for testing if jar/zip, but leave the
+							// real filespec unchanged
 							String lowerJarZipPart = jarZipPart.toLowerCase();
 							int index = lowerJarZipPart.indexOf(".zip");
-							if(index == -1) index = lowerJarZipPart.indexOf(".jar");
-							if(index == -1) throw e;
-							
-							String filename = jarZipPart.substring(0, index+4); // 4 = len of ".jar" or ".zip"
-							log.debug("trying the filename: " + filename + " to load as a zip/jar.");
-							JarFile jarFile = new JarFile(filename,false);
+							if (index == -1)
+							{
+								index = lowerJarZipPart.indexOf(".jar");
+							}
+							if (index == -1)
+							{
+								throw e;
+							}
+
+							String filename = jarZipPart.substring(0, index + 4); // 4 =
+																					// len
+																					// of
+																					// ".jar"
+																					// or
+																					// ".zip"
+							log
+									.debug("trying the filename: " + filename
+											+ " to load as a zip/jar.");
+							JarFile jarFile = new JarFile(filename, false);
 							scanJarFile(scope, packageRef, jarFile);
 							return;
 						}
 						if (!basedir.isDirectory())
 						{
-							throw new IllegalStateException("unable to read resources from directory "
-									+ basedir);
+							throw new IllegalStateException(
+									"unable to read resources from directory " + basedir);
 						}
 						addResources(scope, new AppendingStringBuffer(), basedir);
 					}
@@ -62,7 +78,7 @@
 			{
 				throw new WicketRuntimeException(e);
 			}
-		
+
 			return;
 		}
 

@@ -8,15 +8,16 @@
 		final List data = new TestList(6, false);
 
 		// Add the table (but no table header)
-		SimpleListView table = new SimpleListView(this,"rows", data);
+		SimpleListView table = new SimpleListView(this, "rows", data);
 		add(table);
 
 		// And this is with a little bit of magic
-		add(new SortableListViewHeaders(this,"header", table)
+		add(new SortableListViewHeaders(this, "header", table)
 		{
 			/**
 			 * If object does not support equals()
 			 */
+			@Override
 			protected int compareTo(final SortableListViewHeader header, final Object o1,
 					final Object o2)
 			{
@@ -34,6 +35,7 @@
 			 * @see SortableListViewHeaders#getObjectToCompare(SortableListViewHeader,
 			 *      java.lang.Object)
 			 */
+			@Override
 			protected Comparable getObjectToCompare(final SortableListViewHeader header,
 					final Object object)
 			{

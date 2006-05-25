@@ -4,13 +4,14 @@
 	public Index()
 	{
 		// Add the Ajaxian link to the page...
-		add(new Link(this,"link")
+		add(new Link(this, "link")
 		{
 			/**
 			 * Handles a click on the link. This method is accessed normally
 			 * using a standard http request, but in this example, we use Ajax
 			 * to perform the call.
 			 */
+			@Override
 			public void onClick()
 			{
 				// Increment count
@@ -24,6 +25,7 @@
 			 * Alter the javascript 'onclick' event to emit the Ajax call and
 			 * update the counter label.
 			 */
+			@Override
 			protected String getOnClickScript(String url)
 			{
 				return new AppendingStringBuffer("new Ajax.Updater('counter', '").append(
@@ -33,6 +35,6 @@
 		});
 
 		// Add the label
-		add(counter = new Label(this,"counter", new PropertyModel(this, "count")));
+		add(counter = new Label(this, "counter", new PropertyModel(this, "count")));
 	}
 
