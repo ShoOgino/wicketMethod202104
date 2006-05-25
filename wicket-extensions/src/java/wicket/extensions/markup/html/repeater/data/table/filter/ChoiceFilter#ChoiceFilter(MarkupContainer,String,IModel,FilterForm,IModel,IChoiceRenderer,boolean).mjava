@@ -13,20 +13,20 @@
 	 *            if true this filter will submit the form on selection change
 	 * @see DropDownChoice
 	 */
-	public ChoiceFilter(MarkupContainer parent,final String id, IModel model, FilterForm form, IModel choices,
-			IChoiceRenderer renderer, boolean autoSubmit)
+	public ChoiceFilter(MarkupContainer parent, final String id, IModel model, FilterForm form,
+			IModel choices, IChoiceRenderer renderer, boolean autoSubmit)
 	{
-		super(parent,id, form);
+		super(parent, id, form);
 
-		choice = new DropDownChoice(this,"filter", model, choices, renderer);
+		choice = new DropDownChoice(this, "filter", model, choices, renderer);
 		choice.setNullValid(true);
-		
+
 		if (autoSubmit)
 		{
 			choice.add(new AttributeModifier("onchange", true, new Model("this.form.submit();")));
 		}
 		enableFocusTracking(choice);
-		
+
 		add(choice);
 	}
 

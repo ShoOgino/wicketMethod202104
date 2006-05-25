@@ -12,16 +12,18 @@
 		 * @param enableLink
 		 *            Whether the link should be enabled
 		 */
-		public BreadCrumbComponent(MarkupContainer parent,final String id, int index, IBreadCrumbModel breadCrumbModel,
+		public BreadCrumbComponent(MarkupContainer parent, final String id, int index,
+				IBreadCrumbModel breadCrumbModel,
 				final IBreadCrumbParticipant breadCrumbParticipant, boolean enableLink)
 		{
-			super(parent,id);
-			add(new Label(this,"sep", (index > 0) ? "/" : "").setEscapeModelStrings(false)
+			super(parent, id);
+			add(new Label(this, "sep", (index > 0) ? "/" : "").setEscapeModelStrings(false)
 					.setRenderBodyOnly(true));
-			BreadCrumbLink link = new BreadCrumbLink(this,"link", breadCrumbModel)
+			BreadCrumbLink link = new BreadCrumbLink(this, "link", breadCrumbModel)
 			{
 				private static final long serialVersionUID = 1L;
 
+				@Override
 				protected IBreadCrumbParticipant getParticipant(String componentId)
 				{
 					return breadCrumbParticipant;
@@ -29,6 +31,7 @@
 			};
 			link.setEnabled(enableLink);
 			add(link);
-			link.add(new Label(link,"label", breadCrumbParticipant.getTitle()).setRenderBodyOnly(true));
+			link.add(new Label(link, "label", breadCrumbParticipant.getTitle())
+					.setRenderBodyOnly(true));
 		}
 

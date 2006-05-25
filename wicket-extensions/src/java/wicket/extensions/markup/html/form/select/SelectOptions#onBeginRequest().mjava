@@ -1,3 +1,4 @@
+	@Override
 	protected void onBeginRequest()
 	{
 		if (size() == 0 || recreateChoices)
@@ -11,7 +12,8 @@
 			{
 				if (!(modelObject instanceof Collection))
 				{
-					throw new WicketRuntimeException("Model object " + modelObject + " not a collection");
+					throw new WicketRuntimeException("Model object " + modelObject
+							+ " not a collection");
 				}
 
 				// iterator over model objects for SelectOption components
@@ -20,7 +22,7 @@
 				while (it.hasNext())
 				{
 					// we need a container to represent a row in repeater
-					WebMarkupContainer row = new WebMarkupContainer(this,newChildId());
+					WebMarkupContainer row = new WebMarkupContainer(this, newChildId());
 					row.setRenderBodyOnly(true);
 					add(row);
 
@@ -28,7 +30,7 @@
 					Object value = it.next();
 					String text = renderer.getDisplayValue(value);
 					IModel model = renderer.getModel(value);
-					row.add(new SimpleSelectOption(row,"option", model, text));
+					row.add(new SimpleSelectOption(row, "option", model, text));
 				}
 			}
 		}

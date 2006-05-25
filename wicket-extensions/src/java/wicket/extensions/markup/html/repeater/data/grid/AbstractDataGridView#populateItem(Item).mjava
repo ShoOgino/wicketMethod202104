@@ -1,19 +1,23 @@
+	@Override
 	protected final void populateItem(Item item)
 	{
 		final IModel rowModel = item.getModel();
 
-		// TODO Post 1.2: General: Does this need to be a refreshing view? since the rows
+		// TODO Post 1.2: General: Does this need to be a refreshing view? since
+		// the rows
 		// is a refreshing view this will be recreated anyways. maybe can se
 		// orderedrepeatingview instead to simplify.
-		item.add(new RefreshingView(item,CELL_REPEATER_ID)
+		item.add(new RefreshingView(item, CELL_REPEATER_ID)
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected Iterator getItemModels()
 			{
 				return getPopulatorsIterator();
 			}
 
+			@Override
 			protected void populateItem(Item item)
 			{
 				final ICellPopulator populator = (ICellPopulator)item.getModelObject();
@@ -21,13 +25,16 @@
 
 				if (item.get("cell") == null)
 				{
-					throw new WicketRuntimeException(populator.getClass().getName()
-							+ ".populateItem() failed to add a component with id [" + CELL_ITEM_ID
-							+ "] to the provided [cellItem] object. Make sure you call add() on cellItem ( cellItem.add(new MyComponent(componentId, rowModel) )");
+					throw new WicketRuntimeException(
+							populator.getClass().getName()
+									+ ".populateItem() failed to add a component with id ["
+									+ CELL_ITEM_ID
+									+ "] to the provided [cellItem] object. Make sure you call add() on cellItem ( cellItem.add(new MyComponent(componentId, rowModel) )");
 				}
 
 			}
 
+			@Override
 			protected Item newItem(final String id, int index, IModel model)
 			{
 				return newCellItem(id, index, model);

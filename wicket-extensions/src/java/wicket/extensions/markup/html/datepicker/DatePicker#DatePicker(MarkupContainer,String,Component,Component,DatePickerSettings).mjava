@@ -10,10 +10,10 @@
 	 * @param settings
 	 *            datepicker properties
 	 */
-	public DatePicker(MarkupContainer parent,final String id, final Component label, final Component target,
-			final DatePickerSettings settings)
+	public DatePicker(MarkupContainer parent, final String id, final Component label,
+			final Component target, final DatePickerSettings settings)
 	{
-		super(parent,id);
+		super(parent, id);
 
 		if (settings == null)
 		{
@@ -35,19 +35,20 @@
 		{
 			label.add(new PathAttributeModifier("for", target));
 		}
-		add(triggerButton = new TriggerButton(this,"trigger", settings.getIcon()));
-		add(new InitScript(this,"script"));
-		add(new JavaScriptReference(this,"calendarMain", DatePicker.class, "calendar.js"));
-		add(new JavaScriptReference(this,"calendarSetup", DatePicker.class, "calendar-setup.js"));
-		add(new JavaScriptReference(this,"calendarLanguage", new Model()
+		add(triggerButton = new TriggerButton(this, "trigger", settings.getIcon()));
+		add(new InitScript(this, "script"));
+		add(new JavaScriptReference(this, "calendarMain", DatePicker.class, "calendar.js"));
+		add(new JavaScriptReference(this, "calendarSetup", DatePicker.class, "calendar-setup.js"));
+		add(new JavaScriptReference(this, "calendarLanguage", new Model()
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public Object getObject(Component component)
 			{
 				return settings.getLanguage(DatePicker.this.getLocale());
 			}
 		}));
-		add(new StyleSheetReference(this,"calendarStyle", settings.getStyle()));
+		add(new StyleSheetReference(this, "calendarStyle", settings.getStyle()));
 	}
 

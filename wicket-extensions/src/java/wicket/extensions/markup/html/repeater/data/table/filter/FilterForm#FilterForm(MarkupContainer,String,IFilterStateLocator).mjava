@@ -4,18 +4,19 @@
 	 * @param locator
 	 *            filter state locator
 	 */
-	public FilterForm(MarkupContainer parent,final String id, IFilterStateLocator locator)
+	public FilterForm(MarkupContainer parent, final String id, IFilterStateLocator locator)
 	{
-		super(parent,id, new FilterStateModel(locator));
+		super(parent, id, new FilterStateModel(locator));
 
 		this.locator = locator;
 
-		hidden = new HiddenField(this,"focus-tracker", new Model());
+		hidden = new HiddenField(this, "focus-tracker", new Model());
 
 		hidden.add(new AbstractBehavior()
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onComponentTag(Component component, ComponentTag tag)
 			{
 				tag.put("id", getFocusTrackerFieldCssId());

@@ -3,6 +3,7 @@
 	 * @param tag
 	 *            the abstraction representing html tag of this component
 	 */
+	@Override
 	protected void onComponentTag(final ComponentTag tag)
 	{
 
@@ -21,25 +22,32 @@
 		// assign name and value
 		tag.put("value", getPath());
 
-		// check if the model collection of the select contains the model object.
+		// check if the model collection of the select contains the model
+		// object.
 		// if it does mark the option as selected
-		Object selected=select.getModelObject();
+		Object selected = select.getModelObject();
 
-		boolean isSelected=false;
-		
-		Object value=getModelObject();
-		
-		if (selected!=null && selected instanceof Collection) {
-			
-			if (value instanceof Collection) {
-				isSelected=selected.equals(value);
-			} else {
-				isSelected=((Collection)selected).contains(value);
+		boolean isSelected = false;
+
+		Object value = getModelObject();
+
+		if (selected != null && selected instanceof Collection)
+		{
+
+			if (value instanceof Collection)
+			{
+				isSelected = selected.equals(value);
 			}
-		} else {
-			isSelected=Objects.equal(selected,value);
+			else
+			{
+				isSelected = ((Collection)selected).contains(value);
+			}
 		}
-		
+		else
+		{
+			isSelected = Objects.equal(selected, value);
+		}
+
 		if (isSelected)
 		{
 			tag.put("selected", "true");
