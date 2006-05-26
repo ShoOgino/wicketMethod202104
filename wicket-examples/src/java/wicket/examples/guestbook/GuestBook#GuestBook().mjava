@@ -4,18 +4,18 @@
 	public GuestBook()
 	{
 		// Add comment form
-		add(new CommentForm(this, "commentForm"));
+		new CommentForm(this, "commentForm");
 
 		// Add commentListView of existing comments
-		add(commentListView = new ListView(this, "comments", commentList)
+		commentListView = (ListView)new ListView(this, "comments", commentList)
 		{
 			@Override
 			public void populateItem(final ListItem listItem)
 			{
 				final Comment comment = (Comment)listItem.getModelObject();
-				listItem.add(new Label(listItem, "date", new Model(comment.getDate())));
-				listItem.add(new MultiLineLabel(listItem, "text", comment.getText()));
+				new Label(listItem, "date", new Model(comment.getDate()));
+				new MultiLineLabel(listItem, "text", comment.getText());
 			}
-		}).setVersioned(false);
+		}.setVersioned(false);
 	}
 
