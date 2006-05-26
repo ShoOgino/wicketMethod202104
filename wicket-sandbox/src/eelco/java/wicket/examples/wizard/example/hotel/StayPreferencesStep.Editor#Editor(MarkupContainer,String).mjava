@@ -1,0 +1,35 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param id
+		 *            component id
+		 */
+		public Editor(MarkupContainer parent,String id)
+		{
+			super(parent,id, new CompoundPropertyModel(StayPreferencesStep.this.getModel()));
+
+			new CheckBox(parent,"wantsWakeUpCall")
+			{
+				protected boolean wantOnSelectionChangedNotifications()
+				{
+					return true;
+				}
+			};
+
+			// we want to show the wake up call input fields (time) only when
+			// the customer
+			// wants to get a wake up call
+			WebMarkupContainer wakeUpCallContainer = new WebMarkupContainer(this,"wakeUpCallContainer")
+			{
+				public boolean isVisible()
+				{
+					return getPreferences().getWantsWakeUpCall();
+				}
+			};
+			// note that required is only checked when the field is visible
+			new TextField(wakeUpCallContainer,"wakeUpCallHours", Integer.class);
+			new TextField(wakeUpCallContainer,"wakeUpCallMinutes", Integer.class);
+
+			new CheckBox(this,"wantsBreakFast");
+		}
+

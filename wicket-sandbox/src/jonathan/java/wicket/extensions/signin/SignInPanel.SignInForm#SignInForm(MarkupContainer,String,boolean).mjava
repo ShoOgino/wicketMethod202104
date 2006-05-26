@@ -1,0 +1,30 @@
+        /**
+         * Constructor.
+         * 
+         * @param id
+         *            id of the form component
+         * @param includeRememberMe
+         *            True to include checkbox
+         */
+        public SignInForm(MarkupContainer parent,final String id, boolean includeRememberMe)
+        {
+            super(parent,id);
+
+            setModel(new CompoundPropertyModel(this));
+
+            // Components working on compound property model
+            usernameTextField = new TextField(this,idUsername);
+            passwordTextField = new PasswordTextField(this,idPassword);
+            final WebMarkupContainer rememberMeRow = new WebMarkupContainer(this,"rememberMeRow");
+            rememberMeRow.setVisible(includeRememberMe);
+            rememberMeCheckBox = new CheckBox(rememberMeRow,idRememberMe);
+
+            // Add validators
+            usernameTextField.add(EmailAddressPatternValidator.getInstance());
+
+            // Add components
+
+            // Add button image
+            new ImageButton(this,"signInButton", new ResourceReference("signInButton"));
+        }
+
