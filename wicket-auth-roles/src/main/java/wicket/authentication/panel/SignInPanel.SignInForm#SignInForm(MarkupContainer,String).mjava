@@ -1,0 +1,30 @@
+		/**
+		 * Constructor.
+		 * 
+		 * @param id
+		 *            id of the form component
+		 */
+		public SignInForm(MarkupContainer parent,final String id)
+		{
+			super(parent,id);
+
+			// Attach textfield components that edit properties map
+			// in lieu of a formal beans model
+			username = new TextField(this,"username", new PropertyModel(properties, "username"));
+			password = new PasswordTextField(this,"password", new PropertyModel(properties,
+					"password"));
+
+			// MarkupContainer row for remember me checkbox
+			final WebMarkupContainer rememberMeRow = new WebMarkupContainer(this,"rememberMeRow");
+
+			// Add rememberMe checkbox
+			new CheckBox(rememberMeRow,"rememberMe", new PropertyModel(SignInPanel.this,
+					"rememberMe"));
+
+			// Make form values persistent
+			setPersistent(rememberMe);
+
+			// Show remember me checkbox?
+			rememberMeRow.setVisible(includeRememberMe);
+		}
+
