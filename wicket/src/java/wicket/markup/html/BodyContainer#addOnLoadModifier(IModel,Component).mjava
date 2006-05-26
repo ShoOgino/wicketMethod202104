@@ -18,13 +18,14 @@
 	 */
 	public final BodyContainer addOnLoadModifier(final IModel model, final Component behaviorOwner)
 	{
+		final Component bodyContainer = page.get(id);
 		if (behaviorOwner == null)
 		{
-			return addOnLoadModifier(model);
-		}
+			bodyContainer.add(new AppendingAttributeModifier("onload", model));
+		} else {
 
-		final Component bodyContainer = page.get(id);
 		bodyContainer.add(new BodyTagAttributeModifier("onload", true, model, behaviorOwner));
+		}
 		return this;
 	}
 
