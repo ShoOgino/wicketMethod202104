@@ -1,6 +1,9 @@
 		/**
 		 * Construct.
 		 * 
+		 * @param parent
+		 *            The parent component
+		 * 
 		 * @param id
 		 *            Component id
 		 */
@@ -8,15 +11,16 @@
 		{
 			super(parent, id);
 			setReuseItems(false);
-			setModel(new LoadableDetachableModel()
+			setModel(new LoadableDetachableModel<List<IBreadCrumbParticipant>>()
 			{
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected Object load()
+				protected List<IBreadCrumbParticipant> load()
 				{
 					// save a copy
-					List l = new ArrayList(allBreadCrumbParticipants());
+					List<IBreadCrumbParticipant> l = new ArrayList<IBreadCrumbParticipant>(
+							allBreadCrumbParticipants());
 					size = l.size();
 					return l;
 				}
