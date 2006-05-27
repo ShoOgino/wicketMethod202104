@@ -11,12 +11,8 @@
 	 *            If true, any html of the content will be rendered as is.
 	 *            Otherwise, it will be escaped.
 	 */
-	public StaticContentStep(MarkupContainer< ? > parent, IModel title, IModel summary,
-			IModel content, boolean allowHtml)
+	public StaticContentStep(String title, String summary, String content, boolean allowHtml)
 	{
-		super(parent, title, summary);
-		this.content = content;
-		this.allowHtml = allowHtml;
-		new Label(this, "content", content).setEscapeModelStrings(!allowHtml);
+		this(title, summary, new Model<String>(content), allowHtml);
 	}
 

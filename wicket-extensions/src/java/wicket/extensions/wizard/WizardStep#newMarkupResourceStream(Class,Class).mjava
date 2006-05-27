@@ -1,0 +1,32 @@
+	/**
+	 * Tries to load the markup stream matching the provided step class.
+	 * 
+	 * @param stepClass
+	 *            The class to match
+	 * @param containerClass
+	 *            The container to associate with
+	 * @return The markup stream or null
+	 */
+	private final IResourceStream newMarkupResourceStream(final Class stepClass,
+			final Class containerClass)
+	{
+		// TODO OPTIMIZE (CACHE)
+		if (!stepClass.equals(WizardStep.class))
+		{
+			String name = Strings.afterLast(stepClass.getName(), '.') + ".html";
+			// try to load template with name of implementing step class;
+			final URL url = stepClass.getResource(name);
+			if (url != null)
+			{
+				return new UrlResourceStream(url);
+			}
+			else
+			{
+				return newMarkupResourceStream(stepClass.getSuperclass(), containerClass);
+			}
+		}
+
+		// not resource was not found
+		return null;
+	}
+
