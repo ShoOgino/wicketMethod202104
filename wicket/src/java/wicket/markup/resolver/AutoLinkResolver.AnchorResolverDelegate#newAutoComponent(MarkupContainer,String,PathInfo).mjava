@@ -3,6 +3,7 @@
 		 *      java.lang.String,
 		 *      wicket.markup.resolver.AutoLinkResolver.PathInfo)
 		 */
+		@SuppressWarnings("unchecked")
 		public Component newAutoComponent(final MarkupContainer container, final String autoId,
 				PathInfo pathInfo)
 		{
@@ -33,8 +34,7 @@
 
 				try
 				{
-					final Class<? extends Page> clazz = defaultClassResolver
-							.resolveClass(className);
+					final Class clazz = defaultClassResolver.resolveClass(className);
 					return new AutolinkBookmarkablePageLink(container, autoId, clazz,
 							pathInfo.pageParameters, pathInfo.anchor);
 				}
@@ -49,13 +49,11 @@
 				if ((parentWithContainer instanceof Page) && !infoPath.startsWith(".")
 						&& page.getMarkupStream().isMergedMarkup())
 				{
-					Class<? extends Page> clazz = container.getMarkupStream().getTag()
-							.getMarkupClass();
+					Class clazz = container.getMarkupStream().getTag().getMarkupClass();
 					if (clazz != null)
 					{
 						// Href is relative. Resolve the url given relative to
-						// the
-						// current page
+						// the current page
 						className = Packages.extractPackageName(clazz) + "." + infoPath;
 
 						try
@@ -66,8 +64,8 @@
 						}
 						catch (WicketRuntimeException ex)
 						{
-							log.warn("Did not find corresponding java class: " + className);
-							// fall through
+							log.warn("Did not find corresponding java class: " + className + "("
+									+ ex.getMessage() + ")");
 						}
 					}
 				}
