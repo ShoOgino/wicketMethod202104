@@ -1,12 +1,13 @@
 		/**
 		 * Construct.
 		 * 
+		 * @param parent
 		 * @param name
 		 *            Component name
 		 */
 		public InputForm(MarkupContainer parent, String name)
 		{
-			super(parent, name, new CompoundPropertyModel(new FormInputModel()));
+			super(parent, name, new CompoundPropertyModel<FormInputModel>(new FormInputModel()));
 
 			// Dropdown for selecting locale
 			new LocaleDropDownChoice(this, "localeSelect");
@@ -22,50 +23,51 @@
 				}
 			};
 
-			RequiredTextField stringTextField = new RequiredTextField(this, "stringProperty");
-			stringTextField.setLabel(new Model("String"));
-			RequiredTextField integerTextField = new RequiredTextField(this, "integerProperty",
-					Integer.class);
+			RequiredTextField stringTextField = new RequiredTextField<String>(this,
+					"stringProperty");
+			stringTextField.setLabel(new Model<String>("String"));
+			RequiredTextField integerTextField = new RequiredTextField<Integer>(this,
+					"integerProperty", Integer.class);
 			integerTextField.add(NumberValidator.POSITIVE);
-			new RequiredTextField(this, "doubleProperty", Double.class);
+			new RequiredTextField<Double>(this, "doubleProperty", Double.class);
 			// we have a component attached to the label here, as we want to
 			// synchronize the
 			// id's of the label, textfield and datepicker. Note that you can
 			// perfectly
 			// do without labels
 			WebMarkupContainer dateLabel = new WebMarkupContainer(this, "dateLabel");
-			TextField datePropertyTextField = new TextField(this, "dateProperty", Date.class);
+			TextField datePropertyTextField = new TextField<Date>(this, "dateProperty", Date.class);
 			new DatePicker(this, "datePicker", dateLabel, datePropertyTextField);
-			new RequiredTextField(this, "integerInRangeProperty", Integer.class)
+			new RequiredTextField<Integer>(this, "integerInRangeProperty", Integer.class)
 					.add(NumberValidator.range(0, 100));
 			new CheckBox(this, "booleanProperty");
 			RadioChoice rc = new RadioChoice(this, "numberRadioChoice", NUMBERS).setSuffix("");
-			rc.setLabel(new Model("number"));
+			rc.setLabel(new Model<String>("number"));
 			rc.setRequired(true);
 
 			RadioGroup group = new RadioGroup(this, "numbersGroup");
-			ListView persons = new ListView(group, "numbers", NUMBERS)
+			ListView numbers = new ListView<String>(group, "numbers", NUMBERS)
 			{
 				@Override
-				protected void populateItem(ListItem item)
+				protected void populateItem(ListItem<String> item)
 				{
-					new Radio(item, "radio", item.getModel());
-					new Label(item, "number", item.getModelObjectAsString());
+					new Radio<String>(item, "radio", item.getModel());
+					new Label(item, "number", item.getModelObject());
 				};
 			};
 
 			CheckGroup checks = new CheckGroup(this, "numbersCheckGroup");
-			ListView checksList = new ListView(checks, "numbers", NUMBERS)
+			ListView checksList = new ListView<String>(checks, "numbers", NUMBERS)
 			{
 				@Override
-				protected void populateItem(ListItem item)
+				protected void populateItem(ListItem<String> item)
 				{
-					new Check(item, "check", item.getModel());
-					new Label(item, "number", item.getModelObjectAsString());
+					new Check<String>(item, "check", item.getModel());
+					new Label(item, "number", item.getModelObject());
 				};
 			};
 
-			new ListMultipleChoice(this, "siteSelection", SITES);
+			new ListMultipleChoice<String>(this, "siteSelection", SITES);
 
 			// TextField using a custom converter.
 			new TextField(this, "urlProperty", URL.class)
@@ -74,12 +76,6 @@
 				{
 					return new SimpleConverterAdapter()
 					{
-						@Override
-						public String toString(Object value)
-						{
-							return value != null ? value.toString() : null;
-						}
-
 						@Override
 						public Object toObject(String value)
 						{
@@ -91,6 +87,12 @@
 							{
 								throw new ConversionException("'" + value + "' is not a valid URL");
 							}
+						}
+
+						@Override
+						public String toString(Object value)
+						{
+							return value != null ? value.toString() : null;
 						}
 					};
 				}
