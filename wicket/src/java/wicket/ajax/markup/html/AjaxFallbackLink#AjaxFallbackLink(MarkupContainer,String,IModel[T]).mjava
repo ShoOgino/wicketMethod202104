@@ -7,11 +7,11 @@
 	 * @param id
 	 * @param model
 	 */
-	public AjaxLink(MarkupContainer parent, final String id, final IModel model)
+	public AjaxFallbackLink(MarkupContainer parent, final String id, final IModel<T> model)
 	{
 		super(parent, id, model);
 
-		add(new AjaxEventBehavior("href")
+		add(new AjaxEventBehavior("onclick")
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,8 @@
 			@Override
 			protected IAjaxCallDecorator getAjaxCallDecorator()
 			{
-				return AjaxLink.this.getAjaxCallDecorator();
+				return new CancelEventIfNoAjaxDecorator(AjaxFallbackLink.this
+						.getAjaxCallDecorator());
 			}
 
 		});

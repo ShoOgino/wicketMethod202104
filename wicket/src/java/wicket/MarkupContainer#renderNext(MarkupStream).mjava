@@ -19,7 +19,7 @@
 			final String id = tag.getId();
 
 			// Get the component for the id from the given container
-			final Component component = get(id);
+			final Component<?> component = get(id);
 
 			// Failed to find it?
 			if (component != null)
@@ -30,7 +30,7 @@
 			{
 				// 2rd try: Components like Border and Panel might implement
 				// the ComponentResolver interface as well.
-				MarkupContainer container = this;
+				MarkupContainer<?> container = this;
 				while (container != null)
 				{
 					if (container instanceof IComponentResolver)
@@ -45,16 +45,14 @@
 				}
 
 				// 3rd try: Try application's component resolvers
-				final List componentResolvers = this.getApplication().getPageSettings()
+				final List<IComponentResolver> componentResolvers = this.getApplication().getPageSettings()
 						.getComponentResolvers();
-				final Iterator iterator = componentResolvers.iterator();
-				while (iterator.hasNext())
+				for (IComponentResolver resolver: componentResolvers)
 				{
-					final IComponentResolver resolver = (IComponentResolver)iterator.next();
 					if (resolver.resolve(this, markupStream, tag))
 					{
 						return;
-					}
+					}	
 				}
 
 				if (tag instanceof WicketTag)
