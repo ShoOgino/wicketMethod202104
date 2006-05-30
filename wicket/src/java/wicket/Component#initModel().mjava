@@ -12,7 +12,7 @@
 		for (Component current = getParent(); current != null; current = current.getParent())
 		{
 			// Get model
-			final IModel<T> model = current.getModel();
+			final IModel model = current.getModel();
 			if (model instanceof ICompoundModel)
 			{
 				// we turn off versioning as we share the model with another
@@ -21,7 +21,7 @@
 				setVersioned(false);
 
 				// return the shared compound model
-				return model;
+				return new WrapModel<T>((ICompoundModel)model);
 			}
 		}
 
