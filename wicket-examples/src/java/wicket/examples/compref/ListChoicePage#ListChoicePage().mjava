@@ -3,8 +3,8 @@
 	 */
 	public ListChoicePage()
 	{
-		final Input input = new Input();
-		setModel(new CompoundPropertyModel(input));
+		final ListChoicePageInput listChoicePageInput = new ListChoicePageInput();
+		setModel(new CompoundPropertyModel<ListChoicePageInput>(listChoicePageInput));
 
 		// Add a FeedbackPanel for displaying our messages
 		FeedbackPanel feedbackPanel = new FeedbackPanel(this, "feedback");
@@ -15,7 +15,7 @@
 			@Override
 			protected void onSubmit()
 			{
-				info("input: " + input);
+				info("input: " + listChoicePageInput);
 			}
 		};
 
@@ -23,7 +23,7 @@
 		// designate the
 		// current selection, and that uses the SITES list for the available
 		// options.
-		ListChoice listChoice = new ListChoice(form, "site", SITES);
+		ListChoice listChoice = new ListChoice(form, "site", ListChoicePageInput.SITES);
 		listChoice.setMaxRows(4);
 	}
 

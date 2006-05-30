@@ -1,6 +1,8 @@
 		/**
 		 * Constructor
 		 * 
+		 * @param parent
+		 *            The parent
 		 * @param id
 		 *            id of form
 		 * @param book
@@ -8,7 +10,7 @@
 		 */
 		public EditBookForm(MarkupContainer parent, final String id, final Book book)
 		{
-			super(parent, id, new CompoundPropertyModel(book));
+			super(parent, id, new CompoundPropertyModel<Book>(book));
 
 			// Create a required text field with a max length of 30 characters
 			// that edits the book's title
@@ -28,19 +30,19 @@
 			new CheckBox(this, "fiction");
 
 			// Books is everything but otherBook
-			List books = new ArrayList();
+			List<Book> books = new ArrayList<Book>();
 
 			books.addAll(Book.getBooks());
 			books.remove(otherBook);
 
 			// Add companion book choice
-			new DropDownChoice(this, "companionBook", books);
+			new DropDownChoice<Book>(this, "companionBook", books);
 
 			// Add radio choice test
 			final RadioChoice relatedBook = new RadioChoice(this, "relatedBook", books);
 
 			// Multi-select among writing styles
-			new ListMultipleChoice(this, "writingStyles", EnumeratedType
-					.getValues(Book.WritingStyle.class));
+			new ListMultipleChoice<WritingStyle>(this, "writingStyles", Arrays.asList(WritingStyle
+					.values()));
 		}
 

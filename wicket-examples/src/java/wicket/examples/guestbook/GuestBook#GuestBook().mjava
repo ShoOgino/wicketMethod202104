@@ -7,13 +7,13 @@
 		new CommentForm(this, "commentForm");
 
 		// Add commentListView of existing comments
-		commentListView = (ListView)new ListView(this, "comments", commentList)
+		commentListView = (ListView)new ListView<Comment>(this, "comments", commentList)
 		{
 			@Override
-			public void populateItem(final ListItem listItem)
+			public void populateItem(final ListItem<Comment> listItem)
 			{
-				final Comment comment = (Comment)listItem.getModelObject();
-				new Label(listItem, "date", new Model(comment.getDate()));
+				final Comment comment = listItem.getModelObject();
+				new Label(listItem, "date", new Model<Date>(comment.getDate()));
 				new MultiLineLabel(listItem, "text", comment.getText());
 			}
 		}.setVersioned(false);
