@@ -26,7 +26,7 @@
 
 		// create a tree
 		TreeModel treeModel = convertToTreeModel(l1);
-		Tree tree = new Tree("tree", treeModel)
+		final Tree tree = new Tree("tree", treeModel)
 		{
 			protected String getNodeLabel(DefaultMutableTreeNode node)
 			{
@@ -36,6 +36,21 @@
 			}
 		};
 		add(tree);
+		add(new Link("expandAll")
+		{
+			public void onClick()
+			{
+				tree.expandAll(true);
+			}
+		});
+
+		add(new Link("collapseAll")
+		{
+			public void onClick()
+			{
+				tree.expandAll(false);
+			}
+		});
 
 		// and another one
 		Tree tree2 = new MyTree("tree2", treeModel);
