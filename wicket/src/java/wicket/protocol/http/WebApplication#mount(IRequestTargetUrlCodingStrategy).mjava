@@ -6,15 +6,15 @@
 	 * @param encoder
 	 *            the encoder that will be used for this mount
 	 */
-	public final void mount(String path, IRequestTargetUrlCodingStrategy encoder)
+	public final void mount(IRequestTargetUrlCodingStrategy encoder)
 	{
-		checkMountPath(path);
+		checkMountPath(encoder.getMountPath());
 
 		if (encoder == null)
 		{
 			throw new IllegalArgumentException("Encoder must be not null");
 		}
 
-		getRequestCycleProcessor().getRequestCodingStrategy().mount(path, encoder);
+		getRequestCycleProcessor().getRequestCodingStrategy().mount(encoder);
 	}
 

@@ -4,54 +4,6 @@
 	@Override
 	protected long getLastModified(final HttpServletRequest servletRequest)
 	{
-		final String pathInfo = servletRequest.getPathInfo();
-		if ((pathInfo != null) && pathInfo.startsWith(RESOURCES_PATH_PREFIX))
-		{
-			final String resourceReferenceKey = pathInfo.substring(RESOURCES_PATH_PREFIX.length());
-
-			// Try to find shared resource
-			Resource resource = webApplication.getSharedResources().get(resourceReferenceKey);
-
-			// If resource found and it is cacheable
-			if ((resource != null) && resource.isCacheable())
-			{
-				try
-				{
-					Application.set(webApplication);
-
-					final WebRequest webRequest = webApplication.newWebRequest(servletRequest);
-
-					// Set parameters from servlet request
-					resource.setParameters(webRequest.getParameterMap());
-
-					// Get resource stream
-					IResourceStream stream = resource.getResourceStream();
-
-					// Get last modified time from stream
-					Time time = stream.lastModifiedTime();
-
-					try
-					{
-						stream.close();
-					}
-					catch (IOException e)
-					{
-						// ignore
-					}
-
-					return time != null ? time.getMilliseconds() : -1;
-				}
-				catch (AbortException e)
-				{
-					return -1;
-				}
-				finally
-				{
-					resource.setParameters(null);
-					Application.unset();
-				}
-			}
-		}
-		return -1;
+		return wicketFilter.getLastModified(servletRequest);
 	}
 

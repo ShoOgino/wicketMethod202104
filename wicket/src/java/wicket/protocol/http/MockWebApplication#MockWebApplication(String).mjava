@@ -12,32 +12,36 @@
 
 		context = new MockServletContext(this, path);
 
-		setWicketServlet(new WicketServlet()
+		setWicketFilter(new WicketFilter()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public ServletContext getServletContext()
+			public FilterConfig getFilterConfig()
 			{
-				return context;
-			};
-
-			/**
-			 * @see javax.servlet.GenericServlet#getInitParameter(java.lang.String)
-			 */
-			@Override
-			public String getInitParameter(String name)
-			{
-				return null;
-			}
-
-			/**
-			 * @see javax.servlet.GenericServlet#getServletName()
-			 */
-			@Override
-			public String getServletName()
-			{
-				return "WicketMockServlet";
+				return new FilterConfig()
+				{
+				
+					public ServletContext getServletContext()
+					{
+						return context;
+					}
+				
+					public Enumeration getInitParameterNames()
+					{
+						return null;
+					}
+				
+					public String getInitParameter(String name)
+					{
+						return null;
+					}
+				
+					public String getFilterName()
+					{
+						return "WicketMockServlet";
+					}
+				};
 			}
 		});
 
