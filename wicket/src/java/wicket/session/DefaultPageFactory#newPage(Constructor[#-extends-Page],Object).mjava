@@ -10,11 +10,11 @@
 	 *             Thrown if the Page cannot be instantiated using the given
 	 *             constructor and argument.
 	 */
-	private final Page newPage(final Constructor constructor, final Object argument)
+	private final Page newPage(final Constructor<? extends Page> constructor, final Object argument)
 	{
 		try
 		{
-			return (Page)constructor.newInstance(new Object[] { argument });
+			return constructor.newInstance(new Object[] { argument });
 		}
 		catch (InstantiationException e)
 		{
