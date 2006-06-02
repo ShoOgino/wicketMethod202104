@@ -7,12 +7,22 @@
 	 *            The component id
 	 * @param markupId
 	 *            The associated id of the associated markup fragment
+	 * @param markupProvider
+	 *            The component whose markup contains the fragment's markup
 	 * @param model
 	 *            The model for this fragment
 	 */
 	public Fragment(MarkupContainer parent, final String id, final String markupId,
-			final IModel model)
+			final MarkupContainer markupProvider, final IModel<T> model)
 	{
-		this(parent, id, markupId, null, model);
+		super(parent, id, model);
+
+		if (markupId == null)
+		{
+			throw new IllegalArgumentException("markupId cannot be null");
+		}
+
+		this.markupId = markupId;
+		this.markupProvider = markupProvider;
 	}
 

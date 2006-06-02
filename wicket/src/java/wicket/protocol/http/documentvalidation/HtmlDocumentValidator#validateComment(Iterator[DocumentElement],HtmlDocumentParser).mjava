@@ -7,14 +7,14 @@
 	 *            The parser
 	 * @return Whether the comment is valid or not
 	 */
-	private boolean validateComment(Iterator expectedElements, HtmlDocumentParser parser)
+	private boolean validateComment(Iterator<DocumentElement> expectedElements, HtmlDocumentParser parser)
 	{
 		boolean valid = true;
 		if (!skipComments)
 		{
 			if (expectedElements.hasNext())
 			{
-				DocumentElement e = (DocumentElement)expectedElements.next();
+				DocumentElement e = expectedElements.next();
 				if (e instanceof Comment)
 				{
 					if (!((Comment)e).getText().equals(parser.getComment()))
