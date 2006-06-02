@@ -8,5 +8,12 @@
 	{
 		final TreePath selection = new TreePath(node.getPath());
 		setExpandedState(selection, (!treeState.isExpanded(selection))); // inverse
+
+		// If set to SINGLE_TREE_SELECTION, collapse all sibling nodes
+		final int selectionType = getTreeState().getSelectionModel().getSelectionMode();
+		if (TreeSelectionModel.SINGLE_TREE_SELECTION == selectionType)
+		{
+			collapseSiblings(node);
+		}
 	}
 
