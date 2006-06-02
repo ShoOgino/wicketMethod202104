@@ -20,7 +20,41 @@
 				ObjectOutputStream oos = new ObjectOutputStream(out);
 				oos.writeObject(object);
 				ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(out
-						.toByteArray()));
+						.toByteArray()))
+				{
+					// This overide is required to resolve classess inside in
+					// different
+					// bundle, i.e.
+					// The classess can be resolved by OSGI classresolver
+					// implementation
+					protected Class resolveClass(ObjectStreamClass desc) throws IOException,
+							ClassNotFoundException
+					{
+						String className = desc.getName();
+						Application application = Application.get();
+						IApplicationSettings applicationSettings = application
+								.getApplicationSettings();
+						IClassResolver classResolver = applicationSettings.getClassResolver();
+
+						Class candidate = null;
+						try
+						{
+							candidate = classResolver.resolveClass(className);
+							if (candidate == null)
+							{
+								candidate = super.resolveClass(desc);
+							}
+						}
+						catch (WicketRuntimeException ex)
+						{
+							if (ex.getCause() instanceof ClassNotFoundException)
+							{
+								throw (ClassNotFoundException)ex.getCause();
+							}
+						}
+						return candidate;
+					}
+				};
 				return ois.readObject();
 			}
 			catch (ClassNotFoundException e)
