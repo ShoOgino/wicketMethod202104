@@ -16,7 +16,7 @@
 	 * @return A IResourceStream if the resource was found
 	 */
 	@SuppressWarnings("unchecked")
-	public IResourceStream newMarkupResourceStream(Class<? extends MarkupContainer> containerClass)
+	public MarkupResourceStreamLookupResult newMarkupResourceStream(Class<? extends MarkupContainer> containerClass)
 	{
 		// Get locator to search for the resource
 		final IResourceStreamLocator locator = getApplication().getResourceSettings()
@@ -33,8 +33,8 @@
 			// Did we find it already?
 			if (resourceStream != null)
 			{
-				return new MarkupResourceStream(resourceStream, new ContainerInfo(this),
-						containerClass);
+				return new MarkupResourceStreamLookupResult(
+						new MarkupResourceStream(resourceStream, new ContainerInfo(this), containerClass));
 			}
 
 			// Walk up the class hierarchy one level, if markup has not

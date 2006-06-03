@@ -1,0 +1,40 @@
+	/**
+	 * Load markup from an IResourceStream and add an {@link IChangeListener}to
+	 * the {@link ModificationWatcher} so that if the resource changes, we can
+	 * remove it from the cache automatically and subsequently reload when
+	 * needed.
+	 * 
+	 * @param container
+	 *            The original requesting markup container
+	 * @param lookupResult
+	 *            The markup stream to load and begin to watch
+	 * @return The markup in the stream
+	 */
+	private final Markup loadMarkupAndWatchForChanges(final MarkupContainer container,
+			final MarkupResourceStreamLookupResult lookupResult)
+	{
+		if (lookupResult.isDisableCaching() == false)
+		{
+			// Watch file in the future
+			final ModificationWatcher watcher = application.getResourceSettings().getResourceWatcher(true);
+			if (watcher != null)
+			{
+				watcher.add(lookupResult.getResourceStream(), new IChangeListener()
+				{
+					public void onChange()
+					{
+						log.info("Remove markup from cache: " + lookupResult.getResourceStream());
+	
+						// Remove the markup from the cache. It will be reloaded
+						// next time it the markup is requested.
+						removeMarkup(lookupResult);
+						watcher.remove(lookupResult.getResourceStream());
+					}
+				});
+			}
+		}
+		
+		log.info("Loading markup from " + lookupResult.getResourceStream());
+		return loadMarkup(container, lookupResult);
+	}
+

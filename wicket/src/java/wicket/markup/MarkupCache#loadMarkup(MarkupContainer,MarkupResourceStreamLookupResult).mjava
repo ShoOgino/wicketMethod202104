@@ -3,46 +3,44 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param key
-	 *            Key under which markup should be cached
-	 * @param markupResourceStream
+	 * @param lookupResult
 	 *            The markup resource stream to load
 	 * @return The markup
 	 */
-	private final Markup loadMarkup(final MarkupContainer container, final CharSequence key,
-			final MarkupResourceStream markupResourceStream)
+	private final Markup loadMarkup(final MarkupContainer container, 
+			final MarkupResourceStreamLookupResult lookupResult)
 	{
 		try
 		{
 			// read and parse the markup
 			Markup markup = application.getMarkupSettings().getMarkupParserFactory()
-					.newMarkupParser().readAndParse(markupResourceStream);
+					.newMarkupParser().readAndParse(lookupResult.getMarkupResourceStream());
 
 			// Check for markup inheritance. If it contains <wicket:extend>
 			// the two markups get merged.
-			markup = checkForMarkupInheritance(container, key, markup);
+			markup = checkForMarkupInheritance(container, lookupResult, markup);
 
 			// add the markup to the cache
-			markupCache.put(key, markup);
+			markupCache.put(lookupResult.getCacheKey(), markup);
 
 			// trigger all listeners registered on the markup just loaded
-			afterLoadListeners.notifyListeners(markupResourceStream);
+			afterLoadListeners.notifyListeners(lookupResult.getResourceStream());
 
 			return markup;
 		}
 		catch (ResourceStreamNotFoundException e)
 		{
-			log.error("Unable to find markup from " + markupResourceStream, e);
+			log.error("Unable to find markup from " + lookupResult.getResourceStream(), e);
 		}
 		catch (IOException e)
 		{
-			log.error("Unable to read markup from " + markupResourceStream, e);
+			log.error("Unable to read markup from " + lookupResult.getResourceStream(), e);
 		}
 
 		synchronized (markupCache)
 		{
-			markupCache.remove(key);
-			afterLoadListeners.remove(markupResourceStream);
+			markupCache.remove(lookupResult.getCacheKey());
+			afterLoadListeners.remove(lookupResult.getResourceStream());
 		}
 
 		return Markup.NO_MARKUP;

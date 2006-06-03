@@ -41,25 +41,28 @@
 				if (markup == null)
 				{
 					// Ask the container to locate its associated markup
-					final IResourceStream resourceStream = container
+					final MarkupResourceStreamLookupResult lookupResult = container
 							.newMarkupResourceStream(containerClass);
 
 					// Found markup?
-					if (resourceStream != null)
+					if (lookupResult != null)
 					{
-						final MarkupResourceStream markupResource;
-						if (resourceStream instanceof MarkupResourceStream)
+						// TODO If lookupResult.getCacheKey() != null than caching is basically disabled. 
+						//    That was not the intend.
+						if (lookupResult.getCacheKey() == null)
 						{
-							markupResource = (MarkupResourceStream)resourceStream;
+							lookupResult.setCacheKey(key);
 						}
-						else
+						
+						final IResourceStream resourceStream = lookupResult.getResourceStream();
+						if (!(resourceStream instanceof MarkupResourceStream))
 						{
-							markupResource = new MarkupResourceStream(resourceStream,
-									new ContainerInfo(container), containerClass);
+							lookupResult.setResourceStream(new MarkupResourceStream(resourceStream,
+									new ContainerInfo(container), containerClass));
 						}
 
 						// load the markup and watch for changes
-						markup = loadMarkupAndWatchForChanges(container, key, markupResource);
+						markup = loadMarkupAndWatchForChanges(container, lookupResult);
 					}
 					else
 					{
