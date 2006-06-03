@@ -7,7 +7,7 @@
 	 *            The container to associate with
 	 * @return The markup stream or null
 	 */
-	private final IResourceStream newMarkupResourceStream(final Class stepClass,
+	private final MarkupResourceStreamLookupResult newMarkupResourceStream(final Class stepClass,
 			final Class containerClass)
 	{
 		if (!stepClass.equals(WizardStep.class))
@@ -17,7 +17,7 @@
 			final URL url = stepClass.getResource(name);
 			if (url != null)
 			{
-				return new UrlResourceStream(url);
+				return new MarkupResourceStreamLookupResult(new UrlResourceStream(url));
 			}
 			else
 			{
