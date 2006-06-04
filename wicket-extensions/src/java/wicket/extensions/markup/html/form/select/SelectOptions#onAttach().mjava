@@ -6,7 +6,7 @@
 			// populate this repeating view with SelectOption components
 			removeAll();
 
-			Object modelObject = getModelObject();
+			Collection<T> modelObject = getModelObject();
 
 			if (modelObject != null)
 			{
@@ -17,19 +17,16 @@
 				}
 
 				// iterator over model objects for SelectOption components
-				Iterator it = ((Collection)modelObject).iterator();
-
-				while (it.hasNext())
+				for (T value : modelObject)
 				{
 					// we need a container to represent a row in repeater
 					WebMarkupContainer row = new WebMarkupContainer(this, newChildId());
 					row.setRenderBodyOnly(true);
 
 					// we add our actual SelectOption component to the row
-					Object value = it.next();
 					String text = renderer.getDisplayValue(value);
-					IModel model = renderer.getModel(value);
-					new SimpleSelectOption(row, "option", model, text);
+					IModel<T> model = renderer.getModel(value);
+					new SimpleSelectOption<T>(row, "option", model, text);
 				}
 			}
 		}
