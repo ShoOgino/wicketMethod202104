@@ -77,17 +77,17 @@
 			}
 		});
 
-		Model sessionModel = new Model()
+		IModel<List<SessionData>> sessionModel = new Model<List<SessionData>>()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object getObject(Component component)
+			public List<SessionData> getObject(Component component)
 			{
 				return new ArrayList<SessionData>(getRequestLogger().getLiveSessions());
 			}
 		};
-		PageableListView listView = new PageableListView(this, "sessions", sessionModel, 50)
+		PageableListView<SessionData> listView = new PageableListView<SessionData>(this, "sessions", sessionModel, 50)
 		{
 			private static final long serialVersionUID = 1L;
 

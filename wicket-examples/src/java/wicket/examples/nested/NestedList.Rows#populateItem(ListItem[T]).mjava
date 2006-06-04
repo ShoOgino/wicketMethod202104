@@ -2,14 +2,14 @@
 		 * @see wicket.markup.html.list.ListView#populateItem(wicket.markup.html.list.ListItem)
 		 */
 		@Override
-		protected void populateItem(ListItem listItem)
+		protected void populateItem(ListItem<T> listItem)
 		{
-			Object modelObject = listItem.getModelObject();
+			T modelObject = listItem.getModelObject();
 
 			if (modelObject instanceof List)
 			{
 				// create a panel that renders the sub lis
-				NestedList nested = new NestedList<T>(listItem, "nested", (List)modelObject);
+				NestedList nested = new NestedList(listItem, "nested", (List)modelObject);
 				// if the current element is a list, we create a dummy row/
 				// label element
 				// as we have to confirm to our HTML definition, and set it's
@@ -26,7 +26,7 @@
 				// to confirm to our HTML definition, and set this panel's
 				// visibility
 				// property to false to avoid having the UL tag rendered
-				NestedList nested = new NestedList<T>(listItem, "nested", null);
+				NestedList nested = new NestedList(listItem, "nested", null);
 				nested.setVisible(false);
 				// add the row (with the LI element attached, and the label with
 				// the
