@@ -1,3 +1,6 @@
+		/**
+		 * @see wicket.behavior.AbstractAjaxBehavior#onComponentTag(wicket.markup.ComponentTag)
+		 */
 		@Override
 		protected void onComponentTag(ComponentTag tag)
 		{
@@ -8,12 +11,10 @@
 			final String cancelCall = "{wicketAjaxGet('" + getCallbackUrl()
 					+ "&save=false'); return false;}";
 
-
 			final String keypress = "var kc=wicketKeyCode(event); if (kc==27) " + cancelCall
 					+ " else if (kc!=13) { return true; } else " + saveCall;
 
 			tag.put("onblur", saveCall);
 			tag.put("onkeypress", keypress);
-
 		}
 

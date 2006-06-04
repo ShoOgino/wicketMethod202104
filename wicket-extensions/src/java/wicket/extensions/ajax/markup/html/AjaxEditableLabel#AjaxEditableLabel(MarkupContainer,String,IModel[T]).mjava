@@ -1,7 +1,7 @@
 	/**
 	 * @see wicket.Component#Component(MarkupContainer, String, IModel)
 	 */
-	public AjaxEditableLabel(MarkupContainer parent, final String id, IModel model)
+	public AjaxEditableLabel(MarkupContainer parent, final String id, IModel<T> model)
 	{
 		super(parent, id);
 		setOutputMarkupId(true);
@@ -10,10 +10,9 @@
 		label.setOutputMarkupId(true);
 		label.add(new LabeAjaxBehavior("onClick"));
 
-		editor = new TextField(this, "editor", model);
+		editor = new TextField<T>(this, "editor", model);
 		editor.setOutputMarkupId(true);
 		editor.setVisible(false);
 		editor.add(new EditorAjaxBehavior());
-
 	}
 
