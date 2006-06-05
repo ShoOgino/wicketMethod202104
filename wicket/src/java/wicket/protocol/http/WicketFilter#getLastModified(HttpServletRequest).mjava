@@ -1,11 +1,13 @@
 	long getLastModified(final HttpServletRequest servletRequest)
 	{
 		final String pathInfo = servletRequest.getRequestURI();
-		
+
 		int rootPathLength = getRootPath(servletRequest).length();
-		if (pathInfo.length() > rootPathLength && pathInfo.substring(rootPathLength).startsWith(RESOURCES_PATH_PREFIX))
+		if (pathInfo.length() > rootPathLength
+				&& pathInfo.substring(rootPathLength).startsWith(RESOURCES_PATH_PREFIX))
 		{
-			final String resourceReferenceKey = pathInfo.substring(rootPathLength + RESOURCES_PATH_PREFIX.length());
+			final String resourceReferenceKey = pathInfo.substring(rootPathLength
+					+ RESOURCES_PATH_PREFIX.length());
 
 			// Try to find shared resource
 			Resource resource = webApplication.getSharedResources().get(resourceReferenceKey);
