@@ -1,0 +1,21 @@
+	/* removed in 2.0 */
+	private static void scanJarFile(Class scope, Pattern pattern, boolean recurse,
+			final List resources, String packageRef, JarFile jf)
+	{
+		Enumeration enumeration = jf.entries();
+		while (enumeration.hasMoreElements())
+		{
+			JarEntry je = (JarEntry)enumeration.nextElement();
+			String name = je.getName();
+			if (name.startsWith(packageRef))
+			{
+				name = name.substring(packageRef.length() + 1);
+				if (pattern.matcher(name).matches() && (recurse || (name.indexOf('/') == -1)))
+				{
+					// we add the entry as a package resource
+					resources.add(get(scope, name, null, null));
+				}
+			}
+		}
+	}
+

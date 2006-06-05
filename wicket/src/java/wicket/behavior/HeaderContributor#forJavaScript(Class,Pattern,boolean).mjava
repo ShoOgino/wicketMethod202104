@@ -1,0 +1,34 @@
+	/**
+	 * Returns a new instance of {@link HeaderContributor} with a set of header
+	 * contributors that references java script files that match the pattern and
+	 * that live in a package and sub packages in case recurse is true.
+	 * 
+	 * @param scope
+	 *            The scope of the package resource (typically the class of the
+	 *            caller, or a class that lives in the package where the
+	 *            resource lives).
+	 * @param pattern
+	 *            The regexp pattern to match resources on
+	 * @param recurse
+	 *            whether to recurse into sub packages
+	 * @return the new header contributor instance
+	 * @deprecated Will be removed in 2.0; contribute resources one by one
+	 *             instead
+	 */
+	public static final HeaderContributor forJavaScript(final Class scope, final Pattern pattern,
+			boolean recurse)
+	{
+		PackageResource[] resources = PackageResource.get(scope, pattern, recurse);
+		HeaderContributor contributor = new HeaderContributor();
+		if (resources != null)
+		{
+			int len = resources.length;
+			for (int i = 0; i < len; i++)
+			{
+				contributor.addContributor(new JavaScriptReferenceHeaderContributor(scope,
+						resources[i].getPath()));
+			}
+		}
+		return contributor;
+	}
+
