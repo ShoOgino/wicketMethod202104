@@ -1,0 +1,24 @@
+	/**
+	 * Whether the provided absolute path is accepted.
+	 * 
+	 * @param path
+	 *            The absolute path, starting from the class root (packages are
+	 *            seperated with forward slashes instead of dots).
+	 * @return True if accepted, false otherwise.
+	 */
+	protected boolean acceptAbsolutePath(String path)
+	{
+		int ixExtension = path.lastIndexOf('.');
+		int len = path.length();
+		final String ext;
+		if (ixExtension <= 0 || ixExtension == len || (path.lastIndexOf('/') + 1) == ixExtension)
+		{
+			ext = null;
+		}
+		else
+		{
+			ext = path.substring(ixExtension + 1).toLowerCase();
+		}
+		return acceptExtension(ext);
+	}
+

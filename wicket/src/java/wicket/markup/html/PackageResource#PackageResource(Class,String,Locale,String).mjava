@@ -16,6 +16,15 @@
 	{
 		// Convert resource path to absolute path relative to base package
 		this.absolutePath = Packages.absolutePath(scope, path);
+
+		IPackageResourceGuard guard = Application.get().getResourceSettings()
+				.getPackageResourceGuard();
+		if (!guard.accept(scope, path))
+		{
+			throw new PackageResourceBlockedException("package resource " + absolutePath
+					+ " may not be accessed");
+		}
+
 		this.scope = scope;
 		this.path = path;
 		this.locale = locale;
