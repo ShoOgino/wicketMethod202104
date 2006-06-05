@@ -10,12 +10,24 @@
 	 *            The locale of the resource
 	 * @param style
 	 *            The style of the resource
+	 * @throws PackageResourceBlockedException
+	 *             when the target resource is not accepted by
+	 *             {@link IPackageResourceGuard the package resource guard}.
 	 */
 	private PackageResource(final Class scope, final String path, final Locale locale,
 			final String style)
 	{
 		// Convert resource path to absolute path relative to base package
 		this.absolutePath = Packages.absolutePath(scope, path);
+
+		IPackageResourceGuard guard = Application.get().getResourceSettings()
+				.getPackageResourceGuard();
+		if (!guard.accept(scope, path))
+		{
+			throw new PackageResourceBlockedException("package resource " + absolutePath
+					+ " may not be accessed");
+		}
+
 		this.scope = scope;
 		this.path = path;
 		this.locale = locale;
