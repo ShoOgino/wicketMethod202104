@@ -1,0 +1,31 @@
+	/**
+	 * Creates a new rating label, showing a message like 'Rated 5.4 from 53
+	 * votes'.
+	 * 
+	 * @param parent
+	 *            The parent
+	 * @param id
+	 *            the id of the label
+	 * @param rating
+	 *            the model containing the rating
+	 * @param nrOfVotes
+	 *            the model containing the number of votes (may be null)
+	 * @return the label component showing the message.
+	 */
+	protected Component newRatingLabel(MarkupContainer parent, String id, IModel<Integer> rating,
+			IModel<Integer> nrOfVotes)
+	{
+		IModel<String> model = null;
+		if (nrOfVotes == null)
+		{
+			Object[] parameters = new Object[] { rating };
+			model = new StringResourceModel("rating.simple", this, null, parameters);
+		}
+		else
+		{
+			Object[] parameters = new Object[] { rating, nrOfVotes };
+			model = new StringResourceModel("rating.complete", this, null, parameters);
+		}
+		return new Label(parent, id, model);
+	}
+

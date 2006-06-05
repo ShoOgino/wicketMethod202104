@@ -1,0 +1,41 @@
+		protected void populateItem(LoopItem item)
+		{
+			// Use an AjaxFallbackLink for rating to make voting work even
+			// without Ajax.
+			AjaxFallbackLink link = new AjaxFallbackLink(item, "link")
+			{
+				private static final long serialVersionUID = 1L;
+
+				public boolean isEnabled()
+				{
+					return !((Boolean)hasVoted.getObject(RatingPanel.this)).booleanValue();
+				}
+
+				public void onClick(AjaxRequestTarget target)
+				{
+					LoopItem item = (LoopItem)getParent();
+
+					// adjust the rating, and provide the target to the subclass
+					// of our rating component, so other components can also get
+					// updated in case of an AJAX event.
+
+					onRated(item.getIteration() + 1, target);
+
+					// if we process an AJAX event, update this panel
+					if (target != null)
+					{
+						target.addComponent(RatingPanel.this.get("rater"));
+					}
+				}
+			};
+
+			int iteration = item.getIteration();
+
+			// add the star image, which is either active (highlighted) or
+			// inactive (no star)
+			new WebMarkupContainer(link, "star").add(new SimpleAttributeModifier("src",
+					(onIsStarActive(iteration)
+							? getActiveStarUrl(iteration)
+							: getInactiveStarUrl(iteration))));
+		}
+
