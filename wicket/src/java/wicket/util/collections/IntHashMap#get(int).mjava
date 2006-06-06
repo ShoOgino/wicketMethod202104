@@ -12,7 +12,8 @@
 	 *         <tt>null</tt> if the map contains no mapping for this key.
 	 * @see #put(int, Object)
 	 */
-	public Object get(int key)
+	@SuppressWarnings("unchecked")
+	public T get(int key)
 	{
 		int i = indexFor(key, table.length);
 		Entry e = table[i];
@@ -20,11 +21,11 @@
 		{
 			if (e == null)
 			{
-				return e;
+				return null;
 			}
 			if (key == e.key)
 			{
-				return e.value;
+				return (T)e.value;
 			}
 			e = e.next;
 		}
