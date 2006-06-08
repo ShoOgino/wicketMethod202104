@@ -1,0 +1,10 @@
+	/**
+	 * @see wicket.session.ISessionStore#getSessionId(wicket.Request, boolean)
+	 */
+	public final String getSessionId(Request request, boolean create)
+	{
+		WebRequest webRequest = toWebRequest(request);
+		HttpSession httpSession = webRequest.getHttpServletRequest().getSession(create);
+		return (httpSession != null) ? httpSession.getId() : null;
+	}
+

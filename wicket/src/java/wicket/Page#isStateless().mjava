@@ -1,6 +1,9 @@
 	/**
-	 * @return Returns true if this page can be seen as stateless so it won't go
-	 *         into the session
+	 * Gets whether the page is stateless. A page is stateless when it doesn't
+	 * have any call backs (like {@link Link links}), and thus doesn't need to
+	 * be kept around for possible calls.
+	 * 
+	 * @return Whether to page is stateless
 	 */
 	@Override
 	public final boolean isStateless()
@@ -13,7 +16,7 @@
 				{
 					if (!component.isStateless())
 					{
-						return false;
+						return Boolean.FALSE;
 					}
 					return CONTINUE_TRAVERSAL;
 				}
@@ -24,7 +27,7 @@
 			}
 			else if (returnValue instanceof Boolean)
 			{
-				stateless = (Boolean)returnValue;
+				stateless =  (Boolean)returnValue;
 			}
 		}
 		return stateless;
