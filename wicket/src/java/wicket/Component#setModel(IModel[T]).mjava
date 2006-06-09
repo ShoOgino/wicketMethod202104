@@ -17,12 +17,25 @@
 		{
 			this.model.detach();
 		}
+		
+		IModel prevModel = this.model;
+		if(prevModel instanceof WrapModel)
+		{
+			prevModel = model.getNestedModel();
+		}
 
 		// Change model
-		if (this.model != model)
+		if (prevModel != model)
 		{
-			addStateChange(new ComponentModelChange(this.model));
-			this.model = model;
+			if(prevModel != null) addStateChange(new ComponentModelChange(prevModel));
+			if(model instanceof ICompoundModel)
+			{
+				this.model = new WrapModel<T>(model,true);
+			}
+			else
+			{
+				this.model = model;
+			}
 		}
 
 		modelChanged();
