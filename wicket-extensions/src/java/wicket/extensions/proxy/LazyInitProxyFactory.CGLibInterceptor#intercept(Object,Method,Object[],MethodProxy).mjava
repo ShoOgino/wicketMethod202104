@@ -1,0 +1,41 @@
+		/**
+		 * @see net.sf.cglib.proxy.MethodInterceptor#intercept(java.lang.Object,
+		 *      java.lang.reflect.Method, java.lang.Object[],
+		 *      net.sf.cglib.proxy.MethodProxy)
+		 */
+		public Object intercept(Object object, Method method, Object[] args,
+				MethodProxy proxy) throws Throwable
+		{
+			if (isFinalizeMethod(method))
+			{
+				// swallow finalize call
+				return null;
+			}
+			else if (isEqualsMethod(method))
+			{
+				return (equals(args[0])) ? Boolean.TRUE : Boolean.FALSE;
+			}
+			else if (isHashCodeMethod(method))
+			{
+				return new Integer(this.hashCode());
+			}
+			else if (isToStringMethod(method))
+			{
+				return toString();
+			}
+			else if (isWriteReplaceMethod(method))
+			{
+				return writeReplace();
+			}
+			else if (method.getDeclaringClass().equals(ILazyInitProxy.class))
+			{
+				return getObjectLocator();
+			}
+
+			if (target == null)
+			{
+				target = locator.locateProxyTarget();
+			}
+			return proxy.invoke(target, args);
+		}
+
