@@ -25,7 +25,6 @@
 		setId(id);
 		this.model = model;
 		
-		// If a compound model is explicitly set on this component
 		getApplication().notifyComponentInstantiationListeners(this);
 		if (id.startsWith(AUTO_COMPONENT_PREFIX))
 		{
@@ -33,6 +32,19 @@
 		}
 		else
 		{
+			try
+			{
+				MarkupStream markupStream = MarkupFragmentFinder.find(this);
+				ComponentTag tag = markupStream.getTag();
+				if(tag.hasAttributes())
+				{
+					markupAttributes = new CopyOnWriteValueMap(tag.getAttributes());
+				}
+			} 
+			catch(RuntimeException re)
+			{
+				throw new WicketRuntimeException("Couldn't find the markup of the component " + id + " in parent " + parent.getPageRelativePath());
+			}
 			parent.add(this);
 		}
 	}
