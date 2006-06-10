@@ -51,17 +51,16 @@
 				{
 					final CharSequence url = urlFor(IOnChangeListener.INTERFACE);
 
-					try
+					Form form = (Form)findParent(Form.class);
+					if (form != null)
 					{
-						Form form = getForm();
 						buffer.append(" onclick=\"").append(form.getJsForInterfaceUrl(url)).append(
 								";\"");
 					}
-					catch (WicketRuntimeException ex)
+					else
 					{
 						// NOTE: do not encode the url as that would give
-						// invalid
-						// JavaScript
+						// invalid JavaScript
 						buffer.append(" onclick=\"").append(url).append("&" + getInputName())
 								.append("=").append(id).append("';\"");
 					}
