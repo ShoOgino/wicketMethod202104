@@ -1,0 +1,31 @@
+	/**
+	 * Factory method for sortable header components. A sortable header
+	 * component must have id of <code>headerId</code> and conform to markup
+	 * specified in <code>HeadersToolbar.html</code>
+	 * 
+	 * @param parent
+	 *            parent container
+	 * @param headerId
+	 *            header component id
+	 * @param property
+	 *            propert this header represents
+	 * @param locator
+	 *            sort state locator
+	 * @return created header component
+	 */
+	protected WebMarkupContainer newSortableHeader(WebMarkupContainer parent, String headerId,
+			String property, ISortStateLocator locator)
+	{
+		return new OrderByBorder(parent, headerId, property, locator)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSortChanged()
+			{
+				getTable().setCurrentPage(0);
+			}
+		};
+
+	}
+

@@ -17,46 +17,46 @@
 	{
 		super(parent, id, table);
 
-		RepeatingView headers = new RepeatingView(this, "headers");
-		IColumn[] cols = table.getColumns();
-
-		for (IColumn column : cols)
+		new RefreshingView(this, "headers")
 		{
-			// TODO Post 1.2: General: Is this extra component really necessary?
-			// can we
-			// not simply use the repeater's body without the need for the id in
-			// the markup?
-			WebMarkupContainer item = new WebMarkupContainer(headers, headers.newChildId());
+			private static final long serialVersionUID = 1L;
 
-			WebMarkupContainer header = null;
-			if (column.isSortable())
+			protected Iterator getItemModels()
 			{
-				header = new OrderByBorder(item, "header", column.getSortProperty(), stateLocator)
+				return new ArrayIteratorAdapter(table.getColumns())
 				{
 
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onSortChanged()
+					protected IModel model(Object object)
 					{
-						table.setCurrentPage(0);
+						return new Model((IColumn)object);
 					}
 
-					@Override
-					protected void onLinkCreated(OrderByLink link)
-					{
-						HeadersToolbar.this.onLinkCreated(link);
-					}
 				};
+			}
+
+			protected void populateItem(Item item)
+			{
+				item.setRenderBodyOnly(true);
+
+
+				IColumn column = (IColumn)item.getModelObject();
+				WebMarkupContainer header = null;
+				if (column.isSortable())
+				{
+					header = newSortableHeader(item, "header", column.getSortProperty(),
+							stateLocator);
+				}
+				else
+				{
+					header = new WebMarkupContainer(item, "header");
+				}
+
+				//TODO General: ivaynberg: rename ICOlumn.getHeader() to newHeader()
+				column.getHeader(header, "label");
 
 			}
-			else
-			{
-				header = new WebMarkupContainer(item, "header");
-			}
-			item.setRenderBodyOnly(true);
-			column.getHeader(header, "label");
-		}
+
+		};
 
 	}
 

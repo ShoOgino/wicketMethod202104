@@ -1,0 +1,55 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param parent
+	 *            The parent of this component The parent of this component.
+	 * @param id
+	 *            component id
+	 * @param columns
+	 *            array of columns
+	 * @param dataProvider
+	 *            data provider
+	 * @param rowsPerPage
+	 *            number of rows per page
+	 */
+	public AjaxFallbackDefaultDataTable(MarkupContainer parent, final String id, final IColumn[] columns,
+			final SortableDataProvider dataProvider, int rowsPerPage)
+	{
+		super(parent, id, columns, dataProvider, rowsPerPage);
+
+		/*
+		 * TODO General: ivaynberg: this is rediculous, would be better to have
+		 * a onPopulateTopToolbars() callback
+		 */
+
+		addTopToolbar(new IToolbarFactory()
+		{
+
+			public AbstractToolbar newToolbar(WebMarkupContainer parent, String id, DataTable dataTable)
+			{
+				return new NavigationToolbar(parent, id, dataTable);
+			}
+
+		});
+
+		addTopToolbar(new IToolbarFactory()
+		{
+
+			public AbstractToolbar newToolbar(WebMarkupContainer parent, String id, DataTable dataTable)
+			{
+				return new AjaxFallbackHeadersToolbar(parent, id, dataTable, dataProvider);
+			}
+
+		});
+
+		addBottomToolbar(new IToolbarFactory()
+		{
+
+			public AbstractToolbar newToolbar(WebMarkupContainer parent, String id, DataTable dataTable)
+			{
+				return new NoRecordsToolbar(parent, id, dataTable);
+			}
+
+		});
+	}
+

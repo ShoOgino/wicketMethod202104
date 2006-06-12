@@ -1,0 +1,35 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param parent
+	 * @param id
+	 * @param property
+	 * @param stateLocator
+	 * @param cssProvider
+	 * @param decorator
+	 */
+	public AjaxFallbackOrderByLink(WebMarkupContainer parent, String id, String property,
+			ISortStateLocator stateLocator, ICssProvider cssProvider,
+			final IAjaxCallDecorator decorator)
+	{
+		super(parent, id, property, stateLocator, cssProvider);
+
+		add(new AjaxEventBehavior("onclick")
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onEvent(AjaxRequestTarget target)
+			{
+				onClick();
+				onAjaxClick(target);
+			}
+
+			protected IAjaxCallDecorator getAjaxCallDecorator()
+			{
+				return new CancelEventIfNoAjaxDecorator(decorator);
+			}
+
+		});
+
+	}
+
