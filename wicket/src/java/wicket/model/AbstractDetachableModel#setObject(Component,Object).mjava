@@ -4,6 +4,14 @@
 	public final void setObject(final Component component, final Object object)
 	{
 		attach();
-		onSetObject(component, object);
+		try
+		{
+			onSetObject(component, object);
+		}
+		catch (RuntimeException e)
+		{
+			throw new WicketRuntimeException("unable to set object " + object + ", model: " + this
+					+ ", called with component " + component, e);
+		}
 	}
 
