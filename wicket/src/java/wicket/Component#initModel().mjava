@@ -14,12 +14,12 @@
 			// Get model
 			IModel model = current.getModel();
 
-			if (model instanceof WrapModel)
+			if (model instanceof IWrapModel)
 			{
-				model = ((WrapModel)model).getNestedModel();
+				model = ((IWrapModel)model).getNestedModel();
 			}
 
-			if (model instanceof ICompoundModel)
+			if (model instanceof IInhertanceAware)
 			{
 				// we turn off versioning as we share the model with another
 				// component that is the owner of the model (that component
@@ -27,7 +27,7 @@
 				setVersioned(false);
 
 				// return the shared compound model
-				return new WrapModel<T>((ICompoundModel)model, false);
+				return ((IInhertanceAware)model).wrapOnInhertance(this);
 			}
 		}
 

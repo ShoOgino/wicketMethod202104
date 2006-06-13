@@ -19,7 +19,8 @@
 		}
 
 		IModel prevModel = this.model;
-		if (prevModel instanceof WrapModel)
+		// TODO really need such a check? Can we just store the wrapper in the state change?
+		if (prevModel instanceof IWrapModel)
 		{
 			prevModel = model.getNestedModel();
 		}
@@ -32,9 +33,9 @@
 				addStateChange(new ComponentModelChange(prevModel));
 			}
 
-			if (model instanceof ICompoundModel)
+			if (model instanceof IAssignmentAware)
 			{
-				this.model = new WrapModel<T>(model, true);
+				this.model = ((IAssignmentAware<T>)model).wrapOnAssignment(this);
 			}
 			else
 			{

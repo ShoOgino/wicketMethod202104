@@ -1,0 +1,24 @@
+	/**
+	 * @see IModel#detach()
+	 */
+	public final void detach()
+	{
+		if (attached)
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("detaching " + this + " for requestCycle " + RequestCycle.get());
+			}
+			attached = false;
+			onDetach();
+		}
+
+		IModel nestedModel = getNestedModel();
+		if (nestedModel != null)
+		{
+			// do detach the nested model because this one could be attached
+			// if the model is used not through this compound model
+			nestedModel.detach();
+		}
+	}
+

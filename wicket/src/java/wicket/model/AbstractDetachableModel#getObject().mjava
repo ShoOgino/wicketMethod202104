@@ -1,0 +1,16 @@
+	/**
+	 * @see wicket.model.IModel#getObject()
+	 */
+	public final T getObject()
+	{
+		attach();
+		try
+		{
+			return onGetObject();
+		}
+		catch (RuntimeException e)
+		{
+			throw new WicketRuntimeException("unable to get object, model: " + this, e);
+		}
+	}
+
