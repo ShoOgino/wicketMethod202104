@@ -1,16 +1,16 @@
-	/**
-	 * @see wicket.model.AbstractDetachableModel#onGetObject()
-	 */
-	@Override
-	public final List<FeedbackMessage> onGetObject(Component component)
+	public List<FeedbackMessage> getObject()
 	{
 		if (messages == null)
 		{
+			if (page == null)
+			{
+				throw new IllegalStateException(
+						"getObject() cannot be called on this model until it has been attached to a component");
+			}
 			// Get filtered messages from page where component lives
-			List<FeedbackMessage> pageMessages = component.getPage().getFeedbackMessages()
-					.messages(filter);
+			List<FeedbackMessage> pageMessages = page.getFeedbackMessages().messages(filter);
 
-			List<FeedbackMessage> sessionMessages = component.getSession().getFeedbackMessages()
+			List<FeedbackMessage> sessionMessages = page.getSession().getFeedbackMessages()
 					.messages(filter);
 
 			messages = new ArrayList<FeedbackMessage>(pageMessages.size() + sessionMessages.size());
