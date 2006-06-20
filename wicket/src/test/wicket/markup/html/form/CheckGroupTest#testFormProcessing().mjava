@@ -1,0 +1,89 @@
+	/**
+	 * test component form processing
+	 */
+	public void testFormProcessing()
+	{
+		
+		// THIS NEEDS TO BE REWRITTEN BASED ON 1_2 VERSION
+		
+		MockModelObject modelObject = new MockModelObject();
+		MockPage page = new MockPage();
+
+		// create component hierarchy
+
+		final Form form = new Form(page, "form", new CompoundPropertyModel(modelObject));
+
+		final CheckGroup group = new CheckGroup(form, "prop1");
+
+		final WebMarkupContainer container = new WebMarkupContainer(group, "container");
+
+
+		// setup some values we will use for testing as well as a test model
+		final String check1 = "check1-selection";
+		final String check2 = "check2-selection";
+
+
+		// test model constructors
+		List list = new ArrayList();
+		Model model = new Model((Serializable)list);
+
+		final CheckGroup group2 = new CheckGroup(group, "group2", model);
+		assertTrue(group2.getModelObject() == list);
+
+		final CheckGroup group3 = new CheckGroup(form, "group3", list);
+		assertTrue(group3.getModelObject() == list);
+
+
+		// set up necessary objects to emulate a form submission
+
+		RequestCycle cycle = application.createRequestCycle();
+
+
+		final Check choice1 = new Check(container, "check1", new Model(check1));
+		final Check choice2 = new Check(group, "prop2");
+
+		modelObject.setProp2(check2);
+
+		// test mock form submissions
+
+		modelObject.getProp1().add(check1);
+
+		form.onFormSubmitted();
+		assertTrue("running with nothing selected - model must be empty", modelObject.getProp1()
+				.size() == 0);
+
+		application.getServletRequest().setParameter(group.getInputName(), "container:check1");
+		form.onFormSubmitted();
+		assertTrue("running with choice1 selected - model must only contain value of check1",
+				modelObject.getProp1().size() == 1 && modelObject.getProp1().contains(check1));
+
+		application.getServletRequest().setParameter(group.getInputName(), "prop2");
+		form.onFormSubmitted();
+		assertTrue("running with choice2 selected - model must only contain value of check2",
+				modelObject.getProp1().size() == 1 && modelObject.getProp1().contains(check2));
+
+		// throw in some nulls into the request param to make sure they are
+		// ignored
+		application.getServletRequest().getParameterMap().put(group.getInputName(),
+				new String[] { null, "container:check1", null, "prop2" });
+		form.onFormSubmitted();
+		assertTrue(
+				"running with choice1 and choice2 selected - model must only contain values of check1 and check2",
+				modelObject.getProp1().size() == 2 && modelObject.getProp1().contains(check2)
+						&& modelObject.getProp1().contains(check1));
+
+		application.getServletRequest().getParameterMap().put(group.getInputName(),
+				new String[] { "some weird path to test error" });
+		try
+		{
+			form.onFormSubmitted();
+			fail("running with an invalid choice value in the request param, should fail");
+		}
+		catch (WicketRuntimeException e)
+		{
+
+		}
+
+
+	}
+
