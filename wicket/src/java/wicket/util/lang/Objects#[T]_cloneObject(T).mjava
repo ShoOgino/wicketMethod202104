@@ -5,9 +5,11 @@
 	 * @param object
 	 *            The object to clone
 	 * @return A deep copy of the object
+	 * @param <T>
+	 *            The type
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Serializable> T cloneObject(final T object)
+	public static <T> T cloneObject(final T object)
 	{
 		if (object == null)
 		{
@@ -23,16 +25,19 @@
 				ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(out
 						.toByteArray()))
 				{
-					// This overide is required to resolve classess inside in different
+					// This overide is required to resolve classess inside in
+					// different
 					// bundle, i.e.
-					// The classess can be resolved by OSGI classresolver implementation
+					// The classess can be resolved by OSGI classresolver
+					// implementation
 					@Override
 					protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException,
 							ClassNotFoundException
 					{
 						String className = desc.getName();
 						Application application = Application.get();
-						IApplicationSettings applicationSettings = application.getApplicationSettings();
+						IApplicationSettings applicationSettings = application
+								.getApplicationSettings();
 						IClassResolver classResolver = applicationSettings.getClassResolver();
 
 						Class candidate = null;
@@ -46,7 +51,7 @@
 						}
 						catch (WicketRuntimeException ex)
 						{
-							if(ex.getCause() instanceof ClassNotFoundException)
+							if (ex.getCause() instanceof ClassNotFoundException)
 							{
 								throw (ClassNotFoundException)ex.getCause();
 							}
@@ -54,7 +59,7 @@
 						return candidate;
 					}
 				};
-				return (T) ois.readObject();
+				return (T)ois.readObject();
 			}
 			catch (ClassNotFoundException e)
 			{

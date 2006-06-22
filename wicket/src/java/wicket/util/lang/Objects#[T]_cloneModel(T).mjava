@@ -7,9 +7,11 @@
 	 * @param object
 	 *            The object to clone
 	 * @return A deep copy of the object
+	 * @param <T>
+	 *            The type
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Serializable> T cloneModel(final T object)
+	public static <T> T cloneModel(final T object)
 	{
 		if (object == null)
 		{
@@ -25,7 +27,7 @@
 				oos.writeObject(object);
 				ObjectInputStream ois = new ReplaceObjectInputStream(new ByteArrayInputStream(out
 						.toByteArray()), replacedObjects);
-				return (T) ois.readObject();
+				return (T)ois.readObject();
 			}
 			catch (ClassNotFoundException e)
 			{
