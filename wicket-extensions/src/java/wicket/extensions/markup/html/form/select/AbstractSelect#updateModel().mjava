@@ -7,19 +7,7 @@
 		Object object = getModelObject();
 		boolean isModelCollection = object instanceof Collection;
 
-		/*
-		 * clear the model
-		 */
-		if (isModelCollection)
-		{
-			modelChanging();
-
-			((Collection)object).clear();
-		}
-		else
-		{
-			getModel().setObject(null);
-		}
+		clearModel();
 
 		/*
 		 * the input contains an array of full path of the selected option
@@ -35,13 +23,7 @@
 
 		if (paths != null && paths.length > 0)
 		{
-			if (!isModelCollection && paths.length > 1)
-			{
-				throw new WicketRuntimeException(
-						"The model of Select component ["
-								+ getPath()
-								+ "] is not of type java.util.Collection, but more then one SelectOption component has been selected. Either remove the multiple attribute from the select tag or make the model of the Select component a collection");
-			}
+			checkSelectedOptionsCount(paths.length);
 
 			for (String element : paths)
 			{
@@ -69,22 +51,11 @@
 										+ "] which does not point to an SelectOption component. Due to this the Select component cannot resolve the selected SelectOption component pointed to by the illegal value. A possible reason is that component hierarchy changed between rendering and form submission.");
 					}
 
-					// assign the value
-					if (isModelCollection)
-					{
-						((Collection)object).add(option.getModelObject());
-					}
-					else
-					{
-						setModelObject(option.getModelObject());
-					}
+					assignValue(option.getModelObject());
 				}
 			}
 		}
 
-		if (isModelCollection)
-		{
-			modelChanged();
-		}
+		finishModelUpdate();
 	}
 
