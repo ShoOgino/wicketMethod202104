@@ -6,7 +6,8 @@
 	 *            The object to clone
 	 * @return A deep copy of the object
 	 */
-	public static Object cloneObject(final Object object)
+	@SuppressWarnings("unchecked")
+	public static <T extends Serializable> T cloneObject(final T object)
 	{
 		if (object == null)
 		{
@@ -53,7 +54,7 @@
 						return candidate;
 					}
 				};
-				return ois.readObject();
+				return (T) ois.readObject();
 			}
 			catch (ClassNotFoundException e)
 			{
