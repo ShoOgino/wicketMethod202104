@@ -1,0 +1,23 @@
+	/**
+	 * @see wicket.session.ISessionStore#removeAttribute(Request,java.lang.String)
+	 */
+	public void removeAttribute(Request request, String name)
+	{
+		WicketPortletRequest webRequest = toPortletRequest(request);
+		PortletSession httpSession = getPortletSession(webRequest);
+		if (httpSession != null)
+		{
+			String attributeName = getSessionAttributePrefix(webRequest) + name;
+			RequestLogger logger = application.getRequestLogger();
+			if (logger != null)
+			{
+				Object value = httpSession.getAttribute(attributeName);
+				if (value != null)
+				{
+					logger.objectRemoved(value);
+				}
+			}
+			httpSession.removeAttribute(attributeName);
+		}
+	}
+

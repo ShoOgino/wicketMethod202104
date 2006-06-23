@@ -1,0 +1,45 @@
+	/**
+	 * Looks for a given pathname along this path
+	 * 
+	 * @param pathname
+	 *            The filename with possible path
+	 * @return The file located on the path
+	 */
+	public URL find(final String pathname)
+	{
+		for (final Iterator iterator = folders.iterator(); iterator.hasNext();)
+		{
+			Folder folder = (Folder)iterator.next();
+			File file = new File(folder, pathname);
+			if (file.exists())
+			{
+				try
+				{
+					return file.toURI().toURL();
+				}
+				catch (MalformedURLException ex)
+				{
+					// ignore
+				}
+			}
+		}
+		for (final Iterator iterator = webappPaths.iterator(); iterator.hasNext();)
+		{
+			final String path = (String)iterator.next();
+			try
+			{
+				final URL file = portletContext.getResource(path + pathname);
+				if (file != null)
+				{
+					return file;
+				}
+			}
+			catch (Exception ex)
+			{
+				// ignore, file couldn't be found
+			}
+		}
+
+		return null;
+	}
+

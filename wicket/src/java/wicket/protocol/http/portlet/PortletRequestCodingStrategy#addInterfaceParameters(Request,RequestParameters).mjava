@@ -1,0 +1,40 @@
+	/**
+	 * Adds page related parameters (path and pagemap and optionally version and
+	 * interface).
+	 * 
+	 * If you override this method to behave different then also
+	 * {@link #encode(RequestCycle, IListenerInterfaceRequestTarget)} should be
+	 * overridden to by in sync with that behaviour.
+	 * 
+	 * @param request
+	 *            the incoming request
+	 * @param parameters
+	 *            the parameters object to set the found values on
+	 */
+	protected void addInterfaceParameters(final Request request, final RequestParameters parameters)
+	{
+		final String requestString = request.getParameter(INTERFACE_PARAMETER_NAME);
+		if (requestString != null)
+		{
+
+			// Set pagemap name
+			final String pageMapName = request.getParameter(PAGEMAP);
+			parameters.setPageMapName(pageMapName!=null && pageMapName.length()>0				
+					? PageMap.DEFAULT_NAME
+							: pageMapName);
+
+			final String interfaceName = request.getParameter(INTERFACE_PARAMETER_NAME);
+			parameters.setInterfaceName(interfaceName!=null && interfaceName.length() != 0
+					? interfaceName
+							: IRedirectListener.INTERFACE.getName());
+
+			final String versionNumberString = request.getParameter(VERSION_PARAMETER_NAME);
+			final int versionNumber = Strings.isEmpty(versionNumberString) ? 0 : Integer
+					.parseInt(versionNumberString);
+			parameters.setVersionNumber(versionNumber);
+
+			final String componentPath = request.getParameter(COMPONENT_PATH_PARAMETER_NAME);
+			parameters.setComponentPath(componentPath);
+		}
+	}
+

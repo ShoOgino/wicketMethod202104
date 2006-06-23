@@ -1,0 +1,43 @@
+	/**
+	 * Encode the given request target and one of the delegation methods will be
+	 * called. In case you are using custom targets that are not part of the
+	 * default target hierarchy, you need to override
+	 * {@link #doEncode(RequestCycle, IRequestTarget)}, which will be called
+	 * after the defaults have been tried. When that doesn't provide a url
+	 * either, and exception will be thrown saying that encoding could not be
+	 * done.
+	 * 
+	 * @see wicket.request.IRequestCodingStrategy#encode(wicket.RequestCycle,
+	 *      wicket.IRequestTarget)
+	 */
+	public final CharSequence encode(final RequestCycle requestCycle,
+			final IRequestTarget requestTarget)
+	{
+		if (requestTarget instanceof IBookmarkablePageRequestTarget)
+		{
+			return encodeRequest(requestCycle, (IBookmarkablePageRequestTarget)requestTarget);
+		}
+		else if (requestTarget instanceof ISharedResourceRequestTarget)
+		{
+			return encodeRequest(requestCycle, (ISharedResourceRequestTarget)requestTarget);
+		}
+		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
+		{
+			return encodeRequest(requestCycle, (IListenerInterfaceRequestTarget)requestTarget);
+		}
+		else if (requestTarget instanceof IPageRequestTarget)
+		{
+			return encodeRequest(requestCycle, (IPageRequestTarget)requestTarget);
+		}
+
+		// fallthough for non-default request targets
+		String url = doEncode(requestCycle, requestTarget);
+		if (url != null)
+		{
+			return url;
+		}
+
+		// this method was not able to produce a url; throw an exception
+		throw new WicketRuntimeException("unable to encode " + requestTarget);
+	}
+
