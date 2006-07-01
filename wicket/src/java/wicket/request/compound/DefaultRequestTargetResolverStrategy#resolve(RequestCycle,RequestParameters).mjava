@@ -14,16 +14,17 @@
 			return mounted;
 		}
 
-		// See whether this request points to a rendered page
 		final String path = requestParameters.getPath();
-		if (requestParameters.getComponentPath() != null)
-		{
-			return resolveRenderedPage(requestCycle, requestParameters);
-		}
+		
 		// see whether this request points to a bookmarkable page
-		else if (requestParameters.getBookmarkablePageClass() != null)
+		if (requestParameters.getBookmarkablePageClass() != null)
 		{
 			return resolveBookmarkablePage(requestCycle, requestParameters);
+		}		
+		// See whether this request points to a rendered page		
+		else if (requestParameters.getComponentPath() != null)
+		{
+			return resolveRenderedPage(requestCycle, requestParameters);
 		}
 		// see whether this request points to a shared resource
 		else if (requestParameters.getResourceKey() != null)
