@@ -23,7 +23,10 @@
 			{
 				public void onChange()
 				{
-					log.info("Remove markup from cache: " + markupResourceStream);
+					if (log.isDebugEnabled())
+					{
+						log.debug("Remove markup from cache: " + markupResourceStream);
+					}
 
 					// Remove the markup from the cache. It will be reloaded
 					// next time it the markup is requested.
@@ -33,7 +36,10 @@
 			});
 		}
 
-		log.info("Loading markup from " + markupResourceStream);
+		if (log.isDebugEnabled())
+		{
+			log.debug("Loading markup from " + markupResourceStream);
+		}
 		return loadMarkup(container, key, markupResourceStream);
 	}
 
