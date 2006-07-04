@@ -17,7 +17,10 @@
 			final URL url = stepClass.getResource(name);
 			if (url != null)
 			{
-				return new MarkupResourceStreamLookupResult(new UrlResourceStream(url));
+				MarkupResourceStreamLookupResult result = new MarkupResourceStreamLookupResult(
+						new UrlResourceStream(url));
+				result.setCacheKey(url.toString());
+				return result;
 			}
 			else
 			{
