@@ -34,9 +34,10 @@
 			while (it.hasNext())
 			{
 				final Map.Entry<String, Component> entry = it.next();
-				final Component component = entry.getValue();
+				final Component component = entry.getValue();				
 				final String markupId = entry.getKey();
-				respondComponent(response, markupId, component);
+				respondComponent(response, markupId, component);				
+				respondHeaderContribution(response, component);
 			}
 
 			Iterator<String> it2 = javascripts.iterator();
@@ -45,8 +46,8 @@
 				String js = it2.next();
 				respondInvocation(response, js);
 			}
-			response.write("</ajax-response>");
-
+			response.write("</ajax-response>");			
+			
 			// restore component use check
 			app.getDebugSettings().setComponentUseCheck(oldUseCheck);
 		}
