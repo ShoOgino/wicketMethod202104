@@ -1,0 +1,74 @@
+	private void executeHeaderTest(final Class<? extends Component> componentClass,
+			String expectedFile) throws IOException
+	{
+		final MockPageWithLinkAndComponent page = new MockPageWithLinkAndComponent();
+
+		new WebComponent(page, MockPageWithLinkAndComponent.COMPONENT_ID).setOutputMarkupId(true);
+
+
+		new AjaxLink(page, MockPageWithLinkAndComponent.LINK_ID)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				// Create an instance of the component
+				try
+				{
+					Constructor<? extends Component> con = componentClass
+							.getConstructor(new Class[] { MarkupContainer.class, String.class });
+
+					Component comp = con.newInstance(new Object[] { page,
+							MockPageWithLinkAndComponent.COMPONENT_ID });
+
+					comp.setOutputMarkupId(true);
+
+					target.addComponent(comp);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		};
+
+		application.startPage(new ITestPageSource()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public Page getTestPage()
+			{
+				return page;
+			}
+		});
+
+		application.clickLink(MockPageWithLinkAndComponent.LINK_ID);
+
+		String document = application.getServletResponse().getDocument();
+
+		Pattern pat = Pattern.compile(".*<header-contribution>(.*?)</header-contribution>.*",
+				Pattern.DOTALL);
+		Matcher mat = pat.matcher(document);
+
+		String headerContribution = null;
+
+		if (mat.matches())
+		{
+			headerContribution = mat.group(1);
+		}
+
+		// If the filename is empty we use it to say that the headerContribution
+		// should be empty.
+		// This means that it doesn't exist at all
+		if (expectedFile == null)
+		{
+			assertNull("There was a header contribution on the response: <" + headerContribution
+					+ ">", headerContribution);
+		}
+		else
+		{
+			assertTrue(DiffUtil.validatePage(headerContribution, this.getClass(), expectedFile));
+		}
+	}
+
