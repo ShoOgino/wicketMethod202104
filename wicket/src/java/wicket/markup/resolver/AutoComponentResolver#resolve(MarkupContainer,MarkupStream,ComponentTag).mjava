@@ -13,14 +13,13 @@
 			final ComponentTag tag)
 	{
 		// It must be <wicket:...>
-		if (tag instanceof WicketTag)
+		if (tag.isWicketTag())
 		{
 			// It must be <wicket:component...>
-			final WicketTag wicketTag = (WicketTag)tag;
-			if (wicketTag.isComponentTag())
+			if (tag.isComponentTag())
 			{
 				// Create and initialize the component
-				final Component component = createComponent(container, wicketTag);
+				final Component component = createComponent(container, tag);
 				if (component != null)
 				{
 					// 1. push the current component onto the stack

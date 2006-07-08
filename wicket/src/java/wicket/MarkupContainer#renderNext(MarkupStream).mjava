@@ -17,6 +17,12 @@
 
 			// Get component id
 			final String id = tag.getId();
+			if (id == null)
+			{
+				throw new WicketRuntimeException(
+						"Prgamming error: tag id must not be null: " 
+						+ tag.toString());
+			}
 
 			// Get the component for the id from the given container
 			final Component<?> component = get(id);
@@ -55,9 +61,9 @@
 					}	
 				}
 
-				if (tag instanceof WicketTag)
+				if (tag.isWicketTag())
 				{
-					if (((WicketTag)tag).isChildTag())
+					if (tag.isChildTag())
 					{
 						markupStream.throwMarkupException("Found " + tag.toString()
 								+ " but no <wicket:extend>");

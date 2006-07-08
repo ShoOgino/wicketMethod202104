@@ -25,13 +25,7 @@
 			final ComponentTag tag)
 	{
 		// Determine if tag is a <wicket:body> tag
-		if (!(tag instanceof WicketTag))
-		{
-			return false;
-		}
-
-		final WicketTag wtag = (WicketTag)tag;
-		if (!wtag.isBodyTag())
+		if (!tag.isWicketBodyTag())
 		{
 			return false;
 		}
@@ -48,7 +42,7 @@
 
 		try
 		{
-			renderBodyComponent(markupStream, wtag);
+			renderBodyComponent(markupStream, tag);
 		}
 		finally
 		{

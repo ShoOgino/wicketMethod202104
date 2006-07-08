@@ -4,18 +4,12 @@
 	 */
 	private void insertHeadTag()
 	{
-		final XmlTag headOpenTag = new XmlTag();
-		headOpenTag.setName("head");
-		headOpenTag.setType(XmlTag.Type.OPEN);
-		final ComponentTag openTag = new ComponentTag(headOpenTag);
+		// Note: only the open-tag must be a AutoComponentTag
+		final ComponentTag openTag = new ComponentTag(HEAD, XmlTag.Type.OPEN);
 		openTag.setId(HEADER_ID);
-
-		final XmlTag headCloseTag = new XmlTag();
-		headCloseTag.setName(headOpenTag.getName());
-		headCloseTag.setType(XmlTag.Type.CLOSE);
-		final ComponentTag closeTag = new ComponentTag(headCloseTag);
+		
+		final ComponentTag closeTag = new ComponentTag(HEAD, XmlTag.Type.CLOSE);
 		closeTag.setOpenTag(openTag);
-		closeTag.setId(HEADER_ID);
 
 		// insert the tags into the markup stream
 		tagList.add(openTag);
