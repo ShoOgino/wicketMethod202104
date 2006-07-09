@@ -1,16 +1,24 @@
-	public HeadForceTagIdHandler(IMarkupFilter parent, Class markupFileClass) 
+	/**
+	 * Construct.
+	 * 
+	 * @param parent
+	 * @param markupFileClass Used to generated the a common prefix for the id
+	 */
+	public HeadForceTagIdHandler(final IMarkupFilter parent, final Class markupFileClass)
 	{
 		super(parent);
-		
+
 		// generate the prefix from class name
-		AppendingStringBuffer buffer = new AppendingStringBuffer(markupFileClass.getName());
-		for (int i = 0; i < buffer.getValue().length; ++i) 
+		final AppendingStringBuffer buffer = new AppendingStringBuffer(markupFileClass.getName());
+		for (int i = 0; i < buffer.getValue().length; ++i)
 		{
-			if (Character.isLetterOrDigit(buffer.getValue()[i]) == false) 
+			if (Character.isLetterOrDigit(buffer.getValue()[i]) == false)
 			{
 				buffer.getValue()[i] = '-';
 			}
 		}
-		headElementIdPrefix = buffer.toString();
+
+		buffer.append("-");
+		this.headElementIdPrefix = buffer.toString();
 	}
 
