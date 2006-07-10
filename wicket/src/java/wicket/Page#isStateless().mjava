@@ -1,23 +1,39 @@
 	/**
-	 * Gets whether the page is stateless. A page is stateless when it doesn't
-	 * have any call backs (like {@link Link links}), and thus doesn't need to
-	 * be kept around for possible calls.
+	 * Gets whether the page is stateless. Components on stateless page must not render
+	 * any statefull urls, and components on statefull page must not render any stateless urls.
+	 * Statefull urls are urls, which refer to a certain (current) page instance.   
 	 * 
 	 * @return Whether to page is stateless
 	 */
-	@Override
 	public final boolean isStateless()
 	{
+		if (getStatelessHint() == false || isBookmarkable() == false)
+		{
+			stateless = false;
+		}
+		
 		if (stateless == null)
 		{
 			Object returnValue = visitChildren(Component.class, new IVisitor()
 			{
-				public Object component(Component component)
+				public Object component(Component<?> component)
 				{
-					if (!component.isStateless())
+					if (!component.getStatelessHint())
 					{
 						return Boolean.FALSE;
 					}
+					
+					final Iterator<IBehavior> behaviors = component.getBehaviors().iterator();
+					
+					while (behaviors.hasNext())
+					{
+						IBehavior behavior = behaviors.next();
+						if (!behavior.getStatelessHint())
+						{
+							return false;
+						}
+					}
+
 					return CONTINUE_TRAVERSAL;
 				}
 			});
