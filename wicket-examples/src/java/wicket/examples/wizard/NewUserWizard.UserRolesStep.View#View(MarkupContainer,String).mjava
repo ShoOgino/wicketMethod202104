@@ -1,0 +1,38 @@
+			/**
+			 * Construct.
+			 * 
+			 * @param parent
+			 * @param id
+			 */
+			public View(MarkupContainer parent, String id)
+			{
+				super(parent, id);
+				final ListMultipleChoice rolesChoiceField = new ListMultipleChoice<String>(this,
+						"user.roles", allRoles);
+				final TextField<String> rolesSetNameField = new TextField<String>(this,
+						"user.rolesSetName");
+				Form form = findParent(Form.class);
+				form.add(new AbstractFormValidator()
+				{
+					public FormComponent[] getDependentFormComponents()
+					{
+						// name and roles don't have anything to validate,
+						// so might as well just skip them here
+						return null;
+					}
+
+					public void validate(Form form)
+					{
+						String rolesInput = rolesChoiceField.getInput();
+						if (rolesInput != null && (!"".equals(rolesInput)))
+						{
+							if ("".equals(rolesSetNameField.getInput()))
+							{
+								rolesSetNameField.error(Collections
+										.singletonList("error.noSetNameForRoles"), null);
+							}
+						}
+					}
+				});
+			}
+
