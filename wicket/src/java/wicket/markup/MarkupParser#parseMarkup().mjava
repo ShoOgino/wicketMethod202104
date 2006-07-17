@@ -29,22 +29,6 @@
 					add = ((tag.getOpenTag() != null) && (tag.getOpenTag().getId() != null));
 				}
 
-				// Determine wicket namespace: <html
-				// xmlns:wicket="http://wicket.sourceforge.net">
-				RawMarkup replaceTag = null;
-				if (tag.isOpen() && "html".equals(tag.getName().toLowerCase()))
-				{
-					// if add already true, do not make it false
-					add |= determineWicketNamespace(tag);
-
-					// If add and tag has no wicket:id, than
-					if ((add == true) && (tag.getId() == null))
-					{
-						// Replace the current tag
-						replaceTag = new RawMarkup(tag.toCharSequence());
-					}
-				}
-
 				// Add tag to list?
 				if (add || (autoAddList.size() > 0) || tag.isModified())
 				{
@@ -87,14 +71,7 @@
 					// as removed
 					if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
 					{
-						if (replaceTag != null)
-						{
-							this.markup.addMarkupElement(replaceTag);
-						}
-						else
-						{
-							this.markup.addMarkupElement(tag);
-						}
+						this.markup.addMarkupElement(tag);
 					}
 
 					xmlParser.setPositionMarker();

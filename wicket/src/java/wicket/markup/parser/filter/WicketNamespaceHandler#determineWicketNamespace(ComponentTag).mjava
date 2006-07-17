@@ -3,12 +3,10 @@
 	 * xmlns:wicket="http://wicket.sourceforge.net"
 	 * 
 	 * @param tag
-	 * @return true, if tag has been modified
+	 * @return Wicket namespace
 	 */
-	private boolean determineWicketNamespace(final ComponentTag tag)
+	private String determineWicketNamespace(final ComponentTag tag)
 	{
-		String attrValue = null;
-
 		// For all tags attributes
 		final ValueMap attributes = tag.getAttributes();
 		final Iterator it = attributes.entrySet().iterator();
@@ -29,21 +27,21 @@
 					// Set the Wicket namespace for wicket tags (e.g.
 					// <eicket:panel>) and attributes (e.g. wicket:id)
 					String namespace = attributeName.substring(XMLNS.length());
-					markup.setWicketNamespace(namespace);
-					attrValue = attributeName;
+					
+					// Note: <html ...> tags usually have no wicket:id and hence are treated
+					// as raw markup and removing xmlns:wicket from markup does not have any
+					// effect. The solution approach does not work.
+					if (Application.get().getMarkupSettings().getStripWicketTags())
+					{
+						attributes.remove(attributeName);
+						tag.setModified(true);
+					}
+					
+					return namespace;
 				}
 			}
 		}
 
-		// Note: <html ...> tags usually have no wicket:id and hence are treated
-		// as raw markup and removing xmlns:wicket from markup does not have any
-		// effect. The solution approach does not work.
-		if ((attrValue != null) && this.markupSettings.getStripWicketTags())
-		{
-			attributes.remove(attrValue);
-			return true;
-		}
-
-		return false;
+		return null;
 	}
 
