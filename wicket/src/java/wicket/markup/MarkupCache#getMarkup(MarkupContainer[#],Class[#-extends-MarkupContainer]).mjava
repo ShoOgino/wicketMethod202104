@@ -10,7 +10,7 @@
 	 *            container as well (markup inheritance)
 	 * @return Markup resource
 	 */
-	private final Markup getMarkup(final MarkupContainer<?> container,
+	private final IMarkup getMarkup(final MarkupContainer<?> container,
 			final Class<? extends MarkupContainer> clazz)
 	{
 		Class<? extends MarkupContainer> containerClass = clazz;
@@ -28,7 +28,7 @@
 
 		// Look up markup tag list by class, locale, style and markup type
 		final CharSequence key = markupKey(container, clazz);
-		Markup markup = markupCache.get(key);
+		IMarkup markup = markupCache.get(key);
 
 		// If no markup in the cache
 		if (markup == null)
@@ -69,7 +69,7 @@
 						// flag markup as non-existent (as opposed to null,
 						// which might mean that it's simply not loaded into
 						// the cache)
-						markup = Markup.NO_MARKUP;
+						markup = IMarkup.NO_MARKUP;
 
 						// Save any markup list (or absence of one) for next
 						// time

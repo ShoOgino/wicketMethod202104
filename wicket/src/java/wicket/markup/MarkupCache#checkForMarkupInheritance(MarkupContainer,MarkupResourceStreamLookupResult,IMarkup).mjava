@@ -13,8 +13,8 @@
 	 * @return A markup object with the the base markup elements resolved.
 	 */
 	@SuppressWarnings("unchecked")
-	private Markup checkForMarkupInheritance(final MarkupContainer container,
-			final MarkupResourceStreamLookupResult lookupResult, final Markup markup)
+	private IMarkup checkForMarkupInheritance(final MarkupContainer container,
+			final MarkupResourceStreamLookupResult lookupResult, final IMarkup markup)
 	{
 		// Check if markup contains <wicket:extend> which tells us that
 		// we need to read the inherited markup as well.
@@ -27,10 +27,10 @@
 
 		Class<? extends MarkupContainer> markupClass = markup.getResource().getMarkupClass();
 		// get the base markup
-		final Markup baseMarkup = getMarkup(container,
+		final IMarkup baseMarkup = getMarkup(container,
 				(Class<? extends MarkupContainer>)markupClass.getSuperclass());
 
-		if (baseMarkup == Markup.NO_MARKUP)
+		if (baseMarkup == IMarkup.NO_MARKUP)
 		{
 			throw new MarkupNotFoundException(
 					"Parent markup of inherited markup not found. Component class: "
@@ -76,7 +76,7 @@
 		});
 
 		// Merge base and derived markup
-		Markup mergedMarkup = new MergedMarkup(markup, baseMarkup, extendIndex);
+		IMarkup mergedMarkup = new MergedMarkup(markup, baseMarkup, extendIndex);
 		return mergedMarkup;
 	}
 

@@ -7,13 +7,13 @@
 	 *            The markup resource stream to load
 	 * @return The markup
 	 */
-	private final Markup loadMarkup(final MarkupContainer container, 
+	private final IMarkup loadMarkup(final MarkupContainer container, 
 			final MarkupResourceStreamLookupResult lookupResult)
 	{
 		try
 		{
 			// read and parse the markup
-			Markup markup = application.getMarkupSettings().getMarkupParserFactory()
+			IMarkup markup = application.getMarkupSettings().getMarkupParserFactory()
 					.newMarkupParser().readAndParse(lookupResult.getMarkupResourceStream());
 
 			// Check for markup inheritance. If it contains <wicket:extend>
@@ -43,6 +43,6 @@
 			afterLoadListeners.remove(lookupResult.getResourceStream());
 		}
 
-		return Markup.NO_MARKUP;
+		return IMarkup.NO_MARKUP;
 	}
 

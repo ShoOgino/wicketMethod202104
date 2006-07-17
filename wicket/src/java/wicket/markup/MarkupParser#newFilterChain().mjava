@@ -2,12 +2,9 @@
 	 * Create a new markup filter chain and initialize with all default filters
 	 * required.
 	 * 
-	 * @param tagList
-	 *            A list which the handler may add new MarkupElement to which
-	 *            were not found in the markup file.
 	 * @return a preconfigured markup filter chain
 	 */
-	private final IMarkupFilter newFilterChain(final List<ComponentTag> tagList)
+	private final IMarkupFilter newFilterChain()
 	{
 		// Chain together all the different markup filters and configure them
 		IMarkupFilter filter = new WicketTagIdentifier(markup, xmlParser);
@@ -35,7 +32,7 @@
 				// Pages require additional handlers
 				if (Page.class.isAssignableFrom(containerInfo.getContainerClass()))
 				{
-					filter = new HtmlHeaderSectionHandler(tagList, filter);
+					filter = new HtmlHeaderSectionHandler(this.markup, filter);
 				}
 				
 				filter = new HeadForceTagIdHandler(filter, containerInfo.getContainerClass());

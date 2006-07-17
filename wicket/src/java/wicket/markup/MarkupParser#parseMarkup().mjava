@@ -4,12 +4,8 @@
 	 */
 	private void parseMarkup()
 	{
-		// Handlers may add MarkupElements which were not found in the markup
-		// file.
-		final List<ComponentTag> autoAddList = new ArrayList<ComponentTag>();
-
 		// Initialize the markup filter chain
-		this.markupFilterChain = newFilterChain(autoAddList);
+		this.markupFilterChain = newFilterChain();
 
 		// Allow subclasses to extend the filter chain
 		initFilterChain();
@@ -20,6 +16,8 @@
 
 		try
 		{
+			int size = this.markup.size();
+			
 			// Loop through tags
 			for (ComponentTag tag; null != (tag = (ComponentTag)markupFilterChain.nextTag());)
 			{
@@ -30,7 +28,7 @@
 				}
 
 				// Add tag to list?
-				if (add || (autoAddList.size() > 0) || tag.isModified())
+				if (add || tag.isModified())
 				{
 					final CharSequence text = xmlParser.getInputFromPositionMarker(tag.getPos());
 
@@ -46,23 +44,18 @@
 
 						if (compressWhitespace)
 						{
-							rawMarkup = rawMarkup.replaceAll("[ \\t]+", " ");
-							rawMarkup = rawMarkup.replaceAll("( ?[\\r\\n] ?)+", "\n");
+							rawMarkup = compressWhitespace(rawMarkup);
 						}
 
-						this.markup.addMarkupElement(new RawMarkup(rawMarkup));
+						// Make sure you add it at the correct location.
+						// IMarkupFilters might have added elements as well.
+						this.markup.addMarkupElement(size, new RawMarkup(rawMarkup));
 					}
 
-					if ((add == false) && (autoAddList.size() > 0))
+					if (add == false)
 					{
 						xmlParser.setPositionMarker(tag.getPos());
 					}
-
-					for (MarkupElement element : autoAddList)
-					{
-						this.markup.addMarkupElement(element);
-					}
-					autoAddList.clear();
 				}
 
 				if (add)
@@ -81,6 +74,8 @@
 					this.markup.addMarkupElement(new RawMarkup(tag.toCharSequence()));
 					xmlParser.setPositionMarker();
 				}
+				
+				size = this.markup.size();
 			}
 		}
 		catch (ParseException ex)
