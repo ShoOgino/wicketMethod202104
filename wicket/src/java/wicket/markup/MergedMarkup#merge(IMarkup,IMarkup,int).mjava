@@ -49,7 +49,7 @@
 					{
 						// <wicket:child /> => <wicket:child>...</wicket:child>
 						childTag = tag;
-						ComponentTag childOpenTag = tag.mutable();
+						final ComponentTag childOpenTag = tag.mutable();
 						childOpenTag.getXmlTag().setType(XmlTag.Type.OPEN);
 						childOpenTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
 						childOpenTag.setWicketTag(true);
@@ -125,7 +125,7 @@
 				{
 					if (onLoad != null)
 					{
-						ComponentTag mutableTag = tag.mutable();
+						final ComponentTag mutableTag = tag.mutable();
 						mutableTag.getAttributes().put("onload", onLoad);
 						element = mutableTag;
 					}
@@ -133,7 +133,7 @@
 				else if (onLoad != null)
 				{
 					onLoadBase += onLoad;
-					ComponentTag mutableTag = tag.mutable();
+					final ComponentTag mutableTag = tag.mutable();
 					mutableTag.getAttributes().put("onload", onLoadBase);
 					element = mutableTag;
 				}
@@ -153,12 +153,12 @@
 		// <wicket:extend> until </wicket:extend> to the list
 		for (; extendIndex < markup.size(); extendIndex++)
 		{
-			MarkupElement element = markup.get(extendIndex);
+			final MarkupElement element = markup.get(extendIndex);
 			addMarkupElement(element);
 
 			if (element instanceof ComponentTag)
 			{
-				ComponentTag tag = (ComponentTag)element;
+				final ComponentTag tag = (ComponentTag)element;
 				if (tag.isExtendTag() && tag.isClose())
 				{
 					break;
@@ -177,10 +177,10 @@
 		{
 			for (baseIndex++; baseIndex < baseMarkup.size(); baseIndex++)
 			{
-				MarkupElement element = baseMarkup.get(baseIndex);
+				final MarkupElement element = baseMarkup.get(baseIndex);
 				if (element instanceof ComponentTag)
 				{
-					ComponentTag tag = (ComponentTag)element;
+					final ComponentTag tag = (ComponentTag)element;
 					if (tag.isChildTag() && tag.isClose())
 					{
 						// Ok, skipped the childs content
@@ -214,7 +214,7 @@
 		{
 			// And now all remaining elements from the derived markup.
 			// But first add </wicket:child>
-			ComponentTag childCloseTag = childTag.mutable();
+			final ComponentTag childCloseTag = childTag.mutable();
 			childCloseTag.getXmlTag().setType(XmlTag.Type.CLOSE);
 			childCloseTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
 			childCloseTag.setWicketTag(true);
@@ -223,14 +223,14 @@
 
 		for (baseIndex++; baseIndex < baseMarkup.size(); baseIndex++)
 		{
-			MarkupElement element = baseMarkup.get(baseIndex);
+			final MarkupElement element = baseMarkup.get(baseIndex);
 			addMarkupElement(element);
 
 			// Make sure all tags of the base markup remember where they are
 			// from
 			if ((element instanceof ComponentTag) && (baseMarkup.getResource() != null))
 			{
-				ComponentTag tag = (ComponentTag)element;
+				final ComponentTag tag = (ComponentTag)element;
 				tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
 			}
 		}
@@ -248,10 +248,10 @@
 			int hasHead = -1;
 			for (int i = 0; i < size(); i++)
 			{
-				MarkupElement element = get(i);
+				final MarkupElement element = get(i);
 				if (element instanceof ComponentTag)
 				{
-					ComponentTag tag = (ComponentTag) element;
+					final ComponentTag tag = (ComponentTag) element;
 					if ((hasOpenWicketHead == -1) && tag.isWicketHeadTag())
 					{
 						hasOpenWicketHead = i;

@@ -18,14 +18,14 @@
 	{
 		// Check if markup contains <wicket:extend> which tells us that
 		// we need to read the inherited markup as well.
-		int extendIndex = requiresBaseMarkup(markup);
+		final int extendIndex = requiresBaseMarkup(markup);
 		if (extendIndex == -1)
 		{
 			// return a MarkupStream for the markup
 			return markup;
 		}
 
-		Class<? extends MarkupContainer> markupClass = markup.getResource().getMarkupClass();
+		final Class<? extends MarkupContainer> markupClass = markup.getResource().getMarkupClass();
 		// get the base markup
 		final IMarkup baseMarkup = getMarkup(container,
 				(Class<? extends MarkupContainer>)markupClass.getSuperclass());
@@ -58,7 +58,7 @@
 			 * @see java.lang.Object#equals(java.lang.Object)
 			 */
 			@Override
-			public boolean equals(Object obj)
+			public boolean equals(final Object obj)
 			{
 				return true;
 			}
@@ -76,7 +76,7 @@
 		});
 
 		// Merge base and derived markup
-		IMarkup mergedMarkup = new MergedMarkup(markup, baseMarkup, extendIndex);
+		final IMarkup mergedMarkup = new MergedMarkup(markup, baseMarkup, extendIndex);
 		return mergedMarkup;
 	}
 
