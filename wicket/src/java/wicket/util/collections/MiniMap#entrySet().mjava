@@ -1,40 +1,40 @@
 	/**
 	 * @see java.util.Map#entrySet()
 	 */
-	public Set entrySet()
+	public Set<Entry<K, V>> entrySet()
 	{
-		return new AbstractSet<Object>()
+		return new AbstractSet<Entry<K, V>>()
 		{
 			@Override
-			public Iterator<Object> iterator()
+			public Iterator<Entry<K, V>> iterator()
 			{
-				return new Iterator<Object>()
+				return new Iterator<Entry<K, V>>()
 				{
 					public boolean hasNext()
 					{
 						return index < size;
 					}
 
-					public Object next()
+					public Entry<K, V> next()
 					{
 						keyIndex = nextKey(nextIndex(keyIndex));
 						index++;
 
-						return new Map.Entry()
+						return new Map.Entry<K, V>()
 						{
-							public Object getKey()
+							public K getKey()
 							{
 								return keys[keyIndex];
 							}
 
-							public Object getValue()
+							public V getValue()
 							{
 								return values[keyIndex];
 							}
 
-							public Object setValue(final Object value)
+							public V setValue(final V value)
 							{
-								final Object oldValue = values[keyIndex];
+								final V oldValue = values[keyIndex];
 
 								values[keyIndex] = value;
 
