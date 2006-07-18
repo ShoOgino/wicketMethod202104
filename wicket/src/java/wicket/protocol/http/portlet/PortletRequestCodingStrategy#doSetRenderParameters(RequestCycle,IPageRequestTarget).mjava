@@ -1,13 +1,14 @@
 	private void doSetRenderParameters(RequestCycle requestCycle, IPageRequestTarget requestTarget)
 	{
-		ActionResponse response=getActionResponse(requestCycle);
+		ActionResponse response = getActionResponse(requestCycle);
 
-		final PortletPage page = (PortletPage) requestTarget.getPage();
+		final PortletPage page = (PortletPage)requestTarget.getPage();
 
 		/*
-		 * Kludge: call page.urlFor to make the page stateful. 
-		 *
-		 * @see encodeRequest(RequestCycle requestCycle, IListenerInterfaceRequestTarget requestTarget)
+		 * Kludge: call page.urlFor to make the page stateful.
+		 * 
+		 * @see encodeRequest(RequestCycle requestCycle,
+		 *      IListenerInterfaceRequestTarget requestTarget)
 		 */
 		page.urlFor(requestTarget);
 
@@ -19,14 +20,15 @@
 
 		if (!pageMap.isDefault())
 		{
-			response.setRenderParameter(PAGEMAP,pageMap.getName());
+			response.setRenderParameter(PAGEMAP, pageMap.getName());
 		}
 		// Add path to component
-		response.setRenderParameter(COMPONENT_PATH_PARAMETER_NAME,page.getPath());
+		response.setRenderParameter(COMPONENT_PATH_PARAMETER_NAME, page.getPath());
 
 		// Add version
 		final int versionNumber = page.getCurrentVersionNumber();
-		response.setRenderParameter(VERSION_PARAMETER_NAME,String.valueOf(versionNumber));
-		response.setRenderParameter(INTERFACE_PARAMETER_NAME,IRedirectListener.INTERFACE.getName());
+		response.setRenderParameter(VERSION_PARAMETER_NAME, String.valueOf(versionNumber));
+		response
+				.setRenderParameter(INTERFACE_PARAMETER_NAME, IRedirectListener.INTERFACE.getName());
 	}
 
