@@ -1,0 +1,28 @@
+		@Override
+		protected void onRender(final MarkupStream markupStream)
+		{
+			// remember current index
+			final int index = markupStream.getCurrentIndex();
+			
+			// render the item
+			super.onRender(markupStream);
+			
+			// should we also render children (ajax response)
+			if (isRenderChildren()) 
+			{
+				// visit every child
+				visitItemChildren(this, new ItemCallback() 
+				{
+					public void visitItem(TreeItem item) 
+					{
+						// rewind markupStream
+						markupStream.setCurrentIndex(index);
+						// render child
+						item.onRender(markupStream);
+					}
+				});
+				// children are rendered, clear the flag
+				setRenderChildren(false);
+			}
+		}				
+

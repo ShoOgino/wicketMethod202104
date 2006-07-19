@@ -1,0 +1,26 @@
+	// called when tree nodes (but not their children) have changed
+	public final void treeNodesChanged(TreeModelEvent e) 
+	{
+		// has root node changed?
+		if (e.getChildren() == null) 
+		{
+			if (rootItem != null)
+			{
+				invalidateNode(rootItem.getModelObject());
+			}			
+		}
+		else
+		{
+			// go through all changed nodes
+			for (Object child: e.getChildren()) 
+			{
+				TreeNode node = (TreeNode) child;
+				if (isNodeVisible(node))
+				{
+					// if the nodes is visible invalidate it
+					invalidateNode(node);
+				}
+			}
+		}
+	}
+

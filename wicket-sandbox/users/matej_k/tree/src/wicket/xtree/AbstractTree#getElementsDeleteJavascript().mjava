@@ -1,0 +1,24 @@
+	private String getElementsDeleteJavascript() {
+		// build the javascript call
+		final AppendingStringBuffer buffer = new AppendingStringBuffer(100);
+		
+		buffer.append("Wicket.Tree.removeNodes(\"");
+		
+		// first parameter is the markup id of tree (will be used as prefix to build ids of child items 
+		buffer.append(getMarkupId()+"_\",[");
+		
+		// append the ids of elements to be deleted			
+		buffer.append(deleteIds);
+
+		// does the buffer end if ','?
+		if (buffer.endsWith(","))
+		{
+			// it does, trim it
+			buffer.setLength(buffer.length() - 1);
+		}
+						
+		buffer.append("]);");							
+		
+		return buffer.toString();
+	}
+

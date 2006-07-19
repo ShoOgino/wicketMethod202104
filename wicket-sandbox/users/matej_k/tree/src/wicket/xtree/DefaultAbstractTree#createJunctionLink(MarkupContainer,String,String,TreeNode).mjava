@@ -1,0 +1,39 @@
+	protected void createJunctionLink(MarkupContainer parent, final String id, 
+			                          final String imageId, final TreeNode node)
+	{
+		final MarkupContainer junctionLink;
+
+		if (node.isLeaf() == false)
+		{
+			junctionLink = createLink(parent, id, new LinkCallback() 
+			{
+				public void onClick(AjaxRequestTarget target)
+				{					
+					if (isNodeExpanded(node))
+					{
+						getTreeState().collapseNode(node);
+					}
+					else
+					{
+						getTreeState().expandNode(node);
+					}
+					updateTree(target);					
+				}
+			});
+		}		
+		else
+		{
+			junctionLink = new WebMarkupContainer(parent, id)
+			{
+				@Override
+				protected void onComponentTag(ComponentTag tag) {
+					super.onComponentTag(tag);
+					tag.put("onclick", "return false");
+				}
+			};
+		}
+			
+		if (imageId != null)
+			createJunctionImage(junctionLink, imageId, node);
+	}
+

@@ -1,0 +1,30 @@
+	protected Image createJunctionImage(MarkupContainer parent, final String id, final TreeNode node)
+	{		
+		if (!node.isLeaf())
+		{
+			// we want the image to be dynamically, yet resolving to a static
+			// image.
+			return new Image(parent, id)
+			{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected ResourceReference getImageResourceReference()
+				{
+					if (isNodeExpanded(node))
+					{
+						return MINUS;
+					}
+					else
+					{
+						return PLUS;
+					}
+				}
+			};
+		}
+		else
+		{
+			return new Image(parent, id, getBlank());
+		}
+	}
+
