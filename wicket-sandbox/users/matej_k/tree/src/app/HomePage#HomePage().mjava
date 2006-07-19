@@ -1,0 +1,18 @@
+	public HomePage() 
+	{		
+		// this link is here as temporary hack to make wicket-ajax.js first javascript in head
+		new AjaxLink(this, "link") 
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target) 
+			{
+			}
+		};
+
+		final DefaultTreeModel treeModel = (DefaultTreeModel) createTreeModel();
+		
+		SimpleTree tree = new SimpleTree(this, "tree", treeModel, false);
+		tree.getTreeState().setAllowSelectMultiple(true);		
+		tree.setLinkType(DefaultAbstractTree.LinkType.AJAX);		
+	}
+
