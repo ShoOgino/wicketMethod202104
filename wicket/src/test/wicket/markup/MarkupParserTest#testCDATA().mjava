@@ -1,0 +1,21 @@
+	/**
+	 * Test &lt;wicket: .
+	 * 
+	 * @throws ParseException
+	 * @throws ResourceStreamNotFoundException
+	 * @throws IOException
+	 */
+	public final void testCDATA() throws ParseException, ResourceStreamNotFoundException,
+			IOException
+	{
+		final MarkupParser parser = new MarkupParser(new XmlPullParser());
+
+		IMarkup markup = parser
+				.parse("<html><![CDATA[ test ]]></html>");
+		assertEquals(1, markup.size());
+		assertEquals("html", ((ComponentTag)markup.get(0)).getName());
+		assertEquals("html", ((ComponentTag)markup.get(1)).getName());
+		assertEquals(true, markup.get(1) instanceof RawMarkup);
+		assertEquals("<![CDATA[ test ]]>", ((RawMarkup)markup.get(1)).toString());
+	}
+
