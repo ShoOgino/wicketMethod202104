@@ -1,30 +1,26 @@
-	protected Image createJunctionImage(MarkupContainer parent, final String id, final TreeNode node)
+	protected WebMarkupContainer createJunctionImage(MarkupContainer parent, final String id, final TreeNode node)
 	{		
-		if (!node.isLeaf())
-		{
-			// we want the image to be dynamically, yet resolving to a static
-			// image.
-			return new Image(parent, id)
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected ResourceReference getImageResourceReference()
+		return (WebMarkupContainer) new WebMarkupContainer(parent, id) 
+		{			
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				super.onComponentTag(tag);
+			
+				final String cssClassInner;
+				if (node.isLeaf() == false)
 				{
-					if (isNodeExpanded(node))
-					{
-						return MINUS;
-					}
-					else
-					{
-						return PLUS;
-					}
+					cssClassInner = isNodeExpanded(node) ? "minus" : "plus";							
 				}
-			};
-		}
-		else
-		{
-			return new Image(parent, id, getBlank());
-		}
+				else
+				{
+					cssClassInner = "corner"; 
+				}
+				
+				final String cssClassOuter = isNodeLast(node) ? "junction-last" : "junction"; 				
+				
+				Response response = RequestCycle.get().getResponse();
+				response.write("<span class=\""+cssClassOuter+"\"><span class=\""+cssClassInner+"\"></span></span>");
+			}
+		}.setRenderBodyOnly(true);
 	}
 
