@@ -29,7 +29,12 @@
 			response.write(encoding);
 			response.write("\"?>");
 			response.write("<ajax-response>");
-
+			
+			for (String js : prependJavascripts)
+			{
+				respondInvocation(response, js);
+			}
+			
 			Iterator<Entry<String, Component>> it = markupIdToComponent.entrySet().iterator();
 			while (it.hasNext())
 			{
@@ -38,14 +43,13 @@
 				final String markupId = entry.getKey();
 				respondHeaderContribution(response, component);
 				respondComponent(response, markupId, component);								
-			}
+			}			
 
-			Iterator<String> it2 = javascripts.iterator();
-			while (it2.hasNext())
+			for (String js : appendJavascripts)
 			{
-				String js = it2.next();
 				respondInvocation(response, js);
 			}
+			
 			response.write("</ajax-response>");			
 			
 			// restore component use check
