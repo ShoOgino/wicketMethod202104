@@ -6,156 +6,30 @@
 	 */
 	public final MarkupElement nextTag() throws ParseException
 	{
-		if (this.skipUntilText != null)
+		while (next())
 		{
-			skipUntil();
-		}
-
-		// While we can find an open tag, parse the tag
-		final int openBracketIndex = this.input.find('<');
-		if (openBracketIndex == -1)
-		{
-			// There is no next matching tag
-			return null;
-		}
-
-		// Determine line number
-		this.input.countLinesTo(openBracketIndex);
-
-		// Get index of closing tag and advance past the tag
-		int closeBracketIndex = this.input.find('>', openBracketIndex + 1);
-
-		if (closeBracketIndex == -1)
-		{
-			throw new ParseException("No matching close bracket at position " + openBracketIndex,
-					this.input.getPosition());
-		}
-
-		// Get the tagtext between open and close brackets
-		String tagText = this.input.getSubstring(openBracketIndex + 1, closeBracketIndex)
-				.toString();
-
-		// Handle comments
-		if (tagText.startsWith("!--"))
-		{
-			// Skip ahead to "-->". Note that you can not simply test for
-			// tagText.endsWith("--") as the comment might contain a '>'
-			// inside.
-			final int pos = this.input.find("-->", openBracketIndex + 1);
-			if (pos == -1)
+			switch (this.lastType)
 			{
-				throw new ParseException("Unclosed comment beginning at line:"
-						+ input.getLineNumber() + " column:" + input.getColumnNumber(),
-						openBracketIndex);
-			}
+				case TAG :
+					return this.lastTag;
 
-			this.input.setPosition(pos + 3);
-			return nextTag();
-		}
+				case BODY :
+					break;
 
-		// CDATA sections might contain "<" which is not part of an XML tag.
-		// Make sure escaped "<" are treated right
-		final String startText = (tagText.length() <= 8 ? tagText : tagText.substring(0, 8));
-		if (startText.toUpperCase().equals("![CDATA["))
-		{
-			int pos1 = openBracketIndex;
-			do
-			{
-				// Get index of closing tag and advance past the tag
-				closeBracketIndex = findChar('>', pos1);
+				case COMMENT :
+					break;
 
-				if (closeBracketIndex == -1)
-				{
-					throw new ParseException("No matching close bracket at position "
-							+ openBracketIndex, this.input.getPosition());
-				}
+				case CDATA :
+					break;
 
-				// Get the tagtext between open and close brackets
-				tagText = this.input.getSubstring(openBracketIndex + 1, closeBracketIndex)
-						.toString();
+				case PROCESSING_INSTRUCTION :
+					break;
 
-				pos1 = closeBracketIndex + 1;
-			}
-			while (tagText.endsWith("]]") == false);
-			
-			// Move to position after the tag
-			this.input.setPosition(closeBracketIndex + 1);
-
-			// Return next tag
-			return nextTag();
-		}
-
-		{
-			// Type of tag
-			XmlTag.Type type = XmlTag.Type.OPEN;
-
-			// If the tag ends in '/', it's a "simple" tag like <foo/>
-			if (tagText.endsWith("/"))
-			{
-				type = XmlTag.Type.OPEN_CLOSE;
-				tagText = tagText.substring(0, tagText.length() - 1);
-			}
-			else if (tagText.startsWith("/"))
-			{
-				// The tag text starts with a '/', it's a simple close tag
-				type = XmlTag.Type.CLOSE;
-				tagText = tagText.substring(1);
-			}
-
-			// We don't deeply parse tags like DOCTYPE that start with !
-			// or XML document definitions that start with ?
-			if (tagText.startsWith("!") || tagText.startsWith("?"))
-			{
-				// Move to position after the tag
-				this.input.setPosition(closeBracketIndex + 1);
-
-				// Return next tag
-				return nextTag();
-			}
-			else
-			{
-				final String lowerCase = tagText.toLowerCase();
-
-				// Often save a (longer) comparison at the expense of a
-				// extra shorter one for 's' tags
-				if ((type == XmlTag.Type.OPEN) && lowerCase.startsWith("s"))
-				{
-					if (lowerCase.startsWith("script"))
-					{
-						this.skipUntilText = "script";
-					}
-					else if (lowerCase.startsWith("style"))
-					{
-						this.skipUntilText = "style";
-					}
-				}
-
-				// Parse remaining tag text, obtaining a tag object or null
-				// if it's invalid
-				final XmlTag tag = parseTagText(tagText);
-				if (tag != null)
-				{
-					// Populate tag fields
-					tag.type = type;
-					tag.pos = openBracketIndex;
-					tag.length = (closeBracketIndex + 1) - openBracketIndex;
-					tag.text = this.input.getSubstring(openBracketIndex, closeBracketIndex + 1)
-							.toString();
-					tag.lineNumber = this.input.getLineNumber();
-					tag.columnNumber = this.input.getColumnNumber();
-
-					// Move to position after the tag
-					this.input.setPosition(closeBracketIndex + 1);
-
-					// Return the tag we found!
-					return tag;
-				}
-				else
-				{
-					throw new ParseException("Malformed tag (line " + this.input.getLineNumber()
-							+ ", column " + this.input.getColumnNumber() + ")", openBracketIndex);
-				}
+				case SPECIAL_TAG :
+					break;
 			}
 		}
+
+		return null;
 	}
 

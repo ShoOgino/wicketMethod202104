@@ -1,0 +1,83 @@
+	/**
+	 * Handle special tags like <!-- --> or <![CDATA[..]]> or <?xml>
+	 * 
+	 * @param tagText
+	 * @param openBracketIndex
+	 * @param closeBracketIndex
+	 * @throws ParseException
+	 */
+	private void specialTagHandling(String tagText, final int openBracketIndex,
+			int closeBracketIndex) throws ParseException
+	{
+		// Handle comments
+		if (tagText.startsWith("!--"))
+		{
+			// Skip ahead to "-->". Note that you can not simply test for
+			// tagText.endsWith("--") as the comment might contain a '>'
+			// inside.
+			int pos = this.input.find("-->", openBracketIndex + 1);
+			if (pos == -1)
+			{
+				throw new ParseException("Unclosed comment beginning at line:"
+						+ input.getLineNumber() + " column:" + input.getColumnNumber(),
+						openBracketIndex);
+			}
+
+			pos += 3;
+			this.lastText = this.input.getSubstring(openBracketIndex, pos);
+			this.lastType = Type.COMMENT;
+			this.input.setPosition(pos);
+			return;
+		}
+
+		// CDATA sections might contain "<" which is not part of an XML tag.
+		// Make sure escaped "<" are treated right
+		if (tagText.startsWith("!["))
+		{
+			final String startText = (tagText.length() <= 8 ? tagText : tagText.substring(0, 8));
+			if (startText.toUpperCase().equals("![CDATA["))
+			{
+				int pos1 = openBracketIndex;
+				do
+				{
+					// Get index of closing tag and advance past the tag
+					closeBracketIndex = findChar('>', pos1);
+
+					if (closeBracketIndex == -1)
+					{
+						throw new ParseException("No matching close bracket at line:"
+								+ input.getLineNumber() + " column:" + input.getColumnNumber(),
+								this.input.getPosition());
+					}
+
+					// Get the tagtext between open and close brackets
+					tagText = this.input.getSubstring(openBracketIndex + 1, closeBracketIndex)
+							.toString();
+
+					pos1 = closeBracketIndex + 1;
+				}
+				while (tagText.endsWith("]]") == false);
+
+				// Move to position after the tag
+				this.input.setPosition(closeBracketIndex + 1);
+
+				this.lastText = tagText;
+				this.lastType = Type.CDATA;
+				return;
+			}
+		}
+
+		if (tagText.charAt(0) == '?')
+		{
+			this.lastType = Type.PROCESSING_INSTRUCTION;
+
+			// Move to position after the tag
+			this.input.setPosition(closeBracketIndex + 1);
+			return;
+		}
+
+		// Move to position after the tag
+		this.lastType = Type.SPECIAL_TAG;
+		this.input.setPosition(closeBracketIndex + 1);
+	}
+
