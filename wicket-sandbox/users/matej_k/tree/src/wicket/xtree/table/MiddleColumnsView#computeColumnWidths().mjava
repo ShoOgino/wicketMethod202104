@@ -1,0 +1,34 @@
+	protected int[] computeColumnWidths()
+	{
+		int result[] = new int[columns.size()];
+		
+		double sum = 0d;
+		double whole = 99d; // we can't do 100%, might cause formating errors
+		
+		for (Column column : columns)
+		{
+			// check if the unit is right
+			if (column.getLocation().getUnit() != Unit.PROPORTIONAL)
+			{
+				throw new IllegalStateException("Middle columns must have PROPORTIONAL unit set.");
+			}
+			sum += column.getLocation().getSize();
+		}
+		
+		int index = 0;
+		int together = 0;
+		for (Column column : columns)
+		{
+			together += result[index] = (int) Math.round(((double) column.getLocation().getSize()) / sum * whole);			
+			++index;
+		}				
+		
+		if (together > 99) 
+		{
+			// this can happen - rounding error. just decrease the last one
+			result[result.length - 1] -= together - 99;
+		}
+		
+		return result;
+	}
+
