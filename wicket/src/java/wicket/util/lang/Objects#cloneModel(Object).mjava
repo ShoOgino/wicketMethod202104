@@ -23,7 +23,7 @@
 				ObjectOutputStream oos = new ReplaceObjectOutputStream(out, replacedObjects);
 				oos.writeObject(object);
 				ObjectInputStream ois = new ReplaceObjectInputStream(new ByteArrayInputStream(out
-						.toByteArray()), replacedObjects);
+						.toByteArray()), replacedObjects,object.getClass().getClassLoader());
 				return ois.readObject();
 			}
 			catch (ClassNotFoundException e)
