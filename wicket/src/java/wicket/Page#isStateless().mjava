@@ -1,7 +1,8 @@
 	/**
-	 * Gets whether the page is stateless. Components on stateless page must not render
-	 * any statefull urls, and components on statefull page must not render any stateless urls.
-	 * Statefull urls are urls, which refer to a certain (current) page instance.   
+	 * Gets whether the page is stateless. Components on stateless page must not
+	 * render any statefull urls, and components on statefull page must not
+	 * render any stateless urls. Statefull urls are urls, which refer to a
+	 * certain (current) page instance.
 	 * 
 	 * @return Whether to page is stateless
 	 */
@@ -11,7 +12,7 @@
 		{
 			stateless = false;
 		}
-		
+
 		if (stateless == null)
 		{
 			Object returnValue = visitChildren(Component.class, new IVisitor()
@@ -22,9 +23,9 @@
 					{
 						return Boolean.FALSE;
 					}
-					
+
 					final Iterator<IBehavior> behaviors = component.getBehaviors().iterator();
-					
+
 					while (behaviors.hasNext())
 					{
 						IBehavior behavior = behaviors.next();
@@ -43,7 +44,7 @@
 			}
 			else if (returnValue instanceof Boolean)
 			{
-				stateless =  (Boolean)returnValue;
+				stateless = (Boolean)returnValue;
 			}
 		}
 		return stateless;
