@@ -1,13 +1,17 @@
 	/**
 	 * Invoked when the editor was succesfully updated. Use this method e.g. to
-	 * persist the changed value. This implemention clears any window status
-	 * that might have been set in onError.
+	 * persist the changed value. This implemention displays the label and
+	 * clears any window status that might have been set in onError.
 	 * 
 	 * @param target
 	 *            The ajax request target
 	 */
 	protected void onSubmit(AjaxRequestTarget target)
 	{
+		label.setVisible(true);
+		editor.setVisible(false);
+		target.addComponent(AjaxEditableLabel.this);
+
 		target.addJavascript("window.status='';");
 	}
 
