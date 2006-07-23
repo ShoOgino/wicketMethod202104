@@ -10,6 +10,7 @@
 		{
 			Component component = components.get(i);
 			Renderable renderable = renderables.get(i);
+			Column column = columns.get(i);
 			
 			response.write("<span class=\"column\" style=\"width:" + widths[i] + "%\">");
 			response.write("<span class=\"column-inner\">");						
@@ -30,6 +31,25 @@
 			}
 			
 			response.write("</span></span>\n");
+			
+			int span = column.getSpan(node);
+			if (span > 1)
+			{
+				for (int j = 1; j < span && i < components.size(); ++j)
+				{
+					++i;
+					if (components.get(i) != null)
+					{
+						Response old = RequestCycle.get().setResponse(NullResponse.getInstance());
+						markupStream.setCurrentIndex(markupStart);
+						components.get(i).render(markupStream);
+						RequestCycle.get().setResponse(old);
+						rendered = true;
+					}
+					
+				}
+				
+			}
 		}
 		
 		if (rendered == false)
