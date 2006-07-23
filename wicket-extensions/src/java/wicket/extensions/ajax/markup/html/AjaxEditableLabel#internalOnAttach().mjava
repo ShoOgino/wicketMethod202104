@@ -5,16 +5,11 @@
 	{
 		super.onBeforeRender();
 
-		// add components once here (tempModel may not be null after
-		// construction) to get around nasty constructor issues
-		// for overriding classes
+		// if tempModel - set on construction - is not-null, the label and
+		// editor components have not yet been set.
 		if (tempModel != null)
 		{
-			label = newLabel(this, "label", tempModel);
-			editor = newEditor(this, "editor", tempModel);
-			add(label);
-			add(editor);
-			this.tempModel = null;
+			initLabelAndEditor();
 		}
 	}
 
