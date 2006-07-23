@@ -4,17 +4,12 @@
 	 * @param model
 	 *            The model
 	 */
-	private void init(IModel<T> model)
+	private final void init(IModel<T> model)
 	{
 		setOutputMarkupId(true);
 
-		label = new Label(this, "label", model);
-		label.setOutputMarkupId(true);
-		label.add(new LabelAjaxBehavior(ClientEvent.CLICK));
+		label = newLabel(this, model);
 
-		editor = new TextField<T>(this, "editor", model);
-		editor.setOutputMarkupId(true);
-		editor.setVisible(false);
-		editor.add(new EditorAjaxBehavior());
+		editor = newEditor(this, model);
 	}
 
