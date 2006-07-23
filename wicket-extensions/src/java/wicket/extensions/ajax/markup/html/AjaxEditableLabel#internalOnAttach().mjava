@@ -1,0 +1,20 @@
+	/**
+	 * @see wicket.Component#internalOnAttach()
+	 */
+	protected void internalOnAttach()
+	{
+		super.onBeforeRender();
+
+		// add components once here (tempModel may not be null after
+		// construction) to get around nasty constructor issues
+		// for overriding classes
+		if (tempModel != null)
+		{
+			label = newLabel(this, "label", tempModel);
+			editor = newEditor(this, "editor", tempModel);
+			add(label);
+			add(editor);
+			this.tempModel = null;
+		}
+	}
+
