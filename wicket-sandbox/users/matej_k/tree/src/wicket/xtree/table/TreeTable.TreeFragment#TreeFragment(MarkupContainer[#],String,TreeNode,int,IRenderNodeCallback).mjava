@@ -1,4 +1,9 @@
-		public TreePanel(MarkupContainer<?> parent, String id, final TreeNode node, int level) {
+		/**
+		 * Constructor.
+		 */
+		public TreeFragment(MarkupContainer<?> parent, String id, final TreeNode node, 
+				            int level, final IRenderNodeCallback renderNodeCallback) 
+		{
 			super(parent, id, "fragment");
 	
 			createIndentation(this, "indent", node, level);
@@ -12,8 +17,8 @@
 			new Label(nodeLink, "label", new Model<String>() {
 				@Override
 				public String getObject() {				
-					return renderNode(node);
+					return renderNodeCallback.renderNode(node);
 				}
-			});
+			});						
 		}		
 

@@ -1,7 +1,14 @@
+	/**
+	 * Adds a column to be rendered.
+	 */
 	public void addColumn(IColumn column, Component component, IRenderable renderable)
 	{
 		if (column.isVisible())
 		{
+			// if the column is aligned to the left, just append it. 
+			// Otherwise we prepend it, because we want columns aligned to right
+			// to be rendered reverse order (because they will have set float:right
+			// in css, so they will be displayed in reverse order too).
 			if (column.getLocation().getAlignment() == Alignment.LEFT)
 			{
 				columns.add(column);

@@ -1,42 +1,54 @@
+	/**
+	 * Renders all columns.
+	 */
 	@Override
 	protected void onRender(final MarkupStream markupStream)
-	{
+	{		
 		final int markupStart = markupStream.getCurrentIndex();
 		Response response = RequestCycle.get().getResponse();
 		int widths[] = computeColumnWidths();
-		boolean rendered = false;	
-		
+				
+		boolean rendered = false; // has been at least one column (component, not renderable) rendered?	
+				
 		for (int i = 0; i < columns.size(); ++i)
 		{
 			Component component = components.get(i);
 			IRenderable renderable = renderables.get(i);
 			IColumn column = columns.get(i);
-			
+		
+			// write the wrapping column markup
 			response.write("<span class=\"column\" style=\"width:" + widths[i] + "%\">");
 			response.write("<span class=\"column-inner\">");						
 			
-			if (component != null)
+			if (component != null) // is there a component for current column?
 			{
+				// render the component
 				markupStream.setCurrentIndex(markupStart);
 				component.render(markupStream);
 				rendered = true;
 			}
-			else if (renderable != null)
+			else if (renderable != null) // no component - try to render renderable
 			{
-				renderable.render(response);
+				renderable.render(node, response);
 			}
 			else
 			{
+				// no renderable or component. fail
 				throw new IllegalStateException("Either renderable or cell component must be created for this noode");
 			}
 			
+			// end of wrapping markup
 			response.write("</span></span>\n");
 			
+			// does this component span over other columns
 			int span = column.getSpan(node);
 			if (span > 1)
 			{
+				// iterate through the columns and if any of them has a component,
+				// render the component to null response (otherwise the component will
+				// complain that it hasn't been rendered
 				for (int j = 1; j < span && i < components.size(); ++j)
-				{
+				{					
 					++i;
 					if (components.get(i) != null)
 					{
@@ -47,11 +59,11 @@
 						rendered = true;
 					}
 					
-				}
-				
+				}				
 			}
 		}
 		
+		// if no component was rendered just advance in the markup stream
 		if (rendered == false)
 		{
 			markupStream.skipComponent();

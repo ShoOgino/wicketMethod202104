@@ -1,3 +1,6 @@
+	/**
+	 * Populates one row of the tree.
+	 */
 	@Override
 	protected void populateTreeItem(WebMarkupContainer<TreeNode> item, int level) 
 	{	
@@ -5,17 +8,20 @@
 
 		int i = 0;
 		
-		SideColumnsView sideColumns = new SideColumnsView(item, "sideColumns");
+		// add side columns
+		SideColumnsView sideColumns = new SideColumnsView(item, "sideColumns", null);
 		for (IColumn column: columns)
 		{
 			if (column.getLocation().getAlignment() == Alignment.LEFT ||
 				column.getLocation().getAlignment() == Alignment.RIGHT)
 			{
 				Component component;
+				// first try to create a renderable
 				IRenderable renderable = column.createCell(this, node, level);			
 				
 				if (renderable == null)
 				{
+					// if renderable failed, try to create a regular component					
 					component = column.createCell(sideColumns, "" + i++, node, level);
 				}
 				else
@@ -29,16 +35,19 @@
 		
 		i = 0;
 		
+		// add middle columns
 		MiddleColumnsView middleColumns = new MiddleColumnsView(item, "middleColumns", node);
 		for (IColumn column: columns)
 		{
 			if (column.getLocation().getAlignment() == Alignment.MIDDLE)
 			{
 				Component component;
+				// first try to create a renderable
 				IRenderable renderable = column.createCell(this, node, level);			
 				
 				if (renderable == null)
 				{
+					// if renderable failed, try to create a regular component					
 					component = column.createCell(middleColumns, "" + i++, node, level);
 				}
 				else

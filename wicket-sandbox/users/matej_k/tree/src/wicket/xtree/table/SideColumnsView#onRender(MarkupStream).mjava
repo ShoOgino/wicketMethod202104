@@ -1,3 +1,6 @@
+	/**
+	 * Renders the columns.
+	 */
 	@Override
 	protected void onRender(final MarkupStream markupStream)
 	{
@@ -13,9 +16,11 @@
 			Component component = components.get(i);
 			IRenderable renderable = renderables.get(i);
 			
+			// write wrapping markup
 			response.write("<span class=\"column\" style=\"" + renderColumnStyle(column) + "\">");
 			if (column.getLocation().getAlignment() == Alignment.LEFT && firstLeft == true)
 			{
+				// for the first left column we have different style class (without the left border)
 				response.write("<span class=\"column-inner-first\">");
 				firstLeft = false;
 			}				
@@ -32,7 +37,7 @@
 			}
 			else if (renderable != null)
 			{
-				renderable.render(response);
+				renderable.render(node, response);
 			}
 			else
 			{
@@ -42,6 +47,7 @@
 			response.write("</span></span>\n");
 		}
 		
+		// if no component was rendered just advance in the markup stream 
 		if (rendered == false)
 		{
 			markupStream.skipComponent();
