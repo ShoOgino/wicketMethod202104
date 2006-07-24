@@ -17,6 +17,11 @@
 		filter = new WicketRemoveTagHandler(filter);
 		filter = new WicketLinkTagHandler(filter);
 
+		if (getMarkupResourceStream() != null && getMarkupResourceStream().getContainerInfo() != null)
+		{
+			filter = new HeadForceTagIdHandler(filter, getMarkupResourceStream().getContainerInfo().getContainerClass());
+		}
+		
 		// Provided the wicket component requesting the markup is known ...
 		MarkupResourceStream resource = markup.getResource();
 		if ((resource != null) && (resource.getContainerInfo() != null))
