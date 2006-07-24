@@ -1,0 +1,29 @@
+	/**
+	 * @see IColumn#createCell(TreeTable, TreeNode, int)
+	 */
+	public IRenderable createCell(TreeTable treeTable, TreeNode node, int level) 
+	{
+		return new IRenderable() 
+		{
+			public void render(TreeNode node, Response response) 
+			{				
+				String content = getNodeValue(node);
+				
+				// escape if necessary
+				if (isEscapeContent())
+				{
+					content = Strings.escapeMarkup(content).toString();
+				}
+				
+				response.write("<span class=\"text\"");
+				if (isContentAsTooltip())
+				{
+					response.write(" title=\"" + content + "\"");
+				}
+				response.write(">");
+				response.write(content);
+				response.write("</span>");
+			}			
+		};
+	}
+
