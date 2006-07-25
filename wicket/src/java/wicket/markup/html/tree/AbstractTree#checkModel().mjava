@@ -1,0 +1,24 @@
+	/**
+	 * Checks whether the model has been chaned, and if so unregister and register listeners.
+	 */
+	private final void checkModel() {
+		// find out whether the model object (the TreeModel) has been changed
+		TreeModel model = getModelObject();
+		if (model != previousModel)  
+		{								
+			if (previousModel != null) 
+			{
+				previousModel.removeTreeModelListener(this);
+			}
+			
+			previousModel = model;
+			
+			if (model != null)
+			{
+				model.addTreeModelListener(this);
+			}
+			// model has been changed, redraw whole tree 
+			invalidateAll();
+		}		
+	}
+

@@ -1,0 +1,22 @@
+	/**
+	 * @see Component#onAttach()
+	 */
+	@Override
+	protected void onAttach() 
+	{						
+		// has the header been added yet?
+		if (get("sideColumns") == null)
+		{
+			// no. initialize columns first
+			for (IColumn column : columns)
+			{
+				column.setTreeTable(this);
+			}
+			
+			// add the tree table header 
+			addHeader();
+		}
+		
+		super.onAttach();
+	}
+

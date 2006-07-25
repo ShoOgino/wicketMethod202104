@@ -1,0 +1,77 @@
+	/**
+	 * Populates one row of the tree.
+	 */
+	@Override
+	protected void populateTreeItem(WebMarkupContainer<TreeNode> item, int level) 
+	{	
+		final TreeNode node = item.getModelObject();
+
+		int i = 0;
+		
+		// add side columns
+		SideColumnsView sideColumns = new SideColumnsView(item, "sideColumns", node);
+		for (IColumn column: columns)
+		{
+			if (column.getLocation().getAlignment() == Alignment.LEFT ||
+				column.getLocation().getAlignment() == Alignment.RIGHT)
+			{
+				Component component;
+				// first try to create a renderable
+				IRenderable renderable = column.createCell(node, level);			
+				
+				if (renderable == null)
+				{
+					// if renderable failed, try to create a regular component					
+					component = column.createCell(sideColumns, "" + i++, node, level);
+				}
+				else
+				{
+					component = null;
+				}
+				
+				sideColumns.addColumn(column, component, renderable);
+			}
+		}
+		
+		i = 0;
+		
+		// add middle columns
+		MiddleColumnsView middleColumns = new MiddleColumnsView(item, "middleColumns", node);
+		for (IColumn column: columns)
+		{
+			if (column.getLocation().getAlignment() == Alignment.MIDDLE)
+			{
+				Component component;
+				// first try to create a renderable
+				IRenderable renderable = column.createCell(node, level);			
+				
+				if (renderable == null)
+				{
+					// if renderable failed, try to create a regular component					
+					component = column.createCell(middleColumns, "" + i++, node, level);
+				}
+				else
+				{
+					component = null;
+				}
+				
+				middleColumns.addColumn(column, component, renderable);
+			}
+		}			
+		
+		// do distinguish between selected and unselected rows we add an behavior
+		// that modifies row css class.
+		item.add(new AbstractBehavior() 
+		{
+			@Override
+			public void onComponentTag(Component component, ComponentTag tag) 
+			{
+				super.onComponentTag(component, tag);
+				if (getTreeState().isNodeSelected(node))
+					tag.put("class", "row-selected");
+				else
+					tag.put("class", "row");
+			}
+		});		
+	}
+

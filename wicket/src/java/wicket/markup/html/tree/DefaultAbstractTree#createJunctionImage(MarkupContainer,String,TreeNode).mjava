@@ -1,0 +1,31 @@
+	/**
+	 * Creates an image placed on junction link. This image actually consists of two spans with different css classes.
+	 * These classes are specified according to the stylesheet to make the junction image look well together with lines
+	 * connecting nodes.
+	 */
+	protected WebMarkupContainer createJunctionImage(MarkupContainer parent, final String id, final TreeNode node)
+	{		
+		return (WebMarkupContainer) new WebMarkupContainer(parent, id) 
+		{			
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				super.onComponentTag(tag);
+			
+				final String cssClassInner;
+				if (node.isLeaf() == false)
+				{
+					cssClassInner = isNodeExpanded(node) ? "minus" : "plus";							
+				}
+				else
+				{
+					cssClassInner = "corner"; 
+				}
+				
+				final String cssClassOuter = isNodeLast(node) ? "junction-last" : "junction"; 				
+				
+				Response response = RequestCycle.get().getResponse();
+				response.write("<span class=\""+cssClassOuter+"\"><span class=\""+cssClassInner+"\"></span></span>");
+			}
+		}.setRenderBodyOnly(true);
+	}
+

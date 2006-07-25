@@ -1,0 +1,15 @@
+	/**
+	 * Creates a link that can be used to select / unselect the specified node.
+	 */
+	protected WebMarkupContainer createNodeLink(MarkupContainer parent, String id, final TreeNode node)
+	{
+		return createLink(parent, id, new ILinkCallback() 
+		{
+			public void onClick(AjaxRequestTarget target) {
+				getTreeState().selectNode(node, !getTreeState().isNodeSelected(node));
+				onNodeLinkClicked(target, node);
+				updateTree(target);
+			}
+		});
+	}
+

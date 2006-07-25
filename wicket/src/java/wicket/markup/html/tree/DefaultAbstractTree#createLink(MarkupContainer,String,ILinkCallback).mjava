@@ -1,0 +1,37 @@
+	/**
+	 * Creates a link of type specified by current linkType. When the links is clicked it calls the specified callback.
+	 */
+	protected WebMarkupContainer createLink(MarkupContainer parent, String id, final ILinkCallback callback) 
+	{
+		if (getLinkType() == LinkType.REGULAR)
+		{
+			return new Link(parent, id) 
+			{
+				@Override
+				public void onClick() {
+					callback.onClick(null);
+				}
+			};
+		}
+		else if (getLinkType() == LinkType.AJAX)
+		{
+			return new AjaxLink(parent, id)
+			{
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					callback.onClick(target);
+				}
+			};
+		}
+		else
+		{
+			return new AjaxFallbackLink(parent, id)
+			{
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					callback.onClick(target);
+				}
+			};
+		}
+	}
+
