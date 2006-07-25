@@ -1,11 +1,17 @@
-		// This overide is required to resolve classess inside in different
-		// bundle, i.e.
-		// The classess can be resolved by OSGI classresolver implementation
 		@Override
 		protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException,
 				ClassNotFoundException
 		{
 			String className = desc.getName();
+			Class clzz = usedClasses.get(className);
+			if(clzz != null)
+			{
+				return clzz;
+			}
+			else
+			{
+				log.debug("No Class  found for " + className + " trying through IClassResolver");
+			}
 			Application application = Application.get();
 			IApplicationSettings applicationSettings = application.getApplicationSettings();
 			IClassResolver classResolver = applicationSettings.getClassResolver();
