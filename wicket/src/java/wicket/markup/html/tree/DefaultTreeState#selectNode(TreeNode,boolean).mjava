@@ -1,21 +1,25 @@
-	public void selectNode(TreeNode node, boolean selected) 
+	/**
+	 * @see wicket.markup.html.tree.ITreeState#selectNode(javax.swing.tree.TreeNode,
+	 *      boolean)
+	 */
+	public void selectNode(TreeNode node, boolean selected)
 	{
 		if (selected == true && selectedNodes.contains(node) == false)
 		{
 			if (isAllowSelectMultiple() == false && selectedNodes.size() > 0)
 			{
-				for (Iterator<TreeNode> i = selectedNodes.iterator(); i.hasNext(); )
-				{					
+				for (Iterator<TreeNode> i = selectedNodes.iterator(); i.hasNext();)
+				{
 					TreeNode current = i.next();
-					i.remove();					
-					for (TreeStateListener l : listeners)
+					i.remove();
+					for (ITreeStateListener l : listeners)
 					{
 						l.nodeUnselected(current);
-					}					
-				}					
+					}
+				}
 			}
 			selectedNodes.add(node);
-			for (TreeStateListener l : listeners)
+			for (ITreeStateListener l : listeners)
 			{
 				l.nodeSelected(node);
 			}
@@ -23,7 +27,7 @@
 		else if (selected == false && selectedNodes.contains(node) == true)
 		{
 			selectedNodes.remove(node);
-			for (TreeStateListener l : listeners)
+			for (ITreeStateListener l : listeners)
 			{
 				l.nodeUnselected(node);
 			}

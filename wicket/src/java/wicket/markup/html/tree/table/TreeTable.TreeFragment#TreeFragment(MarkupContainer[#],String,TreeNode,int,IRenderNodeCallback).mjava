@@ -1,25 +1,27 @@
 		/**
 		 * Constructor.
-		 * @param parent 
-		 * @param id 
-		 * @param node 
-		 * @param level 
-		 * @param renderNodeCallback 
+		 * 
+		 * @param parent
+		 * @param id
+		 * @param node
+		 * @param level
+		 * @param renderNodeCallback
+		 *            The call back for rendering nodes
 		 */
-		public TreeFragment(MarkupContainer<?> parent, String id, final TreeNode node, 
-				            int level, final IRenderNodeCallback renderNodeCallback) 
+		public TreeFragment(MarkupContainer<?> parent, String id, final TreeNode node, int level,
+				final IRenderNodeCallback renderNodeCallback)
 		{
 			super(parent, id, "fragment");
-	
-			createIndentation(this, "indent", node, level);
-			
-			createJunctionLink(this, "link", "image", node);
-			
-			WebMarkupContainer nodeLink = createNodeLink(this, "nodeLink", node);
-			
-			createNodeIcon(nodeLink, "icon", node);
-			
-			new Label(nodeLink, "label", new Model<String>() 
+
+			newIndentation(this, "indent", node, level);
+
+			newJunctionLink(this, "link", "image", node);
+
+			MarkupContainer nodeLink = newNodeLink(this, "nodeLink", node);
+
+			newNodeIcon(nodeLink, "icon", node);
+
+			new Label(nodeLink, "label", new Model<String>()
 			{
 				/**
 				 * 
@@ -27,10 +29,10 @@
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public String getObject() 
-				{				
+				public String getObject()
+				{
 					return renderNodeCallback.renderNode(node);
 				}
-			});						
-		}		
+			});
+		}
 

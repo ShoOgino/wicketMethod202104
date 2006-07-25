@@ -1,0 +1,26 @@
+	/**
+	 * Creates a link that can be used to select / unselect the specified node.
+	 * 
+	 * @param parent
+	 *            The parent component
+	 * @param id
+	 *            The component id
+	 * @param node
+	 *            The parent node
+	 * @return The component that represents the link
+	 */
+	protected MarkupContainer newNodeLink(MarkupContainer parent, String id, final TreeNode node)
+	{
+		return newLink(parent, id, new ILinkCallback()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target)
+			{
+				getTreeState().selectNode(node, !getTreeState().isNodeSelected(node));
+				onNodeLinkClicked(target, node);
+				updateTree(target);
+			}
+		});
+	}
+

@@ -1,25 +1,33 @@
 	/**
 	 * Returns an iterator that iterates trough the enumeration.
+	 * 
+	 * @param enumeration
+	 *            The enumeration to iterate through
+	 * @param <T>
+	 *            The type
+	 * @return The iterator
 	 */
-	private final <T> Iterator<T> toIterator(final Enumeration enumeration)
+	private static final <T> Iterator<T> toIterator(final Enumeration enumeration)
 	{
-		return new Iterator<T>() 
+		return new Iterator<T>()
 		{
 			@SuppressWarnings("unchecked")
 			private Enumeration<T> e = enumeration;
-			
-			public boolean hasNext() 
+
+			public boolean hasNext()
 			{
 				return e.hasMoreElements();
 			}
-			public T next() 
+
+			public T next()
 			{
 				return e.nextElement();
 			}
-			public void remove() 
+
+			public void remove()
 			{
 				throw new UnsupportedOperationException("Remove is not supported on enumeration.");
-			}			
+			}
 		};
 	}
 

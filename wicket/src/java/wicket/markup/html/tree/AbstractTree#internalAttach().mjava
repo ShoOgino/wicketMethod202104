@@ -1,0 +1,48 @@
+	/**
+	 * Called at the beginning of the request (not ajax request, unless we are
+	 * rendering the entire component)
+	 */
+	@Override
+	public void internalAttach()
+	{
+		super.internalAttach();
+		if (attached == false)
+		{
+			checkModel();
+
+			// Do we have to rebuld the whole tree?
+			if (dirtyAll && rootItem != null)
+			{
+				clearAllItem();
+			}
+			else
+			{
+				// rebuild chilren of dirty nodes that need it
+				rebuildDirty();
+			}
+
+			// is root item created? (root item is null if the items have not
+			// been created yet, or the whole tree was dirty and clearAllITem
+			// has been called
+			if (rootItem == null)
+			{
+				TreeNode rootNode = (TreeNode)getModelObject().getRoot();
+				if (rootNode != null)
+				{
+					if (isRootLess())
+					{
+						rootItem = newTreeItem(rootNode, -1);
+						rootItem.setVisible(false);
+					}
+					else
+					{
+						rootItem = newTreeItem(rootNode, 0);
+					}
+					buildItemChildren(rootItem);
+				}
+			}
+
+			attached = true;
+		}
+	}
+

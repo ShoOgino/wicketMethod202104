@@ -1,25 +1,25 @@
 	/**
 	 * @see IColumn#createCell(TreeTable, TreeNode, int)
 	 */
-	public IRenderable createCell(TreeNode node, int level) 
+	public IRenderable newCell(TreeNode node, int level)
 	{
-		return new IRenderable() 
+		return new IRenderable()
 		{
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 
-			public void render(TreeNode node, Response response) 
-			{				
+			public void render(TreeNode node, Response response)
+			{
 				String content = getNodeValue(node);
-				
+
 				// escape if necessary
 				if (isEscapeContent())
 				{
 					content = Strings.escapeMarkup(content).toString();
 				}
-				
+
 				response.write("<span class=\"text\"");
 				if (isContentAsTooltip())
 				{
@@ -28,7 +28,7 @@
 				response.write(">");
 				response.write(content);
 				response.write("</span>");
-			}			
+			}
 		};
 	}
 
