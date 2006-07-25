@@ -1,0 +1,33 @@
+		/**
+		 * Collapses the receiver. If <code>adjustRows</code> is true, the
+		 * rows of nodes after the receiver are adjusted.
+		 * 
+		 * @param adjustRows
+		 *            whether to adjust the rows of the receiver
+		 */
+		private void collapse(boolean adjustRows)
+		{
+			if (isExpanded)
+			{
+				if (isVisible() && adjustRows)
+				{
+					int childCount = getTotalChildCount();
+
+					isExpanded = false;
+					adjustRowCountBy(-childCount);
+					// We can do this because adjustRowBy won't descend
+					// the children.
+					adjustRowBy(-childCount, 0);
+				}
+				else
+				{
+					isExpanded = false;
+				}
+
+				if (adjustRows && isVisible() && treeSelectionModel != null)
+				{
+					treeSelectionModel.resetRowSelection();
+				}
+			}
+		}
+

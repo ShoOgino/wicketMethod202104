@@ -1,0 +1,44 @@
+		/**
+		 * Creates a new node to represent <code>userObject</code>. This does
+		 * NOT check to ensure there isn't already a child node to manage
+		 * <code>userObject</code>.
+		 * 
+		 * @param userObject
+		 *            the user object of the new node
+		 * @return the new node
+		 */
+		private TreeStateNode createChildFor(Object userObject)
+		{
+			int newChildIndex = treeModel.getIndexOfChild(getUserObject(), userObject);
+
+			if (newChildIndex < 0)
+			{
+				return null;
+			}
+
+			TreeStateNode aNode;
+			TreeStateNode child = createNodeForValue(userObject, newChildIndex);
+			int childRow;
+
+			if (isVisible())
+			{
+				childRow = getRowToModelIndex(newChildIndex);
+			}
+			else
+			{
+				childRow = -1;
+			}
+			child.row = childRow;
+			for (int counter = 0, maxCounter = getChildCount(); counter < maxCounter; counter++)
+			{
+				aNode = (TreeStateNode)getChildAt(counter);
+				if (aNode.childIndex > newChildIndex)
+				{
+					insert(child, counter);
+					return child;
+				}
+			}
+			add(child);
+			return child;
+		}
+

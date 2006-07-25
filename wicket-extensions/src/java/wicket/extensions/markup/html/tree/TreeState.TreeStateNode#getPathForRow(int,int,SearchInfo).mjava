@@ -1,0 +1,91 @@
+		/**
+		 * Returns true if there is a row for <code>row</code>.
+		 * <code>nextRow</code> gives the bounds of the receiver. Information
+		 * about the found row is returned in <code>info</code>. This should
+		 * be invoked on root with <code>nextRow</code> set to
+		 * <code>getRowCount</code> ().
+		 * 
+		 * @param row
+		 * @param nextRow
+		 * @param info
+		 *            search info object
+		 * @return true if there is a row for <code>row</code>
+		 */
+		private boolean getPathForRow(int row, int nextRow, SearchInfo info)
+		{
+			if (this.row == row)
+			{
+				info.node = this;
+				info.isNodeParentNode = false;
+				info.childIndex = childIndex;
+				return true;
+			}
+
+			TreeStateNode child;
+			TreeStateNode lastChild = null;
+
+			for (int counter = 0, maxCounter = getChildCount(); counter < maxCounter; counter++)
+			{
+				child = (TreeStateNode)getChildAt(counter);
+				if (child.row > row)
+				{
+					if (counter == 0)
+					{
+						// No node exists for it, and is first.
+						info.node = this;
+						info.isNodeParentNode = true;
+						info.childIndex = row - this.row - 1;
+						return true;
+					}
+					else if (lastChild != null)
+					{
+						// May have been in last childs bounds.
+						int lastChildEndRow = 1 + child.row
+								- (child.childIndex - lastChild.childIndex);
+
+						if (row < lastChildEndRow)
+						{
+							return lastChild.getPathForRow(row, lastChildEndRow, info);
+						}
+						// Between last child and child, but not in last child
+						info.node = this;
+						info.isNodeParentNode = true;
+						info.childIndex = row - lastChildEndRow + lastChild.childIndex + 1;
+						return true;
+					}
+				}
+				lastChild = child;
+			}
+
+			// Not in children, but we should have it, offset from
+			// nextRow.
+			if (lastChild != null)
+			{
+				int lastChildEndRow = nextRow - (childCount - lastChild.childIndex) + 1;
+
+				if (row < lastChildEndRow)
+				{
+					return lastChild.getPathForRow(row, lastChildEndRow, info);
+				}
+				// Between last child and child, but not in last child
+				info.node = this;
+				info.isNodeParentNode = true;
+				info.childIndex = row - lastChildEndRow + lastChild.childIndex + 1;
+				return true;
+			}
+			else
+			{
+				// No children.
+				int retChildIndex = row - this.row - 1;
+
+				if (retChildIndex >= childCount)
+				{
+					return false;
+				}
+				info.node = this;
+				info.isNodeParentNode = true;
+				info.childIndex = retChildIndex;
+				return true;
+			}
+		}
+

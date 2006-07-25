@@ -1,0 +1,19 @@
+	/**
+	 * Sets the new expanded state, based on the given node
+	 * 
+	 * @param node
+	 *            the tree node model
+	 */
+	public void setExpandedState(final DefaultMutableTreeNode node)
+	{
+		final TreePath selection = new TreePath(node.getPath());
+		setExpandedState(selection, (!treeState.isExpanded(selection))); // inverse
+
+		// If set to SINGLE_TREE_SELECTION, collapse all sibling nodes
+		final int selectionType = getTreeState().getSelectionModel().getSelectionMode();
+		if (TreeSelectionModel.SINGLE_TREE_SELECTION == selectionType)
+		{
+			collapseSiblings(node);
+		}
+	}
+

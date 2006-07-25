@@ -1,0 +1,28 @@
+	/**
+	 * Determines whether or not the root node from the TreeModel is visible.
+	 * 
+	 * @param rootVisible
+	 *            true if the root node of the tree is to be displayed
+	 */
+	public void setRootVisible(boolean rootVisible)
+	{
+		if (isRootVisible() != rootVisible)
+		{
+			this.rootVisible = rootVisible;
+			if (root != null)
+			{
+				if (rootVisible)
+				{
+					rowCount++;
+					root.adjustRowBy(1);
+				}
+				else
+				{
+					rowCount--;
+					root.adjustRowBy(-1);
+				}
+				visibleNodesChanged();
+			}
+		}
+	}
+

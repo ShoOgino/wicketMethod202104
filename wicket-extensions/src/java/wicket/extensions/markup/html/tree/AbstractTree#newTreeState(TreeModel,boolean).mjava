@@ -1,0 +1,23 @@
+	/**
+	 * Creates a new tree state by creating a new {@link TreeState}object,
+	 * which is then set as the current tree state, creating a new
+	 * {@link TreeSelectionModel}and then calling setTreeModel with this
+	 * 
+	 * @param treeModel
+	 *            the model that the new tree state applies to
+	 * @param rootVisible
+	 *            whether the tree node should be displayed
+	 * @return the tree state
+	 */
+	protected final TreeState newTreeState(final TreeModel treeModel, final boolean rootVisible)
+	{
+		final TreeState treeState = new TreeState();
+		final TreeSelectionModel treeSelectionModel = new DefaultTreeSelectionModel();
+		treeSelectionModel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		treeState.setModel(treeModel);
+		treeState.setSelectionModel(treeSelectionModel);
+		treeState.setRootVisible(rootVisible);
+		treeModel.addTreeModelListener(treeState);
+		return treeState;
+	}
+

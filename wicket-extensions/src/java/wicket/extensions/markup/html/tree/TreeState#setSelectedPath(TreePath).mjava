@@ -1,0 +1,25 @@
+	/**
+	 * Expands the selected path and set selection to currently selected path.
+	 * 
+	 * @param selection
+	 *            the new selection.
+	 */
+	public void setSelectedPath(TreePath selection)
+	{
+		setExpandedState(selection, true);
+		this.selectedPath = selection;
+
+		// if we have a multiple selection model
+		if (treeSelectionModel != null)
+		{
+			if (treeSelectionModel.isPathSelected(selection))
+			{
+				treeSelectionModel.removeSelectionPath(selection);
+			}
+			else
+			{
+				treeSelectionModel.addSelectionPath(selection);
+			}
+		}
+	}
+
