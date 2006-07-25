@@ -17,22 +17,27 @@
 
 			public RequestCycle newRequestCycle(Session session, Request request, Response response)
 			{
-				WicketPortletRequest req = (WicketPortletRequest)request;
-				WicketPortletResponse res = (WicketPortletResponse)response;
-				PortletRequest preq = req.getPortletRequest();
-				PortletResponse pres = res.getPortletResponse();
-				if (preq instanceof ActionRequest)
-				{
-					return new PortletActionRequestCycle((WicketPortletSession)session,
-							(WicketPortletRequest)request, (WicketPortletResponse)response);
+				if(request instanceof WicketPortletRequest){
 
-				}
-				else
-				{
-					return new PortletRenderRequestCycle((WicketPortletSession)session,
-							(WicketPortletRequest)request, (WicketPortletResponse)response);
+					WicketPortletRequest req = (WicketPortletRequest)request;
+					WicketPortletResponse res = (WicketPortletResponse)response;
+					PortletRequest preq = req.getPortletRequest();
+					PortletResponse pres = res.getPortletResponse();
+					if (preq instanceof ActionRequest)
+					{
+						return new PortletActionRequestCycle((WicketPortletSession)session,
+								(WicketPortletRequest)request, (WicketPortletResponse)response);
 
+					}
+					else
+					{
+						return new PortletRenderRequestCycle((WicketPortletSession)session,
+								(WicketPortletRequest)request, (WicketPortletResponse)response);
+
+					}
 				}
+				return new WebRequestCycle((WebSession)session, (WebRequest)request,
+						(WebResponse)response);
 			}
 		};
 	}
