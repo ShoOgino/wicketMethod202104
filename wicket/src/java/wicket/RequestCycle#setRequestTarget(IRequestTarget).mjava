@@ -6,23 +6,11 @@
 	 */
 	public final void setRequestTarget(IRequestTarget requestTarget)
 	{
-		// FIXME post 1.2 Robustness: This has to be done after the unit tests are fixed
-		// // if we are already responding, we can't change the request target
-		// // as that would either have no effect, or - in case we would set
-		// // the currentStep back to PROCESS_EVENTS, we would have double
-		// // output (and it is not Wicket's intention to work as Servlet
-		// filters)
-		// if (currentStep >= RESPOND)
-		// {
-		// throw new WicketRuntimeException(
-		// "you cannot change the request cycle after rendering has commenced");
-		// }
-
 		if (log.isDebugEnabled())
 		{
 			if (!requestTargets.isEmpty())
 			{
-				IRequestTarget former = (IRequestTarget)requestTargets.peek();
+				IRequestTarget former = requestTargets.peek();
 				log.debug("replacing request target " + former + " with " + requestTarget);
 			}
 			else
