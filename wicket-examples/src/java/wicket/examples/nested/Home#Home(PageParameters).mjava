@@ -22,18 +22,19 @@
 		l1.add("test 1.3");
 
 		// construct the panel
-		new NestedList(this, "nestedList", l1);
+		new RecursivePanel(this, "panels", l1);
 
 		// create a tree
 		TreeModel treeModel = convertToTreeModel(l1);
 		final Tree tree = new Tree(this, "tree", treeModel)
 		{
+			/**
+			 * @see wicket.markup.html.tree.Tree#renderNode(javax.swing.tree.TreeNode)
+			 */
 			@Override
-			protected String getNodeLabel(DefaultMutableTreeNode node)
+			protected String renderNode(TreeNode node)
 			{
-				Object userObject = node.getUserObject();
-				return (userObject instanceof List) ? "<sub>" : String
-						.valueOf(node.getUserObject());
+				return node.isLeaf() ? node.toString() : "<sub>";
 			}
 		};
 		new Link(this, "expandAll")
@@ -41,7 +42,7 @@
 			@Override
 			public void onClick()
 			{
-				tree.expandAll(true);
+				tree.getTreeState().expandAll();
 			}
 		};
 
@@ -50,14 +51,8 @@
 			@Override
 			public void onClick()
 			{
-				tree.expandAll(false);
+				tree.getTreeState().collapseAll();
 			}
 		};
-
-		// and another one
-		new MyTree(this, "tree2", treeModel);
-
-		// and yet another one
-		new AnotherTree(this, "tree3", treeModel);
 	}
 
