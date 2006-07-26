@@ -1,0 +1,36 @@
+	private void doSetRenderParameters(PortletRequestCycle requestCycle,
+			IListenerInterfaceRequestTarget requestTarget)
+	{
+		ActionResponse response = getActionResponse(requestCycle);
+		final RequestListenerInterface rli = requestTarget.getRequestListenerInterface();
+
+		// Get component and page for request target
+		final Component component = requestTarget.getTarget();
+		final Page page = component.getPage();
+
+		// Add pagemap
+		final PageMap pageMap = page.getPageMap();
+		if (!pageMap.isDefault())
+		{
+			response.setRenderParameter(PAGEMAP, pageMap.getName());
+		}
+		// Add path to component
+		response.setRenderParameter(COMPONENT_PATH_PARAMETER_NAME, component.getPath());
+
+		// Add version
+		final int versionNumber = component.getPage().getCurrentVersionNumber();
+		if (!rli.getRecordsPageVersion())
+		{
+			response
+			.setRenderParameter(VERSION_PARAMETER_NAME, String.valueOf(Page.LATEST_VERSION));
+		}
+		else if (versionNumber > 0)
+		{
+			response.setRenderParameter(VERSION_PARAMETER_NAME, String.valueOf(versionNumber));
+		}
+
+		// Add listener interface
+		final String listenerName = rli.getName();
+		response.setRenderParameter(INTERFACE_PARAMETER_NAME, listenerName);
+	}
+

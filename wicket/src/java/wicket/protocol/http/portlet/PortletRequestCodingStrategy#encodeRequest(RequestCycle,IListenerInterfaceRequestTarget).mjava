@@ -1,0 +1,77 @@
+	/**
+	 * Encode a listener interface target.
+	 * 
+	 * If you override this method to behave different then also
+	 * {@link #addInterfaceParameters(Request, RequestParameters)} should be
+	 * overridden to by in sync with that behaviour.
+	 * 
+	 * @param requestCycle
+	 *            the current request cycle
+	 * @param requestTarget
+	 *            the target to encode
+	 * @return the encoded url
+	 */
+	protected CharSequence encodeRequest(RequestCycle requestCycle,
+			IListenerInterfaceRequestTarget requestTarget)
+	{
+		PortletURL url;
+		final RequestListenerInterface rli = requestTarget.getRequestListenerInterface();
+
+		try
+		{
+			url = getActionURL(requestCycle);
+		}
+		catch (WicketRuntimeException e)
+		{
+			/*
+			 * 
+			 * TODO
+			 * 
+			 * This is a kludge to allow page to be set stateful by calling
+			 * page.urlFor. If we could set the page stateful manually, this
+			 * could be removed.
+			 * 
+			 * Exception is thrown when getActionURL is called when not in the
+			 * portlet render phase.
+			 * 
+			 * @see doSetRenderParameters(RequestCycle requestCycle,
+			 *      IPageRequestTarget requestTarget)
+			 */
+			return null;
+		}
+
+		if(IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
+		{
+			return encodeServletRequest(requestCycle,requestTarget);
+		}
+		
+		// Get component and page for request target
+		final Component component = requestTarget.getTarget();
+		final Page page = component.getPage();
+		// Add pagemap
+		final PageMap pageMap = page.getPageMap();
+		if (!pageMap.isDefault())
+		{
+			url.setParameter(PAGEMAP, pageMap.getName());
+		}
+		// Add path to component
+		url.setParameter(COMPONENT_PATH_PARAMETER_NAME, component.getPath());
+
+		// Add version
+		final int versionNumber = component.getPage().getCurrentVersionNumber();
+		if (!rli.getRecordsPageVersion())
+		{
+			url.setParameter(VERSION_PARAMETER_NAME, String.valueOf(Page.LATEST_VERSION));
+		}
+		else if (versionNumber > 0)
+		{
+			url.setParameter(VERSION_PARAMETER_NAME, String.valueOf(versionNumber));
+		}
+
+		// Add listener interface
+		final String listenerName = rli.getName();
+		url.setParameter(INTERFACE_PARAMETER_NAME, listenerName);
+
+		return url.toString();
+	}
+

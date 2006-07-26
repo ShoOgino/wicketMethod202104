@@ -1,0 +1,50 @@
+	/*
+	 * public void doView(RenderRequest req, RenderResponse res){
+	 */
+	public final void render(RenderRequest req, RenderResponse res) throws PortletException,
+			IOException
+	{
+		// First, set the webapplication for this thread
+		Application.set(portletApplication);
+
+		// Create a response object and set the output encoding according to
+		// wicket's application setttings.
+		final WicketPortletResponse response = portletApplication.newPortletResponse(res);
+
+		// Create a new webrequest
+		final WicketPortletRequest request = portletApplication.newPortletRequest(req);
+
+		final WicketPortletSession session = portletApplication.getSession(request);
+
+		try
+		{
+			// Create a new request cycle
+			// FIXME post 1.2 Instead of doing this, we should get a request
+			// cycle factory
+			// from the application settings and use that. That way we are a
+			// step
+			// closer to a session-less operation of Wicket.
+			PortletRequestCycle cycle = (PortletRequestCycle)session.newRequestCycle(request,
+					response);
+
+			try
+			{
+				// Process request
+				cycle.request();
+			}
+			catch (AbortException e)
+			{
+				// noop
+			}
+		}
+		finally
+		{
+			// Clean up thread local session
+			Session.unset();
+
+			// Clean up thread local application
+			Application.unset();
+
+		}
+	}
+

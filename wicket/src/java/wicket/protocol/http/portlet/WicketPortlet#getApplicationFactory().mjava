@@ -1,0 +1,54 @@
+	/**
+	 * Creates the web application factory instance.
+	 * 
+	 * If no APP_FACT_PARAM is specified in web.xml
+	 * ContextParamWebApplicationFactory will be used by default.
+	 * 
+	 * @see ContextParamWebApplicationFactory
+	 * 
+	 * @return application factory instance
+	 */
+	protected final IPortletApplicationFactory getApplicationFactory()
+	{
+		final String appFactoryClassName = getPortletContext().getInitParameter(APP_FACT_PARAM);
+
+		if (appFactoryClassName == null)
+		{
+			// If no context param was specified we return the default factory
+			return new PortletPreferencesPortletApplicationFactory();
+		}
+		else
+		{
+			try
+			{
+				// Try to find the specified factory class
+				final Class factoryClass = getClass().getClassLoader().loadClass(
+						appFactoryClassName);
+
+				// Instantiate the factory
+				return (IPortletApplicationFactory)factoryClass.newInstance();
+			}
+			catch (ClassCastException e)
+			{
+				throw new WicketRuntimeException("Application factory class " + appFactoryClassName
+						+ " must implement IPortletApplicationFactory");
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new WebApplicationFactoryCreationException(appFactoryClassName, e);
+			}
+			catch (InstantiationException e)
+			{
+				throw new WebApplicationFactoryCreationException(appFactoryClassName, e);
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new WebApplicationFactoryCreationException(appFactoryClassName, e);
+			}
+			catch (SecurityException e)
+			{
+				throw new WebApplicationFactoryCreationException(appFactoryClassName, e);
+			}
+		}
+	}
+
