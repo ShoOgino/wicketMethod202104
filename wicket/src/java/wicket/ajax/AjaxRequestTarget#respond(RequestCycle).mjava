@@ -29,29 +29,49 @@
 			response.write(encoding);
 			response.write("\"?>");
 			response.write("<ajax-response>");
-			
-			for (String js : prependJavascripts)
-			{
-				respondInvocation(response, js);
-			}
-			
-			Iterator<Entry<String, Component>> it = markupIdToComponent.entrySet().iterator();
-			while (it.hasNext())
-			{
-				final Map.Entry<String, Component> entry = it.next();
-				final Component component = entry.getValue();				
-				final String markupId = entry.getKey();
-				respondHeaderContribution(response, component);
-				respondComponent(response, markupId, component);								
-			}			
 
-			for (String js : appendJavascripts)
+			if (requestTarget == null)
 			{
-				respondInvocation(response, js);
+				// normal behavior
+
+				for (String js : prependJavascripts)
+				{
+					respondInvocation(response, js);
+				}
+
+				Iterator<Entry<String, Component>> it = markupIdToComponent.entrySet().iterator();
+				while (it.hasNext())
+				{
+					final Map.Entry<String, Component> entry = it.next();
+					final Component component = entry.getValue();
+					final String markupId = entry.getKey();
+					respondHeaderContribution(response, component);
+					respondComponent(response, markupId, component);
+				}
+
+				for (String js : appendJavascripts)
+				{
+					respondInvocation(response, js);
+				}
 			}
-			
-			response.write("</ajax-response>");			
-			
+			else
+			{
+				// a request target was set. only do the redirect to that
+				CharSequence url = RequestCycle.get().urlFor(requestTarget);
+
+				// if this is a page target, make sure it is available in the
+				// page map
+				if (requestTarget instanceof IPageRequestTarget)
+				{
+					Session.get().touch(((IPageRequestTarget)requestTarget).getPage());
+				}
+
+				// append the redirect script
+				respondInvocation(response, "window.location='" + url + "';");
+			}
+
+			response.write("</ajax-response>");
+
 			// restore component use check
 			app.getDebugSettings().setComponentUseCheck(oldUseCheck);
 		}

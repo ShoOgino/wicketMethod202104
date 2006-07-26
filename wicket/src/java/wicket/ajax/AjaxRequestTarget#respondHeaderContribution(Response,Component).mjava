@@ -3,27 +3,27 @@
 	 * @param response
 	 * @param component
 	 */
-	private void respondHeaderContribution(final Response response, final Component component) 
-	{		
+	private void respondHeaderContribution(final Response response, final Component component)
+	{
 		final HtmlHeaderContainer header = new HtmlHeaderContainer(component.getPage(),
 				HtmlHeaderSectionHandler.HEADER_ID);
-						
+
 		Response oldResponse = RequestCycle.get().setResponse(encodingResponse);
-		
+
 		encodingResponse.reset();
-		
+
 		component.renderHead(header);
-		if (component instanceof MarkupContainer) 
+		if (component instanceof MarkupContainer)
 		{
-			((MarkupContainer)component).visitChildren(new Component.IVisitor() 
+			((MarkupContainer)component).visitChildren(new Component.IVisitor()
 			{
-				public Object component(Component component) 
+				public Object component(Component component)
 				{
 					if (component.isVisible())
 					{
 						component.renderHead(header);
 						return CONTINUE_TRAVERSAL;
-					}					
+					}
 					else
 					{
 						return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
@@ -31,29 +31,30 @@
 				}
 			});
 		}
-		
+
 		RequestCycle.get().setResponse(oldResponse);
-		
-		if (encodingResponse.getContents().length() != 0) 
+
+		if (encodingResponse.getContents().length() != 0)
 		{
 			response.write("<header-contribution");
-			
+
 			if (encodingResponse.isContentsEncoded())
 			{
 				response.write(" encoding=\"");
 				response.write(getEncodingName());
 				response.write("\" ");
 			}
-						
-			// we need to write response as CDATA and parse it on client, because
+
+			// we need to write response as CDATA and parse it on client,
+			// because
 			// konqueror crashes when there is a <script> element
 			response.write("><![CDATA[<head xmlns:wicket=\"http://wicket.sourceforge.net\">");
-						
+
 			response.write(encodingResponse.getContents());
-			
+
 			response.write("</head>]]>");
-			
-			response.write("</header-contribution>");			
-		}		
+
+			response.write("</header-contribution>");
+		}
 	}
 
