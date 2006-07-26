@@ -1,0 +1,30 @@
+	/**
+	 * Constructs the ColumnLocation object.
+	 * 
+	 * @param alignment
+	 *            The column alignment
+	 * @param size
+	 *            The column size in expressed in the provided unit
+	 * @param unit
+	 *            The unit that the size argument is expressed in
+	 * @throws IllegalArgumentException
+	 *             if the unit does not matche the alignment
+	 */
+	public ColumnLocation(Alignment alignment, int size, Unit unit)
+	{
+		this.alignment = alignment;
+		this.size = size;
+		this.unit = unit;
+
+		if (alignment == Alignment.MIDDLE && unit != Unit.PROPORTIONAL)
+		{
+			throw new IllegalArgumentException(
+					"For alignment MIDDLE the specified unit must be PROPORTIONAL.");
+		}
+		else if (alignment != Alignment.MIDDLE && unit == Unit.PROPORTIONAL)
+		{
+			throw new IllegalArgumentException(
+					"Unit PROPORTIONAL can be specified only for columns with alignment MIDDLE.");
+		}
+	}
+

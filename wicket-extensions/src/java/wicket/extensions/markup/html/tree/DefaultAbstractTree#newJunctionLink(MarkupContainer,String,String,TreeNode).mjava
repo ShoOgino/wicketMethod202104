@@ -1,0 +1,72 @@
+	/**
+	 * Creates the junction link for given node. Also (optionally) creates the
+	 * junction image. If the node is a leaf (it has no children), the created
+	 * junction link is non-functional.
+	 * 
+	 * @param parent
+	 *            parent component of the link
+	 * 
+	 * @param id
+	 *            wicket:id of the component
+	 * 
+	 * @param imageId
+	 *            wicket:id of the image. this can be null, in that case image
+	 *            is not created. image is supposed to be placed on the link
+	 *            (link is parent of image)
+	 * 
+	 * @param node
+	 *            tree node for which the link should be created.
+	 * @return The link component
+	 */
+	protected Component newJunctionLink(MarkupContainer parent, final String id,
+			final String imageId, final TreeNode node)
+	{
+		final MarkupContainer junctionLink;
+
+		if (node.isLeaf() == false)
+		{
+			junctionLink = newLink(parent, id, new ILinkCallback()
+			{
+				private static final long serialVersionUID = 1L;
+
+				public void onClick(AjaxRequestTarget target)
+				{
+					if (isNodeExpanded(node))
+					{
+						getTreeState().collapseNode(node);
+					}
+					else
+					{
+						getTreeState().expandNode(node);
+					}
+					onJunctionLinkClicked(target, node);
+					updateTree(target);
+				}
+			});
+		}
+		else
+		{
+			junctionLink = new WebMarkupContainer(id)
+			{
+				private static final long serialVersionUID = 1L;
+
+				/**
+				 * @see wicket.Component#onComponentTag(wicket.markup.ComponentTag)
+				 */
+				protected void onComponentTag(ComponentTag tag)
+				{
+					super.onComponentTag(tag);
+					tag.put("onclick", "return false");
+				}
+			};
+
+		}
+
+		if (imageId != null)
+		{
+			junctionLink.add(newJunctionImage(junctionLink, imageId, node));
+		}
+
+		return junctionLink;
+	}
+

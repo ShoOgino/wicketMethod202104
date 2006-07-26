@@ -1,0 +1,21 @@
+	/**
+	 * @see wicket.extensions.markup.html.tree.ITreeState#expandNode(javax.swing.tree.TreeNode)
+	 */
+	public void expandNode(TreeNode node)
+	{
+		if (nodesCollapsed == false)
+		{
+			nodes.add(node);
+		}
+		else
+		{
+			nodes.remove(node);
+		}
+
+		for (Iterator i = listeners.iterator(); i.hasNext();)
+		{
+			ITreeStateListener l = (ITreeStateListener)i.next();
+			l.nodeExpanded(node);
+		}
+	}
+

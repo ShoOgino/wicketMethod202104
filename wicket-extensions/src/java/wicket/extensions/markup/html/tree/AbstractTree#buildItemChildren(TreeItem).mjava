@@ -1,0 +1,27 @@
+	/**
+	 * Builds the children for given TreeItem. It recursively traverses children
+	 * of it's TreeNode and creates TreeItem for every visible TreeNode.
+	 * 
+	 * @param item
+	 *            The parent tree item
+	 */
+	private final void buildItemChildren(TreeItem item)
+	{
+		List items;
+
+		// if the node is expanded
+		if (isNodeExpanded((TreeNode)item.getModelObject()))
+		{
+			// build the items for children of the items' treenode.
+			items = buildTreeItems(nodeChildren((TreeNode)item.getModelObject()),
+					item.getLevel() + 1);
+		}
+		else
+		{
+			// it's not expanded, just set children to an empty list
+			items = Collections.EMPTY_LIST;
+		}
+
+		item.setChildren(items);
+	}
+

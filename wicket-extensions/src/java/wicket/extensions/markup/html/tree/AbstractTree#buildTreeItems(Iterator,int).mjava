@@ -1,0 +1,31 @@
+	/**
+	 * Builds (recursively) TreeItems for the given Iterator of TreeNodes.
+	 * 
+	 * @param nodes
+	 *            The nodes to build tree items for
+	 * @param level
+	 *            The current level
+	 * @return List with new tree items
+	 */
+	private final List buildTreeItems(Iterator nodes, int level)
+	{
+		List result = new ArrayList();
+
+		// for each node
+		while (nodes.hasNext())
+		{
+			TreeNode node = (TreeNode)nodes.next();
+			// create tree item
+			TreeItem item = newTreeItem(node, level);
+			itemContainer.add(item);
+
+			// builds it children (recursively)
+			buildItemChildren(item);
+
+			// add item to result
+			result.add(item);
+		}
+
+		return result;
+	}
+

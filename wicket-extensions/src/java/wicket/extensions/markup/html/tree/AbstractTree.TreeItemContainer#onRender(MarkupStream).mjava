@@ -1,0 +1,55 @@
+		/**
+		 * renders the tree items, making sure that items are rendered in the
+		 * order they should be
+		 * 
+		 * @param markupStream
+		 */
+		protected void onRender(final MarkupStream markupStream)
+		{
+			// Save position in markup stream
+			final int markupStart = markupStream.getCurrentIndex();
+
+			// have we rendered at least one item?
+			final class Rendered
+			{
+				boolean rendered = false;
+			}
+			;
+			final Rendered rendered = new Rendered();
+
+			// is there a root item? (non-empty tree)
+			if (rootItem != null)
+			{
+				IItemCallback callback = new IItemCallback()
+				{
+					public void visitItem(TreeItem item)
+					{
+						// rewind markup stream
+						markupStream.setCurrentIndex(markupStart);
+
+						// render component
+						item.render(markupStream);
+
+						rendered.rendered = true;
+					}
+				};
+
+				if (isRootLess())
+				{
+					// vist just the children
+					visitItemChildren(rootItem, callback);
+				}
+				else
+				{
+					// visit item and it's children
+					visitItemAndChildren(rootItem, callback);
+				}
+			}
+
+			if (rendered.rendered == false)
+			{
+				// tree is empty, just move the markupStream
+				markupStream.skipComponent();
+			}
+		}
+

@@ -1,0 +1,21 @@
+	/**
+	 * @see wicket.extensions.markup.html.tree.ITreeState#collapseNode(javax.swing.tree.TreeNode)
+	 */
+	public void collapseNode(TreeNode node)
+	{
+		if (nodesCollapsed == true)
+		{
+			nodes.add(node);
+		}
+		else
+		{
+			nodes.remove(node);
+		}
+
+		for (Iterator i = listeners.iterator(); i.hasNext();)
+		{
+			ITreeStateListener l = (ITreeStateListener)i.next();
+			l.nodeCollapsed(node);
+		}
+	}
+
