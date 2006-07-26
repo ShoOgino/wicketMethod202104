@@ -4,9 +4,12 @@
 	@Override
 	public void setLastModifiedTime(Time time)
 	{
-		if (time != null && time.getMilliseconds() != -1)
+		if (httpServletResponse != null)
 		{
-			httpServletResponse.setDateHeader("Last-Modified", time.getMilliseconds());
+			if (time != null && time.getMilliseconds() != -1)
+			{
+				httpServletResponse.setDateHeader("Last-Modified", time.getMilliseconds());
+			}
 		}
 	}
 
