@@ -29,15 +29,23 @@
 
 			item = newTreeItem(node, level, id);
 			itemContainer.add(item);
+			
 			item.setChildren(children);
 
-			if (parent != null)
+			// was the item an root item?
+			if (parent == null)
+			{
+				rootItem = item;				
+			}
+			else
 			{
 				parent.getChildren().set(index, item);
 			}
 		}
 
 		if (item != null)
+		{
 			dirtyItems.add(item);
+		}
 	}
 
