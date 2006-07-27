@@ -28,13 +28,15 @@
 		TreeModel treeModel = convertToTreeModel(l1);
 		final Tree tree = new Tree("tree", treeModel)
 		{
-			protected String getNodeLabel(DefaultMutableTreeNode node)
+			protected String renderNode(TreeNode node)
 			{
-				Object userObject = node.getUserObject();
-				return (userObject instanceof List) ? "<sub>" : String
-						.valueOf(node.getUserObject());
+				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;				 
+				Object userObject = treeNode.getUserObject();
+				return (userObject instanceof List) ? "<subtree>" : String
+						.valueOf(treeNode.getUserObject());
 			}
 		};
+		tree.setLinkType(LinkType.REGULAR);
 		add(tree);
 		add(new Link("expandAll")
 		{
