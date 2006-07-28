@@ -7,26 +7,29 @@
 	 */
 	private final void invalidateNodeWithChildren(TreeNode node)
 	{
-		// get item for this node
-		TreeItem item = (TreeItem)nodeToItemMap.get(node);
-
-		// is the item visible?
-		if (item != null)
+		if (dirtyAll == false)
 		{
-			// go though item children and remove every one of them
-			visitItemChildren(item, new IItemCallback()
+			// get item for this node
+			TreeItem item = (TreeItem)nodeToItemMap.get(node);
+	
+			// is the item visible?
+			if (item != null)
 			{
-				public void visitItem(TreeItem item)
+				// go though item children and remove every one of them
+				visitItemChildren(item, new IItemCallback()
 				{
-					removeItem(item);
-				}
-			});
-
-			// set children to null so that they get rebuild
-			item.setChildren(null);
-
-			// add item to dirty items
-			dirtyItems.add(item);
+					public void visitItem(TreeItem item)
+					{
+						removeItem(item);
+					}
+				});
+	
+				// set children to null so that they get rebuild
+				item.setChildren(null);
+	
+				// add item to dirty items
+				dirtyItems.add(item);
+			}
 		}
 	}
 
