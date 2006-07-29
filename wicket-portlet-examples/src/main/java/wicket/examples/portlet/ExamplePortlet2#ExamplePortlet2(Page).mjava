@@ -1,6 +1,3 @@
-	/**
-	 * @param page
-	 */
 	public ExamplePortlet2(final Page page)
 	{
 		add(new Link("link")
@@ -29,5 +26,17 @@
 				return true;
 			}
 		}));
+		
+		final Label counterValue=new Label("counter",new PropertyModel(this,"counter"));
+		counterValue.setOutputMarkupId(true);
+		add(counterValue);
+		add(new AjaxLink("counterLink"){
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				counter++;
+				target.addComponent(counterValue);
+			}
+		});
 	}
 
