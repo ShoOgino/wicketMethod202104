@@ -4,22 +4,21 @@
 	 */
 	private void parseMarkup()
 	{
-		// Handlers may add MarkupElements which were not found in the markup
-		// file.
-		final List autoAddList = new ArrayList();
-
 		// Initialize the markup filter chain
-		this.markupFilterChain = newFilterChain(autoAddList);
-		
+		initializeMarkupFilters();
+
 		// Allow subclasses to extend the filter chain
 		initFilterChain();
 
 		// Get relevant settings from the Application
-		boolean stripComments = this.markupSettings.getStripComments();
-		boolean compressWhitespace = this.markupSettings.getCompressWhitespace();
+		final boolean stripComments = this.markupSettings.getStripComments();
+		final boolean compressWhitespace = this.markupSettings.getCompressWhitespace();
 
 		try
 		{
+			// allways remember the latest index (size)
+			int size = this.markup.size();
+			
 			// Loop through tags
 			for (ComponentTag tag; null != (tag = (ComponentTag)markupFilterChain.nextTag());)
 			{
@@ -29,24 +28,8 @@
 					add = ((tag.getOpenTag() != null) && (tag.getOpenTag().getId() != null));
 				}
 
-				// Determine wicket namespace: <html
-				// xmlns:wicket="http://wicket.sourceforge.net">
-				RawMarkup replaceTag = null;
-				if (tag.isOpen() && "html".equals(tag.getName().toLowerCase()))
-				{
-					// if add already true, do not make it false
-					add |= determineWicketNamespace(tag);
-
-					// If add and tag has no wicket:id, than
-					if ((add == true) && (tag.getId() == null))
-					{
-						// Replace the current tag
-						replaceTag = new RawMarkup(tag.toCharSequence());
-					}
-				}
-
 				// Add tag to list?
-				if (add || (autoAddList.size() > 0) || tag.isModified())
+				if (add || tag.isModified())
 				{
 					final CharSequence text = xmlParser.getInputFromPositionMarker(tag.getPos());
 
@@ -62,51 +45,36 @@
 
 						if (compressWhitespace)
 						{
-							rawMarkup = rawMarkup.replaceAll("[ \\t]+", " ");
-							rawMarkup = rawMarkup.replaceAll("( ?[\\r\\n] ?)+", "\n");
+							rawMarkup = compressWhitespace(rawMarkup);
 						}
 
-						this.markup.addMarkupElement(new RawMarkup(rawMarkup));
+						// Make sure you add it at the correct location.
+						// IMarkupFilters might have added elements as well.
+						this.markup.addMarkupElement(size, new RawMarkup(rawMarkup));
 					}
 
-					if ((add == false) && (autoAddList.size() > 0))
+					if (add)
 					{
-						xmlParser.setPositionMarker(tag.getPos());
-					}
-
-					for (int i = 0; i < autoAddList.size(); i++)
-					{
-						this.markup.addMarkupElement((MarkupElement)autoAddList.get(i));
-					}
-					autoAddList.clear();
-				}
-
-				if (add)
-				{
-					// Add to list unless preview component tag remover flagged
-					// as removed
-					if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
-					{
-						if (replaceTag != null)
-						{
-							this.markup.addMarkupElement(replaceTag);
-						}
-						else
+						// Add to list unless preview component tag remover flagged
+						// as removed
+						if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
 						{
 							this.markup.addMarkupElement(tag);
 						}
 					}
-
+					else if (tag.isModified())
+					{
+						this.markup.addMarkupElement(new RawMarkup(tag.toCharSequence()));
+					}
+					
 					xmlParser.setPositionMarker();
 				}
-				else if (tag.isModified())
-				{
-					this.markup.addMarkupElement(new RawMarkup(tag.toCharSequence()));
-					xmlParser.setPositionMarker();
-				}
+				
+				// allways remember the latest index (size)
+				size = this.markup.size();
 			}
 		}
-		catch (ParseException ex)
+		catch (final ParseException ex)
 		{
 			// Add remaining input string
 			final CharSequence text = xmlParser.getInputFromPositionMarker(-1);
@@ -118,7 +86,7 @@
 			this.markup.setEncoding(xmlParser.getEncoding());
 			this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
 
-			MarkupStream markupStream = new MarkupStream(markup);
+			final MarkupStream markupStream = new MarkupStream(markup);
 			markupStream.setCurrentIndex(this.markup.size() - 1);
 			throw new MarkupException(markupStream, ex.getMessage(), ex);
 		}

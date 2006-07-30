@@ -1,0 +1,42 @@
+	/**
+	 * Create a new markup filter chain and initialize with all default filters
+	 * required.
+	 */
+	private final void initializeMarkupFilters()
+	{
+		// Chain together all the different markup filters and configure them
+		this.markupFilterChain = xmlParser;
+		
+		appendMarkupFilter(new WicketTagIdentifier(markup));
+		appendMarkupFilter(new TagTypeHandler());
+		appendMarkupFilter(new HtmlHandler());
+		appendMarkupFilter(new WicketRemoveTagHandler());
+		appendMarkupFilter(new WicketLinkTagHandler());
+		appendMarkupFilter(new WicketNamespaceHandler(markup));
+		
+		// Provided the wicket component requesting the markup is known ...
+		final MarkupResourceStream resource = markup.getResource();
+		if (resource != null) 
+		{
+			final ContainerInfo containerInfo = resource.getContainerInfo();
+			if (containerInfo != null)
+			{
+				if (WicketMessageTagHandler.enable)
+				{
+					appendMarkupFilter(new WicketMessageTagHandler(containerInfo));
+				}
+	
+				appendMarkupFilter(new BodyOnLoadHandler(null));
+	
+				// Pages require additional handlers
+				if (Page.class.isAssignableFrom(containerInfo.getContainerClass()))
+				{
+					appendMarkupFilter(new HtmlHeaderSectionHandler(this.markup));
+				}
+
+				// By default added since 2.0
+				// appendMarkupFilter(new HeadForceTagIdHandler(containerInfo.getContainerClass()));
+			}
+		}
+	}
+
