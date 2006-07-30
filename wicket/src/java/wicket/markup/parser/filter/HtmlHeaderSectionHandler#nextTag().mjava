@@ -11,7 +11,7 @@
 	{
 		// Get the next tag from the markup.
 		// If null, no more tags are available
-		ComponentTag tag = (ComponentTag)getParent().nextTag();
+		final ComponentTag tag = nextComponentTag();
 		if (tag == null)
 		{
 			return tag;
@@ -24,29 +24,35 @@
 		}
 
 		// if it is <head> or </head>
-		if (("head".equalsIgnoreCase(tag.getName()) == true) && (tag.getNamespace() == null))
+		if (HEAD.equalsIgnoreCase(tag.getName()))
 		{
-			// we found <head>
-			if (tag.isClose())
+			if (tag.getNamespace() == null)
 			{
+				// we found <head>
+				if (tag.isClose())
+				{
+					foundHead = true;
+				}
+				else if (tag.getId() == null)
+				{
+					tag.setId(HEADER_ID);
+				}
+	
+				// Usually <head> is not a wicket special tag. But because we want
+				// transparent header support we insert it automatically if missing
+				// and while rendering its content all child components are asked if
+				// they want to contribute something to the header. Thus we have to
+				// handle <head> accordingly.
+				tag.setInternalTag(true);
+				return tag;
+			}
+			else 
+			{
+				// we found <wicket:head>
 				foundHead = true;
 			}
-
-			// Usually <head> is not a wicket special tag. But because we want
-			// transparent header support we insert it automatically if missing
-			// and while rendering its content all child components are asked if
-			// they want to contribute something to the header. Thus we have to
-			// handle <head> accordingly.
-			tag.setId(HEADER_ID);
-
-			return tag;
 		}
-		else if (("head".equalsIgnoreCase(tag.getName()) == true) && (tag.getNamespace() != null))
-		{
-			// we found <wicket:head>
-			foundHead = true;
-		}
-		else if (("body".equalsIgnoreCase(tag.getName()) == true) && (tag.getNamespace() == null))
+		else if (BODY.equalsIgnoreCase(tag.getName()) && (tag.getNamespace() == null))
 		{
 			// We found <body>
 			if (foundHead == false)
