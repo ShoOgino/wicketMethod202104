@@ -1,0 +1,33 @@
+	/**
+	 * Test that path is prefixed with /.
+	 * 
+	 * @throws Exception
+	 *             We don't care about exceptions in this test.
+	 */
+	@SuppressWarnings("unchecked")
+	public void testMount_IRequestTargetUrlCodingStrategy_3() throws Exception
+	{
+		IRequestTargetUrlCodingStrategy codingStrategy = new MockRequestTargetUrlCodingStrategy()
+		{
+			@Override
+			public String getMountPath()
+			{
+				return "mockpath";
+			}
+		};
+
+		WebRequestCodingStrategy strategy = new WebRequestCodingStrategy();
+		strategy.mount(codingStrategy);
+
+		// Get the mountsOnPath field
+		Field mountsOnPathField = WebRequestCodingStrategy.class.getDeclaredField("mountsOnPath");
+		mountsOnPathField.setAccessible(true);
+		SortedMap<String, IRequestTargetUrlCodingStrategy> mountsOnPath = (SortedMap<String, IRequestTargetUrlCodingStrategy>)mountsOnPathField
+				.get(strategy);
+
+		IRequestTargetUrlCodingStrategy foundStrategy = mountsOnPath.get("/mockpath");
+
+		assertNotNull(foundStrategy);
+		assertEquals(codingStrategy, foundStrategy);
+	}
+
