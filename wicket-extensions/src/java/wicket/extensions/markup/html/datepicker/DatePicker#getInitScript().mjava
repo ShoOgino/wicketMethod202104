@@ -5,32 +5,33 @@
 	 */
 	private CharSequence getInitScript()
 	{
-		String targetId = target.getPath();
+		String targetId = target.getOutputMarkupId() ? target.getMarkupId() : target.getPath();
 		AppendingStringBuffer b = new AppendingStringBuffer("\nCalendar.setup(\n{");
 		b.append("\n\t\tinputField : \"").append(targetId).append("\",");
 		b.append("\n\t\tbutton : \"").append(triggerButton.getPath()).append("\",");
-		
+
 		String pattern = null;
-		if(dateConverter == null)
+		if (dateConverter == null)
 		{
 			// TODO this should be much easier and nicer to do in 2.0
 			IConverter converter = target.getConverter();
-			if(converter instanceof Converter)
+			if (converter instanceof Converter)
 			{
 				ITypeConverter typeConverter = ((Converter)converter).get(Date.class);
-				if(typeConverter instanceof DateConverter)
+				if (typeConverter instanceof DateConverter)
 				{
 					dateConverter = (DateConverter)typeConverter;
 				}
 			}
-			if(dateConverter == null) dateConverter = new DateConverter();
+			if (dateConverter == null)
+				dateConverter = new DateConverter();
 		}
 		DateFormat df = dateConverter.getDateFormat(target.getLocale());
-		if(df instanceof SimpleDateFormat)
+		if (df instanceof SimpleDateFormat)
 		{
 			pattern = ((SimpleDateFormat)df).toPattern();
 		}
-		b.append(settings.toScript(target.getLocale(),pattern));
+		b.append(settings.toScript(target.getLocale(), pattern));
 		int last = b.length() - 1;
 		if (',' == b.charAt(last))
 		{
