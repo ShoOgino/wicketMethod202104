@@ -1,12 +1,13 @@
 	/**
-	 * Test that an AjaxLink's onClick method is actually invoked.
+	 * Test that when AJAX is disabled, the AjaxFallbackLink is invoked with
+	 * null as AjaxRequestTarget.
 	 */
-	public void testBasicAjaxLinkClick()
+	public void testFallbackLinkWithAjaxDisabled()
 	{
 		final Page page = new MockPageWithLink();
 
 		// Create a link, which we test is actually invoked
-		new AjaxLink(page, "ajaxLink")
+		new AjaxFallbackLink(page, "ajaxLink")
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -31,9 +32,10 @@
 			}
 		});
 
-		application.clickLink("ajaxLink");
+		// Click the link with ajax disabled
+		application.clickLink("ajaxLink", false);
 
 		assertTrue(linkClicked);
-		assertNotNull(ajaxRequestTarget);
+		assertNull(ajaxRequestTarget);
 	}
 
