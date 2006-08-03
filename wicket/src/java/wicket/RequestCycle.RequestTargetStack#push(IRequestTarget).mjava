@@ -6,13 +6,22 @@
 		 */
 		public final void push(final IRequestTarget requestTarget)
 		{
-			if (!isEmpty() && (peek() instanceof AjaxRequestTarget))
+			if (!isEmpty() && (peek() instanceof IRequestTargetInterceptor))
 			{
 				// adding more request targets on top of an ajax request is
 				// useless; there is no overriding anyway. But what we do
 				// is place a redirect issue in the ajax response
-				AjaxRequestTarget ajaxRequestTarget = (AjaxRequestTarget)peek();
-				ajaxRequestTarget.setRequestTarget(requestTarget);
+				IRequestTargetInterceptor ajaxRequestTarget = (IRequestTargetInterceptor)peek();
+
+				// let target intercept
+				IRequestTarget vetod = ajaxRequestTarget.onSetRequestTarget(requestTarget);
+				if (vetod != null)
+				{
+					// if it returns a non-null request target, we set that as
+					// the current
+					add(vetod);
+				}
+				// else interceptor ate up the push request
 			}
 			else
 			{
