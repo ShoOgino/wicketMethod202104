@@ -2,7 +2,9 @@
 	public void processEvents(RequestCycle requestCycle)
 	{
 		Page page = getPage(requestCycle);
-		Component<?> component = page.get(componentPath);
+		final String pageRelativeComponentPath = Strings.afterFirstPathComponent(componentPath,
+				Component.PATH_SEPARATOR);
+		Component<?> component = page.get(pageRelativeComponentPath);
 		RequestListenerInterface listenerInterface = RequestListenerInterface
 				.forName(interfaceName);
 		listenerInterface.invoke(page, component);
