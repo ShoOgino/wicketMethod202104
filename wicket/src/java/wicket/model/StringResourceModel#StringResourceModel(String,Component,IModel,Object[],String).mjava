@@ -20,10 +20,20 @@
 	 *            The model to use for property substitutions
 	 * @param parameters
 	 *            The parameters to substitute using a Java MessageFormat object
+	 * @param defaultValue 
+	 *            The default value if the resource key is not found.
 	 */
 	public StringResourceModel(final String resourceKey, final Component component,
-			final IModel model, final Object[] parameters)
+			final IModel model, final Object[] parameters, final String defaultValue)
 	{
-		this(resourceKey, component, model, parameters, null);
+		if (resourceKey == null)
+		{
+			throw new IllegalArgumentException("Resource key must not be null");
+		}
+		this.resourceKey = resourceKey;
+		this.component = component;
+		this.model = model;
+		this.parameters = parameters;
+		this.defaultValue = defaultValue;
 	}
 
