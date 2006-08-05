@@ -21,6 +21,11 @@
 				}
 			}
 		}
+		// as a last resort look if the key can be found for the application class by this same loader.
+		if( value == null && clazz != application.getClass())
+		{
+			return loadStringResource(application.getClass(), key, locale, style);
+		}
 		return value;
 	}
 
