@@ -1,0 +1,26 @@
+	/**
+	 * Construct a variable assignment parser against a given input character
+	 * sequence
+	 * 
+	 * @param input
+	 *            The input to parse
+	 * @param valuePattern
+	 *            Value pattern
+	 */
+	public VariableAssignmentParser(final CharSequence input, final MetaPattern valuePattern)
+	{
+		super(input);
+
+		// Create group for value pattern
+		value = new Group(valuePattern);
+
+		// Pattern for =<value>
+		final MetaPattern variableAssignment = new MetaPattern(new MetaPattern[] {
+				MetaPattern.OPTIONAL_WHITESPACE, MetaPattern.EQUALS,
+				MetaPattern.OPTIONAL_WHITESPACE, value });
+
+		// Set parse pattern to <key>=<value>?
+		setPattern(new MetaPattern(new MetaPattern[] { MetaPattern.OPTIONAL_WHITESPACE, key,
+				new OptionalMetaPattern(variableAssignment), MetaPattern.OPTIONAL_WHITESPACE }));
+	}
+
