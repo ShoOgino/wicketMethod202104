@@ -5,7 +5,7 @@
 	 */
 	public void testPagedTable() throws Exception
 	{
-		MockWebApplication application = new MockWebApplication(null);
+		WicketTester application = new WicketTester(null);
 		application.getRequestCycleSettings().setRenderStrategy(
 				RenderStrategy.REDIRECT_TO_BUFFER);
 		application.setHomePage(SortableTableHeadersPage.class);
@@ -16,16 +16,16 @@
 		assertTrue(DiffUtil.validatePage(document, this.getClass(),
 				"SortableTableHeadersExpectedResult_1.html"));
 
-		Link link = (Link)page.get("header:id:actionLink");
+		Link link = (Link)page.get("header:<auto>-id:actionLink");
 		assertTrue(link.isEnabled());
 
-		link = (Link)page.get("header:name:actionLink");
+		link = (Link)page.get("header:<auto>-name:actionLink");
 		assertTrue(link.isEnabled());
 
-		link = (Link)page.get("header:email:actionLink");
+		link = (Link)page.get("header:<auto>-email:actionLink");
 		assertNull(link);
 
-		link = (Link)page.get("header:name:actionLink");
+		link = (Link)page.get("header:<auto>-name:actionLink");
 		application.setupRequestAndResponse();
 		application.getServletRequest().setRequestToComponent(link);
 		application.processRequestCycle();
@@ -44,7 +44,7 @@
 				"SortableTableHeadersExpectedResult_2.html"));
 
 		// reverse sorting
-		link = (Link)page.get("header:name:actionLink");
+		link = (Link)page.get("header:<auto>-name:actionLink");
 		application.setupRequestAndResponse();
 		application.getServletRequest().setRequestToComponent(link);
 		application.processRequestCycle();
