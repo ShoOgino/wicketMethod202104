@@ -1,0 +1,27 @@
+	/**
+	 * Constructor for web appliactions
+	 * 
+	 * @param webapp
+	 */
+	public SpringComponentInjector(WebApplication webapp) {
+		// locate spring's application context ...
+		ServletContext sc = webapp.getWicketServlet().getServletContext();
+
+		final ApplicationContext applicationContext = WebApplicationContextUtils
+				.getRequiredWebApplicationContext(sc);
+
+		// ... stick it into a locator ...
+		ISpringContextLocator locator = new ISpringContextLocator() {
+
+			private static final long serialVersionUID = 1L;
+
+			public ApplicationContext getSpringContext() {
+				return applicationContext;
+			}
+
+		};
+
+		// ... and create and register the annotation aware injector
+		InjectorHolder.setInjector(new AnnotSpringInjector(locator));
+	}
+
