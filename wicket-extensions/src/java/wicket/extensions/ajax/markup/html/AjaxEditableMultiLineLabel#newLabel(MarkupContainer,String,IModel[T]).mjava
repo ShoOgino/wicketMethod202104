@@ -5,7 +5,23 @@
 	@Override
 	protected Component newLabel(MarkupContainer parent, String componentId, IModel<T> model)
 	{
-		MultiLineLabel label = new MultiLineLabel(this, componentId, model);
+		MultiLineLabel label = new MultiLineLabel(this, componentId, model)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			{
+				if (getModelObject() == null)
+				{
+					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+				}
+				else
+				{
+					super.onComponentTagBody(markupStream, openTag);
+				}
+			}
+		};
 		label.setOutputMarkupId(true);
 		label.add(new LabelAjaxBehavior(ClientEvent.CLICK));
 		return label;
