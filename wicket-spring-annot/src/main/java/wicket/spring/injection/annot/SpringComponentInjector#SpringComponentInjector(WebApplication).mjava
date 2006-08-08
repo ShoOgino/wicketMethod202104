@@ -7,21 +7,13 @@
 		// locate spring's application context ...
 		ServletContext sc = webapp.getWicketServlet().getServletContext();
 
-		final ApplicationContext applicationContext = WebApplicationContextUtils
+		final ApplicationContext ctx = WebApplicationContextUtils
 				.getRequiredWebApplicationContext(sc);
 
-		// ... stick it into a locator ...
-		ISpringContextLocator locator = new ISpringContextLocator() {
-
-			private static final long serialVersionUID = 1L;
-
-			public ApplicationContext getSpringContext() {
-				return applicationContext;
-			}
-
-		};
+		webapp.setMetaData(CONTEXT_KEY, new ApplicationContextHolder(ctx));
 
 		// ... and create and register the annotation aware injector
-		InjectorHolder.setInjector(new AnnotSpringInjector(locator));
+		InjectorHolder
+				.setInjector(new AnnotSpringInjector(new ContextLocator()));
 	}
 
