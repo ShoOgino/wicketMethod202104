@@ -11,11 +11,16 @@
 		if (isBookmarkable() == false)
 		{
 			stateless = false;
+			if (getStatelessHint())
+			{
+				log.warn("Page '" + this + "' is not stateless because it is not bookmarkable, "
+						+ "but the stateless hint is set to true!");
+			}
 		}
 
 		if (stateless == null)
 		{
-			final Object[] returnArray = new Object[1]; 
+			final Object[] returnArray = new Object[1];
 			Object returnValue = visitChildren(Component.class, new IVisitor()
 			{
 				public Object component(Component<?> component)
@@ -37,13 +42,14 @@
 			{
 				stateless = (Boolean)returnValue;
 			}
-			
-			if(!stateless  && getStatelessHint())
+
+			if (!stateless && getStatelessHint())
 			{
-				log.warn("Page '" + this + "' is not stateless because of '" + returnArray[0]+ "' but the stateless hint is set to true!");
+				log.warn("Page '" + this + "' is not stateless because of '" + returnArray[0]
+						+ "' but the stateless hint is set to true!");
 			}
 		}
-		
+
 		return stateless;
 	}
 
