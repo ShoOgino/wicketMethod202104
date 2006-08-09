@@ -1,38 +1,28 @@
 	/**
-	 * Called to monitor additions of objects in the {@link ISessionStore}
-	 * 
-	 * @param value
+	 * @see wicket.protocol.http.IRequestLogger#objectCreated(java.lang.Object)
 	 */
 	public void objectCreated(Object value)
 	{
-		SessionData sd = null;
-		// Special case, if session is created then getSessionData()
-		// can't be called because Session.get() does fail. and there is no
-		// SessionData anyway so directly create one.
-		if (value instanceof Session)
+		RequestData rd = getCurrentRequest();
+		
+		if( value instanceof Session )
 		{
-			sd = createSessionData((Session)value);
+			rd.addEntry("Session created"); 
+		}
+		else if(value instanceof Page)
+		{
+			Page page = (Page)value;
+			rd.addEntry("Page created, id: " + page.getId() + ", class:" + page.getClass());
+		}
+		else if(value instanceof PageMap)
+		{
+			PageMap map = (PageMap)value;
+			rd.addEntry("PageMap created, name: " + (map.getName()==null?"DEFAULT":map.getName()));
 		}
 		else
 		{
-			sd = getSessionData();
+			rd.addEntry("Custom object created: " + value);
 		}
-		if (value instanceof Page)
-		{
-			sd.pageCreated((Page)value);
-		}
-		else if (value instanceof PageMap)
-		{
-			sd.pageMapCreated((PageMap)value);
-		}
-		else if (value instanceof WebSession)
-		{
-			sd.webSessionCreated((WebSession)value);
-		}
-		else
-		{
-			// unknown object/custom object?
-		}
-
+		
 	}
 

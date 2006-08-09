@@ -1,12 +1,18 @@
 	/**
-	 * This method is called when the request is over this will set the total
-	 * time a request takes and cleans up the current request data.
-	 * 
-	 * @param timeTaken
+	 * @see wicket.protocol.http.IRequestLogger#requestTime(long)
 	 */
 	public void requestTime(long timeTaken)
 	{
-		SessionData sd = getSessionData();
-		sd.endRequest(timeTaken);
+		RequestData rd = currentRequest.get();
+		if(rd != null)
+		{
+			Session session = Session.get();
+			rd.setSessionId(session.getId());
+			// todo should we really do this, this is a bit expensive.
+			rd.setSessionSize(session.getSizeInBytes());
+			rd.setTimeTaken(timeTaken);
+			requests.add(0, rd);
+			currentRequest.set(null);
+		}
 	}
 

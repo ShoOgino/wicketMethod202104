@@ -1,27 +1,26 @@
 	/**
-	 * Called to monitor updates of objects in the {@link ISessionStore}
-	 * 
-	 * @param value
+	 * @see wicket.protocol.http.IRequestLogger#objectUpdated(java.lang.Object)
 	 */
 	public void objectUpdated(Object value)
 	{
-		SessionData sd = getSessionData();
-		if (value instanceof Page)
+		RequestData rd = getCurrentRequest();
+		if(value instanceof Page)
 		{
-			sd.pageUpdated((Page)value);
+			Page page = (Page)value;
+			rd.addEntry("Page updated, id: " + page.getId() + ", class:" + page.getClass());
 		}
-		else if (value instanceof PageMap)
+		else if(value instanceof PageMap)
 		{
-			sd.pageMapUpdated((PageMap)value);
+			PageMap map = (PageMap)value;
+			rd.addEntry("PageMap updated, name: " + (map.getName()==null?"DEFAULT":map.getName()));
 		}
-		else if (value instanceof WebSession)
+		else if(value instanceof Session)
 		{
-			sd.webSessionUpdated((WebSession)value);
+			rd.addEntry("Session updated");
 		}
 		else
 		{
-			// unknown object/custom object?
+			rd.addEntry("Custom object updated: " + value);
 		}
-
 	}
 
