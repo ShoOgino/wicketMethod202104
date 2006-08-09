@@ -3,31 +3,10 @@
 	 */
 	private void validateFormValidators()
 	{
-		final int multiCount = formValidators_size();
-		for (int i = 0; i < multiCount; i++)
+		final int count = formValidators_size();
+		for (int i = 0; i < count; i++)
 		{
-			final IFormValidator validator = formValidators_get(i);
-			final FormComponent[] dependents = validator.getDependentFormComponents();
-
-			boolean validate = true;
-
-			if (dependents != null)
-			{
-				for (int j = 0; j < dependents.length; j++)
-				{
-					final FormComponent dependent = dependents[j];
-					if (!dependent.isValid())
-					{
-						validate = false;
-						break;
-					}
-				}
-			}
-
-			if (validate)
-			{
-				validator.validate(this);
-			}
+			validateFormValidator(formValidators_get(i));
 		}
 	}
 
