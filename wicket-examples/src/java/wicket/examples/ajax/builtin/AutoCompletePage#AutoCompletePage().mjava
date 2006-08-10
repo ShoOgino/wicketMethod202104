@@ -3,8 +3,18 @@
 	 */
 	public AutoCompletePage()
 	{
+		new AjaxLink(this, "link") {
+			/* (non-Javadoc)
+			 * @see wicket.ajax.markup.html.AjaxLink#onClick(wicket.ajax.AjaxRequestTarget)
+			 */
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.appendJavascript("alert('This is just a dummy ajax link.');");
+			}
+		};
+		
 		Form form = new Form(this, "form");
-
+		
 		new AutoCompleteTextField<String>(form, "ac", new Model<String>(""))
 		{
 			@Override
