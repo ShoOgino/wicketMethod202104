@@ -1,18 +1,18 @@
 	/**
 	 * Construct.
 	 * 
-	 * @param store
+	 * @param pageStore
 	 */
-	public SecondLevelCacheSessionStore(final IStore store)
+	public SecondLevelCacheSessionStore(final IPageStore pageStore)
 	{
-		this.cachingStore = new IStore()
+		this.cachingStore = new IPageStore()
 		{
 			Map<String, SoftReference<Map<String, SoftReference<Page>>>> sessionMap = new ConcurrentHashMap<String, SoftReference<Map<String, SoftReference<Page>>>>();
 
 			public void unbind(String sessionId)
 			{
 				sessionMap.remove(sessionId);
-				store.unbind(sessionId);
+				pageStore.unbind(sessionId);
 			}
 
 			public void removePage(String sessionId, Page page)
@@ -26,7 +26,7 @@
 						map.remove(page.getId());
 					}
 				}
-				store.removePage(sessionId, page);
+				pageStore.removePage(sessionId, page);
 			}
 
 			public Page getPage(String sessionId, int id, int versionNumber)
@@ -52,7 +52,7 @@
 						}
 					}
 				}
-				return store.getPage(sessionId, id, versionNumber);
+				return pageStore.getPage(sessionId, id, versionNumber);
 			}
 
 			public void storePage(String sessionId, Page page)
@@ -66,7 +66,7 @@
 							pageMap));
 				}
 				pageMap.put(page.getId(), new SoftReference<Page>(page));
-				store.storePage(sessionId, page);
+				pageStore.storePage(sessionId, page);
 			}
 		};
 	}
