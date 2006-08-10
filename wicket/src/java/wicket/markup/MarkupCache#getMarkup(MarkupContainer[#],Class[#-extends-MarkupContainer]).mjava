@@ -26,43 +26,53 @@
 			}
 		}
 
-		// Look up markup tag list by class, locale, style and markup type
-		final CharSequence key = markupKey(container, clazz);
-		IMarkup markup = markupCache.get(key);
+		// Get the cache key to be associated with the markup resource stream
+		final IMarkupCacheKeyProvider markupCacheKeyProvider = getMarkupCacheKeyProvider(container);
+		final CharSequence cacheKey = markupCacheKeyProvider.getCacheKey(container, clazz);
 
-		// If no markup in the cache
+		// Markup already in the cache? If cacheKey == null, than don't cache
+		// the markup resource stream
+		IMarkup markup = null;
+		if (cacheKey != null)
+		{
+			markup = markupCache.get(cacheKey);
+		}
+
+		// Must Markup be loaded?
 		if (markup == null)
 		{
 			synchronized (markupCache)
 			{
-				markup = markupCache.get(key);
+				markup = markupCache.get(cacheKey);
 
-				// If no markup is in the cache
+				// Must Markup be loaded?
 				if (markup == null)
 				{
-					// Ask the container to locate its associated markup
-					final MarkupResourceStreamLookupResult lookupResult = container
-							.newMarkupResourceStream(containerClass);
+					// Who is going to provide the markup resource stream?
+					final IMarkupResourceStreamProvider markupResourceStreamProvider = getMarkupResourceStreamProvider(container);
+
+					// Ask the provider to locate the markup resource stream
+					final IResourceStream resourceStream = markupResourceStreamProvider
+							.getMarkupResourceStream(container, containerClass);
 
 					// Found markup?
-					if (lookupResult != null)
+					if (resourceStream != null)
 					{
-						// TODO If lookupResult.getCacheKey() != null than caching is basically disabled. 
-						//    That was not the intend.
-						if (lookupResult.getCacheKey() == null)
+						final MarkupResourceStream markupResourceStream;
+						if (resourceStream instanceof MarkupResourceStream)
 						{
-							lookupResult.setCacheKey(key);
+							markupResourceStream = (MarkupResourceStream)resourceStream;
 						}
-						
-						final IResourceStream resourceStream = lookupResult.getResourceStream();
-						if (!(resourceStream instanceof MarkupResourceStream))
+						else
 						{
-							lookupResult.setResourceStream(new MarkupResourceStream(resourceStream,
-									new ContainerInfo(container), containerClass));
+							markupResourceStream = new MarkupResourceStream(resourceStream,
+									new ContainerInfo(container), containerClass);
 						}
 
+						markupResourceStream.setCacheKey(cacheKey);
+
 						// load the markup and watch for changes
-						markup = loadMarkupAndWatchForChanges(container, lookupResult);
+						markup = loadMarkupAndWatchForChanges(container, markupResourceStream);
 					}
 					else
 					{
@@ -73,7 +83,7 @@
 
 						// Save any markup list (or absence of one) for next
 						// time
-						markupCache.put(key, markup);
+						markupCache.put(cacheKey, markup);
 					}
 				}
 			}

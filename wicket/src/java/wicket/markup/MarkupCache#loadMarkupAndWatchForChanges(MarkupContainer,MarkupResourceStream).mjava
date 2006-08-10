@@ -6,41 +6,42 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param lookupResult
+	 * @param markupResourceStream
 	 *            The markup stream to load and begin to watch
 	 * @return The markup in the stream
 	 */
 	private final IMarkup loadMarkupAndWatchForChanges(final MarkupContainer container,
-			final MarkupResourceStreamLookupResult lookupResult)
+			final MarkupResourceStream markupResourceStream)
 	{
-		if (lookupResult.isDisableCaching() == false)
+		if (markupResourceStream.getCacheKey() != null)
 		{
 			// Watch file in the future
-			final ModificationWatcher watcher = application.getResourceSettings().getResourceWatcher(true);
+			final ModificationWatcher watcher = application.getResourceSettings()
+					.getResourceWatcher(true);
 			if (watcher != null)
 			{
-				watcher.add(lookupResult.getResourceStream(), new IChangeListener()
+				watcher.add(markupResourceStream, new IChangeListener()
 				{
 					public void onChange()
 					{
 						if (log.isDebugEnabled())
 						{
-							log.debug("Remove markup from cache: " + lookupResult.getResourceStream());
+							log.debug("Remove markup from cache: " + markupResourceStream);
 						}
-	
+
 						// Remove the markup from the cache. It will be reloaded
 						// next time it the markup is requested.
-						removeMarkup(lookupResult);
-						watcher.remove(lookupResult.getResourceStream());
+						removeMarkup(markupResourceStream);
+						watcher.remove(markupResourceStream);
 					}
 				});
 			}
 		}
-		
+
 		if (log.isDebugEnabled())
 		{
-			log.debug("Loading markup from " + lookupResult.getResourceStream());
+			log.debug("Loading markup from " + markupResourceStream);
 		}
-		return loadMarkup(container, lookupResult);
+		return loadMarkup(container, markupResourceStream);
 	}
 

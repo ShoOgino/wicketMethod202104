@@ -6,15 +6,12 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param lookupResult
-	 *            Key under which markup should be cached
 	 * @param markup
 	 *            The markup to checked for inheritance
 	 * @return A markup object with the the base markup elements resolved.
 	 */
 	@SuppressWarnings("unchecked")
-	private IMarkup checkForMarkupInheritance(final MarkupContainer container,
-			final MarkupResourceStreamLookupResult lookupResult, final IMarkup markup)
+	private IMarkup checkForMarkupInheritance(final MarkupContainer container, final IMarkup markup)
 	{
 		// Check if markup contains <wicket:extend> which tells us that
 		// we need to read the inherited markup as well.
@@ -25,15 +22,15 @@
 			return markup;
 		}
 
-		final Class<? extends MarkupContainer> markupClass = markup.getResource().getMarkupClass();
+		final Class<? extends MarkupContainer> markupClass = (Class<? extends MarkupContainer>)markup
+				.getResource().getMarkupClass().getSuperclass();
 		// get the base markup
-		final IMarkup baseMarkup = getMarkup(container,
-				(Class<? extends MarkupContainer>)markupClass.getSuperclass());
+		final IMarkup baseMarkup = getMarkup(container, markupClass);
 
 		if (baseMarkup == IMarkup.NO_MARKUP)
 		{
 			throw new MarkupNotFoundException(
-					"Parent markup of inherited markup not found. Component class: "
+					"Base markup of inherited markup not found. Component class: "
 							+ markup.getResource().getContainerInfo().getContainerClass().getName()
 							+ " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried.");
 		}
@@ -49,7 +46,7 @@
 				{
 					log.debug("Remove derived markup from cache: " + markup.getResource());
 				}
-				removeMarkup(lookupResult);
+				removeMarkup(markup.getResource());
 			}
 
 			/**
@@ -71,7 +68,7 @@
 			@Override
 			public int hashCode()
 			{
-				return lookupResult.getCacheKey().hashCode();
+				return markup.getResource().getCacheKey().hashCode();
 			}
 		});
 

@@ -3,44 +3,44 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param lookupResult
+	 * @param markupResourceStream
 	 *            The markup resource stream to load
 	 * @return The markup
 	 */
-	private final IMarkup loadMarkup(final MarkupContainer container, 
-			final MarkupResourceStreamLookupResult lookupResult)
+	private final IMarkup loadMarkup(final MarkupContainer container,
+			final MarkupResourceStream markupResourceStream)
 	{
 		try
 		{
 			// read and parse the markup
 			IMarkup markup = application.getMarkupSettings().getMarkupParserFactory()
-					.newMarkupParser().readAndParse(lookupResult.getMarkupResourceStream());
+					.newMarkupParser().readAndParse(markupResourceStream);
 
 			// Check for markup inheritance. If it contains <wicket:extend>
 			// the two markups get merged.
-			markup = checkForMarkupInheritance(container, lookupResult, markup);
+			markup = checkForMarkupInheritance(container, markup);
 
 			// add the markup to the cache
-			markupCache.put(lookupResult.getCacheKey(), markup);
+			markupCache.put(markupResourceStream.getCacheKey(), markup);
 
 			// trigger all listeners registered on the markup just loaded
-			afterLoadListeners.notifyListeners(lookupResult.getResourceStream());
+			afterLoadListeners.notifyListeners(markupResourceStream);
 
 			return markup;
 		}
 		catch (final ResourceStreamNotFoundException e)
 		{
-			log.error("Unable to find markup from " + lookupResult.getResourceStream(), e);
+			log.error("Unable to find markup from " + markupResourceStream, e);
 		}
 		catch (final IOException e)
 		{
-			log.error("Unable to read markup from " + lookupResult.getResourceStream(), e);
+			log.error("Unable to read markup from " + markupResourceStream, e);
 		}
 
 		synchronized (markupCache)
 		{
-			markupCache.remove(lookupResult.getCacheKey());
-			afterLoadListeners.remove(lookupResult.getResourceStream());
+			markupCache.remove(markupResourceStream.getCacheKey());
+			afterLoadListeners.remove(markupResourceStream);
 		}
 
 		return IMarkup.NO_MARKUP;
