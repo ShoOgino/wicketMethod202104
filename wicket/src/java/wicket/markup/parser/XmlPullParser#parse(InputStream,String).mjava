@@ -1,25 +1,25 @@
 	/**
 	 * Reads and parses markup from a resource such as file.
 	 * 
-	 * @param resource
+	 * @param inputStream
 	 *            The resource to read and parse
 	 * @param encoding
 	 *            The default character encoding of the input
 	 * @throws IOException
 	 * @throws ResourceStreamNotFoundException
 	 */
-	public void parse(final IResourceStream resource, final String encoding) throws IOException,
+	public void parse(final InputStream inputStream, final String encoding) throws IOException,
 			ResourceStreamNotFoundException
 	{
 		try
 		{
 			this.xmlReader = new XmlReader(
-					new BufferedInputStream(resource.getInputStream(), 4000), encoding);
+					new BufferedInputStream(inputStream, 4000), encoding);
 			this.input = new FullyBufferedReader(this.xmlReader);
 		}
 		finally
 		{
-			resource.close();
+			inputStream.close();
 			this.xmlReader.close();
 		}
 	}
