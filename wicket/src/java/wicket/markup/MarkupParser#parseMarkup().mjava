@@ -4,23 +4,13 @@
 	 */
 	private void parseMarkup()
 	{
-		// Initialize the markup filter chain
-		initializeMarkupFilters();
-
-		// Allow subclasses to extend the filter chain
-		initFilterChain();
-
-		// Get relevant settings from the Application
-		final boolean stripComments = this.markupSettings.getStripComments();
-		final boolean compressWhitespace = this.markupSettings.getCompressWhitespace();
-
 		try
 		{
 			// allways remember the latest index (size)
 			int size = this.markup.size();
-			
+
 			// Loop through tags
-			for (ComponentTag tag; null != (tag = (ComponentTag)markupFilterChain.nextTag());)
+			for (ComponentTag tag; null != (tag = (ComponentTag)this.markupFilterChain.nextTag());)
 			{
 				boolean add = (tag.getId() != null);
 				if (!add && tag.getXmlTag().isClose())
@@ -31,19 +21,20 @@
 				// Add tag to list?
 				if (add || tag.isModified())
 				{
-					final CharSequence text = xmlParser.getInputFromPositionMarker(tag.getPos());
+					final CharSequence text = this.xmlParser.getInputFromPositionMarker(tag
+							.getPos());
 
 					// Add text from last position to tag position
 					if (text.length() > 0)
 					{
 						String rawMarkup = text.toString();
 
-						if (stripComments)
+						if (this.stripComments)
 						{
 							rawMarkup = removeComment(rawMarkup);
 						}
 
-						if (compressWhitespace)
+						if (this.compressWhitespace)
 						{
 							rawMarkup = compressWhitespace(rawMarkup);
 						}
@@ -55,7 +46,8 @@
 
 					if (add)
 					{
-						// Add to list unless preview component tag remover flagged
+						// Add to list unless preview component tag remover
+						// flagged
 						// as removed
 						if (!WicketRemoveTagHandler.IGNORE.equals(tag.getId()))
 						{
@@ -66,10 +58,10 @@
 					{
 						this.markup.addMarkupElement(new RawMarkup(tag.toCharSequence()));
 					}
-					
-					xmlParser.setPositionMarker();
+
+					this.xmlParser.setPositionMarker();
 				}
-				
+
 				// allways remember the latest index (size)
 				size = this.markup.size();
 			}
@@ -77,22 +69,22 @@
 		catch (final ParseException ex)
 		{
 			// Add remaining input string
-			final CharSequence text = xmlParser.getInputFromPositionMarker(-1);
+			final CharSequence text = this.xmlParser.getInputFromPositionMarker(-1);
 			if (text.length() > 0)
 			{
 				this.markup.addMarkupElement(new RawMarkup(text));
 			}
 
-			this.markup.setEncoding(xmlParser.getEncoding());
-			this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
+			this.markup.setEncoding(this.xmlParser.getEncoding());
+			this.markup.setXmlDeclaration(this.xmlParser.getXmlDeclaration());
 
-			final MarkupStream markupStream = new MarkupStream(markup);
+			final MarkupStream markupStream = new MarkupStream(this.markup);
 			markupStream.setCurrentIndex(this.markup.size() - 1);
 			throw new MarkupException(markupStream, ex.getMessage(), ex);
 		}
 
 		// Add tail?
-		final CharSequence text = xmlParser.getInputFromPositionMarker(-1);
+		final CharSequence text = this.xmlParser.getInputFromPositionMarker(-1);
 		if (text.length() > 0)
 		{
 			this.markup.addMarkupElement(new RawMarkup(text));

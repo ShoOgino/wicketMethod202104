@@ -1,15 +1,20 @@
 	/**
 	 * Construct.
+	 * <p>
+	 * <b>Note:<b> be careful when you use this constructor. All additional
+	 * filters provided MUST be stateless and not keep any information about the
+	 * markup. The filter does not know when a new markup file starts or ends.
 	 * 
 	 * @param application
 	 *            Application settings necessary to configure the parser
 	 * @param filters
 	 *            additional markup filters
+	 * @deprecated since 2.0 please subclass and replace initMarkupFilters()
+	 *             instead.
 	 */
 	public MarkupParserFactory(final Application application, final IMarkupFilter[] filters)
 	{
-		this.filters = new IMarkupFilter[filters.length + 1];
-		System.arraycopy(filters, 0, this.filters, 0, filters.length);
-		this.filters[filters.length] = new PrependContextPathHandler(application);
+		this.application = application;
+		this.filters = filters;
 	}
 

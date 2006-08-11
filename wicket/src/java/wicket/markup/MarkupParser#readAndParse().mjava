@@ -1,0 +1,26 @@
+	/**
+	 * Reads and parses markup from a file.
+	 * 
+	 * @param resource
+	 *            The file
+	 * @return The markup
+	 * @throws IOException
+	 * @throws ResourceStreamNotFoundException
+	 */
+	final IMarkup readAndParse() throws IOException, ResourceStreamNotFoundException
+	{
+
+		// Initialize the xml parser
+		this.xmlParser
+				.parse(this.markup.getResource().getInputStream(), this.defaultMarkupEncoding);
+
+		// parse the xml markup and tokenize it into wicket relevant markup
+		// elements
+		parseMarkup();
+
+		this.markup.setEncoding(this.xmlParser.getEncoding());
+		this.markup.setXmlDeclaration(this.xmlParser.getXmlDeclaration());
+
+		return this.markup;
+	}
+
