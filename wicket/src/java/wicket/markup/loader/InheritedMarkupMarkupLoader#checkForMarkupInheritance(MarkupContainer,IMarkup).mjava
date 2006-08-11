@@ -25,7 +25,7 @@
 		final Class<? extends MarkupContainer> markupClass = (Class<? extends MarkupContainer>)markup
 				.getResource().getMarkupClass().getSuperclass();
 		// get the base markup
-		final IMarkup baseMarkup = getMarkup(container, markupClass);
+		final IMarkup baseMarkup = this.markupCache.getMarkup(container, markupClass);
 
 		if (baseMarkup == IMarkup.NO_MARKUP)
 		{
@@ -38,7 +38,7 @@
 		// register an after-load listener for base markup. The listener
 		// implementation will remove the derived markup which must be merged
 		// with the base markup
-		afterLoadListeners.add(baseMarkup.getResource(), new IChangeListener()
+		this.markupCache.addAfterLoadListener(baseMarkup.getResource(), new IChangeListener()
 		{
 			public void onChange()
 			{
@@ -46,7 +46,7 @@
 				{
 					log.debug("Remove derived markup from cache: " + markup.getResource());
 				}
-				removeMarkup(markup.getResource());
+				InheritedMarkupMarkupLoader.this.markupCache.removeMarkup(markup.getResource());
 			}
 
 			/**
@@ -73,7 +73,7 @@
 		});
 
 		// Merge base and derived markup
-		final IMarkup mergedMarkup = new MergedMarkup(markup, baseMarkup, extendIndex);
+		final IMarkup mergedMarkup = mergedMarkup(markup, baseMarkup, extendIndex);
 		return mergedMarkup;
 	}
 

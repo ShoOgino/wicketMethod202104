@@ -1,0 +1,23 @@
+	/**
+	 * Merge inherited and base markup.
+	 * 
+	 * @param markup
+	 *            The inherited markup
+	 * @param baseMarkup
+	 *            The base markup
+	 */
+	public MergedMarkup(final IMarkup markup, final IMarkup baseMarkup)
+	{
+		// Copy settings from derived markup
+		setResource(markup.getResource());
+		setXmlDeclaration(markup.getXmlDeclaration());
+		setEncoding(markup.getEncoding());
+		setWicketNamespace(markup.getWicketNamespace());
+
+		if (baseMarkup instanceof MergedMarkup)
+		{
+			this.baseMarkupResources.addAll(((MergedMarkup)baseMarkup)
+					.getBaseMarkupResourceStreams());
+		}
+	}
+

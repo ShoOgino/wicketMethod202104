@@ -12,13 +12,7 @@
 	{
 		try
 		{
-			// read and parse the markup
-			IMarkup markup = application.getMarkupSettings().getMarkupParserFactory()
-					.newMarkupParser(markupResourceStream).readAndParse();
-
-			// Check for markup inheritance. If it contains <wicket:extend>
-			// the two markups get merged.
-			markup = checkForMarkupInheritance(container, markup);
+			final IMarkup markup = newMarkupLoader().loadMarkup(container, markupResourceStream);
 
 			// add the markup to the cache
 			if (markupResourceStream.getCacheKey() != null)
@@ -40,6 +34,7 @@
 			log.error("Unable to read markup from " + markupResourceStream, e);
 		}
 
+		// In case of an error, remove the cache entry
 		synchronized (markupCache)
 		{
 			markupCache.remove(markupResourceStream.getCacheKey());
