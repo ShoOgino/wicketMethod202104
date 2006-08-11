@@ -1,9 +1,11 @@
 	/**
 	 * Gets the pagemap where the popup page must be created in.
 	 * 
+	 * @param callee
+	 *            Calling component
 	 * @return The pagemap where the popup page must be created in
 	 */
-	public PageMap getPageMap()
+	public PageMap getPageMap(Component callee)
 	{
 		if (pageMapName != null)
 		{
@@ -11,8 +13,7 @@
 		}
 		else
 		{
-			// fallback on the current page map
-			return RequestCycle.get().getRequest().getPage().getPageMap();
+			return callee.getPage().getPageMap();
 		}
 	}
 
