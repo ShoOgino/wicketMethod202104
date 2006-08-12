@@ -6,8 +6,7 @@
 	 * @param tag
 	 * @return componentPath
 	 */
-	private StringBuffer setComponentPathForTag(final StringBuffer componentPath,
-			final ComponentTag tag)
+	private StringBuffer setComponentPathForTag(StringBuffer componentPath, final ComponentTag tag)
 	{
 		// Only if the tag has wicket:id="xx" and open or open-close
 		if ((tag.isOpen() || tag.isOpenClose()) && tag.getAttributes().containsKey(wicketId))
@@ -18,48 +17,48 @@
 			if (tag.isOpenClose() || tag.hasNoCloseTag())
 			{
 				// Set the components path.
-				if ((this.currentPath != null) && (this.currentPath.length() > 0))
+				if ((componentPath != null) && (componentPath.length() > 0))
 				{
-					tag.setPath(this.currentPath.toString());
+					tag.setPath(componentPath.toString());
 				}
 			}
 			else
 			{
 				// Set the components path.
-				if (this.currentPath == null)
+				if (componentPath == null)
 				{
-					this.currentPath = new StringBuffer(100);
+					componentPath = new StringBuffer(100);
 				}
-				else if (this.currentPath.length() > 0)
+				else if (componentPath.length() > 0)
 				{
-					tag.setPath(this.currentPath.toString());
-					this.currentPath.append(':');
+					tag.setPath(componentPath.toString());
+					componentPath.append(':');
 				}
 
 				// .. and append the tags id to the component path for the
 				// children to come
-				this.currentPath.append(tag.getId());
+				componentPath.append(tag.getId());
 			}
 		}
-		else if (tag.isClose() && (this.currentPath != null))
+		else if (tag.isClose() && (componentPath != null))
 		{
 			// For example <wicket:message> does not have an id
 			if ((tag.getOpenTag() == null)
 					|| tag.getOpenTag().getAttributes().containsKey(wicketId))
 			{
 				// Remove the last element from the component path
-				final int index = this.currentPath.lastIndexOf(":");
+				final int index = componentPath.lastIndexOf(":");
 				if (index != -1)
 				{
-					this.currentPath.setLength(index);
+					componentPath.setLength(index);
 				}
 				else
 				{
-					this.currentPath.setLength(0);
+					componentPath.setLength(0);
 				}
 			}
 		}
 
-		return this.currentPath;
+		return componentPath;
 	}
 
