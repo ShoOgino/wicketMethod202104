@@ -4,40 +4,29 @@
 	 * 
 	 * @param componentPath
 	 * @param tag
+	 * @param tagIndex
 	 * @return componentPath
 	 */
-	private StringBuffer setComponentPathForTag(StringBuffer componentPath, final ComponentTag tag)
+	private StringBuffer setComponentPathForTag(StringBuffer componentPath, final ComponentTag tag, final int tagIndex)
 	{
 		// Only if the tag has wicket:id="xx" and open or open-close
 		if ((tag.isOpen() || tag.isOpenClose()) && tag.getAttributes().containsKey(wicketId))
 		{
+			int size = componentPath.length();
+			if (size > 0)
+			{
+				componentPath.append(TAG_PATH_SEPARATOR);
+			}
+			componentPath.append(tag.getId());
+			
+			this.componentMap.put(componentPath.toString(), new Integer(tagIndex));
+			
 			// With open-close the path does not change. It can/will not have
 			// children. The same is true for HTML tags like <br> or <img>
 			// which might not have close tags.
 			if (tag.isOpenClose() || tag.hasNoCloseTag())
 			{
-				// Set the components path.
-				if ((componentPath != null) && (componentPath.length() > 0))
-				{
-					tag.setPath(componentPath.toString());
-				}
-			}
-			else
-			{
-				// Set the components path.
-				if (componentPath == null)
-				{
-					componentPath = new StringBuffer(100);
-				}
-				else if (componentPath.length() > 0)
-				{
-					tag.setPath(componentPath.toString());
-					componentPath.append(':');
-				}
-
-				// .. and append the tags id to the component path for the
-				// children to come
-				componentPath.append(tag.getId());
+				componentPath.setLength(size);
 			}
 		}
 		else if (tag.isClose() && (componentPath != null))
@@ -47,7 +36,7 @@
 					|| tag.getOpenTag().getAttributes().containsKey(wicketId))
 			{
 				// Remove the last element from the component path
-				final int index = componentPath.lastIndexOf(":");
+				final int index = componentPath.lastIndexOf(TAG_PATH_SEPARATOR);
 				if (index != -1)
 				{
 					componentPath.setLength(index);
