@@ -11,14 +11,22 @@
 	private static String getComponentRelativePath(final Component component,
 			final MarkupContainer parentWithAssociatedMarkup)
 	{
-		final String componentPath = component.getParent().getPageRelativePath();
-		final String parentWithAssociatedMarkupPath = parentWithAssociatedMarkup
-				.getPageRelativePath();
-		String relativePath = componentPath.substring(parentWithAssociatedMarkupPath.length());
-		if (relativePath.startsWith(IMarkup.TAG_PATH_SEPARATOR))
+		final MarkupContainer parent = component.getParent();
+		if ((parent == null) || (parent == parentWithAssociatedMarkup))
 		{
-			relativePath = relativePath.substring(1);
+			return "";
 		}
-		return relativePath;
+
+		final PrependingStringBuffer buffer = new PrependingStringBuffer(32);
+		for (Component c = parent; (c != parentWithAssociatedMarkup) && (c != null); c = c
+				.getParent())
+		{
+			if (buffer.length() > 0)
+			{
+				buffer.prepend(IMarkup.TAG_PATH_SEPARATOR);
+			}
+			buffer.prepend(c.getId());
+		}
+		return buffer.toString();
 	}
 
