@@ -36,7 +36,18 @@
 					buffer.append(path);
 				}
 			}
-			urlPrefix = buffer;
+			// special check, if everything is empty then we need to define '/' as urlPrefix 
+			// else all urls get relative this is bad for mounts.
+			// Except for mounts who have to do a special check else mounts get: //mount
+			// see encode(RequestCycle,IRequestTarget) when a mount is found.
+			if(buffer.length() ==0)
+			{
+				urlPrefix = "/";
+			}
+			else
+			{
+				urlPrefix = buffer;
+			}
 		}
 		return urlPrefix;
 	}
