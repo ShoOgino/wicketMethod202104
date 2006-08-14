@@ -27,7 +27,13 @@
 						log.debug("Redirecting to " + url);
 					}
 
-					httpServletResponse.sendRedirect(url);
+					if (getWebRequest().isAjax()) 
+					{
+						httpServletResponse.addHeader("Ajax-Location", url);
+					} else 
+					{
+						httpServletResponse.sendRedirect(url);
+					}
 					redirect = true;
 				}
 				catch (IOException e)
