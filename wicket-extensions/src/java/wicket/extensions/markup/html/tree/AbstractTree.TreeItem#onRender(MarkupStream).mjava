@@ -3,28 +3,39 @@
 		 */
 		protected void onRender(final MarkupStream markupStream)
 		{
-			// remember current index
-			final int index = markupStream.getCurrentIndex();
-
-			// render the item
-			super.onRender(markupStream);
-
-			// should we also render children (ajax response)
-			if (isRenderChildren())
+			// is this root and tree is in rootless mode?
+			if (this == rootItem && isRootLess() == true)
 			{
-				// visit every child
-				visitItemChildren(this, new IItemCallback()
+				// yes, write empty div with id
+				// this is necesary for createElement js to work correctly
+				getResponse().write("<div style=\"display:none\" id=\"" + getMarkupId() + "\"></div>");
+				markupStream.skipComponent();
+			}
+			else
+			{			
+				// remember current index
+				final int index = markupStream.getCurrentIndex();
+
+				// render the item
+				super.onRender(markupStream);
+
+				// should we also render children (ajax response)
+				if (isRenderChildren())
 				{
-					public void visitItem(TreeItem item)
+					// visit every child
+					visitItemChildren(this, new IItemCallback()
 					{
-						// rewind markupStream
-						markupStream.setCurrentIndex(index);
-						// render child
-						item.onRender(markupStream);
-					}
-				});
-				// children are rendered, clear the flag
-				setRenderChildren(false);
+						public void visitItem(TreeItem item)
+						{
+							// rewind markupStream
+							markupStream.setCurrentIndex(index);
+							// render child
+							item.onRender(markupStream);
+						}
+					});
+					// children are rendered, clear the flag
+					setRenderChildren(false);
+				}
 			}
 		}
 
