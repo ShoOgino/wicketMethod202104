@@ -1,0 +1,21 @@
+	public boolean isAjax()
+	{
+		boolean ajax = false;
+
+		String ajaxHeader = httpServletRequest.getHeader("Wicket-Ajax");
+		if (Strings.isEmpty(ajaxHeader) == false)
+		{
+			try
+			{
+				ajax = Strings.isTrue(ajaxHeader);
+			}
+			catch (StringValueConversionException e)
+			{
+				// We are not interested in this exception but we log it anyway
+				log.debug("Couldn't convert the Wicket-Ajax header: "+ajaxHeader);
+			}
+		}
+
+		return ajax;
+	}
+
