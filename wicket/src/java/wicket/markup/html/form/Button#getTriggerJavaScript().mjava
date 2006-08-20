@@ -3,19 +3,17 @@
 	 * 
 	 * @return The javascript
 	 */
-	private String getTriggerJavaScript()
+	protected final String getTriggerJavaScript()
 	{
-		Form form = getForm();
-		if (form != null)
-		{
+		if (getForm() != null) {
 			StringBuffer sb = new StringBuffer(100);
 			sb.append("var e=document.getElementById('");
-			sb.append(form.getHiddenFieldId(Form.HIDDEN_FIELD_FAKE_SUBMIT));
+			sb.append(getForm().getHiddenFieldId(Form.HIDDEN_FIELD_FAKE_SUBMIT));
 			sb.append("'); e.name=\'");
 			sb.append(getInputName());
 			sb.append("'; e.value='x';");
 			sb.append("var f=document.getElementById('");
-			sb.append(form.getMarkupId());
+			sb.append(getForm().getMarkupId());
 			sb.append("');");
 			if (shouldInvokeJavascriptFormOnsubmit())
 			{
@@ -23,12 +21,8 @@
 			}
 			sb.append("f.submit();return false;");
 			return sb.toString();
-		}
-		else
-		{
-			// if we didn't find a parent form, fall back on normal link
-			// behavior
-			return "location.href='" + urlFor(ILinkListener.INTERFACE).toString() + "';";
+		} else {
+			return null;
 		}
 	}
 

@@ -1,0 +1,46 @@
+	/**
+	 * Check if an attribute contains the specified partial value.
+	 * <p>
+	 * For example:
+	 * 
+	 * <p>
+	 * <b>Markup:</b>
+	 * 
+	 * <pre>
+	 *         &lt;span wicket:id=&quot;helloComp&quot; class=&quot;style1 style2&quot;&gt;Hello&lt;/span&gt;
+	 * </pre>
+	 * 
+	 * <p>
+	 * <b>Test</b>
+	 * 
+	 * <pre>
+	 * TagTester tester = application.getTagByWicketId(&quot;helloComp&quot;);
+	 * assertTrue(tester.getAttributeContains(&quot;class&quot;, &quot;style2&quot;));
+	 * </pre>
+	 * 
+	 * @param attribute
+	 *            The attribute to test on
+	 * @param partialValue
+	 *            The partial value to test if the attribute value contains.
+	 * @return True if the attribute value contains the partial value.
+	 */
+	public boolean getAttributeContains(String attribute, String partialValue)
+	{
+		boolean contains = false;
+
+		if (partialValue != null)
+		{
+			String value = getAttribute(attribute);
+
+			if (value != null)
+			{
+				if (value.contains(partialValue))
+				{
+					contains = true;
+				}
+			}
+		}
+
+		return contains;
+	}
+

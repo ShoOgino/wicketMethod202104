@@ -30,5 +30,20 @@
 		{
 			tag.put("onclick", onClickJavaScript);
 		}
+		// If the button isn't added to the form's hierarchy
+		// we use javascript to submit the form instead
+		else 
+		{
+			Form parentForm = findParent(Form.class);
+			if (parentForm == null && form != null) 
+			{
+				// Lets see if we should add some on click javascript
+				String triggerJavaScript = getTriggerJavaScript();
+				if (Strings.isEmpty(triggerJavaScript) == false)
+				{
+					tag.put(ClientEvent.CLICK.getEvent(), triggerJavaScript);
+				}
+			}
+		}
 	}
 
