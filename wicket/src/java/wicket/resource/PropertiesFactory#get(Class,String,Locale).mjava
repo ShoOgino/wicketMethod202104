@@ -1,17 +1,15 @@
 	/**
-	 * @see wicket.resource.IPropertiesFactory#get(wicket.Application,
-	 *      java.lang.Class, java.lang.String, java.util.Locale)
+	 * @see wicket.resource.IPropertiesFactory#get(java.lang.Class,
+	 *      java.lang.String, java.util.Locale)
 	 */
-	public Properties get(final Application application, final Class clazz, final String style,
-			final Locale locale)
+	public Properties get(final Class clazz, final String style, final Locale locale)
 	{
 		final String key = createResourceKey(clazz, locale, style);
 		Properties props = propertiesCache.get(key);
 		if ((props == null) && (propertiesCache.containsKey(key) == false))
 		{
-			final IResourceStream resource = application.getResourceSettings()
-					.getResourceStreamLocator().locate(clazz, clazz.getName().replace('.', '/'),
-							style, locale, "properties");
+			final IResourceStream resource = resourceSettings.getResourceStreamLocator().locate(
+					clazz, clazz.getName().replace('.', '/'), style, locale, "properties");
 
 			if (resource != null)
 			{
