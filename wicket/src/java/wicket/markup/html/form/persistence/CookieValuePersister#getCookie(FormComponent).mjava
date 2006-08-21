@@ -9,16 +9,16 @@
 	 *            The form component
 	 * @return The cookie for the component or null if none is available
 	 */
-	private Cookie getCookie(final FormComponent component)
+	private CookieWrapper getCookie(final FormComponent component)
 	{
 		// Gets the cookie's name
-		final String name = getName(component);
+		String name = getName(component);
 
 		// Get all cookies attached to the Request by the client browser
-		Cookie[] cookies = getCookies();
+		List<CookieWrapper> cookies = getCookies();
 		if (cookies != null)
 		{
-			for (Cookie cookie : cookies)
+			for (CookieWrapper cookie : cookies)
 			{
 				// Names must match and Value must not be empty
 				if (cookie.getName().equals(name))

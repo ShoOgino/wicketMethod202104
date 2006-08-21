@@ -3,21 +3,18 @@
 	 */
 	public void save(final FormComponent component)
 	{
-		final String name = getName(component);
-		final String value = component.getValue();
-
-		Cookie cookie = getCookie(component);
+		CookieWrapper cookie = getCookie(component);
 		if (cookie == null)
 		{
-			cookie = new Cookie(name, value == null ? "" : value);
+			cookie = new CookieWrapper(getName(component), component.getModelObjectAsString());
 		}
 		else
 		{
-			cookie.setValue(value == null ? "" : value);
+			cookie.setValue(component.getModelObjectAsString());
 		}
-		cookie.setSecure(false);
-		cookie.setMaxAge(getSettings().getMaxAge());
+		cookie.getCookie().setSecure(false);
+		cookie.getCookie().setMaxAge(getSettings().getMaxAge());
 
-		save(cookie);
+		save(cookie.getCookie());
 	}
 

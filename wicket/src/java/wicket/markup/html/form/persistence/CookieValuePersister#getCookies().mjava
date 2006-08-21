@@ -3,17 +3,21 @@
 	 * 
 	 * @return Any cookies for this request
 	 */
-	private Cookie[] getCookies()
+	private List<CookieWrapper> getCookies()
 	{
+		final List<CookieWrapper> cookies = new ArrayList<CookieWrapper>();
 		try
 		{
-			return getWebRequest().getCookies();
+			for (Cookie cookie : getWebRequest().getCookies())
+			{
+				cookies.add(new CookieWrapper(cookie));
+			}
 		}
 		catch (NullPointerException ex)
 		{
 			// Ignore any app server problem here
 		}
 
-		return new Cookie[0];
+		return cookies;
 	}
 
