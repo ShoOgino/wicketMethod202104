@@ -13,44 +13,16 @@
 	 */
 	protected CharSequence encodeRequest(RequestCycle requestCycle,
 			IBookmarkablePageRequestTarget requestTarget)
-	{
+	{		
 		final PortletURL url = getActionURL(requestCycle);
 
 		// Get page Class
 		final Class pageClass = requestTarget.getPageClass();
-		final Application application = Application.get();
-
-		// Find pagemap name
-		String pageMapName = requestTarget.getPageMapName();
-		if (pageMapName == null)
-		{
-			IRequestTarget currentTarget = requestCycle.getRequestTarget();
-			if (currentTarget instanceof IPageRequestTarget)
-			{
-				Page currentPage = ((IPageRequestTarget)currentTarget).getPage();
-				final PageMap pageMap = currentPage.getPageMap();
-				if (pageMap.isDefault())
-				{
-					pageMapName = "";
-				}
-				else
-				{
-					pageMapName = pageMap.getName();
-				}
-			}
-			else
-			{
-				pageMapName = "";
-			}
-		}
-
-		url.setParameter(WebRequestCodingStrategy.PAGEMAP, pageMapName);
-		url.setParameter(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME, pageClass
-				.getName());
-
 		// Get page parameters
 		final PageParameters parameters = requestTarget.getPageParameters();
 		url.setParameters(parameters);
+
+		url.setParameter(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME, pageClass.getName());		
 		return url.toString();
 	}
 
