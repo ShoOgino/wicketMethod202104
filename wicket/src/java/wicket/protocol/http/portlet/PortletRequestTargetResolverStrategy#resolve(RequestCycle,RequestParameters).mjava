@@ -5,6 +5,12 @@
 	public final IRequestTarget resolve(final RequestCycle requestCycle,
 			final RequestParameters requestParameters)
 	{
+
+		if (requestParameters.getBookmarkablePageClass() != null)
+		{
+			return resolveBookmarkablePage(requestCycle, requestParameters);
+		}	
+
 		final String componentPath = requestParameters.getComponentPath();
 		final Session session = requestCycle.getSession();
 		final Page page = session.getPage(requestParameters.getPageMapName(), componentPath,
