@@ -1,0 +1,34 @@
+	/**
+	 * 
+	 * @see wicket.markup.markupFinder.IMarkupFinder#find(wicket.Component,
+	 *      wicket.markup.MarkupStream, wicket.MarkupContainer)
+	 */
+	public <T> MarkupStream find(final Component<T> component, MarkupStream markupStream,
+			final MarkupContainer parentWithAssociatedMarkup)
+	{
+		// if it is a child of a fragement. First find the fragement
+		MarkupContainer mc = component.findParent(Fragment.class);
+		if (mc == null)
+		{
+			return null;
+		}
+
+		final Fragment fragment = (Fragment)mc;
+		final MarkupContainer markupProvider = fragment.getMarkupProvider();
+		if (markupProvider != null)
+		{
+			markupStream = markupProvider.getMarkupStream();
+			if (markupStream == null)
+			{
+				markupStream = markupProvider.getAssociatedMarkupStream(true);
+			}
+		}
+
+		String relativePath = fragment.getFragmentMarkupId() + IMarkup.TAG_PATH_SEPARATOR
+				+ getComponentRelativePath(component, mc);
+
+		// If the component is defined in the markup
+		int index = markupStream.positionAt(relativePath, false);
+		return (index != -1 ? markupStream : null);
+	}
+
