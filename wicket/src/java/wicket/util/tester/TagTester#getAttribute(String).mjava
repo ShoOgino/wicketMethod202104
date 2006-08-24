@@ -1,0 +1,30 @@
+	/**
+	 * Get the attribute value for the given attribute. Please note that this is
+	 * case in-sensitive, because attributes in HTML may be case in-sensitive.
+	 * 
+	 * @param attribute
+	 *            The attribute to look for in the tag.
+	 * @return The value of the attribute or null if it isn't found.
+	 */
+	public String getAttribute(String attribute)
+	{
+		String value = null;
+
+		AttributeMap attributeMap = openTag.getAttributes();
+
+		if (attributeMap != null) 
+		{
+			for (Iterator iter = attributeMap.keySet().iterator(); iter.hasNext();)
+			{
+				String attr = (String) iter.next();
+
+				if (attr.equalsIgnoreCase(attribute))
+				{
+					value = attributeMap.getString(attr);
+				}
+			}
+		}
+
+		return value;
+	}
+

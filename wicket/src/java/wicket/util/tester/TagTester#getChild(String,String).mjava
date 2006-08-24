@@ -1,0 +1,28 @@
+	/**
+	 * Get a child tag for testing. If this tag contains child tags, you can get
+	 * one of them as a TagTester.
+	 * 
+	 * @param attribute
+	 *            The attribute on the child tag to search for
+	 * @param value
+	 *            The value that the attribute must have.
+	 * @return The TagTester for the child tag.
+	 */
+	public TagTester getChild(String attribute, String value)
+	{
+		TagTester childTag = null;
+
+		if (openTag.isOpen())
+		{
+			// Generate the markup for this tag
+			String markup = getMarkup();
+
+			if (Strings.isEmpty(markup) == false)
+			{
+				childTag = TagTester.createTagByAttribute(markup, attribute, value);
+			}
+		}
+
+		return childTag;
+	}
+

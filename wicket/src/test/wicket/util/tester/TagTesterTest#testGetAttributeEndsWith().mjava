@@ -1,0 +1,20 @@
+	/**
+	 * getAttributeEndsWith behaves the same as getAttributeContains, but the
+	 * parameter which should be contained must only be at the end.
+	 */
+	public void testGetAttributeEndsWith()
+	{
+		TagTester tester = TagTester.createTagByAttribute(MARKUP_1, "id", "test");
+		assertNotNull(tester);
+
+		assertTrue(tester.getAttributeEndsWith("class", "1"));
+		assertTrue(tester.getAttributeEndsWith("class", ""));
+		assertTrue(tester.getAttributeEndsWith("class", "ss1"));
+		assertTrue(tester.getAttributeEndsWith("class", "lass1"));
+
+		assertFalse(tester.getAttributeEndsWith("class", "1 "));
+		assertFalse(tester.getAttributeEndsWith("class", " "));
+		assertFalse(tester.getAttributeEndsWith("class", "class 1"));
+		assertFalse(tester.getAttributeEndsWith("class", "SS1"));
+	}
+
