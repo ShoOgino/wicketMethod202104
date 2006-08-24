@@ -1,0 +1,33 @@
+	/**
+	 * Adds image-specific attributes including width, height, and alternate
+	 * text. A hash is appended to the source URL to trigger a reload whenever
+	 * drawing attributes change.
+	 */
+	@Override
+	protected void onComponentTag(ComponentTag tag)
+	{
+		super.onComponentTag(tag);
+
+		String text = getModelObjectAsString();
+		if (text != null)
+		{
+			int hash = text.hashCode() ^ font.hashCode() ^ color.hashCode();
+			if (backgroundColor != null)
+				hash ^= backgroundColor.hashCode();
+			if (maxWidth != null)
+				hash ^= maxWidth.hashCode();
+
+			String url = tag.getAttributes().getString("src");
+			url = url + ((url.indexOf("?") >= 0) ? "&" : "?");
+			url = url + "wicket:antiCache=" + hash;
+
+			tag.put("src", url);
+		}
+
+		resource.determineSize();
+		tag.put("width", resource.getWidth());
+		tag.put("height", resource.getHeight());
+
+		tag.put("alt", text);
+	}
+
