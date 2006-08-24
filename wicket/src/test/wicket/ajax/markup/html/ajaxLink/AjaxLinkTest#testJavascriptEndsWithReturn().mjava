@@ -1,0 +1,14 @@
+	/**
+	 * Test that the onclick on ajax link has "return !wcall;" at the end. This
+	 * ensures that execution is not turned over to the href attribute, which
+	 * would then append # to the url.
+	 */
+	public void testJavascriptEndsWithReturn()
+	{
+		application.startPage(AjaxLinkPage.class);
+
+		TagTester ajaxLink = application.getTagByWicketId("ajaxLink");
+
+		assertTrue(ajaxLink.getAttributeEndsWith("onclick", "return !wcall;"));
+	}
+
