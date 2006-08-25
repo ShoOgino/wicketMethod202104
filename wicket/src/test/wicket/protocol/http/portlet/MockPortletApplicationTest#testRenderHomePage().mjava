@@ -1,0 +1,17 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testRenderHomePage() throws Exception
+	{	
+		application.createRenderRequest();
+		application.processRenderRequestCycle(application.createRenderRequestCycle());
+
+		// Validate the document
+		String document = application.getPortletResponse().getDocument();
+		assertTrue(DiffUtil.validatePage(document, this.getClass(), "MockPortletPage_expectedResult.html"));
+
+		// Inspect the page & model
+		MockPortletPage p = (MockPortletPage)application.getLastRenderedPage();
+		Assert.assertEquals("Link should have been clicked 0 times", 0, p.getLinkClickCount());
+	}
+

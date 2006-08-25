@@ -1,0 +1,23 @@
+	/**
+	 * Create and process the request cycle using the current request and
+	 * response information.
+	 * @param cycle 
+	 */
+	public void processRenderRequestCycle(PortletRenderRequestCycle cycle)
+	{
+		cycle.request();
+
+		previousRenderedPage = lastRenderedPage;
+
+		final MockPortletResponse httpResponse = (MockPortletResponse)cycle.getPortletResponse().getPortletResponse();
+
+		generateLastRenderedPage(cycle);
+
+		Session.set(getWicketPortletSession());
+
+		if (getLastRenderedPage() instanceof ExceptionErrorPortletPage)
+		{
+			throw (RuntimeException)((ExceptionErrorPortletPage)getLastRenderedPage()).getThrowable();
+		}
+	}
+

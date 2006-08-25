@@ -1,0 +1,23 @@
+	/**
+	 * Use <code>-Dwicket.replace.expected.results=true</code> to
+	 * automatically replace the expected output file.
+	 * 
+	 * @param pageClass
+	 * @param filename
+	 * @throws Exception
+	 */
+	protected void executeTest(final Class pageClass, final String filename) throws Exception
+	{
+		System.out.println("=== " + pageClass.getName() + " ===");
+
+		application.setHomePage(pageClass);
+
+		application.processRenderRequestCycle(application.createRenderRequestCycle());
+
+		assertEquals(pageClass, application.getLastRenderedPage().getClass());
+
+		// Validate the document
+		String document = application.getPortletResponse().getDocument();
+		assertTrue(DiffUtil.validatePage(document, this.getClass(), filename));
+	}
+

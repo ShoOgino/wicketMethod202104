@@ -1,0 +1,50 @@
+	/**
+	 * Construct.
+	 * @param path
+	 */
+	public MockPortletApplication(String path){	
+		Application.set(this);
+
+		context = new MockServletContext(this, path);
+		final PortletContext portletContext=new MockPortletContext(context);
+		setWicketPortlet(new WicketPortlet()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public PortletContext getPortletContext()
+			{
+				return portletContext;
+			};
+
+			public String getPortletName(){
+				return "MockPortlet";
+			}
+
+			public String getInitParameter(String key){
+				return null;
+			}
+		});
+
+		this.internalInit();
+
+		getDebugSettings().setSerializeSessionAttributes(false);
+
+		// Call init method of web application
+		this.init();
+
+		// We initialize components here rather than in the constructor or
+		// in the internal init, because in the init method class aliases
+		// can be added, that would be used in installing resources in the
+		// component.
+		this.initializeComponents();
+
+		servletSession=new MockHttpSession(context);
+		portletSession=new MockPortletSession(servletSession);
+
+		// set the default context path
+		getApplicationSettings().setContextPath(context.getServletContextName());
+
+		getResourceSettings().setResourceFinder(new WebApplicationPath(context));
+		getPageSettings().setAutomaticMultiWindowSupport(false);		
+	}
+
