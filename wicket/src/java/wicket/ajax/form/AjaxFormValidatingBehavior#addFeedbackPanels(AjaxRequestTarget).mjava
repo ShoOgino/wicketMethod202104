@@ -1,0 +1,19 @@
+	/**
+	 * Adds all feedback panels on the page to the ajax request target so they
+	 * are updated
+	 * 
+	 * @param target
+	 */
+	private void addFeedbackPanels(final AjaxRequestTarget target)
+	{
+		getComponent().getPage().visitChildren(IFeedback.class, new IVisitor()
+		{
+			public Object component(Component component)
+			{
+				target.addComponent(component);
+				return IVisitor.CONTINUE_TRAVERSAL;
+			}
+
+		});
+	}
+
