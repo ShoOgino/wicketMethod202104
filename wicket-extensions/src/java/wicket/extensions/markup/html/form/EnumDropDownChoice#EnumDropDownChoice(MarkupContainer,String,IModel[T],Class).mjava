@@ -1,0 +1,30 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param parent
+	 * @param id
+	 * @param model
+	 * @param enumType
+	 *            class of enum used to provide choices
+	 */
+	@SuppressWarnings("unchecked")
+	public EnumDropDownChoice(MarkupContainer parent, String id, IModel<T> model, Class enumType)
+	{
+		super(parent, id);
+
+		if (enumType == null)
+		{
+			throw new IllegalArgumentException("Argument [[enumType]] cannot be null");
+		}
+		else if (enumType.isEnum() == false)
+		{
+			throw new IllegalArgumentException("Argument [[enumType]] must be an enum");
+		}
+
+
+		setModel(model);
+		setChoices((List<T>)Arrays.asList(enumType.getEnumConstants()));
+		setChoiceRenderer(new EnumRenderer<T>());
+
+	}
+
