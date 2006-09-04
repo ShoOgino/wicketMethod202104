@@ -1,12 +1,14 @@
 	/**
 	 * Construct.
+	 * 
 	 * @param path
 	 */
-	public MockPortletApplication(String path){	
+	public MockPortletApplication(String path)
+	{
 		Application.set(this);
 
 		context = new MockServletContext(this, path);
-		final PortletContext portletContext=new MockPortletContext(context);
+		final PortletContext portletContext = new MockPortletContext(context);
 		setWicketPortlet(new WicketPortlet()
 		{
 			private static final long serialVersionUID = 1L;
@@ -16,11 +18,13 @@
 				return portletContext;
 			};
 
-			public String getPortletName(){
+			public String getPortletName()
+			{
 				return "MockPortlet";
 			}
 
-			public String getInitParameter(String key){
+			public String getInitParameter(String key)
+			{
 				return null;
 			}
 		});
@@ -38,13 +42,13 @@
 		// component.
 		this.initializeComponents();
 
-		servletSession=new MockHttpSession(context);
-		portletSession=new MockPortletSession(servletSession);
+		servletSession = new MockHttpSession(context);
+		portletSession = new MockPortletSession(servletSession);
 
 		// set the default context path
 		getApplicationSettings().setContextPath(context.getServletContextName());
 
 		getResourceSettings().setResourceFinder(new WebApplicationPath(context));
-		getPageSettings().setAutomaticMultiWindowSupport(false);		
+		getPageSettings().setAutomaticMultiWindowSupport(false);
 	}
 
