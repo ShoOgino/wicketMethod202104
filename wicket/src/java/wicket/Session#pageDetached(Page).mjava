@@ -6,10 +6,12 @@
 	 */
 	final synchronized void pageDetached(Page page)
 	{
+		// Remove the entry.
 		if (usedPages != null)
 		{
 			usedPages.remove(page.getId());
 		}
+		// and call notify so that request wanting the same page can now go on.
 		notifyAll();
 	}
 
