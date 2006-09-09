@@ -1,6 +1,6 @@
 	/**
-	 * This feature is not implemented at this time as we are not supporting
-	 * binary servlet input. This functionality may be added in the future.
+	 * Returns an input stream if there has been added some uploaded files. Use
+	 * {@link #addFile(String, File, String)} to add some uploaded files.
 	 * 
 	 * @return The input stream
 	 * @throws IOException
@@ -8,13 +8,33 @@
 	 */
 	public ServletInputStream getInputStream() throws IOException
 	{
-		return new ServletInputStream()
+		if (uploadedFiles != null && uploadedFiles.size() > 0)
 		{
-			@Override
-			public int read()
+			String request = buildRequest();
+
+			// Ok lets make an input stream to return
+			final ByteArrayInputStream bais = new ByteArrayInputStream(request
+					.getBytes("ISO-8859-1"));
+
+			return new ServletInputStream()
 			{
-				return -1;
-			}
-		};
+				@Override
+				public int read()
+				{
+					return bais.read();
+				}
+			};
+		}
+		else
+		{
+			return new ServletInputStream()
+			{
+				@Override
+				public int read()
+				{
+					return -1;
+				}
+			};
+		}
 	}
 

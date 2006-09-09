@@ -1,0 +1,48 @@
+	/**
+	 * Test that when getting an input stream a new input stream is returned every time.
+	 * 
+	 * Also test that the inputstream is saved internally for later closing.
+	 * 
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	public void testGetInputStream() throws Exception
+	{
+		FileItem fileItem = new DiskFileItemFactory().createItem("dummyFieldName", "text/java", false, "FileUploadTest.java");
+		// Initialize the upload
+		fileItem.getOutputStream();
+		
+		// Get the internal list out
+		Field inputStreamsField = FileUpload.class.getDeclaredField("inputStreams");
+		inputStreamsField.setAccessible(true);
+		
+		FileUpload fileUpload = new FileUpload(fileItem);
+
+		List<InputStream> inputStreams = (List<InputStream>) inputStreamsField.get(fileUpload);
+		
+		assertNull(inputStreams);
+
+		InputStream is1 = fileUpload.getInputStream();
+		inputStreams = (List<InputStream>) inputStreamsField.get(fileUpload);
+		
+		assertEquals(1, inputStreams.size());
+
+		InputStream is2 = fileUpload.getInputStream();
+		inputStreams = (List<InputStream>) inputStreamsField.get(fileUpload);
+		
+		assertEquals(2, inputStreams.size());
+		
+		assertNotSame(is1, is2);
+		
+		// Ok lets close all the streams
+		try {
+			fileUpload.closeStreams();
+		} catch (Exception e) {
+			fail();
+		}
+		
+		inputStreams = (List<InputStream>) inputStreamsField.get(fileUpload);
+		
+		assertNull(inputStreams);
+	}
+
