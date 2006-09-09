@@ -1,0 +1,51 @@
+	/**
+	 * Gets the markup fragment associated with the component. Except for Pages
+	 * it is assumed that the first markup element of the fragment is a tag.
+	 * 
+	 * @return markup fragment.
+	 */
+	public MarkupFragment getMarkupFragment()
+	{
+		// Create the markup path for the component to find the associated
+		// markup fragment within the markup file.
+		PrependingStringBuffer buf = new PrependingStringBuffer(80);
+		buf.prepend(getMarkupPathName());
+
+		// The markup path must be relativ to the markup file, hence we need to
+		// find the first parent with associated markup file and update the
+		// markup path accordingly.
+		MarkupContainer parent = getParent();
+		while ((parent != null) && !(parent instanceof IMarkupProvider))
+		{
+			String pathName = parent.getMarkupPathName();
+			if ((pathName != null) && (pathName.length() > 0))
+			{
+				if (buf.length() > 0)
+				{
+					buf.prepend(IMarkup.TAG_PATH_SEPARATOR);
+				}
+				buf.prepend(pathName);
+			}
+			parent = parent.getParent();
+		}
+
+		if (parent == null)
+		{
+			throw new MarkupNotFoundException("Component has no parent with external markup file: "
+					+ getId());
+		}
+
+		// We found the markup file and created the markup path. Now go and get
+		// the fragment.
+		String path = buf.toString();
+		MarkupFragment fragment = ((IMarkupProvider)parent).getMarkupFragment(path);
+		if (fragment == null)
+		{
+			throw new MarkupNotFoundException(
+					"Unable to find the markup fragment with markup path '" + path
+							+ "'. Component: " + getId());
+		}
+
+		return fragment;
+	}
+

@@ -1,0 +1,80 @@
+	/**
+	 * Until we started with AJAX we iterated over the markup and tried to find
+	 * the component. With AJAX however we need to find the Markup for a
+	 * Component. In an attempt to change Wicket internals step by step,
+	 * initializeMarkupFragments() creates a hierarchal structure of
+	 * MarkupFragments and other MarkupElements based on the simple List of
+	 * elements per Markup file which we have today.
+	 */
+	private void initializeMarkupFragments()
+	{
+		// The root element for the markup file. The root element should be only
+		// fragment which not necessarily has a ComponentTag as first element
+		this.markupFragments = new MarkupFragment(this);
+		MarkupFragment current = this.markupFragments;
+
+		// Remember the path associated with a ComponentTag to properly walk up
+		// and down the hierarchy of wicket markup tags
+		Stack<String> stack = new Stack<String>();
+		String basePath = null;
+
+		// For all markup element in the external markup file
+		for (MarkupElement elem : this.markup)
+		{
+			// If RawMarkup simply add the element to the current fragment
+			if (elem instanceof RawMarkup)
+			{
+				current.addMarkupElement(elem);
+			}
+			else
+			// if (elem instanceof ComponentTag)
+			{
+				// Construct the markup path for the tag
+				final ComponentTag tag = (ComponentTag)elem;
+				final String path = (basePath == null ? tag.getId() : basePath
+						+ IMarkup.TAG_PATH_SEPARATOR + tag.getId());
+
+				// Depending on tag type (open, close, open-close) ...
+				if (tag.isOpen())
+				{
+					// Open tags with no close tags (HTML) are treated like
+					// open-close.
+					if (tag.hasNoCloseTag())
+					{
+						MarkupFragment fragment = new MarkupFragment(this, current, tag);
+						this.pathToFragment.put(path, fragment);
+					}
+					else
+					{
+						// If open tag and auto component (BODY, HEAD, etc.)
+						// than the markup path gets not updated as the markup
+						// for BODY e.g. does not have a wicket:id.
+						current = new MarkupFragment(this, current, tag);
+						stack.push(basePath);
+						if (tag.getId().startsWith(Component.AUTO_COMPONENT_PREFIX))
+						{
+							this.pathToFragment.put(path, current);
+						}
+						else
+						{
+							basePath = path;
+							this.pathToFragment.put(basePath, current);
+						}
+					}
+				}
+				else if (tag.isOpenClose())
+				{
+					MarkupFragment fragment = new MarkupFragment(this, current, tag);
+					this.pathToFragment.put(path, fragment);
+				}
+				else
+				// if (tag.isClose()
+				{
+					current.addMarkupElement(tag);
+					current = current.getParentFragment();
+					basePath = stack.pop();
+				}
+			}
+		}
+	}
+

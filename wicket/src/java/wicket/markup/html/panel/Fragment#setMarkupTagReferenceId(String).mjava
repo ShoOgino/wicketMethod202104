@@ -9,6 +9,10 @@
 		{
 			throw new IllegalArgumentException("markupId cannot be null");
 		}
+		
+		// Make sure the associated markup exists 
+		loadMarkupStream();
+		
 		if (!Objects.equal(this.markupId, markupId))
 		{
 			addStateChange(new Change()
@@ -21,7 +25,6 @@
 				{
 					Fragment.this.markupId = oldMarkupId;
 				}
-
 			});
 		}
 		this.markupId = markupId;
