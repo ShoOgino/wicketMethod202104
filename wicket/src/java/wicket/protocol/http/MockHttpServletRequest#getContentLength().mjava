@@ -1,10 +1,19 @@
 	/**
-	 * Always returns -1 for this implementation.
+	 * Return the length of the content. This is always -1 except if there has
+	 * been added uploaded files. Then the length will be the length of the
+	 * generated request.
 	 * 
-	 * @return -1
+	 * @return -1 if no uploaded files has been added. Else the length of the
+	 *         generated request.
 	 */
 	public int getContentLength()
 	{
+		if (uploadedFiles != null && uploadedFiles.size() > 0)
+		{
+			String request = buildRequest();
+			return request.length();
+		}
+
 		return -1;
 	}
 

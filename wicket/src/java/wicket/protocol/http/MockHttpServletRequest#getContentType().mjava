@@ -1,10 +1,16 @@
 	/**
-	 * Content type is always null in this implementation.
+	 * If there has been added uploaded files return the correct content-type.
 	 * 
-	 * @return Always null
+	 * @return The correct multipart content-type if there has been added
+	 *         uploaded files. Else null.
 	 */
 	public String getContentType()
 	{
+		if (uploadedFiles != null && uploadedFiles.size() > 0)
+		{
+			return ServletFileUpload.MULTIPART_FORM_DATA + "; boundary=abcdefgABCDEFG";
+		}
+
 		return null;
 	}
 
