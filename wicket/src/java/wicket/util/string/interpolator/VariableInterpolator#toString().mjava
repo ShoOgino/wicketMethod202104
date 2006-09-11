@@ -37,10 +37,18 @@
 				// If there's no value
 				if (value == null)
 				{
-					// Leave variable uninterpolated, allowing multiple
-					// interpolators to
-					// do their work on the same string
-					buffer.append("${" + variableName + "}");
+					if (exceptionOnNullVarValue)
+					{
+						throw new IllegalArgumentException("Value of variable [[" + variableName
+								+ "]] could not be resolved while interpolating [[" + string + "]]");
+					}
+					else
+					{
+						// Leave variable uninterpolated, allowing multiple
+						// interpolators to
+						// do their work on the same string
+						buffer.append("${" + variableName + "}");
+					}
 				}
 				else
 				{
