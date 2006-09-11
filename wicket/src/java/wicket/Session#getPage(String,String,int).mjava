@@ -24,38 +24,40 @@
 		PageMap pageMap = pageMapForName(pageMapName, pageMapName == PageMap.DEFAULT_NAME);
 		if (pageMap != null)
 		{
-			// Get page entry for id and version
-			final String id = Strings.firstPathComponent(path, Component.PATH_SEPARATOR);
-			if (usedPages == null)
+			long startTime = System.currentTimeMillis();
+			
+			if (pageMapsUsedInRequest == null)
 			{
-				usedPages = new HashMap<String, Thread>(3);
+				pageMapsUsedInRequest = new HashMap<PageMap, Thread>(3);
 			}
-
-			// set up a barrier so that on thread can only access one page at the time of the complete request.
-			// check the usedPages map if the page id is already used by a thread.
-			Thread t = usedPages.get(id);
+			
+			// Get page entry for id and version
+			Thread t = pageMapsUsedInRequest.get(pageMap);
 			while (t != null && t != Thread.currentThread())
 			{
-				// if it isn't used by this thread wait, we could make this indefinitly or better
-				// report error if after X number of tries this still fails!
 				try
 				{
-					wait(1000);
+					wait(20000); // wait 20 seconds max.
 				}
 				catch (InterruptedException ex)
 				{
 					throw new WicketRuntimeException(ex);
 				}
-				t = usedPages.get(id);
+				t = pageMapsUsedInRequest.get(pageMap);
+				if (t != null && t != Thread.currentThread() && (startTime + 20000) < System.currentTimeMillis())
+				{
+					// if it is still not the right thread.. 
+					// This must be a wicket bug or some other (dead)lock in the code.
+					throw new WicketRuntimeException("After 20s the Pagemap " + pageMapName + 
+							" is still locked by: " + t + ", giving up trying to get the page for path: " + path);
+				}
 			}
-			// set the current thread as an owner of this page id.
-			// This will be released in Page.internalDetach() that will call Session.pageDetached()
-			// which will clean up this entry and call notify.
-			usedPages.put(id, Thread.currentThread());
+			pageMapsUsedInRequest.put(pageMap, Thread.currentThread());
+			final String id = Strings.firstPathComponent(path, Component.PATH_SEPARATOR);
 			Page page = pageMap.get(Integer.parseInt(id), versionNumber);
 			if (page == null)
 			{
-				usedPages.remove(id);
+				pageMapsUsedInRequest.remove(pageMap);
 				notifyAll();
 			}
 			return page;
