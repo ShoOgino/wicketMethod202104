@@ -1,0 +1,29 @@
+	/**
+	 * Replaces the element at the specified position in this list with the
+	 * specified element.
+	 * 
+	 * @param index
+	 *            index of element to replace.
+	 * @param element
+	 *            element to be stored at the specified position.
+	 * @return the element previously at the specified position.
+	 * @exception IndexOutOfBoundsException
+	 *                index out of range (index &lt; 0 || index &gt;= size()).
+	 */
+	public synchronized Object set(int index, Object element)
+	{
+		int len = array_.length;
+		rangeCheck(index, len);
+		Object oldValue = array_[index];
+
+		boolean same = (oldValue == element || (element != null && element.equals(oldValue)));
+		if (!same)
+		{
+			Object[] newArray = new Object[len];
+			System.arraycopy(array_, 0, newArray, 0, len);
+			newArray[index] = element;
+			array_ = newArray;
+		}
+		return oldValue;
+	}
+

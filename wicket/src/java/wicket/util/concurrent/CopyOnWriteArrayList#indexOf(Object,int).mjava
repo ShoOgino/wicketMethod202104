@@ -1,0 +1,36 @@
+	/**
+	 * Searches for the first occurence of the given argument, beginning the
+	 * search at <code>index</code>, and testing for equality using the
+	 * <code>equals</code> method.
+	 * 
+	 * @param elem
+	 *            an object.
+	 * @param index
+	 *            the index to start searching from.
+	 * @return the index of the first occurrence of the object argument in this
+	 *         List at position <code>index</code> or later in the List;
+	 *         returns <code>-1</code> if the object is not found.
+	 * @see Object#equals(Object)
+	 */
+
+	// needed in order to compile on 1.2b3
+	public int indexOf(Object elem, int index)
+	{
+		Object[] elementData = array();
+		int elementCount = elementData.length;
+
+		if (elem == null)
+		{
+			for (int i = index; i < elementCount; i++)
+				if (elementData[i] == null)
+					return i;
+		}
+		else
+		{
+			for (int i = index; i < elementCount; i++)
+				if (elem.equals(elementData[i]))
+					return i;
+		}
+		return -1;
+	}
+

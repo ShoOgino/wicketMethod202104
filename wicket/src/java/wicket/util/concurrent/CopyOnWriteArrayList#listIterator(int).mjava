@@ -1,0 +1,25 @@
+	/**
+	 * Returns a ListIterator of the elements in this List (in proper sequence),
+	 * starting at the specified position in the List. The specified index
+	 * indicates the first element that would be returned by an initial call to
+	 * nextElement. An initial call to previousElement would return the element
+	 * with the specified index minus one. The ListIterator returned by this
+	 * implementation will throw an UnsupportedOperationException in its remove,
+	 * set and add methods.
+	 * 
+	 * @param index
+	 *            index of first element to be returned from the ListIterator
+	 *            (by a call to getNext).
+	 * @exception IndexOutOfBoundsException
+	 *                index is out of range (index &lt; 0 || index &gt; size()).
+	 */
+	public ListIterator listIterator(final int index)
+	{
+		Object[] elementData = array();
+		int len = elementData.length;
+		if (index < 0 || index > len)
+			throw new IndexOutOfBoundsException("Index: " + index);
+
+		return new COWIterator(array(), index);
+	}
+

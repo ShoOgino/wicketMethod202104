@@ -1,0 +1,31 @@
+	/**
+	 * Removes from this List all of the elements whose index is between
+	 * fromIndex, inclusive and toIndex, exclusive. Shifts any succeeding
+	 * elements to the left (reduces their index). This call shortens the List
+	 * by (toIndex - fromIndex) elements. (If toIndex==fromIndex, this operation
+	 * has no effect.)
+	 * 
+	 * @param fromIndex
+	 *            index of first element to be removed.
+	 * @param toIndex
+	 *            index after last element to be removed.
+	 * @exception IndexOutOfBoundsException
+	 *                fromIndex or toIndex out of range (fromIndex &lt; 0 ||
+	 *                fromIndex &gt;= size() || toIndex &gt; size() || toIndex
+	 *                &lt; fromIndex).
+	 */
+	public synchronized void removeRange(int fromIndex, int toIndex)
+	{
+		int len = array_.length;
+
+		if (fromIndex < 0 || fromIndex >= len || toIndex > len || toIndex < fromIndex)
+			throw new IndexOutOfBoundsException();
+
+		int numMoved = len - toIndex;
+		int newlen = len - (toIndex - fromIndex);
+		Object[] newArray = new Object[newlen];
+		System.arraycopy(array_, 0, newArray, 0, fromIndex);
+		System.arraycopy(array_, toIndex, newArray, fromIndex, numMoved);
+		array_ = newArray;
+	}
+

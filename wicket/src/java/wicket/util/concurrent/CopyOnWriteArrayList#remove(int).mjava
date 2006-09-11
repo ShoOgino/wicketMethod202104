@@ -1,0 +1,24 @@
+	/**
+	 * Removes the element at the specified position in this list. Shifts any
+	 * subsequent elements to the left (subtracts one from their indices).
+	 * Returns the element that was removed from the list.
+	 * 
+	 * @param index
+	 *            the index of the element to removed.
+	 * @exception IndexOutOfBoundsException
+	 *                index out of range (index &lt; 0 || index &gt;= size()).
+	 */
+	public synchronized Object remove(int index)
+	{
+		int len = array_.length;
+		rangeCheck(index, len);
+		Object oldValue = array_[index];
+		Object[] newArray = new Object[len - 1];
+		System.arraycopy(array_, 0, newArray, 0, index);
+		int numMoved = len - index - 1;
+		if (numMoved > 0)
+			System.arraycopy(array_, index + 1, newArray, index, numMoved);
+		array_ = newArray;
+		return oldValue;
+	}
+

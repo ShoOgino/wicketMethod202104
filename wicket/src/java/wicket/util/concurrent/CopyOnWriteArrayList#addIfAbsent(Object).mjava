@@ -1,0 +1,26 @@
+	/**
+	 * Append the element if not present. This operation can be used to obtain
+	 * Set semantics for lists.
+	 * 
+	 * @param element
+	 *            element to be added to this Collection, if absent.
+	 * @return true if added
+	 */
+	public synchronized boolean addIfAbsent(Object element)
+	{
+		// Copy while checking if already present.
+		// This wins in the most common case where it is not present
+		int len = array_.length;
+		Object[] newArray = new Object[len + 1];
+		for (int i = 0; i < len; ++i)
+		{
+			if (element == array_[i] || (element != null && element.equals(array_[i])))
+				return false; // exit, throwing away copy
+			else
+				newArray[i] = array_[i];
+		}
+		newArray[len] = element;
+		array_ = newArray;
+		return true;
+	}
+

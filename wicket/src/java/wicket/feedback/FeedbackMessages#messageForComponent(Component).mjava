@@ -8,15 +8,12 @@
 	 */
 	public final FeedbackMessage messageForComponent(final Component component)
 	{
-		if (messages != null)
+		for (Iterator iterator = messages.iterator(); iterator.hasNext();)
 		{
-			for (Iterator iterator = messages.iterator(); iterator.hasNext();)
+			FeedbackMessage message = (FeedbackMessage)iterator.next();
+			if (message.getReporter() == component)
 			{
-				FeedbackMessage message = (FeedbackMessage)iterator.next();
-				if (message.getReporter() == component)
-				{
-					return message;
-				}
+				return message;
 			}
 		}
 		return null;

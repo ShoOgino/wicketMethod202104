@@ -1,0 +1,23 @@
+	/**
+	 * Returns a shallow copy of this list. (The elements themselves are not
+	 * copied.)
+	 * 
+	 * @return a clone of this list.
+	 */
+	public Object clone()
+	{
+		try
+		{
+			Object[] elementData = array();
+			CopyOnWriteArrayList v = (CopyOnWriteArrayList)super.clone();
+			v.array_ = new Object[elementData.length];
+			System.arraycopy(elementData, 0, v.array_, 0, elementData.length);
+			return v;
+		}
+		catch (CloneNotSupportedException e)
+		{
+			// this shouldn't happen, since we are Cloneable
+			throw new InternalError();
+		}
+	}
+
