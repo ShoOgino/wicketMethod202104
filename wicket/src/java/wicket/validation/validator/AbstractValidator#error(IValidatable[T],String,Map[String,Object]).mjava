@@ -1,0 +1,39 @@
+	/**
+	 * Reports an error against the validatable using the specified resource key
+	 * and variable map
+	 * 
+	 * @param validatable
+	 *            validatble being validated
+	 * @param resourceKey
+	 *            The message resource key to use
+	 * @param vars
+	 *            The model for variable interpolation
+	 */
+	public void error(final IValidatable<T> validatable, final String resourceKey,
+			Map<String, Object> vars)
+	{
+		if (validatable == null)
+		{
+			throw new IllegalArgumentException("Argument [[validatable]] cannot be null");
+		}
+		if (vars == null)
+		{
+			throw new IllegalArgumentException("Argument [[vars]] cannot be null");
+		}
+		if (resourceKey == null)
+		{
+			throw new IllegalArgumentException("Argument [[resourceKey]] cannot be null");
+		}
+
+
+		ValidationError error = new ValidationError().addMessageKey(resourceKey);
+		final String defaultKey = Classes.simpleName(getClass());
+		if (!resourceKey.equals(defaultKey))
+		{
+			error.addMessageKey(defaultKey);
+		}
+
+		error.setVars(vars);
+		validatable.error(error);
+	}
+

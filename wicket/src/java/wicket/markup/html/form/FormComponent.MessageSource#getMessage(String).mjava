@@ -1,8 +1,7 @@
 		/**
-		 * @see wicket.validation.IMessageSource#getMessage(java.lang.String,
-		 *      java.util.Map)
+		 * @see wicket.validation.IMessageSource#getMessage(java.lang.String)
 		 */
-		public String getMessage(String key, Map<String, Object> params)
+		public String getMessage(String key)
 		{
 			// retrieve prefix that will be used to construct message keys
 			String prefix = FormComponent.this.getValidatorKeyPrefix();
@@ -13,15 +12,12 @@
 
 			final Localizer localizer = FormComponent.this.getLocalizer();
 
-			final IModel<Map<String, Object>> paramsModel = new Model<Map<String, Object>>(
-					addDefaultParams(params));
-
 			String resource = prefix + getId() + "." + key;
 
 			// Note: It is important that the default value of "" is provided
 			// to getString() not to throw a MissingResourceException or to
 			// return a default string like "[Warning: String ..."
-			String message = localizer.getString(resource, FormComponent.this, paramsModel, "");
+			String message = localizer.getString(resource, FormComponent.this, "");
 
 			// If not found, than ...
 			if (Strings.isEmpty(message))
@@ -30,7 +26,7 @@
 
 				resource = prefix + key;
 
-				message = localizer.getString(resource, FormComponent.this, paramsModel, "");
+				message = localizer.getString(resource, FormComponent.this, "");
 			}
 
 			// convert empty string to null in case our default value of "" was
