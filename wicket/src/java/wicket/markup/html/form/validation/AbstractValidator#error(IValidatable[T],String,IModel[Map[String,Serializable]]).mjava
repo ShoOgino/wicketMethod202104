@@ -1,0 +1,44 @@
+	/**
+	 * Returns a formatted validation error message for a given component. The
+	 * error message is retrieved from a message bundle associated with the page
+	 * in which this validator is contained using the given resource key. The
+	 * resourceModel is used for variable interpolation. If that one is null the
+	 * default one is created from messageModel(formComponent)
+	 * 
+	 * @param validatable
+	 *            validatble being validated
+	 * @param resourceKey
+	 *            The resource key to use
+	 * @param resourceModel
+	 *            The model for variable interpolation, it needs to have a map
+	 *            inside it.
+	 */
+	public void error(final IValidatable<T> validatable, final String resourceKey,
+			IModel<Map<String, Serializable>> resourceModel)
+	{
+		if (validatable == null)
+		{
+			throw new IllegalArgumentException("Argument [[validatable]] cannot be null");
+		}
+		if (resourceModel == null)
+		{
+			resourceModel = Model.valueOf(messageModel(validatable));
+		}
+		if (resourceKey == null)
+		{
+			throw new IllegalArgumentException("Argument [[resourceKey]] cannot be null");
+		}
+
+
+		ValidationError error = new ValidationError(resourceKey);
+		final String defaultKey = Classes.simpleName(getClass());
+		if (!resourceKey.equals(defaultKey))
+		{
+			error.addKey(defaultKey);
+		}
+
+		Map<String, Serializable> args = resourceModel.getObject();
+		error.getParams().putAll(args);
+		validatable.error(error);
+	}
+

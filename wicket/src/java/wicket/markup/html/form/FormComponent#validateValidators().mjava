@@ -1,18 +1,22 @@
 	/**
 	 * Validates this component using the component's validators.
 	 */
+	@SuppressWarnings("unchecked")
 	protected final void validateValidators()
 	{
 		final int size = validators_size();
 
+		final IValidatable<T> validatable = new ValidatableAdapter();
+
 		int i = 0;
-		IValidator validator = null;
+		IValidator<T> validator = null;
+
 		try
 		{
 			for (i = 0; i < size; i++)
 			{
 				validator = validators_get(i);
-				validator.validate(this);
+				validator.validate(validatable);
 				if (!isValid())
 				{
 					break;

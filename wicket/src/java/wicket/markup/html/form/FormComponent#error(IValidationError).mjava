@@ -1,0 +1,28 @@
+	/**
+	 * Reports a validation error against this form component
+	 * 
+	 * @param error
+	 *            validation error
+	 */
+	public void error(IValidationError error)
+	{
+		if (error == null)
+		{
+			throw new IllegalArgumentException("Argument [[error]] cannot be null");
+		}
+
+		String message = error.getMessage(new MessageSource());
+
+		if (message == null)
+		{
+			// XXX maybe make message source remember tried resource keys so a
+			// more specific error message can be created
+			error("Could not locate error message for error: " + error.toString());
+		}
+		else
+		{
+			error(message);
+		}
+
+	}
+
