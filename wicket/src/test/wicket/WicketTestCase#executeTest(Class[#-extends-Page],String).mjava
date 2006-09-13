@@ -11,16 +11,9 @@
 	{
 		System.out.println("=== " + pageClass.getName() + " ===");
 
-		application.setHomePage(pageClass);
-
-		// Do the processing
-		application.setupRequestAndResponse();
-		application.processRequestCycle();
-
-		assertEquals(pageClass, application.getLastRenderedPage().getClass());
+		String document = accessPage(pageClass).getDocument();
 
 		// Validate the document
-		String document = application.getServletResponse().getDocument();
 		assertTrue(DiffUtil.validatePage(document, this.getClass(), filename));
 	}
 

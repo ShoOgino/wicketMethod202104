@@ -1,0 +1,20 @@
+	/**
+	 * Simulates a bookmarkable page access from the browser
+	 * 
+	 * @param pageClass
+	 * @return mock servlet response
+	 * @throws Exception
+	 */
+	protected MockHttpServletResponse accessPage(final Class<? extends Page> pageClass)
+			throws Exception
+	{
+		application.setHomePage(pageClass);
+
+		// Do the processing
+		application.setupRequestAndResponse();
+		application.processRequestCycle();
+
+		assertEquals(pageClass, application.getLastRenderedPage().getClass());
+		return application.getServletResponse();
+	}
+
