@@ -6,8 +6,13 @@
 	public WicketExamplePage(IModel<T> model)
 	{
 		super(model);
+		
+		// Allow a subclass to add a border component first, if required
+		init();
+		
 		final String packageName = getClass().getPackage().getName();
-		new WicketExampleHeader(this, "mainNavigation", Strings.afterLast(packageName, '.'), this);
+		new WicketExampleHeader(this, "mainNavigation", Strings.afterLast(packageName, '.'));
+		
 		explain();
 	}
 
