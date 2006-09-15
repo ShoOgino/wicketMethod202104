@@ -28,14 +28,34 @@
 
 		// We found the markup file and created the markup path. Now go and get
 		// the fragment.
-		MarkupFragment fragment = ((IMarkupProvider)parent).getMarkupFragment(path);
-		if (fragment == null)
+		try
 		{
-			throw new MarkupNotFoundException(
-					"Unable to find the markup fragment with markup path '" + path
-							+ "'. Component: " + getId());
+			return ((IMarkupProvider)parent).getMarkupFragment(path);
+		}
+		catch (WicketRuntimeException ex)
+		{
+			// ignore
 		}
 
-		return fragment;
+		Iterator iter = parent.iterator();
+		while (iter.hasNext())
+		{
+			Component child = (Component)iter.next();
+			if (child instanceof WebMarkupContainerWithAssociatedMarkup)
+			{
+				WebMarkupContainerWithAssociatedMarkup container = (WebMarkupContainerWithAssociatedMarkup)child;
+				if (container.isTransparentResolver())
+				{
+					MarkupFragment fragment = container.getMarkupFragment(path);
+					if (fragment != null)
+					{
+						return fragment;
+					}
+				}
+			}
+		}
+
+		throw new MarkupNotFoundException("Unable to find the markup fragment with markup path '"
+				+ path + "'. Component: " + getId());
 	}
 
