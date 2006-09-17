@@ -4,7 +4,7 @@
 	 * 
 	 * <pre>
 	 *  ...
-	 *  component.add(new AjaxEventBehavior("ondblclick") {
+	 *  component.add(new AjaxEventBehavior(&quot;ondblclick&quot;) {
 	 *      public void onEvent(AjaxRequestTarget) {
 	 *          // Do something.
 	 *      }
@@ -17,12 +17,15 @@
 	 * 
 	 * <pre>
 	 *  ...
-	 *  tester.executeAjaxEvent(component, "ondblclick");
+	 *  tester.executeAjaxEvent(component, &quot;ondblclick&quot;);
 	 *            
 	 *  // Test that the code inside onEvent is correct.
 	 *  ...
 	 * </pre>
 	 * 
+	 * This also works with AjaxFormSubmitBehavior, where it will "submit" the
+	 * form before executing the command.
+	 * <p>
 	 * PLEASE NOTE! This method doesn't actually insert the component in the
 	 * client DOM tree, using javascript.
 	 * 
@@ -70,6 +73,13 @@
 
 		setupRequestAndResponse();
 		RequestCycle requestCycle = createRequestCycle();
+
+		// If the event is an FormSubmitBehavior then also "submit" the form
+		if (ajaxEventBehavior instanceof AjaxFormSubmitBehavior)
+		{
+			AjaxFormSubmitBehavior ajaxFormSubmitBehavior = (AjaxFormSubmitBehavior)ajaxEventBehavior;
+			submitAjaxFormSubmitBehavior(ajaxFormSubmitBehavior);
+		}
 
 		ajaxEventBehavior.onRequest();
 
