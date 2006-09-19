@@ -1,5 +1,6 @@
 	/**
-	 * Configures the response, default by setting the content type and length.
+	 * Configures the response, default by setting the content type and length
+	 * and content disposition (in case the fileName property was set).
 	 * 
 	 * @param response
 	 *            the response
@@ -9,8 +10,21 @@
 	protected void configure(final Response response, final IResourceStream resourceStream)
 	{
 		// Configure response with content type of resource
+		String responseType = resourceStream.getContentType();
+		if (responseType == null)
+		{
+			responseType = this.responseType;
+		}
 		response.setContentType(responseType + ";charset=" + response.getCharacterEncoding());
+
 		// and the content length
 		response.setContentLength((int)resourceStream.length());
+
+		// and content disposition if any
+		String file = getFileName();
+		if (file != null && (response instanceof WebResponse))
+		{
+			((WebResponse)response).setAttachmentHeader(file);
+		}
 	}
 
