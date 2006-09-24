@@ -16,9 +16,9 @@
 			component.getPage().add(header);
 		}
 
-		Response oldResponse = RequestCycle.get().setResponse(encodingResponse);
+		Response oldResponse = RequestCycle.get().setResponse(encodingHeaderResponse);
 
-		encodingResponse.reset();
+		encodingHeaderResponse.reset();
 
 		component.renderHead(header);
 		if (component instanceof MarkupContainer)
@@ -42,11 +42,11 @@
 
 		RequestCycle.get().setResponse(oldResponse);
 
-		if (encodingResponse.getContents().length() != 0)
+		if (encodingHeaderResponse.getContents().length() != 0)
 		{
 			response.write("<header-contribution");
 
-			if (encodingResponse.isContentsEncoded())
+			if (encodingHeaderResponse.isContentsEncoded())
 			{
 				response.write(" encoding=\"");
 				response.write(getEncodingName());
@@ -58,7 +58,7 @@
 			// konqueror crashes when there is a <script> element
 			response.write("><![CDATA[<head xmlns:wicket=\"http://wicket.sourceforge.net\">");
 
-			response.write(encodingResponse.getContents());
+			response.write(encodingHeaderResponse.getContents());
 
 			response.write("</head>]]>");
 
