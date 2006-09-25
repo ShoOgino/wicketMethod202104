@@ -1,0 +1,23 @@
+	/**
+	 * Construct.
+	 */
+	public AutoLinkResolver()
+	{
+
+		// register tag reference resolvers
+		TagReferenceResolver hrefTagReferenceResolver = new TagReferenceResolver("href");
+		TagReferenceResolver srcTagReferenceResolver = new TagReferenceResolver("src");
+		tagNameToTagReferenceResolvers.put("a", hrefTagReferenceResolver);
+		tagNameToTagReferenceResolvers.put("link", hrefTagReferenceResolver);
+		tagNameToTagReferenceResolvers.put("script", srcTagReferenceResolver);
+		tagNameToTagReferenceResolvers.put("img", srcTagReferenceResolver);
+
+		// register autolink resolver delegates
+		tagNameToAutolinkResolverDelegates.put("a", new AnchorResolverDelegate());
+		tagNameToAutolinkResolverDelegates.put("link",
+				new ResourceReferenceResolverDelegate("href"));
+		tagNameToAutolinkResolverDelegates.put("script", new ResourceReferenceResolverDelegate(
+				"src"));
+		tagNameToAutolinkResolverDelegates.put("img", new ResourceReferenceResolverDelegate("src"));
+	}
+
