@@ -1,0 +1,34 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param parent
+		 *            The parent component
+		 * @param id
+		 *            The component id
+		 * @param clazz
+		 *            The relative class of the resource
+		 * @param ref
+		 *            The url to the resource
+		 * @param attribute
+		 *            The attribute to replace
+		 */
+		public ResourceReferenceAutolink(MarkupContainer parent, final String id,
+				final Class clazz, final String ref, final String attribute)
+		{
+			super(parent, id);
+
+			this.attribute = attribute;
+			// Check whether it is a valid resource reference
+			if (PackageResource.exists(clazz, ref, getLocale(), getStyle()))
+			{
+				// Create the component implementing the link
+				resourceReference = new ResourceReference(clazz, ref, getLocale(), getStyle());
+			}
+			else
+			{
+				// The resource does not exist. Set to null and ignore when
+				// rendering.
+				resourceReference = null;
+			}
+		}
+
