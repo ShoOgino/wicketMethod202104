@@ -19,6 +19,17 @@
 		if ((wicketMessageAttribute != null) && (wicketMessageAttribute.trim().length() > 0))
 		{
 			tag.addBehavior(ATTRIBUTE_LOCALIZER);
+
+			// check if this tag is raw markup
+			if (tag.getId() == null)
+			{
+				// if this is a raw tag we need to set the id to something so
+				// that wicket will not merge this as raw markup
+				tag.setId(getClass().getSimpleName());
+				// we also mark the tag so that the resolver knows how to
+				// identify it
+				tag.setRawWicketMessageTag(true);
+			}
 		}
 
 		return tag;
