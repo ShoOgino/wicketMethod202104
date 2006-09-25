@@ -11,7 +11,7 @@
 	public MarkupFragment getMarkupFragment(String path)
 	{
 		// First try to find the markup associated with 'path' in the external
-		// markup file
+		// markup file of the Border
 		try
 		{
 			return super.getMarkupFragment(path);
@@ -21,9 +21,24 @@
 			// ignore
 		}
 
+		// If the Border component implements IAlternateProvider as it might do
+		// for body-containers (<wicket:border><span
+		// wicket:id="body-parent"><wicket:body/></span></wicket:border>),
+		// than find the proper parent for the markup
+		if (this instanceof IAlternateParentProvider)
+		{
+			MarkupContainer parent = ((IAlternateParentProvider)this)
+					.getAlternateParent(null, null);
+			String id = parent.getId() + Component.PATH_SEPARATOR;
+			if (path.startsWith(id))
+			{
+				path = path.substring(id.length());
+			}
+		}
+
 		// If not found in the external markup file, than try the markup which
 		// contains the <span wicket:id="myBorder> tag.
-		path = getId() + IMarkup.TAG_PATH_SEPARATOR + path;
+		path = getId() + Component.PATH_SEPARATOR + path;
 
 		// The markup path must be relativ to the markup file, hence we need to
 		// find the first parent with associated markup file and update the
