@@ -1,51 +1,59 @@
 	/**
 	 * Invalidates single node (without children). On the next render, this node
 	 * will be updated. Node will not be rebuilt, unless forceRebuild is true.
-	 * TODO Implement forceRebuild
 	 * 
 	 * @param node
 	 *            The node to invalidate
-	 * @param forceRebuld
+	 * @param forceRebuild
 	 */
-	private final void invalidateNode(TreeNode node, boolean forceRebuld)
+	private final void invalidateNode(TreeNode node, boolean forceRebuild)
 	{
 		if (dirtyAll == false)
 		{
 			// get item for this node
 			TreeItem item = nodeToItemMap.get(node);
 
-			if (forceRebuld)
-			{
-				// recreate the item
-				int level = item.getLevel();
-				List<TreeItem> children = item.getChildren();
-				String id = item.getId();
-
-				// store the parent of old item
-				TreeItem parent = item.getParentItem();
-
-				// if the old item has a parent, store it's index
-				int index = parent != null ? parent.getChildren().indexOf(item) : -1;
-
-				item.remove();
-
-				item = newTreeItem(node, level, id);
-				item.setChildren(children);
-
-				// was the item an root item?
-				if (parent == null)
-				{
-					rootItem = item;
-				}
-				else
-				{
-					parent.getChildren().set(index, item);
-				}
-			}
-
 			if (item != null)
 			{
+				boolean createDOM = false;
+				
+				if (forceRebuild)
+				{
+					// recreate the item
+					int level = item.getLevel();
+					List<TreeItem> children = item.getChildren();
+					String id = item.getId();
+	
+					// store the parent of old item
+					TreeItem parent = item.getParentItem();
+	
+					// if the old item has a parent, store it's index
+					int index = parent != null ? parent.getChildren().indexOf(item) : -1;
+	
+					createDOM = dirtyItemsCreateDOM.contains(item);
+					
+					dirtyItems.remove(item);
+					dirtyItemsCreateDOM.remove(item);
+					
+					item.remove();
+	
+					item = newTreeItem(node, level, id);
+					item.setChildren(children);
+	
+					// was the item an root item?
+					if (parent == null)
+					{
+						rootItem = item;
+					}
+					else
+					{
+						parent.getChildren().set(index, item);
+					}
+				}
+				
 				dirtyItems.add(item);
+				if (createDOM)
+					dirtyItemsCreateDOM.add(item);
 			}
 		}
 	}
