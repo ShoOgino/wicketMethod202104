@@ -12,13 +12,14 @@
 
 		// if the item was about to be created
 		if (dirtyItemsCreateDOM.contains(item))
-		{		
+		{
 			// we needed to create DOM element, we no longer do
 			dirtyItemsCreateDOM.remove(item);
 		}
 		else
 		{
-			// add items id (it's short version) to ids of DOM elements that will be
+			// add items id (it's short version) to ids of DOM elements that
+			// will be
 			// removed
 			deleteIds.append(getShortItemId(item));
 			deleteIds.append(",");
@@ -27,5 +28,8 @@
 		// remove the id
 		// note that this doesn't update item's parent's children list
 		item.remove();
+
+		// unselect the node
+		getTreeState().selectNode(item.getModelObject(), false);
 	}
 

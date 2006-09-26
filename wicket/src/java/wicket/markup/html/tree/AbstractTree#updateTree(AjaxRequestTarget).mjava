@@ -34,10 +34,14 @@
 				target.prependJavascript(js);
 			}
 
-			// We have to repeat this as long as there are any dirty items to be created.
-			// The reason why we can't do this in one pass is that some of the items
-			// may need to be inserted after items that has not been inserted yet, so we have
-			// to detect those and wait until the items they depend on are inserted.
+			// We have to repeat this as long as there are any dirty items to be
+			// created.
+			// The reason why we can't do this in one pass is that some of the
+			// items
+			// may need to be inserted after items that has not been inserted
+			// yet, so we have
+			// to detect those and wait until the items they depend on are
+			// inserted.
 			while (dirtyItemsCreateDOM.isEmpty() == false)
 			{
 				for (Iterator<TreeItem> i = dirtyItemsCreateDOM.iterator(); i.hasNext();)
@@ -64,20 +68,23 @@
 					// check if the previous item isn't waiting to be inserted
 					if (dirtyItemsCreateDOM.contains(previous) == false)
 					{
-						// it's already in dom, so we can use it as point of insertion
-						target.prependJavascript("Wicket.Tree.createElement(\"" + item.getMarkupId()
-								+ "\"," + "\"" + previous.getMarkupId() + "\")");
-						
+						// it's already in dom, so we can use it as point of
+						// insertion
+						target.prependJavascript("Wicket.Tree.createElement(\""
+								+ item.getMarkupId() + "\"," + "\"" + previous.getMarkupId()
+								+ "\")");
+
 						// remove the item so we don't process it again
 						i.remove();
 					}
 					else
 					{
-						// we don't do anything here, inserting this item will have to wait 
-						// until the previous item gets inserted 
+						// we don't do anything here, inserting this item will
+						// have to wait
+						// until the previous item gets inserted
 					}
 				}
-			}		
+			}
 
 			// iterate through dirty items
 			for (TreeItem item : dirtyItems)
