@@ -8,9 +8,9 @@
 	 * @param tabs
 	 *            list of ITab objects used to represent tabs
 	 */
-	public TabbedPanel(MarkupContainer parent, final String id, List tabs)
+	public TabbedPanel(MarkupContainer parent, final String id, List<ITab> tabs)
 	{
-		super(parent, id, new Model(new Integer(-1)));
+		super(parent, id, new Model<Integer>(new Integer(-1)));
 
 		if (tabs == null)
 		{
@@ -25,8 +25,20 @@
 
 		this.tabs = tabs;
 
+		final IModel<Integer> tabCount = new AbstractReadOnlyModel<Integer>()
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Integer getObject()
+			{
+				return TabbedPanel.this.size();
+			}
+		};
+
 		// add the loop used to generate tab names
-		new Loop(this, "tabs", tabs.size())
+		new Loop(this, "tabs", tabCount)
 		{
 			private static final long serialVersionUID = 1L;
 
