@@ -3,29 +3,28 @@
 	 */
 	public Index()
 	{
-		new Label(this,"currentUser", new PropertyModel(this, "session.user"));
-		new ListView<User>(this,"users", RolesApplication.USERS)
+		new Label(this, "currentUser", new PropertyModel(this, "session.user"));
+		new ListView<User>(this, "users", RolesApplication.USERS)
 		{
 			@Override
 			protected void populateItem(ListItem<User> item)
 			{
 				final User user = item.getModelObject();
-				Link link = new Link(item,"selectUserLink")
+				Link link = new Link(item, "selectUserLink")
 				{
 					@Override
 					public void onClick()
 					{
-						RolesSession session = (RolesSession)Session.get();
-						session.setUser(user);
+						RolesSession.get().setUser(user);
 					}
 				};
-				new Label(link,"userId", new Model<User>(user));
+				new Label(link, "userId", new Model<User>(user));
 			}
 		};
 
 		// pages that are proteced using wicket meta data
-		new BookmarkablePageLink(this,"adminBookmarkableLink", AdminBookmarkablePage.class);
-		new Link(this,"adminInternalLink")
+		new BookmarkablePageLink(this, "adminBookmarkableLink", AdminBookmarkablePage.class);
+		new Link(this, "adminInternalLink")
 		{
 			@Override
 			public void onClick()
@@ -33,11 +32,12 @@
 				setResponsePage(new AdminInternalPage("foo"));
 			}
 		};
-		new BookmarkablePageLink(this,"panelsPageLink", PanelsPage.class);
+		new BookmarkablePageLink(this, "panelsPageLink", PanelsPage.class);
 
 		// pages that are protected using annotations
-		new BookmarkablePageLink(this,"adminAnnotBookmarkableLink", AdminAnnotationsBookmarkablePage.class);
-		new Link(this,"adminAnnotInternalLink")
+		new BookmarkablePageLink(this, "adminAnnotBookmarkableLink",
+				AdminAnnotationsBookmarkablePage.class);
+		new Link(this, "adminAnnotInternalLink")
 		{
 			@Override
 			public void onClick()
@@ -45,6 +45,6 @@
 				setResponsePage(new AdminAnnotationsInternalPage("bar"));
 			}
 		};
-		new BookmarkablePageLink(this,"panelsAnnotPageLink", AnnotationsPanelsPage.class);
+		new BookmarkablePageLink(this, "panelsAnnotPageLink", AnnotationsPanelsPage.class);
 	}
 
