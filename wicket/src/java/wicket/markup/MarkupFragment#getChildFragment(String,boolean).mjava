@@ -4,13 +4,21 @@
 	 * 
 	 * @param id
 	 *            The id of the child tag
+	 * @param throwException
+	 *            If true and tag was not found, than throw an exception
 	 * @return Markup fragment
 	 */
-	public final MarkupFragment getChildFragment(final String id)
+	public final MarkupFragment getChildFragment(final String id, final boolean throwException)
 	{
 		if ((id == null) || (id.length() == 0))
 		{
 			return null;
+		}
+		
+		String tagId = getId();
+		if ((tagId != null) && tagId.equals(id))
+		{
+			return this;
 		}
 
 		// If id has not further path elements, than ...
@@ -22,12 +30,12 @@
 				if (elem instanceof MarkupFragment)
 				{
 					MarkupFragment fragment = (MarkupFragment)elem;
-					ComponentTag tag = (ComponentTag)fragment.get(0);
-					String tagId = tag.getId();
+					tagId = fragment.getId();
 					if ((tagId != null) && tagId.equals(id))
 					{
 						return fragment;
 					}
+
 					/*
 					 * if this component tag represents an auto component we
 					 * need to recurse into it because auto components are
@@ -40,7 +48,7 @@
 					 */
 					if (tagId.startsWith(Component.AUTO_COMPONENT_PREFIX))
 					{
-						MarkupFragment frag = fragment.getChildFragment(id);
+						MarkupFragment frag = fragment.getChildFragment(id, false);
 						if (frag != null)
 						{
 							return frag;
@@ -55,14 +63,18 @@
 			// child) and the remaining path. Get the immediate child and
 			// recursively call getChildFragment() with the remaining path ids.
 			String root = Strings.firstPathComponent(id, Component.PATH_SEPARATOR);
-			MarkupFragment child = getChildFragment(root);
-			if (child == null)
+			MarkupFragment child = getChildFragment(root, false);
+			if (child != null)
 			{
-				return null;
+				String remainingPath = Strings.afterFirst(id, Component.PATH_SEPARATOR);
+				return child.getChildFragment(remainingPath, throwException);
 			}
+		}
 
-			String remainingPath = Strings.afterFirst(id, Component.PATH_SEPARATOR);
-			return child.getChildFragment(remainingPath);
+		if (throwException == true)
+		{
+			throw new MarkupException("Markup fragment with id '" + id
+					+ "' not found: Markup Fragment: " + this.getId());
 		}
 
 		return null;
