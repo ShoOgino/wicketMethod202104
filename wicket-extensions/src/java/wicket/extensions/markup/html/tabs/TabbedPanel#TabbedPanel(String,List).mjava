@@ -23,8 +23,18 @@
 
 		this.tabs = tabs;
 
+		final IModel tabCount = new AbstractReadOnlyModel()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public Object getObject(Component component)
+			{
+				return Integer.valueOf(TabbedPanel.this.size());
+			}
+		};
+
 		// add the loop used to generate tab names
-		add(new Loop("tabs", tabs.size())
+		add(new Loop("tabs", tabCount)
 		{
 			private static final long serialVersionUID = 1L;
 
