@@ -13,54 +13,21 @@
 	 *             Thrown if the component has been given a null id.
 	 */
 	@SuppressWarnings("unchecked")
-	public Component(MarkupContainer<?> parent, final String id, final IModel<T> model)
+	public Component(final MarkupContainer<?> parent, final String id, final IModel<T> model)
 	{
 		setId(id);
-
-		if (parent == null)
-		{
-			if (!(this instanceof Page))
-			{
-				throw new WicketRuntimeException("component without a parent is not allowed.");
-			}
-		}
-		// Bordered pages might implement the interface to allow to redirect
-		// to another parent without the need to change to code of adding a
-		// component. Another use case is where you want the parent to
-		// automatically
-		// add a container in between the parent and new component.
-		else if (parent instanceof IAlternateParentProvider)
-		{
-			while (parent instanceof IAlternateParentProvider)
-			{
-				MarkupContainer oldParent = parent;
-				parent = ((IAlternateParentProvider)parent).getAlternateParent(this.getClass(), id);
-
-				if (parent == oldParent)
-				{
-					break;
-				}
-
-				if (!oldParent.contains(parent, true))
-				{
-					throw new WicketRuntimeException(
-							"IAlternateParentProvider cannot return alternate parent containers that are outside its hierarchy.");
-				}
-
-			}
-		}
-
-		this.parent = parent;
+		
+		this.parent = getRealParent(parent, id);
 
 		getApplication().notifyComponentInstantiationListeners(this);
 		if (id.startsWith(AUTO_COMPONENT_PREFIX))
 		{
-			parent.autoAdd(this);
+			this.parent.autoAdd(this);
 		}
 		else
 		{
 			loadMarkupStream();
-			parent.add(this);
+			this.parent.add(this);
 		}
 
 		if (model instanceof IAssignmentAware)

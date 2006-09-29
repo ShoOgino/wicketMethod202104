@@ -1,0 +1,46 @@
+	/**
+	 * Get the real parent for the component taking IAlternateParent into account if
+	 * necessary.
+	 * 
+	 * @param parent
+	 *            The parent of this component The parent of this component.
+	 * @param id
+	 *            The non-null id of this component.
+	 * @return The real parent
+	 */
+	private MarkupContainer<?> getRealParent(MarkupContainer<?> parent, final String id)
+	{
+		if (parent == null)
+		{
+			if (!(this instanceof Page))
+			{
+				throw new WicketRuntimeException("Component without a parent is not allowed.");
+			}
+		}
+		// Bordered pages might implement the interface to allow to redirect
+		// to another parent without the need to change to code of adding a
+		// component. Another use case is where you want the parent to
+		// automatically
+		// add a container in between the parent and new component.
+		else if (parent instanceof IAlternateParentProvider)
+		{
+			while (parent instanceof IAlternateParentProvider)
+			{
+				MarkupContainer oldParent = parent;
+				parent = ((IAlternateParentProvider)parent).getAlternateParent(this.getClass(), id);
+				if (parent == oldParent)
+				{
+					return parent;
+				}
+
+				if (!oldParent.contains(parent, true))
+				{
+					throw new WicketRuntimeException(
+							"IAlternateParentProvider cannot return alternate parent containers that are outside its hierarchy.");
+				}
+			}
+		}
+		
+		return parent;
+	}
+
