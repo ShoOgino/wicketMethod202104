@@ -3,17 +3,23 @@
 	 *      wicket.markup.MarkupResourceStream)
 	 */
 	@Override
-	public final IMarkup loadMarkup(final MarkupContainer container,
+	public final MarkupFragment loadMarkup(final MarkupContainer container,
 			final MarkupResourceStream markupResourceStream) throws IOException,
 			ResourceStreamNotFoundException
 	{
 		// read and parse the markup
-		IMarkup markup = super.loadMarkup(container, markupResourceStream);
+		MarkupFragment markup = super.loadMarkup(container, markupResourceStream);
 
-		// Check for markup inheritance. If it contains <wicket:extend>
-		// the two markups get merged.
-		markup = checkForMarkupInheritance(container, markup);
+		// Check if markup contains <wicket:extend> which tells us that
+		// we need to read the inherited markup as well.
+		final MarkupFragment extendFragment = requiresBaseMarkup(markup);
+		if (extendFragment != null)
+		{
+			final MarkupFragment baseMarkup = getBaseMarkup(container, markup);
 
+			// Merge base and derived markup
+			markup = mergedMarkup(markup, baseMarkup, extendFragment);
+		}
 		return markup;
 	}
 

@@ -1,0 +1,32 @@
+	/**
+	 * Append the wicket:head regions from the extended markup to the current
+	 * markup
+	 * 
+	 * @param mergedMarkup
+	 *            The destination Markup object
+	 * @param markup
+	 *            The source Markup object
+	 */
+	private void copyWicketHead(final MarkupFragment mergedMarkup, final MarkupFragment markup)
+	{
+		markup.visitChildren(MarkupFragment.class, new MarkupFragment.IVisitor()
+		{
+			public Object visit(final MarkupElement element)
+			{
+				MarkupFragment fragment = (MarkupFragment)element;
+				if (fragment.get(0) instanceof ComponentTag)
+				{
+					ComponentTag tag = fragment.getTag(0);
+					if (tag.isWicketHeadTag())
+					{
+						for (MarkupElement elem : fragment.getAllElementsFlat())
+						{
+							mergedMarkup.addMarkupElement(elem);
+						}
+					}
+				}
+				return MarkupFragment.IVisitor.CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+

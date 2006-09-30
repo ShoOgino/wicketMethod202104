@@ -1,0 +1,48 @@
+	/**
+	 * Return the body onLoad attribute of the markup
+	 * 
+	 * @param markup
+	 * @return onLoad attribute
+	 */
+	private String getBodyOnLoadString(final MarkupFragment markup)
+	{
+		String onLoad = (String)markup.visitChildren(ComponentTag.class,
+				new MarkupFragment.IVisitor()
+				{
+					boolean foundHead = false;
+
+					public Object visit(final MarkupElement element)
+					{
+						ComponentTag tag = (ComponentTag)element;
+						if ((foundHead == true) && tag.isOpen() && tag.isBodyTag())
+						{
+							final String onLoad = tag.getAttributes().getString(ONLOAD);
+							return onLoad;
+						}
+						else if (tag.isClose() && tag.isWicketHeadTag())
+						{
+							// Ok, we found <wicket:head>
+							foundHead = true;
+						}
+						else if (tag.isMajorWicketComponentTag())
+						{
+							// Short cut: We found <wicket:panel> or
+							// <wicket:border>.
+							// There certainly will be no <wicket:head> later
+							// on.
+							return null;
+						}
+						else if (tag.isBodyTag())
+						{
+							// Short cut: We found <body> but no <wicket:head>.
+							// There certainly will be no <wicket:head> later
+							// on.
+							return null;
+						}
+						return MarkupFragment.IVisitor.CONTINUE_TRAVERSAL;
+					}
+				});
+
+		return onLoad;
+	}
+

@@ -1,19 +1,20 @@
 	/**
 	 * Merge inherited and base markup.
 	 * 
-	 * @param mergedMarkup
-	 *            The "empty" instance of MergedMarkup which now will be filled
-	 *            with MarkupElements
 	 * @param derivedMarkup
 	 *            The derived markup
 	 * @param baseMarkup
 	 *            The base markup
-	 * @param extendIndex
-	 *            Index where <wicket:extend> has been found
+	 * @param extendFragment
+	 *            The <wicket:extend> markup fragment
+	 * @return The merged markup
 	 */
-	private void merge(final Markup mergedMarkup, final IMarkup derivedMarkup,
-			final IMarkup baseMarkup, int extendIndex)
+	// TODO modify to better fit markup fragments
+	private MarkupFragment merge(final MarkupFragment derivedMarkup,
+			final MarkupFragment baseMarkup, final MarkupFragment extendFragment)
 	{
+		MarkupFragment mergedMarkup = new MarkupFragment(derivedMarkup.getMarkup());
+
 		// True if either <wicket:head> or <head> has been processed
 		boolean wicketHeadProcessed = false;
 
@@ -22,9 +23,10 @@
 		// into <wicket:child> and add it as well.
 		ComponentTag childTag = null;
 		int baseIndex = 0;
-		for (; baseIndex < baseMarkup.size(); baseIndex++)
+		List<MarkupElement> baseMarkupList = baseMarkup.getAllElementsFlat();
+		for (; baseIndex < baseMarkupList.size(); baseIndex++)
 		{
-			MarkupElement element = baseMarkup.get(baseIndex);
+			MarkupElement element = baseMarkupList.get(baseIndex);
 			if (element instanceof RawMarkup)
 			{
 				// Add the element to the merged list
@@ -36,9 +38,9 @@
 
 			// Make sure all tags of the base markup remember where they are
 			// from
-			if ((baseMarkup.getResource() != null) && (tag.getMarkupClass() == null))
+			if ((baseMarkup.getMarkup().getResource() != null) && (tag.getMarkupClass() == null))
 			{
-				tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+				tag.setMarkupClass(baseMarkup.getMarkup().getResource().getMarkupClass());
 			}
 
 			if (tag.isWicketTag())
@@ -47,7 +49,8 @@
 				// inheritance make sure the child tag is not from one of the
 				// deeper levels
 				if (tag.isChildTag()
-						&& (tag.getMarkupClass() == baseMarkup.getResource().getMarkupClass()))
+						&& (tag.getMarkupClass() == baseMarkup.getMarkup().getResource()
+								.getMarkupClass()))
 				{
 					if (tag.isOpenClose())
 					{
@@ -55,7 +58,8 @@
 						childTag = tag;
 						final ComponentTag childOpenTag = tag.mutable();
 						childOpenTag.setType(XmlTag.Type.OPEN);
-						childOpenTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+						childOpenTag.setMarkupClass(baseMarkup.getMarkup().getResource()
+								.getMarkupClass());
 						childOpenTag.setWicketTag(true);
 						mergedMarkup.addMarkupElement(childOpenTag);
 						break;
@@ -85,7 +89,7 @@
 						mergedMarkup.addMarkupElement(tag);
 
 						// Add the <wicket:head> body from the derived markup.
-						copyWicketHead(mergedMarkup, derivedMarkup, extendIndex);
+						copyWicketHead(mergedMarkup, derivedMarkup);
 
 						// Do not add the current tag. It has already been
 						// added.
@@ -98,7 +102,7 @@
 						wicketHeadProcessed = true;
 
 						// Add the <wicket:head> body from the derived markup.
-						copyWicketHead(mergedMarkup, derivedMarkup, extendIndex);
+						copyWicketHead(mergedMarkup, derivedMarkup);
 					}
 				}
 			}
@@ -112,7 +116,7 @@
 					wicketHeadProcessed = true;
 
 					// Add the <wicket:head> body from the derived markup.
-					copyWicketHead(mergedMarkup, derivedMarkup, extendIndex);
+					copyWicketHead(mergedMarkup, derivedMarkup);
 				}
 			}
 
@@ -123,13 +127,13 @@
 				// Get the body onLoad attribute from derived markup
 				final String onLoad = getBodyOnLoadString(derivedMarkup);
 
-				String onLoadBase = tag.getAttributes().getString("onload");
+				String onLoadBase = tag.getAttributes().getString(ONLOAD);
 				if (onLoadBase == null)
 				{
 					if (onLoad != null)
 					{
 						final ComponentTag mutableTag = tag.mutable();
-						mutableTag.getAttributes().put("onload", onLoad);
+						mutableTag.getAttributes().put(ONLOAD, onLoad);
 						element = mutableTag;
 					}
 				}
@@ -137,7 +141,7 @@
 				{
 					onLoadBase += onLoad;
 					final ComponentTag mutableTag = tag.mutable();
-					mutableTag.getAttributes().put("onload", onLoadBase);
+					mutableTag.getAttributes().put(ONLOAD, onLoadBase);
 					element = mutableTag;
 				}
 			}
@@ -146,7 +150,7 @@
 			mergedMarkup.addMarkupElement(element);
 		}
 
-		if (baseIndex == baseMarkup.size())
+		if (baseIndex == baseMarkupList.size())
 		{
 			throw new WicketRuntimeException("Expected to find <wicket:child/> in base markup: "
 					+ baseMarkup.toString());
@@ -154,41 +158,24 @@
 
 		// Now append all elements from the derived markup starting with
 		// <wicket:extend> until </wicket:extend> to the list
-		for (; extendIndex < derivedMarkup.size(); extendIndex++)
+		for (MarkupElement elem : extendFragment.getAllElementsFlat())
 		{
-			final MarkupElement element = derivedMarkup.get(extendIndex);
-			mergedMarkup.addMarkupElement(element);
-
-			if (element instanceof ComponentTag)
-			{
-				final ComponentTag tag = (ComponentTag)element;
-				if (tag.isExtendTag() && tag.isClose())
-				{
-					break;
-				}
-			}
-		}
-
-		if (extendIndex == derivedMarkup.size())
-		{
-			throw new WicketRuntimeException(
-					"Missing close tag </wicket:extend> in derived markup: "
-							+ derivedMarkup.toString());
+			mergedMarkup.addMarkupElement(elem);
 		}
 
 		// If <wicket:child> than skip the body and find </wicket:child>
-		if (((ComponentTag)baseMarkup.get(baseIndex)).isOpen())
+		if (((ComponentTag)baseMarkupList.get(baseIndex)).isOpen())
 		{
-			for (baseIndex++; baseIndex < baseMarkup.size(); baseIndex++)
+			for (baseIndex++; baseIndex < baseMarkupList.size(); baseIndex++)
 			{
-				final MarkupElement element = baseMarkup.get(baseIndex);
+				final MarkupElement element = baseMarkupList.get(baseIndex);
 				if (element instanceof ComponentTag)
 				{
 					final ComponentTag tag = (ComponentTag)element;
 					if (tag.isChildTag() && tag.isClose())
 					{
 						// Ok, skipped the childs content
-						tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+						tag.setMarkupClass(baseMarkup.getMarkup().getResource().getMarkupClass());
 						mergedMarkup.addMarkupElement(tag);
 						break;
 					}
@@ -208,7 +195,7 @@
 			}
 
 			// </wicket:child> not found
-			if (baseIndex == baseMarkup.size())
+			if (baseIndex == baseMarkupList.size())
 			{
 				throw new WicketRuntimeException(
 						"Expected to find </wicket:child> in base markup: " + baseMarkup.toString());
@@ -220,22 +207,22 @@
 			// But first add </wicket:child>
 			final ComponentTag childCloseTag = childTag.mutable();
 			childCloseTag.setType(XmlTag.Type.CLOSE);
-			childCloseTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+			childCloseTag.setMarkupClass(baseMarkup.getMarkup().getResource().getMarkupClass());
 			childCloseTag.setWicketTag(true);
 			mergedMarkup.addMarkupElement(childCloseTag);
 		}
 
-		for (baseIndex++; baseIndex < baseMarkup.size(); baseIndex++)
+		for (baseIndex++; baseIndex < baseMarkupList.size(); baseIndex++)
 		{
-			final MarkupElement element = baseMarkup.get(baseIndex);
+			final MarkupElement element = baseMarkupList.get(baseIndex);
 			mergedMarkup.addMarkupElement(element);
 
 			// Make sure all tags of the base markup remember where they are
 			// from
-			if ((element instanceof ComponentTag) && (baseMarkup.getResource() != null))
+			if ((element instanceof ComponentTag) && (baseMarkup.getMarkup().getResource() != null))
 			{
 				final ComponentTag tag = (ComponentTag)element;
-				tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+				tag.setMarkupClass(baseMarkup.getMarkup().getResource().getMarkupClass());
 			}
 		}
 
@@ -243,7 +230,7 @@
 		// it must enclose ALL of the <wicket:head> tags.
 		// Note: HtmlHeaderSectionHandler does something similar, but because
 		// markup filters are not called for merged markup again, ...
-		if (Page.class.isAssignableFrom(derivedMarkup.getResource().getMarkupClass()))
+		if (Page.class.isAssignableFrom(derivedMarkup.getMarkup().getResource().getMarkupClass()))
 		{
 			// Find the position inside the markup for first <wicket:head>,
 			// last </wicket:head> and <head>
@@ -296,5 +283,7 @@
 				mergedMarkup.addMarkupElement(hasCloseWicketHead + 2, closeTag);
 			}
 		}
+
+		return mergedMarkup;
 	}
 

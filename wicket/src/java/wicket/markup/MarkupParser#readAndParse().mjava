@@ -7,7 +7,7 @@
 	 * @throws IOException
 	 * @throws ResourceStreamNotFoundException
 	 */
-	public final IMarkup readAndParse() throws IOException, ResourceStreamNotFoundException
+	public final MarkupFragment readAndParse() throws IOException, ResourceStreamNotFoundException
 	{
 		// Initialize the xml parser
 		this.xmlParser
@@ -15,11 +15,11 @@
 
 		// parse the xml markup and tokenize it into wicket relevant markup
 		// elements
-		parseMarkup();
+		MarkupFragment fragment = parseMarkup();
 
 		this.markup.setEncoding(this.xmlParser.getEncoding());
 		this.markup.setXmlDeclaration(this.xmlParser.getXmlDeclaration());
 
-		return this.markup;
+		return fragment;
 	}
 

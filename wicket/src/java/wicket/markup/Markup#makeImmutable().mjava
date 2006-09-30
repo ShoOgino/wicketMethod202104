@@ -3,6 +3,16 @@
 	 */
 	public final void makeImmutable()
 	{
+		// TODO This is realy for historical reasons only and should be removed
+		// once the markup fragment changes have been finished.
+		// See MarkupParser.parseMarkup() last line.
+		if ((this.markup != null) && (this.markup.size() == 0) && (this.markupFragments != null)
+				&& (this.markupFragments.size() != 0))
+		{
+			this.markup = this.markupFragments;
+			this.markupFragments = null;
+		}
+
 		if ((this.markup != null) && (this.markupFragments == null))
 		{
 			initialize();

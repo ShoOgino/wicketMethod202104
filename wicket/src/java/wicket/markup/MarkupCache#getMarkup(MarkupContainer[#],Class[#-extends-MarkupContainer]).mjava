@@ -12,7 +12,7 @@
 	 *            container as well (markup inheritance)
 	 * @return Markup resource
 	 */
-	public final IMarkup getMarkup(final MarkupContainer<?> container,
+	public final MarkupFragment getMarkup(final MarkupContainer<?> container,
 			final Class<? extends MarkupContainer> clazz)
 	{
 		Class<? extends MarkupContainer> containerClass = clazz;
@@ -34,7 +34,7 @@
 
 		// Markup already in the cache? If cacheKey == null, than don't cache
 		// the markup resource stream
-		IMarkup markup = null;
+		MarkupFragment markup = null;
 		if (cacheKey != null)
 		{
 			markup = markupCache.get(cacheKey);
@@ -84,7 +84,7 @@
 						// flag markup as non-existent (as opposed to null,
 						// which might mean that it's simply not loaded into
 						// the cache)
-						markup = IMarkup.NO_MARKUP;
+						markup = MarkupFragment.NO_MARKUP_FRAGMENT;
 
 						// Save any markup list (or absence of one) for next
 						// time
