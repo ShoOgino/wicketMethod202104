@@ -10,29 +10,21 @@
 		{
 			return this.markupFragment;
 		}
-		
-		// Create the markup path for the component to find the associated
-		// markup fragment within the markup file.
-		String path = getId();
 
-		// The markup path must be relativ to the markup file, hence we need to
-		// find the first parent with associated markup file and update the
-		// markup path accordingly.
 		MarkupContainer parent = getParent();
-		while ((parent != null) && !(parent instanceof IMarkupProvider))
-		{
-			path = parent.getMarkupFragmentPath(path);
-			parent = parent.getParent();
-		}
-
 		if (parent == null)
 		{
-			throw new MarkupNotFoundException("Component has no parent with external markup file: "
+			throw new MarkupNotFoundException("The component is expected to have a parent: "
 					+ getId());
 		}
 
-		// We found the markup file and created the markup path. Now go and get
-		// the fragment.
-		return ((IMarkupProvider)parent).getMarkupFragment(path);
+		MarkupFragment markupFragment = parent.getMarkupFragment(getId());
+		if (markupFragment == null)
+		{
+			throw new MarkupNotFoundException("Unable to find markup for Component: "
+					+ getId());
+		}
+
+		return markupFragment;
 	}
 

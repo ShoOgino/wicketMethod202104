@@ -23,46 +23,45 @@
 		{
 			// Get the markup fragment for the component
 			this.markupFragment = getMarkupFragment();
-
-			final MarkupStream markupStream = new MarkupStream(markupFragment);
-			final ComponentTag tag = markupStream.getTag();
-			
-			// TODO 2.0:juergen: the attributes and behavior additions are bad
-			// here since this method is meant to be overridden to provide
-			// custom markup (at least thats what the javadoc says) the
-			// overriders have to implement the two functionalities below
-			// otherwise all kinds of things can break. better to move this up
-			// the call hierarchy?
-
-			if (tag.hasAttributes())
+			if ((this.markupFragment.size() > 0) && (this.markupFragment.get(0) instanceof ComponentTag))
 			{
-				markupAttributes = new CopyOnWriteValueMap(tag.getAttributes());
-			}
-
-			// add any behaviors attached to the component tag
-			if (tag.hasBehaviors())
-			{
-				Iterator<IBehavior> behaviors = tag.getBehaviors();
-				while (behaviors.hasNext())
+				final ComponentTag tag = this.markupFragment.getTag(0);
+				
+				// TODO 2.0:juergen: the attributes and behavior additions are bad
+				// here since this method is meant to be overridden to provide
+				// custom markup (at least thats what the javadoc says) the
+				// overriders have to implement the two functionalities below
+				// otherwise all kinds of things can break. better to move this up
+				// the call hierarchy?
+	
+				if (tag.hasAttributes())
 				{
-					add(behaviors.next());
+					markupAttributes = new CopyOnWriteValueMap(tag.getAttributes());
+				}
+	
+				// add any behaviors attached to the component tag
+				if (tag.hasBehaviors())
+				{
+					Iterator<IBehavior> behaviors = tag.getBehaviors();
+					while (behaviors.hasNext())
+					{
+						add(behaviors.next());
+					}
 				}
 			}
-
-
+			
+			final MarkupStream markupStream = new MarkupStream(markupFragment);
 			return markupStream;
 		}
 		catch (MarkupException ex)
 		{
-			log
-					.warn("MarkupFragmentFinder was unable to find the markup associated with Component '"
+			log.warn("MarkupFragmentFinder was unable to find the markup associated with Component '"
 							+ id + "'. You will not be able to use the component for AJAX calls.");
 			throw ex;
 		}
 		catch (RuntimeException re)
 		{
-			log
-					.warn("MarkupFragmentFinder was unable to find the markup associated with Component '"
+			log.warn("MarkupFragmentFinder was unable to find the markup associated with Component '"
 							+ id + "'. You will not be able to use the component for AJAX calls.");
 			throw new MarkupNotFoundException("Couldn't find the markup of the component '" + id
 					+ "' in parent '" + parent.getPageRelativePath() + "'", re);

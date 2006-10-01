@@ -18,16 +18,17 @@
 		}
 		else
 		{
-			// Save the parent's markup stream to re-assign it at the end
+			// Get the markup associated with the component. 
 			MarkupContainer parent = getParent();
-			MarkupStream originalMarkupStream = parent.getMarkupStream();
+			if (parent == null)
+			{
+				throw new WicketRuntimeException("Expected the Component to have a parent container: " + getId());
+			}
 			MarkupStream markupStream = new MarkupStream(getMarkupFragment());
+			parent.setMarkupStream(markupStream);
 
 			try
 			{
-				// Make sure that while rendering the markup stream is found
-				parent.setMarkupStream(markupStream);
-
 				if (this instanceof MarkupContainer)
 				{
 					MarkupContainer<T> container = (MarkupContainer<T>)this;
@@ -59,8 +60,6 @@
 			}
 			finally
 			{
-				// Make sure the original markup stream is back in place
-				parent.setMarkupStream(originalMarkupStream);
 				onAfterRender();
 			}
 		}

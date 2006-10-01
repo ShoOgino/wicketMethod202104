@@ -9,7 +9,12 @@
 		// Skip the components body. It will be replaced by the fragment
 		markupStream.skipRawMarkup();
 
-		final MarkupStream providerMarkupStream = chooseMarkupStream(markupStream);
+		if (this.fragment == null)
+		{
+			this.fragment = getFragment();
+		}
+		
+		final MarkupStream providerMarkupStream = new MarkupStream(this.fragment);
 		if (providerMarkupStream == null)
 		{
 			throw new IllegalStateException(

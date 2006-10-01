@@ -5,10 +5,14 @@
 	 */
 	public MarkupStream(final MarkupFragment fragment)
 	{
+		if (fragment == null)
+		{
+			throw new MarkupException("You can not create a MarkupStream without a markup fragment");
+		}
 		this.markup = fragment;
 		this.markup.makeImmutable();
 		this.markupElements = fragment.getAllElementsFlat();
-		
+
 		if (this.markupElements.size() > 0)
 		{
 			current = get(currentIndex);

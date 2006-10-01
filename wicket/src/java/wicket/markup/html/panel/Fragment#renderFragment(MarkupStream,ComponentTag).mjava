@@ -8,30 +8,14 @@
 	 */
 	private void renderFragment(final MarkupStream providerMarkupStream, final ComponentTag openTag)
 	{
-		// remember the current position in the markup. Will have to come back
-		// to it.
-		int currentIndex = providerMarkupStream.getCurrentIndex();
+		// Get the fragments open tag
+		ComponentTag fragmentOpenTag = providerMarkupStream.getTag();
 
-		// Find the markup fragment
-		int index = providerMarkupStream.positionAt(markupId, true);
+		// We'll completely ignore the fragments open tag. It'll not be
+		// rendered
+		providerMarkupStream.next();
 
-		try
-		{
-			// Get the fragments open tag
-			ComponentTag fragmentOpenTag = providerMarkupStream.getTag();
-
-			// We'll completely ignore the fragments open tag. It'll not be
-			// rendered
-			providerMarkupStream.next();
-
-			// Render the body of the fragment
-			super.onComponentTagBody(providerMarkupStream, fragmentOpenTag);
-		}
-		finally
-		{
-			// Make sure the markup stream is positioned where we started back
-			// at the original component
-			providerMarkupStream.setCurrentIndex(currentIndex);
-		}
+		// Render the body of the fragment
+		super.onComponentTagBody(providerMarkupStream, fragmentOpenTag);
 	}
 

@@ -8,21 +8,11 @@
 	protected final void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 	{
-		// Save open tag for callback later to render body
-		this.openTag = openTag;
-
-		// initialize
-		this.haveSeenBodyTag = false;
-
 		// Render the associated markup
 		renderAssociatedMarkup(BORDER,
 				"Markup for a border component must begin a tag like '<wicket:border>'");
 
-		// There shall exactly only one body tag per border
-		if (haveSeenBodyTag == false)
-		{
-			markupStream
-					.throwMarkupException("Didn't find <wicket:body/> tag for the border compoment.");
-		}
+		// Skip the whole body of <span wicket:id="myBorder>
+		markupStream.skipToMatchingCloseTag(openTag);
 	}
 

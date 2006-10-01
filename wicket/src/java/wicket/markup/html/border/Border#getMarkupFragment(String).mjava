@@ -10,60 +10,16 @@
 	@Override
 	public MarkupFragment getMarkupFragment(String path)
 	{
-		// First try to find the markup associated with 'path' in the external
-		// markup file of the Border
-		try
+		// First try the associated markup
+		MarkupFragment fragment = getAssociatedMarkupFragment(false);
+		if (fragment != null)
 		{
-			return super.getMarkupFragment(path);
-		}
-		catch (RuntimeException ex)
-		{
-			// ignore
+			fragment = fragment.getChildFragment(path, false);
 		}
 
-		// If the Border component implements IAlternateProvider as it might do
-		// for body-containers (<wicket:border><span
-		// wicket:id="body-parent"><wicket:body/></span></wicket:border>),
-		// than find the proper parent for the markup
-		if (this instanceof IAlternateParentProvider)
-		{
-			MarkupContainer parent = ((IAlternateParentProvider)this)
-					.getAlternateParent(null, null);
-			String id = parent.getId() + Component.PATH_SEPARATOR;
-			if (path.startsWith(id))
-			{
-				path = path.substring(id.length());
-			}
-		}
-
-		// If not found in the external markup file, than try the markup which
-		// contains the <span wicket:id="myBorder> tag.
-		path = getId() + Component.PATH_SEPARATOR + path;
-
-		// The markup path must be relativ to the markup file, hence we need to
-		// find the first parent with associated markup file and update the
-		// markup path accordingly.
-		MarkupContainer parent = getParent();
-		while ((parent != null) && !(parent instanceof IMarkupProvider))
-		{
-			path = parent.getMarkupFragmentPath(path);
-			parent = parent.getParent();
-		}
-
-		if (parent == null)
-		{
-			throw new MarkupNotFoundException("Component has no parent with external markup file: "
-					+ getId());
-		}
-
-		// We found the markup file and created the markup path. Now go and get
-		// the fragment.
-		MarkupFragment fragment = ((IMarkupProvider)parent).getMarkupFragment(path);
 		if (fragment == null)
 		{
-			throw new MarkupNotFoundException(
-					"Unable to find the markup fragment with markup path '" + path
-							+ "'. Component: " + getId());
+			fragment = super.getMarkupFragment(path);
 		}
 
 		return fragment;
