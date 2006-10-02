@@ -2,10 +2,12 @@
 	 * MarkupParser until now creates a flat list of RawMarkup and ComponentTag
 	 * elements. However, what we want is a tree like structure with one
 	 * fragment per Component.
+	 * 
+	 * @return MarkupFragment A converted copy of the fragment
 	 */
-	private void convertFlatIntoTreeStructure()
+	public final MarkupFragment translateFlatIntoTreeStructure()
 	{
-		MarkupFragment rootFragment = new MarkupFragment(this);
+		MarkupFragment rootFragment = new MarkupFragment(this.getMarkup());
 
 		// Remember the path associated with a ComponentTag to properly walk up
 		// and down the hierarchy of wicket markup tags
@@ -16,7 +18,7 @@
 		MarkupFragment current = rootFragment;
 
 		// For all markup element in the external markup file
-		for (MarkupElement elem : this.markupFragments)
+		for (MarkupElement elem : this.markupElements)
 		{
 			// If RawMarkup simply add the element to the current fragment
 			if (elem instanceof RawMarkup)
@@ -38,7 +40,7 @@
 					// open-close.
 					if (tag.hasNoCloseTag())
 					{
-						current.addMarkupElement(new MarkupFragment(this, tag));
+						current.addMarkupElement(new MarkupFragment(this.getMarkup(), tag));
 					}
 					else
 					{
@@ -49,7 +51,7 @@
 						stack.push(basePath);
 						fragmentStack.push(current);
 
-						MarkupFragment newFragment = new MarkupFragment(this, tag);
+						MarkupFragment newFragment = new MarkupFragment(this.getMarkup(), tag);
 						current.addMarkupElement(newFragment);
 						current = newFragment;
 
@@ -61,7 +63,7 @@
 				}
 				else if (tag.isOpenClose())
 				{
-					MarkupFragment newFragment = new MarkupFragment(this, tag);
+					MarkupFragment newFragment = new MarkupFragment(this.getMarkup(), tag);
 					current.addMarkupElement(newFragment);
 				}
 				else
@@ -79,6 +81,6 @@
 			rootFragment = (MarkupFragment)rootFragment.get(0);
 		}
 
-		this.markupFragments = rootFragment;
+		return rootFragment;
 	}
 

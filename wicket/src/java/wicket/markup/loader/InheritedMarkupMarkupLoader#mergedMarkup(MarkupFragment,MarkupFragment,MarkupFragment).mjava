@@ -24,15 +24,8 @@
 
 		// Merge derived and base markup
 		MarkupFragment mergedMarkup = merge(derivedMarkup, baseMarkup, extendFragment);
-		
-		MergedMarkup markup = new MergedMarkup(derivedMarkup.getMarkup(), baseMarkup.getMarkup());
-		for (MarkupElement element : mergedMarkup)
-		{
-			markup.getMarkupFragments().addMarkupElement(element);
-		}
-		markup.makeImmutable();
-		
-		mergedMarkup = markup.getMarkupFragments();
+		mergedMarkup = mergedMarkup.translateFlatIntoTreeStructure();
+		mergedMarkup.makeImmutable();
 		
 		if (log.isDebugEnabled())
 		{
