@@ -13,11 +13,13 @@
 	{
 		this.markupIndex = markupStream.getCurrentIndex();
 
-		// Get mutable copy of next tag
+		// Get mutable copy of next tag and apply the changes recorded in markupAttributes
 		final ComponentTag openTag = markupStream.getTag();
-		final IValueMap attributeMap = markupAttributes != null ? new ValueMap(
-				markupAttributes) : null;
-		final ComponentTag tag = openTag.mutable(attributeMap);
+		final ComponentTag tag = openTag.mutable();
+		if (this.markupAttributes != null)
+		{
+			tag.getAttributes().putAll(this.markupAttributes.getChangeMap());
+		}
 
 		// Call any tag handler
 		onComponentTag(tag);
