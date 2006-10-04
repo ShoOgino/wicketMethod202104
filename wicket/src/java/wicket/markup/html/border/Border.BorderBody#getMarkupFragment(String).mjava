@@ -1,0 +1,19 @@
+		/**
+		 * @see wicket.MarkupContainer#getMarkupFragment(java.lang.String)
+		 */
+		@Override
+		protected MarkupFragment getMarkupFragment(final String id)
+		{
+			// First search for the 'id' in the <span
+			// wicket:id="myBorder">...</span> markup
+			MarkupFragment fragment = Border.this.getMarkupFragment(id);
+			if (fragment != null)
+			{
+				return fragment;
+			}
+
+			// Else, check for the 'id' in the border's associated markup
+			return Border.this.getAssociatedMarkup(true).getWicketFragment(BORDER, true)
+					.getChildFragment(id, true);
+		}
+

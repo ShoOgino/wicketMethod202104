@@ -25,6 +25,23 @@
 					+ getId());
 		}
 
+		// Attached behaviors provided by the ComponentTag which
+		// one of the markup handlers might have added.
+		if ((markupFragment.size() > 0) && (markupFragment.get(0) instanceof ComponentTag))
+		{
+			final ComponentTag tag = markupFragment.getTag(0);
+			
+			// add any behaviors attached to the component tag
+			if (tag.hasBehaviors())
+			{
+				Iterator<IBehavior> behaviors = tag.getBehaviors();
+				while (behaviors.hasNext())
+				{
+					add(behaviors.next());
+				}
+			}
+		}
+		
 		return markupFragment;
 	}
 

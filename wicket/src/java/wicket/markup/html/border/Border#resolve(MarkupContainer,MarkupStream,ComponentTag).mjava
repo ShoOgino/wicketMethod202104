@@ -6,11 +6,16 @@
 	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
 			final ComponentTag tag)
 	{
-		// If no wicket:body container has been created yet, than automatically
-		// create one and render it.
+		// If wicket:body container has not yet been created and 'tag' is
+		// wicket:body, than automatically create and render it.
 		if ((this.body == null) && tag.isWicketBodyTag())
 		{
+			// The body container become the child of 'container', which if an
+			// alternate parent has been provided, may not be the border itself,
+			// but a (grand-) child of him.
 			this.body = newBorderBodyContainer(container);
+
+			// Render the body and its children
 			this.body.render(markupStream);
 			return true;
 		}

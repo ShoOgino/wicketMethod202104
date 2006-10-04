@@ -1,11 +1,28 @@
 		/**
+		 * Get the wicket:body fragment
+		 * 
 		 * @see wicket.Component#getMarkupFragment()
 		 */
 		@Override
 		public MarkupFragment getMarkupFragment()
 		{
-			// Get the border's markup
-			// <span wicket:id="myBorder"> xxxx </span>
-			return Border.this.getMarkupFragment();
+			MarkupContainer parent = getParent();
+			MarkupFragment fragment;
+
+			// If the parent is a Border, than search for <wicket:body> in the
+			// associated markup
+			if (parent instanceof Border)
+			{
+				fragment = Border.this.getAssociatedMarkup(true).getWicketFragment(BORDER, true);
+			}
+			else
+			{
+				// If the parent is not a Border, than at least one
+				// MarkupContainer is in between the Border and the Body
+				fragment = parent.getMarkupFragment();
+			}
+
+			// Search for the <wicket:body> tag
+			return fragment.getWicketFragment(BODY, true);
 		}
 
