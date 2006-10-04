@@ -5,17 +5,26 @@
 		public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
 				final ComponentTag tag)
 		{
+			// The body container is semi-transparent. It is only transparent
+			// for none wicket:body tags
+
+			// If wicket:body, than we definitely can't help you
 			if (tag.isWicketBodyTag())
 			{
 				return false;
 			}
-			
-			Component child = getParent().get(tag.getId());
+
+			// For none wicket:body tags behave like a transparent container.
+			// Check if the parent is able to resolve the wicket:id. If yes,
+			// than render the component.
+			final Component child = getParent().get(tag.getId());
 			if (child != null)
 			{
 				child.render(markupStream);
 				return true;
 			}
+
+			// Unable to resolve the request
 			return false;
 		}
 

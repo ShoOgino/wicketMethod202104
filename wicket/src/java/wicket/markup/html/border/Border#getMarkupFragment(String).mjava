@@ -1,11 +1,6 @@
 	/**
-	 * Like Panels, Borders have associated Markup files and hence must
-	 * implement IMarkupProvider. But Border are different in that they allow to
-	 * have child components with markup either in the associated markup file
-	 * (between the wicket:border and wicket:body tags) or the span tag which
-	 * declares the border component.
 	 * 
-	 * @see wicket.markup.html.WebMarkupContainerWithAssociatedMarkup#getMarkupFragment(java.lang.String)
+	 * @see wicket.markup.html.MarkupContainer#getMarkupFragment(java.lang.String)
 	 */
 	@Override
 	public MarkupFragment getMarkupFragment(String path)
@@ -17,6 +12,7 @@
 			fragment = fragment.getChildFragment(path, false);
 		}
 
+		// If not yet found, than try the <span wicket:id="myBorder> body
 		if (fragment == null)
 		{
 			fragment = super.getMarkupFragment(path);

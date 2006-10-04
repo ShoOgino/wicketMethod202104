@@ -7,36 +7,19 @@
 		protected void onComponentTagBody(final MarkupStream markupStream,
 				final ComponentTag openTag)
 		{
-			// Get the borders markup
+			// Get the body's markup which is equal to the border's markup
+			// <span wicket:id="myBorder"> xxxx </span>
 			MarkupFragment borderFragment = getMarkupFragment();
 			MarkupStream borderMarkupStream = new MarkupStream(borderFragment);
 
 			// Skip the <span wicket:id="myBorder> tag
 			borderMarkupStream.next();
 
-			// Render the borders body
-			final Response originalResponse;
-			if (Border.this.bodyVisible == true)
-			{
-				originalResponse = null;
-			}
-			else
-			{
-				originalResponse = getRequestCycle().setResponse(NullResponse.getInstance());
-			}
+			// Render wicket:body and its children
+			renderComponentTagBody(borderMarkupStream, borderFragment.getTag(0));
 
-			try
-			{
-				renderComponentTagBody(borderMarkupStream, borderFragment.getTag(0));
-			}
-			finally
-			{
-				if (originalResponse != null)
-				{
-					getRequestCycle().setResponse(originalResponse);
-				}
-			}
-
+			// If the open tag was Open-Body-Close than remove the body. The
+			// body raw markup might be used as none-computed preview text.
 			if (wasOpenClose == false)
 			{
 				markupStream.skipRawMarkup();
