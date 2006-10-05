@@ -6,12 +6,11 @@
 	 */
 	public final void visitFormComponents(final FormComponent.IVisitor visitor)
 	{
-		visitChildren(FormComponent.class, new IVisitor()
+		visitChildren(IFormProcessingListener.class, new IVisitor()
 		{
 			public Object component(final Component component)
 			{
-				visitor.formComponent((FormComponent)component);
-				return CONTINUE_TRAVERSAL;
+				return visitor.formComponent((IFormProcessingListener)component);
 			}
 		});
 
@@ -33,7 +32,7 @@
 				Component child = (Component)iter.next();
 				if (child instanceof FormComponent)
 				{
-					visitor.formComponent((FormComponent)child);
+					visitor.formComponent((IFormProcessingListener)child);
 				}
 			}
 		}
