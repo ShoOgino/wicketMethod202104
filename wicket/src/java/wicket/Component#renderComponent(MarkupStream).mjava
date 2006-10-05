@@ -9,7 +9,7 @@
 	 * @param markupStream
 	 *            The markup stream
 	 */
-	public final void renderComponent(final MarkupStream markupStream)
+	public final void renderComponent(MarkupStream markupStream)
 	{
 		this.markupIndex = markupStream.getCurrentIndex();
 
@@ -71,7 +71,14 @@
 					if (getRenderBodyOnly() == false)
 					{
 						// Close the manually opened panel tag.
-						getResponse().write(openTag.syntheticCloseTagString());
+						if(tag.getNameChanged())
+						{
+                            getResponse().write(tag.syntheticCloseTagString());
+						}
+						else
+						{
+							getResponse().write(openTag.syntheticCloseTagString());
+						}
 					}
 				}
 			}
