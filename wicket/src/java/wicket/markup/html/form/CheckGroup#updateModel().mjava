@@ -17,7 +17,16 @@
 			collection.addAll(getConvertedInput());
 			modelChanged();
 			// call model.setObject()
-			getModel().setObject(collection);
+			try
+			{
+				getModel().setObject(collection);
+			} 
+			catch(Exception e)
+			{
+				// ignore this exception because it could be that there 
+				// is not setter for this collection.
+				log.info("no setter for the property attached to " + this);
+			}
 		}
 	}
 

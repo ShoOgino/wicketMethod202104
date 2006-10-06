@@ -11,6 +11,17 @@
 			selectedValues.clear();
 			selectedValues.addAll(getConvertedInput());
 			modelChanged();
+			// call model.setObject()
+			try
+			{
+				getModel().setObject(selectedValues);
+			} 
+			catch(Exception e)
+			{
+				// ignore this exception because it could be that there 
+				// is not setter for this collection.
+				log.info("no setter for the property attached to " + this);
+			}
 		}
 		else
 		{
