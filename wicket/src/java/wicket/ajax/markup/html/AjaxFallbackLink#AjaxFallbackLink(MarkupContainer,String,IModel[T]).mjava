@@ -27,6 +27,16 @@
 				return new CancelEventIfNoAjaxDecorator(AjaxFallbackLink.this
 						.getAjaxCallDecorator());
 			}
+			
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				// only render handler if link is enabled
+				if (isLinkEnabled())
+				{
+					super.onComponentTag(tag);
+				}
+			}
 
 		});
 	}

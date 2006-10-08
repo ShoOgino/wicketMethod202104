@@ -2,7 +2,17 @@
 	protected void onComponentTag(ComponentTag tag)
 	{
 		super.onComponentTag(tag);
-		checkComponentTag(tag, "a");
-		tag.put("href", "#");
+		
+		if (isLinkEnabled())
+		{
+			if (tag.getName().equalsIgnoreCase("a"))
+			{
+				tag.put("href", "#");
+			}
+		}
+		else
+		{
+			disableLink(tag);
+		}				
 	}
 

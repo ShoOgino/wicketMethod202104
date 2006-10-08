@@ -16,34 +16,8 @@
 
 		// append any anchor
 		url = appendAnchor(tag, url);
-
-		// If we're disabled
-		if (!isEnabled())
-		{
-			// if the tag is an anchor proper
-			if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
-					|| tag.getName().equalsIgnoreCase("area"))
-			{
-				// Change anchor link to span tag
-				tag.setName("span");
-
-				// Remove any href from the old link
-				tag.remove("href");
-
-				// if it generates a popupscript, remove the design time JS
-				// handler
-				if (popupSettings != null)
-				{
-					tag.remove("onclick");
-				}
-			}
-			else
-			{
-				// Remove any onclick design time code
-				tag.remove("onclick");
-			}
-		}
-		else
+		
+		if (isLinkEnabled())
 		{
 			// if the tag is an anchor proper
 			if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
@@ -75,13 +49,17 @@
 					tag.put("onclick", "location.href='" + url + "';");
 				}
 			}
+			
+			// If the subclass specified javascript, use that
+			final CharSequence onClickJavaScript = getOnClickScript(url);
+			if (onClickJavaScript != null)
+			{
+				tag.put("onclick", onClickJavaScript);
+			}
 		}
-
-		// If the subclass specified javascript, use that
-		final CharSequence onClickJavaScript = getOnClickScript(url);
-		if (onClickJavaScript != null)
+		else
 		{
-			tag.put("onclick", onClickJavaScript);
+			disableLink(tag);
 		}
 	}
 

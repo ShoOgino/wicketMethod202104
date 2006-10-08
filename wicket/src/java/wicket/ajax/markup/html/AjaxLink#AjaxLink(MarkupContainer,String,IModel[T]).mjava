@@ -26,6 +26,16 @@
 			{
 				return new CancelEventIfNoAjaxDecorator(AjaxLink.this.getAjaxCallDecorator());
 			}
+			
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				// add the onclick handler only if link is enabled 
+				if (isLinkEnabled())
+				{
+					super.onComponentTag(tag);
+				}
+			}
 
 		});
 	}

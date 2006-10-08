@@ -1,0 +1,24 @@
+	/**
+	 * Alters the tag so that the link renders as disabled.
+	 * 
+	 * This method is meant to be called from
+	 * {@link #onComponentTag(ComponentTag)} method of the derived class.
+	 * 
+	 * @param tag
+	 */
+	protected void disableLink(final ComponentTag tag)
+	{
+		// if the tag is an anchor proper
+		if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
+				|| tag.getName().equalsIgnoreCase("area"))
+		{
+			// Change anchor link to span tag
+			tag.setName("span");
+
+			// Remove any href from the old link
+			tag.remove("href");
+
+			tag.remove("onclick");
+		}
+	}
+

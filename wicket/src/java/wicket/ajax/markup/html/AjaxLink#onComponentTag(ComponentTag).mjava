@@ -2,11 +2,19 @@
 	protected void onComponentTag(ComponentTag tag)
 	{
 		super.onComponentTag(tag);
-		// disable any href attr in markup
-		if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
-				|| tag.getName().equalsIgnoreCase("area"))
+		
+		if (isLinkEnabled())
 		{
-			tag.put("href", "#");
+			// disable any href attr in markup
+			if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
+					|| tag.getName().equalsIgnoreCase("area"))
+			{
+				tag.put("href", "#");
+			}
+		}
+		else
+		{
+			disableLink(tag);
 		}
 	}
 
