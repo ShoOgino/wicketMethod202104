@@ -1,0 +1,23 @@
+	/**
+	 * Create a new Border Body container and add it to the 'parent'. If a body
+	 * container has already been created, remove that first.
+	 * 
+	 * @param parent
+	 * @return MarkupContainer
+	 */
+	protected final MarkupContainer setBorderBodyContainer(final MarkupContainer parent)
+	{
+		if (this.body != null)
+		{
+			// TODO Check if empty (no child components)
+			this.body.remove();
+		}
+
+		// Auto-components are automatically removed at the end of the render
+		// cycle. Depending on whether the user request body creation of the
+		// resolver (during render time), the name of the body container
+		// will/must be different.
+		this.body = new BorderBody(parent, this.getId() + "Body");
+		return body;
+	}
+

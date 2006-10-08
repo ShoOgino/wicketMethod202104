@@ -6,18 +6,22 @@
 	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
 			final ComponentTag tag)
 	{
-		// If wicket:body container has not yet been created and 'tag' is
-		// wicket:body, than automatically create and render it.
-		if ((this.body == null) && tag.isWicketBodyTag())
-		{
-			// The body container become the child of 'container', which if an
-			// alternate parent has been provided, may not be the border itself,
-			// but a (grand-) child of him.
-			this.body = newBorderBodyContainer(container);
+		// The resolver is needed because the tag id is '<auto>-body' but the
+		// body's container it is border.getId() + "Body"
 
-			// Render the body and its children
-			this.body.render(markupStream);
-			return true;
+		if (tag.isWicketBodyTag())
+		{
+			if (this.body == null)
+			{
+				throw new MarkupException(markupStream, "Border body container not initialized. Did you forget to call newBorderBodyContainer() ??");
+			}
+
+			if (markupStream.get() == this.body.getMarkupFragment().get(0))
+			{
+				// Render the body and its children
+				this.body.render(markupStream);
+				return true;
+			}
 		}
 
 		// Unable to resolve the request

@@ -3,21 +3,9 @@
 	 * @see wicket.markup.html.MarkupContainer#getMarkupFragment(java.lang.String)
 	 */
 	@Override
-	public MarkupFragment getMarkupFragment(final String path)
+	public MarkupFragment getMarkupFragment(final String id)
 	{
-		// First try the associated markup
-		MarkupFragment fragment = getAssociatedMarkup(false);
-		if (fragment != null)
-		{
-			fragment = fragment.getChildFragment(path, false);
-		}
-
-		// If not yet found, than try the <span wicket:id="myBorder> body
-		if (fragment == null)
-		{
-			fragment = super.getMarkupFragment(path);
-		}
-
-		return fragment;
+		// Find the tag in the associated markup
+		return getAssociatedMarkup(true).getWicketFragment(BORDER, true).getChildFragment(id, false);
 	}
 

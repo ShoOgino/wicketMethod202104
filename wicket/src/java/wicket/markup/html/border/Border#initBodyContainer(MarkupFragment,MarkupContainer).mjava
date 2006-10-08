@@ -1,0 +1,30 @@
+	/**
+	 * If the associated markup fragment contains wicket:body, than create a
+	 * body container and add it to the parent.
+	 * 
+	 * @param markup
+	 * @param parent
+	 */
+	private void initBodyContainer(final MarkupFragment markup, final MarkupContainer parent)
+	{
+		if (this.body == null)
+		{
+			// No recursive search. Search just the direct child elements of the
+			// parent markup
+			for (MarkupElement elem : markup)
+			{
+				if (elem instanceof MarkupFragment)
+				{
+					MarkupFragment fragment = (MarkupFragment)elem;
+
+					// If wicket:body, than create a new body container
+					if (fragment.getTag(0).isWicketBodyTag())
+					{
+						setBorderBodyContainer(parent);
+						break;
+					}
+				}
+			}
+		}
+	}
+
