@@ -7,15 +7,17 @@
 			final ComponentTag tag)
 	{
 		// The resolver is needed because the tag id is '<auto>-body' but the
-		// body's container it is border.getId() + "Body"
+		// body's container is border.getId() + "Body"
 
 		if (tag.isWicketBodyTag())
 		{
 			if (this.body == null)
 			{
-				throw new MarkupException(markupStream, "Border body container not initialized. Did you forget to call newBorderBodyContainer() ??");
+				throw new MarkupException(markupStream,
+						"Border body container not initialized. Did you forget to call newBorderBodyContainer() ??");
 			}
 
+			// If current tag equals the body open tag, than ...
 			if (markupStream.get() == this.body.getMarkupFragment().get(0))
 			{
 				// Render the body and its children
