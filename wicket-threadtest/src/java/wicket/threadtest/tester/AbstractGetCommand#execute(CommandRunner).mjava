@@ -1,7 +1,7 @@
 	/**
-	 * @see wicket.threadtest.tester.Command#execute()
+	 * @see wicket.threadtest.tester.Command#execute(CommandRunner)
 	 */
-	public void execute() throws Exception {
+	public void execute(CommandRunner runner) throws Exception {
 
 		int iterations = getIterations();
 		for (int i = 0; i < iterations; i++) {
@@ -9,7 +9,7 @@
 			for (String url : urls) {
 
 				String modUrl = Strings.replaceAll(url, "${iteration}", String.valueOf(i)).toString();
-				doGet(modUrl);
+				doGet(runner.getClient(), modUrl);
 			}
 		}
 	}
