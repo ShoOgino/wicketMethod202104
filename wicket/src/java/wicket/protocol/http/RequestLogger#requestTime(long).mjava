@@ -3,16 +3,38 @@
 	 */
 	public void requestTime(long timeTaken)
 	{
-		RequestData rd = currentRequest.get();
+		RequestData rd = getCurrentRequest();
 		if (rd != null)
 		{
 			Session session = Session.get();
-			rd.setSessionId(session.getId());
+			String sessionId = session.getId();
+			rd.setSessionId(sessionId);
+			
+			Object sessionInfo = getSessionInfo(session);
+			rd.setSessionInfo(sessionInfo);
+			
 			// todo should we really do this, this is a bit expensive.
-			rd.setSessionSize(session.getSizeInBytes());
+			long sizeInBytes = session.getSizeInBytes();
+			rd.setSessionSize(sizeInBytes);
 			rd.setTimeTaken(timeTaken);
 			requests.add(0, rd);
 			currentRequest.set(null);
+			if(sessionId != null)
+			{
+				SessionData sd = liveSessions.get(sessionId);
+				if(sd == null)
+				{
+					// passivated session or logger only started after it.
+					sessionCreated(sessionId);
+					sd = liveSessions.get(sessionId);
+				}				
+				if(sd != null)
+				{
+					sd.setSessionInfo(sessionInfo);
+					sd.setSessionSize(sizeInBytes);
+					sd.addTimeTaken(timeTaken);
+				}
+			}
 		}
 	}
 
