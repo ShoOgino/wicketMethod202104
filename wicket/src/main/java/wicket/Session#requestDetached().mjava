@@ -2,18 +2,21 @@
 	 * INTERNAL API. The request cycle when detached will call this.
 	 * 
 	 */
-	final synchronized void requestDetached()
+	final void requestDetached()
 	{
-		Thread t = Thread.currentThread();
-		Iterator it = pageMapsUsedInRequest.entrySet().iterator();
-		while(it.hasNext())
+		synchronized(pageMapsUsedInRequest)
 		{
-			Entry entry = (Entry)it.next();
-			if(entry.getValue() == t)
+			Thread t = Thread.currentThread();
+			Iterator it = pageMapsUsedInRequest.entrySet().iterator();
+			while(it.hasNext())
 			{
-				it.remove();
+				Entry entry = (Entry)it.next();
+				if(entry.getValue() == t)
+				{
+					it.remove();
+				}
 			}
+			pageMapsUsedInRequest.notifyAll();
 		}
-		notifyAll();
 	}
 
