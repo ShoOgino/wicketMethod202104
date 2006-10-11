@@ -13,9 +13,9 @@
 	 * </p>
 	 * 
 	 * @param submittingComponent
-	 *            the component that triggered this form processing, or null if the
-	 *            processing was triggered by something else (like a non-Wicket
-	 *            submit button or a javascript execution)
+	 *            the component that triggered this form processing, or null if
+	 *            the processing was triggered by something else (like a
+	 *            non-Wicket submit button or a javascript execution)
 	 */
 	protected void delegateSubmit(IFormSubmittingComponent submittingComponent)
 	{
@@ -24,9 +24,14 @@
 		if (submittingComponent != null)
 		{
 			submittingComponent.onSubmit();
+			
+			// call onSubmit on the processed form
+			submittingComponent.getForm().onSubmit();
 		}
-
-		// Model was successfully updated with valid data
-		onSubmit();
+		else
+		{
+			// No submitting button found
+			onSubmit();
+		}
 	}
 

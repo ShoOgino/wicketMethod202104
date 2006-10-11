@@ -4,30 +4,43 @@
 	@Override
 	protected void onComponentTag(final ComponentTag tag)
 	{
-		checkComponentTag(tag, "form");
-		setOutputMarkupId(true);
 		super.onComponentTag(tag);
-
-		// If the javascriptid is already generated then use that on even it was
-		// before the first render. Bbecause there could be a component which
-		// already uses it to submit the forum. This should be fixed when we
-		// pre parse the markup so that we know the id is at front.
-		tag.put("method", "post");
-		tag.put("action", Strings.replaceAll(urlFor(IFormSubmitListener.INTERFACE), "&", "&amp;"));
-
-		if (multiPart)
+		if (isRootForm())
 		{
-			tag.put("enctype", "multipart/form-data");
+			checkComponentTag(tag, "form");
+
+			// If the javascriptid is already generated then use that on even it
+			// was
+			// before the first render. Bbecause there could be a component
+			// which
+			// already uses it to submit the forum. This should be fixed when we
+			// pre parse the markup so that we know the id is at front.
+			tag.put("method", "post");
+			tag.put("action", Strings.replaceAll(urlFor(IFormSubmitListener.INTERFACE), "&",
+					"&amp;"));
+
+			if (multiPart)
+			{
+				tag.put("enctype", "multipart/form-data");
+			}
+			else
+			{
+				// sanity check
+				String enctype = (String)tag.getAttributes().get("enctype");
+				if ("multipart/form-data".equalsIgnoreCase(enctype))
+				{
+					// though not set explicitly in Java, this is a multipart
+					// form
+					setMultiPart(true);
+				}
+			}
 		}
 		else
 		{
-			// sanity check
-			String enctype = (String)tag.getAttributes().get("enctype");
-			if ("multipart/form-data".equalsIgnoreCase(enctype))
-			{
-				// though not set explicitly in Java, this is a multipart form
-				setMultiPart(true);
-			}
+			tag.setName("div");
+			tag.remove("method");
+			tag.remove("action");
+			tag.remove("enctype");
 		}
 	}
 
