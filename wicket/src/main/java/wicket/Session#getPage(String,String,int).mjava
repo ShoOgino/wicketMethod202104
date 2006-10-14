@@ -28,19 +28,15 @@
 			{
 				long startTime = System.currentTimeMillis();
 
-				if (pageMapsUsedInRequest == null)
-				{
-					pageMapsUsedInRequest = new HashMap<PageMap, Thread>(3);
-				}
-
 				// Get page entry for id and version
 				Thread t = pageMapsUsedInRequest.get(pageMap);
 				while (t != null && t != Thread.currentThread())
 				{
 					try
 					{
+						// TODO make longer and configurable
 						pageMapsUsedInRequest.wait(20000); // wait 20 seconds
-															// max.
+						// max.
 					}
 					catch (InterruptedException ex)
 					{
