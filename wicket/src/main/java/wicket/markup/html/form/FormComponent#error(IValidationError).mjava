@@ -1,5 +1,10 @@
 	/**
-	 * Reports a validation error against this form component
+	 * Reports a validation error against this form component.
+	 * 
+	 * The actual error is reported by creating a
+	 * {@link ValidationErrorFeedback} object that holds both the validation
+	 * error and the generated error message - so a custom feedback panel can
+	 * have access to both.
 	 * 
 	 * @param error
 	 *            validation error
@@ -16,13 +21,12 @@
 		if (message == null)
 		{
 			// XXX maybe make message source remember tried resource keys so a
-			// more specific error message can be created
-			error("Could not locate error message for error: " + error.toString());
+			// more detailederror message can be created - like show which keys
+			// were tried
+			message = "Could not locate error message for error: " + error.toString();
 		}
-		else
-		{
-			error(message);
-		}
+
+		error(new ValidationErrorFeedback(error, message));
 
 	}
 

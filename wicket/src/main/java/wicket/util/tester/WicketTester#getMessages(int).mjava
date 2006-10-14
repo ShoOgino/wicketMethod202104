@@ -4,10 +4,10 @@
 	 * @param level
 	 *            level of feedback message, ex.
 	 *            <code>FeedbackMessage.DEBUG or FeedbackMessage.INFO.. etc</code>
-	 * @return List list of messages (in String)
+	 * @return List list of messages (in Serializable)
 	 * @see FeedbackMessage
 	 */
-	public List<String> getMessages(final int level)
+	public List<Serializable> getMessages(final int level)
 	{
 		FeedbackMessages feedbackMessages = getLastRenderedPage().getFeedbackMessages();
 		List allMessages = feedbackMessages.messages(new IFeedbackMessageFilter()
@@ -19,7 +19,7 @@
 				return message.getLevel() == level;
 			}
 		});
-		List<String> actualMessages = new ArrayList<String>();
+		List<Serializable> actualMessages = new ArrayList<Serializable>();
 		for (Iterator iter = allMessages.iterator(); iter.hasNext();)
 		{
 			actualMessages.add(((FeedbackMessage)iter.next()).getMessage());
