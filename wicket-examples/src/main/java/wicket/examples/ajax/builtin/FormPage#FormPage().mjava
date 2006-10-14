@@ -1,8 +1,7 @@
 	/**
 	 * Constructor
 	 */
-	public FormPage()
-	{
+	public FormPage() {
 		// create feedback panel to show errors
 		final FeedbackPanel feedback = new FeedbackPanel("feedback");
 		feedback.setOutputMarkupId(true);
@@ -34,13 +33,19 @@
 		// attach an ajax validation behavior to all form component's onkeydown
 		// event and throttle it down to once per second
 
-		AjaxFormValidatingBehavior.addToAllFormComponents(form, "onkeyup", Duration.ONE_SECOND);
+		AjaxFormValidatingBehavior.addToAllFormComponents(form, "onkeyup",
+				Duration.ONE_SECOND);
 
 		// add a button that can be used to submit the form via ajax
-		form.add(new AjaxSubmitButton("ajax-submit-button", form)
-		{
-			protected void onSubmit(AjaxRequestTarget target, Form form)
-			{
+		form.add(new AjaxSubmitButton("ajax-submit-button", form) {
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				// repaint the feedback panel so that it is hidden
+				target.addComponent(feedback);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form form) {
+				// repaint the feedback panel so errors are shown
 				target.addComponent(feedback);
 			}
 		});
