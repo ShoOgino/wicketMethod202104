@@ -1,0 +1,56 @@
+	/**
+	 * Listen to incomming commands until stop command is issued (method
+	 * blocks).
+	 */
+	private void listen()
+	{
+		boolean goOn = true;
+		while (goOn)
+		{
+			Socket socket = null;
+			try
+			{
+				// wait in blocking mode for an incomming socket connection
+				SocketChannel socketChanel = serverSocketChanel.accept();
+				// we've got a connection here; get concrete socket
+				socket = socketChanel.socket();
+				// attach reader
+				InputStream socketInputStream = socket.getInputStream();
+				InputStreamReader inputStreamReader = new InputStreamReader(socketInputStream);
+				LineNumberReader lnReader = new LineNumberReader(inputStreamReader);
+				String key = lnReader.readLine(); // first line contains auth
+				// key
+				if (!commKey.equals(key))
+				{
+					log.warn("Keys '" + commKey + "' and '" + key + "' do not match!");
+					continue;
+				}
+
+				String cmd = lnReader.readLine(); // second line contains
+				// command
+				OutputStream socketOutputStream = socket.getOutputStream();
+				goOn = handleCommand(cmd, socketOutputStream, goOn);
+
+			}
+			catch (Exception e)
+			{
+				log.error(e.getMessage(), e);
+			}
+			finally
+			{
+				if (socket != null)
+				{
+					try
+					{
+						socket.close();
+					}
+					catch (Exception e)
+					{
+						log.error(e.getMessage());
+					}
+				}
+				socket = null;
+			}
+		}
+	}
+

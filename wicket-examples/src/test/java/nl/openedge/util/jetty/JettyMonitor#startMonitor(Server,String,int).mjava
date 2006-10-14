@@ -1,0 +1,22 @@
+	/**
+	 * Starts a new monitor on the given port, holding the given instance of
+	 * Jetty. This static method starts a monitor that listens for admin
+	 * requests.
+	 * 
+	 * @param theServer
+	 *            instance of Jetty Server
+	 * @param commKey
+	 *            auth key
+	 * @param monitorPort
+	 *            port of monitor
+	 * @return instance of monitor
+	 */
+	public static JettyMonitor startMonitor(Server theServer, String commKey, int monitorPort)
+	{
+		JettyMonitor monitor = new JettyMonitor(commKey, monitorPort);
+		monitor.setServer(theServer);
+		monitor.setDaemon(true);
+		monitor.start();
+		return monitor;
+	}
+
