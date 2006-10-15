@@ -24,6 +24,14 @@
 				pageMapName));
 		if (pageMap != null)
 		{
+			synchronized (usedPageMaps) // get a lock so be sure that only one is made 
+			{
+				if(pageMapsUsedInRequest == null)
+				{
+					// TODO!! this is not synchronized.. it should be (on session?)
+					pageMapsUsedInRequest = new HashMap<PageMap, Thread>(3);
+				}
+			}
 			synchronized (pageMapsUsedInRequest)
 			{
 				long startTime = System.currentTimeMillis();
