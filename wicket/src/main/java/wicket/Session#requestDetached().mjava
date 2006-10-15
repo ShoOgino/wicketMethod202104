@@ -4,19 +4,22 @@
 	 */
 	final void requestDetached()
 	{
-		synchronized(pageMapsUsedInRequest)
+		if(pageMapsUsedInRequest != null)
 		{
-			Thread t = Thread.currentThread();
-			Iterator it = pageMapsUsedInRequest.entrySet().iterator();
-			while(it.hasNext())
+			synchronized(pageMapsUsedInRequest)
 			{
-				Entry entry = (Entry)it.next();
-				if(entry.getValue() == t)
+				Thread t = Thread.currentThread();
+				Iterator it = pageMapsUsedInRequest.entrySet().iterator();
+				while(it.hasNext())
 				{
-					it.remove();
+					Entry entry = (Entry)it.next();
+					if(entry.getValue() == t)
+					{
+						it.remove();
+					}
 				}
+				pageMapsUsedInRequest.notifyAll();
 			}
-			pageMapsUsedInRequest.notifyAll();
 		}
 	}
 
