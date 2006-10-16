@@ -22,8 +22,8 @@
 				final ByteArrayOutputStream out = new ByteArrayOutputStream(256);
 				ClassRecordingObjectOutputStream oos = new ClassRecordingObjectOutputStream(out);
 				oos.writeObject(object);
-				ClassRecordingObjectInputStream ois = new ClassRecordingObjectInputStream(new ByteArrayInputStream(out.toByteArray()),
-						oos.getUsedClasses());
+				ClassRecordingObjectInputStream ois = new ClassRecordingObjectInputStream(
+						new ByteArrayInputStream(out.toByteArray()), oos.getUsedClasses());
 				return (T)ois.readObject();
 			}
 			catch (ClassNotFoundException e)
