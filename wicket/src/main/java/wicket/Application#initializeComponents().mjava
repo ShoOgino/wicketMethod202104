@@ -5,10 +5,10 @@
 	 */
 	public final void initializeComponents()
 	{
-		// Load any wicket components we can find
+		// Load any wicket properties files we can find
 		try
 		{
-			// Load components used by all applications
+			// Load properties files used by all libraries
 			final Enumeration resources = getClass().getClassLoader().getResources(
 					"wicket.properties");
 			while (resources.hasMoreElements())
@@ -20,7 +20,7 @@
 					final Properties properties = new Properties();
 					in = url.openStream();
 					properties.load(in);
-					initializeComponents(properties);
+					load(properties);
 				}
 				finally
 				{
@@ -35,5 +35,8 @@
 		{
 			throw new WicketRuntimeException("Unable to load initializers file", e);
 		}
+
+		// now call any initializers we read
+		callInitializers();
 	}
 
