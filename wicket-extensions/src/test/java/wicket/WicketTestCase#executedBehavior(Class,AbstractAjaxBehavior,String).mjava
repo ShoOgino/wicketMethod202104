@@ -1,0 +1,24 @@
+	/**
+	 * 
+	 * @param pageClass
+	 * @param behavior
+	 * @param filename
+	 * @throws Exception
+	 */
+	protected void executedBehavior(final Class pageClass, final AbstractAjaxBehavior behavior,
+			final String filename) throws Exception
+	{
+		assertNotNull(behavior);
+
+		System.out.println("=== " + pageClass.getName() + " : " + behavior.toString() + " ===");
+
+		application.setupRequestAndResponse();
+		WebRequestCycle cycle = application.createRequestCycle();
+		application.getServletRequest().setRequestToRedirectString(
+				behavior.getCallbackUrl(false).toString());
+		application.processRequestCycle(cycle);
+
+		String document = application.getServletResponse().getDocument();
+		assertTrue(DiffUtil.validatePage(document, pageClass, filename));
+	}
+
