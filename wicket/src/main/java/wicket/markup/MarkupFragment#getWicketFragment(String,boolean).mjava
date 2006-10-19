@@ -10,10 +10,9 @@
 	 */
 	public final MarkupFragment getWicketFragment(final String name, final boolean throwException)
 	{
-		MarkupElement element = get(0);
-		if (element instanceof ComponentTag)
+		ComponentTag tag = getTag();
+		if (tag != null)
 		{
-			ComponentTag tag = getTag(0);
 			if (tag.isWicketTag(name))
 			{
 				return this;
@@ -35,7 +34,8 @@
 
 		if (throwException == true)
 		{
-			throw new MarkupException("Wicket tag with name 'wicket:" + name + "' not found");
+			throw new MarkupException(new MarkupStream(this), "Wicket tag with name 'wicket:"
+					+ name + "' not found.");
 		}
 		return null;
 	}

@@ -1,0 +1,28 @@
+	/**
+	 * 
+	 * @param fragment
+	 * @return Null, if no &lt;body&gt; tag was found
+	 */
+	public static final LookupResult getBodyTagPosition(final MarkupFragment fragment)
+	{
+		for (int i = 0; i < fragment.size(); i++)
+		{
+			MarkupElement element = fragment.get(i);
+			if (element instanceof MarkupFragment)
+			{
+				MarkupFragment frag = (MarkupFragment)element;
+				if (isBodyTag(frag))
+				{
+					return new LookupResult(fragment, i);
+				}
+				LookupResult result = getBodyTagPosition(frag);
+				if (result != null)
+				{
+					return result;
+				}
+			}
+		}
+
+		return null;
+	}
+

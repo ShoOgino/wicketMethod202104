@@ -11,7 +11,7 @@
 	private MarkupFragment getBaseMarkup(final MarkupContainer container,
 			final MarkupFragment markup)
 	{
-		// get the base markup
+		// Get the super class to than retrieve the markup associated with it
 		final Class<? extends MarkupContainer> markupClass = (Class<? extends MarkupContainer>)markup
 				.getMarkup().getResource().getMarkupClass().getSuperclass();
 
@@ -26,9 +26,9 @@
 							+ " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried.");
 		}
 
-		// register an after-load listener for base markup. The listener
-		// implementation will remove the derived markup which must be merged
-		// with the base markup
+		// Register an after-load listener for base markup. The listener
+		// implementation will remove the derived markup from the cache as
+		// reloading the base markup invalidates the derived markup as well
 		this.application.getMarkupCache().addAfterLoadListener(
 				baseMarkup.getMarkup().getResource(), new IChangeListener()
 				{

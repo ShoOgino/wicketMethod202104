@@ -1,0 +1,29 @@
+	/**
+	 * 
+	 * @param fragment
+	 * @return Null, if no wicket:head found
+	 */
+	public static final LookupResult getWicketHeadTagPosition(final MarkupFragment fragment)
+	{
+		if (isWicketHeadTag(fragment))
+		{
+			return new LookupResult(fragment, 0);
+		}
+
+		for (int i = 0; i < fragment.size(); i++)
+		{
+			MarkupElement elem = fragment.get(i);
+			if (elem instanceof MarkupFragment)
+			{
+				MarkupFragment frag = (MarkupFragment)elem;
+				if (isWicketHeadTag(frag))
+				{
+					return new LookupResult(fragment, i + 1);
+				}
+				return getWicketHeadTagPosition(frag);
+			}
+		}
+
+		return null;
+	}
+

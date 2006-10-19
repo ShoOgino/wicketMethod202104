@@ -1,0 +1,28 @@
+	/**
+	 * 
+	 * @param fragment
+	 * @return True, if &lt;head&gt; was found
+	 */
+	public static final MarkupFragment getHeadTag(final MarkupFragment fragment)
+	{
+		if (isHeadTag(fragment))
+		{
+			return fragment;
+		}
+
+		for (MarkupElement element : fragment)
+		{
+			if (element instanceof MarkupFragment)
+			{
+				MarkupFragment frag = (MarkupFragment)element;
+				frag = getHeadTag(frag);
+				if (frag != null)
+				{
+					return frag;
+				}
+			}
+		}
+
+		return null;
+	}
+

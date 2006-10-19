@@ -15,13 +15,15 @@
 	{
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
-		final MarkupStream markupStream = new MarkupStream(getAssociatedMarkup(false));
+		final MarkupFragment markupFragment = getAssociatedMarkup(false);
 
 		// No associated markup => no header section
-		if (markupStream == null)
+		if (markupFragment == null)
 		{
 			return;
 		}
+
+		final MarkupStream markupStream = new MarkupStream(markupFragment);
 
 		// Position pointer at current (first) header
 		this.noMoreWicketHeadTagsAllowed = false;

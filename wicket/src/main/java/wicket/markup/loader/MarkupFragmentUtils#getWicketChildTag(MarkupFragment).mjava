@@ -1,0 +1,31 @@
+	/**
+	 * 
+	 * @param fragment
+	 * @return Null, if no wicket:child was found
+	 */
+	public static final MarkupFragment getWicketChildTag(final MarkupFragment fragment)
+	{
+		// Search for wicket:child. Make sure it is the wicket:child of the base
+		// markup and not the base-base markup
+		final MarkupFragment holder[] = new MarkupFragment[1];
+		if (isChildTag(fragment))
+		{
+			holder[0] = fragment;
+		}
+
+		fragment.visitChildren(MarkupFragment.class, new MarkupFragment.IVisitor()
+		{
+			public Object visit(final MarkupElement element, final MarkupFragment parent)
+			{
+				MarkupFragment fragment = (MarkupFragment)element;
+				if (isChildTag(fragment))
+				{
+					holder[0] = fragment;
+				}
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+
+		return holder[0];
+	}
+

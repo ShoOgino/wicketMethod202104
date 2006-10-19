@@ -1,38 +1,13 @@
 	/**
 	 * Check if markup contains &lt;wicket:extend&gt; which tells us that we
 	 * need to read the inherited markup as well. &lt;wicket:extend&gt; MUST BE
-	 * the first wicket tag in the markup. Skip raw markup
+	 * the first wicket tag in the markup.
 	 * 
 	 * @param markup
-	 * @return == 0, if no wicket:extend was found
+	 * @return Null, if no wicket:extend was found
 	 */
 	private MarkupFragment requiresBaseMarkup(final MarkupFragment markup)
 	{
-		if (markup.get(0) instanceof ComponentTag)
-		{
-			ComponentTag tag = markup.getTag(0);
-			if (tag.isExtendTag())
-			{
-				return markup;
-			}
-		}
-		
-		return (MarkupFragment)markup.visitChildren(MarkupFragment.class,
-				new MarkupFragment.IVisitor()
-				{
-					public Object visit(final MarkupElement element)
-					{
-						MarkupFragment fragment = (MarkupFragment)element;
-						if (fragment.get(0) instanceof ComponentTag)
-						{
-							ComponentTag tag = fragment.getTag(0);
-							if (tag.isExtendTag())
-							{
-								return fragment;
-							}
-						}
-						return MarkupFragment.IVisitor.CONTINUE_TRAVERSAL;
-					}
-				});
+		return MarkupFragmentUtils.getWicketExtendTag(markup);
 	}
 

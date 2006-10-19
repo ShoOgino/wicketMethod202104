@@ -18,15 +18,17 @@
 		}
 
 		// Iterate through children of this container
-		for (MarkupElement element : this)
+		final Iterator iter = iterator();
+		while (iter.hasNext())
 		{
+			MarkupElement element = (MarkupElement)iter.next();
 			Object value = null;
 
 			// Is the child of the correct class (or was no class specified)?
 			if ((clazz == null) || clazz.isInstance(element))
 			{
 				// Call visitor
-				value = visitor.visit(element);
+				value = visitor.visit(element, this);
 
 				// If visitor returns a non-null value, it halts the traversal
 				if ((value != IVisitor.CONTINUE_TRAVERSAL)
