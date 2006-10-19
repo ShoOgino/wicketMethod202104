@@ -8,27 +8,34 @@
 	 */
 	public final MarkupFragment getAssociatedMarkup(final boolean throwException)
 	{
-		try
+		if (this.associatedMarkup == null)
 		{
-			return getApplication().getMarkupCache().getMarkup(this, throwException);
+			try
+			{
+				this.associatedMarkup = getApplication().getMarkupCache().getMarkup(this, throwException);
+			}
+			catch (MarkupException ex)
+			{
+				// re-throw it. The exception contains already all the information
+				// required.
+				throw ex;
+			}
+			catch (WicketRuntimeException ex)
+			{
+				// throw exception since there is no associated markup
+				throw new MarkupNotFoundException(
+						exceptionMessage("Markup of type '"
+								+ getMarkupType()
+								+ "' for component '"
+								+ getClass().getName()
+								+ "' not found."
+								+ " Enable debug messages for wicket.util.resource to get a list of all filenames tried"),
+						ex);
+			}
+			
+			onAssociatedMarkupLoaded(this.associatedMarkup);
 		}
-		catch (MarkupException ex)
-		{
-			// re-throw it. The exception contains already all the information
-			// required.
-			throw ex;
-		}
-		catch (WicketRuntimeException ex)
-		{
-			// throw exception since there is no associated markup
-			throw new MarkupNotFoundException(
-					exceptionMessage("Markup of type '"
-							+ getMarkupType()
-							+ "' for component '"
-							+ getClass().getName()
-							+ "' not found."
-							+ " Enable debug messages for wicket.util.resource to get a list of all filenames tried"),
-					ex);
-		}
+		
+		return this.associatedMarkup;
 	}
 
