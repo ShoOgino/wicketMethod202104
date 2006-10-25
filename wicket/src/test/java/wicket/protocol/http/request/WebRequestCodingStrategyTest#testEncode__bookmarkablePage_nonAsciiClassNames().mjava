@@ -1,0 +1,36 @@
+	/**
+	 * Test that the encoding generates correct encoded urls even for class
+	 * names containing non ASCII characters, like ä, æ, ø, å etc.
+	 * 
+	 * See description in
+	 * {@link WebRequestCodingStrategy#encode(RequestCycle, IBookmarkablePageRequestTarget)}
+	 * for further information.
+	 */
+	public void testEncode__bookmarkablePage_nonAsciiClassNames()
+	{
+		application.setupRequestAndResponse();
+		RequestCycle requestCycle = application.createRequestCycle();
+		application.setHomePage(DummyPage.class);
+
+		executed = false;
+		WebRequestCodingStrategy codingStrategy = new WebRequestCodingStrategy()
+		{
+			protected CharSequence encode(RequestCycle requestCycle,
+					IBookmarkablePageRequestTarget requestTarget)
+			{
+				executed = true;
+				return super.encode(requestCycle, requestTarget);
+			}
+		};
+
+		CharSequence url = codingStrategy.encode(requestCycle, new BookmarkablePageRequestTarget(
+				NønÅsciiPäge.class));
+
+		assertTrue(executed);
+
+		assertNotNull(url);
+
+		assertTrue(url.toString().endsWith(
+				"wicket.protocol.http.request.N%C3%B8n%C3%85sciiP%C3%A4ge"));
+	}
+
