@@ -1,0 +1,28 @@
+	/**
+	 * Set the file on a {@link FileUploadField}.
+	 * 
+	 * @param formComponentId
+	 *            relative path (from form) to formComponent. The form component
+	 *            must be of a type FileUploadField.
+	 * @param file
+	 *            The file to upload.
+	 * @param contentType
+	 *            The content type of the file. Must be a correct mimetype.
+	 */
+	public void setFile(final String formComponentId, final File file, final String contentType)
+	{
+		checkClosed();
+
+		FormComponent formComponent = (FormComponent)workingForm.get(formComponentId);
+
+		if (formComponent instanceof FileUploadField == false)
+		{
+			throw new IllegalArgumentException("'" + formComponentId + "' is not "
+					+ "a FileUploadField. You can only attach a file to form "
+					+ "component of this type.");
+		}
+
+		MockHttpServletRequest servletRequest = wicketTester.getServletRequest();
+		servletRequest.addFile(formComponent.getInputName(), file, contentType);
+	}
+
