@@ -33,6 +33,7 @@
 			{
 				((IFeedback)component).updateFeedback();
 				component.internalAttach();
+				AnnotationUtils.invokeOnAttachListeners(component);
 				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
@@ -51,7 +52,7 @@
 		// or negative as a temporary boolean in the components, and when a
 		// authorization exception is thrown it will block the rendering of this
 		// page
-		
+
 		// first the page itself
 		setRenderAllowed(isActionAuthorized(RENDER));
 		// children of the page

@@ -3,17 +3,13 @@
 	 * OVERRIDE.
 	 * 
 	 * Called when a request begins.
+	 * 
+	 * @deprecated - use {@link OnAttach} instead
 	 */
+	@Deprecated
 	protected void internalAttach()
 	{
 		onAttach();
 		internalOnAttach();
-
-		List<Method> listeners = ReflectionUtils.invocationChainForAnnotation(getClass(),
-				OnAttach.class, ClassOrder.SUPER_TO_SUB);
-		for (Method method : listeners)
-		{
-			invokeAnnotatedListenerMethod(method, OnAttach.class);
-		}
 	}
 

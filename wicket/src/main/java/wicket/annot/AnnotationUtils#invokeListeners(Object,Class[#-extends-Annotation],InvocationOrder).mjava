@@ -1,0 +1,18 @@
+	/**
+	 * Invokes annotated listener methods on the object
+	 * 
+	 * @param object
+	 * @param annot
+	 * @param order
+	 */
+	private static void invokeListeners(Object object, Class<? extends Annotation> annot,
+			InvocationOrder order)
+	{
+		List<Method> listeners = ReflectionUtils.invocationChainForAnnotation(object.getClass(),
+				annot, order.toClassOrder());
+		for (Method method : listeners)
+		{
+			invokeAnnotatedListenerMethod(object, method, annot);
+		}
+	}
+
