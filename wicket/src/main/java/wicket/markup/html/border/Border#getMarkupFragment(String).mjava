@@ -5,7 +5,15 @@
 	public MarkupFragment getMarkupFragment(final String id)
 	{
 		// Find the tag in the associated markup
-		return getAssociatedMarkup(true).getWicketFragment(BORDER, true)
+		MarkupFragment fragment = getAssociatedMarkup(true).getWicketFragment(BORDER, true)
 				.getChildFragment(id, false);
+		
+		if (fragment != null)
+		{
+			return fragment;
+		}
+		
+		// wicket:head must be search for outside wicket:border
+		return getAssociatedMarkup(true).getChildFragment(id, true);
 	}
 

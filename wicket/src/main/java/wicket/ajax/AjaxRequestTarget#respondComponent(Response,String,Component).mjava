@@ -17,13 +17,7 @@
 		}
 
 		component.setOutputMarkupId(true);
-
-		// substitute our encoding response for the real one so we can capture
-		// component's markup in a manner safe for transport inside CDATA block
-		final Response originalResponse = response;
-		encodingBodyResponse.reset();
-		RequestCycle.get().setResponse(encodingBodyResponse);
-
+	
 		// Initialize temporary variables
 		final Page page = component.getPage();
 		if (page == null)
@@ -36,32 +30,37 @@
 		page.setVersioned(false);
 
 		page.startComponentRender(component);
-		component.renderComponent();
 		
+		// render any associated headers of the component
 		respondHeaderContribution(response, component);
-		
+
+		Response encodingResponse = new StringResponse();
+		try
+		{
+			RequestCycle.get().setResponse(encodingResponse);
+			
+			component.renderComponent();
+		}
+		finally
+		{
+			// Restore original response
+			RequestCycle.get().setResponse(response);
+		}
+
 		page.endComponentRender(component);
-
 		page.setVersioned(versioned);
-
-		// Restore original response
-		RequestCycle.get().setResponse(originalResponse);
 
 		response.write("<component id=\"");
 		response.write(markupId);
 		response.write("\" ");
-		if (encodingBodyResponse.isContentsEncoded())
+		if (needsEncoding(encodingResponse.toString()))
 		{
 			response.write(" encoding=\"");
 			response.write(getEncodingName());
 			response.write("\" ");
 		}
 		response.write("><![CDATA[");
-		response.write(encodingBodyResponse.getContents());
+		response.write(encodingResponse.toString());
 		response.write("]]></component>");
-
-		encodingBodyResponse.reset();
-
-
 	}
 

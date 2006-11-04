@@ -4,8 +4,15 @@
 	 * @param id
 	 * @return MarkupFragment
 	 */
+	@Override
 	public MarkupFragment getMarkupFragment(final String id)
 	{
-		return getMarkupFragment().getChildFragment(id, true);
+		MarkupFragment fragment = getMarkupFragment().getChildFragment(id, false);
+		if (fragment != null)
+		{
+			return fragment;
+		}
+		
+		return getAssociatedMarkup(true).getChildFragment(id, true);
 	}
 

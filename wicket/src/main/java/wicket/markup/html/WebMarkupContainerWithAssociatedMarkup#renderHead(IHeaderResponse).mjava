@@ -1,0 +1,23 @@
+	/**
+	 * @see wicket.Component#renderHead(wicket.markup.html.IHeaderResponse)
+	 */
+	@Override
+	public void renderHead(final IHeaderResponse response)
+	{
+		if (isVisible())
+		{
+			// Load the markup and create the header containers if necessary
+			getAssociatedMarkup(true);
+			
+			for (Component child : this)
+			{
+				if (child instanceof WicketHeadContainer)
+				{
+					child.render(new MarkupStream(child.getMarkupFragment()));
+				}
+			}
+			
+			super.renderHead(response);
+		}
+	}
+

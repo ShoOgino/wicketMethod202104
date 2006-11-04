@@ -3,6 +3,7 @@
 	 */
 	public final void respond(final RequestCycle requestCycle)
 	{
+		final WebResponse response = (WebResponse)requestCycle.getResponse();
 		try
 		{
 			final Application app = Application.get();
@@ -11,7 +12,6 @@
 			final String encoding = app.getRequestCycleSettings().getResponseRequestEncoding();
 
 			// Set content type based on markup type for page
-			WebResponse response = (WebResponse)requestCycle.getResponse();
 			response.setCharacterEncoding(encoding);
 			response.setContentType("text/xml; charset=" + encoding);
 
@@ -32,13 +32,12 @@
 				respondInvocation(response, js);
 			}
 
-			Iterator<Entry<String, Component>> it = markupIdToComponent.entrySet().iterator();
-			while (it.hasNext())
+			for (Map.Entry<String, Component> entry : markupIdToComponent.entrySet())
 			{
-				final Map.Entry<String, Component> entry = it.next();
 				final Component component = entry.getValue();
 				final String markupId = entry.getKey();
-				
+
+				// render the component
 				respondComponent(response, markupId, component);
 			}
 
@@ -54,9 +53,11 @@
 			// log the error but output nothing in the response, parse failure
 			// of response will cause any javascript failureHandler to be
 			// invoked
-			LOG.error("Error while responding to an AJAX request: " + toString(), ex);
-			System.out.println(ex.getMessage());
-			ex.printStackTrace();
+			Log.error("Error while responding to an AJAX request: " + toString(), ex);
+		}
+		finally
+		{
+			requestCycle.setResponse(response);
 		}
 	}
 

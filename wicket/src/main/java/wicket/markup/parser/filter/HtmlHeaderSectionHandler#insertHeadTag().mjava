@@ -7,12 +7,14 @@
 		// Note: only the open-tag must be a AutoComponentTag
 		final ComponentTag openTag = new ComponentTag(HEAD, XmlTag.Type.OPEN);
 		openTag.setId(HEADER_ID);
-		
+
 		final ComponentTag closeTag = new ComponentTag(HEAD, XmlTag.Type.CLOSE);
 		closeTag.setOpenTag(openTag);
 
 		// insert the tags into the markup stream
-		this.markup.addMarkupElement(openTag);
-		this.markup.addMarkupElement(closeTag);
+		MarkupFragment fragment = new MarkupFragment(parser.getMarkup());
+		fragment.addMarkupElement(openTag);
+		fragment.addMarkupElement(closeTag);
+		this.parser.getCurrentMarkupFragment().addMarkupElement(fragment);
 	}
 

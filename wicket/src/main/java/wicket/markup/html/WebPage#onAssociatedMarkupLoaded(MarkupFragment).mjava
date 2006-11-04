@@ -3,48 +3,40 @@
 	 */
 	protected void onAssociatedMarkupLoaded(final MarkupFragment markup)
 	{
-		// Add a Body container if the associated markup contains a <body> tag
-		// get markup stream gracefully
-		MarkupStream markupStream = new MarkupStream(markup);
-		
-		// The <body> container. It can be accessed, replaced
-		// and attribute modifiers can be attached. <body> tags without
-		// wicket:id get automatically a wicket:id assigned.
-		while (markupStream.hasMoreComponentTags())
+		if (get(HtmlHeaderSectionHandler.HEADER_ID) == null)
 		{
-			final ComponentTag tag = markupStream.getTag();
-			if (tag.isOpen() && tag.isBodyTag())
+			// Add a Body container if the associated markup contains a <body> tag
+			// get markup stream gracefully
+			MarkupStream markupStream = new MarkupStream(markup);
+			
+			// The <body> container. It can be accessed, replaced
+			// and attribute modifiers can be attached. <body> tags without
+			// wicket:id get automatically a wicket:id assigned.
+			while (markupStream.hasMoreComponentTags())
 			{
-				// Add a default container if the tag has the default
-				// name. If the tag has a wicket:id, than the user
-				// must create the component.
-				if (BodyOnLoadHandler.BODY_ID.equals(tag.getId()))
+				final ComponentTag tag = markupStream.getTag();
+				if (tag.isOpen() && tag.isBodyTag())
 				{
-					new HtmlBodyContainer(this, tag.getId());
+					// Add a default container if the tag has the default
+					// name. If the tag has a wicket:id, than the user
+					// must create the component.
+					if (BodyOnLoadHandler.BODY_ID.equals(tag.getId()))
+					{
+						new HtmlBodyContainer(this, tag.getId());
+					}
+					// remember the id of the tag
+					bodyContainer = new BodyContainer(this, tag.getId());
+					break;
 				}
-				// remember the id of the tag
-				bodyContainer = new BodyContainer(this, tag.getId());
-				break;
 			}
 		}
-
+		
 		// The <head> container. It can be accessed, replaced
 		// and attribute modifiers can be attached.
-		markupStream.setCurrentIndex(0);
-		while (markupStream.hasMoreComponentTags())
+		// HtmlHeaderSectionHandler guarantees the <head> tag does exist.
+		if (get(HtmlHeaderSectionHandler.HEADER_ID) == null)
 		{
-			final ComponentTag tag = markupStream.getTag();
-			if (tag.isOpen() && tag.isHeadTag())
-			{
-				// Add a default container if the tag has the default
-				// name. If the tag has a wicket:id, than the user
-				// must create the component.
-				if (HtmlHeaderSectionHandler.HEADER_ID.equals(tag.getId()))
-				{
-					new HtmlHeaderContainer(this, tag.getId());
-				}
-				break;
-			}
+			new HtmlHeaderContainer(this, HtmlHeaderSectionHandler.HEADER_ID);
 		}
 
 		// if automatic multi window support is on, add a page checker instance
@@ -52,5 +44,8 @@
 		{
 			add(new PageMapChecker());
 		}
+		
+		// Do all the default staff
+		super.onAssociatedMarkupLoaded(markup);
 	}
 
