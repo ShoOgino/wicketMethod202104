@@ -1,0 +1,31 @@
+	/**
+	 * 
+	 * @see wicket.markup.parser.onLoadListener.AbstractMarkupLoadListener#visit(wicket.MarkupContainer,
+	 *      wicket.markup.MarkupFragment)
+	 */
+	@Override
+	protected Object visit(final MarkupContainer container, final MarkupFragment fragment)
+	{
+		final ComponentTag tag = fragment.getTag();
+
+		// If <wicket:link>
+		if (tag.isLinkTag())
+		{
+			new WebMarkupContainer(container, tag.getId())
+			{
+				private static final long serialVersionUID = 1L;
+
+				/**
+				 * @see wicket.MarkupContainer#isTransparentResolver()
+				 */
+				@Override
+				public boolean isTransparentResolver()
+				{
+					return true;
+				}
+			};
+		}
+
+		return MarkupFragment.IVisitor.CONTINUE_TRAVERSAL;
+	}
+
