@@ -1,13 +1,15 @@
 	/**
 	 * Add a new AttributeModifier to the body container which appends the
-	 * 'value' to the onUnLoad attribute of the body tag. Remember the component
+	 * 'value' to the onLoad attribute of the body tag. Remember the component
 	 * which requested to add the modified to the body container. This for
 	 * example is required in cases where on a dynamic page the Component (e.g.
 	 * a Panel) gets removed and/or replaced and the body attribute modifier
 	 * must be removed/replaced as well.
 	 * 
-	 * @param model
-	 *            The model which holds the value to be appended to 'onUnLoad'
+	 * @param attribute
+	 *            The name of the attribute
+	 * @param value
+	 *            The value to append to 'onLoad'
 	 * @param behaviorOwner
 	 *            The component which 'owns' the attribute modifier. Null is a
 	 *            allowed value.
@@ -16,9 +18,10 @@
 	 * @TODO Post 1.2: A listener hook on IBheavior which gets called on removal
 	 *       of the component would be the better solution
 	 */
-	public final BodyContainer addOnUnLoadModifier(final IModel<? extends CharSequence> model,
+	public final BodyContainer addModifier(final String attribute, final CharSequence value,
 			final Component behaviorOwner)
 	{
-		return addModifier(ONUNLOAD, model, behaviorOwner);
+		final IModel<CharSequence> model = new Model<CharSequence>(value);
+		return addModifier(attribute, model, behaviorOwner);
 	}
 

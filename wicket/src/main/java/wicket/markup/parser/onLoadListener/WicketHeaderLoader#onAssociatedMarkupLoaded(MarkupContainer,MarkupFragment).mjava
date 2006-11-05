@@ -5,7 +5,7 @@
 	public void onAssociatedMarkupLoaded(final MarkupContainer container,
 			final MarkupFragment fragment)
 	{
-		// Remove any wicket header container
+		// Remove any existing wicket header container <wicket:head>
 		container.visitChildren(WicketHeadContainer.class, new IVisitor()
 		{
 			public Object component(final Component<?> component)
@@ -14,21 +14,14 @@
 				return CONTINUE_TRAVERSAL;
 			}
 		});
-		
-		// Get the container for the headers from the page
-		final Page page = container.getPage();
-		final HeaderContainer headerContainer;
-		if (container instanceof WebPage)
-		{
-			headerContainer = ((WebPage)page).getHeaderContainer();
-		}
-		else
-		{
-			headerContainer = (HeaderContainer)page.get(HtmlHeaderSectionHandler.HEADER_ID);
-		}
 
-		// Search for wicket:head in the associated markup and copy the body
-		// onload and onunload attributes
+		// Get the header container <head> from the page
+		final Page page = container.getPage();
+		final HeaderContainer headerContainer = (HeaderContainer)page
+				.get(HtmlHeaderSectionHandler.HEADER_ID);
+
+		// Search for wicket:head in the associated markup, create container for
+		// these tags and copy the body onload and onunload attributes
 		fragment.visitChildren(MarkupFragment.class, new MarkupFragment.IVisitor()
 		{
 			private boolean foundBody = false;
@@ -41,55 +34,39 @@
 			{
 				final MarkupFragment frag = (MarkupFragment)element;
 				final ComponentTag tag = frag.getTag();
+
+				// if <wicket:head>, than
 				if (tag.isWicketHeadTag())
 				{
 					if (foundBody == true)
 					{
-						// Create a MarkupStream and position it at the error
-						// location
-						MarkupStream markupStream = new MarkupStream(fragment);
-						while (markupStream.hasMore())
-						{
-							if (markupStream.next() == tag)
-							{
-								break;
-							}
-						}
-						throw new MarkupException(
+						throwMarkupException(fragment, tag,
 								"<wicket:head> must be before the <body>, <wicket:panel> ... tag");
 					}
 
+					// Create a new wicket header container
 					WicketHeadContainer header = newWicketHeaderContainer(container, frag);
-					// TODO check again why setVisible() doesn't work here
+
+					// Determine if the wicket:head markup should be printed or
+					// not.
 					header.setEnable(headerContainer.okToRender(header));
 
 					return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
 				}
 				else if (tag.isBodyTag())
 				{
+					// Found <body>. "Copy" the attributes to the page's body
+					// tag, if the container loading the markup is not a Page
 					foundBody = true;
-					if (page instanceof WebPage)
+					if ((page instanceof WebPage) && !(container instanceof Page))
 					{
-						WebPage webPage = (WebPage)page;
-						final CharSequence onLoad = tag.getString(ONLOAD);
-						if (onLoad != null)
-						{
-							// Attach an AttributeModifier to the body container
-							// which appends the new value to the onLoad
-							// attribute
-							webPage.getBodyContainer().addOnLoadModifier(onLoad, container);
-						}
-
-						final CharSequence onUnLoad = tag.getString(ONUNLOAD);
-						if (onUnLoad != null)
-						{
-							// Same for unload
-							webPage.getBodyContainer().addOnUnLoadModifier(onUnLoad, container);
-						}
+						addBodyModifier(BodyContainer.ONLOAD, container, tag);
+						addBodyModifier(BodyContainer.ONUNLOAD, container, tag);
 					}
 				}
 				else if (tag.isMajorWicketComponentTag())
 				{
+					// Allow for improved error messages
 					foundBody = true;
 				}
 
