@@ -1,22 +1,12 @@
 	/**
-	 * @see wicket.markup.parser.onLoadListener.IMarkupLoadListener#onAssociatedMarkupLoaded(wicket.MarkupContainer,
-	 *      wicket.markup.MarkupFragment)
+	 * 
+	 * @param response
+	 * @param fragment
 	 */
-	public void onAssociatedMarkupLoaded(final MarkupContainer container,
-			final MarkupFragment fragment)
+	private void renderHead(final IHeaderResponse response, final MarkupFragment fragment)
 	{
-		// Remove any existing wicket header container <wicket:head>
-		container.visitChildren(WicketHeadContainer.class, new IVisitor()
-		{
-			public Object component(final Component<?> component)
-			{
-				component.remove();
-				return CONTINUE_TRAVERSAL;
-			}
-		});
-
 		// Get the header container <head> from the page
-		final Page page = container.getPage();
+		final Page page = getPage();
 		final HeaderContainer headerContainer = (HeaderContainer)page
 				.get(HtmlHeaderSectionHandler.HEADER_ID);
 
@@ -45,11 +35,12 @@
 					}
 
 					// Create a new wicket header container
-					WicketHeadContainer header = newWicketHeaderContainer(container, frag);
+					WicketHeadContainer header = newWicketHeaderContainer(frag);
 
 					// Determine if the wicket:head markup should be printed or
 					// not.
 					header.setEnable(headerContainer.okToRender(header));
+					header.render(new MarkupStream(frag));
 
 					return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
 				}
@@ -58,10 +49,10 @@
 					// Found <body>. "Copy" the attributes to the page's body
 					// tag, if the container loading the markup is not a Page
 					foundBody = true;
-					if ((page instanceof WebPage) && !(container instanceof Page))
+					if (page instanceof WebPage)
 					{
-						addBodyModifier(BodyContainer.ONLOAD, container, tag);
-						addBodyModifier(BodyContainer.ONUNLOAD, container, tag);
+						addBodyModifier(BodyContainer.ONLOAD, tag);
+						addBodyModifier(BodyContainer.ONUNLOAD, tag);
 					}
 				}
 				else if (tag.isMajorWicketComponentTag())

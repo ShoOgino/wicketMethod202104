@@ -4,16 +4,17 @@
 	 * @param id
 	 *            The component id
 	 * @param fragment
-	 *            The markup fragment associated with the wicket:head
+	 *            The associated markup
 	 */
 	public WicketHeadContainer(final MarkupContainer parent, final String id,
 			final MarkupFragment fragment)
 	{
 		super(parent, id);
 
-		// It is an auto component; make sure the markup loads properly
-		getMarkupFragment();
-
 		setRenderBodyOnly(true);
+		
+		this.fragment = fragment;
+		String namespace = this.fragment.getMarkup().getWicketNamespace();
+		this.scope = this.fragment.getTag().getAttributes().getString(namespace + ":scope");
 	}
 
