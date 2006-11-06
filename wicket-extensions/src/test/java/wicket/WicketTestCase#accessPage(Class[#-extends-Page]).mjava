@@ -8,13 +8,13 @@
 	protected MockHttpServletResponse accessPage(final Class<? extends Page> pageClass)
 			throws Exception
 	{
-		application.setHomePage(pageClass);
+		tester = new WicketTester(pageClass);
 
 		// Do the processing
-		application.setupRequestAndResponse();
-		application.processRequestCycle();
+		tester.setupRequestAndResponse();
+		tester.processRequestCycle();
 
-		assertEquals(pageClass, application.getLastRenderedPage().getClass());
-		return application.getServletResponse();
+		assertEquals(pageClass, tester.getLastRenderedPage().getClass());
+		return tester.getServletResponse();
 	}
 
