@@ -5,7 +5,7 @@
 	@Override
 	protected void setUp() throws Exception
 	{
-		application = new WicketTester(null)
+		WebApplication app = new DummyApplication()
 		{
 			@Override
 			protected void init() 
@@ -15,7 +15,8 @@
 			}
 		};
 
-		this.application.getMarkupSettings().setMarkupParserFactory(new MarkupParserFactory()
+		tester = new WicketTester(app);
+		this.tester.getApplication().getMarkupSettings().setMarkupParserFactory(new MarkupParserFactory()
 		{
 			@Override
 			public MarkupParser newMarkupParser(MarkupResourceStream resource)

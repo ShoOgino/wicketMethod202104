@@ -4,7 +4,7 @@
 	 */
 	public void test_3() throws Exception
 	{
-		application = new WicketTester()
+		WebApplication app = new DummyApplication()
 		{
 			/**
 			 * @see wicket.protocol.http.WebApplication#newSession()
@@ -15,6 +15,8 @@
 				return new WebSession(this).setStyle("myStyle");
 			}
 		};
+		
+		tester = new WicketTester(app);
 
 		executeTest(ConcretePage2.class, "ExpectedResult3.html");
 	}
