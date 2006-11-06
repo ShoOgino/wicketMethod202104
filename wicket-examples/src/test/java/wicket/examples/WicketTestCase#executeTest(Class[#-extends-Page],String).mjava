@@ -7,16 +7,12 @@
 	{
 		System.out.println("=== " + pageClass.getName() + " ===");
 
-		application.setHomePage(pageClass);
+		tester.startPage(pageClass);
 
-		// Do the processing
-		application.setupRequestAndResponse();
-		application.processRequestCycle();
-
-		assertEquals(pageClass, application.getLastRenderedPage().getClass());
+		assertEquals(pageClass, tester.getLastRenderedPage().getClass());
 
 		// Validate the document
-		String document = application.getServletResponse().getDocument();
+		String document = tester.getServletResponse().getDocument();
 		assertTrue(DiffUtil.validatePage(document, this.getClass(), filename));
 	}
 
