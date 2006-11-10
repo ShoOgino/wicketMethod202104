@@ -1,0 +1,18 @@
+	/**
+	 * @see wicket.protocol.http.SecondLevelCacheSessionStore.IPageStore#removePage(java.lang.String,
+	 *      wicket.Page)
+	 */
+	public void removePage(String sessionId, Page page)
+	{
+		File sessionDir = new File(workDir, sessionId);
+		if (sessionDir.exists())
+		{
+			File pageFile = getPageFile(page.getNumericId(), page.getCurrentVersionNumber(),
+					sessionDir);
+			if (pageFile.exists())
+			{
+				pageFile.delete();
+			}
+		}
+	}
+
