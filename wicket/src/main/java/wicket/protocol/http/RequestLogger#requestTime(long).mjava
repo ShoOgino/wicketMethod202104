@@ -13,8 +13,11 @@
 			Object sessionInfo = getSessionInfo(session);
 			rd.setSessionInfo(sessionInfo);
 			
-			// todo should we really do this, this is a bit expensive.
-			long sizeInBytes = session.getSizeInBytes();
+			long sizeInBytes = -1;
+			if(Application.get().getRequestLoggerSettings().getRecordSessionSize())
+			{
+				sizeInBytes = session.getSizeInBytes();
+			}
 			rd.setSessionSize(sizeInBytes);
 			rd.setTimeTaken(timeTaken);
 			requests.add(0, rd);
