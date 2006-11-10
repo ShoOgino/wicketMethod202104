@@ -15,7 +15,16 @@
 		add(new Label("size", "" + Bytes.bytes(pageMap.getSizeInBytes())));
 
 		// Get entry accesses 
-		final ArrayListStack accessStack = pageMap.getAccessStack();
+		// Get entry accesses
+		final ArrayListStack accessStack;
+		if (pageMap instanceof AccessStackPageMap)
+		{
+			accessStack = ((AccessStackPageMap)pageMap).getAccessStack();
+		}
+		else
+		{
+			accessStack = new ArrayListStack();
+		}
 		final List reversedAccessStack = new ArrayList();
 		reversedAccessStack.addAll(accessStack);
 		Collections.reverse(reversedAccessStack);
