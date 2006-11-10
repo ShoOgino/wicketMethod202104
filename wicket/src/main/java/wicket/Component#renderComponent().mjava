@@ -43,7 +43,6 @@
 						{
 							((IFeedback)component).updateFeedback();
 							component.internalAttach();
-							AnnotationUtils.invokeOnAttachListeners(component);
 							return IVisitor.CONTINUE_TRAVERSAL;
 						}
 					});
@@ -80,13 +79,11 @@
 
 				// Render the component and all its children
 				onBeforeRender();
-				AnnotationUtils.invokeOnBeforeRenderListeners(this);
 				render(markupStream);
 			}
 			finally
 			{
 				onAfterRender();
-				AnnotationUtils.invokeOnAfterRenderListeners(this);
 			}
 		}
 	}
