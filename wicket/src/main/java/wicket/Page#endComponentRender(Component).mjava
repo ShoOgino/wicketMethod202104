@@ -9,13 +9,9 @@
 	 */
 	public final void endComponentRender(Component component)
 	{
-		if (component instanceof MarkupContainer)
+		if (Application.get().getDebugSettings().getComponentUseCheck())
 		{
-			checkRendering((MarkupContainer)component);
-		}
-		else
-		{
-			renderedComponents = null;
+			RequestCycle.get().getDebugHelper().onEndComponentRender(component);
 		}
 	}
 

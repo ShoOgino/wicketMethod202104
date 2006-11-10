@@ -16,7 +16,10 @@
 		}
 
 		// Make sure it is really empty
-		renderedComponents = null;
+		if (Application.get().getDebugSettings().getComponentUseCheck())
+		{
+			RequestCycle.get().getDebugHelper().resetRenderedComponentsSet();
+		}
 
 		// Reset it to stateless so that it can be tested again
 		this.stateless = null;
@@ -75,7 +78,10 @@
 		render(null);
 
 		// Check rendering if it happened fully
-		checkRendering(this);
+		if (Application.get().getDebugSettings().getComponentUseCheck())
+		{
+			RequestCycle.get().getDebugHelper().onEndComponentRender(this);
+		}
 
 		if (!isPageStateless())
 		{
