@@ -1,13 +1,43 @@
 	/**
-	 * This method is called when the request is over this will
-	 * set the total time a request takes and cleans up the current 
-	 * request data.
-	 * 
-	 * @param timeTaken
+	 * @see wicket.protocol.http.IRequestLogger#requestTime(long)
 	 */
 	public void requestTime(long timeTaken)
 	{
-		SessionData sd = getSessionData();
-		sd.endRequest(timeTaken);
+		RequestData rd = (RequestData)currentRequest.get();
+		if(rd != null)
+		{
+			Session session = Session.get();
+			String sessionId = session.getId();
+			rd.setSessionId(sessionId);
+			
+			Object sessionInfo = getSessionInfo(session);
+			rd.setSessionInfo(sessionInfo);
+			
+			long sizeInBytes = -1;
+			if(Application.get().getRequestLoggerSettings().getRecordSessionSize())
+			{
+				sizeInBytes = session.getSizeInBytes();
+			}
+			rd.setSessionSize(sizeInBytes);
+			rd.setTimeTaken(timeTaken);
+			requests.add(0, rd);
+			currentRequest.set(null);
+			if(sessionId != null)
+			{
+				SessionData sd = (SessionData)liveSessions.get(sessionId);
+				if(sd == null)
+				{
+					// passivated session or logger only started after it.
+					sessionCreated(sessionId);
+					sd = (SessionData)liveSessions.get(sessionId);
+				}
+				if(sd != null)
+				{
+					sd.setSessionInfo(sessionInfo);
+					sd.setSessionSize(sizeInBytes);
+					sd.addTimeTaken(timeTaken);
+				}
+			}
+		}
 	}
 

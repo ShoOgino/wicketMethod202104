@@ -14,11 +14,11 @@
 		if (session == null)
 		{
 			// Create session using session factory
-			session = getSessionFactory().newSession();
+			session = getSessionFactory().newSession(request);
 			// Set the client Locale for this session
 			session.setLocale(request.getLocale());
 
-			if (sessionStore.getSessionId(request) != null)
+			if (sessionStore.getSessionId(request, false) != null)
 			{
 				// Bind the session to the session store
 				sessionStore.bind(request, session);
@@ -35,9 +35,6 @@
 			throw new WicketRuntimeException("Session created by a WebApplication session factory "
 					+ "must be a subclass of WebSession");
 		}
-
-		// Set application on session
-		session.setApplication(this);
 
 		// Set session attribute name and attach/reattach http servlet session
 		webSession.initForRequest();
