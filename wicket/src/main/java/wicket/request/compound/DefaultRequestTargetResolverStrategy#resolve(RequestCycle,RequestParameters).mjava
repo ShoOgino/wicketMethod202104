@@ -14,9 +14,14 @@
 			return mounted;
 		}
 
-		// See whether this request points to a rendered page
 		final String path = requestParameters.getPath();
-		if (requestParameters.getComponentPath() != null)
+		// see whether this request points to a bookmarkable page
+		if (requestParameters.getBookmarkablePageClass() != null)
+		{
+			return resolveBookmarkablePage(requestCycle, requestParameters);
+		}
+		// See whether this request points to a rendered page
+		else if (requestParameters.getComponentPath() != null)
 		{
 			// marks whether or not we will be processing this request
 			boolean processRequest = true;
@@ -41,11 +46,12 @@
 						// request
 						processRequest = false;
 					}
-					else
+					else if(pageMap instanceof AccessStackPageMap)
 					{
-						if (pageMap.getAccessStack().size() > 0)
+						AccessStackPageMap accessStackPageMap = (AccessStackPageMap)pageMap;
+						if (accessStackPageMap.getAccessStack().size() > 0)
 						{
-							final Access access = (Access)pageMap.getAccessStack().peek();
+							final Access access = (Access)accessStackPageMap.getAccessStack().peek();
 
 							final int pageId = Integer
 									.parseInt(Strings.firstPathComponent(requestParameters
@@ -70,6 +76,10 @@
 							}
 						}
 					}
+					else 
+					{
+						// TODO also this should work.. also forward port to 2.0!!!
+					}
 
 				}
 
@@ -82,11 +92,6 @@
 			{
 				return EmptyRequestTarget.getInstance();
 			}
-		}
-		// see whether this request points to a bookmarkable page
-		else if (requestParameters.getBookmarkablePageClass() != null)
-		{
-			return resolveBookmarkablePage(requestCycle, requestParameters);
 		}
 		// see whether this request points to a shared resource
 		else if (requestParameters.getResourceKey() != null)
