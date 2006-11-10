@@ -5,9 +5,10 @@
 	public final long getSizeInBytes()
 	{
 		long size = Objects.sizeof(this);
-		for (Iterator iterator = getEntries().iterator(); iterator.hasNext();)
+		Iterator it = getEntries().iterator();
+		while(it.hasNext())
 		{
-			IPageMapEntry entry = (IPageMapEntry)iterator.next();
+			IPageMapEntry entry = (IPageMapEntry)it.next();
 			if (entry instanceof Page)
 			{
 				size += ((Page)entry).getSizeInBytes();
