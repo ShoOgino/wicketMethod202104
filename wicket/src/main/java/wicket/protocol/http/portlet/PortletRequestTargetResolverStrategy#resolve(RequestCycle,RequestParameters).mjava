@@ -15,6 +15,8 @@
 
 		if (requestParameters.getComponentPath() != null)
 		{
+			// marks whether or not we will be processing this request
+			boolean processRequest = true;
 			synchronized (requestCycle.getSession())
 			{
 				// we need to check if this request has been flagged as
@@ -22,8 +24,6 @@
 				// condition
 				// is met
 
-				// marks whether or not we will be processing this request
-				boolean processRequest = true;
 
 				if (requestParameters.isOnlyProcessIfPathActive())
 				{
@@ -39,11 +39,12 @@
 						// request
 						processRequest = false;
 					}
-					else
+					else if(pageMap instanceof AccessStackPageMap)
 					{
-						if (pageMap.getAccessStack().size() > 0)
+						AccessStackPageMap accessStackPm = (AccessStackPageMap)pageMap; 
+						if (accessStackPm.getAccessStack().size() > 0)
 						{
-							final Access access = (Access)pageMap.getAccessStack().peek();
+							final Access access = (Access)accessStackPm.getAccessStack().peek();
 
 							final int pageId = Integer
 							.parseInt(Strings.firstPathComponent(requestParameters
@@ -68,15 +69,19 @@
 							}
 						}
 					}
+					else 
+					{
+						// TODO also this should work.. also forward port to 2.0!!!
+					}
 				}
-				if (processRequest)
-				{
-					return resolveRenderedPage(requestCycle, requestParameters);
-				}
-				else
-				{
-					return EmptyRequestTarget.getInstance();
-				}
+			}
+			if (processRequest)
+			{
+				return resolveRenderedPage(requestCycle, requestParameters);
+			}
+			else
+			{
+				return EmptyRequestTarget.getInstance();
 			}
 		}
 		// see whether this request points to a shared resource
