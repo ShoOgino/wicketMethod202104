@@ -5,9 +5,6 @@
 	@Override
 	protected void onRender(final MarkupStream markupStream)
 	{
-		// Save position in markup stream
-		final int markupStart = markupStream.getCurrentIndex();
-
 		// Get number of items to be displayed
 		final int size = getViewSize();
 		if (size > 0)
@@ -21,16 +18,11 @@
 				// Get list item for index
 				ListItem item = (ListItem)get(Integer.toString(index));
 
-				// Rewind to start of markup for kids
-				markupStream.setCurrentIndex(markupStart);
-
 				// Render
 				renderItem(item);
 			}
 		}
-		else
-		{
-			markupStream.skipComponent();
-		}
+		
+		markupStream.skipComponent();
 	}
 
