@@ -13,7 +13,7 @@
 			new VelocityLicenseHeaderHandler(velocityIgnore)
 		};
 		
-		final List<File> badFiles = new ArrayList<File>();
+		final Map<ILicenseHeaderHandler, List<File>> badFiles = new HashMap<ILicenseHeaderHandler, List<File>>();
 		
 		for (final ILicenseHeaderHandler licenseHeaderHandler : licenseHeaderHandlers)
 		{
@@ -26,7 +26,15 @@
 						if (addHeaders == false 
 								|| licenseHeaderHandler.addLicenseHeader(file) == false)
 						{
-							badFiles.add(file);
+							List<File> files = badFiles.get(licenseHeaderHandler);
+							
+							if (files == null) 
+							{
+								files = new ArrayList<File>();
+								badFiles.put(licenseHeaderHandler, files);
+							}
+							
+							files.add(file);
 						}
 					}
 				}
