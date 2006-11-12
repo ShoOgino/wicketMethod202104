@@ -1,4 +1,4 @@
-	private boolean checkXmlHeader(File file)
+	public boolean checkLicenseHeader(File file)
 	{
 		Revision revision = null;
 
@@ -25,11 +25,11 @@
 				}
 			}
 
-			revision = Diff.diff(xmlLicenseHeader.split(LINE_ENDING), header.split(LINE_ENDING));
+			revision = Diff.diff(getLicenseHeader().split(LINE_ENDING), header.split(LINE_ENDING));
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 
 		return revision.size() == 0;
