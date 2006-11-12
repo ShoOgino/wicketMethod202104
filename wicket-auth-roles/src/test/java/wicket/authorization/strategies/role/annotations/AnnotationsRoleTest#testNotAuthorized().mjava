@@ -4,7 +4,7 @@
 	public void testNotAuthorized() throws Exception
 	{
 		WicketTester tester = new WicketTester();
-		tester.getSecuritySettings().setAuthorizationStrategy(
+		tester.getApplication().getSecuritySettings().setAuthorizationStrategy(
 				new RoleAuthorizationStrategy(new UserRolesAuthorizer("USER")));
 		final class Listener implements IUnauthorizedComponentInstantiationListener
 		{
@@ -16,7 +16,7 @@
 			}
 		}
 		Listener listener = new Listener();
-		tester.getSecuritySettings().setUnauthorizedComponentInstantiationListener(listener);
+		tester.getApplication().getSecuritySettings().setUnauthorizedComponentInstantiationListener(listener);
 
 		try
 		{
