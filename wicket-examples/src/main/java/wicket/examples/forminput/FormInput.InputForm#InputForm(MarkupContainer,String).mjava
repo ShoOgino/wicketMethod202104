@@ -120,28 +120,25 @@
 			// and this is to show we can nest ListViews in Forms too
 			new LinesListView(this, "lines");
 
-			new ImageButton(this, "saveButton")
+			new Button<String>(this, "saveButton", new ResourceModel("save"))
 			{
-
 				@Override
 				public void onSubmit()
 				{
-
-
+					// need to do nothing for this example here
 				}
-
 			};
 
-			Link link = new Link(this, "resetButtonLink")
+			new Button<String>(this, "resetButton", new ResourceModel("reset"))
 			{
 				@Override
-				public void onClick()
+				public void onSubmit()
 				{
-					// just call modelChanged so that any invalid input is
-					// cleared.
+					// trigger reload
 					InputForm.this.modelChanged();
 				}
-			};
-			new Image(link, "resetButtonImage");
+			}.setDefaultFormProcessing(false);
+			// set default form processing so that only this button's
+			// submit method will be called
 		}
 
