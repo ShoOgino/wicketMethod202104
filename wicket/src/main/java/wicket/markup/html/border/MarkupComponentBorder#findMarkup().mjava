@@ -1,0 +1,39 @@
+	private MarkupFragment findMarkup()
+	{
+		// Get locator to search for the resource
+		final IResourceStreamLocator locator = Application.get().getResourceSettings()
+				.getResourceStreamLocator();
+
+		final Session session = Session.get();
+		MarkupResourceStream markupResourceStream = null;
+		Class containerClass = getClass();
+		while (containerClass != MarkupComponentBorder.class)
+		{
+			final IResourceStream resourceStream = locator.locate(containerClass, containerClass
+					.getName().replace('.', '/'), session.getStyle(), session.getLocale(), "html");
+
+			// Did we find it already?
+			if (resourceStream != null)
+			{
+				ContainerInfo ci = new ContainerInfo(containerClass,session.getLocale(),session.getStyle(),null,"html",null);
+				markupResourceStream = new MarkupResourceStream(resourceStream, ci, containerClass);
+			}
+
+			// Walk up the class hierarchy one level, if markup has not
+			// yet been found
+			containerClass = containerClass.getSuperclass();
+		}
+		MarkupFragment markup;
+		try
+		{
+			markup = Application.get().getMarkupSettings().getMarkupParserFactory()
+			.newMarkupParser(markupResourceStream).readAndParse();
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+
+		return markup;
+	}
+
