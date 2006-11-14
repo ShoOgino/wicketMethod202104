@@ -15,11 +15,10 @@
 	 *            The comma separated list of roles that are no longer allowed
 	 *            to perform the given action
 	 */
-	public static final void unauthorize(final Component component, final Action action,
+	public static final void unauthorize(final Component<?> component, final Action action,
 			final String roles)
 	{
-		final ActionPermissions permissions = (ActionPermissions)component
-				.getMetaData(ACTION_PERMISSIONS);
+		final ActionPermissions permissions = component.getMetaData(ACTION_PERMISSIONS);
 		if (permissions != null)
 		{
 			permissions.unauthorize(action, new Roles(roles));
