@@ -1,42 +1,19 @@
 	/**
 	 * @see wicket.request.IRequestTargetMounter#urlCodingStrategyForPath(java.lang.String)
 	 */
-	public final IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(final String path)
+	public final IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path)
 	{
 		if (path == null)
 		{
-			return (IRequestTargetUrlCodingStrategy)mountsOnPath.get(null);
+			return (IRequestTargetUrlCodingStrategy)mountsOnPath.strategyForMount(null);
 		}
 		else if (!path.equals("/")) // ignore root paths.. is this the right
 		// path?
 		{
-			for (final Iterator it = mountsOnPath.entrySet().iterator(); it.hasNext();)
+			IRequestTargetUrlCodingStrategy strategy = mountsOnPath.strategyForPath(path);
+			if (strategy != null)
 			{
-				final Map.Entry entry = (Entry)it.next();
-				final String key = (String)entry.getKey();
-				boolean match = false;
-				if (!settings.areMountsCaseSensitive())
-				{
-					if (path.length() >= key.length())
-					{
-						String mount = path.substring(0, key.length());
-						if (mount.equalsIgnoreCase(key))
-						{
-							match = true;
-						}
-					}
-				}
-				else
-				{
-					if (path.startsWith(key))
-					{
-						match = true;
-					}
-				}
-				if (match)
-				{
-					return (IRequestTargetUrlCodingStrategy)entry.getValue();
-				}
+				return strategy;
 			}
 		}
 		return null;
