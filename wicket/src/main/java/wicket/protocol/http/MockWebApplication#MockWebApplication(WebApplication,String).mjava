@@ -4,14 +4,14 @@
 	 * @param application
 	 *            The wicket application object
 	 * @param path
-	 *            The absolute path on disk to the web tester contents
-	 *            (e.g. war root) - may be null
+	 *            The absolute path on disk to the web tester contents (e.g. war
+	 *            root) - may be null
 	 * @see wicket.protocol.http.MockServletContext
 	 */
 	public MockWebApplication(final WebApplication application, final String path)
 	{
 		this.application = application;
-		
+
 		final MockServletContext context = new MockServletContext(this.application, null);
 		WicketFilter filter = new WicketFilter()
 		{
@@ -27,7 +27,7 @@
 				};
 			}
 		};
-		
+
 		try
 		{
 			filter.init(new FilterConfig()
@@ -62,7 +62,7 @@
 		{
 			throw new RuntimeException(e);
 		}
-		
+
 		Application.set(this.application);
 
 		this.servletSession = new MockHttpSession(context);
@@ -70,7 +70,7 @@
 		this.servletResponse = new MockHttpServletResponse();
 		this.wicketRequest = this.application.newWebRequest(servletRequest);
 		this.wicketSession = this.application.getSession(wicketRequest);
-		
+
 		// -----------------------------------
 		// Copied from WicketFilter
 
@@ -94,7 +94,8 @@
 		// set the default context path
 		this.application.getApplicationSettings().setContextPath(context.getServletContextName());
 
-		this.application.getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+		this.application.getRequestCycleSettings()
+				.setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
 		this.application.getResourceSettings().setResourceFinder(new WebApplicationPath(context));
 		this.application.getPageSettings().setAutomaticMultiWindowSupport(false);
 		this.application.getResourceSettings().setResourcePollFrequency(null);
