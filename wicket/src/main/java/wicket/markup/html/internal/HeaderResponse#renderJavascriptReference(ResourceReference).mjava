@@ -1,0 +1,12 @@
+	/**
+	 * @see wicket.markup.html.IHeaderResponse#renderJavascriptReference(wicket.markup.html.ResourceReference)
+	 */
+	public final void renderJavascriptReference(ResourceReference reference)
+	{
+		if (wasRendered(reference) == false)
+		{
+			JavascriptUtils.writeJavascriptUrl(getResponse(), RequestCycle.get().urlFor(reference));
+			markRendered(reference);
+		}
+	}
+
