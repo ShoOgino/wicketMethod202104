@@ -24,7 +24,7 @@
 			}
 
 			// Auto-components didn't yet call attach()
-			if (isAuto() == true)
+			if (getFlag(FLAG_AUTO) == true)
 			{
 				internalAttach();
 			}
@@ -36,12 +36,16 @@
 				notifyBehaviorsComponentBeforeRender();
 				try
 				{
-					IComponentBorder border = getComponentBorder();
+					final IComponentBorder border = getComponentBorder();
 					if (border != null)
+					{
 						border.renderBefore(this);
+					}
 					onRender(markupStream);
 					if (border != null)
+					{
 						border.renderAfter(this);
+					}
 				}
 				finally
 				{
