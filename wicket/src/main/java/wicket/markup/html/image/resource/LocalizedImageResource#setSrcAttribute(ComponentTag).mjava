@@ -30,6 +30,14 @@
 			// that points to the same resource but with another locale if it exists.
 			// something like SharedResource.getResourceReferenceForLocale(resourceReference);
 		}
+		
+		// check if the model contains a resource, if so, load the resource from the model.
+		Object modelObject = component.getModelObject();
+		if ( modelObject instanceof ResourceReference ) {
+			resourceReference = (ResourceReference) modelObject;
+		} else if ( modelObject instanceof Resource ) {
+			resource = (Resource) modelObject;
+		}
 
 		// Need to load image resource for this component?
 		if (resource == null && resourceReference == null)
