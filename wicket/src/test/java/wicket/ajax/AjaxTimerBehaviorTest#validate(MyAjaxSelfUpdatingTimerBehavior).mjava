@@ -1,0 +1,27 @@
+	/**
+	 * Validates the reponse, then makes sure the timer injects itself again
+	 * when called.
+	 * 
+	 * @param timer
+	 */
+	private void validate(MyAjaxSelfUpdatingTimerBehavior timer)
+	{
+		String document = application.getServletResponse().getDocument();
+
+		String updateScript = timer.getUpdateScript();
+
+		validateTimerScript(document, updateScript);
+
+
+		application.setupRequestAndResponse();
+		WebRequestCycle cycle = application.createRequestCycle();
+		String url = timer.getCallbackUrl().toString();
+		application.getServletRequest().setRequestToRedirectString(url);
+
+		application.processRequestCycle(cycle);
+
+		// Validate the document
+		document = application.getServletResponse().getDocument();
+		validateTimerScript(document, updateScript);
+	}
+
