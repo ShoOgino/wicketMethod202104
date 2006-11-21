@@ -1,0 +1,28 @@
+	/**
+	 * Initializes Page by adding it to the Session and initializing it.
+	 * 
+	 * @param pageMap
+	 *            The page map to put this page in.
+	 */
+	private final void init(final IPageMap pageMap)
+	{
+		// Set the page map
+		if (pageMap != null)
+		{
+			setPageMap(pageMap);
+		}
+		else
+		{
+			throw new IllegalStateException("PageMap cannot be null");
+		}
+
+		// Set the numeric id on this page
+		setNumericId(getPageMap().nextId());
+
+		// Set versioning of page based on default
+		setVersioned(Application.get().getPageSettings().getVersionPagesByDefault());
+
+		// All Pages are born dirty so they get clustered right away
+		dirty();
+	}
+
