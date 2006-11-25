@@ -40,16 +40,16 @@
 			return null;
 		}
 
-		if(IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
+		if (IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
 		{
-			return encodeServletRequest(requestCycle,requestTarget);
+			return encodeServletRequest(requestCycle, requestTarget);
 		}
 
 		// Get component and page for request target
 		final Component component = requestTarget.getTarget();
 		final Page page = component.getPage();
 		// Add pagemap
-		final PageMap pageMap = page.getPageMap();
+		final IPageMap pageMap = page.getPageMap();
 		if (!pageMap.isDefault())
 		{
 			url.setParameter(PAGEMAP, pageMap.getName());

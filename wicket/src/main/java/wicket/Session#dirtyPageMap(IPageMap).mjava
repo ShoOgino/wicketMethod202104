@@ -1,0 +1,18 @@
+	/**
+	 * @param map
+	 *            The page map to add to dirty objects list
+	 */
+	void dirtyPageMap(final IPageMap map)
+	{
+		if (!map.isDefault())
+		{
+			usedPageMaps.remove(map);
+			usedPageMaps.addLast(map);
+		}
+		List<Serializable> dirtyObjects = getDirtyObjectsList();
+		if (!dirtyObjects.contains(map))
+		{
+			dirtyObjects.add(map);
+		}
+	}
+
