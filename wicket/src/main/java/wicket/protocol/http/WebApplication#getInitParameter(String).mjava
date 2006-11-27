@@ -1,0 +1,22 @@
+	/**
+	 * Gets the init parameter from the context (servlet or filter).
+	 * 
+	 * @param key
+	 *            the key to search for
+	 * @return the value of the servlet/filter init parameter
+	 */
+	private String getInitParameter(String key)
+	{
+		if (wicketServlet != null)
+		{
+			return wicketServlet.getInitParameter(key);
+		}
+		if (wicketFilter != null)
+		{
+			return wicketFilter.getFilterConfig().getInitParameter(key);
+		}
+		throw new IllegalStateException("servletContext is not set yet. Any code in your"
+				+ " Application object that uses the wicketServlet/Filter instance should be put"
+				+ " in the init() method instead of your constructor");
+	}
+
