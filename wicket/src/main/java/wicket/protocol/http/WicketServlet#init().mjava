@@ -1,50 +1,46 @@
 	/**
 	 * Servlet initialization
 	 */
-	public void init()
+	public void init() throws ServletException
 	{
-		if (this.webApplication == null)
+		wicketFilter = new WicketFilter();
+		wicketFilter.init(new FilterConfig()
 		{
-			IWebApplicationFactory factory = getApplicationFactory();
+			/**
+			 * @see javax.servlet.FilterConfig#getServletContext()
+			 */
+			public ServletContext getServletContext()
+			{
+				return WicketServlet.this.getServletContext();
+			}
 
-			// Construct WebApplication subclass
-			this.webApplication = factory.createApplication(this);
-			// Finished
-			log.info("WicketServlet loaded application " + this.webApplication.getName() + " via "
-					+ factory.getClass().getName() + " factory");
-		}
+			/**
+			 * @see javax.servlet.FilterConfig#getInitParameterNames()
+			 */
+			public Enumeration getInitParameterNames()
+			{
+				return WicketServlet.this.getInitParameterNames();
+			}
 
-		// Set this WicketServlet as the servlet for the web application
-		this.webApplication.setWicketServlet(this);
+			/**
+			 * @see javax.servlet.FilterConfig#getInitParameter(java.lang.String)
+			 */
+			public String getInitParameter(String name)
+			{
+				if (WicketFilter.FILTER_PATH_PARAM.equals(name))
+				{
+					return WicketFilter.SERVLET_PATH_HOLDER;
+				}
+				return WicketServlet.this.getInitParameter(name);
+			}
 
-		// Store instance of this application object in servlet context to make
-		// integration with outside world easier
-		String contextKey = "wicket:" + getServletConfig().getServletName();
-		getServletContext().setAttribute(contextKey, this.webApplication);
-
-		try
-		{
-			Application.set(webApplication);
-
-			// Call internal init method of web application for default
-			// initialisation
-			this.webApplication.internalInit();
-
-			// Call init method of web application
-			this.webApplication.init();
-
-			// We initialize components here rather than in the constructor or
-			// in the internal init, because in the init method class aliases
-			// can be added, that would be used in installing resources in the
-			// component.
-			this.webApplication.initializeComponents();
-
-			// Give the application the option to log that it is started
-			this.webApplication.logStarted();
-		}
-		finally
-		{
-			Application.unset();
-		}
+			/**
+			 * @see javax.servlet.FilterConfig#getFilterName()
+			 */
+			public String getFilterName()
+			{
+				return WicketServlet.this.getServletName();
+			}
+		});
 	}
 
