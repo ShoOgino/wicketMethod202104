@@ -7,6 +7,10 @@
 	 */
 	public static String toEscapedUnicode(String unicodeString)
 	{
+		if ((unicodeString == null) || (unicodeString.length() == 0))
+		{
+			return unicodeString;
+		}
 		int len = unicodeString.length();
 		int bufLen = len * 2;
 		StringBuffer outBuffer = new StringBuffer(bufLen);
@@ -30,7 +34,9 @@
 			{
 				case ' ' :
 					if (x == 0)
+					{
 						outBuffer.append('\\');
+					}
 					outBuffer.append(' ');
 					break;
 				case '\t' :
