@@ -1,0 +1,59 @@
+	/**
+	 * Loads the class from this <code>ClassLoader</class>.  If the
+	 * class does not exist in this one, we check the parent.  Please
+	 * note that this is the exact opposite of the
+	 * <code>ClassLoader</code> spec.  We use it to load the class
+	 * from the same classloader as WicketFilter or WicketServlet.
+	 * When found, the class file is watched for modifications.
+	 *
+	 * @param     name the name of the class
+	 * @param     resolve if <code>true</code> then resolve the class
+	 * @return    the resulting <code>Class</code> object
+	 * @exception ClassNotFoundException if the class could not be found
+	 */
+	public final Class loadClass(String name, boolean resolve) throws ClassNotFoundException
+	{
+		// First check if it's already loaded
+		Class clazz = findLoadedClass(name);
+
+		if (clazz == null)
+		{
+
+			final ClassLoader parent = getParent();
+
+			try
+			{
+				clazz = findClass(name);
+				watchForModifications(clazz);
+			}
+			catch (ClassNotFoundException cnfe)
+			{
+				if (parent == null)
+				{
+					// Propagate exception
+					throw cnfe;
+				}
+			}
+
+			if (clazz == null)
+			{
+				if (parent == null)
+				{
+					throw new ClassNotFoundException(name);
+				}
+				else
+				{
+					// Will throw a CFNE if not found in parent
+					clazz = parent.loadClass(name);
+				}
+			}
+		}
+
+		if (resolve)
+		{
+			resolveClass(clazz);
+		}
+
+		return clazz;
+	}
+

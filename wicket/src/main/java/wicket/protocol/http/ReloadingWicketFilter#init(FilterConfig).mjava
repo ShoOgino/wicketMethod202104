@@ -1,0 +1,22 @@
+	public void init(final FilterConfig filterConfig) throws ServletException
+	{
+		reloadingClassLoader.setListener(new IChangeListener()
+		{
+			public void onChange()
+			{
+				reloadingClassLoader = new ReloadingClassLoader(getClass().getClassLoader());
+				try
+				{
+					// Reload the application
+					init(filterConfig);
+				}
+				catch (ServletException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+		});
+
+		super.init(filterConfig);
+	}
+
