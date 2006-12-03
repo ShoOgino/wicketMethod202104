@@ -20,17 +20,19 @@
 		{
 			final ClassLoader parent = getParent();
 
-			try
-			{
-				clazz = findClass(name);
-				watchForModifications(clazz);
-			}
-			catch (ClassNotFoundException cnfe)
-			{
-				if (parent == null)
+			if (tryClassHere(name)) {
+				try
 				{
-					// Propagate exception
-					throw cnfe;
+					clazz = findClass(name);
+					watchForModifications(clazz);
+				}
+				catch (ClassNotFoundException cnfe)
+				{
+					if (parent == null)
+					{
+						// Propagate exception
+						throw cnfe;
+					}
 				}
 			}
 
