@@ -1,0 +1,27 @@
+	/**
+	 * Add all the url locations we can find for the provided class loader
+	 * 
+	 * @param loader
+	 *            class loader
+	 */
+	private static void addClassLoaderUrls(ClassLoader loader)
+	{
+		if (loader != null)
+		{
+			final Enumeration resources;
+			try
+			{
+				resources = loader.getResources("");
+			}
+			catch (IOException e)
+			{
+				throw new RuntimeException(e);
+			}
+			while (resources.hasMoreElements())
+			{
+				URL location = (URL)resources.nextElement();
+				ReloadingClassLoader.addLocation(location);
+			}
+		}
+	}
+

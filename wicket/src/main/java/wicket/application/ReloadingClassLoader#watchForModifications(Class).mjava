@@ -12,6 +12,8 @@
 		File clzFile = null;
 		while (locationsIterator.hasNext())
 		{
+			// FIXME only works for directories, but JARs etc could be checked
+			// as well
 			URL location = (URL)locationsIterator.next();
 			String clzLocation = location.getFile() + clz.getName().replaceAll("\\.", "/")
 					+ ".class";
@@ -33,8 +35,7 @@
 						finally
 						{
 							// If an error occurs when the listener is notified,
-							// remove
-							// the watched object to avoid rethrowing the
+							// remove the watched object to avoid rethrowing the
 							// exception at next check
 							// FIXME check if class file has been deleted
 							watcher.remove(finalClzFile);

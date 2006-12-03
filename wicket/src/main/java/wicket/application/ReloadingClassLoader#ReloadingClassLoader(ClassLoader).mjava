@@ -10,7 +10,13 @@
 	 */
 	public ReloadingClassLoader(ClassLoader parent)
 	{
-		super((URL[])urls.toArray(new URL[0]), parent);
+		super(new URL[] {}, parent);
+		// probably doubles from this class, but just in case
+		addClassLoaderUrls(parent); 
+		for (Iterator i = urls.iterator(); i.hasNext();)
+		{
+			addURL((URL)i.next());
+		}
 		this.watcher = new ModificationWatcher(pollFrequency);
 	}
 
