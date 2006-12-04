@@ -10,46 +10,7 @@
 	{
 		if (urlPrefix == null)
 		{
-			final AppendingStringBuffer buffer = new AppendingStringBuffer();
-			final WebRequest request = ((WebRequestCycle)requestCycle).getWebRequest();
-			if (request != null)
-			{
-				String contextPath = Application.get().getApplicationSettings().getContextPath();
-				if (contextPath == null)
-				{
-					contextPath = ((WebRequestCycle)RequestCycle.get()).getWebRequest()
-							.getContextPath();
-					if (contextPath == null)
-					{
-						contextPath = "";
-					}
-				}
-				if (!contextPath.equals("/"))
-				{
-					buffer.append(contextPath);
-				}
-				String path = request.getServletPath();
-				if (path != null && !path.equals(""))
-				{
-					if (!buffer.endsWith("/") && !path.startsWith("/"))
-						buffer.append("/");
-					buffer.append(path);
-				}
-			}
-			// special check, if everything is empty then we need to define '/'
-			// as urlPrefix
-			// else all urls get relative this is bad for mounts.
-			// Except for mounts who have to do a special check else mounts get:
-			// //mount
-			// see encode(RequestCycle,IRequestTarget) when a mount is found.
-			if (buffer.length() == 0)
-			{
-				urlPrefix = "/";
-			}
-			else
-			{
-				urlPrefix = buffer;
-			}
+			urlPrefix = ((WebApplication)Application.get()).getRootPath();
 		}
 		return urlPrefix;
 	}
