@@ -1,13 +1,17 @@
 	private WebApplication createApplication(ApplicationContext ac, String beanName)
 	{
-		if(beanName!=null){
-			WebApplication application = (WebApplication)ac.getBean(beanName);
-			if(application == null)
+		if (beanName != null)
+		{
+			WebApplication application = (WebApplication) ac.getBean(beanName);
+			if (application == null)
 			{
-				throw new IllegalArgumentException("Unable to find WebApplication bean with name ["+beanName+"]");
+				throw new IllegalArgumentException(
+						"Unable to find WebApplication bean with name [" + beanName + "]");
 			}
 			return application;
-		} else {
+		}
+		else
+		{
 			Map beans = ac.getBeansOfType(WebApplication.class, false, false);
 			if (beans.size() == 0)
 			{
