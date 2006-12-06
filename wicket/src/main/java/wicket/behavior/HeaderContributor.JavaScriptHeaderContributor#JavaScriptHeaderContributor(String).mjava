@@ -2,7 +2,7 @@
 		 * Construct.
 		 * 
 		 * @param location
-		 *            the location of the CSS file relative to the context path.
+		 *            the location of the CSS file relative to the context path, or a fully qualified http url.
 		 */
 		public JavaScriptHeaderContributor(final String location)
 		{
@@ -16,25 +16,13 @@
 				{
 					if (path == null)
 					{
-						String contextPath = Application.get().getApplicationSettings()
-								.getContextPath();
-						if (contextPath == null)
+						if (location == null)
 						{
-							contextPath = ((WebRequestCycle)RequestCycle.get()).getWebRequest()
-									.getContextPath();
-							if (contextPath == null)
-							{
-								contextPath = "";
-							}
+							return "";
 						}
 						AppendingStringBuffer b = new AppendingStringBuffer();
 						b.append("<script type=\"text/javascript\" src=\"");
-						b.append(contextPath);
-						if (!contextPath.endsWith("/") && !location.startsWith("/"))
-						{
-							b.append("/");
-						}
-						b.append((location != null) ? location : "");
+						appendPathWithContext(b, location);
 						b.append("\"></script>");
 						path = b.toString();
 					}
