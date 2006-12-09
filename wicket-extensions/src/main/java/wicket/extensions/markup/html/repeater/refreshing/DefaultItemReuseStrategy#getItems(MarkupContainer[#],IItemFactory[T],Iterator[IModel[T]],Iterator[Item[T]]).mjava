@@ -2,10 +2,10 @@
 	 * @see wicket.extensions.markup.html.repeater.refreshing.IItemReuseStrategy#getItems(MarkupContainer, wicket.extensions.markup.html.repeater.refreshing.IItemFactory,
 	 *      java.util.Iterator, java.util.Iterator)
 	 */
-	public Iterator getItems(final MarkupContainer parent, final IItemFactory factory, final Iterator newModels,
-			final Iterator existingItems)
+	public Iterator<Item<T>> getItems(final MarkupContainer<?> parent, final IItemFactory<T> factory, final Iterator<IModel<T>> newModels,
+			final Iterator<Item<T>> existingItems)
 	{
-		return new Iterator()
+		return new Iterator<Item<T>>()
 		{
 			private int index = 0;
 
@@ -19,11 +19,11 @@
 				return newModels.hasNext();
 			}
 
-			public Object next()
+			public Item<T> next()
 			{
-				final IModel model = (IModel)newModels.next();
+				final IModel<T> model = newModels.next();
 
-				Item item = factory.newItem(parent, index, model);
+				Item<T> item = factory.newItem(parent, index, model);
 				index++;
 
 				return item;

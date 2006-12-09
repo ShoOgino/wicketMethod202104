@@ -1,5 +1,5 @@
 	@Override
-	protected void addItems(Iterator items)
+	protected void addItems(Iterator<Item<T>> items)
 	{
 		if (items.hasNext())
 		{
@@ -10,16 +10,16 @@
 			do
 			{
 				// Build a row
-				Item rowItem = newRowItem(newChildId(), row);
-				new RepeatingView(rowItem, "cols");
+				Item<T> rowItem = newRowItem(newChildId(), row);
+				new RepeatingView<T>(rowItem, "cols");
 
 				// Populate the row
 				for (int index = 0; index < cols; index++)
 				{
-					final Item cellItem;
+					final Item<T> cellItem;
 					if (items.hasNext())
 					{
-						cellItem = (Item)items.next();
+						cellItem = items.next();
 					}
 					else
 					{

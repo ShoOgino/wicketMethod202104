@@ -5,14 +5,14 @@
 	 * @return iterator over models for items in the current page
 	 */
 	@Override
-	protected Iterator getItemModels()
+	protected Iterator<IModel<T>> getItemModels()
 	{
 		int offset = getViewOffset();
 		int size = getViewSize();
 
-		Iterator models = getItemModels(offset, size);
+		Iterator<IModel<T>> models = getItemModels(offset, size);
 
-		models = new CappedIteratorAdapter(models, size);
+		models = new CappedIteratorAdapter<T>(models, size);
 
 		return models;
 	}
