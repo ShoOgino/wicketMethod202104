@@ -6,18 +6,13 @@
 	 */
 	protected final void updateFormComponentModels()
 	{
-		visitFormComponents(new FormComponent.IVisitor()
+		visitFormComponents(new ValidationVisitor() 
 		{
-			public void formComponent(final FormComponent formComponent)
+			public void validate(FormComponent formComponent)
 			{
-				// Only update the component when it is visible and valid
-				if (formComponent.isVisibleInHierarchy() && formComponent.isEnabled()
-						&& formComponent.isValid() && formComponent.isEnableAllowed())
-				{
-					// Potentially update the model
-					formComponent.updateModel();
-				}
-			}
+				// Potentially update the model
+				formComponent.updateModel();
+			}		
 		});
 	}
 
