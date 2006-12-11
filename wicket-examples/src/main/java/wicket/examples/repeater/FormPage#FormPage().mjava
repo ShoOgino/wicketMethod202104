@@ -1,0 +1,65 @@
+	/**
+	 * constructor
+	 */
+	public FormPage()
+	{
+		form = new Form(this, "form");
+
+		// create a repeater that will display the list of contacts.
+		RefreshingView<Contact> refreshingView = new RefreshingView<Contact>(form, "simple")
+		{
+			@Override
+			protected Iterator<IModel<Contact>> getItemModels()
+			{
+				// for simplicity we only show the first 10 contacts
+				Iterator<Contact> contacts = DatabaseLocator.getDatabase().find(0, 10, "firstName",
+						true).iterator();
+
+				// the iterator returns contact objects, but we need it to
+				// return models, we use this handy adapter class to perform
+				// on-the-fly conversion.
+				return new ModelIteratorAdapter<Contact>(contacts)
+				{
+
+					protected IModel<Contact> model(Contact object)
+					{
+						return new DetachableContactModel(object);
+					}
+
+				};
+
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void populateItem(final Item<Contact> item)
+			{
+				// populate the row of the repeater
+				IModel contact = item.getModel();
+				new ActionPanel(item, "actions", contact);
+				// FIXME use CompoundPropertyModel!
+				new TextField(item, "id", new PropertyModel(contact, "id"));
+				new TextField(item, "firstName", new PropertyModel(contact, "firstName"));
+				new TextField(item, "lastName", new PropertyModel(contact, "lastName"));
+				new TextField(item, "homePhone", new PropertyModel(contact, "homePhone"));
+				new TextField(item, "cellPhone", new PropertyModel(contact, "cellPhone"));
+			}
+
+			@Override
+			protected Item<Contact> newItem(MarkupContainer parent, String id, int index,
+					IModel<Contact> model)
+			{
+				// this item sets markup class attribute to either 'odd' or
+				// 'even' for decoration
+				return new OddEvenItem<Contact>(parent, id, index, model);
+			}
+
+		};
+
+		// because we are in a form we need to preserve state of the component
+		// hierarchy (because it might contain things like form errors that
+		// would be lost if the hierarchy for each item was recreated every
+		// request by default), so we use an item reuse strategy.
+		refreshingView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+	}
+
