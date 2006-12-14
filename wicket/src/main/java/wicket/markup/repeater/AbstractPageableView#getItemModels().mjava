@@ -1,0 +1,18 @@
+	/**
+	 * This method retrieves the subset of models for items in the current page
+	 * and allows RefreshingView to generate items.
+	 * 
+	 * @return iterator over models for items in the current page
+	 */
+	protected Iterator getItemModels()
+	{
+		int offset = getViewOffset();
+		int size = getViewSize();
+
+		Iterator models = getItemModels(offset, size);
+
+		models = new CappedIteratorAdapter(models, size);
+
+		return models;
+	}
+
