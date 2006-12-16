@@ -13,7 +13,7 @@
 	 *             operation.
 	 * @return This
 	 */
-	final MarkupContainer add(final Component<?> child)
+	final MarkupContainer<?> add(final Component<?> child)
 	{
 		if (child == null)
 		{
@@ -27,8 +27,7 @@
 		}
 
 		// Add to map
-		addedComponent(child);
-		Component replaced = put(child);
+		Component<?> replaced = put(child);
 		child.setFlag(FLAG_REMOVED_FROM_PARENT, false);
 		if (replaced != null)
 		{
@@ -42,6 +41,8 @@
 			String replacedId = (replaced.hasMarkupIdMetaData()) ? replaced.getMarkupId() : null;
 			child.setMarkupIdMetaData(replacedId);
 		}
+		// now call addedComponent (after removedComponent)
+		addedComponent(child);
 
 		return this;
 	}

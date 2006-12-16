@@ -6,9 +6,12 @@
 	 *            The child to put into the map
 	 * @return Any component that was replaced
 	 */
-	private final Component put(final Component<?> child)
+	private final Component<?> put(final Component<?> child)
 	{
-		int index = children_indexOf(child);
+		// search for the child by id. So that it will
+		// find the right index for the id instead of looking
+		// if the component itself is already children.
+		int index = children_indexOf(child.getId());
 		if (index == -1)
 		{
 			children_add(child);
