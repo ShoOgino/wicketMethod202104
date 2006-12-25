@@ -33,13 +33,9 @@
 
 			// Make it a wicket component. Otherwise it would be RawMarkup
 			String id = Component.AUTO_COMPONENT_PREFIX + tag.getName();
-			if (requiresUniqueId.contains(tag.getName()))
-			{
-				id = id + this.index++;
-			}
 			tag.setId(id);
 
-			if (isRegisteredToHaveUniqueId(tag) == false)
+			if (wellKnownTagNames.contains(tag.getName()) == false)
 			{
 				throw new ParseException("Unkown tag name with Wicket namespace: '"
 						+ xmlTag.getName()
