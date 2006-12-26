@@ -6,10 +6,13 @@
 	{
 		onTimer(target);
 
-		// this might look strange, but it is necessary for IE not to leak :(
-		String js = "setTimeout(\"" + getCallbackScript(false, true) + "\", "
-				+ updateInterval.getMilliseconds() + ");";
-		
-		target.appendJavascript(js);
+		if (!stopped)
+		{
+			// this might look strange, but it is necessary for IE not to leak
+			String js = "setTimeout(\"" + getCallbackScript(false, true) + "\", "
+					+ updateInterval.getMilliseconds() + ");";
+
+			target.appendJavascript(js);
+		}
 	}
 
