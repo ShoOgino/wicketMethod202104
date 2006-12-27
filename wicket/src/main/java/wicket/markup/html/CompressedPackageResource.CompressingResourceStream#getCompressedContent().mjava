@@ -1,26 +1,32 @@
-		private byte[] getCompressedContent() {
-			IResourceStream stream=CompressedPackageResource.super.getResourceStream();
+		/**
+		 * 
+		 * @return byte[]
+		 */
+		private byte[] getCompressedContent()
+		{
+			IResourceStream stream = CompressedPackageResource.super.getResourceStream();
 			try
 			{
-				byte ret[]=cache.get();
-				if(ret!=null && timeStamp!=null)
+				byte ret[] = cache.get();
+				if (ret != null && timeStamp != null)
 				{
-					if(timeStamp.equals(stream.lastModifiedTime()))
+					if (timeStamp.equals(stream.lastModifiedTime()))
 					{
 						return ret;
 					}
 				}
 
-				ByteArrayOutputStream out=new ByteArrayOutputStream();
-				GZIPOutputStream zout=new GZIPOutputStream(out);
-				Streams.copy(stream.getInputStream(),zout);
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				GZIPOutputStream zout = new GZIPOutputStream(out);
+				Streams.copy(stream.getInputStream(), zout);
 				zout.close();
 				stream.close();
-				ret=out.toByteArray();
-				timeStamp=stream.lastModifiedTime();
-				cache=new SoftReference<byte[]>(ret);
+				ret = out.toByteArray();
+				timeStamp = stream.lastModifiedTime();
+				cache = new SoftReference<byte[]>(ret);
 				return ret;
-			} catch (IOException e)
+			}
+			catch (IOException e)
 			{
 				throw new RuntimeException(e);
 			}

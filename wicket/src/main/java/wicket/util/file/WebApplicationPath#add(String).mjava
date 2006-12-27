@@ -1,25 +1,25 @@
 	/**
-	 * @param folder
+	 * @param path
 	 *            add a path that is lookup through the servlet context
 	 */
-	public void add(String folder)
+	public void add(String path)
 	{
-		final Folder f = new Folder(folder);
-		if (f.exists())
+		final Folder folder = new Folder(path);
+		if (folder.exists())
 		{
-			folders.add(f);
+			folders.add(folder);
 		}
 		else
 		{
-			if (!folder.startsWith("/"))
+			if (!path.startsWith("/"))
 			{
-				folder = "/" + folder;
+				path = "/" + path;
 			}
-			if (!folder.endsWith("/"))
+			if (!path.endsWith("/"))
 			{
-				folder += "/";
+				path += "/";
 			}
-			webappPaths.add(folder);
+			webappPaths.add(path);
 		}
 	}
 

@@ -7,10 +7,9 @@
 	 */
 	public URL find(final String pathname)
 	{
-		for (Comparable comparable : folders)
+		for (Folder folder : folders)
 		{
-			Folder folder = (Folder)comparable;
-			File file = new File(folder, pathname);
+			final File file = new File(folder, pathname);
 			if (file.exists())
 			{
 				try
@@ -23,9 +22,9 @@
 				}
 			}
 		}
-		for (Comparable comparable : webappPaths)
+
+		for (String path : webappPaths)
 		{
-			final String path = (String)comparable;
 			try
 			{
 				final URL file = servletContext.getResource(path + pathname);
