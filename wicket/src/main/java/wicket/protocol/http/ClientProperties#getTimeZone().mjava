@@ -7,8 +7,8 @@
 	{
 		if (timeZone == null)
 		{
-			String utcOffset = (String)data.get(ClientProperties.UTC_OFFSET);
-			if (utcOffset != null)
+			String utc = getUtcOffset();
+			if (utc != null)
 			{
 				// apparently it is platform dependent on whether you get the
 				// offset in a decimal form or not. This parses the decimal
@@ -16,11 +16,11 @@
 				// possibilities
 				// such as getting the format in +2.5 or -1.2
 
-				int dotPos = utcOffset.indexOf('.');
+				int dotPos = utc.indexOf('.');
 				if (dotPos >= 0)
 				{
-					String hours = utcOffset.substring(0, dotPos);
-					String hourPart = utcOffset.substring(dotPos + 1);
+					String hours = utc.substring(0, dotPos);
+					String hourPart = utc.substring(dotPos + 1);
 
 					if (hours.startsWith("+"))
 					{
@@ -45,12 +45,12 @@
 				}
 				else
 				{
-					int offset = Integer.parseInt(utcOffset);
+					int offset = Integer.parseInt(utc);
 					if (offset < 0)
 					{
-						utcOffset = utcOffset.substring(1);
+						utc = utc.substring(1);
 					}
-					timeZone = TimeZone.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") + utcOffset);
+					timeZone = TimeZone.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") + utc);
 				}
 			}
 		}
