@@ -2,9 +2,10 @@
 	 * @see wicket.markup.html.resources.PackagedResourceReference#createPackageResourceReference(wicket.Application,
 	 *      java.lang.Class, java.lang.String)
 	 */
-	protected PackageResourceReference createPackageResourceReference(Application app, Class scope,
-			String name)
+	protected ResourceReference createPackageResourceReference(Application app, Class scope, String name)
 	{
-		return new CompressedPackageResourceReference(app, scope, name);
+		CompressedResourceReference compressedResourceReference = new CompressedResourceReference(scope, name);
+		compressedResourceReference.bind(app);
+		return compressedResourceReference;
 	}
 
