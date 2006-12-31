@@ -5,7 +5,7 @@
 		 * @param name
 		 *            Component name
 		 */
-		public InputForm(MarkupContainer parent, String name)
+		public InputForm(final MarkupContainer parent, final String name)
 		{
 			super(parent, name, new CompoundPropertyModel<FormInputModel>(new FormInputModel()));
 
@@ -44,7 +44,7 @@
 			new ListView<String>(group, "numbers", NUMBERS)
 			{
 				@Override
-				protected void populateItem(ListItem<String> item)
+				protected void populateItem(final ListItem<String> item)
 				{
 					new Radio<String>(item, "radio", item.getModel());
 					new Label(item, "number", item.getModelObject());
@@ -55,7 +55,7 @@
 			new ListView<String>(checks, "numbers", NUMBERS)
 			{
 				@Override
-				protected void populateItem(ListItem<String> item)
+				protected void populateItem(final ListItem<String> item)
 				{
 					new Check<String>(item, "check", item.getModel());
 					new Label(item, "number", item.getModelObject());
@@ -71,12 +71,12 @@
 				 * @see wicket.Component#getConverter(java.lang.Class)
 				 */
 				@Override
-				public IConverter getConverter(Class type)
+				public IConverter getConverter(final Class type)
 				{
 					return new SimpleConverterAdapter()
 					{
 						@Override
-						public Object toObject(String value)
+						public Object toObject(final String value)
 						{
 							try
 							{
@@ -89,7 +89,7 @@
 						}
 
 						@Override
-						public String toString(Object value)
+						public String toString(final Object value)
 						{
 							return value != null ? value.toString() : null;
 						}
@@ -104,7 +104,7 @@
 				 * @see wicket.Component#getConverter(java.lang.Class)
 				 */
 				@Override
-				public IConverter getConverter(Class type)
+				public IConverter getConverter(final Class type)
 				{
 					// US telephone number mask
 					return new MaskConverter("(###) ###-####", UsPhoneNumber.class);
