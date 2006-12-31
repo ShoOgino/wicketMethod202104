@@ -8,7 +8,7 @@
 				getMountPath().length());
 		final PageParameters parameters = new PageParameters(decodeParameters(parametersFragment,
 				requestParameters.getParameters()));
-		String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
+		String pageMapName = (String)parameters.remove(AbstractWebRequestCodingStrategy.PAGEMAP);
 		if(requestParameters.getPageMapName() == null)
 		{
 			requestParameters.setPageMapName(pageMapName);
@@ -21,7 +21,7 @@
 		final BookmarkablePageRequestTarget target;
 		
 		final String bookmarkableInterfaceListener = (String) parameters.remove(
-				WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
+				AbstractWebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
 		
 		// Do the parameters contain component path and listener interface?
 		if (bookmarkableInterfaceListener != null) {
@@ -34,7 +34,7 @@
 			if (pathComponents.length < 4)
 			{
 				throw new WicketRuntimeException("Internal error parsing "
-						+ WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME + " = " + bookmarkableInterfaceListener);
+						+ AbstractWebRequestCodingStrategy.INTERFACE_PARAMETER_NAME + " = " + bookmarkableInterfaceListener);
 			}
 			final String interfaceName = pathComponents[pathComponents.length - 1];
 			final String componentPath = bookmarkableInterfaceListener.substring(1, 
