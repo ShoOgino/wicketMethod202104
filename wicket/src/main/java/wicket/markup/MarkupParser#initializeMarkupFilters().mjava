@@ -6,6 +6,7 @@
 	{
 		// Chain together all the different markup filters and configure them
 		this.markupFilterChain = xmlParser;
+		xmlParser.setPriority(0);
 
 		registerMarkupFilter(new WicketTagIdentifier(this.markup));
 		registerMarkupFilter(new TagTypeHandler());
@@ -33,5 +34,7 @@
 				registerMarkupFilter(new HeadForceTagIdHandler(containerInfo.getContainerClass()));
 			}
 		}
+		
+		registerMarkupFilter(new PrependContextPathHandler());
 	}
 
