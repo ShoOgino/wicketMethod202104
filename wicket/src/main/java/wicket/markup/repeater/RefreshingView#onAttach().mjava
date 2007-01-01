@@ -3,9 +3,9 @@
 	 * selected item reuse strategy
 	 */
 	@Override
-	protected void internalOnAttach()
+	protected void onAttach()
 	{
-		super.internalOnAttach();
+		super.onAttach();
 
 		if (isVisibleInHierarchy())
 		{
@@ -18,13 +18,15 @@
 					String id = RefreshingView.this.newChildId();
 					Item<T> item = RefreshingView.this.newItem(parent, id, index, model);
 					RefreshingView.this.populateItem(item);
+					item.attach();
 					return item;
 				}
 
 			};
 
 			Iterator<IModel<T>> models = getItemModels();
-			Iterator<Item<T>> items = getItemReuseStrategy().getItems(RefreshingView.this, itemFactory, models, getItems());
+			Iterator<Item<T>> items = getItemReuseStrategy().getItems(RefreshingView.this,
+					itemFactory, models, getItems());
 			removeAll();
 			addItems(items);
 		}

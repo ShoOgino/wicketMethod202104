@@ -1,0 +1,20 @@
+	/**
+	 * @see wicket.markup.html.form.FormComponent#onDetach()
+	 */
+	@Override
+	protected void onDetach()
+	{
+		/*
+		 * Clean up at the end of the request. This means closing all
+		 * inputstreams which might have been opened from the fileUpload.
+		 */
+		
+		if (fileUpload != null)
+		{
+			fileUpload.closeStreams();
+			fileUpload = null;
+		}
+
+		super.onDetach();
+	}
+

@@ -1,0 +1,30 @@
+	/**
+	 * Tests traps for bad onattach/ondetach overrides
+	 */
+	public void testAttachDetachTraps()
+	{
+		try
+		{
+			tester.setupRequestAndResponse();
+			Page page = new BadOnAttachPage();
+			page.attach();
+			fail("bad onAttach() override did not trigger an exception");
+		}
+		catch (IllegalStateException e)
+		{
+			// noop
+		}
+		try
+		{
+			tester.setupRequestAndResponse();
+			Page page = new BadOnDetachPage();
+			page.attach();
+			page.detach();
+			fail("bad onDetach() override did not trigger an exception");
+		}
+		catch (IllegalStateException e)
+		{
+			// noop
+		}
+	}
+
