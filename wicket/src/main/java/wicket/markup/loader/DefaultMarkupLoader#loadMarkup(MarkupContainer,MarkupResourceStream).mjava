@@ -2,14 +2,17 @@
 	 * @see wicket.markup.loader.IMarkupLoader#loadMarkup(wicket.MarkupContainer,
 	 *      wicket.markup.MarkupResourceStream)
 	 */
+	@Override
 	public final MarkupFragment loadMarkup(final MarkupContainer container,
 			final MarkupResourceStream markupResourceStream) throws IOException,
 			ResourceStreamNotFoundException
 	{
-		// read and parse the markup
-		MarkupFragment markup = application.getMarkupSettings().getMarkupParserFactory()
-				.newMarkupParser(markupResourceStream).readAndParse();
+		final Application application = Application.get();
 
-		return markup;
+		IMarkupLoader loader = new InheritedMarkupMarkupLoader(application)
+				.setParent(new HeaderCleanupMarkupLoader(application)
+						.setParent(new BaseMarkupLoader()));
+
+		return loader.loadMarkup(container, markupResourceStream);
 	}
 
