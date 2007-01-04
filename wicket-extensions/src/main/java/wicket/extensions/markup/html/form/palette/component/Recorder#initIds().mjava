@@ -1,0 +1,26 @@
+	/**
+	 * Syncrhonize ids collection from the palette's model
+	 */
+	private void initIds()
+	{
+		// construct the model string based on selection collection
+		IChoiceRenderer renderer = getPalette().getChoiceRenderer();
+		StringBuffer modelStringBuffer = new StringBuffer();
+		Iterator selection = getPalette().getModelCollection().iterator();
+
+		int i = 0;
+		while (selection.hasNext())
+		{
+			modelStringBuffer.append(renderer.getIdValue(selection.next(), i++));
+			if (selection.hasNext())
+			{
+				modelStringBuffer.append(",");
+			}
+		}
+
+		// set model and update ids array
+		String modelString = modelStringBuffer.toString();
+		setModel(new Model(modelString));
+		updateIds(modelString);
+	}
+
