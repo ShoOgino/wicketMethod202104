@@ -10,19 +10,27 @@
 		// TODO check can this be called everytime at this place? Putting should
 		// be called after the rendering so it should be ok.
 		page.internalDetach();
-		byte[] bytes = Objects.objectToByteArray(page);
 		FileOutputStream fos = null;
 		try
 		{
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			try
+			{
+				new ObjectOutputStream(out).writeObject(page);
+			}
+			finally
+			{
+				out.close();
+			}
+			byte[] bytes = out.toByteArray();
 			fos = new FileOutputStream(pageFile);
 			ByteBuffer bb = ByteBuffer.wrap(bytes);
 			fos.getChannel().write(bb);
 		}
 		catch (Exception e)
 		{
-			log.debug("Error saving page " + page.getId() + " with version "
-					+ page.getCurrentVersionNumber() + " for the sessionid " + sessionId
-					+ " from disc", e);
+			log.error("Error saving page " + page.getId() + " with version "
+					+ page.getCurrentVersionNumber() + " for the sessionid " + sessionId, e);
 		}
 		finally
 		{
