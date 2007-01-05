@@ -1,12 +1,55 @@
 	/**
 	 * @see wicket.IInitializer#init(wicket.Application)
 	 */
+	@SuppressWarnings("unchecked")
 	public void init(wicket.Application application)
 	{
+		/*
+		 * This method uses the wicket.mbean.server.impl property to know which
+		 * MBeanServer to get, but it could just as easily allow users to
+		 * specify the MBeanServer per Application by changing the line:
+		 * 
+		 * String mbeanServerImplClass =
+		 * System.getProperty("wicket.mbean.server.impl");
+		 * 
+		 * TO
+		 * 
+		 * String mbeanServerImplClass =
+		 * System.getProperty(System.getProperty("wicket." + name +
+		 * ".mbean.server.impl"), "wicket.mbean.server.impl");
+		 * 
+		 * That will allow users to specify a per application MBeanServer
+		 * implemenation class. However, the global reference to the MBeanServer
+		 * will have to be changed to maybe like a HashMap where the key is the
+		 * Application name and the value is the reference to that Application's
+		 * specified MBeanServer.
+		 */
+
 		try
 		{
 			String name = application.getName();
-			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+			ArrayList<MBeanServer> mbeanServers = (ArrayList<MBeanServer>)MBeanServerFactory
+					.findMBeanServer(null);
+
+			mbeanServer = mbeanServers.get(0); // set the MBeanServer to the
+			// zero entry as a default
+			String mbeanServerImplClass = System.getProperty("wicket.mbean.server.impl");
+			if (mbeanServerImplClass != null)
+			{
+				for (MBeanServer mbs : mbeanServers)
+				{
+					if (mbs.getClass().getName().equals(mbeanServerImplClass))
+					{
+						mbeanServer = mbs;
+						/*
+						 * this will cause the first instance to be accepted in
+						 * the case that there is more than one MBeanServer of
+						 * the given implementation Class
+						 */
+						break;
+					}
+				}
+			}
 
 			// register top level application object, but first check whether
 			// multiple instances of the same application (name) are running and
@@ -15,7 +58,7 @@
 			ObjectName appBeanName = new ObjectName(domain + ":type=Application");
 			String tempDomain = domain;
 			int i = 0;
-			while (mbs.isRegistered(appBeanName))
+			while (mbeanServer.isRegistered(appBeanName))
 			{
 				tempDomain = name + "-" + i++;
 				appBeanName = new ObjectName(tempDomain + ":type=Application");
@@ -23,30 +66,30 @@
 			domain = tempDomain;
 
 			Application appBean = new Application(application);
-			register(mbs, appBean, appBeanName);
+			register(mbeanServer, appBean, appBeanName);
 
-			register(mbs, new ApplicationSettings(application), new ObjectName(domain
+			register(mbeanServer, new ApplicationSettings(application), new ObjectName(domain
 					+ ":type=Application,name=ApplicationSettings"));
-			register(mbs, new DebugSettings(application), new ObjectName(domain
+			register(mbeanServer, new DebugSettings(application), new ObjectName(domain
 					+ ":type=Application,name=DebugSettings"));
-			register(mbs, new MarkupSettings(application), new ObjectName(domain
+			register(mbeanServer, new MarkupSettings(application), new ObjectName(domain
 					+ ":type=Application,name=MarkupSettings"));
-			register(mbs, new ResourceSettings(application), new ObjectName(domain
+			register(mbeanServer, new ResourceSettings(application), new ObjectName(domain
 					+ ":type=Application,name=ResourceSettings"));
-			register(mbs, new PageSettings(application), new ObjectName(domain
+			register(mbeanServer, new PageSettings(application), new ObjectName(domain
 					+ ":type=Application,name=PageSettings"));
-			register(mbs, new RequestCycleSettings(application), new ObjectName(domain
+			register(mbeanServer, new RequestCycleSettings(application), new ObjectName(domain
 					+ ":type=Application,name=RequestCycleSettings"));
-			register(mbs, new SecuritySettings(application), new ObjectName(domain
+			register(mbeanServer, new SecuritySettings(application), new ObjectName(domain
 					+ ":type=Application,name=SecuritySettings"));
-			register(mbs, new SessionSettings(application), new ObjectName(domain
+			register(mbeanServer, new SessionSettings(application), new ObjectName(domain
 					+ ":type=Application,name=SessionSettings"));
-			register(mbs, new CookieValuePersisterSettings(application), new ObjectName(domain
-					+ ":type=Application,name=CookieValuePersisterSettings"));
+			register(mbeanServer, new CookieValuePersisterSettings(application), new ObjectName(
+					domain + ":type=Application,name=CookieValuePersisterSettings"));
 
 			RequestLogger sessionsBean = new RequestLogger(application);
 			ObjectName sessionsBeanName = new ObjectName(domain + ":type=RequestLogger");
-			register(mbs, sessionsBean, sessionsBeanName);
+			register(mbeanServer, sessionsBean, sessionsBeanName);
 		}
 		catch (MalformedObjectNameException e)
 		{

@@ -3,20 +3,22 @@
 	 */
 	public void destroy(wicket.Application application)
 	{
-		MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-		for (ObjectName objectName : registered)
+		if (mbeanServer != null)
 		{
-			try
+			for (ObjectName objectName : registered)
 			{
-				mbs.unregisterMBean(objectName);
-			}
-			catch (InstanceNotFoundException e)
-			{
-				log.error(e.getMessage(), e);
-			}
-			catch (MBeanRegistrationException e)
-			{
-				log.error(e.getMessage(), e);
+				try
+				{
+					mbeanServer.unregisterMBean(objectName);
+				}
+				catch (InstanceNotFoundException e)
+				{
+					log.error(e.getMessage(), e);
+				}
+				catch (MBeanRegistrationException e)
+				{
+					log.error(e.getMessage(), e);
+				}
 			}
 		}
 	}
