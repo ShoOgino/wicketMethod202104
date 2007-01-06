@@ -32,15 +32,22 @@
 
 		// compare the model objects of the group and self, if the same add the
 		// checked attribute, first check if there was a raw input on the group.
+		boolean checked = false;
+
 		if (group.hasRawInput())
 		{
 			String rawInput = group.getRawInput();
 			if (rawInput != null && rawInput.equals(value))
 			{
-				tag.put("checked", "checked");
+				checked = true;
 			}
 		}
 		else if (Objects.equal(group.getModelObject(), getModelObject()))
+		{
+			checked = true;
+		}
+
+		if (checked)
 		{
 			tag.put("checked", "checked");
 		}
@@ -67,7 +74,7 @@
 
 		if (!isActionAuthorized(ENABLE) || !isEnabled() || !group.isEnabled())
 		{
-			tag.put(ATTR_DISABLED, ATTR_DISABLED);
+			tag.put("disabled", "disabled");
 		}
 	}
 
