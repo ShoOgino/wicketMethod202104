@@ -1,11 +1,8 @@
 	/**
-	 * Looks for a given pathname along this path
 	 * 
-	 * @param pathname
-	 *            The filename with possible path
-	 * @return The url located on the path
+	 * @see wicket.util.file.IResourceFinder#find(java.lang.String)
 	 */
-	public URL find(final String pathname)
+	public IResourceStream find(final String pathname)
 	{
 		for (Folder folder : folders)
 		{
@@ -13,14 +10,7 @@
 
 			if (file.exists())
 			{
-				try
-				{
-					return file.toURI().toURL();
-				}
-				catch (MalformedURLException ex)
-				{
-					// ignore
-				}
+				return new FileResourceStream(file);
 			}
 		}
 

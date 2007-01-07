@@ -12,30 +12,6 @@
 		}
 
 		// Try to find file resource on the path supplied
-		final URL file = finder.find(path);
-
-		// Found resource?
-		if (file != null)
-		{
-			// Return file resource
-			IResourceStream stream = new UrlResourceStream(file);
-
-			if (log.isDebugEnabled())
-			{
-				if (stream != null)
-				{
-					log.error("ResourceFinder found a file (URL) but the locator failed to create the UrlResourceStream. Maybe a classloader issue?");
-				}
-				else
-				{
-					log.debug("'file' classLoader: " + file.getClass().getClassLoader().toString()
-							+ "; 'stream' classLoader: "
-							+ stream.getClass().getClassLoader().toString());
-				}
-			}
-
-			return stream;
-		}
-		return null;
+		return finder.find(path);
 	}
 

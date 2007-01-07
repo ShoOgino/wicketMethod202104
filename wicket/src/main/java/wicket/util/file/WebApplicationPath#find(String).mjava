@@ -1,25 +1,15 @@
 	/**
-	 * Looks for a given pathname along this path
 	 * 
-	 * @param pathname
-	 *            The filename with possible path
-	 * @return The file located on the path
+	 * @see wicket.util.file.IResourceFinder#find(java.lang.String)
 	 */
-	public URL find(final String pathname)
+	public IResourceStream find(final String pathname)
 	{
 		for (Folder folder : folders)
 		{
 			final File file = new File(folder, pathname);
 			if (file.exists())
 			{
-				try
-				{
-					return file.toURI().toURL();
-				}
-				catch (MalformedURLException ex)
-				{
-					// ignore
-				}
+				return new FileResourceStream(file);
 			}
 		}
 
@@ -27,10 +17,16 @@
 		{
 			try
 			{
-				final URL file = servletContext.getResource(path + pathname);
-				if (file != null)
+				final URL url = servletContext.getResource(path + pathname);
+				if (url != null)
 				{
-					return file;
+					IResourceStream stream = new UrlResourceStream(url);
+					if (stream == null)
+					{
+						log.error("ClassLoader problem: found the URL, but was unable to load it. URL="
+										+ url.toExternalForm());
+					}
+					return stream;
 				}
 			}
 			catch (Exception ex)
