@@ -1,0 +1,51 @@
+	/**
+	 * Locate a resource. See class comments for more details.
+	 * 
+	 * @param clazz
+	 *            The class requesting the resource
+	 * @param path
+	 *            The path of the resource without extension
+	 * @param style
+	 *            A theme or style (see {@link wicket.Session})
+	 * @param locale
+	 *            The Locale to apply
+	 * @param extension
+	 *            the filname's extensions
+	 * 
+	 * @return The Resource, or null if not found.
+	 */
+	public IResourceStream locate(final Class clazz, String path, final String style,
+			final Locale locale, final String extension)
+	{
+		// Try the various combinations of style, locale and extension to find
+		// the resource.
+		
+		// Most outer loop are the styles and variations
+		Iterator<String> styleIter = new StyleAndVariationResourceNameIterator(path, style, null);
+		while (styleIter.hasNext())
+		{
+			String newPath = styleIter.next();
+
+			// next is the Locale
+			Iterator<String> localeIter = new LocaleResourceNameIterator(newPath, locale);
+			while (localeIter.hasNext())
+			{
+				newPath = localeIter.next();
+
+				// and than the possible resource extensions
+				Iterator<String> extIter = new ExtensionResourceNameIterator(newPath, extension);
+				while (extIter.hasNext())
+				{
+					newPath = extIter.next();
+					IResourceStream stream = locate(clazz, newPath);
+					if (stream != null)
+					{
+						return stream;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+

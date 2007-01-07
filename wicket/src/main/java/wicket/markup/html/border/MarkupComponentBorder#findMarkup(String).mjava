@@ -1,22 +1,33 @@
+	/**
+	 * 
+	 * @param extension
+	 * @return MarkupFragment
+	 */
 	@SuppressWarnings("unchecked")
-	private MarkupFragment findMarkup()
+	private MarkupFragment findMarkup(final String extension)
 	{
 		// Get locator to search for the resource
-		final IResourceStreamLocator locator = Application.get().getResourceSettings()
-				.getResourceStreamLocator();
+		final IResourceStreamFactory locator = Application.get().getResourceSettings()
+				.getResourceStreamFactory();
 
 		final Session session = Session.get();
+		final String style = session.getStyle();
+		final Locale locale = session.getLocale();
+
 		MarkupResourceStream markupResourceStream = null;
 		Class containerClass = getClass();
+
 		while (containerClass != MarkupComponentBorder.class)
 		{
-			final IResourceStream resourceStream = locator.locate(containerClass, containerClass
-					.getName().replace('.', '/'), session.getStyle(), session.getLocale(), "html");
+			String path = containerClass.getName().replace('.', '/');
+			IResourceStream resourceStream = locator.locate(containerClass, path, style, locale,
+					extension);
 
 			// Did we find it already?
 			if (resourceStream != null)
 			{
-				ContainerInfo ci = new ContainerInfo(containerClass,session.getLocale(),session.getStyle(),null,"html",null);
+				ContainerInfo ci = new ContainerInfo(containerClass, locale, style, null,
+						extension, null);
 				markupResourceStream = new MarkupResourceStream(resourceStream, ci, containerClass);
 			}
 
@@ -28,7 +39,7 @@
 		try
 		{
 			markup = Application.get().getMarkupSettings().getMarkupParserFactory()
-			.newMarkupParser(markupResourceStream).readAndParse();
+					.newMarkupParser(markupResourceStream).readAndParse();
 		}
 		catch (Exception e)
 		{
