@@ -1,9 +1,9 @@
 		/**
-		 * @see wicket.util.resource.locator.AbstractResourceStreamLocator#locate(java.lang.Class,
+		 * @see wicket.util.resource.locator.ResourceStreamFactory#locate(java.lang.Class,
 		 *      java.lang.String)
 		 */
 		@Override
-		protected IResourceStream locate(final Class clazz, final String path)
+		public IResourceStream locate(final Class clazz, final String path)
 		{
 			// Log attempt
 			if (log.isDebugEnabled())
@@ -42,7 +42,7 @@
 				throw new WicketRuntimeException(e);
 			}
 
-			// resource not found; fall back on class loading
-			return classLoaderLocator.locate(clazz, path);
+			// resource not found; fall back on Wicket default
+			return super.locate(clazz, path);
 		}
 
