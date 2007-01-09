@@ -13,11 +13,12 @@
 		final IBookmarkablePageRequestTarget target = (IBookmarkablePageRequestTarget)requestTarget;
 
 		PageParameters pageParameters = target.getPageParameters();
-		
-		// If the target contains component path and request target interface, encode it.
-		if (target instanceof BookmarkableListenerInterfaceRequestTarget) 
+
+		// If the target contains component path and request target interface,
+		// encode it.
+		if (target instanceof BookmarkableListenerInterfaceRequestTarget)
 		{
-			BookmarkableListenerInterfaceRequestTarget interfaceRequestTarget = (BookmarkableListenerInterfaceRequestTarget) target;
+			BookmarkableListenerInterfaceRequestTarget interfaceRequestTarget = (BookmarkableListenerInterfaceRequestTarget)target;
 			final AppendingStringBuffer value = new AppendingStringBuffer(32);
 			value.append(Component.PATH_SEPARATOR);
 			value.append(interfaceRequestTarget.getComponentPath());
@@ -30,7 +31,7 @@
 			}
 			pageParameters.put(AbstractWebRequestCodingStrategy.INTERFACE_PARAMETER_NAME, value);
 		}
-		
+
 		String pagemap = pageMapName != null ? pageMapName : target.getPageMapName();
 		if (pagemap != null)
 		{
