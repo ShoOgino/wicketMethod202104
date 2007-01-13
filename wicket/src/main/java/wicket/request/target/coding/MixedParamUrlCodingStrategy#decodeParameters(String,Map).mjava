@@ -1,0 +1,31 @@
+	/** {@inheritDoc} */
+	@SuppressWarnings("unchecked")
+	protected ValueMap decodeParameters(String urlFragment, Map urlParameters)
+	{
+		PageParameters params = new PageParameters();
+		// Add all url parameters
+		params.putAll(urlParameters);
+		String urlPath = urlFragment;
+		if (urlPath.startsWith("/"))
+		{
+			urlPath = urlPath.substring(1);
+		}
+
+		if (urlPath.length() > 0)
+		{
+			String[] pathParts = urlPath.split("/");
+			if (pathParts.length > parameterNames.length)
+			{
+				throw new IllegalArgumentException(
+						"Too many path parts, please provide sufficient number of path parameter names");
+			}
+
+			for (int i = 0; i < pathParts.length; i++)
+			{
+				params.put(parameterNames[i], pathParts[i]);
+			}
+		}
+
+		return params;
+	}
+
