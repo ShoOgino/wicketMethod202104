@@ -5,7 +5,8 @@
 	 */
 	protected final String getJsTimeoutCall(final Duration updateInterval)
 	{
-		return "setTimeout(function() { " + getCallbackScript(false, true) + " }, "
+		// this might look strange, but it is necessary for IE not to leak :(
+		return "setTimeout(\"" + getCallbackScript(false, true) + "\", "
 				+ updateInterval.getMilliseconds() + ");";
 	}
 
