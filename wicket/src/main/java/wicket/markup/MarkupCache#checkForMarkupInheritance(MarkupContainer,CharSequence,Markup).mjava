@@ -41,15 +41,6 @@
 		// with the base markup
 		afterLoadListeners.add(baseMarkup.getResource(), new IChangeListener()
 		{
-			public void onChange()
-			{
-				if (log.isDebugEnabled())
-				{
-					log.debug("Remove derived markup from cache: " + markup.getResource());
-				}
-				removeMarkup(key, markup.getResource());
-			}
-
 			/**
 			 * Make sure there is only one listener per derived markup
 			 * 
@@ -68,6 +59,15 @@
 			public int hashCode()
 			{
 				return key.hashCode();
+			}
+
+			public void onChange()
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("Remove derived markup from cache: " + markup.getResource());
+				}
+				removeMarkup(key, markup.getResource());
 			}
 		});
 
