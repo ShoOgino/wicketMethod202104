@@ -17,7 +17,14 @@
 			final String style)
 	{
 		String absolutePath = Packages.absolutePath(scope, path);
+		String extension = null;
+		int index = absolutePath.lastIndexOf(".");
+		if (index != -1)
+		{
+			extension = absolutePath.substring(index+1);
+			absolutePath = absolutePath.substring(0,index);
+		}
 		return Application.get().getResourceSettings().getResourceStreamFactory().locate(scope,
-				absolutePath, style, locale, null) != null;
+				absolutePath, style, locale, extension) != null;
 	}
 

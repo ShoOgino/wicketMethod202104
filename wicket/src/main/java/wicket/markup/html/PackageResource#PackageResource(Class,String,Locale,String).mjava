@@ -18,7 +18,7 @@
 			final String style)
 	{
 		// Convert resource path to absolute path relative to base package
-		this.absolutePath = Packages.absolutePath(scope, path);
+		String absolutePath = Packages.absolutePath(scope, path);
 
 		IPackageResourceGuard guard = Application.get().getResourceSettings()
 				.getPackageResourceGuard();
@@ -28,6 +28,17 @@
 					+ " may not be accessed");
 		}
 
+		int index = absolutePath.lastIndexOf(".");
+		if (index != -1)
+		{
+			extension = absolutePath.substring(index+1);
+			absolutePath = absolutePath.substring(0,index);
+		}
+		else
+		{
+			this.extension = null;
+		}
+		this.absolutePath = absolutePath;
 		this.scope = scope;
 		this.path = path;
 		this.locale = locale;
