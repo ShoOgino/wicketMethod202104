@@ -3,15 +3,14 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param key
-	 *            Key under which markup should be cached
 	 * @param markupResourceStream
 	 *            The markup resource stream to load
 	 * @return The markup
 	 */
-	private final Markup loadMarkup(final MarkupContainer container, final CharSequence key,
+	private final Markup loadMarkup(final MarkupContainer container,
 			final MarkupResourceStream markupResourceStream)
 	{
+		CharSequence cacheKey = markupResourceStream.getCacheKey();
 		try
 		{
 			// read and parse the markup
@@ -20,10 +19,13 @@
 
 			// Check for markup inheritance. If it contains <wicket:extend>
 			// the two markups get merged.
-			markup = checkForMarkupInheritance(container, key, markup);
+			markup = checkForMarkupInheritance(container, markup);
 
 			// add the markup to the cache
-			markupCache.put(key, markup);
+			if (cacheKey != null)
+			{
+				markupCache.put(cacheKey, markup);
+			}
 
 			// trigger all listeners registered on the markup just loaded
 			afterLoadListeners.notifyListeners(markupResourceStream);
@@ -39,10 +41,14 @@
 			log.error("Unable to read markup from " + markupResourceStream, e);
 		}
 
+		// In case of an error, remove the cache entry
 		synchronized (markupCache)
 		{
-			markupCache.remove(key);
-			afterLoadListeners.remove(markupResourceStream);
+			if (cacheKey != null)
+			{
+				markupCache.remove(cacheKey);
+				afterLoadListeners.remove(markupResourceStream);
+			}
 		}
 
 		return Markup.NO_MARKUP;

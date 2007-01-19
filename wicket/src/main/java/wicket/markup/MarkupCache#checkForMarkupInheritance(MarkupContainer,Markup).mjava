@@ -6,14 +6,11 @@
 	 * 
 	 * @param container
 	 *            The original requesting markup container
-	 * @param key
-	 *            Key under which markup should be cached
 	 * @param markup
 	 *            The markup to checked for inheritance
 	 * @return A markup object with the the base markup elements resolved.
 	 */
-	private Markup checkForMarkupInheritance(final MarkupContainer container,
-			final CharSequence key, final Markup markup)
+	private Markup checkForMarkupInheritance(final MarkupContainer container, final Markup markup)
 	{
 		// Check if markup contains <wicket:extend> which tells us that
 		// we need to read the inherited markup as well.
@@ -36,40 +33,45 @@
 							+ " Enable debug messages for wicket.util.resource.Resource to get a list of all filenames tried.");
 		}
 
-		// register an after-load listener for base markup. The listener
-		// implementation will remove the derived markup which must be merged
-		// with the base markup
-		afterLoadListeners.add(baseMarkup.getResource(), new IChangeListener()
+		final CharSequence key = markup.getResource().getCacheKey();
+		if (key != null)
 		{
-			/**
-			 * Make sure there is only one listener per derived markup
-			 * 
-			 * @see java.lang.Object#equals(java.lang.Object)
-			 */
-			public boolean equals(Object obj)
+			// register an after-load listener for base markup. The listener
+			// implementation will remove the derived markup which must be
+			// merged
+			// with the base markup
+			afterLoadListeners.add(baseMarkup.getResource(), new IChangeListener()
 			{
-				return true;
-			}
-
-			/**
-			 * Make sure there is only one listener per derived markup
-			 * 
-			 * @see java.lang.Object#hashCode()
-			 */
-			public int hashCode()
-			{
-				return key.hashCode();
-			}
-
-			public void onChange()
-			{
-				if (log.isDebugEnabled())
+				/**
+				 * Make sure there is only one listener per derived markup
+				 * 
+				 * @see java.lang.Object#equals(java.lang.Object)
+				 */
+				public boolean equals(Object obj)
 				{
-					log.debug("Remove derived markup from cache: " + markup.getResource());
+					return true;
 				}
-				removeMarkup(key, markup.getResource());
-			}
-		});
+
+				/**
+				 * Make sure there is only one listener per derived markup
+				 * 
+				 * @see java.lang.Object#hashCode()
+				 */
+				public int hashCode()
+				{
+					return key.hashCode();
+				}
+
+				public void onChange()
+				{
+					if (log.isDebugEnabled())
+					{
+						log.debug("Remove derived markup from cache: " + markup.getResource());
+					}
+					removeMarkup(markup.getResource());
+				}
+			});
+		}
 
 		// Merge base and derived markup
 		Markup mergedMarkup = new MergedMarkup(markup, baseMarkup, extendIndex);

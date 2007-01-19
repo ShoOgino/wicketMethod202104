@@ -25,40 +25,56 @@
 			}
 		}
 
-		// Look up markup tag list by class, locale, style and markup type
-		final CharSequence key = markupKey(container, clazz);
-		Markup markup = (Markup)markupCache.get(key);
+		// Get the cache key to be associated with the markup resource stream
+		final IMarkupCacheKeyProvider markupCacheKeyProvider = getMarkupCacheKeyProvider(container);
+		final CharSequence cacheKey = markupCacheKeyProvider.getCacheKey(container, clazz);
 
-		// If no markup in the cache
+		// Markup already in the cache? If cacheKey == null, than don't cache
+		// the markup resource stream
+		Markup markup = null;
+		if (cacheKey != null)
+		{
+			markup = (Markup)markupCache.get(cacheKey);
+		}
+
+		// Must Markup be loaded?
 		if (markup == null)
 		{
 			synchronized (markupCache)
 			{
-				markup = (Markup)markupCache.get(key);
+				if (cacheKey != null)
+				{
+					markup = (Markup)markupCache.get(cacheKey);
+				}
 
-				// If no markup is in the cache
+				// Must Markup be loaded?
 				if (markup == null)
 				{
-					// Ask the container to locate its associated markup
-					final IResourceStream resourceStream = container
-							.newMarkupResourceStream(containerClass);
+					// Who is going to provide the markup resource stream?
+					final IMarkupResourceStreamProvider markupResourceStreamProvider = getMarkupResourceStreamProvider(container);
+
+					// Ask the provider to locate the markup resource stream
+					final IResourceStream resourceStream = markupResourceStreamProvider
+							.getMarkupResourceStream(container, containerClass);
 
 					// Found markup?
 					if (resourceStream != null)
 					{
-						final MarkupResourceStream markupResource;
+						final MarkupResourceStream markupResourceStream;
 						if (resourceStream instanceof MarkupResourceStream)
 						{
-							markupResource = (MarkupResourceStream)resourceStream;
+							markupResourceStream = (MarkupResourceStream)resourceStream;
 						}
 						else
 						{
-							markupResource = new MarkupResourceStream(resourceStream,
+							markupResourceStream = new MarkupResourceStream(resourceStream,
 									new ContainerInfo(container), containerClass);
 						}
 
+						markupResourceStream.setCacheKey(cacheKey);
+
 						// load the markup and watch for changes
-						markup = loadMarkupAndWatchForChanges(container, key, markupResource);
+						markup = loadMarkupAndWatchForChanges(container, markupResourceStream);
 					}
 					else
 					{
@@ -69,7 +85,10 @@
 
 						// Save any markup list (or absence of one) for next
 						// time
-						markupCache.put(key, markup);
+						if (cacheKey != null)
+						{
+							markupCache.put(cacheKey, markup);
+						}
 					}
 				}
 			}
