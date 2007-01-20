@@ -1,8 +1,11 @@
 	/**
-	 * Gets a javascript header contributor that will load the template from the
-	 * given file name relative to (/in the same package as) the provided clazz
+	 * Gets a css header contributor that will load the template from the given
+	 * file name relative to (/in the same package as) the provided clazz
 	 * argument. The template will be interpolated with the given variables. The
 	 * content will be written as the body of a script tag pair.
+	 * 
+	 * @param <K>
+	 * @param <V>
 	 * 
 	 * @param clazz
 	 *            The class to be used for retrieving the classloader for
@@ -13,9 +16,9 @@
 	 *            The variables to interpolate
 	 * @return The header contributor instance
 	 */
-	public static TextTemplateHeaderContributor forJavaScript(final Class<?> clazz,
-			final String fileName, IModel<Map<?, ?>> variablesModel)
+	public static <K, V> TextTemplateHeaderContributor forCss(final Class<?> clazz,
+			final String fileName, IModel<Map<K, V>> variablesModel)
 	{
-		return forJavaScript(new PackagedTextTemplate(clazz, fileName), variablesModel);
+		return forCss(new PackagedTextTemplate(clazz, fileName), variablesModel);
 	}
 
