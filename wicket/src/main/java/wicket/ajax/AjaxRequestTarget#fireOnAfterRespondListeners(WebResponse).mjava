@@ -1,0 +1,26 @@
+	private void fireOnAfterRespondListeners(final WebResponse response)
+	{
+		if (listeners != null)
+		{
+			final Map<String, Component> components = Collections
+					.unmodifiableMap(markupIdToComponent);
+
+			// create response that will be used by listeners to append
+			// javascript
+			final IJavascriptResponse jsresponse = new IJavascriptResponse()
+			{
+
+				public void addJavascript(String script)
+				{
+					respondInvocation(response, script);
+				}
+
+			};
+
+			for (IListener listener : listeners)
+			{
+				listener.onAfterRespond(components, jsresponse);
+			}
+		}
+	}
+
