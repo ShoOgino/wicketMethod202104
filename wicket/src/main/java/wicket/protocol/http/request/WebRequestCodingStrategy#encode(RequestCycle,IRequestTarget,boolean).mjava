@@ -44,15 +44,20 @@
 		
 		if (url != null)
 		{
+			String rootPath = ((WebApplication)Application.get()).getRootPath();
+			String filterPath = ((WebApplication)Application.get()).getFilterPath();
+			
+			// Strip off leading /
 			if (url.length() > 0 && url.charAt(0) == '/')
 			{
 				url = url.subSequence(1, url.length());
 			}
-
 			if (absolutePath)
 			{
-				url = urlPrefix(requestCycle).toString() + url;
+				url = rootPath + "/" + url;
+				return requestCycle.getOriginalResponse().encodeURL(url);
 			}
+
 			String relativeUrl = requestCycle.getRequest().getRelativeURL();
 			String segments = "";
 			for (int i = 0; i < relativeUrl.length(); i++)
@@ -66,16 +71,29 @@
 					segments += "../";
 				}
 			}
-			if (segments.length() > 0)
+			PrependingStringBuffer prepender = new PrependingStringBuffer();
+			
+			prepender.prepend(url.toString());
+			if (url.length() > 0 && (url.charAt(0) == '?' || url.charAt(0) == ';'))
 			{
-				url = segments + url;
+				if (segments.length() == 0) {
+					if (filterPath.length() == 0) {
+						prepender.prepend("./");
+					}
+					else {
+						
+					}
+				}
 			}
-			else if (url.length() > 0 && (url.charAt(0) == '?' || url.charAt(0) == ';'))
+			else if (filterPath.length() > 0)
 			{
-				url = "./" + url;
+				prepender.prepend('/');
 			}
-			url = requestCycle.getOriginalResponse().encodeURL(url);
-			return url;
+			prepender.prepend(filterPath);
+			if (segments.length() > 0) {
+				prepender.prepend(segments);
+			}
+			return requestCycle.getOriginalResponse().encodeURL(prepender.toString());
 		}
 		
 		// Just return null intead of throwing an exception. So that it can be
