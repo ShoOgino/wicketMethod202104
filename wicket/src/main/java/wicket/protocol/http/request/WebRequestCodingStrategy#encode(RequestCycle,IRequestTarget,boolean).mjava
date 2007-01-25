@@ -12,14 +12,8 @@
 	 *      wicket.IRequestTarget)
 	 */
 	public final CharSequence encode(final RequestCycle requestCycle,
-			IRequestTarget requestTarget, boolean absolutePath)
+			final IRequestTarget requestTarget, final boolean absolutePath)
 	{
-		if (requestTarget instanceof IPageRequestTarget)
-		{
-			Page page = ((IPageRequestTarget)requestTarget).getPage();
-			requestTarget = new RedirectPageRequestTarget(page);
-		}
-                
 		// First check to see whether the target is mounted
 		CharSequence url = pathForTarget(requestTarget);
 		
@@ -37,6 +31,10 @@
 		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
 		{
 			url = encode(requestCycle, (IListenerInterfaceRequestTarget)requestTarget);
+		}
+		else if (requestTarget instanceof IPageRequestTarget)
+		{
+			url = encode(requestCycle, (IPageRequestTarget)requestTarget);
 		}
 		// fallthough for non-default request targets
 		else
