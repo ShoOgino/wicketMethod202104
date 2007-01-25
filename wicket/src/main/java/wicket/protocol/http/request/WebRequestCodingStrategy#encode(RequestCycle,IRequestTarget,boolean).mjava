@@ -12,8 +12,18 @@
 	 *      wicket.IRequestTarget)
 	 */
 	public final CharSequence encode(final RequestCycle requestCycle,
-			final IRequestTarget requestTarget, final boolean absolutePath)
+			IRequestTarget requestTarget, boolean absolutePath)
 	{
+		if (requestTarget instanceof IPageRequestTarget)
+		{
+			Page page = ((IPageRequestTarget)requestTarget).getPage();
+			requestTarget = new RedirectPageRequestTarget(page);
+			// Touch the page once because it could be that it did go from stateless
+			// to statefull or it was a internally made page where just a url must
+			// be made for (frames)
+			Session.get().touch(page);
+		}
+                
 		// First check to see whether the target is mounted
 		CharSequence url = pathForTarget(requestTarget);
 		
@@ -31,10 +41,6 @@
 		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
 		{
 			url = encode(requestCycle, (IListenerInterfaceRequestTarget)requestTarget);
-		}
-		else if (requestTarget instanceof IPageRequestTarget)
-		{
-			url = encode(requestCycle, (IPageRequestTarget)requestTarget);
 		}
 		// fallthough for non-default request targets
 		else
