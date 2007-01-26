@@ -41,17 +41,20 @@
 			// Get component
 			final String pageRelativeComponentPath = Strings.afterFirstPathComponent(componentPath,
 					Component.PATH_SEPARATOR);
+
+			Component component = null;
 			if (Strings.isEmpty(pageRelativeComponentPath))
 			{
-				// We have an interface that is not a redirect, but no
-				// component... that must be wrong
-				throw new WicketRuntimeException("When trying to call " + listener
-						+ ", a component must be provided");
+				component = page;
 			}
-			final Component component = page.get(pageRelativeComponentPath);
+			else
+			{
+				component = page.get(pageRelativeComponentPath);
+			}
 			if (component == null || !component.isEnabled() || !component.isVisibleInHierarchy())
 			{
-				log.info("component not enabled or visible, redirecting to calling page, component: "
+				log
+						.info("component not enabled or visible, redirecting to calling page, component: "
 								+ component);
 				return new RedirectPageRequestTarget(page);
 			}
