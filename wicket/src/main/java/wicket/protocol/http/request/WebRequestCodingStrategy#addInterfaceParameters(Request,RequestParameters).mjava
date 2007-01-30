@@ -14,7 +14,7 @@
 	protected void addInterfaceParameters(final Request request, final RequestParameters parameters)
 	{
 		// Format of interface target parameter is
-		// <page-map-name>:<path>:<version>:<interface>
+		// <page-map-name>:<path>:<version>:<interface>:<behaviourId>
 		final String requestString = request.getParameter(INTERFACE_PARAMETER_NAME);
 		if (requestString != null)
 		{
@@ -34,21 +34,27 @@
 					? PageMap.DEFAULT_NAME
 					: pageMapName);
 
-			// Extract interface name after last colon
-			final String interfaceName = pathComponents[pathComponents.length - 1];
+			// Extract behaviour ID after last colon
+			final String behaviourId = pathComponents[pathComponents.length - 1];
+			parameters.setBehaviorId(behaviourId.length() != 0
+					? behaviourId
+					: null);
+
+			// Extract interface name after second-to-last colon
+			final String interfaceName = pathComponents[pathComponents.length - 2];
 			parameters.setInterfaceName(interfaceName.length() != 0
 					? interfaceName
 					: IRedirectListener.INTERFACE.getName());
 
 			// Extract version
-			final String versionNumberString = pathComponents[pathComponents.length - 2];
+			final String versionNumberString = pathComponents[pathComponents.length - 3];
 			final int versionNumber = Strings.isEmpty(versionNumberString) ? 0 : Integer
 					.parseInt(versionNumberString);
 			parameters.setVersionNumber(versionNumber);
 
 			// Component path is everything after pageMapName and before version
 			final int start = pageMapName.length() + 1;
-			final int end = requestString.length() - interfaceName.length()
+			final int end = requestString.length() - behaviourId.length() - interfaceName.length()
 					- versionNumberString.length() - 2;
 			final String componentPath = requestString.substring(start, end);
 			parameters.setComponentPath(componentPath);

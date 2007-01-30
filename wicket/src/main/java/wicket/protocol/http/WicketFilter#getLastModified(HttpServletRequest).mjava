@@ -1,19 +1,16 @@
 	/**
 	 * Gets the last modified time stamp for the given request.
 	 * 
-	 * @param servletRequest
+	 * @param request
 	 * @return The last modified time stamp
 	 */
-	long getLastModified(final HttpServletRequest servletRequest)
+	long getLastModified(final HttpServletRequest request)
 	{
-		final String pathInfo = servletRequest.getRequestURI();
-
-		int rootPathLength = getRootPath(servletRequest).length();
-		if (pathInfo.length() > rootPathLength
-				&& pathInfo.substring(rootPathLength).startsWith(RESOURCES_PATH_PREFIX))
-		{
-			final String resourceReferenceKey = pathInfo.substring(rootPathLength
-					+ RESOURCES_PATH_PREFIX.length());
+		final String pathInfo = getRelativePath(request);
+		
+		if (pathInfo.startsWith(WebRequestCodingStrategy.RESOURCES_PATH_PREFIX)) {
+			
+			final String resourceReferenceKey = pathInfo.substring(WebRequestCodingStrategy.RESOURCES_PATH_PREFIX.length());
 
 			// Try to find shared resource
 			Resource resource = webApplication.getSharedResources().get(resourceReferenceKey);
@@ -25,7 +22,7 @@
 				{
 					Application.set(webApplication);
 
-					final WebRequest webRequest = webApplication.newWebRequest(servletRequest);
+					final WebRequest webRequest = webApplication.newWebRequest(request);
 
 					// Set parameters from servlet request
 					resource.setParameters(webRequest.getParameterMap());

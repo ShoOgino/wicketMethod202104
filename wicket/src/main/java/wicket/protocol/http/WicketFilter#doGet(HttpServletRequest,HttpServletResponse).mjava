@@ -12,6 +12,15 @@
 	public final void doGet(final HttpServletRequest servletRequest,
 			final HttpServletResponse servletResponse) throws ServletException, IOException
 	{
+		String relativePath = getRelativePath(servletRequest);
+		// Special-case for home page - we redirect to add a trailing slash.
+		if (relativePath.length() == 0 && !Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
+		{
+			String foo = servletRequest.getRequestURI() + "/";
+			servletResponse.sendRedirect(foo);
+			return;
+		}
+
 		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
 		try
 		{
