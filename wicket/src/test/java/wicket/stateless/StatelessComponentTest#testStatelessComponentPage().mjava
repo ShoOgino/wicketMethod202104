@@ -4,14 +4,17 @@
 	public void testStatelessComponentPage() throws Exception
 	{
 		executeTest(StatelessComponentPage.class, "StatelessComponentPage_result.html");
-		
+
 		application.setupRequestAndResponse();
-		application.getServletRequest().setURL("/WicketTester/WicketTester/?wicket:bookmarkablePage=:wicket.stateless.StatelessComponentPage&wicket:interface=:0:link::ILinkListener:");
+		application
+				.getServletRequest()
+				.setURL(
+						"/WicketTester/WicketTester/?wicket:bookmarkablePage=:wicket.stateless.StatelessComponentPage&wicket:interface=:0:link::ILinkListener:");
 		try
 		{
 			application.processRequestCycle();
 			assertTrue(false);
-		} 
+		}
 		catch (Exception e)
 		{
 			assertEquals("wanted exception", e.getMessage());
