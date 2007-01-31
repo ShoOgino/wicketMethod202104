@@ -64,7 +64,14 @@
 		}
 		
 		url.append(Component.PATH_SEPARATOR);
-
+		url.append(Component.PATH_SEPARATOR);
+		
+		// Add behaviourId
+		RequestParameters params = requestTarget.getRequestParameters();
+		if (params != null && params.getBehaviorId() != null)
+		{
+			url.append(params.getBehaviorId());
+		}
 		return requestCycle.getOriginalResponse().encodeURL(url);
 	}
 
