@@ -1,0 +1,15 @@
+		/**
+		 * @see wicket.version.IPageVersionManager#endVersion(boolean)
+		 */
+		public void endVersion(boolean mergeVersion)
+		{
+			String sessionId = page.getSession().getId();
+			// can we really test here for merge versions? Ajax request does change the page.
+			// And the last version should be stored to disk..
+			if (sessionId != null /*&& !mergeVersion*/) 
+			{
+				IPageStore store = ((SecondLevelCacheSessionStore)Application.get().getSessionStore()).getStore();
+				store.storePage(sessionId, page);
+			}
+		}
+

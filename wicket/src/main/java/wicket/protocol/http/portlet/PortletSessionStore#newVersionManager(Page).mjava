@@ -1,0 +1,9 @@
+	/**
+	 * @see wicket.session.ISessionStore#newVersionManager(wicket.Page)
+	 */
+	public IPageVersionManager newVersionManager(Page page)
+	{
+		final IPageSettings settings = page.getSession().getApplication().getPageSettings();
+		return new UndoPageVersionManager(page, settings.getMaxPageVersions());
+	}
+
