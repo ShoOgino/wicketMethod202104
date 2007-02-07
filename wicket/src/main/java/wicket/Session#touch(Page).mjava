@@ -11,7 +11,15 @@
 	 */
 	public final void touch(Page page)
 	{
-		// Touch the page in its pagemap.
-		page.getPageMap().put(page);
+		// store it in a list, so that the pages are really pushed
+		// to the pagemap when the session does it update/detaches.
+		// all the pages are then detached
+		List lst = (List)touchedPages.get();
+		if(lst == null)
+		{
+			lst = new ArrayList();
+			touchedPages.set(lst);
+		}
+		lst.add(page);
 	}
 

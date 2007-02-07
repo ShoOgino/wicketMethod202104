@@ -1,0 +1,20 @@
+		private void removeSession(String sessionId)
+		{
+			File sessionDir = new File(getWorkDir(), sessionId);
+			if (sessionDir.exists())
+			{
+				File[] files = sessionDir.listFiles();
+				if (files != null)
+				{
+					for (int i = 0; i < files.length; i++)
+					{
+						files[i].delete();
+					}
+				}
+				if (!sessionDir.delete())
+				{
+					sessionDir.deleteOnExit();
+				}
+			}
+		}
+

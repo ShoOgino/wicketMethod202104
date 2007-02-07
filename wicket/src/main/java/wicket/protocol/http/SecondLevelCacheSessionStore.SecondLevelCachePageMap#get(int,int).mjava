@@ -1,14 +1,16 @@
 		public Page get(int id, int versionNumber)
 		{
+			String sessionId = getSession().getId();
 			if (lastPage != null && lastPage.getNumericId() == id)
 			{
 				Page page = lastPage.getVersion(versionNumber);
 				if (page != null)
 				{
+					// ask the page store if it is ready saving the page.
+					getStore().pageAccessed(sessionId, page);
 					return page;
 				}
 			}
-			String sessionId = getSession().getId();
 			if (sessionId != null)
 			{
 				return getStore().getPage(sessionId, id, versionNumber);

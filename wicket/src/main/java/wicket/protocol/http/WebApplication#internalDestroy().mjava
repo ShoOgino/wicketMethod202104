@@ -3,6 +3,7 @@
 	 */
 	protected void internalDestroy()
 	{
+		// destroy the resource watcher
 		ModificationWatcher resourceWatcher = getResourceSettings().getResourceWatcher(false);
 		if (resourceWatcher != null)
 		{
@@ -10,6 +11,6 @@
 		}
 		super.internalDestroy();
 		bufferedResponses.clear();
-		// destroy the resource watcher
+		getSessionStore().destroy();
 	}
 

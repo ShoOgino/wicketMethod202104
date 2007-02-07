@@ -3,6 +3,17 @@
 	 */
 	protected void update()
 	{
+		List lst = (List)touchedPages.get();
+		if(lst != null)
+		{
+			for (int i = 0; i < lst.size(); i++)
+			{
+				Page page = (Page)lst.get(i);
+				page.getPageMap().put(page);
+			}
+			touchedPages.set(null);
+		}
+		
 		// If state is dirty
 		if (dirty)
 		{

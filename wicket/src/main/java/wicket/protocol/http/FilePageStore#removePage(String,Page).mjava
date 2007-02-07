@@ -4,15 +4,10 @@
 	 */
 	public void removePage(String sessionId, Page page)
 	{
-		File sessionDir = new File(getWorkDir(), sessionId);
-		if (sessionDir.exists())
+		synchronized (storePageMap)
 		{
-			File pageFile = getPageFile(page.getNumericId(), page.getCurrentVersionNumber(),
-					sessionDir);
-			if (pageFile.exists())
-			{
-				pageFile.delete();
-			}
+			storePageMap.put(new SessionPageKey(sessionId,page.getNumericId(),page.getCurrentVersionNumber(),true), page);
+			storePageMap.notifyAll();
 		}
 	}
 

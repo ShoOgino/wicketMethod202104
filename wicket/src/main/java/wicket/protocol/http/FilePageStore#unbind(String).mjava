@@ -3,18 +3,11 @@
 	 */
 	public void unbind(String sessionId)
 	{
-		File sessionDir = new File(getWorkDir(), sessionId);
-		if (sessionDir.exists())
+		synchronized (storePageMap)
 		{
-			File[] files = sessionDir.listFiles();
-			if (files != null)
-			{
-				for (int i = 0; i < files.length; i++)
-				{
-					files[i].delete();
-				}
-			}
-			sessionDir.delete();
+			SessionPageKey key = new SessionPageKey(sessionId,-1,-1,true);
+			storePageMap.put(key, key);
+			storePageMap.notifyAll();
 		}
 	}
 

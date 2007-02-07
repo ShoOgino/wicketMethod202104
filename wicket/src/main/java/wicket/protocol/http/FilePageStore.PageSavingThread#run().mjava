@@ -1,0 +1,56 @@
+		/**
+		 * @see java.lang.Runnable#run()
+		 */
+		public void run()
+		{
+			while(!stop)
+			{
+				Iterator iterator = null;
+				try
+				{
+					iterator = storePageMap.keySet().iterator();
+					if (!iterator.hasNext())
+					{
+						synchronized (storePageMap)
+						{
+							if(stop) return;
+							storePageMap.wait();
+						}
+						continue;
+					}
+					while(iterator.hasNext())
+					{
+						SessionPageKey key = (SessionPageKey)iterator.next();
+						Object value = storePageMap.get(key);
+						if (value == null) continue;
+						if(key.remove)
+						{
+							if (key.id == -1)
+							{
+								removeSession(key.sessionId);
+								// now remove any other pending save for that page.
+								removeSessionFromPendingMap(key.sessionId);
+							}
+							else
+							{
+								removePage(key.sessionId, key.id, key.versionNumber);
+								// now remove any other pending save for that page.
+								removePageFromPendingMap(key.sessionId,key.id);
+							}
+						}
+						else
+						{
+							savePage(key.sessionId, (Page)value);
+						}
+						iterator.remove();
+					}
+				} 
+				catch (Exception e)
+				{
+					log.error("Error in page save thread", e);
+					// removing the one that did fail...
+					if(iterator != null) iterator.remove();
+				}
+			}
+		}
+
