@@ -23,15 +23,9 @@
 			}
 			catch (Exception e)
 			{
-				// trigger serialization again, but this time gather some more info
-				try
-				{
-					new DebuggingObjectOutputStream().writeObject(value);
-				}
-				catch (IOException e1)
-				{
-					throw new RuntimeException(e1);
-				}
+				// trigger serialization again, but this time gather some more
+				// info
+				Objects.checkSerializable(value);
 				// this should never happen
 				throw new WicketRuntimeException(
 						"first pass of serialization failed, but the second one "
