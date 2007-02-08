@@ -1,21 +1,23 @@
-	private void testMap(String sessionId, int id , int versionNumber)
+	private void testMap(String sessionId, int id, int versionNumber)
 	{
-		SessionPageKey curentKey = new SessionPageKey(sessionId,id,versionNumber);
+		SessionPageKey curentKey = new SessionPageKey(sessionId, id, versionNumber);
 		Object key = storePageMap.get(curentKey);
 		while (key != null)
 		{
-			if( log.isDebugEnabled())
+			if (log.isDebugEnabled())
 			{
-				log.debug("The page " + id + ":" + versionNumber+" for session " + sessionId + 
-						" wasn't saved yet. blocking for 200ms");
+				log.debug("The page " + id + ":" + versionNumber + " for session " + sessionId
+						+ " wasn't saved yet. blocking for 200ms");
 			}
 			synchronized (key)
 			{
 				try
 				{
 					// for now i just wait 200ms and then try again.
-					// i could use synchronized() and then notifyAll in the saving thread.
-					// But maybe it is really busy and we should just block for 200ms
+					// i could use synchronized() and then notifyAll in the
+					// saving thread.
+					// But maybe it is really busy and we should just block for
+					// 200ms
 					key.wait(200);
 				}
 				catch (InterruptedException ex)

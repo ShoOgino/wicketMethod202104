@@ -6,7 +6,8 @@
 		{
 			File sessionDir = new File(getWorkDir(), sessionId);
 			sessionDir.mkdirs();
-			File pageFile = getPageFile(page.getNumericId(), page.getCurrentVersionNumber(), sessionDir);
+			File pageFile = getPageFile(page.getNumericId(), page.getCurrentVersionNumber(),
+					sessionDir);
 
 			FileOutputStream fos = null;
 			long t1 = System.currentTimeMillis();
@@ -32,8 +33,17 @@
 			}
 			catch (Exception e)
 			{
-				log.error("Error saving page " + page.getClass() + "["+ page.getId() + "," + page.getCurrentVersionNumber()
-						+ "] for the sessionid " + sessionId, e);
+				// trigger serialization again, but this time gather some more info
+				try
+				{
+					new DebuggingObjectOutputStream().writeObject(page);
+				}
+				catch (Exception e1)
+				{
+					log.error("Error saving page " + page.getClass() + "[" + page.getId() + ","
+							+ page.getCurrentVersionNumber() + "] for the sessionid " + sessionId
+							+ ": " + e1.getMessage(), e1);
+				}
 			}
 			finally
 			{
@@ -52,9 +62,10 @@
 			if (log.isDebugEnabled())
 			{
 				long t3 = System.currentTimeMillis();
-				log.debug("storing page " + page.getClass() + "["+ page.getNumericId() + ","
-						+ page.getCurrentVersionNumber() + "] size: " + length + " for session " + sessionId + " took "
-						+ (t2 - t1) + " miliseconds to serialize and " + (t3-t2) + " miliseconds to save");
+				log.debug("storing page " + page.getClass() + "[" + page.getNumericId() + ","
+						+ page.getCurrentVersionNumber() + "] size: " + length + " for session "
+						+ sessionId + " took " + (t2 - t1) + " miliseconds to serialize and "
+						+ (t3 - t2) + " miliseconds to save");
 			}
 		}
 

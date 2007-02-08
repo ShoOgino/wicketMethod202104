@@ -3,7 +3,7 @@
 		 */
 		public void run()
 		{
-			while(!stop)
+			while (!stop)
 			{
 				Iterator iterator = null;
 				try
@@ -13,29 +13,33 @@
 					{
 						synchronized (storePageMap)
 						{
-							if(stop) return;
+							if (stop)
+								return;
 							storePageMap.wait();
 						}
 						continue;
 					}
-					while(iterator.hasNext())
+					while (iterator.hasNext())
 					{
 						SessionPageKey key = (SessionPageKey)iterator.next();
 						Object value = storePageMap.get(key);
-						if (value == null) continue;
-						if(key.remove)
+						if (value == null)
+							continue;
+						if (key.remove)
 						{
 							if (key.id == -1)
 							{
 								removeSession(key.sessionId);
-								// now remove any other pending save for that page.
+								// now remove any other pending save for that
+								// page.
 								removeSessionFromPendingMap(key.sessionId);
 							}
 							else
 							{
 								removePage(key.sessionId, key.id, key.versionNumber);
-								// now remove any other pending save for that page.
-								removePageFromPendingMap(key.sessionId,key.id);
+								// now remove any other pending save for that
+								// page.
+								removePageFromPendingMap(key.sessionId, key.id);
 							}
 						}
 						else
@@ -44,12 +48,13 @@
 						}
 						iterator.remove();
 					}
-				} 
+				}
 				catch (Exception e)
 				{
 					log.error("Error in page save thread", e);
 					// removing the one that did fail...
-					if(iterator != null) iterator.remove();
+					if (iterator != null)
+						iterator.remove();
 				}
 			}
 		}
