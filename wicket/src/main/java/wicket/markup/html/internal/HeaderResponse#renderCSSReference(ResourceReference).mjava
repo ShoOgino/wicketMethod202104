@@ -3,13 +3,7 @@
 	 */
 	public final void renderCSSReference(ResourceReference reference)
 	{
-		if (wasRendered(reference) == false)
-		{
-			final CharSequence url = RequestCycle.get().urlFor(reference);
-			response.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-			response.write(url);
-			response.println("\"></link>");
-			markRendered(reference);
-		}
+		CharSequence url = RequestCycle.get().urlFor(reference);
+		renderCSSReference(url.toString(), null);
 	}
 

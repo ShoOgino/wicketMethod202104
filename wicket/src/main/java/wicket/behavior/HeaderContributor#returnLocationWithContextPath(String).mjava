@@ -1,12 +1,16 @@
-	// Appends a path to the string buffer, adding the context path on the front
-	// if it's not
+	// adds the context path on the front of the location, if it's not
 	// a fully-qualified URL.
-	private static final void appendPathWithContext(AppendingStringBuffer b, String location)
+	private static final String returnLocationWithContextPath(String location)
 	{
 
 		// WICKET-59 allow external URLs.
-		if (!location.startsWith("http://") && !location.startsWith("https://"))
+		if (location.startsWith("http://") || location.startsWith("https://"))
 		{
+			return location;
+		}
+		else
+		{
+			StringBuilder b = new StringBuilder();
 			String contextPath = Application.get().getApplicationSettings().getContextPath();
 			if (contextPath == null)
 			{
@@ -22,7 +26,8 @@
 			{
 				b.append("/");
 			}
+			b.append(location);
+			return b.toString();
 		}
-		b.append(location);
 	}
 

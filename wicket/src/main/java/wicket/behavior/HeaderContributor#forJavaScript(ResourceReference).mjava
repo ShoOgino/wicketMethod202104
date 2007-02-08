@@ -8,6 +8,14 @@
 	 */
 	public static final HeaderContributor forJavaScript(final ResourceReference reference)
 	{
-		return new HeaderContributor(new JavaScriptReferenceHeaderContributor(reference));
+		return new HeaderContributor(new IHeaderContributor()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void renderHead(IHeaderResponse response)
+			{
+				response.renderJavascriptReference(reference);
+			}
+		});
 	}
 

@@ -1,0 +1,22 @@
+	/**
+	 * @see wicket.markup.html.IHeaderResponse#renderCSSReference(java.lang.String, java.lang.String)
+	 */
+	public void renderCSSReference(String url, String media)
+	{
+		List<Object> token = Arrays.asList(new Object[] { "css", url, media });
+		if (wasRendered(token) == false)
+		{
+			response.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
+			response.write(url);
+			response.write("\"");
+			if (media != null)
+			{
+				response.write(" media=\"");
+				response.write(media);
+				response.write("\"");
+			}
+			response.println(" />");
+			markRendered(token);
+		}
+	}
+

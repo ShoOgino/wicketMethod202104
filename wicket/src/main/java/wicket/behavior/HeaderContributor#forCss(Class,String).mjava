@@ -12,6 +12,15 @@
 	 */
 	public static final HeaderContributor forCss(final Class scope, final String path)
 	{
-		return new HeaderContributor(new CSSReferenceHeaderContributor(scope, path, null));
+		return new HeaderContributor(new IHeaderContributor()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void renderHead(IHeaderResponse response)
+			{
+				CompressedResourceReference reference = new CompressedResourceReference(scope, path);
+				response.renderCSSReference(reference);
+			}
+		});
 	}
 
