@@ -3,9 +3,19 @@
 		 */
 		public void beginVersion(boolean mergeVersion)
 		{
+			// this is an hack.. when object is read in. It must ignore the first version bump.
+			if(versionStarted) return;
+			
+			versionStarted = true;
 			if(!mergeVersion)
 			{
 				currentVersionNumber++;
+				lastAjaxVersionNumber = currentAjaxVersionNumber;
+				currentAjaxVersionNumber = 0;
+			}
+			else
+			{
+				currentAjaxVersionNumber++;
 			}
 		}
 

@@ -3,10 +3,9 @@
 		 */
 		public void endVersion(boolean mergeVersion)
 		{
+			versionStarted = false;
 			String sessionId = page.getSession().getId();
-			// can we really test here for merge versions? Ajax request does change the page.
-			// And the last version should be stored to disk..
-			if (sessionId != null /*&& !mergeVersion*/) 
+			if (sessionId != null) 
 			{
 				IPageStore store = ((SecondLevelCacheSessionStore)Application.get().getSessionStore()).getStore();
 				store.storePage(sessionId, page);
