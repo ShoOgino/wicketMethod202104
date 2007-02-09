@@ -24,7 +24,7 @@
 			final List searchStack, final Locale locale, final String style)
 	{
 		// Search each loader in turn and return the string if it is found
-		final Iterator<IStringResourceLoader> iterator = application.getResourceSettings()
+		final Iterator<IStringResourceLoader> iterator = Application.get().getResourceSettings()
 				.getStringResourceLoaders().iterator();
 
 		// The return value
@@ -46,8 +46,7 @@
 					Class clazz = (Class)searchStack.get(i);
 
 					// First check if a property with the 'key' provided by the
-					// user
-					// is available.
+					// user is available.
 					string = loader.loadStringResource(clazz, key, locale, style);
 
 					// If not, prepend the component relativ path to the key
@@ -72,7 +71,7 @@
 				// ApplicationStringResourceLoader,
 				// does not necessarily require the component hierachy
 				string = loader.loadStringResource(null, key, locale, style);
-				if ((string == null) && (path != null) && (prefix.length() > 0))
+				if ((string == null) && (prefix != null) && (prefix.length() > 0))
 				{
 					string = loader.loadStringResource(null, prefix + '.' + key, locale, style);
 				}

@@ -6,7 +6,7 @@
 	 * @param searchStack
 	 *            A stack of classes to get the resource for
 	 * @param path
-	 *            The component id path relative to the page
+	 *            A (file) path to the resource containing the key
 	 * @param locale
 	 *            The locale to get the resource for (optional)
 	 * @param style
@@ -17,18 +17,9 @@
 	 *             If resource not found and configuration dictates that
 	 *             exception should be thrown
 	 */
-	public String getString(final String key, final String path, final List searchStack,
-			final Locale locale, final String style) throws MissingResourceException
+	private String getString(final String key, final String path, final Locale locale,
+			final String style) throws MissingResourceException
 	{
-		if (searchStack == null)
-		{
-			throw new IllegalArgumentException(
-					"Parameter 'searchStack' must have at least one entry");
-		}
-
-		// Get the property by iterating over the register string resouce loader
-		// until the property has been found. Null, if not found.
-		String string = visitResourceLoaders(key, path, searchStack, locale, style);
-		return string;
+		return visitResourceLoaders(key, path, null, locale, style);
 	}
 

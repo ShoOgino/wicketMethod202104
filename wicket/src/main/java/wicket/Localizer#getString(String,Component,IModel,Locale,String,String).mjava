@@ -24,22 +24,42 @@
 	 *             exception should be thrown
 	 */
 	public String getString(final String key, final Component component, final IModel model,
-			final Locale locale, final String style, final String defaultValue)
-			throws MissingResourceException
+			Locale locale, String style, final String defaultValue) throws MissingResourceException
 	{
 		final List searchStack;
 		final String path;
 		if (component != null)
 		{
-			// The reason why need to create that stack is because we need to
+			// The reason why we need to create that stack is because we need to
 			// walk it downwards starting with Page down to the Component
 			searchStack = getComponentStack(component);
 			path = Strings.replaceAll(component.getPageRelativePath(), ":", ".").toString();
+
+			if (locale == null)
+			{
+				locale = component.getLocale();
+			}
+
+			if (style == null)
+			{
+				style = component.getStyle();
+			}
 		}
 		else
 		{
 			searchStack = null;
 			path = null;
+
+			Session session = Session.get();
+			if (locale == null)
+			{
+				locale = session.getLocale();
+			}
+
+			if (style == null)
+			{
+				style = session.getStyle();
+			}
 		}
 
 		// Iterate over all registered string resource loaders until the
@@ -55,7 +75,7 @@
 
 		// Resource not found, so handle missing resources based on application
 		// configuration
-		final IResourceSettings resourceSettings = application.getResourceSettings();
+		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
 		if (resourceSettings.getUseDefaultOnMissingResource() && (defaultValue != null))
 		{
 			return defaultValue;
