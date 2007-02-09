@@ -1,0 +1,42 @@
+	/**
+	 * Check that this behavior can get a date format out of the component it is
+	 * coupled to. if you override this method to allow for other types (such as
+	 * your own), you should override {@link #getDatePattern()} as well. This
+	 * method should return normally if the component is accepted or throw a RTE
+	 * when it is not.
+	 * 
+	 * @param component
+	 *            the component this behavior is being coupled to
+	 * @throws WicketRuntimeException
+	 *             if the component is not support.
+	 */
+	protected void checkComponentProvidesDateFormat(Component component) {
+
+		if (component instanceof IDatePatternProvider) {
+			// were ok
+			return;
+		}
+
+		IConverter converter = component.getConverter();
+		if (converter instanceof Converter) {
+			ITypeConverter typeConverter = ((Converter) converter)
+					.get(Date.class);
+			if (typeConverter instanceof DateConverter) {
+				DateConverter dateConverter = (DateConverter) typeConverter;
+				DateFormat df = dateConverter.getDateFormat(component
+						.getLocale());
+				if (df instanceof SimpleDateFormat) {
+					// not as nice as IDatePatternProvider, but it'll do
+					return;
+				}
+			}
+		}
+		throw new WicketRuntimeException(
+				"this behavior can only be added to components that either implement "
+						+ IDatePatternProvider.class.getName()
+						+ " or that use " + DateConverter.class.getName()
+						+ " configured with an instance of "
+						+ SimpleDateFormat.class.getName()
+						+ " (like Wicket's default configuration has)");
+	}
+

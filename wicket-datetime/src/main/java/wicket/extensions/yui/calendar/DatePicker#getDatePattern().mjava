@@ -1,0 +1,22 @@
+	/**
+	 * Gets the date pattern to use for putting selected values in the coupled
+	 * component. If you override this method to support components that would
+	 * otherwise not be supported, you should override
+	 * {@link #checkComponentProvidesDateFormat(Component)} and let it return
+	 * normally.
+	 * 
+	 * @return The date pattern
+	 */
+	protected String getDatePattern() {
+
+		if (component instanceof IDatePatternProvider) {
+			return ((IDatePatternProvider) component).getDatePattern();
+		} else {
+			// cast from hell, but we checked before whether we could
+			DateConverter dateConverter = (DateConverter) ((Converter) component
+					.getConverter()).get(Date.class);
+			return ((SimpleDateFormat) dateConverter.getDateFormat(component
+					.getLocale())).toPattern();
+		}
+	}
+
