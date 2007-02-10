@@ -11,6 +11,15 @@
 	 */
 	public final void addCssReference(final Class scope, final String path)
 	{
-		addContributor(new CSSReferenceHeaderContributor(scope, path, null));
+		addContributor(new IHeaderContributor()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void renderHead(IHeaderResponse response)
+			{
+				ResourceReference reference = new CompressedResourceReference(scope, path);
+				response.renderCSSReference(reference);
+			}
+		});
 	}
 

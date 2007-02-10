@@ -6,8 +6,16 @@
 	 * 
 	 * @return the new header contributor instance
 	 */
-	public static final HeaderContributor forCss(ResourceReference reference)
+	public static final HeaderContributor forCss(final ResourceReference reference)
 	{
-		return new HeaderContributor(new CSSReferenceHeaderContributor(reference, null));
+		return new HeaderContributor(new IHeaderContributor()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void renderHead(IHeaderResponse response)
+			{
+				response.renderCSSReference(reference);
+			}
+		});
 	}
 
