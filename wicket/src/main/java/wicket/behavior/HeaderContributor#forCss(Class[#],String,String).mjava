@@ -1,6 +1,6 @@
 	/**
 	 * Returns a new instance of {@link HeaderContributor} with a header
-	 * contributor that references a java script file that lives in a package.
+	 * contributor that references a CSS file that lives in a package.
 	 * 
 	 * @param scope
 	 *            The scope of the package resource (typically the class of the
@@ -8,9 +8,12 @@
 	 *            resource lives).
 	 * @param path
 	 *            The path
+	 * @param media
+	 *            The media type for this CSS ("print", "screen", etc.)
 	 * @return the new header contributor instance
 	 */
-	public static final HeaderContributor forJavaScript(final Class scope, final String path)
+	public static final HeaderContributor forCss(final Class<?> scope, final String path,
+			final String media)
 	{
 		return new HeaderContributor(new IHeaderContributor()
 		{
@@ -18,8 +21,7 @@
 
 			public void renderHead(IHeaderResponse response)
 			{
-				CompressedResourceReference reference = new CompressedResourceReference(scope, path);
-				response.renderJavascriptReference(reference);
+				response.renderCSSReference(new CompressedResourceReference(scope, path));
 			}
 		});
 	}

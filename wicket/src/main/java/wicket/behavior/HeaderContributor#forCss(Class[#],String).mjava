@@ -8,12 +8,9 @@
 	 *            resource lives).
 	 * @param path
 	 *            The path
-	 * @param media
-	 *            The media type for this CSS ("print", "screen", etc.)
 	 * @return the new header contributor instance
 	 */
-	public static final HeaderContributor forCss(final Class scope, final String path,
-			final String media)
+	public static final HeaderContributor forCss(final Class<?> scope, final String path)
 	{
 		return new HeaderContributor(new IHeaderContributor()
 		{
@@ -21,8 +18,7 @@
 
 			public void renderHead(IHeaderResponse response)
 			{
-				CompressedResourceReference reference = new CompressedResourceReference(scope, path);
-				response.renderCSSReference(reference);
+				response.renderCSSReference(new CompressedResourceReference(scope, path));
 			}
 		});
 	}
