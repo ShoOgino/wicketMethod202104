@@ -1,32 +1,41 @@
-	private void testMap(String sessionId, int id, int versionNumber, int ajaxVersionNumber)
+	private byte[] testMap(String sessionId, int id, int versionNumber, int ajaxVersionNumber)
 	{
-		SessionPageKey curentKey = new SessionPageKey(sessionId, id, versionNumber,
-				ajaxVersionNumber);
-		Object key = storePageMap.get(curentKey);
-		while (key != null)
+		SessionPageKey curentKey = new SessionPageKey(sessionId, id, versionNumber,ajaxVersionNumber,null);
+		Object value = storePageMap.get(curentKey);
+		if (value instanceof Page)
 		{
-			if (log.isDebugEnabled())
+			// if the page was still not saved before the next request. Then 
+			// the request itself will serialize it
+			if( storePageMap.put(curentKey, SERIALIZING) == value)
 			{
-				log.debug("The page " + id + ":" + versionNumber + " for session " + sessionId
-						+ " wasn't saved yet. blocking for 200ms");
+				byte[] bytes = serializePage((Page)value);
+				if ( bytes != null)
+				{
+					storePageMap.put(curentKey,bytes);
+				}
+				else
+				{
+					storePageMap.remove(curentKey);
+				}
+				return bytes;
 			}
-			synchronized (key)
+			else
 			{
-				try
-				{
-					// for now i just wait 200ms and then try again.
-					// i could use synchronized() and then notifyAll in the
-					// saving thread.
-					// But maybe it is really busy and we should just block for
-					// 200ms
-					key.wait(200);
-				}
-				catch (InterruptedException ex)
-				{
-					log.error(ex);
-				}
+				value = SERIALIZING;
 			}
-			key = storePageMap.get(curentKey);
 		}
+		while(value == SERIALIZING)
+		{
+			try
+			{
+				Thread.sleep(50);
+			}
+			catch (InterruptedException ex)
+			{
+				throw new RuntimeException(ex);
+			}
+			value = storePageMap.get(curentKey);
+		}
+		return value instanceof byte[]? (byte[])value:null;
 	}
 

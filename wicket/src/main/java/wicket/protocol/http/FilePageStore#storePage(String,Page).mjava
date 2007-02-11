@@ -4,11 +4,23 @@
 	 */
 	public void storePage(String sessionId, Page page)
 	{
-		synchronized (storePageMap)
+		// if the pagemap falls behind, directly serialize it here.
+		if(storePageMap.size() > 25)
 		{
-			storePageMap.put(new SessionPageKey(sessionId, page.getNumericId(), page
-					.getCurrentVersionNumber(), page.getAjaxVersionNumber()), page);
-			storePageMap.notifyAll();
+			byte[] bytes = serializePage(page);
+			if (bytes != null)
+			{
+				storePageMap.put(new SessionPageKey(sessionId, page,false), bytes);
+			}
+			
+		}
+		else
+		{
+			synchronized (storePageMap)
+			{
+				storePageMap.put(new SessionPageKey(sessionId, page,false), page);
+				storePageMap.notifyAll();
+			}
 		}
 	}
 

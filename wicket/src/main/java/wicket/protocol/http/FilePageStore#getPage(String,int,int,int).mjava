@@ -4,7 +4,13 @@
 	 */
 	public Page getPage(String sessionId, int id, int versionNumber, int ajaxVersionNumber)
 	{
-		testMap(sessionId, id, versionNumber, ajaxVersionNumber);
+		byte[] bytes = testMap(sessionId, id, versionNumber,ajaxVersionNumber);
+		if(bytes != null)
+		{
+			Page page = (Page)Objects.byteArrayToObject(bytes);
+			page = page.getVersion(versionNumber);
+			return page; 
+		}
 		File sessionDir = new File(getWorkDir(), sessionId);
 		if (sessionDir.exists())
 		{
