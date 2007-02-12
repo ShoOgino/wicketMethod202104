@@ -12,7 +12,8 @@
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try
 			{
-				new ObjectOutputStream(out).writeObject(object);
+				//new ObjectOutputStream(out).writeObject(object);
+				new WicketObjectOutputStream(out).writeObject(object);
 			}
 			finally
 			{
@@ -22,8 +23,17 @@
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
-			return null;
+			// trigger serialization again, but this time gather some more
+			// info
+			try
+			{
+				Objects.checkSerializable(object);
+			}
+			catch (Exception e1)
+			{
+				log.error("Error serializing object " + object.getClass() + "[" + object + "]" );
+			}
 		}
+		return null;
 	}
 
