@@ -35,7 +35,8 @@
 			for (int i = 0; i < objVals.length; i++)
 			{
 				if (objVals[i] instanceof String || objVals[i] instanceof Number
-						|| objVals[i] instanceof Date || objVals[i] instanceof Boolean)
+						|| objVals[i] instanceof Date || objVals[i] instanceof Boolean
+						|| objVals[i] instanceof Class)
 				{
 					// fitler out common cases
 					continue;
@@ -46,7 +47,6 @@
 					// Check for circular reference.
 					if (checked.contains(objVals[i]))
 					{
-						// System.err.println("skip circular " + path);
 						continue;
 					}
 					checked.add(objVals[i]);
@@ -62,7 +62,7 @@
 							b.append('/');
 						}
 					}
-					System.err.println("error invoking hashCode on " + b + ": " + e.getMessage());
+					log.error("error invoking hashCode on " + b + ": " + e.getMessage());
 					continue;
 				}
 
