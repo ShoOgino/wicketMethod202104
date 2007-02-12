@@ -35,7 +35,7 @@
 		}
 		else if (cls.isArray())
 		{
-			checked.add(obj);
+			checked.assign(obj);
 			Class ccl = cls.getComponentType();
 			if (!(ccl.isPrimitive()))
 			{
@@ -60,22 +60,13 @@
 
 					public void writeObject(Object streamObj) throws IOException
 					{
-						try
+						// Check for circular reference.
+						if (checked.contains(streamObj))
 						{
-							// Check for circular reference.
-							if (checked.contains(streamObj))
-							{
-								return;
-							}
-						}
-						catch (Exception e)
-						{
-							log.warn("error invoking hashCode: " + e.getMessage() + ", path:"
-									+ currentPath() + ": ");
 							return;
 						}
 
-						checked.add(streamObj);
+						checked.assign(streamObj);
 						String arrayPos = "[write:" + count++ + "]";
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
@@ -144,22 +135,13 @@
 						}
 
 						counter++;
-						try
+						// Check for circular reference.
+						if (checked.contains(streamObj))
 						{
-							// Check for circular reference.
-							if (checked.contains(streamObj))
-							{
-								return null;
-							}
-						}
-						catch (Exception e)
-						{
-							log.warn("error invoking hashCode: " + e.getMessage() + ", path:"
-									+ currentPath() + ": ");
 							return null;
 						}
 
-						checked.add(obj);
+						checked.assign(obj);
 						String arrayPos = "[write:" + counter + "]";
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
@@ -206,7 +188,7 @@
 					{
 						throw new RuntimeException(e);
 					}
-					checked.add(obj);
+					checked.assign(obj);
 					checkFields(obj, slotDesc);
 				}
 			}
