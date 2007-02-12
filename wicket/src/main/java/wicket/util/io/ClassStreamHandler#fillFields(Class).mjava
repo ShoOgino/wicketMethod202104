@@ -8,14 +8,15 @@
 		{
 			Field field = fields[i];
 			field.setAccessible(true);
-			if(!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers()))
+			if (!Modifier.isStatic(field.getModifiers())
+					&& !Modifier.isTransient(field.getModifiers()))
 			{
-				FieldAndIndex fai = new FieldAndIndex(field,unsafe.objectFieldOffset(field));
+				FieldAndIndex fai = new FieldAndIndex(field, unsafe.objectFieldOffset(field));
 				this.fields.add(fai);
 			}
 		}
 		cls = cls.getSuperclass();
-		if(cls != Object.class)
+		if (cls != Object.class)
 		{
 			fillFields(cls);
 		}
