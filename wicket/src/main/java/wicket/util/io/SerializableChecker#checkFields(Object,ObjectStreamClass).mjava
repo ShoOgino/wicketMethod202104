@@ -1,4 +1,4 @@
-	private void checkFields(Object obj, ObjectStreamClass desc, String fieldDescription)
+	private void checkFields(Object obj, ObjectStreamClass desc)
 	{
 		int numFields;
 		try
@@ -53,15 +53,7 @@
 				}
 				catch (Exception e)
 				{
-					StringBuffer b = new StringBuffer();
-					for (Iterator it = nameStack.iterator(); it.hasNext();)
-					{
-						b.append(it.next());
-						if (it.hasNext())
-						{
-							b.append('/');
-						}
-					}
+					StringBuffer b = getCurrentPath();
 					log.error("error invoking hashCode on " + b + ": " + e.getMessage());
 					continue;
 				}
@@ -82,7 +74,9 @@
 				}
 
 				String fieldName = field.getName();
-				check(objVals[i], fieldName, field.toString());
+				simpleName = field.getName();
+				fieldDescription = field.toString();
+				check(objVals[i]);
 			}
 		}
 	}
