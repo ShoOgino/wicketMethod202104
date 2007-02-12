@@ -42,17 +42,35 @@
 		}
 		catch (Exception e)
 		{
-			// trigger serialization again, but this time gather some more
-			// info
-			try
+			// FIXME this is temporary until 1.3 gets ported
+			if ((e instanceof NotSerializableException) && SerializableChecker.isAvailable())
 			{
-				Objects.checkSerializable(page);
+				// trigger serialization again, but this time gather some more
+				// info
+				try
+				{
+					new SerializableChecker((NotSerializableException)e).writeObject(page);
+					// if we get here, we didn't fail, while we should; print
+					// out the message contains a pointer to where in the object
+					// hierarchy to trouble maker is
+					log.error("Error saving page " + page.getClass() + "[" + page.getId() + ","
+							+ page.getCurrentVersionNumber() + "] for the sessionid " + sessionId
+							+ ": " + e.getMessage(), e);
+				}
+				catch (Exception e1)
+				{
+					// the message contains a pointer to where in the object
+					// hierarchy to trouble maker is
+					log.error("Error saving page " + page.getClass() + "[" + page.getId() + ","
+							+ page.getCurrentVersionNumber() + "] for the sessionid " + sessionId
+							+ ": " + e1.getMessage(), e1);
+				}
 			}
-			catch (Exception e1)
+			else
 			{
 				log.error("Error saving page " + page.getClass() + "[" + page.getId() + ","
 						+ page.getCurrentVersionNumber() + "] for the sessionid " + sessionId
-						+ ": " + e1.getMessage(), e1);
+						+ ": " + e.getMessage(), e);
 			}
 		}
 		finally
