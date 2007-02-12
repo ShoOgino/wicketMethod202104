@@ -1,6 +1,8 @@
-		private void removeSessionFromPendingMap(String sessionId)
+	private void removeSessionFromPendingMap(String sessionId)
+	{
+		synchronized (storePageMap)
 		{
-			Iterator iterator = storePageMap.keySet().iterator();
+			Iterator iterator = storePageMap.iterator();
 			while (iterator.hasNext())
 			{
 				SessionPageKey key = (SessionPageKey)iterator.next();
@@ -10,4 +12,8 @@
 				}
 			}
 		}
+		
+		removeSession(sessionId);
+		
+	}
 

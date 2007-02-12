@@ -3,11 +3,6 @@
 	 */
 	public void unbind(String sessionId)
 	{
-		synchronized (storePageMap)
-		{
-			SessionPageKey key = new SessionPageKey(sessionId, -1, -1, -1, true,null);
-			storePageMap.put(key, key);
-			storePageMap.notifyAll();
-		}
+		removeSessionFromPendingMap(sessionId);
 	}
 

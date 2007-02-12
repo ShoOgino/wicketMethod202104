@@ -1,0 +1,21 @@
+	/**
+	 * @param sessionId
+	 * @param id
+	 */
+	private void removePageFromPendingMap(String sessionId, int id)
+	{
+		synchronized (storePageMap)
+		{
+			Iterator iterator = storePageMap.iterator();
+			while (iterator.hasNext())
+			{
+				SessionPageKey key = (SessionPageKey)iterator.next();
+				if (key.sessionId == sessionId && key.id == id)
+				{
+					iterator.remove();
+				}
+			}
+		}
+		removePage(sessionId, id);
+	}
+
