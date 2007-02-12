@@ -19,26 +19,26 @@
 						}
 						key = (SessionPageKey)storePageMap.get(0);
 						data = key.getObject();
-						if ( data instanceof Page)
+						if (data instanceof Page)
 						{
 							key.setObject(SERIALIZING);
 						}
 					}
 					byte[] pageBytes = null;
-					if ( data instanceof Page)
+					if (data instanceof Page)
 					{
-						pageBytes = serializePage(key,(Page)data);
+						pageBytes = serializePage(key, (Page)data);
 						synchronized (key)
 						{
 							key.setObject(pageBytes);
 							key.notifyAll();
 						}
 					}
-					else if ( data instanceof byte[])
+					else if (data instanceof byte[])
 					{
 						pageBytes = (byte[])data;
 					}
-					if ( pageBytes != null)
+					if (pageBytes != null)
 					{
 						savePage(key, pageBytes);
 					}

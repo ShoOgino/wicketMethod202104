@@ -1,4 +1,4 @@
-	private byte[] testMap(SessionPageKey currentKey )
+	private byte[] testMap(SessionPageKey currentKey)
 	{
 		synchronized (storePageMap)
 		{
@@ -7,11 +7,11 @@
 			{
 				currentKey = (SessionPageKey)storePageMap.get(index);
 				Object object = currentKey.data;
-				if ( object instanceof Page)
+				if (object instanceof Page)
 				{
 					storePageMap.remove(index);
 				}
-				else if ( object instanceof byte[])
+				else if (object instanceof byte[])
 				{
 					return (byte[])object;
 				}
@@ -25,11 +25,11 @@
 				currentKey = null;
 			}
 		}
-		
-		
+
+
 		if (currentKey != null)
 		{
-			if ( currentKey.data == SERIALIZING)
+			if (currentKey.data == SERIALIZING)
 			{
 				synchronized (currentKey)
 				{
@@ -43,7 +43,7 @@
 					}
 				}
 				Object data = currentKey.data;
-				if(data instanceof byte[])
+				if (data instanceof byte[])
 				{
 					return (byte[])data;
 				}
@@ -51,7 +51,7 @@
 			else
 			{
 				byte[] bytes = serializePage(currentKey, (Page)currentKey.data);
-				if ( bytes != null)
+				if (bytes != null)
 				{
 					currentKey.setObject(bytes);
 					storePageMap.add(currentKey);

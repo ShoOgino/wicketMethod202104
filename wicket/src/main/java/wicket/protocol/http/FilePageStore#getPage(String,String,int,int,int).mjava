@@ -2,15 +2,17 @@
 	 * @see wicket.protocol.http.SecondLevelCacheSessionStore.IPageStore#getPage(java.lang.String,
 	 *      int, int)
 	 */
-	public Page getPage(String sessionId, String pagemapName, int id, int versionNumber, int ajaxVersionNumber)
+	public Page getPage(String sessionId, String pagemapName, int id, int versionNumber,
+			int ajaxVersionNumber)
 	{
-		SessionPageKey currentKey = new SessionPageKey(sessionId, id, versionNumber,ajaxVersionNumber,pagemapName ,null);
+		SessionPageKey currentKey = new SessionPageKey(sessionId, id, versionNumber,
+				ajaxVersionNumber, pagemapName, null);
 		byte[] bytes = testMap(currentKey);
-		if(bytes != null)
+		if (bytes != null)
 		{
 			Page page = (Page)Objects.byteArrayToObject(bytes);
 			page = page.getVersion(versionNumber);
-			return page; 
+			return page;
 		}
 		File sessionDir = new File(getWorkDir(), sessionId);
 		if (sessionDir.exists())
