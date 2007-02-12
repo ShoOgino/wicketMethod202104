@@ -12,8 +12,11 @@
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try
 			{
-				//new ObjectOutputStream(out).writeObject(object);
-				new WicketObjectOutputStream(out).writeObject(object);
+				new ObjectOutputStream(out).writeObject(object);
+
+				// let's keep this commented in SVN until we're absolutely sure
+				// it works without any flaws
+				// new WicketObjectOutputStream(out).writeObject(object);
 			}
 			finally
 			{
@@ -23,15 +26,28 @@
 		}
 		catch (IOException e)
 		{
-			// trigger serialization again, but this time gather some more
-			// info
-			try
+			if (SerializableChecker.isAvailable())
 			{
-				Objects.checkSerializable(object);
+				// trigger serialization again, but this time gather some more
+				// info
+				try
+				{
+					new SerializableChecker(object).check();
+				}
+				catch (Exception e1)
+				{
+					// the message contains a pointer to where in the object
+					// hierarchy to trouble maker is
+					log.error("Error serializing object " + object.getClass() + " [object="
+							+ object + "]", e1);
+				}
 			}
-			catch (Exception e1)
+			else
 			{
-				log.error("Error serializing object " + object.getClass() + "[" + object + "]" );
+				// the message contains a pointer to where in the object
+				// hierarchy to trouble maker is
+				log.error("Error serializing object " + object.getClass() + " [object=" + object
+						+ "]", e);
 			}
 		}
 		return null;
