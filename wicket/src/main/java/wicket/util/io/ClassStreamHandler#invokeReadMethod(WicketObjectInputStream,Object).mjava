@@ -4,23 +4,27 @@
 	 */
 	public boolean invokeReadMethod(WicketObjectInputStream wois, Object obj)
 	{
-		if (readObjectMethod != null)
+		if (readObjectMethod.size() > 0)
 		{
-			try
+			for (int i = readObjectMethod.size(); --i >= 0;)
 			{
-				readObjectMethod.invoke(obj, new Object[] { wois });
-			}
-			catch (IllegalArgumentException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-			catch (IllegalAccessException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-			catch (InvocationTargetException ex)
-			{
-				throw new RuntimeException(ex);
+				Method method = (Method)readObjectMethod.get(i);
+				try
+				{
+					method.invoke(obj, new Object[] { wois });
+				}
+				catch (IllegalArgumentException ex)
+				{
+					throw new RuntimeException(ex);
+				}
+				catch (IllegalAccessException ex)
+				{
+					throw new RuntimeException(ex);
+				}
+				catch (InvocationTargetException ex)
+				{
+					throw new RuntimeException(ex);
+				}
 			}
 			return true;
 		}

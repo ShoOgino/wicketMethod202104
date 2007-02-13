@@ -3,6 +3,10 @@
 	 */
 	public void defaultReadObject() throws IOException, ClassNotFoundException
 	{
-		currentStreamHandler.readFields(this,currentObject);
+		if ( !defaultReadHappend )
+		{
+			defaultReadHappend = true;
+			currentStreamHandler.readFields(this,currentObject);
+		}
 	}
 

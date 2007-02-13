@@ -8,23 +8,28 @@
 	 */
 	public boolean invokeWriteMethod(WicketObjectOutputStream woos, Object obj)
 	{
-		if (writeObjectMethod != null)
+		if (writeObjectMethod.size() > 0)
 		{
-			try
+			for (int i = writeObjectMethod.size(); --i >= 0;)
 			{
-				writeObjectMethod.invoke(obj, new Object[] { woos });
-			}
-			catch (IllegalArgumentException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-			catch (IllegalAccessException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-			catch (InvocationTargetException ex)
-			{
-				throw new RuntimeException(ex);
+				Method method = (Method)writeObjectMethod.get(i);
+				
+				try
+				{
+					method.invoke(obj, new Object[] { woos });
+				}
+				catch (IllegalArgumentException ex)
+				{
+					throw new RuntimeException(ex);
+				}
+				catch (IllegalAccessException ex)
+				{
+					throw new RuntimeException(ex);
+				}
+				catch (InvocationTargetException ex)
+				{
+					throw new RuntimeException(ex);
+				}
 			}
 			return true;
 		}

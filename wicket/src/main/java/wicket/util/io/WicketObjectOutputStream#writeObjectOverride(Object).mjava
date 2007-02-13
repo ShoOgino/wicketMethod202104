@@ -31,7 +31,7 @@
 				{
 					Class componentType = cls.getComponentType();
 					ClassStreamHandler classHandler = ClassStreamHandler.lookup(componentType);
-					if(componentType.isPrimitive() || Number.class.isAssignableFrom(componentType))
+					if(componentType.isPrimitive())
 					{
 						out.write(ClassStreamHandler.PRIMITIVE_ARRAY);
 						out.writeShort(classHandler.getClassId());
@@ -75,6 +75,7 @@
 						{
 							classHandler.writeFields(this,obj);
 						}
+						defaultWriteHappend = false;
 					}
 				}
 			}
