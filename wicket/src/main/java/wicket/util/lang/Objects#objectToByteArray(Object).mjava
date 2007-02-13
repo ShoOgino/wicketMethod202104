@@ -22,29 +22,8 @@
 		}
 		catch (IOException e)
 		{
-			if ((e instanceof NotSerializableException) && SerializableChecker.isAvailable())
-			{
-				// trigger serialization again, but this time gather some more
-				// info
-				try
-				{
-					new SerializableChecker((NotSerializableException)e).writeObject(object);
-					// if we get here, we didn't fail, while we should; print
-					// out the message contains a pointer to where in the object
-					// hierarchy to trouble maker is
-					logSerializationException(object, e);
-				}
-				catch (Exception e1)
-				{
-					// the message contains a pointer to where in the object
-					// hierarchy to trouble maker is
-					logSerializationException(object, e1);
-				}
-			}
-			else
-			{
-				logSerializationException(object, e);
-			}
+			log.error("Error serializing object " + object.getClass() + " [object=" + object + "]",
+					e);
 		}
 		return null;
 	}
