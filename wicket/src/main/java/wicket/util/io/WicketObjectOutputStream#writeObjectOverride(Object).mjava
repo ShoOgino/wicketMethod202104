@@ -8,11 +8,11 @@
 			out.write(ClassStreamHandler.NULL);
 			return;
 		}
-		Object handle = handledObjects.get(obj);
-		if ( handle != null)
+		int handle = handledObjects.lookup(obj);
+		if ( handle != -1)
 		{
 			out.write(ClassStreamHandler.HANDLE);
-			out.writeShort(((Short)handle).shortValue());
+			out.writeShort((int)handle);
 		}
 		else
 		{
@@ -24,7 +24,7 @@
 			}
 			else
 			{
-				handledObjects.put(obj, new Short(handleCounter++));
+				handledObjects.assign(obj);
 				Class cls = obj.getClass();
 	
 				if(cls.isArray())
@@ -70,12 +70,12 @@
 					}
 					else
 					{
-						currentObject = obj;
+						stack.push(obj);
 						if (!classHandler.invokeWriteMethod(this,obj))
 						{
 							classHandler.writeFields(this,obj);
 						}
-						defaultWriteHappend = false;
+						stack.pop();
 					}
 				}
 			}

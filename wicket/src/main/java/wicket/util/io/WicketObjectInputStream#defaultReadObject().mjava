@@ -3,9 +3,10 @@
 	 */
 	public void defaultReadObject() throws IOException, ClassNotFoundException
 	{
-		if ( !defaultReadHappend )
+		Object currentObject = stack.peek();
+		if ( !defaultRead.contains(currentObject) )
 		{
-			defaultReadHappend = true;
+			defaultRead.add(currentObject);
 			currentStreamHandler.readFields(this,currentObject);
 		}
 	}
