@@ -63,12 +63,15 @@
 					}
 					else
 					{
+						PutField old = curPut;
+						curPut = null;
 						stack.push(obj);
 						if (!classHandler.invokeWriteMethod(this,obj))
 						{
 							classHandler.writeFields(this,obj);
 						}
 						stack.pop();
+						curPut = old;
 					}
 				}
 			}
