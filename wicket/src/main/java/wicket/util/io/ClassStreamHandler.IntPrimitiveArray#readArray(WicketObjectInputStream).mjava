@@ -1,0 +1,14 @@
+		/**
+		 * @see wicket.util.io.ClassStreamHandler.PrimitiveArray#readArray(java.lang.Object, java.io.WicketObjectInputStream)
+		 */
+		public Object readArray(WicketObjectInputStream dos) throws IOException
+		{
+			int length = dos.readInt();
+			Object array = Array.newInstance(getStreamClass(), length);
+			for (int i = 0; i < length; i++)
+			{
+				Array.setInt(array, i, dos.readInt());
+			}
+			return array;
+		}
+
