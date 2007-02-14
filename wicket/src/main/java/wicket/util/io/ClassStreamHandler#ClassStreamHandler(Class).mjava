@@ -4,8 +4,9 @@
 	 * @param cls
 	 * @param wicketObjectOutputStream
 	 *            TODO
+	 * @throws NotSerializableException 
 	 */
-	private ClassStreamHandler(Class cls)
+	private ClassStreamHandler(Class cls) throws NotSerializableException
 	{
 		this.classId = classCounter++;
 		this.clz = cls;
@@ -64,10 +65,10 @@
 		{
 			this.fields = new ArrayList();
 			cons = getSerializableConstructor(clz);
-//			if (cons == null)
-//			{
-//				throw new RuntimeException("Failed to get the constructor from clz: " + clz);
-//			}
+			if (cons == null)
+			{
+				throw new NotSerializableException("No serializeable constructor found for " + cls);
+			}
 			
 			writeObjectMethods = new ArrayList();
 			readObjectMethods = new ArrayList();
