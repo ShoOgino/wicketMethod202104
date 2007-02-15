@@ -32,16 +32,19 @@
 			{
 				// this is the first access to the pagemap, set window.name
 				JavascriptUtils.writeOpenTag(response);
-				response.write("if (window.name=='' || window.name.indexOf('wicket') > -1) { window.name=\"");
+				response
+						.write("if (window.name=='' || window.name.indexOf('wicket') > -1) { window.name=\"");
 				response.write(name);
 				response.write("\"; }");
 				JavascriptUtils.writeCloseTag(response);
 			}
 			else
 			{
-				// Here is our trickery to detect whether the current request was
+				// Here is our trickery to detect whether the current request
+				// was
 				// made in a new window/ tab, in which case it should go in a
-				// different page map so that we don't intermangle the history of
+				// different page map so that we don't intermangle the history
+				// of
 				// those windows
 				CharSequence url = null;
 				if (target instanceof IBookmarkablePageRequestTarget)
@@ -49,7 +52,7 @@
 					IBookmarkablePageRequestTarget current = (IBookmarkablePageRequestTarget)target;
 					BookmarkablePageRequestTarget redirect = new BookmarkablePageRequestTarget(
 							getSession().createAutoPageMapName(), current.getPageClass(), current
-							.getPageParameters());
+									.getPageParameters());
 					url = cycle.urlFor(redirect);
 				}
 				else
@@ -57,7 +60,9 @@
 					url = urlFor(INewBrowserWindowListener.INTERFACE);
 				}
 				JavascriptUtils.writeOpenTag(response);
-				response.write("if (window.name=='' || (window.name.indexOf('wicket') > -1 && window.name!='" + name+ "')) { window.location=\"");
+				response
+						.write("if (window.name=='' || (window.name.indexOf('wicket') > -1 && window.name!='"
+								+ name + "')) { window.location=\"");
 				response.write(url);
 				response.write("\"; }");
 				JavascriptUtils.writeCloseTag(response);
