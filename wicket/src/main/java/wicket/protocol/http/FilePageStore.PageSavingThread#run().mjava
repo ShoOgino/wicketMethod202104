@@ -5,10 +5,8 @@
 		{
 			while (!stop)
 			{
-				SessionPageKey key = null;
 				try
 				{
-					Object data = null;
 					synchronized (storePageMap)
 					{
 						if (stop)
@@ -17,41 +15,76 @@
 						{
 							storePageMap.wait();
 						}
-						key = (SessionPageKey)storePageMap.get(0);
-						data = key.getObject();
-						if (data instanceof Page)
+					}
+					
+					Iterator it = storePageMap.entrySet().iterator();
+					outer : while (it.hasNext())
+					{
+						Map.Entry entry = (Entry)it.next();
+						List sessionList = (List)entry.getValue();
+						while (true)
 						{
-							key.setObject(SERIALIZING);
+							byte[] pageBytes = null;
+							Object data = null;
+							SessionPageKey key = null;
+							synchronized (sessionList)
+							{
+								if (sessionList.size() != 0)
+								{
+									key = (SessionPageKey)sessionList.get(0);
+									data = key.data;
+									if (data instanceof Page)
+									{
+										key.setObject(SERIALIZING);
+									}
+									else if (data instanceof byte[])
+									{
+										pageBytes = (byte[])data;
+									}
+									else
+									{
+										sessionList.remove(0);
+									}
+								}
+								// no key found in the current list.
+								if (key == null)
+								{
+									// the list is removed now! 
+									// but it could be that a request add something to the list now.
+									// thats why a request has to check it again.
+									storePageMap.remove(entry.getKey());
+									continue outer;
+								}
+							}
+							
+							if (data instanceof Page)
+							{
+								pageBytes = serializePage(key, (Page)data);
+								synchronized (sessionList)
+								{
+									key.setObject(pageBytes);
+									sessionList.notifyAll();
+								}
+								synchronized (storePageMap)
+								{
+									pagesInMap--;
+								}
+							}
+
+							if (pageBytes != null)
+							{
+								savePage(key, pageBytes);
+							}
+							sessionList.remove(key);
+							key = null;
+							pageBytes = null;
+							data = null;
 						}
-					}
-					byte[] pageBytes = null;
-					if (data instanceof Page)
-					{
-						pageBytes = serializePage(key, (Page)data);
-						synchronized (key)
-						{
-							key.setObject(pageBytes);
-							key.notifyAll();
-						}
-					}
-					else if (data instanceof byte[])
-					{
-						pageBytes = (byte[])data;
-					}
-					if (pageBytes != null)
-					{
-						savePage(key, pageBytes);
-					}
-					if (storePageMap.remove(0) != key)
-					{
-						System.err.println("Remove 0 is not the same!!");
 					}
 				}
 				catch (Exception e)
 				{
 					log.error("Error in page save thread", e);
-					// removing the one that did fail...
-					storePageMap.remove(key);
 				}
 			}
 		}

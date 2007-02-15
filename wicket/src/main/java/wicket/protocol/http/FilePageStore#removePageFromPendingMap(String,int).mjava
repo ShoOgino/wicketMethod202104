@@ -4,9 +4,13 @@
 	 */
 	private void removePageFromPendingMap(String sessionId, int id)
 	{
-		synchronized (storePageMap)
+		List list = (List)storePageMap.get(sessionId);
+
+		if (list == null) return;
+
+		synchronized (list)
 		{
-			Iterator iterator = storePageMap.iterator();
+			Iterator iterator = list.iterator();
 			while (iterator.hasNext())
 			{
 				SessionPageKey key = (SessionPageKey)iterator.next();
