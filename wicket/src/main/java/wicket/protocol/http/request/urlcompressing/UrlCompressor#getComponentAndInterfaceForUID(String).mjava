@@ -1,0 +1,18 @@
+	/**
+	 * Gets the combination
+	 * 
+	 * @param uidString
+	 * @return ComponentAndInterface
+	 */
+	public ComponentAndInterface getComponentAndInterfaceForUID(String uidString)
+	{
+		Object ref;
+		while ((ref = queue.poll()) != null)
+		{
+			directComponentRefs.remove(((IntKeyWeakReference)ref).uid);
+		}
+		int uid = Integer.parseInt(uidString);
+		ComponentAndInterface cai = directComponentRefs.get(uid);
+		return cai;
+	}
+
