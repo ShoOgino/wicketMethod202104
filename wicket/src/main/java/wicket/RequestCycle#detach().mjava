@@ -27,11 +27,11 @@
 		{
 			session.cleanupFeedbackMessages();
 		}
-		catch(RuntimeException re)
+		catch (RuntimeException re)
 		{
 			log.error("there was an error cleaning up the feedback messages", re);
 		}
-		
+
 		if (updateSession)
 		{
 			// At the end of our response, we need to set any session
@@ -39,14 +39,14 @@
 			try
 			{
 				session.update();
-			} 
-			catch(RuntimeException re)
+			}
+			catch (RuntimeException re)
 			{
 				log.error("there was an error updating the session " + session + ".", re);
 			}
 		}
 
-		// clear the used pagemap for this thread, 
+		// clear the used pagemap for this thread,
 		// maybe we can move this a few lines above to have a but more
 		// concurrency (session.update)
 		if (getResponse() instanceof BufferedWebResponse)
@@ -55,7 +55,7 @@
 			{
 				((BufferedWebResponse)getResponse()).filter();
 			}
-			catch(RuntimeException re)
+			catch (RuntimeException re)
 			{
 				log.error("there was an error filtering the response.", re);
 			}
@@ -69,7 +69,7 @@
 				requestLogger.requestTime((System.currentTimeMillis() - startTime));
 			}
 		}
-		catch(RuntimeException re)
+		catch (RuntimeException re)
 		{
 			log.error("there was an error in the RequestLogger ending.", re);
 		}
@@ -78,9 +78,10 @@
 		{
 			session.requestDetached();
 		}
-		catch(RuntimeException re)
+		catch (RuntimeException re)
 		{
-			log.error("there was an error detaching the request from the session " + session + ".", re);
+			log.error("there was an error detaching the request from the session " + session + ".",
+					re);
 		}
 
 		try
@@ -97,7 +98,7 @@
 		{
 			threadDetach();
 		}
-		catch(RuntimeException re)
+		catch (RuntimeException re)
 		{
 			log.error("Exception occurred during threadDetach", re);
 		}
