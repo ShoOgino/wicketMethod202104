@@ -1,0 +1,19 @@
+	/**
+	 * @see wicket.request.IRequestCycleProcessor#processEvents(wicket.RequestCycle)
+	 */
+	public void processEvents(RequestCycle requestCycle)
+	{
+		IRequestTarget target = requestCycle.getRequestTarget();
+
+		if (target instanceof IEventProcessor)
+		{
+			IRequestLogger logger = Application.get().getRequestLogger();
+			if (logger != null)
+			{
+				logger.logEventTarget(target);
+			}
+
+			((IEventProcessor)target).processEvents(requestCycle);
+		}
+	}
+
