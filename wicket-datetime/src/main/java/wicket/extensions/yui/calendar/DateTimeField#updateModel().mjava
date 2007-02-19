@@ -27,14 +27,16 @@
 				} else {
 					date.set(DateTimeFieldType.halfdayOfDay(), 0);
 				}
+
+				// the date will be in the server's timezone
+				Date d = date.toDate();
+				setModelObject(d);
+
 			} catch (RuntimeException e) {
 				DateTimeField.this.error(e.getMessage());
 				invalid();
 			}
 
-			// the date will be in the server's timezone
-			Date d = date.toDate();
-			setModelObject(d);
 		} else {
 			setModelObject(null);
 		}
