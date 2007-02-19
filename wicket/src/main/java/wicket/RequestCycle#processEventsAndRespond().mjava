@@ -4,18 +4,13 @@
 	 */
 	private final void processEventsAndRespond()
 	{
-		// Use any synchronization lock provided by the target
-		Object lock = getRequestTarget().getLock(this);
-		if (lock != null)
-		{
-			synchronized (lock)
-			{
-				doProcessEventsAndRespond(processor);
-			}
-		}
-		else
-		{
-			doProcessEventsAndRespond(processor);
-		}
+		// let the processor handle/ issue any events
+		processor.processEvents(this);
+
+		// set current stage manually this time
+		currentStep = RESPOND;
+
+		// generate a response
+		processor.respond(this);
 	}
 
