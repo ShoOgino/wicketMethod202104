@@ -1,0 +1,28 @@
+        private final boolean checkEnds(final int sipat, final boolean isSingleStart)
+        {
+            // if the remaining length of the string isn't the same as that found in the pattern 
+            // we do not match
+            final int l = lpat - sipat; // calculate length of comparison
+            final int ostr = lstr - l; // calculate offset into string
+            if(ostr >= 0 && strncmp(apat, sipat, astr, ostr, l)) {
+                if( isSingleStart )
+                {
+                    // if the ends matches make sure there isn't a PATHSEP in the candidate string part
+                    int i = ostr - istr;
+                    while( i > istr )
+                    {
+                        if( astr[--i] == PATHSEP )
+                        {
+                            return false; // we cannot match because of a PATHSEP in the matched part
+                        }
+                    }
+                }
+                add(new String(astr, istr, ostr - istr));
+
+                return true;
+            }
+
+            // otherwise we do not match
+            return false;
+        }
+

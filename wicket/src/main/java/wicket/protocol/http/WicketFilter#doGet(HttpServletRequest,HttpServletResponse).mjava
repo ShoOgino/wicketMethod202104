@@ -12,6 +12,11 @@
 	public final void doGet(final HttpServletRequest servletRequest,
 			final HttpServletResponse servletResponse) throws ServletException, IOException
 	{
+		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
+		try
+		{
+		Thread.currentThread().setContextClassLoader(getClassLoader());
+
 		// If the request does not provide information about the encoding of its
 		// body (which includes POST parameters), than assume the default
 		// encoding as defined by the wicket application. Bear in mind that the
@@ -100,6 +105,11 @@
 
 			// Clean up thread local application
 			Application.unset();
+		}
+		}
+		finally
+		{
+			Thread.currentThread().setContextClassLoader(previousClassLoader);
 		}
 	}
 

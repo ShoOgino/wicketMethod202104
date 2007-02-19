@@ -5,6 +5,10 @@
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
 		this.filterConfig = filterConfig;
+		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
+		try
+		{
+		Thread.currentThread().setContextClassLoader(getClassLoader());
 
 		IWebApplicationFactory factory = getApplicationFactory();
 
@@ -21,8 +25,6 @@
 
 		filterPath = filterConfig.getInitParameter(FILTER_PATH_PARAM);
 
-		try
-		{
 			Application.set(webApplication);
 
 			// Call internal init method of web application for default
@@ -44,6 +46,7 @@
 		finally
 		{
 			Application.unset();
+			Thread.currentThread().setContextClassLoader(previousClassLoader);
 		}
 	}
 

@@ -1,0 +1,53 @@
+    /**
+     * Match a pattern agains a string and isolates wildcard replacement into a <code>Map</code>.
+     * <br>
+     * Here is how the matching algorithm works:
+     *
+     * <ul>
+     *   <li>
+     *     The '*' character, meaning that zero or more characters (excluding the path separator '/')
+     *     are to be matched.
+     *   </li>
+     *   <li>
+     *     The '**' sequence, meaning that zero or more characters (including the path separator '/')
+     *     are to be matched.
+     *   </li>
+     *   <li>
+     *     The '\*' sequence is honored as a litteral '*' character, not a wildcard
+     *   </li>
+     * </ul>
+     * <br>
+     * When more than two '*' characters, not separated by another character, are found their value is
+     * considered as '**' and immediate succeeding '*' are skipped.
+     * <br>
+     * The '**' wildcard is greedy and thus the following sample cannot match:
+     * <dl>
+     *   <dt>pattern</dt>
+     *   <dd>STAR,STAR,PATHSEP,STAR,PATHSEP,STAR,STAR (why can't I express it litterally?)</dt>
+     *   <dt>string</dt>
+     *   <dd>foo/bar/baz/bug</dt>
+     * </dl>
+     * The first '**' in the pattern will suck up until the last '/' in string and thus will not match.
+     * <br>
+     * A more advance algorithm could cerainly check whether there is an other literal later in the pattern to ev. match in string
+     * but I'll leave this exercise to someone else ATM if one needs such.
+     * 
+     * @param pat The pattern string.
+     * @param str The string to math agains the pattern
+     *
+     * @return a <code>Map</code> containing the representation of the extracted pattern. The extracted patterns are
+     *         keys in the <code>Map</code> from left to right beginning with "1" for te left most, "2" for the next,
+     *         a.s.o. The key "0" is the string itself. If the return value is null, string does not match to the
+     *         pattern .
+     */
+    public static Map match(final String pat,
+                            final String str) {
+        final Matcher map = new Matcher(pat, str);
+
+        if(map.isMatch()) {
+            return map.getMap();
+        }
+
+        return null;
+    }
+
