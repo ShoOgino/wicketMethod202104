@@ -5,8 +5,8 @@
 	 * and {@link AjaxSubmitLink}.
 	 * <p>
 	 * On AjaxLinks and AjaxFallbackLinks the onClick method is invoked with a
-	 * valid AjaxRequestTarget. In that way you can test the flow of your tester
-	 * when using AJAX.
+	 * valid AjaxRequestTarget. In that way you can test the flow of your
+	 * application when using AJAX.
 	 * <p>
 	 * When clicking an AjaxSubmitLink the form, which the AjaxSubmitLink is
 	 * attached to is first submitted, and then the onSubmit method on
@@ -102,42 +102,10 @@
 			String failMessage = "No form submit behavior found on the submit link. Strange!!";
 			Assert.assertNotNull(failMessage, ajaxFormSubmitBehavior);
 
-			// We need to get the form submitted, using reflection.
-			// It needs to be "submitted".
-			Form form = null;
-			try
-			{
-				Field formField = AjaxFormSubmitBehavior.class.getDeclaredField("form");
-				formField.setAccessible(true);
-				form = (Form)formField.get(ajaxFormSubmitBehavior);
-			}
-			catch (Exception e)
-			{
-				Assert.fail(e.getMessage());
-			}
-
-			failMessage = "No form attached to the submitlink.";
-			Assert.assertNotNull(failMessage, form);
-
 			setupRequestAndResponse();
 			RequestCycle requestCycle = createRequestCycle();
 
-			// "Submit" the form
-			form.visitFormComponents(new FormComponent.AbstractVisitor()
-			{
-				@Override
-				public void onFormComponent(FormComponent formComponent)
-				{
-					if (!(formComponent instanceof Button)
-							&& !(formComponent instanceof RadioGroup))
-					{
-						String name = formComponent.getInputName();
-						String value = formComponent.getValue();
-
-						getServletRequest().setParameter(name, value);
-					}
-				}
-			});
+			submitAjaxFormSubmitBehavior(ajaxFormSubmitBehavior);
 
 			// Ok, finally we "click" the link
 			ajaxFormSubmitBehavior.onRequest();

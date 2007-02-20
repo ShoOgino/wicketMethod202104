@@ -70,6 +70,13 @@
 		setupRequestAndResponse();
 		RequestCycle requestCycle = createRequestCycle();
 
+		// If the event is an FormSubmitBehavior then also "submit" the form
+		if (ajaxEventBehavior instanceof AjaxFormSubmitBehavior)
+		{
+			AjaxFormSubmitBehavior ajaxFormSubmitBehavior = (AjaxFormSubmitBehavior)ajaxEventBehavior;
+			submitAjaxFormSubmitBehavior(ajaxFormSubmitBehavior);
+		}
+
 		ajaxEventBehavior.onRequest();
 
 		// process the request target
