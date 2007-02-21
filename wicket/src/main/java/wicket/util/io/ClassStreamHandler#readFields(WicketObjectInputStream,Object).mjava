@@ -1,27 +1,26 @@
 	/**
 	 * @param wois
+	 * @throws WicketSerializeableException 
 	 */
-	public void readFields(WicketObjectInputStream wois, Object object)
+	public void readFields(WicketObjectInputStream wois, Object object)  throws WicketSerializeableException
 	{
+		FieldAndIndex fai = null;
 		try
 		{
 			for (int i = 0; i < fields.size(); i++)
 			{
-				FieldAndIndex fai = (FieldAndIndex)fields.get(i);
+				fai = (FieldAndIndex)fields.get(i);
 				fai.readField(object, wois);
 			}
 		}
-		catch (IllegalArgumentException ex)
+		catch (WicketSerializeableException wse)
 		{
-			throw new RuntimeException(ex);
+			wse.addTrace(fai.field.getName());
+			throw wse;
 		}
-		catch (IOException ex)
+		catch (Exception ex)
 		{
-			throw new RuntimeException(ex);
-		}
-		catch (ClassNotFoundException ex)
-		{
-			throw new RuntimeException(ex);
+			throw new WicketSerializeableException("Error reading field: " + fai.field.getName() + " for object class: " + object.getClass(),ex);
 		}
 	}
 

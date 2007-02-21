@@ -1,0 +1,20 @@
+	/**
+	 * @return
+	 * @throws NotSerializableException 
+	 */
+	public Object writeReplace(Object o) throws NotSerializableException
+	{
+		if (writeReplaceMethod != null)
+		{
+			try
+			{
+				return writeReplaceMethod.invoke(o, null);
+			}
+			catch (Exception ex)
+			{
+				throw new NotSerializableException(ex.getMessage());
+			} 
+		}
+		return null;
+	}
+
