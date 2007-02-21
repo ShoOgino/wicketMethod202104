@@ -4,36 +4,16 @@
 	 */
 	public void storePage(String sessionId, Page page)
 	{
-		List list = (List)storePageMap.get(sessionId);
+		List list = (List)pagesToBeSerialized.get(sessionId);
 		if (list == null)
 		{
-			list = Collections.synchronizedList(new LinkedList());
+			list = new LinkedList();
 		}
-		// if the pagemap falls behind, directly serialize it here.
-		// this check is now really wrong!! We should use a complete counter..
-		if (pagesInMap  > 25)
-		{
-			SessionPageKey key = new SessionPageKey(sessionId, page);
-			byte[] bytes = serializePage(key, page);
-			if (bytes != null)
-			{
-				key.setObject(bytes);
-				list.add(key);
-				// do really put it back in.. The writer thread could have removed it.
-				storePageMap.put(sessionId, list);
-			}
-
-		}
-		else
+		synchronized (list)
 		{
 			list.add(new SessionPageKey(sessionId, page));
-			// do really put it back in.. The writer thread could have removed it.
-			storePageMap.put(sessionId, list);
-			synchronized (storePageMap)
-			{
-				pagesInMap++;
-				storePageMap.notifyAll();
-			}
 		}
+		// do really put it back in.. The writer thread could have removed it.
+		pagesToBeSerialized.put(sessionId, list);
 	}
 
