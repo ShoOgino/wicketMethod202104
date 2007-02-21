@@ -9,9 +9,11 @@
 			if (header.startsWith("<?xml"))
 			{
 				header = header.substring(header.indexOf(LINE_ENDING) + LINE_ENDING.length());
+				logger.debug("Header for " + file + ": " + header);
 			}
 			else
 			{
+				logger.debug(file + " does not start with XML prolog");
 				// Then only take the first 16 lines
 				String[] headers = header.split(LINE_ENDING);
 				header = "";
@@ -26,6 +28,7 @@
 			}
 
 			revision = Diff.diff(getLicenseHeader().split(LINE_ENDING), header.split(LINE_ENDING));
+			logger.debug("License diff for " + file + ": " + revision);
 		}
 		catch (Exception e)
 		{
