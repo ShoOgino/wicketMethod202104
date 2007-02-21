@@ -4,6 +4,11 @@
 
 			if (pathname.isDirectory())
 			{
+				String relativePathname = pathname.getAbsolutePath();
+				relativePathname = Strings.replaceAll(relativePathname,
+						baseDirectory.getAbsolutePath() + System.getProperty("file.separator"), "")
+						.toString();
+				if (relativePathname.equals("target") == false) {
 				boolean found = false;
 				for (String ignore : ignoreDirectory)
 				{
@@ -16,6 +21,7 @@
 				if (found == false)
 				{
 					accept = true;
+				}
 				}
 			}
 
