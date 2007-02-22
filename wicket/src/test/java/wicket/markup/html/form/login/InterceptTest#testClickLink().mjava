@@ -6,7 +6,7 @@
 		application.setupRequestAndResponse();
 		application.processRequestCycle();
 		MockLoginPage loginPage = (MockLoginPage)application.getLastRenderedPage();
-		assertEquals(application.getLoginPage(), loginPage.getClass());
+		assertEquals(((MyMockWebApplication)application.getApplication()).getLoginPage(), loginPage.getClass());
 
 		application.setupRequestAndResponse();
 		application.getServletRequest().setRequestToComponent(loginPage.getForm());
@@ -16,7 +16,7 @@
 
 		// continueToInterceptPage seems to return the same call, causing it to
 		// login twice as a result the lastrendered page is null
-		assertEquals(application.getHomePage(), application.getLastRenderedPage().getClass());
+		assertEquals(application.getApplication().getHomePage(), application.getLastRenderedPage().getClass());
 
 		application.setupRequestAndResponse();
 		application.getServletRequest().setRequestToComponent(

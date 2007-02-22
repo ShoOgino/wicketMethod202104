@@ -4,10 +4,8 @@
 	 */
 	public void testPagedTable() throws Exception
 	{
-		MockWebApplication application = new MockWebApplication(null);
-		application.setHomePage(PagedTableNavigatorPage.class);
-		application.setupRequestAndResponse();
-		application.processRequestCycle();
+		WicketTester application = new WicketTester();
+		application.startPage(PagedTableNavigatorPage.class);
 		PagedTableNavigatorPage page = (PagedTableNavigatorPage)application.getLastRenderedPage();
 		String document = application.getServletResponse().getDocument();
 		DiffUtil.validatePage(document, this.getClass(), "PagedTableNavigatorExpectedResult_1.html", true);
@@ -150,5 +148,7 @@
 		application.processRequestCycle();
 		document = application.getServletResponse().getDocument();
 		DiffUtil.validatePage(document, this.getClass(), "PagedTableNavigatorExpectedResult_8.html", true);
+
+		application.destroy();
 	}
 

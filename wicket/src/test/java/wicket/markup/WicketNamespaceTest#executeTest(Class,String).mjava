@@ -7,15 +7,12 @@
 	{
 		System.out.println("=== " + pageClass.getName() + " ===");
 		
-		application = new MockWebApplication(null);
-		application.setHomePage(pageClass);
-
-		// Do the processing
-		application.setupRequestAndResponse();
-		application.processRequestCycle();
+		application = new WicketTester();
+		application.startPage(pageClass);
 
 		// Validate the document
 		String document = application.getServletResponse().getDocument();
 		DiffUtil.validatePage(document, this.getClass(), filename, true);
+		application.destroy();
 	}
 
