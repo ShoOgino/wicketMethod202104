@@ -1,0 +1,37 @@
+	/**
+	 * Test that the executeAjaxEvent "submits" the form if the event is a
+	 * AjaxFormSubmitBehavior.
+	 */
+	public void testExecuteAjaxEvent_ajaxFormSubmitLink()
+	{
+		tester.startPage(MockPageWithFormAndAjaxFormSubmitBehavior.class);
+
+		// Get the page
+		MockPageWithFormAndAjaxFormSubmitBehavior page = (MockPageWithFormAndAjaxFormSubmitBehavior)tester
+				.getLastRenderedPage();
+
+		Pojo pojo = page.getPojo();
+
+		assertEquals("Mock name", pojo.getName());
+		assertEquals("Mock name", ((TextField)tester.getComponentFromLastRenderedPage("form"
+				+ Component.PATH_SEPARATOR + "name")).getValue());
+
+		assertFalse(page.isExecuted());
+
+		// Execute the ajax event
+		tester.executeAjaxEvent(MockPageWithFormAndAjaxFormSubmitBehavior.EVENT_COMPONENT,
+				ClientEvent.CLICK);
+
+		assertTrue("AjaxFormSubmitBehavior.onSubmit() has not been executed in "
+				+ MockPageWithFormAndAjaxFormSubmitBehavior.class, page.isExecuted());
+
+		assertEquals("Mock name", ((TextField)tester.getComponentFromLastRenderedPage("form" + Component.PATH_SEPARATOR + "name")).getValue());
+		
+		// The name of the pojo should still be the same. If the
+		// executeAjaxEvent weren't submitting the form the name would have been
+		// reset to null, because the form would have been updated but there
+		// wouldn't be any data to update it with.
+		assertNotNull("executeAjaxEvent() did not properly submit the form", pojo.getName());
+		assertEquals("Mock name", pojo.getName());
+	}
+
