@@ -1,0 +1,22 @@
+	/**
+	 * Gets the store for the session of the provided request, returning null
+	 * and log a warning when the store was not found.
+	 * 
+	 * @param request
+	 * 
+	 * @return The store
+	 */
+	private final Map getStore(Request request)
+	{
+		String sessionId = getSessionId(request, true);
+		Map store = (Map)sessionIdToStore.get(sessionId);
+		if (store == null)
+		{
+			log.warn("no store found for session with id " + sessionId + " (request=" + request
+					+ ")");
+			// return a dummy
+			return new HashMap();
+		}
+		return store;
+	}
+
