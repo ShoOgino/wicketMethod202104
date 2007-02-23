@@ -6,8 +6,7 @@
 	 */
 	public void testCreateDisallowedComponent() throws Exception
 	{
-		WicketTester app = new WicketTester();
-		app.getApplication().getSecuritySettings().setAuthorizationStrategy(new DummyAuthorizationStrategy()
+		tester.getApplication().getSecuritySettings().setAuthorizationStrategy(new DummyAuthorizationStrategy()
 		{
 			public boolean isInstantiationAuthorized(Class c)
 			{
@@ -16,7 +15,7 @@
 		});
 		try
 		{
-			WebComponent c = new WebComponent("test");
+			new WebComponent("test");
 			// bad: authorization should have failed
 			fail("authorization check failed to throw an exception");
 		}

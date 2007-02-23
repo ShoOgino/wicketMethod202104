@@ -9,16 +9,11 @@
 			final String filename) throws Exception
 	{
 		assertNotNull(component);
-		
+
 		System.out.println("=== " + pageClass.getName() + " : " + component.getPageRelativePath()
 				+ " ===");
 
-		application.setupRequestAndResponse();
-		WebRequestCycle cycle = application.createRequestCycle();
-		application.getServletRequest().setRequestToComponent(component);
-		application.processRequestCycle(cycle);
-
-		String document = application.getServletResponse().getDocument();
-		DiffUtil.validatePage(document, pageClass, filename, true);
+		tester.executeListener(component);
+		tester.assertResultPage(pageClass, filename);
 	}
 
