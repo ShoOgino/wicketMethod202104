@@ -4,10 +4,11 @@
 		public final void renderHead(final IHeaderResponse headResponse)
 		{
 			Response response = headResponse.getResponse();
-			final WebRequestCycle cycle = (WebRequestCycle)getRequestCycle();
+			final WebRequestCycle cycle = (WebRequestCycle)RequestCycle.get();
 			final IRequestTarget target = cycle.getRequestTarget();
 
-			String name = getPageMap().getName();
+			IPageMap pageMap = webPage.getPageMap();
+			String name = pageMap.getName();
 			if (name == null)
 			{
 				name = "wicket:default";
@@ -17,7 +18,7 @@
 				name = name.replace('"', '_');
 			}
 
-			Session session = getSession();
+			Session session = Session.get();
 
 			Session.PageMapAccessMetaData meta = (Session.PageMapAccessMetaData)session
 					.getMetaData(Session.PAGEMAP_ACCESS_MDK);
@@ -26,7 +27,7 @@
 				meta = new Session.PageMapAccessMetaData();
 				session.setMetaData(Session.PAGEMAP_ACCESS_MDK, meta);
 			}
-			boolean firstAccess = meta.add(getPageMap());
+			boolean firstAccess = meta.add(pageMap);
 
 			if (firstAccess)
 			{
@@ -51,13 +52,13 @@
 				{
 					IBookmarkablePageRequestTarget current = (IBookmarkablePageRequestTarget)target;
 					BookmarkablePageRequestTarget redirect = new BookmarkablePageRequestTarget(
-							getSession().createAutoPageMapName(), current.getPageClass(), current
+							session.createAutoPageMapName(), current.getPageClass(), current
 									.getPageParameters());
 					url = cycle.urlFor(redirect);
 				}
 				else
 				{
-					url = urlFor(INewBrowserWindowListener.INTERFACE);
+					url = webPage.urlFor(INewBrowserWindowListener.INTERFACE);
 				}
 				JavascriptUtils.writeOpenTag(response);
 				response
