@@ -13,12 +13,7 @@
 		System.out.println("=== " + pageClass.getName() + " : " + component.getPageRelativePath()
 				+ " ===");
 
-		tester.setupRequestAndResponse();
-		WebRequestCycle cycle = tester.createRequestCycle();
-		tester.getServletRequest().setRequestToComponent(component);
-		tester.processRequestCycle(cycle);
-
-		String document = tester.getServletResponse().getDocument();
-		DiffUtil.validatePage(document, pageClass, filename,true);
+		tester.executeListener(component);
+		tester.assertResultPage(pageClass, filename);
 	}
 
