@@ -3,7 +3,6 @@
 	 * 
 	 * @see RenderedDynamicImageResource#render(Graphics2D)
 	 */
-	@Override
 	protected boolean render(final Graphics2D graphics)
 	{
 		// Get width and height
@@ -11,7 +10,7 @@
 		final int height = getHeight();
 
 		// Get size of text
-		graphics.setFont(font);
+		graphics.setFont(getFont());
 		final FontMetrics fontMetrics = graphics.getFontMetrics();
 		final int dxText = fontMetrics.stringWidth(label);
 		final int dxMargin = 10;
@@ -30,16 +29,17 @@
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
 			// Draw background
-			graphics.setColor(backgroundColor);
+			Color bgColor = getBackgroundColor();
+			graphics.setColor(bgColor);
 			graphics.fillRect(0, 0, width, height);
 
 			// Draw round rectangle
-			graphics.setColor(color);
-			graphics.setBackground(backgroundColor);
+			graphics.setColor(getColor());
+			graphics.setBackground(bgColor);
 			graphics.fillRoundRect(0, 0, width, height, arcWidth, arcHeight);
 
 			// Draw text
-			graphics.setColor(textColor);
+			graphics.setColor(getTextColor());
 			final int x = (width - dxText) / 2;
 			final int y = (getHeight() - fontMetrics.getHeight()) / 2;
 			graphics.drawString(label, x, y + fontMetrics.getAscent());
