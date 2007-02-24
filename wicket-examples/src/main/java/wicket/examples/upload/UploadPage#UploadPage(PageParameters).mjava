@@ -6,11 +6,7 @@
 	 */
 	public UploadPage(final PageParameters parameters)
 	{
-		// Set upload folder to tempdir + 'wicket-uploads'.
-		this.uploadFolder = new Folder(System.getProperty("java.io.tmpdir"), "wicket-uploads");
-
-		// Ensure folder exists
-		uploadFolder.mkdirs();
+		Folder uploadFolder = getUploadFolder();
 
 		// Create feedback panels
 		new FeedbackPanel(this, "uploadFeedback");
@@ -21,8 +17,14 @@
 
 		// Add folder view
 		new Label(this, "dir", uploadFolder.getAbsolutePath());
-		files.addAll(Arrays.asList(uploadFolder.listFiles()));
-		fileListView = new FileListView(this, "fileList", files);
+		fileListView = new FileListView(this, "fileList", new LoadableDetachableModel<List<File>>()
+		{
+			@Override
+			protected List<File> load()
+			{
+				return Arrays.asList(getUploadFolder().listFiles());
+			}
+		});
 
 		// Add upload form with ajax progress bar
 		final FileUploadForm ajaxSimpleUploadForm = new FileUploadForm(this, "ajax-simpleUpload");
