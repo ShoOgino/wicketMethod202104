@@ -1,5 +1,6 @@
 	/**
-	 * Computes the size of an object by serializing it to a byte array.
+	 * Computes the size of an object. Note that this is an estimation, never an
+	 * absolute accurate size.
 	 * 
 	 * @param object
 	 *            Object to compute size of
@@ -7,18 +8,6 @@
 	 */
 	public static long sizeof(final Object object)
 	{
-		if (object == null)
-			return 0;
-		try
-		{
-			final ByteCountingOutputStream out = new ByteCountingOutputStream();
-			new ObjectOutputStream(out).writeObject(object);
-			out.close();
-			return out.size();
-		}
-		catch (IOException e)
-		{
-			return -1;
-		}
+		return sizeOfStrategy.sizeOf(object);
 	}
 
