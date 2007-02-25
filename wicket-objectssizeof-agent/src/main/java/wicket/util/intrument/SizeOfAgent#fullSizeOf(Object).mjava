@@ -1,0 +1,19 @@
+	/**
+	 * Calculates full size of object iterating over its hierarchy graph.
+	 * 
+	 * @param obj
+	 *            object to calculate size of
+	 * @return object size
+	 */
+	public static long fullSizeOf(Object obj) {
+		Map<Object, Object> visited = new IdentityHashMap<Object, Object>();
+		Stack<Object> stack = new Stack<Object>();
+
+		long result = internalSizeOf(obj, stack, visited);
+		while (!stack.isEmpty()) {
+			result += internalSizeOf(stack.pop(), stack, visited);
+		}
+		visited.clear();
+		return result;
+	}
+
