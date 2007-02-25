@@ -1,0 +1,26 @@
+	/**
+	 * @see wicket.util.convert.SimpleConverterAdapter#toObject(java.lang.String)
+	 */
+	public final Object toObject(String value) {
+
+		DateTimeFormatter format = getFormat();
+
+		if (applyTimeZoneDifference) {
+			TimeZone zone = getClientTimeZone();
+			// instantiate now/ current time
+			MutableDateTime dt = new MutableDateTime();
+			if (zone != null) {
+				// set time zone for client
+				format = format.withZone(DateTimeZone.forTimeZone(zone));
+				dt.setZone(DateTimeZone.forTimeZone(zone));
+			}
+			// parse date retaining the time of the submission
+			format.parseInto(dt, value, 0);
+			// apply the server time zone to the parsed value
+			dt.setZone(getTimeZone());
+			return dt.toDate();
+		} else {
+			return format.parseDateTime(value).toDate();
+		}
+	}
+

@@ -1,0 +1,25 @@
+	/**
+	 * Gives overriding classes the option of adding (or even changing/
+	 * removing) configuration properties for the javascript widget. See <a
+	 * href="http://developer.yahoo.com/yui/calendar/">the widget's
+	 * documentation</a> for the available options. If you want to override/
+	 * remove properties, you obviously should call
+	 * {@link super#setWidgetProperties(Properties)} first.
+	 * 
+	 * @param widgetProperties
+	 *            the current widget properties
+	 */
+	protected void configureWidgetProperties(Map widgetProperties) {
+		widgetProperties.put("close", Boolean.TRUE);
+		// TODO localize
+		widgetProperties.put("title", "Select a date:");
+
+		Date date = (Date) component.getModelObject();
+		if (date != null) {
+			widgetProperties.put("selected", AbstractCalendar.FORMAT_DATE
+					.format(date));
+			widgetProperties.put("pagedate", AbstractCalendar.FORMAT_PAGEDATE
+					.format(date));
+		}
+	}
+

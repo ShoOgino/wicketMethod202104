@@ -1,0 +1,32 @@
+	/**
+	 * Construct. The provided pattern will be used as the base format (but they
+	 * will be localized for the current locale) and if null,
+	 * {@link DateTimeFormat#shortDate()} will be used.
+	 * </p>
+	 * When applyTimeZoneDifference is true, the current time is applied on the
+	 * parsed date, and the date will be corrected for the time zone difference
+	 * between the server and the client. For instance, if I'm in Seattle and
+	 * the server I'm working on is in Amsterdam, the server is 9 hours ahead.
+	 * So, if I'm inputting say 12/24 at a couple of hours before midnight, at
+	 * the server it is already 12/25. If this boolean is true, it will be
+	 * transformed to 12/25, while the client sees 12/24.
+	 * </p>
+	 * 
+	 * @param dateStyle
+	 *            style to use in case no pattern is provided. Must be two
+	 *            characters from the set {"S", "M", "L", "F", "-"}. Must be not
+	 *            null. See {@link DateTimeFormat#forStyle(String)} for options.
+	 * @param applyTimeZoneDifference
+	 *            whether to apply the difference in time zones between client
+	 *            and server
+	 * @throws IllegalArgumentException
+	 *             in case dateStyle is null
+	 */
+	public StyleDateConverter(String dateStyle, boolean applyTimeZoneDifference) {
+		super(applyTimeZoneDifference);
+		if (dateStyle == null) {
+			throw new IllegalArgumentException("dateStyle must be not null");
+		}
+		this.dateStyle = dateStyle;
+	}
+
