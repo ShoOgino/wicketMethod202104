@@ -35,7 +35,7 @@
 		}
 		else if (cls.isArray())
 		{
-			checked.assign(obj);
+			checked.put(obj, null);
 			Class<?> ccl = cls.getComponentType();
 			if (!(ccl.isPrimitive()))
 			{
@@ -61,12 +61,12 @@
 					public void writeObject(Object streamObj) throws IOException
 					{
 						// Check for circular reference.
-						if (checked.contains(streamObj))
+						if (checked.containsKey(streamObj))
 						{
 							return;
 						}
 
-						checked.assign(streamObj);
+						checked.put(streamObj, null);
 						String arrayPos = "[write:" + count++ + "]";
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
@@ -136,12 +136,12 @@
 
 						counter++;
 						// Check for circular reference.
-						if (checked.contains(streamObj))
+						if (checked.containsKey(streamObj))
 						{
 							return null;
 						}
 
-						checked.assign(obj);
+						checked.put(obj, null);
 						String arrayPos = "[write:" + counter + "]";
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
@@ -188,7 +188,7 @@
 					{
 						throw new RuntimeException(e);
 					}
-					checked.assign(obj);
+					checked.put(obj, null);
 					checkFields(obj, slotDesc);
 				}
 			}
