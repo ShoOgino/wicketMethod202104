@@ -6,15 +6,28 @@
 	public void run() throws Exception {
 
 		activeThreads = 0;
-		Server server = new Server(port);
-		WebAppContext ctx = new WebAppContext("./src/main/webapp", "/");
-		server.addHandler(ctx);
-		server.start();
 
 		HttpConnectionManagerParams connManagerParams = new HttpConnectionManagerParams();
 		connManagerParams.setDefaultMaxConnectionsPerHost(numberOfThreads * 2);
 		MultiThreadedHttpConnectionManager manager = new MultiThreadedHttpConnectionManager();
 		manager.setParams(connManagerParams);
+
+		Server server = null;
+		GetMethod getMethod = new GetMethod("http://localhost:" + port + "/");
+		try {
+			getMethod.setFollowRedirects(true);
+			HttpClient httpClient = new HttpClient(params, manager);
+			int code = httpClient.executeMethod(getMethod);
+			if (code != 200) {
+				// start up server
+				server = new Server(port);
+				WebAppContext ctx = new WebAppContext("./src/main/webapp", "/");
+				server.addHandler(ctx);
+				server.start();
+			}
+		} finally {
+			getMethod.releaseConnection();
+		}
 
 		try {
 
@@ -53,7 +66,9 @@
 
 		} finally {
 			MultiThreadedHttpConnectionManager.shutdownAll();
-			server.stop();
+			if (server != null) {
+				server.stop();
+			}
 		}
 	}
 
