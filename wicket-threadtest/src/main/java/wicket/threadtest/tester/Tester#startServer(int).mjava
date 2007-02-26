@@ -1,0 +1,20 @@
+	/**
+	 * Start Jetty server instance and return the handle.
+	 * 
+	 * @param port
+	 * @return server handle
+	 */
+	private static Server startServer(int port) {
+		Server server;
+		// start up server
+		server = new Server(port);
+		WebAppContext ctx = new WebAppContext("./src/main/webapp", "/");
+		server.addHandler(ctx);
+		try {
+			server.start();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return server;
+	}
+
