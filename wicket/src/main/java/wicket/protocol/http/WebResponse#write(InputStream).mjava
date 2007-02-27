@@ -1,0 +1,36 @@
+	/**
+	 * Copies the given input stream to the servlet response
+	 * <p>
+	 * NOTE Content-Length is not set because it would require to buffer the
+	 * whole input stream
+	 * </p>
+	 * 
+	 * @param in
+	 *            input stream to copy, will be closed after copy
+	 */
+	public void write(InputStream in)
+	{
+		try
+		{
+			// Copy resource input stream to servlet output stream
+			Streams.copy(in, getHttpServletResponse().getOutputStream());
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+		finally
+		{
+			// NOTE: We only close the InputStream. The servlet
+			// container should close the output stream.
+			try
+			{
+				in.close();
+			}
+			catch (IOException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+	}
+

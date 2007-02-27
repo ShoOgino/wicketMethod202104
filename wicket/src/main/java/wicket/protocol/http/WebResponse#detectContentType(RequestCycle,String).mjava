@@ -1,0 +1,34 @@
+	/**
+	 * Sets the Content-Type header with servlet-context-defined content-types
+	 * (application's web.xml or servlet container's configuration), and fall
+	 * back to system or JVM-defined (FileNameMap) content types.
+	 * 
+	 * @param requestCycle
+	 * @param uri
+	 *            Resource name to be analyzed to detect MIME type
+	 * 
+	 * @see ServletContext#getMimeType(String)
+	 * @see URLConnection#getFileNameMap()
+	 */
+	public void detectContentType(RequestCycle requestCycle, String uri)
+	{
+		// Configure response with content type of resource
+		final ServletContext context = ((WebApplication)requestCycle.getApplication())
+				.getServletContext();
+		// First look for user defined content-type in web.xml
+		String contentType = context.getMimeType(uri);
+
+		// If not found, fall back to
+		// FileResourceStream.getContentType() that looks into
+		// system or JVM content types
+		if (contentType == null)
+		{
+			contentType = URLConnection.getFileNameMap().getContentTypeFor(uri);
+		}
+
+		if (contentType != null)
+		{
+			setContentType(contentType);
+		}
+	}
+
