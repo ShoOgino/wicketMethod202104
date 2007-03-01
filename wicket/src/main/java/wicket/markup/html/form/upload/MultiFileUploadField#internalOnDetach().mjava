@@ -1,0 +1,30 @@
+	/**
+	 * @see wicket.Component#internalOnDetach()
+	 */
+	protected void internalOnDetach()
+	{
+		// cleanup any opened filestreams
+		Collection uploads = (Collection)getConvertedInput();
+		if (uploads != null)
+		{
+			Iterator it = uploads.iterator();
+			while (it.hasNext())
+			{
+				final FileUpload upload = (FileUpload)it.next();
+				upload.closeStreams();
+			}
+		}
+
+		// cleanup any caches
+		inputArrayCache = null;
+
+		// clean up the model because we dont want FileUpload objects in session
+		Object modelObject = getModelObject();
+		if (modelObject != null && (modelObject instanceof Collection))
+		{
+			((Collection)modelObject).clear();
+		}
+
+		super.internalOnDetach();
+	}
+

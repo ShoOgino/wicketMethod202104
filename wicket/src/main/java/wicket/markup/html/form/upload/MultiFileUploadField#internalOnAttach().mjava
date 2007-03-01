@@ -1,0 +1,18 @@
+	/**
+	 * @see wicket.Component#internalOnAttach()
+	 */
+	protected void internalOnAttach()
+	{
+		super.internalOnAttach();
+
+		// auto toggle form's multipart property
+		Form form = (Form)findParent(Form.class);
+		if (form == null)
+		{
+			// woops
+			throw new IllegalStateException("Component " + getClass().getName() + " must have a "
+					+ Form.class.getName() + " component above in the hierarchy");
+		}
+		form.setMultiPart(true);
+	}
+
