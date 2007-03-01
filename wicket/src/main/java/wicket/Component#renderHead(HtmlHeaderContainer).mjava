@@ -8,17 +8,20 @@
 	 */
 	public void renderHead(final HtmlHeaderContainer container)
 	{
-		// Ask all behaviors if they have something to contribute to the
-		// header or body onLoad tag.
-		if (this.behaviors != null)
+		if (isVisible())
 		{
-			final Iterator iter = this.behaviors.iterator();
-			while (iter.hasNext())
+			// Ask all behaviors if they have something to contribute to the
+			// header or body onLoad tag.
+			if (this.behaviors != null)
 			{
-				IBehavior behavior = (IBehavior)iter.next();
-				if (behavior instanceof IHeaderContributor)
+				final Iterator iter = this.behaviors.iterator();
+				while (iter.hasNext())
 				{
-					((IHeaderContributor)behavior).renderHead(container.getHeaderResponse());
+					IBehavior behavior = (IBehavior)iter.next();
+					if (behavior instanceof IHeaderContributor)
+					{
+						((IHeaderContributor)behavior).renderHead(container.getHeaderResponse());
+					}
 				}
 			}
 		}
