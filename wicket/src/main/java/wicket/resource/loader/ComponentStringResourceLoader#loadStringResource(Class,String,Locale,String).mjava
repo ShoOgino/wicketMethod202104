@@ -23,33 +23,37 @@
 			return null;
 		}
 
-		String value = null;
 		while (true)
 		{
-			// Get (or load) the properties associated with clazz, locale and
-			// style
-			final Properties props = getProperties(clazz, locale, style);
-			if (props != null)
+			// Create the base path
+			String path = clazz.getName().replace('.', '/');
+
+			// Iterator over all the combinations
+			ResourceNameIterator iter = new ResourceNameIterator(path, style, locale,
+					"properties,xml");
+			while (iter.hasNext())
 			{
-				ValueMap strings = props.getAll();
+				String newPath = iter.next();
 
-				// Lookup value
-				if (log.isDebugEnabled())
+				// Load the properties associated with the path
+				final Properties props = PropertiesFactory.get().load(clazz, newPath);
+				if (props != null)
 				{
-					log.debug("Try to load resource from: " + props + "; key: " + key);
-				}
-				value = strings.getString(key);
-				if (value != null)
-				{
-					if (log.isDebugEnabled())
+					// Lookup the value
+					String value = props.getString(key);
+					if (value != null)
 					{
-						log.debug("Found resource from: " + props + "; key: " + key);
-					}
+						if (log.isDebugEnabled())
+						{
+							log.debug("Found resource from: " + props + "; key: " + key);
+						}
 
-					break;
+						return value;
+					}
 				}
 			}
 
+			// Didn't find the key yet, continue searching if possible
 			if (isStopResourceSearch(clazz))
 			{
 				break;
@@ -59,7 +63,7 @@
 			clazz = clazz.getSuperclass();
 		}
 
-		// Return the resource value (may be null if resource was not found)
-		return value;
+		// not found
+		return null;
 	}
 

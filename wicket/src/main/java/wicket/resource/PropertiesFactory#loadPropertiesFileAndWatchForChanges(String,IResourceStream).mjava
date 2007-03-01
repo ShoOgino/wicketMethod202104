@@ -7,17 +7,10 @@
 	 *            The key for the resource
 	 * @param resourceStream
 	 *            The properties file stream to load and begin to watch
-	 * @param componentClass
-	 *            The class that resources are bring loaded for
-	 * @param style
-	 *            The style to load resources for (see {@link wicket.Session})
-	 * @param locale
-	 *            The locale to load reosurces for
 	 * @return The map of loaded resources
 	 */
 	private final Properties loadPropertiesFileAndWatchForChanges(final String key,
-			final IResourceStream resourceStream, final Class componentClass, final String style,
-			final Locale locale)
+			final IResourceStream resourceStream)
 	{
 		// Watch file modifications
 		final ModificationWatcher watcher = resourceSettings.getResourceWatcher(true);
@@ -31,22 +24,20 @@
 							+ "from the cache. Resource: " + resourceStream);
 
 					// Clear the whole cache as associated localized files may
-					// be affected and may need reloading as well. We make it
-					// easy. Usually the watcher is activ in dev mode only
-					// anyway.
+					// be affected and may need reloading as well. 
 					clearCache();
 
 					// Inform all listeners
 					for (Iterator iter = afterReloadListeners.iterator(); iter.hasNext();)
 					{
-						IPropertiesReloadListener listener = (IPropertiesReloadListener)iter.next();
+						IPropertiesChangeListener listener = (IPropertiesChangeListener)iter.next();
 						try
 						{
-							listener.propertiesLoaded(key);
+							listener.propertiesChanged(key);
 						}
 						catch (Throwable ex)
 						{
-							log.error("PropertiesReloadListener throw an exception: "
+							log.error("PropertiesReloadListener has thrown an exception: "
 									+ ex.getMessage());
 						}
 					}
@@ -55,6 +46,6 @@
 		}
 
 		log.info("Loading properties files from " + resourceStream);
-		return loadPropertiesFile(key, resourceStream, componentClass, style, locale);
+		return loadPropertiesFile(key, resourceStream);
 	}
 

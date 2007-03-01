@@ -1,13 +1,16 @@
 	/**
-	 * @see #getString(String, Component, IModel, Locale, String, String)
+	 * Get the localized string using all of the supplied parameters. This
+	 * method is left public to allow developers full control over string
+	 * resource loading. However, it is recommended that one of the other
+	 * convenience methods in the class are used as they handle all of the work
+	 * related to obtaining the current user locale and style information.
 	 * 
 	 * @param key
 	 *            The key to obtain the resource for
 	 * @param component
-	 *            The component to get the resource for
+	 *            The component to get the resource for (optional)
 	 * @param model
-	 *            The model to use for property substitutions in the strings
-	 *            (optional)
+	 *            The model to use for substitutions in the strings (optional)
 	 * @param defaultValue
 	 *            The default value (optional)
 	 * @return The string resource
@@ -18,6 +21,48 @@
 	public String getString(final String key, final Component component, final IModel model,
 			final String defaultValue) throws MissingResourceException
 	{
-		return getString(key, component, model, null, null, defaultValue);
+		// Iterate over all registered string resource loaders until the
+		// property has been found
+		String string = null;
+		for (IStringResourceLoader loader : Application.get().getResourceSettings()
+				.getStringResourceLoaders())
+		{
+			string = loader.loadStringResource(component, key);
+			if (string != null)
+			{
+				break;
+			}
+		}
+
+		// If a property value has been found, than replace the placeholder
+		// and we are done
+		if (string != null)
+		{
+			return substitutePropertyExpressions(component, string, model);
+		}
+
+		// Resource not found, so handle missing resources based on application
+		// configuration
+		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
+		if (resourceSettings.getUseDefaultOnMissingResource() && (defaultValue != null))
+		{
+			return defaultValue;
+		}
+
+		if (resourceSettings.getThrowExceptionOnMissingResource())
+		{
+			AppendingStringBuffer message = new AppendingStringBuffer("Unable to find resource: "
+					+ key);
+			if (component != null)
+			{
+				message.append(" for component: ");
+				message.append(component.getPageRelativePath());
+				message.append(" [class=").append(component.getClass().getName()).append("]");
+			}
+			throw new MissingResourceException(message.toString(), (component != null ? component
+					.getClass().getName() : ""), key);
+		}
+
+		return "[Warning: String resource for '" + key + "' not found]";
 	}
 

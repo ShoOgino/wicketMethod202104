@@ -1,0 +1,62 @@
+	/**
+	 * @see java.util.Iterator#hasNext()
+	 */
+	public boolean hasNext()
+	{
+		// Most inner loop. Loop through all extensions provided
+		if (this.extenstionsIterator != null)
+		{
+			if (this.extenstionsIterator.hasNext() == true)
+			{
+				return true;
+			}
+
+			// If there are no more extensions, than return to the next outer
+			// loop (locale), get the next value from that loop and start
+			// over again with the first extension in the list.
+			extenstionsIterator = null;
+		}
+
+		// 2nd inner loop: Loop through all Locale combinations
+		if (this.localeIterator != null)
+		{
+			while (this.localeIterator.hasNext())
+			{
+				// Get the next Locale from the iterator and start the next
+				// inner iterator over again.
+				String newPath = this.localeIterator.next();
+				this.currentLocale = this.localeIterator.getLocale();
+				this.extenstionsIterator = new ExtensionResourceNameIterator(newPath,
+						this.extensions);
+				if (this.extenstionsIterator.hasNext() == true)
+				{
+					return true;
+				}
+			}
+			this.localeIterator = null;
+		}
+
+		// Most outer loop: Loop through all combinations of styles and
+		// variations
+		while (this.styleIterator.hasNext())
+		{
+			String newPath = this.styleIterator.next();
+
+			this.localeIterator = new LocaleResourceNameIterator(newPath, this.locale);
+			while (this.localeIterator.hasNext())
+			{
+				newPath = this.localeIterator.next();
+				this.currentLocale = this.localeIterator.getLocale();
+				this.extenstionsIterator = new ExtensionResourceNameIterator(newPath,
+						this.extensions);
+				if (this.extenstionsIterator.hasNext() == true)
+				{
+					return true;
+				}
+			}
+		}
+
+		// No more combinations found. End of iteration.
+		return false;
+	}
+
