@@ -1,0 +1,70 @@
+	/**
+	 * Copies the given input stream to the servlet response
+	 * <p>
+	 * NOTE Content-Length is not set because it would require to buffer the
+	 * whole input stream
+	 * </p>
+	 * 
+	 * @param in
+	 *            input stream to copy, will be closed after copy
+	 */
+	public void write(InputStream in)
+	{
+		OutputStream out = getOutputStream();
+
+		try
+		{
+			// Copy resource input stream to servlet output stream
+			Streams.copy(in, out);
+		}
+		catch (Exception e)
+		{
+			Throwable throwable = e;
+			boolean ignoreException = false;
+			while (throwable != null)
+			{
+				if (throwable instanceof SocketException)
+				{
+					String message = throwable.getMessage();
+					ignoreException = message != null
+							&& (message.indexOf("Connection reset by peer") != -1 || message
+									.indexOf("Software caused connection abort") != -1);
+				}
+				else
+				{
+					ignoreException = throwable.getClass().getName()
+							.indexOf("ClientAbortException") >= 0;
+					if (ignoreException)
+					{
+						if (log.isDebugEnabled())
+						{
+							log.debug("Socket exception ignored for sending Resource "
+									+ "response to client (ClientAbort)", e);
+						}
+						break;
+					}
+				}
+				throwable = throwable.getCause();
+
+				if (!ignoreException)
+				{
+					throw new WicketRuntimeException("Unable to write response", e);
+				}
+			}
+		}
+		finally
+		{
+			// NOTE: We only close the InputStream. The servlet
+			// container should close the output stream.
+			try
+			{
+				in.close();
+				out.flush();
+			}
+			catch (IOException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+	}
+
