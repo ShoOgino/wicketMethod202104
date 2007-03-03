@@ -5,5 +5,10 @@
 	protected final void respond(final AjaxRequestTarget target)
 	{
 		onTimer(target);
+		
+		if (!stopped)
+		{
+			target.getHeaderResponse().renderOnLoadJavascript(getJsTimeoutCall(updateInterval));
+		}
 	}
 

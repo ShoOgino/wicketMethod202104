@@ -5,19 +5,24 @@
 	 */
 	private void respondHeaderContribution(final Response response, final Component component)
 	{
+		headerRendering = true;
+
+		// create the htmlheadercontainer if needed
 		if (header == null)
 		{
 			header = new HtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID)
 			{
 				private static final long serialVersionUID = 1L;
 
-				protected IHeaderResponse newHeaderResponse(Response response)
+				protected IHeaderResponse newHeaderResponse()
 				{
-					return new AjaxHeaderResponse(response);
+					return AjaxRequestTarget.this.getHeaderResponse();
 				}
 			};
 		}
 
+		// add or replace the container to page
+		
 		if (component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID) != null)
 		{
 			component.getPage().replace(header);
@@ -27,10 +32,13 @@
 			component.getPage().add(header);
 		}
 
+		// save old response, set new 
 		Response oldResponse = RequestCycle.get().setResponse(encodingHeaderResponse);
 
 		encodingHeaderResponse.reset();
 
+		// render the head of component and all it's children
+		
 		component.renderHead(header);
 
 		if (component instanceof MarkupContainer)
@@ -52,6 +60,8 @@
 			});
 		}
 
+		// revert to old response
+		
 		RequestCycle.get().setResponse(oldResponse);
 
 		if (encodingHeaderResponse.getContents().length() != 0)
@@ -76,5 +86,7 @@
 
 			response.write("</header-contribution>");
 		}
+
+		headerRendering = false;
 	}
 
