@@ -11,11 +11,13 @@
 	private MarkupFragment getBaseMarkup(final MarkupContainer container,
 			final MarkupFragment markup)
 	{
+		final Application application = Application.get();
+
 		// Get the super class to than retrieve the markup associated with it
 		final Class<? extends MarkupContainer> markupClass = (Class<? extends MarkupContainer>)markup
 				.getMarkup().getResource().getMarkupClass().getSuperclass();
 
-		final MarkupFragment baseMarkup = this.application.getMarkupCache().getMarkup(container,
+		final MarkupFragment baseMarkup = application.getMarkupCache().getMarkup(container,
 				markupClass);
 		if (baseMarkup == MarkupFragment.NO_MARKUP_FRAGMENT)
 		{
@@ -29,7 +31,7 @@
 		// Register an after-load listener for base markup. The listener
 		// implementation will remove the derived markup from the cache as
 		// reloading the base markup invalidates the derived markup as well
-		this.application.getMarkupCache().addAfterLoadListener(
+		application.getMarkupCache().addAfterLoadListener(
 				baseMarkup.getMarkup().getResource(), new IChangeListener()
 				{
 					public void onChange()
