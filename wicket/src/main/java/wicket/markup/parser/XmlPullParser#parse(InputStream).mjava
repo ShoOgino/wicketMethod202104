@@ -1,5 +1,6 @@
 	/**
-	 * Reads and parses markup from an input stream
+	 * Reads and parses markup from an input stream, using UTF-8 encoding by
+	 * default when not specified in XML declaration.
 	 * 
 	 * @param in
 	 *            The input stream to read and parse
@@ -9,17 +10,7 @@
 	public void parse(final InputStream in) throws IOException,
 			ResourceStreamNotFoundException
 	{
-		try
-		{
-			// When XML declaration does not specify encoding, it defaults to UTF-8
-			this.xmlReader = new XmlReader(
-					new BufferedInputStream(in, 4000), "UTF-8");
-			this.input = new FullyBufferedReader(this.xmlReader);
-		}
-		finally
-		{
-			in.close();
-			if(this.xmlReader != null) this.xmlReader.close();
-		}
+		// When XML declaration does not specify encoding, it defaults to UTF-8
+		parse(in, "UTF-8");
 	}
 
