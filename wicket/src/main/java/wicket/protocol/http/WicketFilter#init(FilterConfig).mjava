@@ -13,18 +13,19 @@
 			Thread.currentThread().setContextClassLoader(getClassLoader());
 
 			IWebApplicationFactory factory = getApplicationFactory();
-	
+
 			// Construct WebApplication subclass
 			this.webApplication = factory.createApplication(this);
-	
+
 			// Set this WicketServlet as the servlet for the web application
 			this.webApplication.setWicketFilter(this);
-	
-			// Store instance of this application object in servlet context to make
+
+			// Store instance of this application object in servlet context to
+			// make
 			// integration with outside world easier
 			String contextKey = "wicket:" + filterConfig.getFilterName();
 			filterConfig.getServletContext().setAttribute(contextKey, this.webApplication);
-	
+
 			filterPath = filterConfig.getInitParameter(FILTER_PATH_PARAM);
 
 			Application.set(webApplication);
