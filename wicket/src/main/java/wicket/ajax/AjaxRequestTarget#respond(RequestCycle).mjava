@@ -3,8 +3,6 @@
 	 */
 	public final void respond(final RequestCycle requestCycle)
 	{
-		try
-		{
 			final Application app = Application.get();
 
 			// Determine encoding
@@ -25,6 +23,7 @@
 			response.write("\"?>");
 			response.write("<ajax-response>");
 
+			// invoke onbeforerespond event on listeners
 			fireOnBeforeRespondListeners();
 
 			// normal behavior
@@ -47,16 +46,6 @@
 				respondInvocation(response, js);
 			}
 
-
 			response.write("</ajax-response>");
-		}
-		catch (RuntimeException ex)
-		{
-			// log the error but output nothing in the response, parse
-			// failure
-			// of response will cause any javascript failureHandler to be
-			// invoked
-			LOG.error("Error while responding to an AJAX request: " + toString(), ex);
-		}
 	}
 
