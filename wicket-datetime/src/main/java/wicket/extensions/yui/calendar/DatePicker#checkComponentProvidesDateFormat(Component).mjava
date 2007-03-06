@@ -17,19 +17,13 @@
 			return;
 		}
 
-		IConverter converter = component.getConverter();
-		if (converter instanceof Converter) {
-			ITypeConverter typeConverter = ((Converter) converter)
-					.get(Date.class);
-			if (typeConverter instanceof DateConverter) {
-				DateConverter dateConverter = (DateConverter) typeConverter;
-				DateFormat df = dateConverter.getDateFormat(component
-						.getLocale());
-				if (df instanceof SimpleDateFormat) {
-					// not as nice as IDatePatternProvider, but it'll do
-					return;
-				}
-			}
+		IConverter converter = component.getConverter(DateTime.class);
+		if (converter == null) {
+			converter = component.getConverter(Date.class);
+		}
+		if (converter instanceof DateConverter) {
+
+			return; // This is ok
 		}
 		throw new WicketRuntimeException(
 				"this behavior can only be added to components that either implement "
