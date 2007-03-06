@@ -1,0 +1,25 @@
+	public static void decodeParameters(String queryString, ValueMap params)
+	{
+		final String[] paramTuples = queryString.split("&");
+		for (int t = 0; t < paramTuples.length; t++)
+		{
+			final String[] bits = paramTuples[t].split("=");
+			try
+			{
+				if (bits.length == 2)
+				{
+					params.add(URLDecoder.decode(bits[0], "UTF-8"), URLDecoder.decode(bits[1],
+							"UTF-8"));
+				}
+				else
+				{
+					params.add(URLDecoder.decode(bits[0], "UTF-8"), "");
+				}
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				// Should never happen
+			}
+		}
+	}
+
