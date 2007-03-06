@@ -1,0 +1,22 @@
+	/**
+	 * Gets the converter instance. This method returns the cached converter for
+	 * the current locale. Whenever the locale is changed, the cached value is
+	 * cleared and the converter will be recreated for the new locale on a next
+	 * request.
+	 * 
+	 * @param type
+	 *            TODO
+	 * 
+	 * @return the converter
+	 */
+	public final IConverter getConverter(Class/*<?>*/ type)
+	{
+		if (converterSupplier == null)
+		{
+			// Let the factory create a new converter
+			converterSupplier = getApplication().getApplicationSettings()
+					.getConverterLocatorFactory().newConverterLocator();
+		}
+		return converterSupplier.getConverter(type);
+	}
+

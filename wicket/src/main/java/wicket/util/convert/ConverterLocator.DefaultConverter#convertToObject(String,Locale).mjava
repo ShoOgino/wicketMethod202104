@@ -1,0 +1,29 @@
+		/**
+		 * @see wicket.util.convert.IConverter#convertToObject(java.lang.String,
+		 *      java.util.Locale)
+		 */
+		public Object convertToObject(String value, Locale locale)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+			if ("".equals(value))
+			{
+				if (type == String.class)
+				{
+					return "";
+				}
+				return null;
+			}
+
+			try
+			{
+				return Objects.convertValue(value, type);
+			}
+			catch (Exception e)
+			{
+				throw new ConversionException(e.getMessage(), e).setSourceValue(value);
+			}
+		}
+

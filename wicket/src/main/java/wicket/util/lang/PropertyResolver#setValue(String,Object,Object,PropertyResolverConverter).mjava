@@ -1,0 +1,43 @@
+	/**
+	 * Set the value on the object with the given expression. If the expression
+	 * can't be evaluated then a WicketRuntimeException will be thrown. If a
+	 * null object is encounted then it will try to generate it by calling the
+	 * default constructor and set it on the object.
+	 * 
+	 * The value will be tried to convert to the right type with the given
+	 * converter.
+	 * 
+	 * @param expression
+	 *            The expression string with the property to be set.
+	 * @param object
+	 *            The object which is evaluated to set the value on.
+	 * @param value
+	 *            The value to set.
+	 * @param converter
+	 *            The convertor to convert the value if needed to the right
+	 *            type.
+	 */
+	public final static void setValue(final String expression, final Object object, Object value,
+			PropertyResolverConverter converter)
+	{
+		if (expression == null || expression.equals(""))
+		{
+			throw new WicketRuntimeException("Empty expression setting value: " + value
+					+ " on object: " + object);
+		}
+		if (object == null)
+		{
+			throw new WicketRuntimeException("Null object setting value: " + value
+					+ " with expression: " + expression);
+		}
+
+		ObjectAndGetSetter setter = getObjectAndGetSetter(expression, object, true);
+		if (setter == null)
+		{
+			throw new WicketRuntimeException("Null object returned for expression: " + expression
+					+ " for setting value: " + value + " on: " + object);
+		}
+		setter.setValue(value, converter == null ? new PropertyResolverConverter(Session.get(),
+				Session.get().getLocale()) : converter);
+	}
+

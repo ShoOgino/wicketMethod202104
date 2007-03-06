@@ -1,0 +1,26 @@
+	/**
+	 * Parses a value using one of the java.util.text format classes.
+	 * 
+	 * @param format
+	 *            The format to use
+	 * @param value
+	 *            The object to parse
+	 * @param locale
+	 *            The locale to use to parse.
+	 * @return The object
+	 * @throws ConversionException
+	 *             Thrown if parsing fails
+	 */
+	protected Object parse(final Format format, final Object value, Locale locale)
+	{
+		final ParsePosition position = new ParsePosition(0);
+		final String stringValue = value.toString();
+		final Object result = format.parseObject(stringValue, position);
+		if (position.getIndex() != stringValue.length())
+		{
+			throw newConversionException("Cannot parse '" + value + "' using format " + format,
+					value, locale).setFormat(format);
+		}
+		return result;
+	}
+
