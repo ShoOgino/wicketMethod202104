@@ -6,6 +6,13 @@
 	 */
 	public final void removeAll()
 	{
+		Iterator<Component<?>> children = iterator();
+		while (children.hasNext())
+		{
+			children.next().setFlag(FLAG_REMOVED_FROM_PARENT, true);
+		}
+
+
 		if (children != null)
 		{
 			addStateChange(new Change()
