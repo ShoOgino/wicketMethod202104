@@ -1,7 +1,6 @@
 	public void testErrorPage()
 	{
-		WicketTester tester = new WicketTester();
-		tester.startPage(TestPage.class);
+		tester.startPage(TestErrorPage.class);
 		AjaxLink link = (AjaxLink)tester.getComponentFromLastRenderedPage("link");
 		
 		// Cannot use executeAjaxEvent or onClick because WicketTester creates an AjaxRequestTarget from scratch
@@ -22,11 +21,6 @@
 		WebRequestCycle cycle = tester.createRequestCycle();
 		cycle.request();
 
-		assertNull(((MockHttpServletResponse)tester.getWicketResponse().getHttpServletResponse()).getRedirectLocation());
-		String ajaxLocation = ((MockHttpServletResponse)tester.getWicketResponse().getHttpServletResponse()).getHeader("Ajax-Location");
-		log.debug(ajaxLocation);
-		assertNotNull(ajaxLocation);
-
-		tester.destroy();
+		assertAjaxLocation(tester);
 	}
 

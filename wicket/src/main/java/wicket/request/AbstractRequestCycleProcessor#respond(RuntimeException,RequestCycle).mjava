@@ -26,6 +26,11 @@
 
 			throw new RestartResponseAtInterceptPageException(accessDeniedPageClass);
 		}
+		else if (e instanceof PageExpiredException)
+		{
+			Class pageExpiredErrorPageClass = application.getApplicationSettings().getPageExpiredErrorPage();
+			throw new RestartResponseException(pageExpiredErrorPageClass);
+		}
 		else if (settings.getUnexpectedExceptionDisplay() != IExceptionSettings.SHOW_NO_EXCEPTION_PAGE)
 		{
 			// we do not want to redirect - we want to inline the error output
