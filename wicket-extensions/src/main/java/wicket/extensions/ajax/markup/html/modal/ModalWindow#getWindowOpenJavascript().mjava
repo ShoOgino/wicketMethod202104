@@ -78,9 +78,12 @@
 					+ "};\n");
 		}
 
-		WindowClosedBehavior behavior = (WindowClosedBehavior)getBehaviors(
-				WindowClosedBehavior.class).get(0);
-		buffer.append("settings.onClose = function() { " + behavior.getCallbackScript() + " };\n");
+		if (isCustomComponent() == false || windowClosedCallback != null) 
+		{
+			WindowClosedBehavior behavior = (WindowClosedBehavior)getBehaviors(
+					WindowClosedBehavior.class).get(0);
+			buffer.append("settings.onClose = function() { " + behavior.getCallbackScript() + " };\n");
+		}
 
 		buffer.append("Wicket.Window.create(settings).show();\n");
 
