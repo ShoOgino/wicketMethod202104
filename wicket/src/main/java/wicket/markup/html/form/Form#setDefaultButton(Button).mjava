@@ -9,6 +9,9 @@
 	 * 'default' button in a form is ill defined in the standards, and of course
 	 * IE has it's own way of doing things.
 	 * </p>
+	 * There can be only one default button per form hierarchy. So if you set
+	 * default button on a nested form, it will actually delegate the call to
+	 * root form. </b>
 	 * 
 	 * @param button
 	 *            The button to set as the default button, or null when you want
@@ -16,6 +19,13 @@
 	 */
 	public final void setDefaultButton(Button button)
 	{
-		this.defaultButton = button;
+		if (isRootForm())
+		{
+			this.defaultButton = button;
+		}
+		else
+		{
+			getRootForm().setDefaultButton(button);
+		}
 	}
 
