@@ -1,4 +1,4 @@
-	private void check(final Object obj)
+	private void check(Object obj)
 	{
 		if (obj == null)
 		{
@@ -9,24 +9,36 @@
 		nameStack.add(simpleName);
 		traceStack.add(new TraceSlot(obj, fieldDescription));
 
-		if (!(obj instanceof Serializable))
+		if (!(obj instanceof Serializable) && (!Proxy.isProxyClass(cls)))
 		{
 			throw new WicketNotSerializableException(toPrettyPrintedStack(obj.getClass().getName())
 					.toString(), exception);
 		}
 
-		final ObjectStreamClass desc;
-		try
+		ObjectStreamClass desc;
+		for (;;)
 		{
-			desc = (ObjectStreamClass)lookup.invoke(null, new Object[] { cls, Boolean.TRUE });
-		}
-		catch (IllegalAccessException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (InvocationTargetException e)
-		{
-			throw new RuntimeException(e);
+			try
+			{
+				desc = (ObjectStreamClass)LOOKUP_METHOD.invoke(null, new Object[] { cls,
+						Boolean.TRUE });
+				Class repCl;
+				if (!((Boolean)HAS_WRITE_REPLACE_METHOD_METHOD.invoke(desc, null)).booleanValue()
+						|| (obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, new Object[] { obj })) == null
+						|| (repCl = obj.getClass()) == cls)
+				{
+					break;
+				}
+				cls = repCl;
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new RuntimeException(e);
+			}
+			catch (InvocationTargetException e)
+			{
+				throw new RuntimeException(e);
+			}
 		}
 
 		if (cls.isPrimitive())
@@ -115,6 +127,7 @@
 				}
 			}
 
+			final Object original = obj;
 			if (writeObjectMethod != null)
 			{
 				class InterceptingObjectOutputStream extends ObjectOutputStream
@@ -129,7 +142,7 @@
 
 					protected Object replaceObject(Object streamObj) throws IOException
 					{
-						if (streamObj == obj)
+						if (streamObj == original)
 						{
 							return streamObj;
 						}
@@ -141,7 +154,7 @@
 							return null;
 						}
 
-						checked.put(obj, null);
+						checked.put(original, null);
 						String arrayPos = "[write:" + counter + "]";
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
@@ -169,7 +182,7 @@
 				Object[] slots;
 				try
 				{
-					slots = (Object[])getClassDataLayoutMethod.invoke(desc, null);
+					slots = (Object[])GET_CLASS_DATA_LAYOUT_METHOD.invoke(desc, null);
 				}
 				catch (Exception e)
 				{
