@@ -2,20 +2,27 @@
 	 * Configures the response, default by setting the content type and length
 	 * and content disposition (in case the fileName property was set).
 	 * 
+	 * @param requestCycle
 	 * @param response
 	 *            the response
 	 * @param resourceStream
 	 *            the resource stream that will be rendered
 	 */
-	protected void configure(final Response response, final IResourceStream resourceStream)
+	protected void configure(final RequestCycle requestCycle, final Response response, final IResourceStream resourceStream)
 	{
-		// Configure response with content type of resource
+		// Configure response with content type of resource, if available
 		String responseType = resourceStream.getContentType();
-		if (responseType == null)
-		{
-			responseType = this.responseType;
+		if (responseType != null) {
+			response.setContentType(responseType + "; charset=" + response.getCharacterEncoding());
 		}
-		response.setContentType(responseType + ";charset=" + response.getCharacterEncoding());
+		else
+		{
+			// otherwise detect content-type automatically
+			if (getFileName() != null)
+				response.detectContentType(requestCycle, getFileName());
+			else
+				response.detectContentType(requestCycle, requestCycle.getRequest().getRelativeURL());
+		}
 
 		// and the content length
 		response.setContentLength((int)resourceStream.length());
