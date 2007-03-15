@@ -14,7 +14,8 @@
 	{
 		String relativePath = getRelativePath(servletRequest);
 		// Special-case for home page - we redirect to add a trailing slash.
-		if (relativePath.length() == 0 && !Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
+		if (relativePath.length() == 0
+				&& !Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
 		{
 			String foo = servletRequest.getRequestURI() + "/";
 			servletResponse.sendRedirect(foo);
@@ -27,26 +28,21 @@
 			Thread.currentThread().setContextClassLoader(getClassLoader());
 
 			// If the request does not provide information about the encoding of
-			// its
-			// body (which includes POST parameters), than assume the default
-			// encoding as defined by the wicket application. Bear in mind that
-			// the
-			// encoding of the request usually is equal to the previous
-			// response.
+			// its body (which includes POST parameters), than assume the
+			// default encoding as defined by the wicket application. Bear in
+			// mind that the encoding of the request usually is equal to the
+			// previous response.
 			// However it is a known bug of IE that it does not provide this
 			// information. Please see the wiki for more details and why all
-			// other
-			// browser deliberately copied that bug.
+			// other browser deliberately copied that bug.
 			if (servletRequest.getCharacterEncoding() == null)
 			{
 				try
 				{
 					// The encoding defined by the wicket settings is used to
-					// encode
-					// the responses. Thus, it is reasonable to assume the
-					// request
-					// has the same encoding. This is especially important for
-					// forms and form parameters.
+					// encode the responses. Thus, it is reasonable to assume
+					// the request has the same encoding. This is especially
+					// important for forms and form parameters.
 					servletRequest.setCharacterEncoding(webApplication.getRequestCycleSettings()
 							.getResponseRequestEncoding());
 				}

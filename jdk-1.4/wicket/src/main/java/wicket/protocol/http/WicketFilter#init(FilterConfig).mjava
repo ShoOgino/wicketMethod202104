@@ -5,21 +5,23 @@
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
 		this.filterConfig = filterConfig;
-		
+
 		if (SERVLET_PATH_HOLDER.equals(filterConfig.getInitParameter(FILTER_MAPPING_PARAM)))
 		{
 			servletMode = true;
 		}
-		
+
 		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
 		try
 		{
 			Thread.currentThread().setContextClassLoader(getClassLoader());
-			
-			// Try to configure filterPath from web.xml if it's not specified as an init-param.
+
+			// Try to configure filterPath from web.xml if it's not specified as
+			// an init-param.
 			if (filterConfig.getInitParameter(WicketFilter.FILTER_MAPPING_PARAM) == null)
 			{
-				InputStream is = filterConfig.getServletContext().getResourceAsStream("/WEB-INF/web.xml");
+				InputStream is = filterConfig.getServletContext().getResourceAsStream(
+						"/WEB-INF/web.xml");
 				if (is != null)
 				{
 					try
@@ -29,13 +31,15 @@
 					catch (Exception e)
 					{
 						log.debug("Error parsing web.xml", e);
-						// Swallow IOException or SecurityException or similar, and log.info below.
+						// Swallow IOException or SecurityException or similar,
+						// and log.info below.
 					}
 				}
 				if (filterPath == null)
 				{
-					log.info("Unable to parse filter mapping web.xml for " + filterConfig.getFilterName() + ". " +
-							"Configure with init-param " + FILTER_MAPPING_PARAM + " if it is not \"/*\".");
+					log.info("Unable to parse filter mapping web.xml for "
+							+ filterConfig.getFilterName() + ". " + "Configure with init-param "
+							+ FILTER_MAPPING_PARAM + " if it is not \"/*\".");
 				}
 			}
 
