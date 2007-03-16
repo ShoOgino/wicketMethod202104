@@ -9,7 +9,8 @@
 			SpringBeanLocator locator = new SpringBeanLocator(annot.name(),
 					field.getType(), contextLocator);
 
-			if (cache.containsKey(locator)) {
+			// only check the cache if the bean is a singleton
+			if (locator.isSingletonBean() && cache.containsKey(locator)) {
 				return cache.get(locator);
 			}
 
@@ -20,7 +21,10 @@
 
 			Object proxy = LazyInitProxyFactory.createProxy(field.getType(),
 					locator);
-			cache.put(locator, proxy);
+			// only put the proxy into the cache if the bean is a singleton
+			if (locator.isSingletonBean()) {
+				cache.put(locator, proxy);
+			}
 			return proxy;
 		} else {
 			return null;
