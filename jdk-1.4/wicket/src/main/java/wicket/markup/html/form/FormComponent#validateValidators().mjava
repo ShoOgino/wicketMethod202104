@@ -5,14 +5,17 @@
 	{
 		final int size = validators_size();
 
+		final IValidatable validatable = new ValidatableAdapter();
+
 		int i = 0;
 		IValidator validator = null;
+
 		try
 		{
 			for (i = 0; i < size; i++)
 			{
 				validator = validators_get(i);
-				validator.validate(this);
+				validator.validate(validatable);
 				if (!isValid())
 				{
 					break;
@@ -21,13 +24,8 @@
 		}
 		catch (Exception e)
 		{
-			String name = "<null>";
-			if (validator != null)
-			{
-				name = validator.getClass().getName();
-			}
 			throw new WicketRuntimeException("Exception '" + e + "' occurred during validation "
-					+ name + " on component " + this.getPath(), e);
+					+ validator.getClass().getName() + " on component " + this.getPath(), e);
 		}
 	}
 

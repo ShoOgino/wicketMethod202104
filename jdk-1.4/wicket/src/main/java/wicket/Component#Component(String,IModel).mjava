@@ -15,12 +15,13 @@
 		setId(id);
 		getApplication().notifyComponentInstantiationListeners(this);
 
-		this.model = model;
-		// If a compound model is explicitly set on this component
-		if (model instanceof ICompoundModel)
+		if (model instanceof IAssignmentAwareModel)
 		{
-			// we need to remember this for getModelObject()
-			setFlag(FLAG_HAS_ROOT_MODEL, true);
+			this.model = ((IAssignmentAwareModel)model).wrapOnAssignment(this);
+		}
+		else
+		{
+			this.model = model;
 		}
 	}
 

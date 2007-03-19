@@ -1,0 +1,32 @@
+	/**
+	 * @see wicket.model.IModel#getObject()
+	 */
+	public final Object getObject()
+	{
+		if (messages == null)
+		{
+			// Get filtered messages from page where component lives
+			List pageMessages = component.getPage().getFeedbackMessages().messages(filter);
+
+			List sessionMessages = component.getSession().getFeedbackMessages().messages(filter);
+
+			messages = new ArrayList(pageMessages.size() + sessionMessages.size());
+			messages.addAll(pageMessages);
+			messages.addAll(sessionMessages);
+
+			// Sort the list before returning it
+			if (sortingComparator != null)
+			{
+				Collections.sort(messages, sortingComparator);
+			}
+
+			// Let subclass do any extra processing it wants to on the messages.
+			// It may want to do something special, such as removing a given
+			// message under some special condition or perhaps eliminate
+			// duplicate messages. It could even add a message under certain
+			// conditions.
+			messages = processMessages(messages);
+		}
+		return messages;
+	}
+

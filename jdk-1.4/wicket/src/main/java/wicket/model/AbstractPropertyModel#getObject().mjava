@@ -1,0 +1,20 @@
+	/**
+	 * @see wicket.model.IModel#getObject()
+	 */
+	public Object getObject()
+	{
+		final String expression = propertyExpression();
+		if (Strings.isEmpty(expression))
+		{
+			// Return a meaningful value for an empty property expression
+			return getTarget();
+		}
+
+		final Object target = getTarget();
+		if (target != null)
+		{
+			return PropertyResolver.getValue(expression, target);
+		}
+		return null;
+	}
+

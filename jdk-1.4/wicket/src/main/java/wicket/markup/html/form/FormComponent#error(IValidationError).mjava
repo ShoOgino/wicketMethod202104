@@ -1,0 +1,29 @@
+ 	/**
+	 * Reports a validation error against this form component.
+	 * 
+	 * The actual error is reported by creating a
+	 * {@link ValidationErrorFeedback} object that holds both the validation
+	 * error and the generated error message - so a custom feedback panel can
+	 * have access to both.
+	 * 
+	 * @param error
+	 *            validation error
+	 */
+	public void error(IValidationError error)
+ 	{
+		if (error == null)
+ 		{
+			throw new IllegalArgumentException("Argument [[error]] cannot be null");
+ 		}
+		String message = error.getErrorMessage(new MessageSource());
+ 
+		if (message == null)
+ 		{
+			// XXX maybe make message source remember tried resource keys so a
+			// more detailederror message can be created - like show which keys
+			// were tried
+			message = "Could not locate error message for error: " + error.toString();
+ 		}
+		error(new ValidationErrorFeedback(error, message));
+ 	}
+

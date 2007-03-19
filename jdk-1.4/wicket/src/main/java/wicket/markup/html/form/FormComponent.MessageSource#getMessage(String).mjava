@@ -1,0 +1,42 @@
+		/**
+		 * @see wicket.validation.IMessageSource#getMessage(java.lang.String)
+		 */
+		public String getMessage(String key)
+		{
+			final FormComponent fc = FormComponent.this;
+
+			// retrieve prefix that will be used to construct message keys
+			String prefix = fc.getValidatorKeyPrefix();
+			if (Strings.isEmpty(prefix))
+			{
+				prefix = "";
+			}
+
+			final Localizer localizer = fc.getLocalizer();
+
+			String resource = prefix + getId() + "." + key;
+
+			// Note: It is important that the default value of "" is provided
+			// to getString() not to throw a MissingResourceException or to
+			// return a default string like "[Warning: String ..."
+			String message = localizer.getString(resource, fc.getParent(), "");
+
+			// If not found, than ...
+			if (Strings.isEmpty(message))
+			{
+				// Try a variation of the resource key
+
+				resource = prefix + key;
+
+				message = localizer.getString(resource, fc.getParent(), "");
+			}
+
+			// convert empty string to null in case our default value of "" was
+			// returned from localizer
+			if (Strings.isEmpty(message))
+			{
+				message = null;
+			}
+			return message;
+		}
+

@@ -3,19 +3,9 @@
 	 */
 	protected void detachModel()
 	{
-		// If the model is compound and it's not the root model, then it can
-		// be reconstituted via initModel() after replication
-		if (model instanceof CompoundPropertyModel && !getFlag(FLAG_HAS_ROOT_MODEL))
+		if (model != null)
 		{
-			// Get rid of model which can be lazy-initialized again
-			this.model = null;
-		}
-		else
-		{
-			if (model != null)
-			{
-				model.detach();
-			}
+			model.detach();
 		}
 	}
 

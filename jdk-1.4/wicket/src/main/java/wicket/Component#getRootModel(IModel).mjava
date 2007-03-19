@@ -7,21 +7,16 @@
 	 */
 	private final IModel getRootModel(final IModel model)
 	{
-		IModel nestedModelObject = model;
-		while (true)
+		IModel nested = model;
+		while (nested != null && nested instanceof IWrapModel)
 		{
-			final IModel next = nestedModelObject.getNestedModel();
-			if (next == null)
+			final IModel next = ((IWrapModel)nested).getNestedModel();
+			if (nested == next)
 			{
-				break;
+				throw new WicketRuntimeException("Model for " + nested + " is self-referential");
 			}
-			if (nestedModelObject == next)
-			{
-				throw new WicketRuntimeException("Model for " + nestedModelObject
-						+ " is self-referential");
-			}
-			nestedModelObject = next;
+			nested = next;
 		}
-		return nestedModelObject;
+		return nested;
 	}
 

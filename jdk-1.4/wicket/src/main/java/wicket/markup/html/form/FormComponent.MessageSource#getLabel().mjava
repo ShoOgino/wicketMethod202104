@@ -1,0 +1,23 @@
+		/**
+		 * @return value of label param for this form component
+		 */
+		private Object getLabel()
+		{
+			final FormComponent fc = FormComponent.this;
+			Object label = null;
+
+			// first try the label model ...
+			if (fc.getLabel() != null)
+			{
+				label = fc.getLabel().getObject();
+			}
+			// ... then try a resource of format [form-component-id] with
+			// default of '[form-component-id]'
+			if (label == null)
+			{
+
+				label = fc.getLocalizer().getString(fc.getId(), fc.getParent(), fc.getId());
+			}
+			return label;
+		}
+
