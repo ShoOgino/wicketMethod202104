@@ -73,6 +73,19 @@
 		}
 		else
 		{
+			if (getFlag(FLAG_PLACEHOLDER))
+			{
+				// write out a placeholder tag into the markup
+				final ComponentTag tag = markupStream.getTag();
+
+				getResponse().write("<");
+				getResponse().write(tag.getName());
+				getResponse().write(" id=\"");
+				getResponse().write(getMarkupId());
+				getResponse().write("\" style=\"display:none\"></");
+				getResponse().write(tag.getName());
+				getResponse().write(">");
+			}
 			markupStream.skipComponent();
 		}
 	}
