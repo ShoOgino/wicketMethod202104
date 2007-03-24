@@ -25,5 +25,21 @@
 		}
 
 		this.columns = columns;
-	}	
+		
+		// Attach the javascript that resizes the header according to the body
+		// This is necessary to support fixed position header. The header does
+		// not
+		// scroll together with body. The body contains vertical scrollbar. The
+		// header width must be same as body content width, so that the columns
+		// are properly aligned.
+		add(new Label("attachJavascript", new Model() 
+		{
+			private static final long serialVersionUID = 1L;
+
+			public Object getObject()
+			{
+				return "Wicket.TreeTable.attachUpdate(\"" + getMarkupId() + "\");";
+			}
+		}).setEscapeModelStrings(false));
+	}
 
