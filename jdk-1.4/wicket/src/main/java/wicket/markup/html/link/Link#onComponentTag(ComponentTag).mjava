@@ -19,28 +19,7 @@
 		// If we're disabled
 		if (!isEnabled())
 		{
-			// if the tag is an anchor proper
-			if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
-					|| tag.getName().equalsIgnoreCase("area"))
-			{
-				// Change anchor link to span tag
-				tag.setName("span");
-
-				// Remove any href from the old link
-				tag.remove("href");
-
-				// if it generates a popupscript, remove the design time JS
-				// handler
-				if (popupSettings != null)
-				{
-					tag.remove("onclick");
-				}
-			}
-			else
-			{
-				// Remove any onclick design time code
-				tag.remove("onclick");
-			}
+			disableLink(tag);
 		}
 		else
 		{
@@ -79,22 +58,23 @@
 					tag.put("onclick", "window.location.href='" + url + "';return false;");
 				}
 			}
-		}
-
-		// If the subclass specified javascript, use that
-		final CharSequence onClickJavaScript = getOnClickScript(url);
-		if (onClickJavaScript != null)
-		{
-			tag.put("onclick", onClickJavaScript);
-		}
-
-		if (popupSettings != null)
-		{
-			IPageMap popupPageMap = popupSettings.getPageMap(this);
-			if (popupPageMap != null)
+			
+			// If the subclass specified javascript, use that
+			final CharSequence onClickJavaScript = getOnClickScript(url);
+			if (onClickJavaScript != null)
 			{
-				tag.put("target", popupPageMap.getName());
+				tag.put("onclick", onClickJavaScript);
+			}
+
+			if (popupSettings != null)
+			{
+				IPageMap popupPageMap = popupSettings.getPageMap(this);
+				if (popupPageMap != null)
+				{
+					tag.put("target", popupPageMap.getName());
+				}
 			}
 		}
+
 	}
 

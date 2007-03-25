@@ -5,22 +5,9 @@
 	protected void onComponentTag(ComponentTag tag)
 	{
 		// If we're disabled
-		if (!isEnabled())
+		if (!isLinkEnabled())
 		{
-			// if the tag is an anchor proper
-			if (tag.getName().equalsIgnoreCase("a"))
-			{
-				// Change anchor link to span tag
-				tag.setName("span");
-
-				// Remove any href from the old link
-				tag.remove("href");
-			}
-			else
-			{
-				// Remove any onclick design time code
-				tag.remove("onclick");
-			}
+			disableLink(tag);
 		}
 		else
 		{
