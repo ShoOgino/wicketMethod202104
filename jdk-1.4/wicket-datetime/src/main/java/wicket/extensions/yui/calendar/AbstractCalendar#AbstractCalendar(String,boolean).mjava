@@ -18,19 +18,23 @@
 	 * 	 &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;calendar.css&quot; /&gt; 
 	 * </pre>
 	 */
-	public AbstractCalendar(String id, boolean contributeDependencies) {
+	public AbstractCalendar(String id, boolean contributeDependencies)
+	{
 
 		super(id);
 		setOutputMarkupId(true);
-		if (contributeDependencies) {
+		if (contributeDependencies)
+		{
 			contributeDependencies();
 		}
 
-		add(new StringHeaderContributor(new LoadableDetachableModel() {
+		add(new StringHeaderContributor(new LoadableDetachableModel()
+		{
 
 			private static final long serialVersionUID = 1L;
 
-			protected Object load() {
+			protected Object load()
+			{
 
 				// not pretty to look at, but cheaper than using a template
 				String markupId = AbstractCalendar.this.getMarkupId();
@@ -55,20 +59,42 @@
 				Properties p = new Properties();
 				configureWidgetProperties(p);
 				b.append("\", { ");
-				for (Iterator i = p.entrySet().iterator(); i.hasNext();) {
-					Entry entry = (Entry) i.next();
+				for (Iterator i = p.entrySet().iterator(); i.hasNext();)
+				{
+					Entry entry = (Entry)i.next();
 					b.append(entry.getKey());
 					Object value = entry.getValue();
-					if (value instanceof CharSequence) {
+					if (value instanceof CharSequence)
+					{
 						b.append(":\"");
 						b.append(value);
 						b.append("\"");
-					} else {
+					}
+					else if (value instanceof CharSequence[])
+					{
+						b.append(":[");
+						CharSequence[] valueArray = (CharSequence[])value;
+						for (int j = 0; j < valueArray.length; j++)
+						{
+							CharSequence tmpValue = valueArray[j];
+							b.append("\"");
+							b.append(tmpValue);
+							b.append("\"");
+							if (j < valueArray.length - 1)
+							{
+								b.append(",");
+							}
+						}
+						b.append("]");
+					}
+					else
+					{
 						b.append(":");
 						b.append(value);
 					}
 					// TODO handle arrays
-					if (i.hasNext()) {
+					if (i.hasNext())
+					{
 						b.append(",");
 					}
 				}
