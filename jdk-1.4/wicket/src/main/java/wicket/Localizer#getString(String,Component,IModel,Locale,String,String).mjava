@@ -1,81 +1,21 @@
 	/**
-	 * Get the localized string using all of the supplied parameters. This
-	 * method is left public to allow developers full control over string
-	 * resource loading. However, it is recommended that one of the other
-	 * convenience methods in the class are used as they handle all of the work
-	 * related to obtaining the current user locale and style information.
-	 * 
+	 * This method is now deprecated.
+	 *  
 	 * @param key
-	 *            The key to obtain the resource for
 	 * @param component
-	 *            The component to get the resource for (optional)
 	 * @param model
-	 *            The model to use for substitutions in the strings (optional)
 	 * @param locale
-	 *            The locale to get the resource for (optional)
 	 * @param style
-	 *            The style to get the resource for (optional) (see
-	 *            {@link wicket.Session})
 	 * @param defaultValue
-	 *            The default value (optional)
-	 * @return The string resource
+	 * @return String
 	 * @throws MissingResourceException
-	 *             If resource not found and configuration dictates that
-	 *             exception should be thrown
+	 * 
+	 * @Deprecated please use {@link #getString(String, Component, IModel, String)}
 	 */
 	public String getString(final String key, final Component component, final IModel model,
 			final Locale locale, final String style, final String defaultValue)
 			throws MissingResourceException
 	{
-		final List searchStack;
-		final String path;
-		if (component != null)
-		{
-			// The reason why need to create that stack is because we need to
-			// walk it downwards starting with Page down to the Component
-			searchStack = getComponentStack(component);
-			path = Strings.replaceAll(component.getPageRelativePath(), ":", ".").toString();
-		}
-		else
-		{
-			searchStack = null;
-			path = null;
-		}
-
-		// Iterate over all registered string resource loaders until the
-		// property has been found
-		String string = visitResourceLoaders(key, path, searchStack, locale, style);
-
-		// If a property value has been found, than replace the placeholder
-		// and we are done
-		if (string != null)
-		{
-			return substitutePropertyExpressions(component, string, model);
-		}
-
-		// Resource not found, so handle missing resources based on application
-		// configuration
-		final IResourceSettings resourceSettings = application.getResourceSettings();
-		if (resourceSettings.getUseDefaultOnMissingResource() && (defaultValue != null))
-		{
-			return defaultValue;
-		}
-
-		if (resourceSettings.getThrowExceptionOnMissingResource())
-		{
-			AppendingStringBuffer message = new AppendingStringBuffer("Unable to find resource: "
-					+ key);
-			if (component != null)
-			{
-				message.append(" for component: ");
-				message.append(component.getPageRelativePath());
-			}
-			throw new MissingResourceException(message.toString(), (component != null ? component
-					.getClass().getName() : ""), key);
-		}
-		else
-		{
-			return "[Warning: String resource for '" + key + "' not found]";
-		}
+		return null;
 	}
 

@@ -1,0 +1,96 @@
+	/**
+	 * Helper method to do the actual loading of resources if required.
+	 * 
+	 * @param key
+	 *            The key for the resource
+	 * @param resourceStream
+	 *            The properties file stream to load and begin to watch
+	 * @return The map of loaded resources
+	 */
+	private synchronized Properties loadPropertiesFile(final String key,
+			final IResourceStream resourceStream)
+	{
+		// Make sure someone else didn't load our resources while we were
+		// waiting for the synchronized lock on the method
+		Properties props = (Properties) propertiesCache.get(key);
+		if (props != null)
+		{
+			return props;
+		}
+
+		// Do the resource load
+		final java.util.Properties properties = new java.util.Properties();
+
+		if (resourceStream == null)
+		{
+			props = new Properties(key, ValueMap.EMPTY_MAP);
+		}
+		else
+		{
+			ValueMap strings = null;
+
+			try
+			{
+				try
+				{
+					// Get the InputStream 
+					BufferedInputStream in = new BufferedInputStream(resourceStream
+							.getInputStream());
+					
+					// Determine if resource is a XML File
+					boolean loadAsXml = false;
+					if (resourceStream instanceof IFixedLocationResourceStream)
+					{
+						String location = ((IFixedLocationResourceStream)resourceStream)
+								.locationAsString();
+						if (location != null)
+						{
+							String ext = Strings.lastPathComponent(location, '.').toLowerCase();
+							if ("xml".equals(ext))
+							{
+								loadAsXml = true;
+							}
+						}
+					}
+
+					// Load the properties
+					if (loadAsXml)
+					{
+						properties.loadFromXML(in);
+					}
+					else
+					{
+						properties.load(in);
+					}
+
+					// Copy the properties into the ValueMap
+					strings = new ValueMap();
+					Enumeration enumeration = properties.propertyNames();
+					while (enumeration.hasMoreElements())
+					{
+						String property = (String)enumeration.nextElement();
+						strings.put(property, properties.getProperty(property));
+					}
+				}
+				finally
+				{
+					resourceStream.close();
+				}
+			}
+			catch (ResourceStreamNotFoundException e)
+			{
+				log.warn("Unable to find resource " + resourceStream, e);
+				strings = ValueMap.EMPTY_MAP;
+			}
+			catch (IOException e)
+			{
+				log.warn("Unable to access resource " + resourceStream, e);
+				strings = ValueMap.EMPTY_MAP;
+			}
+
+			props = new Properties(key, strings);
+		}
+
+		return props;
+	}
+

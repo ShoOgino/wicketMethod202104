@@ -1,0 +1,25 @@
+	/**
+	 * 
+	 * @see wicket.util.resource.locator.IResourceStreamLocator#locate(java.lang.Class, java.lang.String, java.lang.String, java.util.Locale, java.lang.String)
+	 */
+	public IResourceStream locate(final Class clazz, String path, final String style,
+			final Locale locale, final String extension)
+	{
+		// Try the various combinations of style, locale and extension to find
+		// the resource.
+		ResourceNameIterator iter = new ResourceNameIterator(path, style, locale, extension);
+		while (iter.hasNext())
+		{
+			String newPath = (String) iter.next();
+			
+			IResourceStream stream = locate(clazz, newPath);
+			if (stream != null)
+			{
+				stream.setLocale(iter.getLocale());
+				return stream;
+			}
+		}
+
+		return null;
+	}
+

@@ -1,0 +1,44 @@
+	/**
+	 * Search the the resource my means of the various classloaders available
+	 * 
+	 * @param clazz
+	 * @param path
+	 * @return resource stream
+	 */
+	protected IResourceStream locateByClassLoader(final Class clazz, final String path)
+	{
+		ClassLoader classLoader = null;
+		if (clazz != null)
+		{
+			classLoader = clazz.getClassLoader();
+		}
+
+		if (classLoader == null)
+		{
+			// use context classloader when no specific classloader is set
+			// (package resources for instance)
+			classLoader = Thread.currentThread().getContextClassLoader();
+		}
+
+		if (classLoader == null)
+		{
+			// use Wicket classloader when no specific classloader is set
+			classLoader = getClass().getClassLoader();
+		}
+
+		// Log attempt
+		if (log.isDebugEnabled())
+		{
+			log.debug("Attempting to locate resource '" + path + "' using classloader "
+					+ classLoader);
+		}
+
+		// Try loading path using classloader
+		final URL url = classLoader.getResource(path);
+		if (url != null)
+		{
+			return new UrlResourceStream(url);
+		}
+		return null;
+	}
+

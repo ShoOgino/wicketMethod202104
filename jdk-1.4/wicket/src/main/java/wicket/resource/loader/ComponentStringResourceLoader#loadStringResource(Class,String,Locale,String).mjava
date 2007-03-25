@@ -1,0 +1,69 @@
+	/**
+	 * Get the string resource for the given combination of class, key, locale
+	 * and style. The information is obtained from a resource bundle associated
+	 * with the provided Class (or one of its super classes).
+	 * 
+	 * @param clazz
+	 *            The Class to find resources to be loaded
+	 * @param key
+	 *            The key to obtain the string for
+	 * @param locale
+	 *            The locale identifying the resource set to select the strings
+	 *            from
+	 * @param style
+	 *            The (optional) style identifying the resource set to select
+	 *            the strings from (see {@link wicket.Session})
+	 * @return The string resource value or null if resource not found
+	 */
+	public String loadStringResource(Class clazz, final String key, final Locale locale,
+			final String style)
+	{
+		if (clazz == null)
+		{
+			return null;
+		}
+
+		while (true)
+		{
+			// Create the base path
+			String path = clazz.getName().replace('.', '/');
+
+			// Iterator over all the combinations
+			ResourceNameIterator iter = new ResourceNameIterator(path, style, locale,
+					"properties,xml");
+			while (iter.hasNext())
+			{
+				String newPath = (String) iter.next();
+
+				// Load the properties associated with the path
+				final Properties props = PropertiesFactory.get().load(clazz, newPath);
+				if (props != null)
+				{
+					// Lookup the value
+					String value = props.getString(key);
+					if (value != null)
+					{
+						if (log.isDebugEnabled())
+						{
+							log.debug("Found resource from: " + props + "; key: " + key);
+						}
+
+						return value;
+					}
+				}
+			}
+
+			// Didn't find the key yet, continue searching if possible
+			if (isStopResourceSearch(clazz))
+			{
+				break;
+			}
+
+			// Move to the next superclass
+			clazz = clazz.getSuperclass();
+		}
+
+		// not found
+		return null;
+	}
+

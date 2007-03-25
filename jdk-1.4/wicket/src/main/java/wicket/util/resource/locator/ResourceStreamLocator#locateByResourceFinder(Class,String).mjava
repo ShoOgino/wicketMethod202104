@@ -1,0 +1,25 @@
+	/**
+	 * Search the resource by means of the application registered resource
+	 * finder
+	 * 
+	 * @param clazz
+	 * @param path
+	 * @return resource stream
+	 */
+	protected IResourceStream locateByResourceFinder(final Class clazz, final String path)
+	{
+		if (this.finder == null)
+		{
+			finder = Application.get().getResourceSettings().getResourceFinder();
+		}
+
+		// Log attempt
+		if (log.isDebugEnabled())
+		{
+			log.debug("Attempting to locate resource '" + path + "' on path " + finder);
+		}
+
+		// Try to find file resource on the path supplied
+		return finder.find(clazz, path);
+	}
+
