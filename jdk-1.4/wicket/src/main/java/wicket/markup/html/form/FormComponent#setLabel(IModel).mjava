@@ -5,8 +5,12 @@
 	 * @param labelModel
 	 * @return this for chaining
 	 */
-	public FormComponent setLabel(final IModel labelModel)
+	public FormComponent setLabel(IModel labelModel)
 	{
+		if (labelModel instanceof IAssignmentAwareModel) 
+		{
+			labelModel = ((IAssignmentAwareModel)labelModel).wrapOnAssignment(this);
+		}
 		this.labelModel = labelModel;
 		return this;
 	}
