@@ -6,19 +6,20 @@
 		setStatelessHint(true);
 		add(new Label("message", new SessionModel()));
 		add(new BookmarkablePageLink("indexLink", Index.class));
-		
-		StatelessForm statelessForm = new StatelessForm("statelessform"){
+
+		StatelessForm statelessForm = new StatelessForm("statelessform")
+		{
 			/**
 			 * @see wicket.markup.html.form.Form#onSubmit()
 			 */
 			protected void onSubmit()
 			{
-				info("Onsubmit of stateless page pressed, textfield updated: " + tf.getModelObject());
-				tf.setModelObject(tf.getModelObject()+ "_" +tf.getModelObject());
+				info("Submitted text: " + tf.getModelObject());
 			}
 		};
 		tf = new TextField("textfield", new Model());
 		add(statelessForm);
 		statelessForm.add(tf);
+		add(new FeedbackPanel("feedback"));
 	}
 
