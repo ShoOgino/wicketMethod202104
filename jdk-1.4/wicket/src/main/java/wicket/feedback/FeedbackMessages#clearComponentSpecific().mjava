@@ -1,0 +1,18 @@
+	/**
+	 * Clears any messages specifically for components. This is an aggressive
+	 * cleanup to ensure there won't be a memory leak in session.
+	 */
+	public final void clearComponentSpecific()
+	{
+		for (int i = messages.size() - 1; i >= 0; i--)
+		{
+			final FeedbackMessage msg = (FeedbackMessage)messages.get(i);
+			Component reporter = msg.getReporter();
+			if (reporter != null)
+			{
+				messages.remove(i);
+			}
+		}
+		trimToSize();
+	}
+

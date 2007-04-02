@@ -6,13 +6,7 @@
 		if (messages == null)
 		{
 			// Get filtered messages from page where component lives
-			List pageMessages = component.getPage().getFeedbackMessages().messages(filter);
-
-			List sessionMessages = component.getSession().getFeedbackMessages().messages(filter);
-
-			messages = new ArrayList(pageMessages.size() + sessionMessages.size());
-			messages.addAll(pageMessages);
-			messages.addAll(sessionMessages);
+			messages = Session.get().getFeedbackMessages().messages(filter);
 
 			// Sort the list before returning it
 			if (sortingComparator != null)
