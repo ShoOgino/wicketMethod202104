@@ -7,10 +7,20 @@
 	 */
 	protected final Object getAttribute(final String name)
 	{
-		RequestCycle cycle = RequestCycle.get();
-		if (cycle != null)
+		if (!isTemporary())
 		{
-			return getSessionStore().getAttribute(cycle.getRequest(), name);
+			RequestCycle cycle = RequestCycle.get();
+			if (cycle != null)
+			{
+				return getSessionStore().getAttribute(cycle.getRequest(), name);
+			}
+		}
+		else
+		{
+			if (temporarySessionAttributes != null)
+			{
+				return temporarySessionAttributes.get(name);
+			}
 		}
 		return null;
 	}

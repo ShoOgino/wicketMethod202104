@@ -10,7 +10,11 @@
 	 */
 	public final void redirectToInterceptPage(final Page page)
 	{
-		Session.get().bind();
+		Session session = Session.get();
+		if (session.isTemporary())
+		{
+			session.bind();
+		}
 		// Get the request cycle
 		final RequestCycle cycle = RequestCycle.get();
 

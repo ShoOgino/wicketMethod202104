@@ -6,10 +6,20 @@
 	 */
 	protected final void removeAttribute(String name)
 	{
-		RequestCycle cycle = RequestCycle.get();
-		if (cycle != null)
+		if (!isTemporary())
 		{
-			getSessionStore().removeAttribute(cycle.getRequest(), name);
+			RequestCycle cycle = RequestCycle.get();
+			if (cycle != null)
+			{
+				getSessionStore().removeAttribute(cycle.getRequest(), name);
+			}
+		}
+		else
+		{
+			if (temporarySessionAttributes != null)
+			{
+				temporarySessionAttributes.remove(name);
+			}
 		}
 	}
 

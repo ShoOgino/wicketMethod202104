@@ -1,4 +1,4 @@
-    /**
+	/**
 	 * Redirects browser to an intermediate page such as a sign-in page. The
 	 * current request's URL is saved exactly as it was requested for future use
 	 * by continueToOriginalDestination(); Only use this method when you plan to
@@ -10,7 +10,11 @@
 	 */
 	public final void redirectToInterceptPage(final Class pageClazz)
 	{
-		Session.get().bind();
+		Session session = Session.get();
+		if (session.isTemporary())
+		{
+			session.bind();
+		}
 		// Get the request cycle
 		final RequestCycle cycle = RequestCycle.get();
 
@@ -24,5 +28,5 @@
 		// Redirect to the page
 		cycle.setRedirect(true);
 		cycle.setResponsePage(pageClazz);
-	}	
+	}
 
