@@ -3,10 +3,14 @@
 		 */
 		public void valueUnbound(HttpSessionBindingEvent evt)
 		{
-			Application application = Application.get(applicationKey);
-			if (application != null)
+			if (!unbound)
 			{
-				application.getSessionStore().unbind(sessionId);
+				unbound = true;
+				Application application = Application.get(applicationKey);
+				if (application != null)
+				{
+					application.getSessionStore().unbind(sessionId);
+				}
 			}
 		}
 
