@@ -19,9 +19,9 @@
 		}
 
 		IModel prevModel = this.model;
-		if (prevModel instanceof IWrapModel)
+		if (prevModel instanceof IModelWrapper)
 		{
-			prevModel = ((IWrapModel)prevModel).getNestedModel();
+			prevModel = ((IModelWrapper)prevModel).getNestedModel();
 		}
 
 		// Change model
@@ -32,14 +32,7 @@
 				addStateChange(new ComponentModelChange(prevModel));
 			}
 
-			if (model instanceof IAssignmentAwareModel)
-			{
-				this.model = ((IAssignmentAwareModel)model).wrapOnAssignment(this);
-			}
-			else
-			{
-				this.model = model;
-			}
+			this.model = wrap(model);
 		}
 
 		modelChanged();

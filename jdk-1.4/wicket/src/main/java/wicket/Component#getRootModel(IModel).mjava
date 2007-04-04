@@ -5,12 +5,12 @@
 	 *            The model
 	 * @return The root object
 	 */
-	private final IModel getRootModel(final IModel model)
+	protected final IModel getRootModel(final IModel model)
 	{
 		IModel nested = model;
-		while (nested != null && nested instanceof IWrapModel)
+		while (nested != null && nested instanceof IModelWrapper)
 		{
-			final IModel next = ((IWrapModel)nested).getNestedModel();
+			final IModel next = ((IModelWrapper)nested).getNestedModel();
 			if (nested == next)
 			{
 				throw new WicketRuntimeException("Model for " + nested + " is self-referential");
