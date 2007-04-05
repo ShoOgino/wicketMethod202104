@@ -1,20 +1,25 @@
+	/**
+	 * Tests page expired.
+	 */
 	public void testExpirePage()
 	{
 		tester.startPage(TestExpirePage.class);
 		AjaxLink link = (AjaxLink)tester.getComponentFromLastRenderedPage("link");
-		
-		// Cannot use executeAjaxEvent or onClick because WicketTester creates an AjaxRequestTarget from scratch
-		//tester.executeAjaxEvent(link, "onclick");
-		//tester.clickLink("link");
+
+		// Cannot use executeAjaxEvent or onClick because WicketTester creates
+		// an AjaxRequestTarget from scratch
+		// tester.executeAjaxEvent(link, "onclick");
+		// tester.clickLink("link");
 
 		// FIXME should not be needed
 		tester.createRequestCycle();
-		
+
 		// Clear the session to remove the pages
 		tester.getWicketSession().invalidateNow();
 
 		// Invoke the call back URL of the ajax event behavior
-		String callbackUrl = ((AjaxEventBehavior)link.getBehaviors().get(0)).getCallbackUrl().toString();
+		String callbackUrl = ((AjaxEventBehavior)link.getBehaviors().get(0)).getCallbackUrl()
+				.toString();
 		tester.setupRequestAndResponse();
 
 		// Fake an Ajax request
@@ -24,7 +29,8 @@
 
 		tester.getServletRequest().setURL(callbackUrl);
 
-		// Do not call tester.processRequestCycle() because it throws an exception when getting an error page
+		// Do not call tester.processRequestCycle() because it throws an
+		// exception when getting an error page
 		WebRequestCycle cycle = tester.createRequestCycle();
 		cycle.request();
 
