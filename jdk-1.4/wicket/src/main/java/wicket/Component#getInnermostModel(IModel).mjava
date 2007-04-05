@@ -9,9 +9,9 @@
 	protected final IModel getInnermostModel(final IModel model)
 	{
 		IModel nested = model;
-		while (nested != null && nested instanceof INestedModelContainer)
+		while (nested != null && nested instanceof IWrapModel)
 		{
-			final IModel next = ((INestedModelContainer)nested).getNestedModel();
+			final IModel next = ((IWrapModel)nested).getWrappedModel();
 			if (nested == next)
 			{
 				throw new WicketRuntimeException("Model for " + nested + " is self-referential");
