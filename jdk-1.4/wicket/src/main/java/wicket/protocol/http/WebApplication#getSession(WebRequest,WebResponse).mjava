@@ -3,10 +3,12 @@
 	 * if it doesn't already exist.
 	 * 
 	 * @param request
-	 *            The http request object
+	 *            The web request
+	 * @param response
+	 *            The web response
 	 * @return The session object
 	 */
-	final WebSession getSession(final WebRequest request)
+	final WebSession getSession(final WebRequest request, final WebResponse response)
 	{
 		ISessionStore sessionStore = getSessionStore();
 		Session session = sessionStore.lookup(request);
@@ -14,7 +16,7 @@
 		if (session == null)
 		{
 			// Create session using session factory
-			session = getSessionFactory().newSession(request);
+			session = getSessionFactory().newSession(request, response);
 		}
 
 		WebSession webSession;
