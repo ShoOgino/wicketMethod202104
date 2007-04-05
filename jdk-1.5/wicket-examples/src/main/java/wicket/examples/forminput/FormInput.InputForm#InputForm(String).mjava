@@ -30,7 +30,8 @@
 			add(new RequiredTextField("doubleProperty", Double.class));
 
 			add(new DateTimeField("dateProperty"));
-			// add(DateTextField.forShortStyle("dateProperty").add(new DatePicker()));
+			// add(DateTextField.forShortStyle("dateProperty").add(new
+			// DatePicker()));
 
 			add(new RequiredTextField("integerInRangeProperty", Integer.class).add(NumberValidator
 					.range(0, 100)));
@@ -73,9 +74,9 @@
 			{
 				public IConverter getConverter(final Class type)
 				{
-					return new SimpleConverterAdapter()
+					return new IConverter()
 					{
-						public Object toObject(final String value)
+						public Object convertToObject(String value, Locale locale)
 						{
 							try
 							{
@@ -87,7 +88,7 @@
 							}
 						}
 
-						public String toString(final Object value)
+						public String convertToString(Object value, Locale locale)
 						{
 							return value != null ? value.toString() : null;
 						}
