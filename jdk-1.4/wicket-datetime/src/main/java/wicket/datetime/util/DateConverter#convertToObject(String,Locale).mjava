@@ -1,15 +1,18 @@
 	/**
-	 * @see wicket.util.convert.SimpleConverterAdapter#toObject(java.lang.String)
+	 * @see wicket.util.convert.IConverter#convertToObject(java.lang.String,
+	 *      java.util.Locale)
 	 */
-	public final Object toObject(String value) {
-
+	public Object convertToObject(String value, Locale locale)
+	{
 		DateTimeFormatter format = getFormat();
 
-		if (applyTimeZoneDifference) {
+		if (applyTimeZoneDifference)
+		{
 			TimeZone zone = getClientTimeZone();
 			// instantiate now/ current time
 			MutableDateTime dt = new MutableDateTime();
-			if (zone != null) {
+			if (zone != null)
+			{
 				// set time zone for client
 				format = format.withZone(DateTimeZone.forTimeZone(zone));
 				dt.setZone(DateTimeZone.forTimeZone(zone));
@@ -19,7 +22,9 @@
 			// apply the server time zone to the parsed value
 			dt.setZone(getTimeZone());
 			return dt.toDate();
-		} else {
+		}
+		else
+		{
 			return format.parseDateTime(value).toDate();
 		}
 	}

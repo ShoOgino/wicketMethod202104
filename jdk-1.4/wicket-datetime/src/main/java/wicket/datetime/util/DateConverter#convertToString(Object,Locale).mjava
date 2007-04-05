@@ -1,0 +1,21 @@
+	/**
+	 * @see wicket.util.convert.IConverter#convertToString(java.lang.Object,
+	 *      java.util.Locale)
+	 */
+	public String convertToString(Object value, Locale locale)
+	{
+		DateTime dt = new DateTime(((Date)value).getTime(), getTimeZone());
+		DateTimeFormatter format = getFormat();
+
+		if (applyTimeZoneDifference)
+		{
+			TimeZone zone = getClientTimeZone();
+			if (zone != null)
+			{
+				// apply time zone to formatter
+				format = format.withZone(DateTimeZone.forTimeZone(zone));
+			}
+		}
+		return format.print(dt);
+	}
+
