@@ -12,7 +12,8 @@
 	{
 		this.application = application;
 
-		context = newServletContext(path);
+		this.context = newServletContext(path);
+		
 		filter = new WicketFilter()
 		{
 			protected IWebApplicationFactory getApplicationFactory()
@@ -65,14 +66,20 @@
 
 		Application.set(this.application);
 
-		this.servletSession = new MockHttpSession(context);
-		this.servletRequest = new MockHttpServletRequest(this.application, servletSession, context);
+		// Construct mock session, request and response 
+		this.servletSession = new MockHttpSession(this.context);
+		this.servletRequest = new MockHttpServletRequest(this.application, this.servletSession, this.context);
 		this.servletResponse = new MockHttpServletResponse();
-		this.wicketRequest = this.application.newWebRequest(servletRequest);
-		this.wicketSession = this.application.getSession(wicketRequest, wicketResponse);
+		
+		// Construct request, response and session using factories
+		this.wicketRequest = this.application.newWebRequest(this.servletRequest);
+		this.wicketResponse = this.application.newWebResponse(this.servletResponse);
+		this.wicketSession = this.application.getSession(this.wicketRequest, this.wicketResponse);
+		
+		// Get request cycle factory
 		this.requestCycleFactory = this.wicketSession.getRequestCycleFactory();
 
-		// set the default context path
+		// Set the default context path
 		this.application.getApplicationSettings().setContextPath(context.getServletContextName());
 
 		this.application.getRequestCycleSettings()
