@@ -13,7 +13,7 @@
 						if (stop)
 							return;
 					}
-					
+
 					Iterator it = pagesToBeSerialized.entrySet().iterator();
 					outer : while (it.hasNext())
 					{
@@ -43,14 +43,16 @@
 								// no key found in the current list.
 								if (key == null)
 								{
-									// the list is removed now! 
-									// but it could be that a request add something to the list now.
-									// thats why a request has to check it again.
+									// the list is removed now!
+									// but it could be that a request add
+									// something to the list now.
+									// thats why a request has to check it
+									// again.
 									pagesToBeSerialized.remove(entry.getKey());
 									continue outer;
 								}
 							}
-							
+
 							byte[] pageBytes = serializePage(key, page);
 							serializedInThread++;
 							synchronized (sessionList)
