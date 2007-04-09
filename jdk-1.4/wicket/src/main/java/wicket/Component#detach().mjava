@@ -28,10 +28,10 @@
 		// reset the model to null when the current model is a IWrapModel and
 		// the model that created it/wrapped in it is a IComponentInheritedModel
 		// The model will be created next time.
-		if (model instanceof IWrapModel
-				&& ((IWrapModel)model).getWrappedModel() instanceof IComponentInheritedModel)
+		if (getFlag(FLAG_INHERITABLE_MODEL))
 		{
 			model = null;
+			setFlag(FLAG_INHERITABLE_MODEL,false);
 		}
 	}
 
