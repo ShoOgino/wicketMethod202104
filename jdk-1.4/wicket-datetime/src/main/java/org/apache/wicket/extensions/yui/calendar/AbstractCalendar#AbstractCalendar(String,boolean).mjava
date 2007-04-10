@@ -1,0 +1,124 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 *            The component id
+	 * @param contributeDependencies
+	 *            Whether to contribute the packaged dependencies. Pass false in
+	 *            case you want to include the dependencies manually in your own
+	 *            page, e.g. when you want to keep them in your web application
+	 *            dir. To contribute yourself (in case you want to pass false),
+	 *            your page header should look like:
+	 * 
+	 * <pre>
+	 * 	 &lt;script type=&quot;text/javascript&quot; src=&quot;yahoo.js&quot;&gt;&lt;/script&gt; 
+	 * 	 &lt;script type=&quot;text/javascript&quot; src=&quot;dom.js&quot;&gt;&lt;/script&gt; 
+	 * 	 &lt;script type=&quot;text/javascript&quot; src=&quot;event.js&quot;&gt;&lt;/script&gt; 
+	 * 	 &lt;script type=&quot;text/javascript&quot; src=&quot;calendar.js&quot;&gt;&lt;/script&gt; 
+	 * 	 &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;calendar.css&quot; /&gt; 
+	 * </pre>
+	 */
+	public AbstractCalendar(String id, boolean contributeDependencies)
+	{
+
+		super(id);
+		setOutputMarkupId(true);
+		if (contributeDependencies)
+		{
+			contributeDependencies();
+		}
+
+		add(new StringHeaderContributor(new LoadableDetachableModel()
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			protected Object load()
+			{
+
+				// not pretty to look at, but cheaper than using a template
+				String markupId = AbstractCalendar.this.getMarkupId();
+				String javascriptId = getJavascriptId();
+				String javascriptWidgetId = getJavascriptWidgetId();
+				StringBuffer b = new StringBuffer();
+				b.append(JavascriptUtils.SCRIPT_OPEN_TAG);
+				// initialize org.apache.wicket namespace and register the init function
+				// for the YUI widget
+				b.append("YAHOO.namespace(\"org.apache.wicket\");\nfunction init");
+				b.append(javascriptId);
+				b.append("() {\n");
+
+				// instantiate the calendar object
+				b.append("  ");
+				b.append(javascriptWidgetId);
+				b.append(" = new YAHOO.widget.Calendar(\"");
+				b.append(javascriptId);
+				b.append("\",\"");
+				b.append(markupId);
+
+				Properties p = new Properties();
+				configureWidgetProperties(p);
+				b.append("\", { ");
+				for (Iterator i = p.entrySet().iterator(); i.hasNext();)
+				{
+					Entry entry = (Entry)i.next();
+					b.append(entry.getKey());
+					Object value = entry.getValue();
+					if (value instanceof CharSequence)
+					{
+						b.append(":\"");
+						b.append(value);
+						b.append("\"");
+					}
+					else if (value instanceof CharSequence[])
+					{
+						b.append(":[");
+						CharSequence[] valueArray = (CharSequence[])value;
+						for (int j = 0; j < valueArray.length; j++)
+						{
+							CharSequence tmpValue = valueArray[j];
+							b.append("\"");
+							b.append(tmpValue);
+							b.append("\"");
+							if (j < valueArray.length - 1)
+							{
+								b.append(",");
+							}
+						}
+						b.append("]");
+					}
+					else
+					{
+						b.append(":");
+						b.append(value);
+					}
+					// TODO handle arrays
+					if (i.hasNext())
+					{
+						b.append(",");
+					}
+				}
+
+				b.append(" });\n");
+
+				// append the javascript we want for our init function; call
+				// this in an overridable method so that clients can add their
+				// stuff without needing a big ass API
+				appendToInit(markupId, javascriptId, javascriptWidgetId, b);
+
+				// trigger rendering
+				b.append("  ");
+				b.append(javascriptWidgetId);
+				b.append(".render();\n");
+
+				b.append("}\n");
+				// register the function for execution when the page is loaded
+				b.append("YAHOO.util.Event.addListener(window, \"load\", init");
+				b.append(javascriptId);
+				b.append(");");
+				b.append(JavascriptUtils.SCRIPT_CLOSE_TAG);
+				return b;
+			}
+		}));
+	}
+
