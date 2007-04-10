@@ -1,0 +1,13 @@
+	/**
+	 * @see org.apache.wicket.resource.StringResourceLoaderTestBase#testLoaderUnknownResources()
+	 */
+	public void testLoaderUnknownResources()
+	{
+		WicketTester tester = new WicketTester();
+		WebApplication app = tester.getApplication();
+		IStringResourceLoader loader = new ClassStringResourceLoader(app.getClass());
+		Assert.assertNull("Unknown resource should return null", loader.loadStringResource(component.getClass(),
+				"test.string", Locale.getDefault(), null));
+		tester.destroy();
+	}
+

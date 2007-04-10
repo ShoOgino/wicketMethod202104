@@ -1,0 +1,31 @@
+	/**
+	 * Retrieves id by which this component is represented within the markup.
+	 * <p>
+	 * The point of this function is to generate a unique id to make it easy to
+	 * locate this component in the generated markup for post-org.apache.wicket processing
+	 * such as javascript or an xslt transform.
+	 * <p>
+	 * Note: This method should only be called after the component or its parent
+	 * have been added to the page.
+	 * 
+	 * @return markup id of the component
+	 */
+	public String getMarkupId()
+	{
+		String markupId = (String)getMetaData(MARKUP_ID_KEY);
+		if (markupId == null)
+		{
+			Page page = findPage();
+			if (page == null)
+			{
+				throw new WicketRuntimeException(
+						"This component is not (yet) coupled to a page. It has to be able "
+								+ "to find the page it is supposed to operate in before you can call "
+								+ "this method (Component#getMarkupId)");
+			}
+			markupId = getId() + page.getAutoIndex();
+			setMetaData(MARKUP_ID_KEY, markupId);
+		}
+		return markupId;
+	}
+

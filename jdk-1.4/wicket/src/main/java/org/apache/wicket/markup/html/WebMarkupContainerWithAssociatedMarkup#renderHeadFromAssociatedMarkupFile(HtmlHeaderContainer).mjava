@@ -1,0 +1,23 @@
+	/**
+	 * Called by components like Panel and Border which have associated Markup
+	 * and which may have a &lt;org.apache.wicket:head&gt; tag.
+	 * <p>
+	 * Whereas 'this' might be a Panel or Border, the HtmlHeaderContainer
+	 * parameter has been added to the Page as a container for all headers any
+	 * of its components might wish to contribute.
+	 * <p>
+	 * The headers contributed are rendered in the standard way.
+	 * 
+	 * @param container
+	 *            The HtmlHeaderContainer added to the Page
+	 */
+	protected final void renderHeadFromAssociatedMarkupFile(final HtmlHeaderContainer container)
+	{
+		if (markupHelper == null)
+		{
+			markupHelper = new ContainerWithAssociatedMarkupHelper(this);
+		}
+
+		markupHelper.renderHeadFromAssociatedMarkupFile(container);
+	}
+

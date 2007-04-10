@@ -1,0 +1,60 @@
+	/**
+	 * Return the body onLoad attribute of the markup
+	 * 
+	 * @param markup
+	 * @return onLoad attribute
+	 */
+	private String getBodyOnLoadString(final Markup markup)
+	{
+		int i = 0;
+
+		// The markup must have a <org.apache.wicket:head> region, else copying the
+		// body onLoad attributes doesn't make sense
+		for (; i < markup.size(); i++)
+		{
+			MarkupElement elem = markup.get(i);
+			if (elem instanceof WicketTag)
+			{
+				WicketTag tag = (WicketTag)elem;
+				if (tag.isClose() && tag.isHeadTag())
+				{
+					// Ok, we found <org.apache.wicket:head>
+					break;
+				}
+				else if (tag.isMajorWicketComponentTag())
+				{
+					// Short cut: We found <org.apache.wicket:panel> or <org.apache.wicket:border>.
+					// There certainly will be no <org.apache.wicket:head> later on.
+					return null;
+				}
+			}
+			else if (elem instanceof ComponentTag)
+			{
+				ComponentTag tag = (ComponentTag)elem;
+				if (TagUtils.isBodyTag(tag))
+				{
+					// Short cut: We found <body> but no <org.apache.wicket:head>.
+					// There certainly will be no <org.apache.wicket:head> later on.
+					return null;
+				}
+			}
+		}
+
+		// Found </org.apache.wicket:head> => get body onLoad
+		for (; i < markup.size(); i++)
+		{
+			MarkupElement elem = markup.get(i);
+			if (elem instanceof ComponentTag)
+			{
+				ComponentTag tag = (ComponentTag)elem;
+				if (tag.isOpen() && TagUtils.isBodyTag(tag))
+				{
+					String onLoad = tag.getAttributes().getString("onload");
+					return onLoad;
+				}
+			}
+		}
+
+		return null;
+	}
+

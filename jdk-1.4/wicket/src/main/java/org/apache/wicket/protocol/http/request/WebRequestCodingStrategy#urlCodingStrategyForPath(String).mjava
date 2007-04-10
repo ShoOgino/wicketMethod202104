@@ -1,0 +1,20 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestTargetMounter#urlCodingStrategyForPath(java.lang.String)
+	 */
+	public final IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path)
+	{
+		if (path == null)
+		{
+			return (IRequestTargetUrlCodingStrategy)mountsOnPath.strategyForMount(null);
+		}
+		else
+		{
+			IRequestTargetUrlCodingStrategy strategy = mountsOnPath.strategyForPath(path);
+			if (strategy != null)
+			{
+				return strategy;
+			}
+		}
+		return null;
+	}
+

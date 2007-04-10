@@ -1,0 +1,42 @@
+	/**
+	 * Persist (e.g. Cookie) FormComponent data to be reloaded and re-assigned
+	 * to the FormComponent automatically when the page is visited by the user
+	 * next time.
+	 * 
+	 * @see org.apache.wicket.markup.html.form.FormComponent#updateModel()
+	 */
+	private void persistFormComponentData()
+	{
+		// Cannot add cookies to request cycle unless it accepts them
+		// We could conceivably be HTML over some other protocol!
+		if (getRequestCycle() instanceof WebRequestCycle)
+		{
+			// The persistence manager responsible to persist and retrieve
+			// FormComponent data
+			final IValuePersister persister = getValuePersister();
+
+			// Search for FormComponent children. Ignore all other
+			visitFormComponents(new FormComponent.AbstractVisitor()
+			{
+				public void onFormComponent(final FormComponent formComponent)
+				{
+					if (formComponent.isVisibleInHierarchy())
+					{
+						// If peristence is switched on for that FormComponent
+						// ...
+						if (formComponent.isPersistent())
+						{
+							// Save component's data (e.g. in a cookie)
+							persister.save(formComponent);
+						}
+						else
+						{
+							// Remove component's data (e.g. cookie)
+							persister.clear(formComponent);
+						}
+					}
+				}
+			});
+		}
+	}
+

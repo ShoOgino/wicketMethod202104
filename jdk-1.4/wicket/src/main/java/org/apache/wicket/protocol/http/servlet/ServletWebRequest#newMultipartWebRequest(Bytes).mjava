@@ -1,0 +1,15 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.WebRequest#newMultipartWebRequest(org.apache.wicket.util.lang.Bytes)
+	 */
+	public WebRequest newMultipartWebRequest(Bytes maxsize)
+	{
+		try
+		{
+			return new MultipartServletWebRequest(httpServletRequest, maxsize);
+		}
+		catch (FileUploadException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

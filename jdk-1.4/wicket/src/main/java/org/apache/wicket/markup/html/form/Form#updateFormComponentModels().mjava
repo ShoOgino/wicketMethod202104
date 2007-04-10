@@ -1,0 +1,18 @@
+	/**
+	 * Update the model of all form components using the fields that were sent
+	 * with the current request.
+	 * 
+	 * @see org.apache.wicket.markup.html.form.FormComponent#updateModel()
+	 */
+	protected final void updateFormComponentModels()
+	{
+		visitFormComponents(new ValidationVisitor()
+		{
+			public void validate(FormComponent formComponent)
+			{
+				// Potentially update the model
+				formComponent.updateModel();
+			}
+		});
+	}
+

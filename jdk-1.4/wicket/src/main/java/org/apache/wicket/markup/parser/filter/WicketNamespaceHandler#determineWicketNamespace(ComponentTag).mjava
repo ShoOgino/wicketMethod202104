@@ -1,0 +1,45 @@
+	/**
+	 * Determine org.apache.wicket namespace from xmlns:org.apache.wicket or
+	 * xmlns:org.apache.wicket="http://org.apache.wicket.sourceforge.net"
+	 * 
+	 * @param tag
+	 * @return Wicket namespace
+	 */
+	private String determineWicketNamespace(final ComponentTag tag)
+	{
+		// For all tags attributes
+		final IValueMap attributes = tag.getAttributes();
+		final Iterator it = attributes.entrySet().iterator();
+		while (it.hasNext())
+		{
+			final Map.Entry entry = (Map.Entry)it.next();
+
+			// Find attributes with namespace "xmlns"
+			final String attributeName = (String)entry.getKey();
+			if (attributeName.startsWith(XMLNS))
+			{
+				final String xmlnsUrl = (String)entry.getValue();
+
+				// If Wicket relevant ...
+				if ((xmlnsUrl == null) || (xmlnsUrl.trim().length() == 0)
+						|| xmlnsUrl.startsWith(WICKET_URI))
+				{
+					// Set the Wicket namespace for org.apache.wicket tags (e.g.
+					// <wicket:panel>) and attributes (e.g. wicket:id)
+					final String namespace = attributeName.substring(XMLNS.length());
+					if (Application.get().getMarkupSettings().getStripWicketTags())
+					{
+						attributes.remove(attributeName);
+						
+						// Make sure the parser knows it has been changed
+						tag.setModified(true);
+					}
+					
+					return namespace;
+				}
+			}
+		}
+
+		return null;
+	}
+

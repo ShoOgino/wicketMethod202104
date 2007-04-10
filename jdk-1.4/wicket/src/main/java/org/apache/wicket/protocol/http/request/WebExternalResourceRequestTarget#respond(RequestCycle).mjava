@@ -1,0 +1,40 @@
+	/**
+	 * Respond by trying to delegate getting the resource from the
+	 * {@link ServletContext} object and stream that to the client. If such a
+	 * resource is not found, a warning will be logged, and a 404 will be
+	 * issued.
+	 * 
+	 * @see org.apache.wicket.IRequestTarget#respond(org.apache.wicket.RequestCycle)
+	 */
+	public void respond(RequestCycle requestCycle)
+	{
+		try
+		{
+			WebResponse webResponse = ((WebRequestCycle)requestCycle).getWebResponse();
+			final ServletContext context = ((WebApplication)requestCycle.getApplication())
+					.getServletContext();
+
+			final InputStream in = context.getResourceAsStream(url);
+			if (in != null)
+			{
+				// NOTE headers must be written before the body
+				// Set content type
+				webResponse.detectContentType(requestCycle, url);
+				// FIXME do we need to call webResponse.setContentLength()?
+				webResponse.write(in);
+			}
+			else
+			{
+				log.warn("the resource requested by request " + requestCycle.getRequest()
+						+ " was not found");
+				HttpServletResponse httpServletResponse = webResponse.getHttpServletResponse();
+				httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+			}
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException("Cannot load static content for request "
+					+ requestCycle.getRequest(), e);
+		}
+	}
+

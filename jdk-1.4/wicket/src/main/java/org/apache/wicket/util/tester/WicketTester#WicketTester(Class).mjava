@@ -1,0 +1,24 @@
+	/**
+	 * Create WicketTester and automatically create a WebApplication.
+	 * 
+	 * @param homePage
+	 */
+	public WicketTester(final Class homePage)
+	{
+		this(new WebApplication()
+		{
+			/**
+			 * @see org.apache.wicket.Application#getHomePage()
+			 */
+			public Class getHomePage()
+			{
+				return homePage;
+			}
+
+			protected WebResponse newWebResponse(final HttpServletResponse servletResponse)
+			{
+				return new WebResponse(servletResponse);
+			}
+		});
+	}
+

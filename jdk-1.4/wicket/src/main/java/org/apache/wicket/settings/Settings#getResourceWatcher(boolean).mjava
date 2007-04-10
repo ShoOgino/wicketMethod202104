@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.settings.IResourceSettings#getResourceWatcher(boolean)
+	 */
+	public ModificationWatcher getResourceWatcher(boolean start)
+	{
+		if (resourceWatcher == null && start)
+		{
+			final Duration pollFrequency = getResourcePollFrequency();
+			if (pollFrequency != null)
+			{
+				resourceWatcher = new ModificationWatcher(pollFrequency);
+			}
+		}
+		return resourceWatcher;
+	}
+

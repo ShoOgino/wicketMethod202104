@@ -1,0 +1,80 @@
+	/**
+	 * Parses the text between tags. For example, "a href=foo.html".
+	 * 
+	 * @param tagText
+	 *            The text between tags
+	 * @return A new Tag object or null if the tag is invalid
+	 * @throws ParseException
+	 */
+	private XmlTag parseTagText(final String tagText) throws ParseException
+	{
+		// Get the length of the tagtext
+		final int tagTextLength = tagText.length();
+
+		// If we match tagname pattern
+		final TagNameParser tagnameParser = new TagNameParser(tagText);
+		if (tagnameParser.matcher().lookingAt())
+		{
+			final XmlTag tag = new XmlTag();
+
+			// Extract the tag from the pattern matcher
+			tag.name = tagnameParser.getName();
+			tag.namespace = tagnameParser.getNamespace();
+
+			// Are we at the end? Then there are no attributes, so we just
+			// return the tag
+			int pos = tagnameParser.matcher().end(0);
+			if (pos == tagTextLength)
+			{
+				return tag;
+			}
+
+			// Extract attributes
+			final VariableAssignmentParser attributeParser = new VariableAssignmentParser(tagText);
+			while (attributeParser.matcher().find(pos))
+			{
+				// Get key and value using attribute pattern
+				String value = attributeParser.getValue();
+
+				// In case like <html xmlns:org.apache.wicket> will the value be null
+				if (value == null)
+				{
+					value = "";
+				}
+
+				// Set new position to end of attribute
+				pos = attributeParser.matcher().end(0);
+
+				// Chop off double quotes or single quotes
+				if (value.startsWith("\"") || value.startsWith("\'"))
+				{
+					value = value.substring(1, value.length() - 1);
+				}
+
+				// Trim trailing whitespace
+				value = value.trim();
+
+				// Get key
+				final String key = attributeParser.getKey();
+
+				// Put the attribute in the attributes hash
+				if (null != tag.put(key, value))
+				{
+					throw new ParseException("Same attribute found twice: " + key, this.input
+							.getPosition());
+				}
+
+				// The input has to match exactly (no left over junk after
+				// attributes)
+				if (pos == tagTextLength)
+				{
+					return tag;
+				}
+			}
+
+			return tag;
+		}
+
+		return null;
+	}
+

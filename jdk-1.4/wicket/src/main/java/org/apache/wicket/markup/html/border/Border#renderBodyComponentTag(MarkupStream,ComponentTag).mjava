@@ -1,0 +1,42 @@
+	/**
+	 * Render the org.apache.wicket:body tag
+	 * 
+	 * @param tag
+	 *            The org.apache.wicket:body tag
+	 * @param markupStream
+	 *            The associated markup stream
+	 * @return the body tag. May be its type has been changed
+	 */
+	protected ComponentTag renderBodyComponentTag(final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		ComponentTag bodyTag = tag;
+
+		// Ok, it is a org.apache.wicket:body tag. Now render its body
+		if (tag.isOpen())
+		{
+			// It is open-preview-close already.
+			// Only RawMarkup is allowed within the preview region, which
+			// gets stripped from output
+			markupStream.next();
+			markupStream.skipRawMarkup();
+		}
+		else if (tag.isOpenClose())
+		{
+			// Automatically expand <org.apache.wicket:body/> to
+			// <org.apache.wicket:body>...</org.apache.wicket:body>
+			// in order for the html to look right: insert the body in between
+			// the org.apache.wicket tags instead of behind the open-close tag.
+			bodyTag = tag.mutable();
+			bodyTag.setType(XmlTag.OPEN);
+		}
+		else
+		{
+			markupStream
+					.throwMarkupException("A <org.apache.wicket:body> tag must be an open or open-close tag.");
+		}
+
+		renderComponentTag(bodyTag);
+		return bodyTag;
+	}
+

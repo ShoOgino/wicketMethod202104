@@ -1,0 +1,16 @@
+	/**
+	 * This method by default calls isAjax(), org.apache.wicket ajax request do have an
+	 * header set. And for all the ajax request the versioning should be merged
+	 * with the previous one. And when it sees that the current request is a
+	 * redirect to page request the version will also be merged with the
+	 * previous one because refresh in the browser or redirects to a page
+	 * shouldn't generate a new version.
+	 * 
+	 * @see org.apache.wicket.Request#mergeVersion()
+	 */
+	public boolean mergeVersion()
+	{
+		RequestListenerInterface intface = getRequestParameters().getInterface();
+		return isAjax() || intface == IRedirectListener.INTERFACE;
+	}
+

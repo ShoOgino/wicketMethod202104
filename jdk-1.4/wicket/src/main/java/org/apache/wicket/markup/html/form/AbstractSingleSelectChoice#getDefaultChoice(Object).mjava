@@ -1,0 +1,56 @@
+	/**
+	 * The localizer will be ask for the property to display Depending on if
+	 * null is allowed or not it will ask for:
+	 * 
+	 * <ul>
+	 * <li>nullValid: when null is valid and by default it will show an empty
+	 * string as a choice.</li>
+	 * <li>null: when null is not a valid choice and it will make a choice with
+	 * "Choose One"</li>
+	 * </ul>
+	 * 
+	 * The choice for null is valid will always be returned. The choice when
+	 * null is not valid will only be returned if the selected object is null.
+	 * 
+	 * @see org.apache.wicket.markup.html.form.AbstractChoice#getDefaultChoice(Object)
+	 */
+	protected CharSequence getDefaultChoice(final Object selected)
+	{
+		// Is null a valid selection value?
+		if (isNullValid())
+		{
+			// Null is valid, so look up the value for it
+			final String option = getLocalizer().getString("nullValid", this, "");
+
+			// The <option> tag buffer
+			final AppendingStringBuffer buffer = new AppendingStringBuffer(32 + option.length());
+
+
+			// Add option tag
+			buffer.append("\n<option");
+
+			// If null is selected, indicate that
+			if (selected == null)
+			{
+				buffer.append(" selected=\"selected\"");
+			}
+
+			// Add body of option tag
+			buffer.append(" value=\"\">").append(option).append("</option>");
+			return buffer;
+		}
+		else
+		{
+			// Null is not valid. Is it selected anyway?
+			if (selected == null || selected.equals(NO_SELECTION_VALUE)
+					|| selected.equals(EMPTY_STRING))
+			{
+				// Force the user to pick a non-null value
+				final String option = getLocalizer().getString("null", this, CHOOSE_ONE);
+				return new AppendingStringBuffer("\n<option selected=\"selected\" value=\"\">")
+						.append(option).append("</option>");
+			}
+		}
+		return "";
+	}
+

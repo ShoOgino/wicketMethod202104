@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.markup.html.IHeaderContributor#renderHead(org.apache.wicket.Response)
+	 */
+	public final void renderHead(final IHeaderResponse response)
+	{
+		IHeaderContributor[] contributors = getHeaderContributors();
+		// do nothing if we don't need to
+		if (contributors == null)
+		{
+			return;
+		}
+
+		for (int i = 0; i < contributors.length; i++)
+		{
+			if (response.wasRendered(contributors[i]) == false) 
+			{
+				contributors[i].renderHead(response);
+				response.markRendered(contributors[i]);
+			}
+		}
+	}
+

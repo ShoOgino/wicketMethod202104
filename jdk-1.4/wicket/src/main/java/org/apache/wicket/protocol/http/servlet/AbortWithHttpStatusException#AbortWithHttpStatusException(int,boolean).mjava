@@ -1,0 +1,39 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param status
+	 *            The http response status code
+	 * @param statusCodeOptional
+	 *            If true and http status could not be set, an
+	 *            IllegalStateException will be thrown
+	 */
+	public AbortWithHttpStatusException(int status, boolean statusCodeOptional)
+	{
+		this.status = status;
+
+		RequestCycle rc = RequestCycle.get();
+		if (rc == null)
+		{
+			if (!statusCodeOptional)
+			{
+				throw new IllegalStateException(
+						"This exception can only be thrown from within request processing cycle");
+			}
+		}
+		else
+		{
+			Response r = rc.getResponse();
+			if (!(r instanceof WebResponse))
+			{
+				throw new IllegalStateException(
+						"This exception can only be thrown when org.apache.wicket is processing an http request");
+			}
+
+			WebResponse wr = (WebResponse)r;
+			wr.getHttpServletResponse().setStatus(status);
+
+			// abort any further response processing
+			rc.setRequestTarget(EmptyRequestTarget.getInstance());
+		}
+	}
+

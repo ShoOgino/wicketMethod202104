@@ -1,0 +1,18 @@
+	/**
+	 * Reset the request and the response back to a starting state and recreate
+	 * the necessary org.apache.wicket request, response and session objects. The request
+	 * and response objects can be accessed and initialised at this point.
+	 */
+	public void setupRequestAndResponse()
+	{
+		servletRequest.initialize();
+		servletResponse.initialize();
+		servletRequest.setParameters(parametersForNextRequest);
+		parametersForNextRequest.clear();
+        this.wicketRequest = this.application.newWebRequest(servletRequest);
+        this.wicketResponse = this.application.newWebResponse(servletResponse); 
+        this.wicketSession = this.application.getSession(wicketRequest, wicketResponse); 
+        this.application.getSessionStore().bind(wicketRequest, wicketSession); 
+		wicketResponse.setAjax(wicketRequest.isAjax());
+	}
+

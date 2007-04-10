@@ -1,0 +1,24 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
+	 * @param scope
+	 *            The scope of the resource
+	 * @param path
+	 *            The resource path
+	 * @param locale
+	 *            The locale
+	 * @param style
+	 *            The style (see {@link org.apache.wicket.Session})
+	 * @return The localized path
+	 */
+	public String resourceKey(final Class scope, final String path, final Locale locale,
+			final String style)
+	{
+		String alias = (String)classAliasMap.get(scope);
+		if (alias == null)
+		{
+			alias = scope.getName();
+		}
+		return alias + '/' + resourceKey(path, locale, style);
+	}
+

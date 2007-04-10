@@ -1,0 +1,20 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.Component#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
+	 *      org.apache.wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
+	{
+		// Skip the components body. It will be replaced by the fragment
+		markupStream.skipRawMarkup();
+
+		final MarkupStream providerMarkupStream = chooseMarkupStream(markupStream);
+		if (providerMarkupStream == null)
+		{
+			throw new IllegalStateException(
+					"no markup stream found for providing markup container " + markupProvider);
+		}
+
+		renderFragment(providerMarkupStream, openTag);
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * @see org.apache.wicket.Component#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
+	 *      org.apache.wicket.markup.ComponentTag)
+	 */
+	protected final void onComponentTagBody(final MarkupStream markupStream,
+			final ComponentTag openTag)
+	{
+		if (this.transformBodyOnly == true)
+		{
+			execute(new Runnable()
+			{
+				public void run()
+				{
+					// Invoke default execution
+					AbstractOutputTransformerContainer.super.onComponentTagBody(markupStream, openTag);
+				}
+			});
+		}
+		else
+		{
+			super.onComponentTagBody(markupStream, openTag);
+		}
+	}
+

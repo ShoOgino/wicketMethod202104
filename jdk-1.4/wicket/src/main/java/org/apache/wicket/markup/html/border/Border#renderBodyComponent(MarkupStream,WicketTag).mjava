@@ -1,0 +1,58 @@
+	/**
+	 * Render the org.apache.wicket:body and all what is in it.
+	 * 
+	 * @param markupStream
+	 *            The associated markup stream
+	 * @param wtag
+	 *            The org.apache.wicket:body tag
+	 */
+	public void renderBodyComponent(final MarkupStream markupStream, final WicketTag wtag)
+	{
+		// Ok, it is a org.apache.wicket:body tag. Now render its body
+		final ComponentTag bodyTag = renderBodyComponentTag(markupStream, wtag);
+
+		// If markup stream is null, that indicates we already recursed into
+		// this block of log and set it to null (below). If we did that,
+		// then we want to go up another level of border nesting.
+		Border border = this;
+		if (border.getMarkupStream() == null)
+		{
+			// Find Border at or above parent of this border
+			final MarkupContainer borderParent = border.getParent();
+			border = (Border)((borderParent instanceof Border) ? borderParent : borderParent
+					.findParent(Border.class));
+		}
+
+		// Get the border's markup
+		final MarkupStream borderMarkup = border.findMarkupStream();
+
+		// Set markup of border to null. This allows us to find the border's
+		// parent's markup. It also indicates that we've been here in the
+		// log just above.
+		border.setMarkupStream(null);
+
+		// Draw the children of the border component using its original
+		// in-line markup stream (not the border's associated markup stream)
+		border.renderComponentTagBody(border.findMarkupStream(), border.openTag);
+
+		// Restore border markup so it can continue rendering
+		border.setMarkupStream(borderMarkup);
+
+		// Render body close tag: </org.apache.wicket:body>
+		if (wtag.isOpenClose())
+		{
+			markupStream.next();
+			bodyTag.setType(XmlTag.CLOSE);
+			renderComponentTag(bodyTag);
+		}
+
+		// There shall exactly only one body tag per border
+		if (border.haveSeenBodyTag == true)
+		{
+			markupStream
+					.throwMarkupException("There must be exactly one <org.apache.wicket:body> tag for each border compoment.");
+		}
+
+		border.haveSeenBodyTag = true;
+	}
+

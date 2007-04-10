@@ -1,0 +1,53 @@
+	/**
+	 * Configures application settings to good defaults for the given
+	 * configuration type (either DEVELOPMENT or DEPLOYMENT).
+	 * 
+	 * @param configurationType
+	 *            The configuration type. Must currently be either DEVELOPMENT
+	 *            or DEPLOYMENT. Currently, if the configuration type is
+	 *            DEVELOPMENT, resources are polled for changes, component usage
+	 *            is checked, org.apache.wicket tags are not stripped from ouput and a
+	 *            detailed exception page is used. If the type is DEPLOYMENT,
+	 *            component usage is not checked, org.apache.wicket tags are stripped from
+	 *            output and a non-detailed exception page is used to display
+	 *            errors.
+	 * @param resourceFinder
+	 *            Resource finder for looking up resources
+	 */
+	public final void configure(final String configurationType, final IResourceFinder resourceFinder)
+	{
+		this.configurationType = configurationType;
+
+		if (resourceFinder != null)
+		{
+			getResourceSettings().setResourceFinder(resourceFinder);
+		}
+		// As long as this is public api the developermenat and deployment mode
+		// should counter act each other for all properties.
+		if (DEVELOPMENT.equalsIgnoreCase(configurationType))
+		{
+			getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
+			getDebugSettings().setComponentUseCheck(true);
+			getMarkupSettings().setStripWicketTags(false);
+			getExceptionSettings().setUnexpectedExceptionDisplay(
+					IExceptionSettings.SHOW_EXCEPTION_PAGE);
+			getDebugSettings().setAjaxDebugModeEnabled(true);
+			getResourceSettings().setStripJavascriptCommentsAndWhitespace(false);
+		}
+		else if (DEPLOYMENT.equalsIgnoreCase(configurationType))
+		{
+			getResourceSettings().setResourcePollFrequency(null);
+			getDebugSettings().setComponentUseCheck(false);
+			getMarkupSettings().setStripWicketTags(true);
+			getExceptionSettings().setUnexpectedExceptionDisplay(
+					IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
+			getDebugSettings().setAjaxDebugModeEnabled(false);
+			getResourceSettings().setStripJavascriptCommentsAndWhitespace(true);
+		}
+		else
+		{
+			throw new IllegalArgumentException(
+					"Invalid configuration type.  Must be \"development\" or \"deployment\".");
+		}
+	}
+

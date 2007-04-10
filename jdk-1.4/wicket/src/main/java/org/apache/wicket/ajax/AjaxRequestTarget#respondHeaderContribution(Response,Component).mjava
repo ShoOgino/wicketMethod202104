@@ -1,0 +1,90 @@
+	/**
+	 * 
+	 * @param response
+	 * @param component
+	 */
+	private void respondHeaderContribution(final Response response, final Component component)
+	{
+		headerRendering = true;
+
+		// create the htmlheadercontainer if needed
+		if (header == null)
+		{
+			header = new AjaxHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID, this);
+		}
+
+		// add or replace the container to page
+		Component oldHeader = component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID); 
+		
+		if (oldHeader != null)
+		{
+			component.getPage().replace(header);
+		}
+		else
+		{
+			component.getPage().add(header);
+		}
+
+		// save old response, set new 
+		Response oldResponse = RequestCycle.get().setResponse(encodingHeaderResponse);
+
+		encodingHeaderResponse.reset();
+
+		// render the head of component and all it's children
+		
+		component.renderHead(header);
+
+		if (component instanceof MarkupContainer)
+		{
+			((MarkupContainer)component).visitChildren(new Component.IVisitor()
+			{
+				public Object component(Component component)
+				{
+					if (component.isVisible())
+					{
+						component.renderHead(header);
+						return CONTINUE_TRAVERSAL;
+					}
+					else
+					{
+						return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+					}
+				}
+			});
+		}
+
+		// revert to old response
+		
+		RequestCycle.get().setResponse(oldResponse);
+
+		if (encodingHeaderResponse.getContents().length() != 0)
+		{
+			response.write("<header-contribution");
+
+			if (encodingHeaderResponse.isContentsEncoded())
+			{
+				response.write(" encoding=\"");
+				response.write(getEncodingName());
+				response.write("\" ");
+			}
+
+			// we need to write response as CDATA and parse it on client,
+			// because
+			// konqueror crashes when there is a <script> element
+			response.write("><![CDATA[<head xmlns:org.apache.wicket=\"http://org.apache.wicket.sourceforge.net\">");
+
+			response.write(encodingHeaderResponse.getContents());
+
+			response.write("</head>]]>");
+
+			response.write("</header-contribution>");
+		}
+
+		headerRendering = false;
+		
+		if (oldHeader == null)
+			component.getPage().remove(header);
+		else
+			component.getPage().replace(oldHeader);
+	}
+

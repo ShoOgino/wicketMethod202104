@@ -1,0 +1,21 @@
+	/**
+	 * Decode the querystring of the URL
+	 * 
+	 * @see org.apache.wicket.request.IRequestCodingStrategy#decode(org.apache.wicket.Request)
+	 */
+	public RequestParameters decode(final Request request)
+	{
+		String url = request.decodeURL(request.getURL());
+		String decodedQueryParams = decodeURL(url);
+		if (decodedQueryParams != null)
+		{
+			// The difficulty now is that this.defaultStrategy.decode(request)
+			// doesn't know the just decoded url which is why must create
+			// a fake Request for.
+			Request fakeRequest = new DecodedUrlRequest(request, url, decodedQueryParams);
+			return this.defaultStrategy.decode(fakeRequest);
+		}
+
+		return this.defaultStrategy.decode(request);
+	}
+

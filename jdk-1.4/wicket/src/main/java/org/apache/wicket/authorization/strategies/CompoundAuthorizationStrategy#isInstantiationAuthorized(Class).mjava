@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isInstantiationAuthorized(java.lang.Class)
+	 */
+	public final boolean isInstantiationAuthorized(Class componentClass)
+	{
+		int size = strategies.size();
+		for (int i = 0; i < size; i++)
+		{
+			IAuthorizationStrategy strategy = (IAuthorizationStrategy)strategies.get(i);
+			if (!strategy.isInstantiationAuthorized(componentClass))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+

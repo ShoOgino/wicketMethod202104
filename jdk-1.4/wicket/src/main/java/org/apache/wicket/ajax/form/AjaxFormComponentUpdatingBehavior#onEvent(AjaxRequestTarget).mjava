@@ -1,0 +1,32 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.ajax.AjaxEventBehavior#onEvent(org.apache.wicket.ajax.AjaxRequestTarget)
+	 */
+	protected final void onEvent(final AjaxRequestTarget target)
+	{
+		final FormComponent formComponent = getFormComponent();
+
+		try
+		{
+			formComponent.inputChanged();
+			formComponent.validate();
+			if (formComponent.hasErrorMessage())
+			{
+				formComponent.invalid();
+				
+				onError(target, null);
+			}
+			else
+			{
+				formComponent.valid();
+				formComponent.updateModel();
+				onUpdate(target);
+			}
+		}
+		catch (RuntimeException e)
+		{
+			onError(target, e);
+
+		}
+	}
+

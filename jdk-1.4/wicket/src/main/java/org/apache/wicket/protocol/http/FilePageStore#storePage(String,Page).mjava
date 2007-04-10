@@ -1,0 +1,19 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.SecondLevelCacheSessionStore.IPageStore#storePage(java.lang.String,
+	 *      org.apache.wicket.Page)
+	 */
+	public void storePage(String sessionId, Page page)
+	{
+		List list = (List)pagesToBeSerialized.get(sessionId);
+		if (list == null)
+		{
+			list = new LinkedList();
+		}
+		synchronized (list)
+		{
+			list.add(new SessionPageKey(sessionId, page));
+		}
+		// do really put it back in.. The writer thread could have removed it.
+		pagesToBeSerialized.put(sessionId, list);
+	}
+

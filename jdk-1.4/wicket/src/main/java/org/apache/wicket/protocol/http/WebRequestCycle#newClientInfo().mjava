@@ -1,0 +1,24 @@
+	/**
+	 * @see org.apache.wicket.RequestCycle#newClientInfo()
+	 */
+	protected ClientInfo newClientInfo()
+	{
+		if (getApplication().getRequestCycleSettings().getGatherExtendedBrowserInfo())
+		{
+			Session session = getSession();
+			if (session.getMetaData(BROWSER_WAS_POLLED_KEY) == null)
+			{
+				// we haven't done the redirect yet; record that we will be
+				// doing that now and redirect
+				session.setMetaData(BROWSER_WAS_POLLED_KEY, Boolean.TRUE);
+				throw new RestartResponseAtInterceptPageException(new BrowserInfoPage(getRequest()
+						.getURL()));
+			}
+			// if we get here, the redirect already has been done; clear
+			// the meta data entry; we don't need it any longer is the client
+			// info object will be cached too
+			session.setMetaData(BROWSER_WAS_POLLED_KEY, (Boolean)null);
+		}
+		return new WebClientInfo(this);
+	}
+

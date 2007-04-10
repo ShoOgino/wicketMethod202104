@@ -1,0 +1,91 @@
+	/**
+	 * Renders the next element of markup in the given markup stream.
+	 * 
+	 * @param markupStream
+	 *            The markup stream
+	 */
+	private final void renderNext(final MarkupStream markupStream)
+	{
+		// Get the current markup element
+		final MarkupElement element = markupStream.get();
+
+		// If it a tag like <org.apache.wicket..> or <span wicket:id="..." >
+		if ((element instanceof ComponentTag) && !markupStream.atCloseTag())
+		{
+			// Get element as tag
+			final ComponentTag tag = (ComponentTag)element;
+
+			// Get component id
+			final String id = tag.getId();
+
+			// Get the component for the id from the given container
+			final Component component = get(id);
+
+			// Failed to find it?
+			if (component != null)
+			{
+				component.render(markupStream);
+			}
+			else
+			{
+				// 2rd try: Components like Border and Panel might implement
+				// the ComponentResolver interface as well.
+				MarkupContainer container = this;
+				while (container != null)
+				{
+					if (container instanceof IComponentResolver)
+					{
+						if (((IComponentResolver)container).resolve(this, markupStream, tag))
+						{
+							return;
+						}
+					}
+
+					container = container.findParent(MarkupContainer.class);
+				}
+
+				// 3rd try: Try application's component resolvers
+				final List componentResolvers = this.getApplication().getPageSettings()
+						.getComponentResolvers();
+				final Iterator iterator = componentResolvers.iterator();
+				while (iterator.hasNext())
+				{
+					final IComponentResolver resolver = (IComponentResolver)iterator.next();
+					if (resolver.resolve(this, markupStream, tag))
+					{
+						return;
+					}
+				}
+
+				if (tag instanceof WicketTag)
+				{
+					if (((WicketTag)tag).isChildTag())
+					{
+						markupStream.throwMarkupException("Found " + tag.toString()
+								+ " but no <org.apache.wicket:extend>");
+					}
+					else
+					{
+						markupStream.throwMarkupException("Failed to handle: " + tag.toString());
+					}
+				}
+
+				// No one was able to handle the component id
+				markupStream.throwMarkupException("Unable to find component with id '" + id
+						+ "' in " + this + ". This means that you declared wicket:id=" + id
+						+ " in your markup, but that you either did not add the "
+						+ "component to your page at all, or that the hierarchy does not match.");
+			}
+		}
+		else
+		{
+			// Render as raw markup
+			if (log.isDebugEnabled())
+			{
+				log.debug("Rendering raw markup");
+			}
+			getResponse().write(element.toCharSequence());
+			markupStream.next();
+		}
+	}
+

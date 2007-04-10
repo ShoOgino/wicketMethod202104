@@ -1,0 +1,20 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testRenderHomePage_10() throws Exception
+	{
+	    executeTest(SimplePage_10.class, "SimplePageExpectedResult_10.html");
+
+	    Panel panel = (Panel)tester.getLastRenderedPage().get("myPanel");
+	    assertNotNull(panel);
+		// we need to setup request/response before calling setvisible
+		tester.setupRequestAndResponse();
+		tester.createRequestCycle();
+
+	    panel.setVisible(true);
+		tester.processRequestCycle(panel);
+		String document = tester.getServletResponse().getDocument();
+		assertNotNull(document);
+		assertEquals("<org.apache.wicket:panel>Inside the panel<span wicket:id=\"label\">mein Label</span></org.apache.wicket:panel>", document);
+	}
+
