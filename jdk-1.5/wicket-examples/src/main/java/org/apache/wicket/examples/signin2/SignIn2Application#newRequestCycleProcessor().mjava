@@ -1,0 +1,14 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.WebApplication#newRequestCycleProcessor()
+	 */
+	protected IRequestCycleProcessor newRequestCycleProcessor()
+	{
+		return new WebRequestCycleProcessor()
+		{
+			protected IRequestCodingStrategy newRequestCodingStrategy()
+			{
+				return new CryptedUrlWebRequestCodingStrategy(new WebRequestCodingStrategy());
+			}
+		};
+	}
+

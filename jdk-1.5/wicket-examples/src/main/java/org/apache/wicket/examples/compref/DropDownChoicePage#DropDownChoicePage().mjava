@@ -1,0 +1,92 @@
+	/**
+	 * Constructor
+	 */
+	public DropDownChoicePage()
+	{
+		final Input input = new Input();
+		setModel(new CompoundPropertyModel(input));
+
+		// Add a FeedbackPanel for displaying our messages
+		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		add(feedbackPanel);
+
+		// Add a form with an onSumbit implementation that sets a message
+		Form form = new Form("form")
+		{
+			protected void onSubmit()
+			{
+				info("input: " + input);
+			}
+		};
+		add(form);
+
+		// Add a dropdown choice component that uses Input's 'site' property to
+		// designate the
+		// current selection, and that uses the SITES list for the available
+		// options.
+		// Note that when the selection is null, Wicket will lookup a localized
+		// string to
+		// represent this null with key: "id + '.null'". In this case, this is
+		// 'site.null'
+		// which can be found in DropDownChoicePage.properties
+		form.add(new DropDownChoice("site", SITES));
+
+		// Allthough the default behavior of displaying the string
+		// representations of the choices
+		// by calling toString on the object might be alright in some cases, you
+		// usually want to have
+		// more control over it. You achieve this by providing an instance of
+		// IChoiceRenderer,
+		// like the example below. Don't forget to check out the default
+		// implementation of
+		// IChoiceRenderer, ChoiceRenderer.
+		form.add(new DropDownChoice("integer", INTEGERS, new IChoiceRenderer()
+		{
+			/**
+			 * Gets the display value that is visible to the end user.
+			 * 
+			 * @see org.apache.wicket.markup.html.form.IChoiceRenderer#getDisplayValue(java.lang.Object)
+			 */
+			public Object getDisplayValue(Object object)
+			{
+				// Use an ugly switch statement. Usually you would hide this in
+				// your business
+				// object or in a utility.
+				String stringrep;
+				int value = ((Integer)object).intValue();
+				switch (value)
+				{
+					case 1 :
+						stringrep = "One";
+						break;
+					case 2 :
+						stringrep = "Two";
+						break;
+					case 3 :
+						stringrep = "Three";
+						break;
+					default :
+						throw new IllegalStateException(value + " is not mapped!");
+				}
+				return stringrep;
+			}
+
+			/**
+			 * Gets the value that is invisble to the end user, and that is used
+			 * as the selection id.
+			 * 
+			 * @see org.apache.wicket.markup.html.form.IChoiceRenderer#getIdValue(java.lang.Object,
+			 *      int)
+			 */
+			public String getIdValue(Object object, int index)
+			{
+				// though we could do kind of the reverse of what we did in
+				// getDisplayValue,
+				// just using your index in the list of provided options is
+				// usually more
+				// convenient
+				return String.valueOf(INTEGERS.get(index));
+			}
+		}));
+	}
+

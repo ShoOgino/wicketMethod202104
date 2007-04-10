@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.examples.WicketExampleApplication#init()
+	 */
+	protected void init()
+	{
+		getResourceSettings().setThrowExceptionOnMissingResource(false);
+
+		uploadFolder = new Folder(System.getProperty("java.io.tmpdir"), "org.apache.wicket-uploads");
+		// Ensure folder exists
+		uploadFolder.mkdirs();
+
+		mountBookmarkablePage("/multi", MultiUploadPage.class);
+		mountBookmarkablePage("/single", UploadPage.class);
+
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Create the word generator, loading the words and preparing them for
+	 * serving.
+	 */
+	public WordGenerator()
+	{
+		try
+		{
+			final IResourceStream resource = new ResourceStreamLocator().locate(null,
+					"org.apache.wicket/examples/hangman/WordList", "", Locale.getDefault(), ".txt");
+			final String wordlist = Streams.readString(resource.getInputStream());
+			this.words = Arrays.asList(wordlist.split("\\s+"));
+			shuffle();
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Couldn't read word list");
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			throw new RuntimeException("Couldn't read word list");
+		}
+	}
+
