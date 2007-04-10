@@ -1,0 +1,24 @@
+	/**
+	 * @see org.apache.wicket.extensions.markup.html.tree.ITreeState#collapseAll()
+	 */
+	public void collapseAll()
+	{
+		if (nodes.isEmpty() && nodesCollapsed == false)
+		{
+			// all nodes are already collapsed, do nothing
+		}
+		else
+		{
+			// clear all nodes from the set and sets the nodes as expanded
+			nodes.clear();
+			nodesCollapsed = false;
+
+			Object[] listenersCopy = listeners.toArray();
+			for(int i = 0; i < listenersCopy.length; i++) 
+			{
+				ITreeStateListener l = (ITreeStateListener)listenersCopy[i];
+				l.allNodesCollapsed();
+			}
+		}
+	}
+
