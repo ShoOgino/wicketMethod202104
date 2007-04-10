@@ -12,7 +12,7 @@
 			return -1;
 		}
 
-		// Scan the markup for <org.apache.wicket:head>.
+		// Scan the markup for <wicket:head>.
 		MarkupElement elem = associatedMarkupStream.get();
 		while (elem != null)
 		{
@@ -24,11 +24,11 @@
 					if (this.noMoreWicketHeadTagsAllowed == true)
 					{
 						throw new MarkupException(
-								"<org.apache.wicket:head> tags are only allowed before <body>, </head>, <org.apache.wicket:panel> etc. tag");
+								"<wicket:head> tags are only allowed before <body>, </head>, <wicket:panel> etc. tag");
 					}
 					return associatedMarkupStream.getCurrentIndex();
 				}
-				// org.apache.wicket:head must be before border, panel or extend
+				// wicket:head must be before border, panel or extend
 				else if (tag.isOpen()
 						&& (tag.isPanelTag() || tag.isBorderTag() || tag.isExtendTag()))
 				{
@@ -38,12 +38,12 @@
 			else if (elem instanceof ComponentTag)
 			{
 				ComponentTag tag = (ComponentTag)elem;
-				// org.apache.wicket:head must be before </head>
+				// wicket:head must be before </head>
 				if (tag.isClose() && TagUtils.isHeadTag(tag))
 				{
 					this.noMoreWicketHeadTagsAllowed = true;
 				}
-				// org.apache.wicket:head must be before <body>
+				// wicket:head must be before <body>
 				else if (tag.isOpen() && TagUtils.isBodyTag(tag))
 				{
 					this.noMoreWicketHeadTagsAllowed = true;
@@ -52,7 +52,7 @@
 			elem = associatedMarkupStream.next();
 		}
 
-		// No (more) org.apache.wicket:head found
+		// No (more) wicket:head found
 		return -1;
 	}
 

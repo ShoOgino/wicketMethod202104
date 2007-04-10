@@ -6,16 +6,16 @@
 	 * @param baseMarkup
 	 *            The base markup
 	 * @param extendIndex
-	 *            Index where <org.apache.wicket:extend> has been found
+	 *            Index where <wicket:extend> has been found
 	 */
 	private void merge(final Markup markup, final Markup baseMarkup, int extendIndex)
 	{
-		// True if either <org.apache.wicket:head> or <head> has been processed
+		// True if either <wicket:head> or <head> has been processed
 		boolean wicketHeadProcessed = false;
 
 		// Add all elements from the base markup to the new list
-		// until <org.apache.wicket:child/> is found. Convert <org.apache.wicket:child/>
-		// into <org.apache.wicket:child> and add it as well.
+		// until <wicket:child/> is found. Convert <wicket:child/>
+		// into <wicket:child> and add it as well.
 		WicketTag childTag = null;
 		int baseIndex = 0;
 		for (; baseIndex < baseMarkup.size(); baseIndex++)
@@ -49,7 +49,7 @@
 				{
 					if (wtag.isOpenClose())
 					{
-						// <org.apache.wicket:child /> => <org.apache.wicket:child>...</org.apache.wicket:child>
+						// <wicket:child /> => <wicket:child>...</wicket:child>
 						childTag = wtag;
 						WicketTag childOpenTag = (WicketTag)wtag.mutable();
 						childOpenTag.getXmlTag().setType(XmlTag.OPEN);
@@ -59,13 +59,13 @@
 					}
 					else if (wtag.isOpen())
 					{
-						// <org.apache.wicket:child>
+						// <wicket:child>
 						addMarkupElement(wtag);
 						break;
 					}
 					else
 					{
-						throw new WicketRuntimeException("Did not expect a </org.apache.wicket:child> tag in "
+						throw new WicketRuntimeException("Did not expect a </wicket:child> tag in "
 								+ baseMarkup.toString());
 					}
 				}
@@ -73,7 +73,7 @@
 				// Process the head of the extended markup only once
 				if (wicketHeadProcessed == false)
 				{
-					// if </org.apache.wicket:head> in base markup
+					// if </wicket:head> in base markup
 					if (wtag.isClose() && wtag.isHeadTag())
 					{
 						wicketHeadProcessed = true;
@@ -81,7 +81,7 @@
 						// Add the current close tag
 						addMarkupElement(wtag);
 
-						// Add the <org.apache.wicket:head> body from the derived markup.
+						// Add the <wicket:head> body from the derived markup.
 						copyWicketHead(markup, extendIndex);
 
 						// Do not add the current tag. It has already been
@@ -89,12 +89,12 @@
 						continue;
 					}
 
-					// if <org.apache.wicket:panel> or ... in base markup
+					// if <wicket:panel> or ... in base markup
 					if (wtag.isOpen() && wtag.isMajorWicketComponentTag())
 					{
 						wicketHeadProcessed = true;
 
-						// Add the <org.apache.wicket:head> body from the derived markup.
+						// Add the <wicket:head> body from the derived markup.
 						copyWicketHead(markup, extendIndex);
 					}
 				}
@@ -109,7 +109,7 @@
 				{
 					wicketHeadProcessed = true;
 
-					// Add the <org.apache.wicket:head> body from the derived markup.
+					// Add the <wicket:head> body from the derived markup.
 					copyWicketHead(markup, extendIndex);
 				}
 			}
@@ -146,12 +146,12 @@
 
 		if (baseIndex == baseMarkup.size())
 		{
-			throw new WicketRuntimeException("Expected to find <org.apache.wicket:child/> in base markup: "
+			throw new WicketRuntimeException("Expected to find <wicket:child/> in base markup: "
 					+ baseMarkup.toString());
 		}
 
 		// Now append all elements from the derived markup starting with
-		// <org.apache.wicket:extend> until </org.apache.wicket:extend> to the list
+		// <wicket:extend> until </wicket:extend> to the list
 		for (; extendIndex < markup.size(); extendIndex++)
 		{
 			MarkupElement element = markup.get(extendIndex);
@@ -170,10 +170,10 @@
 		if (extendIndex == markup.size())
 		{
 			throw new WicketRuntimeException(
-					"Missing close tag </org.apache.wicket:extend> in derived markup: " + markup.toString());
+					"Missing close tag </wicket:extend> in derived markup: " + markup.toString());
 		}
 
-		// If <org.apache.wicket:child> than skip the body and find </org.apache.wicket:child>
+		// If <wicket:child> than skip the body and find </wicket:child>
 		if (((ComponentTag)baseMarkup.get(baseIndex)).isOpen())
 		{
 			for (baseIndex++; baseIndex < baseMarkup.size(); baseIndex++)
@@ -192,29 +192,29 @@
 					else
 					{
 						throw new WicketRuntimeException(
-								"Wicket tags like <org.apache.wicket:xxx> are not allowed in between <org.apache.wicket:child> and </org.apache.wicket:child> tags: "
+								"Wicket tags like <wicket:xxx> are not allowed in between <wicket:child> and </wicket:child> tags: "
 										+ markup.toString());
 					}
 				}
 				else if (element instanceof ComponentTag)
 				{
 					throw new WicketRuntimeException(
-							"Wicket tags identified by wicket:id are not allowed in between <org.apache.wicket:child> and </org.apache.wicket:child> tags: "
+							"Wicket tags identified by wicket:id are not allowed in between <wicket:child> and </wicket:child> tags: "
 									+ markup.toString());
 				}
 			}
 
-			// </org.apache.wicket:child> not found
+			// </wicket:child> not found
 			if (baseIndex == baseMarkup.size())
 			{
 				throw new WicketRuntimeException(
-						"Expected to find </org.apache.wicket:child> in base markup: " + baseMarkup.toString());
+						"Expected to find </wicket:child> in base markup: " + baseMarkup.toString());
 			}
 		}
 		else
 		{
 			// And now all remaining elements from the derived markup.
-			// But first add </org.apache.wicket:child>
+			// But first add </wicket:child>
 			WicketTag childCloseTag = (WicketTag)childTag.mutable();
 			childCloseTag.getXmlTag().setType(XmlTag.CLOSE);
 			childCloseTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
@@ -236,13 +236,13 @@
 		}
 
 		// Automatically add <head> if missing and required. On a Page
-		// it must enclose ALL of the <org.apache.wicket:head> tags.
+		// it must enclose ALL of the <wicket:head> tags.
 		// Note: HtmlHeaderSectionHandler does something similar, but because
 		// markup filters are not called for merged markup again, ...
 		if (Page.class.isAssignableFrom(markup.getResource().getMarkupClass()))
 		{
-			// Find the position inside the markup for first <org.apache.wicket:head>,
-			// last </org.apache.wicket:head> and <head>
+			// Find the position inside the markup for first <wicket:head>,
+			// last </wicket:head> and <head>
 			int hasOpenWicketHead = -1;
 			int hasCloseWicketHead = -1;
 			int hasHead = -1;

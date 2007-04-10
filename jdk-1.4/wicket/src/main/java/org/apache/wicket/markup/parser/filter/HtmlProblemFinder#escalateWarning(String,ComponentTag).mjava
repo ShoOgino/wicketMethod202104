@@ -2,27 +2,30 @@
 	 * Handle the issue. Depending the setting either log a warning, an error,
 	 * throw an exception or ignore it.
 	 * 
-	 * @param msg The message
-	 * @param tag The current tag
+	 * @param msg
+	 *            The message
+	 * @param tag
+	 *            The current tag
 	 * @throws ParseException
 	 */
 	private void escalateWarning(final String msg, final ComponentTag tag) throws ParseException
 	{
-	    if (problemEscalation == ERR_LOG_WARN)
-	    {
-	        log.warn(msg + tag.toUserDebugString());
-	    }
-	    else if (problemEscalation == ERR_LOG_ERROR)
-	    {
-	        log.error(msg + tag.toUserDebugString());
-	    }
-	    else if (problemEscalation == ERR_INGORE)
-	    {
-	        // no action required
-	    }
-	    else // if (problemEscalation == ERR_THROW_EXCEPTION)
-	    {
-	        throw new ParseException(msg + tag.toUserDebugString(), tag.getPos());
-	    }
+		if (problemEscalation == ERR_LOG_WARN)
+		{
+			log.warn(msg + tag.toUserDebugString());
+		}
+		else if (problemEscalation == ERR_LOG_ERROR)
+		{
+			log.error(msg + tag.toUserDebugString());
+		}
+		else if (problemEscalation == ERR_INGORE)
+		{
+			// no action required
+		}
+		else
+		// if (problemEscalation == ERR_THROW_EXCEPTION)
+		{
+			throw new ParseException(msg + tag.toUserDebugString(), tag.getPos());
+		}
 	}
 
