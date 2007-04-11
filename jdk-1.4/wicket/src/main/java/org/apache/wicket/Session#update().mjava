@@ -3,15 +3,15 @@
 	 */
 	protected void update()
 	{
-		List lst = (List)touchedPages.get();
-		if (lst != null)
+		List touchedPages = (List)Session.touchedPages.get();
+		Session.touchedPages.set(null);
+		if (touchedPages != null)
 		{
-			for (int i = 0; i < lst.size(); i++)
+			for (int i = 0; i < touchedPages.size(); i++)
 			{
-				Page page = (Page)lst.get(i);
+				Page page = (Page)touchedPages.get(i);
 				page.getPageMap().put(page);
 			}
-			touchedPages.set(null);
 		}
 
 		// If state is dirty
@@ -36,8 +36,10 @@
 			}
 		}
 
-		// Go through all dirty entries, replicating any dirty objects
 		List dirtyObjects = (List)Session.dirtyObjects.get();
+		Session.dirtyObjects.set(null);
+
+		// Go through all dirty entries, replicating any dirty objects
 		if (dirtyObjects != null)
 		{
 			for (final Iterator iterator = dirtyObjects.iterator(); iterator.hasNext();)
@@ -69,7 +71,6 @@
 
 				setAttribute(attribute, object);
 			}
-			Session.dirtyObjects.set(null);
 		}
 	}
 
