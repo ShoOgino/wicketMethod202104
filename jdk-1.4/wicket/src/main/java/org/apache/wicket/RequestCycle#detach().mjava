@@ -22,28 +22,30 @@
 			}
 		}
 
-		// remove any rendered feedback messages from the session
+		// remove any rendered and otherwise obsolute feedback messages from the
+		// session
 		try
 		{
 			session.cleanupRenderedFeedbackMessages();
+			Page page = getResponsePage();
+			if (page != null)
+			{
+				session.cleanupFeedbackMessages(page);
+			}
 		}
 		catch (RuntimeException re)
 		{
 			log.error("there was an error cleaning up the feedback messages", re);
 		}
 
-		if (updateSession)
+		// At the end of our response, let the session do some book keeping
+		try
 		{
-			// At the end of our response, we need to set any session
-			// attributes that might be required to update the cluster
-			try
-			{
-				session.update();
-			}
-			catch (RuntimeException re)
-			{
-				log.error("there was an error updating the session " + session + ".", re);
-			}
+			session.update();
+		}
+		catch (RuntimeException re)
+		{
+			log.error("there was an error updating the session " + session + ".", re);
 		}
 
 		try
