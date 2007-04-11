@@ -1,16 +1,20 @@
 	/**
-	 * @see org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.wicket.Request, org.apache.wicket.Response)
+	 * @see org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.wicket.Request,
+	 *      org.apache.wicket.Response)
 	 */
 	@Override
-	public Session newSession(final Request request, final Response response) {
-		try {
-			return webSessionClass.getDeclaredConstructor(
-					AuthenticatedWebApplication.class, Request.class)
-					.newInstance(AuthenticatedWebApplication.this, request);
-		} catch (Exception e) {
-			throw new WicketRuntimeException(
-					"Unable to instantiate web session class "
-							+ webSessionClass, e);
+	public Session newSession(final Request request, final Response response)
+	{
+		try
+		{
+			return webSessionClass.getDeclaredConstructor(AuthenticatedWebApplication.class,
+					Request.class, Response.class).newInstance(AuthenticatedWebApplication.this,
+					request, response);
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException("Unable to instantiate web session class "
+					+ webSessionClass, e);
 		}
 	}
 

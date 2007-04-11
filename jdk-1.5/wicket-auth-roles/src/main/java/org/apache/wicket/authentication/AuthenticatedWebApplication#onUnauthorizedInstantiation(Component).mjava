@@ -1,18 +1,24 @@
 	/**
 	 * @see IUnauthorizedComponentInstantiationListener#onUnauthorizedInstantiation(Component)
 	 */
-	public final void onUnauthorizedInstantiation(final Component component) {
+	public final void onUnauthorizedInstantiation(final Component component)
+	{
 		// If there is a sign in page class declared, and the unauthorized
 		// component is a page, but it's not the sign in page
-		if (component instanceof Page) {
-			if (!AuthenticatedWebSession.get().isSignedIn()) {
+		if (component instanceof Page)
+		{
+			if (!AuthenticatedWebSession.get().isSignedIn())
+			{
 				// Redirect to intercept page to let the user sign in
-				throw new RestartResponseAtInterceptPageException(
-						getSignInPageClass());
-			} else {
-				onUnauthorizedPage((Page) component);
+				throw new RestartResponseAtInterceptPageException(getSignInPageClass());
 			}
-		} else {
+			else
+			{
+				onUnauthorizedPage((Page)component);
+			}
+		}
+		else
+		{
 			// The component was not a page, so throw an exception
 			throw new UnauthorizedInstantiationException(component.getClass());
 		}
