@@ -31,11 +31,13 @@
 			// It is <wicket:...>
 			tag = new WicketTag(xmlTag);
 
-			// Make it a org.apache.wicket component. Otherwise it would be RawMarkup
+			// Make it a Wicket component. Otherwise it would be RawMarkup
 			tag.setId("_" + tag.getName());
 
-			if (wellKnownTagNames.contains(xmlTag.getName()) == false)
+			// If the tag is not a well-known wicket namespace tag
+			if (!isWellKnown(xmlTag))
 			{
+				// give up
 				throw new ParseException("Unknown tag name with Wicket namespace: '"
 						+ xmlTag.getName()
 						+ "'. Might be you haven't installed the appropriate resolver?", tag
@@ -58,7 +60,8 @@
 						"The wicket:id attribute value must not be empty. May be unmatched quotes?!?",
 						tag.getPos());
 			}
-			// Make it a org.apache.wicket component. Otherwise it would be RawMarkup
+			// Make it a org.apache.wicket component. Otherwise it would be
+			// RawMarkup
 			tag.setId(value);
 		}
 
