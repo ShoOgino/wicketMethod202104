@@ -1,13 +1,6 @@
 	/**
-	 * Cleans up any unrendered, dangling feedback messages there may be. This
-	 * implementation calls {@link FeedbackMessages#clearComponentSpecific()} to
-	 * aggresively ensure there won't be memory leaks. Clients can override this
-	 * method to e.g. call {@link FeedbackMessages#clearPageSpecific(Page)}.
-	 * <p>
-	 * This method should be called from by the framework right before a even
-	 * handler is called. There is no need for clients to call this method
-	 * directly
-	 * </p>
+	 * Cleans up all rendered feedback messages and any unrendered, dangling
+	 * feedback messages there may be left after that.
 	 * 
 	 * @param page
 	 *            any current page (the page on which the event handler is that
@@ -15,6 +8,14 @@
 	 */
 	public void cleanupFeedbackMessages(Page page)
 	{
-		feedbackMessages.clearComponentSpecific();
+
+		// if session scoped, rendered messages got indeed cleaned up, mark the
+		// session as dirty
+		if (feedbackMessages.clear(RENDERED_SESSION_SCOPED_MESSAGES) > 0)
+		{
+			dirty();
+		}
+
+		feedbackMessages.clear(MESSAGES_FOR_COMPONENTS);
 	}
 

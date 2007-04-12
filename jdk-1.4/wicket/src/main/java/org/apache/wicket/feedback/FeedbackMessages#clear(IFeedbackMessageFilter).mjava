@@ -1,27 +1,30 @@
 	/**
-	 * Gets a list of messages from the page using a filter.
+	 * Clears all messsages that are accepted by the filter.
 	 * 
 	 * @param filter
 	 *            Filter for selecting messages. If null, all messages will be
 	 *            returned
-	 * @return The messages or an empty list if no messages are found
+	 * @return The number of messages deleted
 	 */
-	public final List messages(final IFeedbackMessageFilter filter)
+	public final int clear(final IFeedbackMessageFilter filter)
 	{
 		if (messages.size() == 0)
 		{
-			return Collections.EMPTY_LIST;
+			return 0;
 		}
 
-		final List list = new ArrayList();
+		int count = 0;
 		for (final Iterator iterator = messages.iterator(); iterator.hasNext();)
 		{
 			final FeedbackMessage message = (FeedbackMessage)iterator.next();
 			if (filter == null || filter.accept(message))
 			{
-				list.add(message);
+				messages.remove(message);
+				count++;
 			}
 		}
-		return list;
+
+		trimToSize();
+		return count;
 	}
 

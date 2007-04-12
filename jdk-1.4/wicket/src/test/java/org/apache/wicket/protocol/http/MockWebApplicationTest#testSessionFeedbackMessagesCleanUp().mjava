@@ -1,7 +1,8 @@
 	/**
-	 * Tests the clean up of flash messages put into the session when they are rendered.
+	 * Tests the clean up of flash messages put into the session when they are
+	 * rendered.
 	 */
-	public void testSessionFeedbackMessagesCleanUp() 
+	public void testSessionFeedbackMessagesCleanUp()
 	{
 		Session session = Session.get();
 		session.info("Message");
@@ -10,11 +11,11 @@
 		Iterator iterator = feedbackMessages.iterator();
 		FeedbackMessage message = (FeedbackMessage)iterator.next();
 		message.markRendered();
-		feedbackMessages.clearRendered();
+		feedbackMessages.clear(RENDERED_MESSAGES);
 		assertEquals(1, feedbackMessages.size());
 		message = (FeedbackMessage)iterator.next();
 		message.markRendered();
-		feedbackMessages.clearRendered();
+		feedbackMessages.clear(RENDERED_MESSAGES);
 		assertEquals(0, feedbackMessages.size());
 	}
 
