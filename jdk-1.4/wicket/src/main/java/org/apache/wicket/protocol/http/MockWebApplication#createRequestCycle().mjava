@@ -6,6 +6,13 @@
 	 */
 	public WebRequestCycle createRequestCycle()
 	{
-		return (WebRequestCycle) requestCycleFactory.newRequestCycle(wicketSession, wicketRequest, wicketResponse);
+		// Create a web request cycle using factory
+		final WebRequestCycle cycle = (WebRequestCycle)requestCycleFactory.newRequestCycle(
+				wicketSession, wicketRequest, wicketResponse);
+
+		// Set request cycle so it won't detach automatically and clear messages
+		// we want to check
+		cycle.setAutomaticallyClearFeedbackMessages(false);
+		return cycle;
 	}
 

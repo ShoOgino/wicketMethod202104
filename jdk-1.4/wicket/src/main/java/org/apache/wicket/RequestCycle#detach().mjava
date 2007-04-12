@@ -22,20 +22,23 @@
 			}
 		}
 
-		// remove any rendered and otherwise obsolute feedback messages from the
-		// session
-		try
+		if (automaticallyClearFeedbackMessages)
 		{
-			session.cleanupRenderedFeedbackMessages();
-			Page page = getResponsePage();
-			if (page != null)
+			// remove any rendered and otherwise obsolute feedback messages from
+			// the session
+			try
 			{
-				session.cleanupFeedbackMessages(page);
+				session.cleanupRenderedFeedbackMessages();
+				final Page page = getResponsePage();
+				if (page != null)
+				{
+					session.cleanupFeedbackMessages(page);
+				}
 			}
-		}
-		catch (RuntimeException re)
-		{
-			log.error("there was an error cleaning up the feedback messages", re);
+			catch (RuntimeException re)
+			{
+				log.error("there was an error cleaning up the feedback messages", re);
+			}
 		}
 
 		// At the end of our response, let the session do some book keeping
@@ -103,5 +106,6 @@
 		{
 			log.error("Exception occurred during threadDetach", re);
 		}
+
 	}
 
