@@ -5,8 +5,8 @@
 	 */
 	private Page generateLastRenderedPage(WebRequestCycle cycle)
 	{
-		Page lastRenderedPage = cycle.getResponsePage();
-		if (lastRenderedPage == null)
+		Page newLastRenderedPage = cycle.getResponsePage();
+		if (newLastRenderedPage == null)
 		{
 			Class responseClass = cycle.getResponsePageClass();
 			if (responseClass != null)
@@ -15,7 +15,7 @@
 				IRequestTarget target = cycle.getRequestTarget();
 				if (target instanceof IPageRequestTarget)
 				{
-					lastRenderedPage = ((IPageRequestTarget)target).getPage();
+					newLastRenderedPage = ((IPageRequestTarget)target).getPage();
 				}
 				else if (target instanceof IBookmarkablePageRequestTarget)
 				{
@@ -26,21 +26,22 @@
 					PageParameters parameters = pageClassRequestTarget.getPageParameters();
 					if (parameters == null || parameters.size() == 0)
 					{
-						lastRenderedPage = new DefaultPageFactory().newPage(pageClass);
+						newLastRenderedPage = new DefaultPageFactory().newPage(pageClass);
 					}
 					else
 					{
-						lastRenderedPage = new DefaultPageFactory().newPage(pageClass, parameters);
+						newLastRenderedPage = new DefaultPageFactory().newPage(pageClass,
+								parameters);
 					}
 				}
 			}
 		}
 
-		if (lastRenderedPage == null)
+		if (newLastRenderedPage == null)
 		{
-			lastRenderedPage = this.lastRenderedPage;
+			newLastRenderedPage = this.lastRenderedPage;
 		}
 
-		return lastRenderedPage;
+		return newLastRenderedPage;
 	}
 

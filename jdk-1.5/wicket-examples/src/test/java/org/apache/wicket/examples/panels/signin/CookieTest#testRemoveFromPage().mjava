@@ -11,7 +11,7 @@
 		page.removePersistedFormData(SignInPanel.SignInForm.class, true);
 
 		// validate
-		Collection cookieCollection = application.getServletResponse().getCookies();
+		Collection cookieCollection = tester.getServletResponse().getCookies();
 		// Cookies are remove by setting maxAge == 0
 		Assert.assertEquals(2, cookieCollection.size());
 
@@ -20,13 +20,13 @@
 		final Cookie cookiePassword = new Cookie("panel:signInForm:password", "test");
 		final Cookie[] cookies = new Cookie[] { cookieUsername, cookiePassword };
 
-		application.getServletRequest().setCookies(cookies);
+		tester.getServletRequest().setCookies(cookies);
 
 		// test
 		page.removePersistedFormData(SignInPanel.SignInForm.class, true);
 
 		// validate
-		cookieCollection = application.getServletResponse().getCookies();
+		cookieCollection = tester.getServletResponse().getCookies();
 		Assert.assertEquals(4, cookieCollection.size());
 		Iterator iter = cookieCollection.iterator();
 		while (iter.hasNext())

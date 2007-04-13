@@ -28,7 +28,10 @@
 			// the session
 			try
 			{
-				session.cleanupFeedbackMessages();
+				if (sessionExists())
+				{
+					getSession().cleanupFeedbackMessages();
+				}
 			}
 			catch (RuntimeException re)
 			{
@@ -37,13 +40,16 @@
 		}
 
 		// At the end of our response, let the session do some book keeping
-		try
+		if (sessionExists())
 		{
-			session.update();
-		}
-		catch (RuntimeException re)
-		{
-			log.error("there was an error updating the session " + session + ".", re);
+			try
+			{
+				getSession().update();
+			}
+			catch (RuntimeException re)
+			{
+				log.error("there was an error updating the session " + session + ".", re);
+			}
 		}
 
 		try
@@ -60,14 +66,17 @@
 		}
 
 		// clear the used pagemap for this thread,
-		try
+		if (sessionExists())
 		{
-			session.requestDetached();
-		}
-		catch (RuntimeException re)
-		{
-			log.error("there was an error detaching the request from the session " + session + ".",
-					re);
+			try
+			{
+				getSession().requestDetached();
+			}
+			catch (RuntimeException re)
+			{
+				log.error("there was an error detaching the request from the session " + session
+						+ ".", re);
+			}
 		}
 
 		if (getResponse() instanceof BufferedWebResponse)
