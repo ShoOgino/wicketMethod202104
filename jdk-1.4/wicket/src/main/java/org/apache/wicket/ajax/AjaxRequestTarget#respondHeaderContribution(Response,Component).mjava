@@ -14,8 +14,8 @@
 		}
 
 		// add or replace the container to page
-		Component oldHeader = component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID); 
-		
+		Component oldHeader = component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID);
+
 		if (oldHeader != null)
 		{
 			component.getPage().replace(header);
@@ -25,13 +25,13 @@
 			component.getPage().add(header);
 		}
 
-		// save old response, set new 
+		// save old response, set new
 		Response oldResponse = RequestCycle.get().setResponse(encodingHeaderResponse);
 
 		encodingHeaderResponse.reset();
 
 		// render the head of component and all it's children
-		
+
 		component.renderHead(header);
 
 		if (component instanceof MarkupContainer)
@@ -54,7 +54,7 @@
 		}
 
 		// revert to old response
-		
+
 		RequestCycle.get().setResponse(oldResponse);
 
 		if (encodingHeaderResponse.getContents().length() != 0)
@@ -81,7 +81,7 @@
 		}
 
 		headerRendering = false;
-		
+
 		if (oldHeader == null)
 			component.getPage().remove(header);
 		else
