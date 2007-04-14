@@ -1,0 +1,34 @@
+	/**
+	 * Decodes parameters object from the provided url fragment
+	 * 
+	 * @param urlFragment
+	 *            fragment of the url after the decoded path and before the
+	 *            query string
+	 * @param urlParameters
+	 *            query string parameters
+	 * @return Parameters created from the url fragment and query string
+	 */
+	protected ValueMap decodeParameters(String urlFragment, Map urlParameters)
+	{
+		// Hack off any leading slash
+		if (urlFragment.startsWith("/"))
+		{
+			urlFragment = urlFragment.substring(1);
+		}
+
+		if (urlFragment.length() == 0)
+		{
+			return new ValueMap();
+		}
+
+		ValueMap parameters = new ValueMap();
+		parameters.add(URI, urlFragment);
+
+		if (urlParameters != null)
+		{
+			parameters.putAll(urlParameters);
+		}
+
+		return parameters;
+	}
+

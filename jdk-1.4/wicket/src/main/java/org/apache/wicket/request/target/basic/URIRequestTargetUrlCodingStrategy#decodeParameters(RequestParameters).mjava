@@ -1,0 +1,15 @@
+	/**
+	 * Get the remaining path after mount point.
+	 * 
+	 * @param requestParameters
+	 *            request parameters provided to the decode() method
+	 * @return the URI
+	 */
+	public PageParameters decodeParameters(RequestParameters requestParameters)
+	{
+		final String parametersFragment = requestParameters.getPath().substring(
+				getMountPath().length());
+		return new PageParameters(decodeParameters(parametersFragment, requestParameters
+				.getParameters()));
+	}
+
