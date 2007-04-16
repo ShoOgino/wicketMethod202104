@@ -1,0 +1,15 @@
+	/**
+	 * Test direct access (with wicket parameters) to a mounted page including
+	 * (part of the) mount path.
+	 */
+	public void testDirectAccessToMountedPageWithExtraPath()
+	{
+		tester.setupRequestAndResponse();
+		tester.getServletRequest().setURL(
+				"/foo/bar/?wicket:bookmarkablePage=:" + TestPage.class.getName() + "");
+		tester.processRequestCycle();
+		tester.assertRenderedPage(TestPage.class);
+		
+		// NOTE: currently the resolve logic is to give priority
+	}
+
