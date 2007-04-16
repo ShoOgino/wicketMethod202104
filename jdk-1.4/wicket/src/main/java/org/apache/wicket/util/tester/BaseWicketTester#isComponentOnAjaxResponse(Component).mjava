@@ -6,7 +6,7 @@
 	 * PLEASE NOTE! This method doesn't actually insert the component in the
 	 * client DOM tree, using javascript. But it shouldn't be needed because you
 	 * have to trust that the Wicket Ajax Javascript just works.
-	 *
+	 * 
 	 * @param component
 	 *            The component to test whether it's on the response.
 	 * @return
@@ -21,19 +21,21 @@
 
 		// Test that the previous response was actually a AJAX response
 		failMessage = "The Previous response was not an AJAX response. "
-			+ "You need to execute an AJAX event, using clickLink, before using this assert";
+				+ "You need to execute an AJAX event, using clickLink, before using this assert";
 		boolean isAjaxResponse = ajaxResponse
-		.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><ajax-response>");
+				.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><ajax-response>");
 		Result result = isTrue(failMessage, isAjaxResponse);
-		if(result.wasFailed()) return result;
+		if (result.wasFailed())
+			return result;
 
 		// See if the component has a markup id
 		String markupId = component.getMarkupId();
 
 		failMessage = "The component doesn't have a markup id, "
-			+ "which means that it can't have been added to the AJAX response";
+				+ "which means that it can't have been added to the AJAX response";
 		result = isTrue(failMessage, !Strings.isEmpty(markupId));
-		if(result.wasFailed()) return result;
+		if (result.wasFailed())
+			return result;
 
 		// Look for that the component is on the response, using the markup id
 		boolean isComponentInAjaxResponse = ajaxResponse.matches(".*<component id=\"" + markupId
