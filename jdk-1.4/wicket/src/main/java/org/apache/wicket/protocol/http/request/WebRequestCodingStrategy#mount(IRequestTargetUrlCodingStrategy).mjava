@@ -2,11 +2,17 @@
 	 * @see org.apache.wicket.request.IRequestTargetMounter#mount(java.lang.String,
 	 *      org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy)
 	 */
-	public final void mount(String path, IRequestTargetUrlCodingStrategy encoder)
+	public final void mount(IRequestTargetUrlCodingStrategy encoder)
 	{
-		if (path == null)
+		if (encoder == null)
 		{
-			throw new IllegalArgumentException("Argument path must be not-null");
+			throw new IllegalArgumentException("Argument encoder must be not-null");
+		}
+
+		String path = encoder.getMountPath();
+		if (Strings.isEmpty(path))
+		{
+			throw new IllegalArgumentException("Argument path must be not-null and not empty");
 		}
 		if (path.equals("/"))
 		{
