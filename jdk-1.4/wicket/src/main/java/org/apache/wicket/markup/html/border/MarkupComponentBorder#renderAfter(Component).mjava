@@ -4,40 +4,57 @@
 	 */
 	public void renderAfter(Component component)
 	{
-		final String extension;
-		if (component instanceof MarkupContainer)
+		final MarkupStream stream = getMarkupStream(component);
+		final Response response = component.getResponse();
+
+		boolean insideBorderMarkup = false;
+		boolean complete = false;
+		while (stream.hasMore())
 		{
-			extension = ((MarkupContainer)component).getMarkupType();
-		}
-		else
-		{
-			extension = component.getParent().getMarkupId();
-		}
-/*		MarkupFragment markupFragment = findMarkup(extension);
-		MarkupFragment childFragment = markupFragment.getWicketFragment(Border.BORDER, true);
-		List allElementsFlat = childFragment.getAllElementsFlat();
-		Response response = component.getResponse();
-		boolean render = false;
-		for (MarkupElement markupElement : allElementsFlat)
-		{
-			if (markupElement instanceof ComponentTag)
+			MarkupElement e = stream.next();
+			if (e instanceof WicketTag)
 			{
-				ComponentTag tag = (ComponentTag)markupElement;
-				if (tag.isWicketBodyTag())
+				WicketTag wt = (WicketTag)e;
+				if (!insideBorderMarkup)
 				{
-					render = true;
-					continue;
+					if (wt.isBodyTag() && (wt.isClose() || wt.isOpenClose()))
+					{
+						insideBorderMarkup = true;
+					}
+					else if (!(wt.isBorderTag() && wt.isOpen() || wt.isBodyTag()))
+					{
+						throw new WicketRuntimeException(
+								"Unexpected tag encountered in markup of component border "
+										+ getClass().getName() + ". Tag: " + wt.toString()
+										+ ", expected tag: <wicket:border> or <wicket:body>");
+					}
 				}
-				else if (tag.isBorderTag())
+				else
 				{
-					continue;
+					if (wt.isBorderTag() && wt.isClose())
+					{
+						complete = true;
+						break;
+					}
+					else
+					{
+						throw new WicketRuntimeException(
+								"Unexpected tag encountered in markup of component border "
+										+ getClass().getName() + ". Tag: " + wt.toString()
+										+ ", expected tag: </wicket:border>");
+					}
 				}
 			}
-			if (render)
+			if (insideBorderMarkup)
 			{
-				response.write(markupElement.toCharSequence());
+				response.write(e.toCharSequence());
 			}
 		}
-*/
+		if (!complete)
+		{
+			throw new WicketRuntimeException(
+					"Missing </wicket:border> tag in markup of markup component border: "
+							+ getClass().getName());
+		}
 	}
 

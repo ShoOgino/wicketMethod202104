@@ -4,38 +4,56 @@
 	 */
 	public void renderBefore(Component component)
 	{
-		final String extension;
-		if (component instanceof MarkupContainer)
+		final MarkupStream stream = getMarkupStream(component);
+		final Response response = component.getResponse();
+		stream.setCurrentIndex(0);
+
+		boolean insideBorderMarkup = false;
+		while (stream.hasMore())
 		{
-			extension = ((MarkupContainer)component).getMarkupType();
-		}
-		else
-		{
-			extension = component.getParent().getMarkupId();
-		}
-/*		
-		MarkupFragment markupFragment = findMarkup(extension);
-		MarkupFragment childFragment = markupFragment.getWicketFragment(Border.BORDER, true);
-		
-		List allElementsFlat = childFragment.getAllElementsFlat();
-		Response response = component.getResponse();
-		
-		for (MarkupElement markupElement : allElementsFlat)
-		{
-			if (markupElement instanceof ComponentTag)
+			MarkupElement e = stream.next();
+			if (e instanceof WicketTag)
 			{
-				ComponentTag ct = (ComponentTag)markupElement;
-				if (ct.isWicketBodyTag())
+				WicketTag wt = (WicketTag)e;
+				if (!insideBorderMarkup)
 				{
-					break;
+					if (wt.isBorderTag() && wt.isOpen())
+					{
+						insideBorderMarkup = true;
+					}
+					else
+					{
+						throw new WicketRuntimeException(
+								"Unexpected tag encountered in markup of component border "
+										+ getClass().getName() + ". Tag: " + wt.toString()
+										+ ", expected tag: <wicket:border>");
+					}
 				}
-				else if (ct.isBorderTag())
+				else
 				{
-					continue;
+					if (wt.isBodyTag())
+					{
+						break;
+					}
+					else
+					{
+						throw new WicketRuntimeException(
+								"Unexpected tag encountered in markup of component border "
+										+ getClass().getName() + ". Tag: " + wt.toString()
+										+ ", expected tag: <wicket:body> or </wicket:body>");
+					}
 				}
 			}
-			response.write(markupElement.toCharSequence());
+			if (insideBorderMarkup)
+			{
+				response.write(e.toCharSequence());
+			}
 		}
-*/
+
+		if (!stream.hasMore())
+		{
+			throw new WicketRuntimeException("Markup for component border " + getClass().getName()
+					+ " ended prematurely, was expecting </wicket:border>");
+		}
 	}
 
