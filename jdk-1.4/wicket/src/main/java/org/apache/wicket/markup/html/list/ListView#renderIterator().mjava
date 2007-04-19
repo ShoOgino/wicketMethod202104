@@ -1,0 +1,25 @@
+	/**
+	 * @see org.apache.wicket.markup.repeater.AbstractRepeater#renderIterator()
+	 */
+	protected Iterator renderIterator()
+	{
+
+		final int size = getViewSize();
+		return new ReadOnlyIterator()
+		{
+			private int index = 0;
+
+			public boolean hasNext()
+			{
+				return index < size;
+			}
+
+			public Object next()
+			{
+				final String id = Integer.toString(firstIndex + index);
+				index++;
+				return get(id);
+			}
+		};
+	}
+

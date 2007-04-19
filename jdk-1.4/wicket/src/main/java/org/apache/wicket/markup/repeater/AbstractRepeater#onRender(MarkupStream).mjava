@@ -1,0 +1,26 @@
+	/**
+	 * Renders all child items in no specified order
+	 * 
+	 * @param markupStream
+	 *            The markup stream
+	 */
+	protected final void onRender(final MarkupStream markupStream)
+	{
+		final int markupStart = markupStream.getCurrentIndex();
+
+		Iterator it = renderIterator();
+		if (it.hasNext())
+		{
+			do
+			{
+				markupStream.setCurrentIndex(markupStart);
+				renderChild((Component)it.next());
+			}
+			while (it.hasNext());
+		}
+		else
+		{
+			markupStream.skipComponent();
+		}
+	}
+
