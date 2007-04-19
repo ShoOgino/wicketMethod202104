@@ -1,0 +1,34 @@
+	/**
+	 * Gets the string to be used for the <tt>name</tt> attribute of the form
+	 * element. Generated using the path from the form to the component,
+	 * excluding the form itself. Override it if you want even a smaller name.
+	 * E.g. if you know for sure that the id is unique within a form.
+	 *
+	 * @return The string to use as the form element's name attribute
+	 */
+	public String getInputName()
+	{
+		String id = getId();
+		final PrependingStringBuffer inputName = new PrependingStringBuffer(id.length());
+		Component c = this;
+		while (true)
+		{
+			inputName.prepend(id);
+			c = c.getParent();
+			if (c == null || (c instanceof Form && ((Form)c).isRootForm()) || c instanceof Page)
+			{
+				break;
+			}
+			inputName.prepend(Component.PATH_SEPARATOR);
+			id = c.getId();
+		}
+
+		// having input name "submit" causes problems with javascript, so we
+		// create a unique string to replace it by prepending a path separator
+		if (inputName.equals("submit"))
+		{
+			inputName.prepend(Component.PATH_SEPARATOR);
+		}
+		return inputName.toString();
+	}
+

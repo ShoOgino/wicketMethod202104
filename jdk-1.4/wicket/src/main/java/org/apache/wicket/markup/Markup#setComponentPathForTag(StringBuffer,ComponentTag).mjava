@@ -1,0 +1,65 @@
+	/**
+	 * Set the components path within the markup and add the component tag to
+	 * the local cache
+	 * 
+	 * @param componentPath
+	 * @param tag
+	 * @return componentPath
+	 */
+	private StringBuffer setComponentPathForTag(final StringBuffer componentPath,
+			final ComponentTag tag)
+	{
+		// Only if the tag has wicket:id="xx" and open or open-close
+		if ((tag.isOpen() || tag.isOpenClose()) && tag.getAttributes().containsKey(wicketId))
+		{
+			// With open-close the path does not change. It can/will not have
+			// children. The same is true for HTML tags like <br> or <img>
+			// which might not have close tags.
+			if (tag.isOpenClose() || tag.hasNoCloseTag())
+			{
+				// Set the components path.
+				if ((this.currentPath != null) && (this.currentPath.length() > 0))
+				{
+					tag.setPath(this.currentPath.toString());
+				}
+			}
+			else
+			{
+				// Set the components path.
+				if (this.currentPath == null)
+				{
+					this.currentPath = new StringBuffer(100);
+				}
+				else if (this.currentPath.length() > 0)
+				{
+					tag.setPath(this.currentPath.toString());
+					this.currentPath.append(':');
+				}
+
+				// .. and append the tags id to the component path for the
+				// children to come
+				this.currentPath.append(tag.getId());
+			}
+		}
+		else if (tag.isClose() && (this.currentPath != null))
+		{
+			// For example <wicket:message> does not have an id
+			if ((tag.getOpenTag() == null)
+					|| tag.getOpenTag().getAttributes().containsKey(wicketId))
+			{
+				// Remove the last element from the component path
+				int index = this.currentPath.lastIndexOf(":");
+				if (index != -1)
+				{
+					this.currentPath.setLength(index);
+				}
+				else
+				{
+					this.currentPath.setLength(0);
+				}
+			}
+		}
+
+		return this.currentPath;
+	}
+

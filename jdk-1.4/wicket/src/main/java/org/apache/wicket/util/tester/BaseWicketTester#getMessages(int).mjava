@@ -1,0 +1,29 @@
+	/**
+	 * get feedback messages
+	 * 
+	 * @param level
+	 *            level of feedback message, ex.
+	 *            <code>FeedbackMessage.DEBUG or FeedbackMessage.INFO.. etc</code>
+	 * @return List list of messages (in String)
+	 * @see FeedbackMessage
+	 */
+	public List getMessages(final int level)
+	{
+		FeedbackMessages feedbackMessages = Session.get().getFeedbackMessages();
+		List allMessages = feedbackMessages.messages(new IFeedbackMessageFilter()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public boolean accept(FeedbackMessage message)
+			{
+				return message.getLevel() == level;
+			}
+		});
+		List actualMessages = new ArrayList();
+		for (Iterator iter = allMessages.iterator(); iter.hasNext();)
+		{
+			actualMessages.add(((FeedbackMessage)iter.next()).getMessage());
+		}
+		return actualMessages;
+	}
+

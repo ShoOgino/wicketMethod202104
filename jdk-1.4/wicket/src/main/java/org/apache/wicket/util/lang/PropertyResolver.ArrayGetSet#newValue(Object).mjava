@@ -1,0 +1,20 @@
+		/**
+		 * @see org.apache.wicket.util.lang.PropertyResolver.IGetAndSet#newValue(java.lang.Object)
+		 */
+		public Object newValue(Object object)
+		{
+			Class clz = object.getClass().getComponentType();
+			Object value = null;
+			try
+			{
+				value = clz.newInstance();
+				Array.set(object, index, value);
+			}
+			catch (Exception e)
+			{
+				log.warn("Cannot set new value " + value + " at index " + index
+						+ " for array holding elements of class " + clz, e);
+			}
+			return value;
+		}
+

@@ -1,0 +1,22 @@
+	/**
+	 * @return ResourceReference token for this letter
+	 */
+	public ResourceReference getSharedImageResource()
+	{
+		return new ResourceReference(Letter.class, asString()
+				+ (isGuessed() ? "_enabled" : "_disabled"))
+		{
+			protected Resource newResource()
+			{
+				// Lazy loading of shared resource
+				final DefaultButtonImageResource buttonResource = new DefaultButtonImageResource(
+						30, 30, asString());
+				if (!isGuessed())
+				{
+					buttonResource.setColor(Color.GRAY);
+				}
+				return buttonResource;
+			}
+		};
+	}
+

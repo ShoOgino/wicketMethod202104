@@ -1,0 +1,22 @@
+	/**
+	 * Add a buffered response to the redirect buffer.
+	 * 
+	 * @param sessionId
+	 *            the session id
+	 * @param bufferId
+	 *            the id that should be used for storing the buffer
+	 * @param renderedResponse
+	 *            the response to buffer
+	 */
+	final void addBufferedResponse(String sessionId, String bufferId,
+			BufferedHttpServletResponse renderedResponse)
+	{
+		Map responsesPerSession = (Map)bufferedResponses.get(sessionId);
+		if (responsesPerSession == null)
+		{
+			responsesPerSession = new MostRecentlyUsedMap(4);
+			bufferedResponses.put(sessionId, responsesPerSession);
+		}
+		responsesPerSession.put(bufferId, renderedResponse);
+	}
+

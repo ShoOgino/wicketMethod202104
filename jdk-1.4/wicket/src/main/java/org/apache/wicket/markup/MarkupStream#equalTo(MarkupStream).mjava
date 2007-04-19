@@ -1,0 +1,47 @@
+	/**
+	 * Compare this markup stream with another one
+	 * 
+	 * @param that
+	 *            The other markup stream
+	 * @return True if each MarkupElement in this matches each element in that
+	 */
+	public boolean equalTo(final MarkupStream that)
+	{
+		// While a has more markup elements
+		while (this.hasMore())
+		{
+			// Get an element from each
+			final MarkupElement thisElement = this.next();
+			final MarkupElement thatElement = that.next();
+			
+			// and if the elements are not equal
+			if (thisElement != null && thatElement != null)
+			{
+				if (!thisElement.equalTo(thatElement))
+				{
+					// fail the comparison
+					return false;
+				}
+			}
+			else
+			{
+				// If one element is null,
+				if (!(thisElement == null && thatElement == null))
+				{
+					// fail the comparison
+					return false;
+				}
+			}
+		}
+
+		// If we've run out of markup elements in b
+		if (!that.hasMore())
+		{
+			// then the two streams match perfectly
+			return true;
+		}
+
+		// Stream b had extra elements
+		return false;
+	}
+

@@ -1,0 +1,38 @@
+	/**
+	 * Constructor.
+	 */
+	public Index()
+	{
+		// Add the Ajaxian link to the page...
+		add(new Link("link")
+		{
+			/**
+			 * Handles a click on the link. This method is accessed normally
+			 * using a standard http request, but in this example, we use Ajax
+			 * to perform the call.
+			 */
+			public void onClick()
+			{
+				// Increment count
+				count++;
+
+				// The response should refresh the label displaying the counter.
+				getRequestCycle().setRequestTarget(new ComponentRequestTarget(counter));
+			}
+
+			/**
+			 * Alter the javascript 'onclick' event to emit the Ajax call and
+			 * update the counter label.
+			 */
+			protected String getOnClickScript(String url)
+			{
+				return new AppendingStringBuffer("new Ajax.Updater('counter', '").append(
+						urlFor(ILinkListener.INTERFACE))
+						.append("', {method:'get'}); return false;").toString();
+			}
+		});
+
+		// Add the label
+		add(counter = new Label("counter", new PropertyModel(this, "count")));
+	}
+

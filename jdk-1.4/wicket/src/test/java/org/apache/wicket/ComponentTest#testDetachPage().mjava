@@ -1,0 +1,20 @@
+	/**
+	 * Tests the number of detach calls on a Page, Component, Behavior and Model
+	 * during a normal request.
+	 * 
+	 * @throws Exception
+	 */
+	public void testDetachPage() throws Exception
+	{
+		executeTest(TestDetachPage.class, "TestDetachPageExpectedResult.html");
+		TestDetachPage page = (TestDetachPage)tester.getLastRenderedPage();
+		assertTrue(page.getNrComponentDetachModelCalls() > 0);
+		assertTrue(page.getNrComponentDetachModelsCalls() > 0);
+		assertTrue(page.getNrComponentOnDetachCalls() > 0);
+		assertTrue(page.getNrPageDetachModelCalls() > 0);
+		assertTrue(page.getNrPageDetachModelsCalls() > 0);
+		assertTrue(page.getNrPageOnDetachCalls() > 0);
+		assertTrue(page.getNrModelDetachCalls() > 0);
+		assertTrue(page.getNrAjaxBehaviorDetachModelCalls() > 0);
+	}
+

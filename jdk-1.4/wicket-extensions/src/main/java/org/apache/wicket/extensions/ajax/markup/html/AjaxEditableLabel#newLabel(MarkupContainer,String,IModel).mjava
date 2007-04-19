@@ -1,0 +1,34 @@
+	/**
+	 * Create a new form component instance to serve as editor.
+	 * 
+	 * @param parent
+	 *            The parent component
+	 * @param componentId
+	 *            Id that should be used by the component
+	 * @param model
+	 *            The model
+	 * @return The editor
+	 */
+	protected Component newLabel(MarkupContainer parent, String componentId, IModel model)
+	{
+		Label label = new Label("label", model)
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			{
+				if (getModelObject() == null)
+				{
+					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+				}
+				else
+				{
+					super.onComponentTagBody(markupStream, openTag);
+				}
+			}
+		};
+		label.setOutputMarkupId(true);
+		label.add(new LabelAjaxBehavior("onclick"));
+		return label;
+	}
+

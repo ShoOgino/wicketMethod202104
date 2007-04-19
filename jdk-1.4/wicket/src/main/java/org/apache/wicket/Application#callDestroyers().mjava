@@ -1,0 +1,17 @@
+	/**
+	 * @param properties
+	 *            Properties map with names of any library destroyers in it
+	 */
+	private final void callDestroyers()
+	{
+		for (Iterator i = initializers.iterator(); i.hasNext();)
+		{
+			IInitializer initializer = (IInitializer)i.next();
+			if (initializer instanceof IDestroyer)
+			{
+				log.info("[" + getName() + "] destroy: " + initializer);
+				((IDestroyer)initializer).destroy(this);
+			}
+		}
+	}
+

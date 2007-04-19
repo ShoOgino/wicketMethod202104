@@ -1,0 +1,63 @@
+	/**
+	 * Border makes use of a &lt;wicket:body&gt; tag to identify the position to
+	 * insert within the border's body. As &lt;wicket:body&gt; is a special tag
+	 * and MarkupContainer is not able to handle it, we do that here.
+	 * <p>
+	 * You have two options. Either use &lt;wicket:body/&gt; (open-close tag)
+	 * which will automatically be expanded to &lt;wicket:body&gt;body
+	 * content&lt;/wicket:body&gt; or use &lt;wicket:body&gt;preview
+	 * region&lt;/wicket:body&gt; in your border's markup. The preview region
+	 * (everything in between the open and close tag) will automatically be
+	 * removed.
+	 * 
+	 * @see IComponentResolver#resolve(MarkupContainer, MarkupStream,
+	 *      ComponentTag)
+	 * 
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return True if componentId was handled by the resolver, false otherwise.
+	 */
+	public final boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		// Determine if tag is a <wicket:body> tag
+		if (!(tag instanceof WicketTag))
+		{
+			return false;
+		}
+
+		final WicketTag wtag = (WicketTag)tag;
+		if (!wtag.isBodyTag())
+		{
+			return false;
+		}
+
+		final Response originalResponse;
+		if (this.bodyVisible == true)
+		{
+			originalResponse = null;
+		}
+		else
+		{
+			originalResponse = getRequestCycle().setResponse(NullResponse.getInstance());
+		}
+
+		try
+		{
+			renderBodyComponent(markupStream, wtag);
+		}
+		finally
+		{
+			if (originalResponse != null)
+			{
+				getRequestCycle().setResponse(originalResponse);
+			}
+		}
+
+		return true;
+	}
+

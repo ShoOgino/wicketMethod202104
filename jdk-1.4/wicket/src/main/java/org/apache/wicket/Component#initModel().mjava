@@ -1,0 +1,44 @@
+	/**
+	 * Called when a null model is about to be retrieved in order to allow a
+	 * subclass to provide an initial model. This gives FormComponent, for
+	 * example, an opportunity to instantiate a model on the fly using the
+	 * containing Form's model.
+	 * 
+	 * @return The model
+	 */
+	protected IModel initModel()
+	{
+		// Search parents for CompoundPropertyModel
+		for (Component current = getParent(); current != null; current = current.getParent())
+		{
+			// Get model
+			// Dont call the getModel() that could initialize many inbetween
+			// completely useless models.
+			// IModel model = current.getModel();
+			IModel model = current.model;
+
+			if (model instanceof IWrapModel)
+			{
+				model = ((IWrapModel)model).getWrappedModel();
+			}
+
+			if (model instanceof IComponentInheritedModel)
+			{
+				// we turn off versioning as we share the model with another
+				// component that is the owner of the model (that component
+				// has to decide whether to version or not
+				// TODO can we really do this?? Model shouldn't versioned but
+				// all other things?? (add/remove)
+				setVersioned(false);
+
+				// return the shared inherited
+				model = ((IComponentInheritedModel)model).wrapOnInheritance(this);
+				setFlag(FLAG_INHERITABLE_MODEL, true);
+				return model;
+			}
+		}
+
+		// No model for this component!
+		return null;
+	}
+

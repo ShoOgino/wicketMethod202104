@@ -1,0 +1,141 @@
+	private final static IGetAndSet getGetAndSetter(String exp, Class clz)
+	{
+		Map getAndSetters = (Map)classesToGetAndSetters.get(clz);
+		if (getAndSetters == null)
+		{
+			getAndSetters = new ConcurrentHashMap(8);
+			classesToGetAndSetters.put(clz, getAndSetters);
+		}
+
+		IGetAndSet getAndSetter = (IGetAndSet)getAndSetters.get(exp);
+		if (getAndSetter == null)
+		{
+			Method method = null;
+			Field field = null;
+			if (exp.startsWith("["))
+			{
+				// if expression begins with [ skip method finding and use it as
+				// a key/index lookup on a map.
+				exp = exp.substring(1, exp.length() - 1);
+			}
+			else if (exp.endsWith("()"))
+			{
+				// if expression ends with (), don't test for setters just skip
+				// directly to method finding.
+				method = findMethod(clz, exp);
+			}
+			else
+			{
+				method = findGetter(clz, exp);
+			}
+			if (method == null)
+			{
+				if (List.class.isAssignableFrom(clz))
+				{
+					try
+					{
+						int index = Integer.parseInt(exp);
+						getAndSetter = new ListGetSet(index);
+					}
+					catch (NumberFormatException ex)
+					{
+						// can't parse the exp als a index maybe the exp was a
+						// method.
+						method = findMethod(clz, exp);
+						if (method != null)
+						{
+							getAndSetter = new MethodGetAndSet(method);
+						}
+						else
+						{
+							throw new WicketRuntimeException("The expression '" + exp
+									+ "' is neither an index nor is it a method for the list " + clz);
+						}
+					}
+				}
+				else if (Map.class.isAssignableFrom(clz))
+				{
+					getAndSetter = new MapGetSet(exp);
+				}
+				else if (clz.isArray())
+				{
+					try
+					{
+						int index = Integer.parseInt(exp);
+						getAndSetter = new ArrayGetSet(index);
+					}
+					catch (NumberFormatException ex)
+					{
+						if (exp.equals("length") || exp.equals("size"))
+						{
+							getAndSetter = new ArrayLengthGetSet();
+						}
+						else
+						{
+							throw new WicketRuntimeException("can't parse the exp " + exp
+									+ " as an index for an array lookup");
+						}
+					}
+				}
+				else
+				{
+					field = findField(clz, exp);
+					if(field == null)
+					{
+						method = findMethod(clz, exp);
+						if (method == null)
+						{
+							int index = exp.indexOf('.');
+							if (index != -1)
+							{
+								String propertyName = exp.substring(0, index);
+								String propertyIndex = exp.substring(index + 1);
+								try
+								{
+
+									int parsedIndex = Integer.parseInt(propertyIndex);
+									// if so then it could be a
+									// getPropertyIndex(int)
+									// and setPropertyIndex(int, object)
+									String name = Character.toUpperCase(propertyName.charAt(0))
+											+ propertyName.substring(1);
+									method = clz.getMethod("get" + name, new Class[] { int.class });
+									getAndSetter = new ArrayPropertyGetSet(method, parsedIndex);
+
+								}
+								catch (Exception e)
+								{
+									throw new WicketRuntimeException(
+											"no get method defined for class: " + clz + " expression: "
+													+ propertyName);
+								}
+							}
+							else
+							{
+								// We do not look for a public FIELD because that is
+								// not good
+								// programming with beans patterns
+								throw new WicketRuntimeException("No get method defined for class: "
+										+ clz + " expression: " + exp);
+							}
+						}
+						else
+						{
+							getAndSetter = new MethodGetAndSet(method);
+						}
+					}
+					else
+					{
+						getAndSetter = new FieldGetAndSetter(field);
+					}
+				}
+			}
+			else
+			{
+				getAndSetter = new MethodGetAndSet(method);
+			}
+			getAndSetters.put(exp, getAndSetter);
+		}
+		return getAndSetter;
+	}
+

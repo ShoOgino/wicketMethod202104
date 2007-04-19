@@ -1,0 +1,55 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param request
+		 * @param url
+		 * @param encodedParamReplacement
+		 */
+		public DecodedUrlRequest(final Request request, final String url,
+				final String encodedParamReplacement)
+		{
+			this.request = request;
+
+			// Create a copy of the original parameter map
+			this.parameterMap = this.request.getParameterMap();
+
+			// Remove the 'x' parameter which contains ALL the encoded params
+			this.parameterMap.remove("x");
+			String decodedParamReplacement = encodedParamReplacement;
+			try
+			{
+				decodedParamReplacement = URLDecoder.decode(encodedParamReplacement, Application
+						.get().getRequestCycleSettings().getResponseRequestEncoding());
+			}
+			catch (UnsupportedEncodingException ex)
+			{
+				log.error("error decoding url: " + encodedParamReplacement, ex);
+			}
+
+			// Add ALL of the params from the decoded 'x' param
+			ValueMap params = new ValueMap();
+			RequestUtils.decodeParameters(decodedParamReplacement, params);
+			this.parameterMap.putAll(params);
+
+			// Rebuild the URL with the 'x' param removed
+			int pos1 = url.indexOf("?x=");
+			if (pos1 == -1)
+			{
+				throw new WicketRuntimeException("Programming error: we should come here");
+			}
+			int pos2 = url.indexOf("&");
+
+			AppendingStringBuffer urlBuf = new AppendingStringBuffer(url.length()
+					+ encodedParamReplacement.length());
+			urlBuf.append(url.subSequence(0, pos1 + 1));
+			urlBuf.append(encodedParamReplacement);
+			if (pos2 != -1)
+			{
+				urlBuf.append(url.substring(pos2));
+			}
+			this.url = urlBuf.toString();
+
+			// Determine the index for the relative path.
+			this.startRelativeUrl = url.indexOf(request.getRelativeURL());
+		}
+

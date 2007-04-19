@@ -1,0 +1,21 @@
+	/**
+	 * Invoked when the label is in edit mode, received a new input, but that
+	 * input didn't validate
+	 * 
+	 * @param target
+	 *            the ajax request target
+	 */
+	protected void onError(AjaxRequestTarget target)
+	{
+		Serializable errorMessage = editor.getFeedbackMessage().getMessage();
+		if (errorMessage instanceof String)
+		{
+			target.appendJavascript("window.status='" + JavascriptUtils.escapeQuotes((String)errorMessage)
+					+ "';");
+		}
+		String editorMarkupId = editor.getMarkupId();
+		target.appendJavascript(editorMarkupId + ".select();");
+		target.appendJavascript(editorMarkupId + ".focus();");
+		target.addComponent(editor);
+	}
+

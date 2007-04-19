@@ -1,0 +1,51 @@
+		/**
+		 * Constructor
+		 * 
+		 * @param id
+		 *            id of form
+		 * @param book
+		 *            Book model
+		 */
+		public EditBookForm(final String id, final Book book)
+		{
+			super(id, new CompoundPropertyModel(book));
+
+			// Create a required text field with a max length of 30 characters
+			// that edits the book's title
+			final TextField title = new TextField("title");
+			title.setRequired(true);
+			title.add(StringValidator.maximumLength(30));
+			final FormComponentFeedbackBorder titleFeedback = new FormComponentFeedbackBorder(
+					"titleFeedback");
+			add(titleFeedback);
+			titleFeedback.add(title);
+
+			// Create a required text field that edits the book's author
+			final TextField author = new TextField("author");
+			author.setRequired(true);
+			final FormComponentFeedbackBorder authorFeedback = new FormComponentFeedbackBorder(
+					"authorFeedback");
+			add(authorFeedback);
+			authorFeedback.add(author);
+
+			// Add fiction checkbox
+			add(new CheckBox("fiction"));
+
+			// Books is everything but otherBook
+			List books = new ArrayList();
+
+			books.addAll(Book.getBooks());
+			books.remove(otherBook);
+
+			// Add companion book choice
+			add(new DropDownChoice("companionBook", books));
+
+			// Add radio choice test
+			final RadioChoice relatedBook = new RadioChoice("relatedBook", books);
+			add(relatedBook);
+
+			// Multi-select among writing styles
+			add(new ListMultipleChoice("writingStyles", EnumeratedType
+					.getValues(Book.WritingStyle.class)));
+		}
+

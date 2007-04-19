@@ -1,0 +1,33 @@
+	/**
+	 * Applies the property expression on the model object using the given
+	 * object argument.
+	 * 
+	 * @param object
+	 *            The object that will be used when setting a value on the model
+	 *            object
+	 * @see IModel#setObject(Object)
+	 */
+	public void setObject(Object object)
+	{
+		final String expression = propertyExpression();
+		if (Strings.isEmpty(expression))
+		{
+			// TODO check, really do this?
+			// why not just set the target to the object?
+			if (target instanceof IModel)
+			{
+				((IModel)target).setObject(object);
+			}
+			else
+			{
+				target = object;
+			}
+		}
+		else
+		{
+			PropertyResolverConverter prc = null;
+			prc = new PropertyResolverConverter(Session.get(), Session.get().getLocale());
+			PropertyResolver.setValue(expression, getTarget(), object, prc);
+		}
+	}
+

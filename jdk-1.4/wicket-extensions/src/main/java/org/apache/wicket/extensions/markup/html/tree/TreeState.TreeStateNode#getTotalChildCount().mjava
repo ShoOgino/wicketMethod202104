@@ -1,0 +1,39 @@
+		/**
+		 * Returns the number of children in the receiver by descending all
+		 * expanded nodes and messaging them with getTotalChildCount.
+		 * 
+		 * @return the number of children in the receiver by descending all
+		 *		   expanded nodes and messaging them with getTotalChildCount
+		 */
+		public int getTotalChildCount()
+		{
+			if (isExpanded())
+			{
+				TreeStateNode parent = (TreeStateNode) getParent();
+				int pIndex;
+
+				if (parent != null
+						&& (pIndex = parent.getIndex(this)) + 1 < parent.getChildCount())
+				{
+					// This node has a created sibling, to calc total
+					// child count directly from that!
+					TreeStateNode nextSibling = (TreeStateNode) parent
+							.getChildAt(pIndex + 1);
+
+					return nextSibling.row - row - (nextSibling.childIndex - childIndex);
+				}
+				else
+				{
+					int retCount = childCount;
+
+					for (int counter = getChildCount() - 1; counter >= 0; counter--)
+					{
+						retCount += ((TreeStateNode) getChildAt(counter))
+								.getTotalChildCount();
+					}
+					return retCount;
+				}
+			}
+			return 0;
+		}
+

@@ -1,0 +1,51 @@
+	/**
+	 * Resolves to a home page target.
+	 * 
+	 * @param requestCycle
+	 *            the current request cycle.
+	 * @param requestParameters
+	 *            the request parameters object
+	 * @return the home page as a request target
+	 */
+	protected IRequestTarget resolveHomePageTarget(final RequestCycle requestCycle,
+			final RequestParameters requestParameters)
+	{
+		Session session = requestCycle.getSession();
+		Application application = session.getApplication();
+		try
+		{
+			// Get the home page class
+			Class homePageClass = application.getHomePage();
+
+			PageParameters parameters = new PageParameters(requestParameters.getParameters());
+			// and create a dummy target for looking up whether the home page is
+			// mounted
+			BookmarkablePageRequestTarget homepageTarget = new BookmarkablePageRequestTarget(
+					homePageClass, parameters);
+			IRequestCodingStrategy requestCodingStrategy = requestCycle.getProcessor()
+					.getRequestCodingStrategy();
+			CharSequence path = requestCodingStrategy.pathForTarget(homepageTarget);
+
+			if (path != null)
+			{
+				// The home page was mounted at the given path.
+				// Issue a redirect to that path
+				requestCycle.setRedirect(true);
+			}
+
+			// else the home page was not mounted; render it now so
+			// that we will keep a clean path
+			return homepageTarget;
+		}
+		catch (MarkupException e)
+		{
+			// Markup exception should pass without modification. They show
+			// a nice error page
+			throw e;
+		}
+		catch (WicketRuntimeException e)
+		{
+			throw new WicketRuntimeException("Could not create home page", e);
+		}
+	}
+

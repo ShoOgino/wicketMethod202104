@@ -1,0 +1,39 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param parameters
+	 *            Page parameters
+	 */
+	public UploadPage(final PageParameters parameters)
+	{
+		Folder uploadFolder = getUploadFolder();
+
+		// Create feedback panels
+		final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
+
+		// Add uploadFeedback to the page itself
+		add(uploadFeedback);
+
+		// Add simple upload form, which is hooked up to its feedback panel by
+		// virtue of that panel being nested in the form.
+		final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
+		add(simpleUploadForm);
+
+		// Add folder view
+		add(new Label("dir", uploadFolder.getAbsolutePath()));
+		fileListView = new FileListView("fileList", new LoadableDetachableModel()
+		{
+			protected Object load()
+			{
+				return Arrays.asList(getUploadFolder().listFiles());
+			}
+		});
+		add(fileListView);
+
+		// Add upload form with ajax progress bar
+		final FileUploadForm ajaxSimpleUploadForm = new FileUploadForm("ajax-simpleUpload");
+		ajaxSimpleUploadForm.add(new UploadProgressBar("progress", ajaxSimpleUploadForm));
+		add(ajaxSimpleUploadForm);
+
+	}
+

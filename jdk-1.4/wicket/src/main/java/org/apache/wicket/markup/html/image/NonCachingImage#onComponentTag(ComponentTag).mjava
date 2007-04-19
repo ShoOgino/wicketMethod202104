@@ -1,0 +1,14 @@
+	/**
+	 * @see org.apache.wicket.markup.html.image.Image#onComponentTag(org.apache.wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTag(ComponentTag tag)
+	{
+		super.onComponentTag(tag);
+
+		String url = tag.getAttributes().getString("src");
+		url = url + ((url.indexOf("?") >= 0) ? "&" : "?");
+		url = url + "wicket:antiCache=" + System.currentTimeMillis();
+		
+		tag.put("src", url);
+	}
+

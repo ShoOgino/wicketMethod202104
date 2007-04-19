@@ -1,0 +1,29 @@
+	/**
+	 * Adds a component to the set of rendered components.
+	 * 
+	 * @param component
+	 *            The component that was rendered
+	 */
+	public final void componentRendered(final Component component)
+	{
+		// Inform the page that this component rendered
+		if (Application.get().getDebugSettings().getComponentUseCheck())
+		{
+			if (renderedComponents == null)
+			{
+				renderedComponents = new HashSet();
+			}
+			if (renderedComponents.add(component) == false)
+			{
+				throw new MarkupException(
+						"The component "
+								+ component
+								+ " has the same wicket:id as another component already added at the same level");
+			}
+			if (log.isDebugEnabled())
+			{
+				log.debug("Rendered " + component);
+			}
+		}
+	}
+

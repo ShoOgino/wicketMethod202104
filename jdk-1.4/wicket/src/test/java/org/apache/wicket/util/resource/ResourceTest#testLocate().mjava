@@ -1,0 +1,18 @@
+	/**
+	 * Test locating a resource.
+	 */
+	public void testLocate()
+	{
+		// Execute without source path
+		executeMultiple(new Path());
+
+		// Determine source path
+		IResourceStreamLocator locator = new ResourceStreamLocator();
+		IResourceStream resource = locator.locate(getClass(),this.getClass().getName().replace('.', '/'), null, null, "txt");
+		String path = getPath(resource);
+		path = Strings.beforeLastPathComponent(path, '/') + "/sourcePath";
+
+		// and execute
+		executeMultiple(new Path(new Folder(path)));
+	}
+

@@ -1,0 +1,25 @@
+	/**
+	 * @see org.apache.wicket.threadtest.tester.AbstractGetCommand#doGet(org.apache.commons.httpclient.HttpClient,
+	 *      java.lang.String)
+	 */
+	@Override
+	protected void doGet(HttpClient client, String url) throws Exception {
+
+		GetMethod method = new GetMethod(url);
+		method.setFollowRedirects(true);
+		try {
+			int code = client.executeMethod(method);
+			if (code != 200) {
+				log.error("ERROR! code: " + code);
+				log.error(Streams.readString(method.getResponseBodyAsStream()));
+				// TODO rather than failing, just gather statistics
+				// throw new Exception(new String(method.getResponseBody()));
+			}
+			if (getPrintResponse()) {
+				log.info("\n" + Streams.readString(method.getResponseBodyAsStream()));
+			}
+		} finally {
+			method.releaseConnection();
+		}
+	}
+

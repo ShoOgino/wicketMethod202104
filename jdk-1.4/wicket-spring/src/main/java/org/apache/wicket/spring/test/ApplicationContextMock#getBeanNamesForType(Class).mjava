@@ -1,0 +1,21 @@
+	/**
+	 * @see org.springframework.beans.factory.ListableBeanFactory#getBeanNamesForType(java.lang.Class)
+	 */
+	public String[] getBeanNamesForType(Class type)
+	{
+		ArrayList names = new ArrayList();
+		Iterator entries = beans.entrySet().iterator();
+		while (entries.hasNext())
+		{
+			Entry entry = (Entry) entries.next();
+			Object bean = entry.getValue();
+
+			if (type.isAssignableFrom(bean.getClass()))
+			{
+				String name = (String) entry.getKey();
+				names.add(name);
+			}
+		}
+		return (String[]) names.toArray(new String[names.size()]);
+	}
+

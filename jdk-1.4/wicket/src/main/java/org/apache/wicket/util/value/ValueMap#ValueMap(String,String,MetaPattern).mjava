@@ -1,0 +1,41 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param keyValuePairs
+	 *            List of key value pairs separated by a given delimiter. For
+	 *            example, "param1=foo,param2=bar" where delimiter is ",".
+	 * @param delimiter
+	 *            Delimiter string used to separate key/value pairs
+	 * @param valuePattern
+	 *            Pattern for value. To pass a simple regular expression pass
+	 *            "new MetaPattern(regexp)".
+	 */
+	public ValueMap(final String keyValuePairs, final String delimiter,
+			final MetaPattern valuePattern)
+	{
+		// Get list of strings separated by the delimiter
+		final StringList pairs = StringList.tokenize(keyValuePairs, delimiter);
+
+		// Go through each string in the list
+		for (IStringIterator iterator = pairs.iterator(); iterator.hasNext();)
+		{
+			// Get the next key value pair
+			final String pair = iterator.next();
+
+			// Parse using metapattern parser for variable assignments
+			final VariableAssignmentParser parser = new VariableAssignmentParser(pair, valuePattern);
+
+			// Does it parse?
+			if (parser.matches())
+			{
+				// Succeeded. Put key and value into map
+				put(parser.getKey(), parser.getValue());
+			}
+			else
+			{
+				throw new IllegalArgumentException("Invalid key value list: '" + keyValuePairs
+						+ "'");
+			}
+		}
+	}
+

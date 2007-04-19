@@ -1,0 +1,13 @@
+	/**
+	 * @see IWebApplicationFactory#createApplication(WicketFilter)
+	 */
+	public WebApplication createApplication(WicketFilter filter)
+	{
+		ServletContext sc = filter.getFilterConfig().getServletContext();
+		ApplicationContext ac = WebApplicationContextUtils
+				.getRequiredWebApplicationContext(sc);
+
+		String beanName = filter.getFilterConfig().getInitParameter("applicationBean");
+		return createApplication(ac, beanName);
+	}
+

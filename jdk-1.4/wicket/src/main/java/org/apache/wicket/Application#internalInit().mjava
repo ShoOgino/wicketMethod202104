@@ -1,0 +1,32 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT OVERRIDE OR
+	 * CALL.
+	 * 
+	 * Internal initialization.
+	 */
+	protected void internalInit()
+	{
+		settingsAccessible = true;
+		IPageSettings pageSettings = getPageSettings();
+		// Install default component resolvers
+		pageSettings.addComponentResolver(new ParentResolver());
+		pageSettings.addComponentResolver(new AutoComponentResolver());
+		pageSettings.addComponentResolver(new MarkupInheritanceResolver());
+		pageSettings.addComponentResolver(new HtmlHeaderResolver());
+		pageSettings.addComponentResolver(new WicketLinkResolver());
+		pageSettings.addComponentResolver(new WicketMessageResolver());
+		pageSettings.addComponentResolver(new WicketMessageTagHandler());
+		pageSettings.addComponentResolver(new FragmentResolver());
+		pageSettings.addComponentResolver(new EnclosureResolver());
+		pageSettings.addComponentResolver(new WicketContainerResolver());
+
+		// Install button image resource factory
+		getResourceSettings().addResourceFactory("buttonFactory",
+				new DefaultButtonImageResourceFactory());
+
+		String applicationKey = getApplicationKey();
+		applicationKeyToApplication.put(applicationKey, this);
+
+		sessionStore = newSessionStore();
+	}
+

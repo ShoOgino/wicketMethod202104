@@ -1,0 +1,50 @@
+	/**
+	 * Replaces a child component of this container with another
+	 * 
+	 * @param child
+	 *            The child
+	 * @throws IllegalArgumentException
+	 *             Thrown if there was no child with the same id.
+	 * @return This
+	 */
+	public final MarkupContainer replace(final Component child)
+	{
+		if (child == null)
+		{
+			throw new IllegalArgumentException("argument child must be not null");
+		}
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Replacing " + child.getId() + " in " + this);
+		}
+
+		if (child.getParent() != this)
+		{
+			// Add to map
+			final Component replaced = put(child);
+
+			// Look up to make sure it was already in the map
+			if (replaced == null)
+			{
+				throw new WicketRuntimeException(
+						exceptionMessage("Cannot replace a component which has not been added: id='"
+								+ child.getId() + "', component=" + child));
+			}
+
+			// first remove the component.
+			removedComponent(replaced);
+			// then add the other one.
+			addedComponent(child);
+
+			// The position of the associated markup remains the same
+			child.markupIndex = replaced.markupIndex;
+
+			// The generated markup id remains the same
+			String replacedId = (replaced.hasMarkupIdMetaData()) ? replaced.getMarkupId() : null;
+			child.setMarkupIdMetaData(replacedId);
+		}
+
+		return this;
+	}
+

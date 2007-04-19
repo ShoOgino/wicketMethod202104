@@ -1,0 +1,29 @@
+	/**
+	 * @param comparator
+	 *            The comparator
+	 * @return Iterator that iterates over children in the order specified by
+	 *         comparator
+	 */
+	public final Iterator iterator(Comparator comparator)
+	{
+		final List sorted;
+		if (children == null)
+		{
+			sorted = Collections.EMPTY_LIST;
+		}
+		else
+		{
+			if (children instanceof Component)
+			{
+				sorted = new ArrayList(1);
+				sorted.add(children);
+			}
+			else
+			{
+				sorted = Arrays.asList((Component[])children);
+			}
+		}
+		Collections.sort(sorted, comparator);
+		return sorted.iterator();
+	}
+

@@ -1,0 +1,40 @@
+	/**
+	 * Initialize this wizard with a transition model.
+	 * <p>
+	 * If you constructed this wizard using a constructor without the
+	 * transitions model argument, <strong>you must</strong> call this method
+	 * prior to actually using it.
+	 * </p>
+	 * 
+	 * @param wizardModel
+	 */
+	protected void init(IWizardModel wizardModel)
+	{
+		if (wizardModel == null)
+		{
+			throw new IllegalArgumentException("argument wizardModel must be not null");
+		}
+
+		this.wizardModel = wizardModel;
+
+		form = new Form("form");
+		add(form);
+		// dummy view to be replaced
+		form.add(new WebMarkupContainer(HEADER_ID));
+		form.add(newFeedbackPanel(FEEDBACK_ID));
+		// add dummy view; will be replaced on initialization
+		form.add(new WebMarkupContainer(VIEW_ID));
+		form.add(newButtonBar(BUTTONS_ID));
+		form.add(newOverviewBar(OVERVIEW_ID));
+
+		wizardModel.addListener(this);
+
+		for (Iterator iter = wizardModel.stepIterator(); iter.hasNext();)
+		{
+			((IWizardStep)iter.next()).init(wizardModel);
+		}
+
+		// reset model to prepare for action
+		wizardModel.reset();
+	}
+

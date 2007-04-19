@@ -1,0 +1,19 @@
+	/**
+	 * @return List of entries in this page map
+	 */
+	private final List getEntries()
+	{
+		final Session session = Session.get();
+		final List attributes = session.getAttributeNames();
+		final List list = new ArrayList();
+		for (final Iterator iterator = attributes.iterator(); iterator.hasNext();)
+		{
+			final String attribute = (String)iterator.next();
+			if (attribute.startsWith(attributePrefix()))
+			{
+				list.add(session.getAttribute(attribute));
+			}
+		}
+		return list;
+	}
+

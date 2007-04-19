@@ -1,0 +1,16 @@
+	private HTMLElement toDefaultElement(Element element)
+	{
+		return new HTMLElementBase(element)
+		{
+			protected ScriptableDelegate newScriptable()
+			{
+				return new HTMLElementScriptable(this);
+			}
+
+			protected ScriptableDelegate getParentDelegate()
+			{
+				return getResponse().getScriptableObject().getDocument();
+			}
+		};
+	}
+

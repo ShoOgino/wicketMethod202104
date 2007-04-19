@@ -1,0 +1,23 @@
+	/**
+	 * Flushes the response buffer by doing a redirect or writing out the
+	 * buffer. NOTE: The servlet container will close the response output
+	 * stream.
+	 */
+	public void close()
+	{
+		// If a redirection was specified
+		if (redirectURL != null)
+		{
+			// actually redirect
+			super.redirect(redirectURL);
+		}
+		else
+		{
+			// Write the buffer to the response stream
+			if (buffer.length() != 0)
+			{
+				super.write(buffer);
+			}
+		}
+	}
+

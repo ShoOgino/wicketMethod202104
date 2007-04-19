@@ -1,0 +1,13 @@
+	/**
+	 * Test mount access to a mounted page that should be allowed.
+	 */
+	public void testMountAccessToMountedPageAllowed()
+	{
+		tester.getApplication().getSecuritySettings().setEnforceMounts(false);
+
+		tester.setupRequestAndResponse();
+		tester.getServletRequest().setURL("/mount/point/TestPage");
+		tester.processRequestCycle();
+		tester.assertRenderedPage(TestPage.class);
+	}
+

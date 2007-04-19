@@ -1,0 +1,34 @@
+	/**
+	 * @see Component#onComponentTag(ComponentTag)
+	 * @param tag
+	 *            the abstraction representing html tag of this component
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+
+		// must be attached to <option .../> tag
+		checkComponentTag(tag, "option");
+
+		Select select = (Select)findParent(Select.class);
+		if (select == null)
+		{
+			throw new WicketRuntimeException(
+					"SelectOption component ["
+							+ getPath()
+							+ "] cannot find its parent Select. All SelectOption components must be a child of or below in the hierarchy of a Select component.");
+		}
+
+		// assign name and value
+		tag.put("value", getPath());
+
+		boolean isSelected=false;
+		
+		if (select.isSelected(this))
+		{
+			tag.put("selected", "true");
+		}
+
+		// Default handling for component tag
+		super.onComponentTag(tag);
+	}
+

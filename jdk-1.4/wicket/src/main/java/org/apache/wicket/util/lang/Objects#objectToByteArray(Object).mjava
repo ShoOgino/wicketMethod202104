@@ -1,0 +1,30 @@
+	/**
+	 * Serializes an object into a byte array.
+	 * 
+	 * @param object
+	 *            The object
+	 * @return The serialized object
+	 */
+	public static byte[] objectToByteArray(final Object object)
+	{
+		try
+		{
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			try
+			{
+				objectStreamFactory.newObjectOutputStream(out).writeObject(object);
+			}
+			finally
+			{
+				out.close();
+			}
+			return out.toByteArray();
+		}
+		catch (Exception e)
+		{
+			log.error("Error serializing object " + object.getClass() + " [object=" + object + "]",
+					e);
+		}
+		return null;
+	}
+

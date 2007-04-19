@@ -1,0 +1,65 @@
+	/**
+	 * Constructor
+	 */
+	public TextFieldPage()
+	{
+		final Input input = new Input();
+
+		// we use the magical compound property model here as our 'super' model.
+		// when components do not have an explicit model, but on of their
+		// parents
+		// has the compound property model set, it will use that parent's model
+		// as the taget for getting and setting the property which is based on
+		// its own component id. Thus, component with id 'text' will act as if
+		// its
+		// model is property 'text' of the compound property model. And as the
+		// compound
+		// property model's actual object is an instance of 'Input', it will map
+		// to
+		// Input's 'text' property.
+		setModel(new CompoundPropertyModel(input));
+
+		// Add a FeedbackPanel for displaying our messages
+		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		add(feedbackPanel);
+
+		// Add a form with an onSumbit implementation that sets a message
+		Form form = new Form("form")
+		{
+			protected void onSubmit()
+			{
+				info("input: " + input);
+			}
+		};
+		add(form);
+
+		// add a simple text field that uses Input's 'text' property. Nothing
+		// can go wrong here
+		form.add(new TextField("text"));
+
+		// here we add a text field that uses Input's 'integer' property.
+		// Something could go
+		// wrong here, as the user's (textual) input might be an invalid value
+		// for an
+		// Integer object. If we provide the class constructor argument like we
+		// do here, we
+		// get two things:
+		// 1. A type validator is added, so that before any actual updating is
+		// tried, first the
+		// user input is checked for validity. When the user input is wrong for
+		// an integer,
+		// the model updating is cancelled, and an error message is displayed to
+		// the user
+		// 2.When updating the model, the given type is explicitly used instead
+		// of trying
+		// to figure out what type should be converted to.
+		// Note that the default validation message mechanism uses resource
+		// bundles for the actual
+		// message lookup. The message for this component can be found in
+		// TextFieldPage.properties
+		// with key 'form.integer.TypeValidator'. Read more about how this works
+		// in the javadocs
+		// of AbstractValidator
+		form.add(new TextField("integer", Integer.class));
+	}
+

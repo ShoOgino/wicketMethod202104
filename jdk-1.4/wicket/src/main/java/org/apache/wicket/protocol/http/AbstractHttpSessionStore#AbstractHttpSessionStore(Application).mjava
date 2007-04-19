@@ -1,0 +1,21 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param application
+	 *            The application to construct this store for
+	 */
+	public AbstractHttpSessionStore(Application application)
+	{
+		if (application == null)
+		{
+			throw new IllegalArgumentException("the application object must be provided");
+		}
+		// sanity check
+		if (!(application instanceof WebApplication))
+		{
+			throw new IllegalStateException(getClass().getName()
+					+ " can only operate in the context of web applications");
+		}
+		this.application = (WebApplication)application;
+	}
+

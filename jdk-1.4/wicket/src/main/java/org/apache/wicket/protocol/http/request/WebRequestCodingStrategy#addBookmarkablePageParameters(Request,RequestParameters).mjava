@@ -1,0 +1,40 @@
+	/**
+	 * Adds bookmarkable page related parameters (page alias and optionally page
+	 * parameters). Any bookmarkable page alias mount will override this method;
+	 * hence if a mount is found, this method will not be called.
+	 * 
+	 * If you override this method to behave different then also
+	 * {@link #encode(RequestCycle, IBookmarkablePageRequestTarget)} should be
+	 * overridden to by in sync with that behaviour.
+	 * 
+	 * @param request
+	 *            the incoming request
+	 * @param parameters
+	 *            the parameters object to set the found values on
+	 */
+	protected void addBookmarkablePageParameters(final Request request,
+			final RequestParameters parameters)
+	{
+		final String requestString = request
+				.getParameter(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME);
+		if (requestString != null)
+		{
+			final String[] components = Strings.split(requestString, Component.PATH_SEPARATOR);
+			if (components.length != 2)
+			{
+				throw new WicketRuntimeException("Invalid bookmarkablePage parameter: "
+						+ requestString + ", expected: 'pageMapName:pageClassName'");
+			}
+
+			// Extract any pagemap name
+			final String pageMapName = components[0];
+			parameters.setPageMapName(pageMapName.length() == 0
+					? PageMap.DEFAULT_NAME
+					: pageMapName);
+
+			// Extract bookmarkable page class name
+			final String pageClassName = components[1];
+			parameters.setBookmarkablePageClass(pageClassName);
+		}
+	}
+

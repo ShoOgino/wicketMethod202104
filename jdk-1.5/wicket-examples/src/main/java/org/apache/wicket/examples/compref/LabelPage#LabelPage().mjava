@@ -1,0 +1,46 @@
+	/**
+	 * Constructor
+	 */
+	public LabelPage()
+	{
+		// add a static label
+		add(new Label("staticLabel", "static text"));
+
+		// add a dynamic label. For this example, we create an annonymous
+		// subclass
+		// of Model (just because it is less work then directly implementing
+		// IModel)
+		// that returns a new java.util.Date on each invocation
+		add(new Label("dynamicLabel", new Model()
+		{
+			public Object getObject()
+			{
+				return new Date();
+			}
+		}));
+
+		// add a label with a model that gets its display text from a resource
+		// bundle
+		// (which is in this case LabelPage.properties)
+		// We use key 'label.current.locale' and provide a the current locale
+		// for
+		// parameter substitution.
+		StringResourceModel stringResourceModel = new StringResourceModel("label.current.locale",
+				this, null, new Object[] { getLocale() });
+		add(new Label("resourceLabel", stringResourceModel));
+
+		// and here we add a label that contains markup. Normally, this markup
+		// would be converted
+		// to HTML escape characters so that e.g. a & really dislays as that
+		// literal char wihout
+		// our browser trying to resolve it to an HTML entity. But it this case
+		// we actually want
+		// our browser to interpret it as real markup, so we set the
+		// escapeModelString property
+		// to false
+		Label markupLabel = new Label("markupLabel",
+				"now <i>that</i> is a pretty <b>bold</b> statement!");
+		markupLabel.setEscapeModelStrings(false);
+		add(markupLabel);
+	}
+

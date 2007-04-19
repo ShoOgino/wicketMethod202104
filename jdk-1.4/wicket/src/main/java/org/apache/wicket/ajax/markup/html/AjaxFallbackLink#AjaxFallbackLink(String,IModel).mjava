@@ -1,0 +1,36 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 * @param model
+	 */
+	public AjaxFallbackLink(final String id, final IModel model)
+	{
+		super(id, model);
+
+		add(new AjaxEventBehavior("onclick")
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onEvent(AjaxRequestTarget target)
+			{
+				onClick(target);
+			}
+
+			protected IAjaxCallDecorator getAjaxCallDecorator()
+			{
+				return new CancelEventIfNoAjaxDecorator(AjaxFallbackLink.this
+						.getAjaxCallDecorator());
+			}
+			
+			protected void onComponentTag(ComponentTag tag)
+			{
+				// only render handler if link is enabled
+				if (isLinkEnabled())
+				{
+					super.onComponentTag(tag);
+				}
+			}
+		});
+	}
+

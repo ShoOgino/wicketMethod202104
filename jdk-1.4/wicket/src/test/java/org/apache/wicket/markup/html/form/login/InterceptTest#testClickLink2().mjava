@@ -1,0 +1,25 @@
+	/**
+	 * 
+	 */
+	public void testClickLink2()
+	{
+		// same as above but uses different technique to login
+		application.setupRequestAndResponse();
+		application.processRequestCycle();
+		MockLoginPage loginPage = (MockLoginPage)application.getLastRenderedPage();
+		assertEquals(((MyMockWebApplication)application.getApplication()).getLoginPage(), loginPage.getClass());
+
+		// bypass form completely to login but continue to intercept page
+		application.setupRequestAndResponse();
+		WebRequestCycle requestCycle = application.createRequestCycle();
+		assertTrue(((MockLoginPage)application.getLastRenderedPage()).login("admin"));
+		application.processRequestCycle(requestCycle);
+		assertEquals(application.getApplication().getHomePage(), application.getLastRenderedPage().getClass());
+
+		application.setupRequestAndResponse();
+		application.getServletRequest().setRequestToComponent(
+				application.getLastRenderedPage().get("link"));
+		application.processRequestCycle();
+		assertEquals(PageA.class, application.getLastRenderedPage().getClass());
+	}
+

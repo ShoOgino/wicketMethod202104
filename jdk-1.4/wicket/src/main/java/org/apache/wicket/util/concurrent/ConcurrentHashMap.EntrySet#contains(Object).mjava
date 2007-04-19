@@ -1,0 +1,14 @@
+		/**
+		 * @see java.util.Set#contains(java.lang.Object)
+		 */
+		public boolean contains(Object o)
+		{
+			if (!(o instanceof Map.Entry))
+			{
+				return false;
+			}
+			Map.Entry entry = (Map.Entry)o;
+			Object v = ConcurrentHashMap.this.get(entry.getKey());
+			return v != null && v.equals(entry.getValue());
+		}
+

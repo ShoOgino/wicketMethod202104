@@ -1,0 +1,112 @@
+	/**
+	 * Redirects browser to the given page. NOTE: Usually, you should never call
+	 * this method directly, but work with setResponsePage instead. This method
+	 * is part of Wicket's internal behavior and should only be used when you
+	 * want to circumvent the normal framework behavior and issue the redirect
+	 * directly.
+	 * 
+	 * @param page
+	 *            The page to redirect to
+	 */
+	public final void redirectTo(final Page page)
+	{
+		String redirectUrl = null;
+
+		// Check if use serverside response for client side redirects
+		IRequestCycleSettings settings = application.getRequestCycleSettings();
+		if ((settings.getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER)
+				&& (application instanceof WebApplication))
+		{
+			// remember the current response
+			final WebResponse currentResponse = getWebResponse();
+			try
+			{
+				// create the redirect response.
+				final BufferedHttpServletResponse servletResponse = new BufferedHttpServletResponse(
+						currentResponse.getHttpServletResponse());
+				final WebResponse redirectResponse = new WebResponse(servletResponse)
+				{
+					public CharSequence encodeURL(CharSequence url)
+					{
+						return currentResponse.encodeURL(url);
+					}
+				};
+				redirectResponse.setCharacterEncoding(currentResponse.getCharacterEncoding());
+
+				// redirect the response to the buffer
+				setResponse(redirectResponse);
+
+				// render the page into the buffer
+				page.renderPage();
+
+				// re-assign the original response
+				setResponse(currentResponse);
+
+				final String responseRedirect = servletResponse.getRedirectUrl();
+				if (responseRedirect != null)
+				{
+					// if the redirectResponse has another redirect url set
+					// then the rendering of this page caused a redirect to
+					// something else.
+					// set this redirect then.
+					redirectUrl = responseRedirect;
+				}
+				else if (servletResponse.getContentLength() > 0)
+				{
+					// call filter() so that any filters can process the
+					// response
+					servletResponse.filter(currentResponse);
+
+					// Set the final character encoding before calling close
+					servletResponse.setCharacterEncoding(currentResponse.getCharacterEncoding());
+					// close it so that the reponse is fixed and encoded from
+					// here on.
+					servletResponse.close();
+
+					redirectUrl = page.urlFor(IRedirectListener.INTERFACE).toString();
+					int index = redirectUrl.indexOf("?");
+					String sessionId = getWebRequest().getHttpServletRequest().getSession(true)
+							.getId();
+					((WebApplication)application).addBufferedResponse(sessionId, redirectUrl
+							.substring(index + 1), servletResponse);
+				}
+			}
+			catch (RuntimeException ex)
+			{
+				// re-assign the original response
+				setResponse(currentResponse);
+				if (ex instanceof AbortException)
+					throw ex;
+
+				if (!(ex instanceof PageExpiredException))
+					logRuntimeException(ex);
+
+				IRequestCycleProcessor processor = getProcessor();
+				processor.respond(ex, this);
+				return;
+			}
+		}
+		else
+		{
+			redirectUrl = page.urlFor(IRedirectListener.INTERFACE).toString();
+
+			// Redirect page can touch its models already (via for example the
+			// constructors)
+			// this can be removed i guess because this page will be detached in
+			// the page target
+			// page.internalDetach();
+		}
+
+		if (redirectUrl == null)
+		{
+			redirectUrl = page.urlFor(IRedirectListener.INTERFACE).toString();
+		}
+
+		// Always touch the page again so that a redirect listener makes a page
+		// statefull and adds it to the pagemap
+		getSession().touch(page);
+
+		// Redirect to the url for the page
+		response.redirect(redirectUrl);
+	}
+

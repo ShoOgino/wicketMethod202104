@@ -1,0 +1,29 @@
+	/**
+	 * @param component
+	 *            Component being added
+	 */
+	private final void addedComponent(final Component component)
+	{
+		// Check for degenerate case
+		if (component == this)
+		{
+			throw new IllegalArgumentException("Component can't be added to itself");
+		}
+
+		MarkupContainer parent = component.getParent();
+		if (parent != null)
+		{
+			parent.remove(component);
+		}
+
+		// Set child's parent
+		component.setParent(this);
+
+		// Tell the page a component was added
+		final Page page = findPage();
+		if (page != null)
+		{
+			page.componentAdded(component);
+		}
+	}
+

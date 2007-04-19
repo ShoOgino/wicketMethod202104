@@ -1,0 +1,45 @@
+	/**
+	 * Returns a link that will remove this ListItem from the ListView that
+	 * holds it.
+	 * 
+	 * @param id
+	 *            Name of remove link component to create
+	 * @param item
+	 * @return The link component
+	 */
+	public final Link removeLink(final String id, final ListItem item)
+	{
+		return new Link(id)
+		{
+			private static final long serialVersionUID = 1L;
+
+			/**
+			 * @see org.apache.wicket.markup.html.link.Link#onClick()
+			 */
+			public void onClick()
+			{
+				addStateChange(new Change()
+				{
+					private static final long serialVersionUID = 1L;
+
+					final Object removedObject = item.getModelObject();
+					final int oldIndex = getList().indexOf(item.getModelObject());
+
+					public void undo()
+					{
+						getList().add(oldIndex, removedObject);
+					}
+
+				});
+
+				item.modelChanging();
+
+				// Remove item and invalidate listView
+				getList().remove(item.getModelObject());
+
+				ListView.this.modelChanged();
+				ListView.this.removeAll();
+			}
+		};
+	}
+

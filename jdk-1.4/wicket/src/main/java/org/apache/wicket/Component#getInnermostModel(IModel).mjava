@@ -1,0 +1,23 @@
+	/**
+	 * Finds the innermost IModel object for an IModel that might contain nested
+	 * IModel(s).
+	 * 
+	 * @param model
+	 *            The model
+	 * @return The innermost (most nested) model
+	 */
+	protected final IModel getInnermostModel(final IModel model)
+	{
+		IModel nested = model;
+		while (nested != null && nested instanceof IWrapModel)
+		{
+			final IModel next = ((IWrapModel)nested).getWrappedModel();
+			if (nested == next)
+			{
+				throw new WicketRuntimeException("Model for " + nested + " is self-referential");
+			}
+			nested = next;
+		}
+		return nested;
+	}
+

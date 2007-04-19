@@ -1,0 +1,21 @@
+	/**
+	 * Tests the clean up of flash messages put into the session when they are
+	 * rendered.
+	 */
+	public void testSessionFeedbackMessagesCleanUp()
+	{
+		Session session = Session.get();
+		session.info("Message");
+		session.info("Not rendered");
+		FeedbackMessages feedbackMessages = session.getFeedbackMessages();
+		Iterator iterator = feedbackMessages.iterator();
+		FeedbackMessage message = (FeedbackMessage)iterator.next();
+		message.markRendered();
+		feedbackMessages.clear(RENDERED_MESSAGES);
+		assertEquals(1, feedbackMessages.size());
+		message = (FeedbackMessage)iterator.next();
+		message.markRendered();
+		feedbackMessages.clear(RENDERED_MESSAGES);
+		assertEquals(0, feedbackMessages.size());
+	}
+

@@ -1,0 +1,14 @@
+	// FIXME WebExternalResourceStream does not implement length()
+	public void testWebExternalResource() throws Exception
+	{
+		WebExternalResourceStream resource = new WebExternalResourceStream("/index.html");
+		ResourceStreamRequestTarget rt = new ResourceStreamRequestTarget(resource);
+		WebRequestCycle cycle = tester.createRequestCycle();
+		cycle.setRequestTarget(rt);
+		tester.processRequestCycle(cycle);
+		assertTrue(getContentType().startsWith("text/html"));
+		// WebExternalResourceStream does not set Content-Length
+		// assertEquals(23, getContentLength());
+		tester.assertResultPage(WebExternalResourceTest.class, "index.html");
+	}
+

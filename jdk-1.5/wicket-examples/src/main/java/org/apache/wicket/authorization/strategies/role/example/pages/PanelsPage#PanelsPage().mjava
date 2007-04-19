@@ -1,0 +1,23 @@
+	/**
+	 * Construct.
+	 */
+	public PanelsPage()
+	{
+		ForAllUsers forAllUsers = new ForAllUsers("forAllUsersPanel");
+		// don't have to do anything here; component is by default not protected
+		add(forAllUsers);
+
+		ForAdminsAndUsers forAdminsAndUsers = new ForAdminsAndUsers("forAdminsAndUsersPanel");
+		add(forAdminsAndUsers);
+		// authorise roles admin and user (and thus deny everyone else) for the
+		// Component.RENDER action
+		MetaDataRoleAuthorizationStrategy.authorize(forAdminsAndUsers, RENDER, "ADMIN");
+		MetaDataRoleAuthorizationStrategy.authorize(forAdminsAndUsers, RENDER, "USER");
+
+		ForAdmins forAdmins = new ForAdmins("forAdminsPanel");
+		// authorise role admin (and thus deny everyone else) for the
+		// Component.RENDER action
+		MetaDataRoleAuthorizationStrategy.authorize(forAdmins, RENDER, "ADMIN");
+		add(forAdmins);
+	}
+

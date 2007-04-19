@@ -1,0 +1,18 @@
+	/**
+	 * @return Whether the session was marked invalid during this request
+	 *         (afterwards, we shouldn't even come here as there is no session)
+	 */
+	private boolean isSessionValid()
+	{
+		if (Session.exists())
+		{
+			Session session = Session.get();
+			if (session instanceof WebSession)
+			{
+				return !((WebSession)session).isSessionInvalidated();
+			}
+		}
+		return true; // we simply don't know, so play safe and rely on
+		// servlet container's code to check availability
+	}
+

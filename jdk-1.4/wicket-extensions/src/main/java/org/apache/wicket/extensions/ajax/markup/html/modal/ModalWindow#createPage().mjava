@@ -1,0 +1,40 @@
+	/**
+	 * Creates the page.
+	 * 
+	 * @return Page instance or null if page couldn't be created.
+	 */
+	private Page createPage()
+	{
+		if (pageCreator == null)
+		{
+			return null;
+		}
+		else
+		{
+			RequestParameters parameters = RequestCycle.get().getRequest().getRequestParameters();
+			String oldPageMapName = parameters.getPageMapName();
+
+			// if there is a pagemap name specified and multiwindow support is
+			// on
+			if (getPageMapName() != null)
+			{
+				// try to find out whether the pagemap already exists
+				Session session = Session.get();
+				if (session.pageMapForName(getPageMapName(), false) == null)
+				{
+					deletePageMap = true;
+				}
+				parameters.setPageMapName(getPageMapName());
+			}
+			try
+			{
+				Page page = pageCreator.createPage();
+				return page;
+			}
+			finally
+			{
+				parameters.setPageMapName(oldPageMapName);
+			}
+		}
+	}
+

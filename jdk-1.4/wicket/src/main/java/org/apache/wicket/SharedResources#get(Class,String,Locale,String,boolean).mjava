@@ -1,0 +1,68 @@
+	/**
+	 * @param scope
+	 *            The resource's scope
+	 * @param name
+	 *            Name of resource to get
+	 * @param locale
+	 *            The locale of the resource
+	 * @param style
+	 *            The resource style (see {@link org.apache.wicket.Session})
+	 * @param exact
+	 *            If true then only return the resource that is registered for
+	 *            the given locale and style.
+	 * 
+	 * @return The logical resource
+	 */
+	public final Resource get(final Class scope, final String name, final Locale locale,
+			final String style, boolean exact)
+	{
+		// 1. Look for fully qualified entry with locale and style
+		if (locale != null && style != null)
+		{
+			final String resourceKey = resourceKey(scope, name, locale, style);
+			final Resource resource = get(resourceKey);
+			if (resource != null)
+			{
+				return resource;
+			}
+			if (exact)
+			{
+				return null;
+			}
+		}
+
+		// 2. Look for entry without style
+		if (locale != null)
+		{
+			final String key = resourceKey(scope, name, locale, null);
+			final Resource resource = get(key);
+			if (resource != null)
+			{
+				return resource;
+			}
+			if (exact)
+			{
+				return null;
+			}
+		}
+
+		// 3. Look for entry without locale
+		if (style != null)
+		{
+			final String key = resourceKey(scope, name, null, style);
+			final Resource resource = get(key);
+			if (resource != null)
+			{
+				return resource;
+			}
+			if (exact)
+			{
+				return null;
+			}
+		}
+
+		// 4. Look for base name with no locale or style
+		final String key = resourceKey(scope, name, null, null);
+		return get(key);
+	}
+

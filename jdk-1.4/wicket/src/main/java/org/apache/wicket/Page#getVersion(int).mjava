@@ -1,0 +1,67 @@
+	/**
+	 * Override this method to implement a custom way of producing a version of
+	 * a Page when it cannot be found in the Session.
+	 * 
+	 * @param versionNumber
+	 *            The version desired
+	 * @return A Page object with the component/model hierarchy that was
+	 *         attached to this page at the time represented by the requested
+	 *         version.
+	 */
+	public Page getVersion(final int versionNumber)
+	{
+		// If we're still the original Page and that's what's desired
+		if (versionManager == null)
+		{
+			if (versionNumber == 0 || versionNumber == LATEST_VERSION)
+			{
+				return this;
+			}
+			else
+			{
+				log.info("No version manager available to retrieve requested versionNumber "
+						+ versionNumber);
+				return null;
+			}
+		}
+		else
+		{
+			// Save original change tracking state
+			final boolean originalTrackChanges = getFlag(FLAG_TRACK_CHANGES);
+
+			try
+			{
+				// While the version manager is potentially playing around with
+				// the Page, it may change the page in order to undo changes and
+				// we don't want change tracking going on while its doing this.
+				setFlag(FLAG_TRACK_CHANGES, false);
+
+				// Get page of desired version
+				final Page page;
+				if (versionNumber != LATEST_VERSION)
+				{
+					page = versionManager.getVersion(versionNumber);
+				}
+				else
+				{
+					page = versionManager.getVersion(getCurrentVersionNumber());
+				}
+
+				// If we went all the way back to the original page
+				if (page != null && page.getCurrentVersionNumber() == 0
+						&& page.getAjaxVersionNumber() == 0)
+				{
+					// remove version info
+					page.versionManager = null;
+				}
+
+				return page;
+			}
+			finally
+			{
+				// Restore change tracking state
+				setFlag(FLAG_TRACK_CHANGES, originalTrackChanges);
+			}
+		}
+	}
+

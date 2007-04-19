@@ -1,0 +1,61 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET API. DO NOT ATTEMPT TO OVERRIDE OR
+	 * CALL IT.
+	 * 
+	 * Handles form submissions.
+	 * 
+	 * @see Form#validate()
+	 */
+	public final void onFormSubmitted()
+	{
+		setFlag(FLAG_SUBMITTED, true);
+
+		if (handleMultiPart())
+		{
+			// Tells FormComponents that a new user input has come
+			inputChanged();
+
+			String url = getRequest().getParameter(getHiddenFieldId());
+			if (!Strings.isEmpty(url))
+			{
+				dispatchEvent(getPage(), url);
+			}
+			else
+			{
+				// First, see if the processing was triggered by a Wicket button
+				final IFormSubmittingComponent submittingButton = findSubmittingButton();
+
+				// When processing was triggered by a Wicket button and that
+				// button indicates it wants to be called immediately
+				// (without processing), call Button.onSubmit() right away.
+				if (submittingButton != null && !submittingButton.getDefaultFormProcessing())
+				{
+					submittingButton.onSubmit();
+				}
+				else
+				{
+					// this is the root form
+					Form formToProcess = this;
+
+					// find out whether it was a nested form that was submitted
+					if (submittingButton != null)
+					{
+						formToProcess = submittingButton.getForm();
+					}
+					// process the form for this request
+					if (formToProcess.process())
+					{
+						// let clients handle further processing
+						delegateSubmit(submittingButton);
+					}
+				}
+			}
+		}
+		// If multi part did fail check if an error is registered and call
+		// onError
+		else if (hasError())
+		{
+			onError();
+		}
+	}
+

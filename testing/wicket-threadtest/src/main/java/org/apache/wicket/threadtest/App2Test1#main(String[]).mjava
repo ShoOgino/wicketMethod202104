@@ -1,0 +1,23 @@
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+
+		List<String> gets = Arrays
+				.asList(new String[] { "/app2?wicket:bookmarkablePage=one:org.apache.wicket.threadtest.apps.app2.Home" });
+
+		SimpleGetCommand getCmd = new SimpleGetCommand(gets, 5);
+
+		// getCmd.setPrintResponse(true);
+
+		// AS OF OCTOBER 9 2006, THIS TYPICALLY RESULTS IN A DEADLOCK
+		// FIXED now... keep this test
+		Tester tester = new Tester(getCmd, 50, false);
+
+		// new Tester(.., .., false) would not give a deadlock, as then
+		// all threads point to seperate sessions
+
+		tester.run();
+	}
+

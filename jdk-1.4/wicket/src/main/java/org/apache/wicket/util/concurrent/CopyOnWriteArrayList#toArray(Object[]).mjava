@@ -1,0 +1,38 @@
+	/**
+	 * Returns an array containing all of the elements in this list in the
+	 * correct order. The runtime type of the returned array is that of the
+	 * specified array. If the list fits in the specified array, it is returned
+	 * therein. Otherwise, a new array is allocated with the runtime type of the
+	 * specified array and the size of this list.
+	 * <p>
+	 * If the list fits in the specified array with room to spare (i.e., the
+	 * array has more elements than the list), the element in the array
+	 * immediately following the end of the collection is set to null. This is
+	 * useful in determining the length of the list <em>only</em> if the
+	 * caller knows that the list does not contain any null elements.
+	 * 
+	 * @param a
+	 *            the array into which the elements of the list are to be
+	 *            stored, if it is big enough; otherwise, a new array of the
+	 *            same runtime type is allocated for this purpose.
+	 * @return an array containing the elements of the list.
+	 * @exception ArrayStoreException
+	 *                the runtime type of a is not a supertype of the runtime
+	 *                type of every element in this list.
+	 */
+	public Object[] toArray(Object a[])
+	{
+		Object[] elementData = array();
+
+		if (a.length < elementData.length)
+			a = (Object[])java.lang.reflect.Array.newInstance(a.getClass().getComponentType(),
+					elementData.length);
+
+		System.arraycopy(elementData, 0, a, 0, elementData.length);
+
+		if (a.length > elementData.length)
+			a[elementData.length] = null;
+
+		return a;
+	}
+

@@ -1,0 +1,22 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param id
+		 */
+		public CaptchaForm(String id)
+		{
+			super(id);
+
+			captchaImageResource = new CaptchaImageResource(imagePass);
+			add(new Image("captchaImage", captchaImageResource));
+			add(new RequiredTextField("password", new PropertyModel(properties, "password"))
+			{
+				protected final void onComponentTag(final ComponentTag tag)
+				{
+					super.onComponentTag(tag);
+					// clear the field after each render
+					tag.put("value", "");
+				}
+			});
+		}
+

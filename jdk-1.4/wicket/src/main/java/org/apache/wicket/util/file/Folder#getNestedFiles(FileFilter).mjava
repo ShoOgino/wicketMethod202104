@@ -1,0 +1,19 @@
+	/**
+	 * Gets files in this folder matching a given filter recusively.
+	 * 
+	 * @param filter
+	 *            The filter
+	 * @return The list of files
+	 */
+	public File[] getNestedFiles(final FileFilter filter)
+	{
+		final List files = new ArrayList();
+		files.addAll(Arrays.asList(getFiles(filter)));
+		final Folder[] folders = getFolders();
+		for (int i = 0; i < folders.length; i++)
+		{
+			files.addAll(Arrays.asList(folders[i].getNestedFiles(filter)));
+		}
+		return (File[])files.toArray(new File[files.size()]);
+	}
+

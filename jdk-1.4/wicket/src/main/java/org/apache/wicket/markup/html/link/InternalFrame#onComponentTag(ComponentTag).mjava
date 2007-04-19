@@ -1,0 +1,20 @@
+	/**
+	 * Handles this frame's tag.
+	 * 
+	 * @param tag
+	 *            the component tag
+	 * @see org.apache.wicket.Component#onComponentTag(ComponentTag)
+	 */
+	protected final void onComponentTag(final ComponentTag tag)
+	{
+		checkComponentTag(tag, "iframe");
+
+		// Set href to link to this frame's frameRequested method
+		CharSequence url = getURL();
+
+		// generate the src attribute
+		tag.put("src", Strings.replaceAll(url, "&", "&amp;"));
+
+		super.onComponentTag(tag);
+	}
+

@@ -1,0 +1,12 @@
+	/**
+	 * Tests text download.
+	 */
+	public void testTextDownloadLink()
+	{
+		tester.startPage(DownloadPage.class);
+		tester.clickLink(DownloadPage.TEXT_DOWNLOAD_LINK);
+		assertTrue(getContentType().startsWith("text/plain"));
+		assertTrue(getContentDisposition().startsWith("attachment; filename="));
+		assertEquals(0, getContentLength());
+	}
+

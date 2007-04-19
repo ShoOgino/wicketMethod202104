@@ -1,0 +1,23 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            component id
+	 * @param columns
+	 *            array of columns
+	 * @param dataProvider
+	 *            data provider
+	 * @param rowsPerPage
+	 *            number of rows per page
+	 */
+	public AjaxFallbackDefaultDataTable(String id, final IColumn[] columns,
+			SortableDataProvider dataProvider, int rowsPerPage)
+	{
+		super(id, columns, dataProvider, rowsPerPage);
+		setOutputMarkupId(true);
+		setVersioned(false);
+		addTopToolbar(new AjaxNavigationToolbar(this));
+		addTopToolbar(new AjaxFallbackHeadersToolbar(this, dataProvider));
+		addBottomToolbar(new NoRecordsToolbar(this));
+	}
+

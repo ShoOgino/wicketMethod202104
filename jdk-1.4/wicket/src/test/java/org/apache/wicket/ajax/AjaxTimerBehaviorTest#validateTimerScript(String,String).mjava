@@ -1,0 +1,26 @@
+	/**
+	 * Checks that the timer javascript is in the document once and only once
+	 *
+	 * @param document
+	 *            the response from the Application
+	 * @param updateScript
+	 *            the timer script
+	 */
+	private void validateTimerScript(String document, String updateScript)
+	{
+		log.debug(document);
+		String quotedRegex;
+		quotedRegex = quote(updateScript);
+		Pattern pat = Pattern.compile(quotedRegex, Pattern.DOTALL);
+		Matcher mat = pat.matcher(document);
+
+		int count = 0;
+		while (mat.find())
+		{
+			++count;
+		}
+		// make sure there is only one match
+		assertEquals("There should be 1 and only 1 script in the markup for this behavior,"
+				+ "but " + count + " were found", 1, count);
+	}
+

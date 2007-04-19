@@ -1,0 +1,29 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * <p>
+	 * The page will be 'touched' in the session. If it wasn't added yet to the
+	 * pagemap, it will be added to the page map else it will set this page to
+	 * the front.
+	 * 
+	 * If another page was removed because of this it will be cleaned up.
+	 * 
+	 * @param page
+	 */
+	public final void touch(Page page)
+	{
+		// store it in a list, so that the pages are really pushed
+		// to the pagemap when the session does it update/detaches.
+		// all the pages are then detached
+		List lst = (List)touchedPages.get();
+		if (lst == null)
+		{
+			lst = new ArrayList();
+			touchedPages.set(lst);
+			lst.add(page);
+		}
+		else if (!lst.contains(page))
+		{
+			lst.add(page);
+		}
+	}
+

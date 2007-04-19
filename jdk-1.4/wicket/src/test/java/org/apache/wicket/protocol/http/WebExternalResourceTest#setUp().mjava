@@ -1,0 +1,16 @@
+	protected void setUp() throws Exception
+	{
+		File tempDir = new File("target/webapp");
+		tempDir.mkdir();
+		File tempFile = new File(tempDir, "index.html");
+		FileOutputStream out = new FileOutputStream(tempFile);
+		InputStream in = WebExternalResourceTest.class.getResourceAsStream("index.html");
+		Streams.copy(in, out);
+		in.close();
+		out.close();
+		tester = new WicketTester(new DummyWebApplication(), tempDir.getPath());
+		tester.setupRequestAndResponse();
+		// We fake the browser URL, otherwise Wicket doesn't know the requested URL and cannot guess the Content-Type
+		tester.getServletRequest().setPath("/index.html");
+	}
+

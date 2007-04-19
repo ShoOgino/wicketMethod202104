@@ -1,0 +1,27 @@
+	/**
+	 * Sets the window name. The logical name of the window. This can be
+	 * anything you want, although you should use alphanumeric characters only
+	 * (no spaces or punctuation). If you have a window already open and call
+	 * window.open a second time using the same windowName, the first window
+	 * will be reused rather than opening a second window
+	 * 
+	 * @param popupWindowName
+	 *            window name.
+	 * @return This
+	 */
+	public PopupSettings setWindowName(String popupWindowName)
+	{
+		if (popupWindowName != null)
+		{
+			this.windowName = popupWindowName;
+			if (pageMapName != null && (!pageMapName.equals(popupWindowName)))
+			{
+				log.warn("the page map and window name should be the same. The page map was "
+						+ pageMapName + ", and the requested window name is " + popupWindowName
+						+ "; changing the page map to " + popupWindowName);
+			}
+			this.pageMapName = popupWindowName;
+		}
+		return this;
+	}
+

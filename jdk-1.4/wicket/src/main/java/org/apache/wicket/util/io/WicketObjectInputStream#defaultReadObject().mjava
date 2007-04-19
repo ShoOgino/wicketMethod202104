@@ -1,0 +1,13 @@
+	/**
+	 * @see java.io.ObjectInputStream#defaultReadObject()
+	 */
+	public void defaultReadObject() throws IOException, ClassNotFoundException
+	{
+		Object currentObject = stack.peek();
+		if ( !defaultRead.contains(currentObject) )
+		{
+			defaultRead.add(currentObject);
+			currentStreamHandler.readFields(this,currentObject);
+		}
+	}
+

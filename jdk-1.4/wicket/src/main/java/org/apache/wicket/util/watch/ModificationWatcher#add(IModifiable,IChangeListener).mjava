@@ -1,0 +1,45 @@
+	/**
+	 * Adds a Modifiable object and an IChangeListener to call when the
+	 * modifiable object is modified.
+	 * 
+	 * @param modifiable
+	 *            The modifiable thing to monitor
+	 * @param listener
+	 *            The listener to call if the modifiable is modified
+	 * @return <tt>true</tt> if the set did not already contain the specified element.
+	 */
+	public final boolean add(final IModifiable modifiable, final IChangeListener listener)
+	{
+		// Look up entry for modifiable
+		final Entry entry = (Entry)modifiableToEntry.get(modifiable);
+
+		// Found it?
+		if (entry == null)
+		{
+			if (modifiable.lastModifiedTime() != null)
+			{
+				// Construct new entry
+				final Entry newEntry = new Entry();
+
+				newEntry.modifiable = modifiable;
+				newEntry.lastModifiedTime = modifiable.lastModifiedTime();
+				newEntry.listeners.add(listener);
+
+				// Put in map
+				modifiableToEntry.put(modifiable, newEntry);
+			}
+			else
+			{
+				// The IModifiable is not returning a valid lastModifiedTime
+				log.info("Cannot track modifications to resource " + modifiable);
+			}
+			
+			return true;
+		}
+		else
+		{
+			// Add listener to existing entry
+			return entry.listeners.add(listener);
+		}
+	}
+

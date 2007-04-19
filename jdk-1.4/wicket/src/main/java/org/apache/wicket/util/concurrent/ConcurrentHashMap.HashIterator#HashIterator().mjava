@@ -1,0 +1,14 @@
+		protected HashIterator()
+		{
+			// force all segments to synch
+			synchronized (segments[0])
+			{
+				tab = table;
+			}
+			for (int i = 1; i < segments.length; ++i)
+			{
+				segments[i].synch();
+			}
+			index = tab.length - 1;
+		}
+

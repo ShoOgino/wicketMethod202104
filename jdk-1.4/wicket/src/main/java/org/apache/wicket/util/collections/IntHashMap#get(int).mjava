@@ -1,0 +1,32 @@
+	/**
+	 * Returns the value to which the specified key is mapped in this identity
+	 * hash map, or <tt>null</tt> if the map contains no mapping for this key.
+	 * A return value of <tt>null</tt> does not <i>necessarily</i> indicate
+	 * that the map contains no mapping for the key; it is also possible that
+	 * the map explicitly maps the key to <tt>null</tt>. The
+	 * <tt>containsKey</tt> method may be used to distinguish these two cases.
+	 * 
+	 * @param key
+	 *            the key whose associated value is to be returned.
+	 * @return the value to which this map maps the specified key, or
+	 *         <tt>null</tt> if the map contains no mapping for this key.
+	 * @see #put(int, Object)
+	 */
+	public Object get(int key)
+	{
+		int i = indexFor(key, table.length);
+		Entry e = table[i];
+		while (true)
+		{
+			if (e == null)
+			{
+				return e;
+			}
+			if (key == e.key)
+			{
+				return e.value;
+			}
+			e = e.next;
+		}
+	}
+

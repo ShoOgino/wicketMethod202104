@@ -1,0 +1,46 @@
+	/**
+	 * Returns a relative path from an HttpServletRequest Use this to resolve a
+	 * Wicket request.
+	 * 
+	 * @param request
+	 * @return Path requested, minus query string, context path, and filterPath.
+	 *         Relative, no leading '/'.
+	 */
+	public String getRelativePath(HttpServletRequest request)
+	{
+		String path = request.getServletPath();
+		if (servletMode)
+		{
+			path = request.getPathInfo();
+			// No path info => root.
+			if (path == null)
+			{
+				path = "";
+			}
+		}
+		filterPath = getFilterPath(request);
+
+		if (path.length() > 0)
+		{
+			path = path.substring(1);
+		}
+
+		// We should always be under the rootPath, except
+		// for the special case of someone landing on the
+		// home page without a trailing slash.
+		if (!path.startsWith(filterPath))
+		{
+			if (filterPath.equals(path + "/"))
+			{
+				path += "/";
+			}
+		}
+		if (path.startsWith(filterPath))
+		{
+			path = path.substring(filterPath.length());
+		}
+
+		return path;
+
+	}
+

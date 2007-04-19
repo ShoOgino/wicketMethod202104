@@ -1,0 +1,32 @@
+	/**
+	 * Constructor
+	 */
+	public SubmitLinkPage()
+	{
+		// Add a FeedbackPanel for displaying our messages
+		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		add(feedbackPanel);
+
+		// Add a form with 2 SubmitLinks that can be called
+		Form form = new Form("form");
+		add(form);
+
+		SubmitLink internal = new SubmitLink("internal")
+		{
+			public void onSubmit()
+			{
+				info("internal onsubmit");
+			};
+		};
+		form.add(internal);
+
+		SubmitLink external = new SubmitLink("external", form)
+		{
+			public void onSubmit()
+			{
+				info("external onsubmit");
+			};
+		};
+		add(external);
+	}
+

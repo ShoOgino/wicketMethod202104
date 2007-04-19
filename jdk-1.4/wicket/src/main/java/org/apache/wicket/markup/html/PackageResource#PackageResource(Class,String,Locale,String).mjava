@@ -1,0 +1,43 @@
+	/**
+	 * Hidden constructor.
+	 * 
+	 * @param scope
+	 *            This argument will be used to get the class loader for loading
+	 *            the package resource, and to determine what package it is in
+	 * @param path
+	 *            The path to the resource
+	 * @param locale
+	 *            The locale of the resource
+	 * @param style
+	 *            The style of the resource
+	 */
+	protected PackageResource(final Class scope, final String path, final Locale locale,
+			final String style)
+	{
+		// Convert resource path to absolute path relative to base package
+		this.absolutePath = Packages.absolutePath(scope, path);
+
+		IPackageResourceGuard guard = Application.get().getResourceSettings()
+				.getPackageResourceGuard();
+		if (!guard.accept(scope, path))
+		{
+			throw new PackageResourceBlockedException("package resource " + absolutePath
+					+ " may not be accessed");
+		}
+
+		this.scope = scope;
+		this.path = path;
+		this.locale = locale;
+		this.style = style;
+
+		if (locale != null)
+		{
+			// Get the resource stream so that the real locale that could be
+			// resolved is set.
+			getResourceStream();
+
+			// Invalidate it again so that it won't hold up resources
+			invalidate();
+		}
+	}
+

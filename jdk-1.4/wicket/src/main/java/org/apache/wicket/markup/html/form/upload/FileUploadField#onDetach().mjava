@@ -1,0 +1,16 @@
+	/**
+	 * Clean up at the end of the request. This means closing all inputstreams
+	 * which might have been opened from the fileUpload.
+	 * 
+	 * @see org.apache.wicket.Component#onDetach()
+	 */
+	protected void onDetach()
+	{
+		if (fileUpload != null)
+		{
+			fileUpload.closeStreams();
+			fileUpload = null;
+		}
+		super.onDetach();
+	}
+

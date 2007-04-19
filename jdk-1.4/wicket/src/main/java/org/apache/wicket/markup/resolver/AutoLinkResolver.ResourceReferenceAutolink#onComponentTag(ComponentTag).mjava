@@ -1,0 +1,23 @@
+		/**
+		 * Handles this link's tag.
+		 * 
+		 * @param tag
+		 *            the component tag
+		 * @see org.apache.wicket.Component#onComponentTag(ComponentTag)
+		 */
+		protected final void onComponentTag(final ComponentTag tag)
+		{
+			// Default handling for tag
+			super.onComponentTag(tag);
+
+			// only set the href attribute when the resource exists
+			if (resourceReference != null)
+			{
+				// Set href to link to this link's linkClicked method
+				CharSequence url = getRequestCycle().urlFor(resourceReference);
+
+				// generate the href attribute
+				tag.put(attribute, Strings.replaceAll(url, "&", "&amp;"));
+			}
+		}
+

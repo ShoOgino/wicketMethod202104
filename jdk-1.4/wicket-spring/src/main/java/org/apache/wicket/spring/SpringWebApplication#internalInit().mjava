@@ -1,0 +1,19 @@
+	/**
+	 * @see org.apache.wicket.Application#internalInit()
+	 */
+	protected void internalInit()
+	{
+		super.internalInit();
+
+		if (applicationContext == null)
+		{
+			// this application was not created as a spring bean so we
+			// locate the app context from servlet context
+
+			ServletContext sc = getServletContext();
+			applicationContext = WebApplicationContextUtils
+					.getRequiredWebApplicationContext(sc);
+
+		}
+	}
+

@@ -1,0 +1,29 @@
+	/**
+	 * This implementation loads from a custom name/ location. While not
+	 * advisable as the default way of loading resources, overriding this method
+	 * can provide a component specific break out so that you e.g. can load a
+	 * template from a database without any other component or the application
+	 * having to know about it.
+	 * 
+	 * @param container
+	 *            The MarkupContainer which requests to load the Markup resource
+	 *            stream
+	 * @param containerClass
+	 *            The container the markup should be associated with
+	 * @return A IResourceStream if the resource was found
+	 */
+	public IResourceStream getMarkupResourceStream(final MarkupContainer container,
+			final Class containerClass)
+	{
+		// load a template with a totally different name from this package using
+		// this component's class loader
+		final URL url = PageWithCustomLoading.class.getResource("CustomLoadedTemplate.html");
+		if (url != null)
+		{
+			return new UrlResourceStream(url);
+		}
+
+		// no resource was not found
+		return null;
+	}
+

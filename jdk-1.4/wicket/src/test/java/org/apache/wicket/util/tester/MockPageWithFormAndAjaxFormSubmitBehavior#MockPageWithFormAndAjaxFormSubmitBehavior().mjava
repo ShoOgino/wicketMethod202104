@@ -1,0 +1,26 @@
+	/**
+	 * Construct.
+	 */
+	public MockPageWithFormAndAjaxFormSubmitBehavior()
+	{
+		pojo = new Pojo("Mock name");
+
+		Form form = new Form("form", new CompoundPropertyModel(pojo));
+		add(form);
+
+		form.add(new TextField("name"));
+
+		// The Event behavior
+		WebComponent eventComponent = new WebComponent(EVENT_COMPONENT);
+		add(eventComponent);
+		eventComponent.add(new AjaxFormSubmitBehavior(form, "onclick")
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onSubmit(AjaxRequestTarget target)
+			{
+				executed = true;
+			}
+		});
+	}
+

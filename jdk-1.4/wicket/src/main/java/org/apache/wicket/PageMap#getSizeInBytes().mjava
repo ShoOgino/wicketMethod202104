@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.IPageMap#getSizeInBytes()
+	 */
+	public final long getSizeInBytes()
+	{
+		long size = Objects.sizeof(this);
+		Iterator it = getEntries().iterator();
+		while (it.hasNext())
+		{
+			IPageMapEntry entry = (IPageMapEntry)it.next();
+			if (entry instanceof Page)
+			{
+				size += ((Page)entry).getSizeInBytes();
+			}
+			else
+			{
+				size += Objects.sizeof(entry);
+			}
+		}
+		return size;
+	}
+

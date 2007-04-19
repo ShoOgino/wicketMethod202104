@@ -1,0 +1,89 @@
+	/**
+	 * handle the current step in the request processing.
+	 */
+	private final void step()
+	{
+		try
+		{
+			switch (currentStep)
+			{
+				case PREPARE_REQUEST : {
+					// prepare the request
+					prepare();
+					break;
+				}
+				case RESOLVE_TARGET : {
+					// resolve the target of the request using the request
+					// parameters
+					final IRequestTarget target = processor.resolve(this, request
+							.getRequestParameters());
+
+					// has to result in a request target
+					if (target == null)
+					{
+						throw new WicketRuntimeException(
+								"the processor did not resolve to any request target");
+					}
+					// Add (inserting at the bottom) in case before or during
+					// target resolving one or more request targets were pushed
+					// on the stack before this. If that is the case, they
+					// should be handled before this
+					requestTargets.add(0, target);
+					break;
+				}
+				case PROCESS_EVENTS : {
+					// determine what kind of synchronization is to be used, and
+					// handle any events with that and generate a response in
+					// that same block
+					// NOTE: because of synchronization, we need to take the
+					// steps PROCESS_EVENTS and RESPOND together
+					processEventsAndRespond();
+					break;
+				}
+				case RESPOND : {
+					// generate a response
+					// NOTE: We have to do sync here because the
+					// processEventsAndRespond step will be unrolled by a
+					// RestartXX Exception. And if this is not the case
+					// then still it is not a problem to have 2 locks on
+					// the same session this will not cause a deadlock.
+					// So only if the request targets are different and the
+					// getLock() doesn't return 2 times the same object a
+					// deadlock could maybe occur. But we use the session
+					// as the lock at all times maybe use a variable inside
+					// RequestCycle to know that a lock is still in place?
+					respond();
+					break;
+				}
+				default : {
+					// nothing
+				}
+			}
+		}
+		catch (AbortException e)
+		{
+			throw e;
+		}
+		catch (RuntimeException e)
+		{
+			// set step manually to handle exception
+			currentStep = HANDLE_EXCEPTION;
+
+			// probably our last chance the exception can be logged.
+			// Note that a PageExpiredException should not be logged, because
+			// it's not an internal error
+			if (!(e instanceof PageExpiredException))
+			{
+				logRuntimeException(e);
+			}
+
+			// try to play nicely and let the request processor handle the
+			// exception response. If that doesn't work, any runtime exception
+			// will automatically be bubbled up
+			if (processor != null)
+			{
+				processor.respond(e, this);
+			}
+		}
+	}
+

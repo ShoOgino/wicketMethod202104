@@ -1,0 +1,27 @@
+	/**
+	 * Create a request cycle factory which is used by default by WebSession.
+	 * You may provide your own default factory by subclassing WebApplication
+	 * and overriding this method or your may subclass WebSession to create a
+	 * session specific request cycle factory.
+	 * 
+	 * @see WebSession#getRequestCycleFactory()
+	 * @see IRequestCycleFactory
+	 * 
+	 * @return Request cycle factory
+	 */
+	protected IRequestCycleFactory getRequestCycleFactory()
+	{
+		return new IRequestCycleFactory()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public RequestCycle newRequestCycle(final Application application,
+					final Request request, final Response response)
+			{
+				// Respond to request
+				return new WebRequestCycle((WebApplication)application, (WebRequest)request,
+						(WebResponse)response);
+			}
+		};
+	}
+

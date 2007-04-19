@@ -1,0 +1,50 @@
+	/**
+	 * Save the state of the <tt>ConcurrentHashMap</tt> instance to a stream
+	 * (i.e., serialize it).
+	 * @param s 
+	 * @throws IOException 
+	 * 
+	 * @serialData An estimate of the table size, followed by the key (Object)
+	 *             and value (Object) for each key-value mapping, followed by a
+	 *             null pair. The key-value mappings are emitted in no
+	 *             particular order.
+	 */
+	private void writeObject(java.io.ObjectOutputStream s) throws IOException
+	{
+		// Write out the loadfactor, and any hidden stuff
+		s.defaultWriteObject();
+
+		// Write out capacity estimate. It is OK if this
+		// changes during the write, since it is only used by
+		// readObject to set initial capacity, to avoid needless resizings.
+
+		int cap;
+		synchronized (segments[0])
+		{
+			cap = table.length;
+		}
+		s.writeInt(cap);
+
+		// Write out keys and values (alternating)
+		for (int k = 0; k < segments.length; ++k)
+		{
+			Segment seg = segments[k];
+			Entry[] tab;
+			synchronized (seg)
+			{
+				tab = table;
+			}
+			for (int i = k; i < tab.length; i += segments.length)
+			{
+				for (Entry e = tab[i]; e != null; e = e.next)
+				{
+					s.writeObject(e.key);
+					s.writeObject(e.value);
+				}
+			}
+		}
+
+		s.writeObject(null);
+		s.writeObject(null);
+	}
+

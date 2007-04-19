@@ -1,0 +1,22 @@
+	/**
+	 * Reconstitute the list from a stream (i.e., deserialize it).
+	 * @param s 
+	 * @throws java.io.IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	private synchronized void readObject(java.io.ObjectInputStream s) throws java.io.IOException,
+			ClassNotFoundException
+	{
+		// Read in size, and any hidden stuff
+		s.defaultReadObject();
+
+		// Read in array length and allocate array
+		int arrayLength = s.readInt();
+		Object[] elementData = new Object[arrayLength];
+
+		// Read in all elements in the proper order.
+		for (int i = 0; i < elementData.length; i++)
+			elementData[i] = s.readObject();
+		array_ = elementData;
+	}
+

@@ -1,0 +1,38 @@
+	/**
+	 * Marks the path <code>path</code> expanded state to
+	 * <code>isExpanded</code>.
+	 * 
+	 * @param path
+	 *			  the path
+	 * @param isExpanded
+	 *			  whether the path is expanded
+	 */
+	public void setExpandedState(TreePath path, boolean isExpanded)
+	{
+		if (isExpanded)
+		{
+			ensurePathIsExpanded(path, true);
+		}
+		else if (path != null)
+		{
+			TreePath parentPath = path.getParentPath();
+
+			// YECK! Make the parent expanded.
+			if (parentPath != null)
+			{
+				TreeStateNode parentNode = getNodeForPath(parentPath, false, true);
+				if (parentNode != null)
+				{
+					parentNode.makeVisible();
+				}
+			}
+			// And collapse the child.
+			TreeStateNode childNode = getNodeForPath(path, true, false);
+
+			if (childNode != null)
+			{
+				childNode.collapse(true);
+			}
+		}
+	}
+

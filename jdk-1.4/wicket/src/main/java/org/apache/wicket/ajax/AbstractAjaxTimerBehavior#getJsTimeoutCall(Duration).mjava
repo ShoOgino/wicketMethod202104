@@ -1,0 +1,12 @@
+	/**
+	 * @param updateInterval
+	 *            Duration between AJAX callbacks
+	 * @return JS script
+	 */
+	protected final String getJsTimeoutCall(final Duration updateInterval)
+	{
+		// this might look strange, but it is necessary for IE not to leak :(
+		return "setTimeout(\"" + getCallbackScript(false, true) + "\", "
+				+ updateInterval.getMilliseconds() + ");";
+	}
+

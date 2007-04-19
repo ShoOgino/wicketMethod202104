@@ -1,0 +1,48 @@
+	/**
+	 * Writes a simple tag out to the response stream. Any components that might
+	 * be referenced by the tag are ignored. Also undertakes any tag attribute
+	 * modifications if they have been added to the component.
+	 * 
+	 * @param tag
+	 *            The tag to write
+	 */
+	protected final void renderComponentTag(ComponentTag tag)
+	{
+		final boolean stripWicketTags = Application.get().getMarkupSettings().getStripWicketTags();
+		if (!(tag instanceof WicketTag) || !stripWicketTags)
+		{
+			// Apply behavior modifiers
+			if ((behaviors != null) && !behaviors.isEmpty() && !tag.isClose()
+					&& (isIgnoreAttributeModifier() == false))
+			{
+				tag = tag.mutable();
+
+				for (Iterator i = behaviors.iterator(); i.hasNext();)
+				{
+					IBehavior behavior = (IBehavior)i.next();
+
+					// Components may reject some behavior components
+					if (isBehaviorAccepted(behavior))
+					{
+						behavior.onComponentTag(this, tag);
+					}
+				}
+			}
+
+			// apply behaviors that are attached to the component tag.
+			if (tag.hasBehaviors())
+			{
+				Iterator behaviors = tag.getBehaviors();
+				while (behaviors.hasNext())
+				{
+					final IBehavior behavior = (IBehavior)behaviors.next();
+					behavior.onComponentTag(this, tag);
+				}
+			}
+
+			// Write the tag
+			tag.writeOutput(getResponse(), stripWicketTags, this.findMarkupStream()
+					.getWicketNamespace());
+		}
+	}
+

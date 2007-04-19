@@ -1,0 +1,27 @@
+	/**
+	 * Test direct access (with wicket parameters) to a mounted page that should
+	 * NOT be allowed due to the {@link ISecuritySettings#getEnforceMounts()}
+	 * setting being set to true.
+	 */
+	public void testDirectAccessToMountedPageNotAllowed()
+	{
+		tester.getApplication().getSecuritySettings().setEnforceMounts(true);
+
+		tester.setupRequestAndResponse();
+		tester.getServletRequest().setURL(
+				"?wicket:bookmarkablePage=:" + TestPage.class.getName() + "");
+		try
+		{
+			tester.processRequestCycle();
+			fail("This request should not have been allowed");
+		}
+		catch (AbortWithWebErrorCodeException e)
+		{
+			assertEquals(e.getErrorCode(), HttpServletResponse.SC_FORBIDDEN);
+		}
+		finally
+		{
+			tester.getApplication().getSecuritySettings().setEnforceMounts(false);
+		}
+	}
+

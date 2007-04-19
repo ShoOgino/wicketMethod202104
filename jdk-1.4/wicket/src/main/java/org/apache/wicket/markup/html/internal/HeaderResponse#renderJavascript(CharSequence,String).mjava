@@ -1,0 +1,14 @@
+	/**
+	 * @see org.apache.wicket.markup.html.IHeaderResponse#renderJavascript(java.lang.CharSequence,
+	 *      java.lang.String)
+	 */
+	public void renderJavascript(CharSequence javascript, String id)
+	{
+		List token = Arrays.asList(new Object[] { javascript.toString(), id });
+		if (wasRendered(token) == false)
+		{
+			JavascriptUtils.writeJavascript(getResponse(), javascript, id);
+			markRendered(token);
+		}
+	}
+

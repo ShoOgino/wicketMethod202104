@@ -1,0 +1,30 @@
+	/**
+	 * Finds the first container parent of this component of the given class.
+	 * 
+	 * @param c
+	 *            MarkupContainer class to search for
+	 * @return First container parent that is an instance of the given class, or
+	 *         null if none can be found
+	 */
+	public final MarkupContainer findParent(final Class c)
+	{
+		// Start with immediate parent
+		MarkupContainer current = parent;
+
+		// Walk up containment hierarchy
+		while (current != null)
+		{
+			// Is current an instance of this class?
+			if (c.isInstance(current))
+			{
+				return current;
+			}
+
+			// Check parent
+			current = current.getParent();
+		}
+
+		// Failed to find component
+		return null;
+	}
+

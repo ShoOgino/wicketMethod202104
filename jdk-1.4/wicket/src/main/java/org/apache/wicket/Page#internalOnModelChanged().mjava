@@ -1,0 +1,22 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL OR
+	 * OVERRIDE.
+	 * 
+	 * @see org.apache.wicket.Component#internalOnModelChanged()
+	 */
+	protected final void internalOnModelChanged()
+	{
+		visitChildren(new Component.IVisitor()
+		{
+			public Object component(final Component component)
+			{
+				// If form component is using form model
+				if (component.sameInnermostModel(Page.this))
+				{
+					component.modelChanged();
+				}
+				return IVisitor.CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+

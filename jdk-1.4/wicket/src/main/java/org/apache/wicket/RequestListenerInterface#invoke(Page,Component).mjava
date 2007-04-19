@@ -1,0 +1,50 @@
+	/**
+	 * Invokes a given interface on a component.
+	 * 
+	 * @param page
+	 *            The Page that contains the component
+	 * @param component
+	 *            The component
+	 */
+	public final void invoke(final Page page, final Component component)
+	{
+		page.beforeCallComponent(component, this);
+
+		if (!component.isEnabled() || !component.isVisibleInHierarchy())
+		{
+			// just return so that we have a silent fail and just re-render the
+			// page
+			log.info("component not enabled or visible; ignoring call. Component: " + component);
+			return;
+		}
+
+		try
+		{
+			// Invoke the interface method on the component
+			method.invoke(component, new Object[] {});
+		}
+		catch (InvocationTargetException e)
+		{
+			// Honor redirect exception contract defined in IPageFactory
+			if (e.getTargetException() instanceof AbstractRestartResponseException
+					|| e.getTargetException() instanceof AuthorizationException
+					|| e.getTargetException() instanceof WicketRuntimeException)
+			{
+				throw (RuntimeException)e.getTargetException();
+			}
+			throw new WicketRuntimeException("Method " + method.getName() + " of "
+					+ method.getDeclaringClass() + " targeted at component " + component
+					+ " threw an exception", e);
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException("Method " + method.getName() + " of "
+					+ method.getDeclaringClass() + " targeted at component " + component
+					+ " threw an exception", e);
+		}
+		finally
+		{
+			page.afterCallComponent(component, this);
+		}
+	}
+

@@ -1,0 +1,43 @@
+	/**
+	 * Persist/save the data using Cookies.
+	 * 
+	 * @param cookie
+	 *            The Cookie to be persisted.
+	 * @return The cookie provided
+	 */
+	private Cookie save(final Cookie cookie)
+	{
+		if (cookie == null)
+		{
+			return null;
+		}
+        else
+        {
+            final String comment = getSettings().getComment();
+    		if (comment != null)
+    		{
+    			cookie.setComment(comment);
+    		}
+    
+            final String domain = getSettings().getDomain();
+    		if (domain != null)
+    		{
+    			cookie.setDomain(domain);
+    		}
+    
+			cookie.setPath(getWebRequest().getContextPath());
+
+    		cookie.setVersion(getSettings().getVersion());
+    		cookie.setSecure(getSettings().getSecure());
+
+    		getWebResponse().addCookie(cookie);
+    
+    		if (log.isDebugEnabled())
+    		{
+    			log.debug("saved: " + cookieToDebugString(cookie));
+    		}
+    
+    		return cookie;
+        }
+	}
+

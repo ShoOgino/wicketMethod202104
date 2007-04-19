@@ -1,0 +1,19 @@
+	/**
+	 * Removes everything in the given folder and then the folder itself.
+	 * 
+	 * @param folder
+	 *            The folder
+	 * @return True if the folder was successfully removed
+	 */
+	private boolean remove(final Folder folder)
+	{
+		final Folder[] folders = getFolders();
+		boolean success = true;
+		for (int i = 0; i < folders.length; i++)
+		{
+			success = folders[i].remove() && success;
+		}
+		success = removeFiles() && success;
+		return folder.delete() && success;
+	}
+

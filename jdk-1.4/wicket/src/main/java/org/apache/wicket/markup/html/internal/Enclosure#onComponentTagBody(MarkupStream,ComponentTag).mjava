@@ -1,0 +1,33 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.MarkupContainer#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
+	 *      org.apache.wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	{
+		if (childComponent == null)
+		{
+			childComponent = getChildComponent(childId);
+		}
+
+		if (childComponent == this)
+		{
+			throw new WicketRuntimeException(
+					"Programming error: childComponent == enclose component; endless loop");
+		}
+		else if (childComponent != null)
+		{
+			// Delegate to child component
+			setVisible(childComponent.isVisible());
+		}
+
+		if (isVisible() == true)
+		{
+			super.onComponentTagBody(markupStream, openTag);
+		}
+		else
+		{
+			markupStream.skipUntil(openTag.getName());
+		}
+	}
+

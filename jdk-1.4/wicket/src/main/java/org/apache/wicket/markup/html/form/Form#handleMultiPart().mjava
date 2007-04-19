@@ -1,0 +1,72 @@
+	/**
+	 * Handles multi-part processing of the submitted data.
+	 * 
+	 * WARNING
+	 * 
+	 * If this method is overridden it can break {@link FileUploadField}s on
+	 * this form
+	 * 
+	 * @return false if form is multipart and upload failed
+	 */
+	protected boolean handleMultiPart()
+	{
+		if (multiPart)
+		{
+			// Change the request to a multipart web request so parameters are
+			// parsed out correctly
+			try
+			{
+				final WebRequest multipartWebRequest = ((WebRequest)getRequest())
+						.newMultipartWebRequest(this.maxSize);
+				getRequestCycle().setRequest(multipartWebRequest);
+			}
+			catch (WicketRuntimeException wre)
+			{
+				if (wre.getCause() == null || !(wre.getCause() instanceof FileUploadException))
+				{
+					throw wre;
+				}
+
+				FileUploadException e = (FileUploadException)wre.getCause();
+				// Create model with exception and maximum size values
+				final Map model = new HashMap();
+				model.put("exception", e);
+				model.put("maxSize", maxSize);
+
+				if (e instanceof SizeLimitExceededException)
+				{
+					// Resource key should be <form-id>.uploadTooLarge to
+					// override default message
+					final String defaultValue = "Upload must be less than " + maxSize;
+					String msg = getString(getId() + "." + UPLOAD_TOO_LARGE_RESOURCE_KEY, Model
+							.valueOf(model), defaultValue);
+					error(msg);
+
+					if (log.isDebugEnabled())
+					{
+						log.error(msg, e);
+					}
+					else
+					{
+						log.error(msg);
+					}
+				}
+				else
+				{
+					// Resource key should be <form-id>.uploadFailed to override
+					// default message
+					final String defaultValue = "Upload failed: " + e.getLocalizedMessage();
+					String msg = getString(getId() + "." + UPLOAD_FAILED_RESOURCE_KEY, Model
+							.valueOf(model), defaultValue);
+					error(msg);
+
+					log.error(msg, e);
+				}
+
+				// don't process the form if there is a FileUploadException
+				return false;
+			}
+		}
+		return true;
+	}
+

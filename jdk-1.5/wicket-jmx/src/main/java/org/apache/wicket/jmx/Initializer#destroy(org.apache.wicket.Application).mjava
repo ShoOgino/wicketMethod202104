@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.IDestroyer#destroy(org.apache.wicket.Application)
+	 */
+	public void destroy(org.apache.wicket.Application application)
+	{
+		for (ObjectName objectName : registered)
+		{
+			try
+			{
+				mbeanServer.unregisterMBean(objectName);
+			}
+			catch (InstanceNotFoundException e)
+			{
+				log.error(e.getMessage(), e);
+			}
+			catch (MBeanRegistrationException e)
+			{
+				log.error(e.getMessage(), e);
+			}
+		}
+	}
+

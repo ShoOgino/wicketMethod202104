@@ -1,0 +1,19 @@
+	/**
+	 * @see java.io.ObjectOutputStream#putFields()
+	 */
+	public PutField putFields() throws IOException
+	{
+		if (curPut == null)
+		{
+			try
+			{
+				curPut = new PutFieldImpl();
+			}
+			catch (Exception e)
+			{
+				throw new WicketSerializeableException("Error reading put fields", e);
+			}
+		}
+		return curPut;
+	}
+

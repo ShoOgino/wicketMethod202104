@@ -1,0 +1,22 @@
+		public Page get(int id, int versionNumber)
+		{
+			String sessionId = getSession().getId();
+			if (lastPage != null && lastPage.getNumericId() == id)
+			{
+				Page page = lastPage.getVersion(versionNumber);
+				if (page != null)
+				{
+					// ask the page store if it is ready saving the page.
+					getStore().pageAccessed(sessionId, page);
+					return page;
+				}
+			}
+			if (sessionId != null)
+			{
+				// this is really a page request for a default page. (so without
+				// an ajax version)
+				return getStore().getPage(sessionId, getName(), id, versionNumber, 0);
+			}
+			return null;
+		}
+

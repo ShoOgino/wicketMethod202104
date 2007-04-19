@@ -1,0 +1,35 @@
+	/**
+	 * @see java.util.Map#put(java.lang.Object, java.lang.Object)
+	 */
+	public Object put(final Object key, final Object value)
+	{
+		// Search for key
+		final int index = findKey(key);
+
+		if (index != -1)
+		{
+			// Replace existing value
+			final Object oldValue = values[index];
+			this.values[index] = value;
+			return oldValue;
+		}
+
+		// Is there room for a new entry?
+		if (size < keys.length)
+		{
+			// Store at first null index and continue searching after null index
+			// next time
+			final int nullIndex = nextNullKey(lastSearchIndex);
+			lastSearchIndex = nextIndex(nullIndex);
+			keys[nullIndex] = key;
+			values[nullIndex] = value;
+			size++;
+
+			return null;
+		}
+		else
+		{
+			throw new IllegalStateException("Map full");
+		}
+	}
+

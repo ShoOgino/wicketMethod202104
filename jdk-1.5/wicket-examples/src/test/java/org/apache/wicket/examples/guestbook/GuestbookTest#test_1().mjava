@@ -1,0 +1,37 @@
+	/**
+	 * Test page.
+	 * 
+	 * @throws Exception
+	 */
+	public void test_1() throws Exception
+	{
+		beginAt("/guestbook");
+
+		assertTitleEquals("Wicket Examples - guestbook");
+		// this.assertXpathNodeNotPresent("//*[@wicket:id='comments']");
+		this.assertElementNotPresent("comments");
+
+		assertFormPresent("commentForm");
+		this.assertFormElementPresent("text");
+		this.setFormElement("text", "test-1");
+		this.submit();
+
+		assertTitleEquals("Wicket Examples - guestbook");
+		assertFormPresent("commentForm");
+		this.assertFormElementPresent("text");
+		this.assertElementPresent("comments");
+		// assertTextInElement() seems to be buggy
+		// this.assertTextInElement("text", "test-1");
+		this.assertTextPresent("test-1");
+		this.setFormElement("text", "test-2");
+		this.submit();
+
+		assertTitleEquals("Wicket Examples - guestbook");
+		this.assertElementPresent("comments");
+		// assertTextInElement() seems to be buggy
+		// this.assertTextInElement("text", "test-1");
+		this.assertTextPresent("test-1");
+		// this.assertTextInElement("text", "test-2");
+		this.assertTextPresent("test-2");
+	}
+

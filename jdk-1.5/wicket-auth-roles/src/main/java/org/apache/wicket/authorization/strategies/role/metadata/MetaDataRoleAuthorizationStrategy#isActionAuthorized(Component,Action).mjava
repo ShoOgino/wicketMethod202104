@@ -1,0 +1,26 @@
+	/**
+	 * Uses component level meta data to match roles for component action
+	 * execution.
+	 * 
+	 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isActionAuthorized(org.apache.wicket.Component,
+	 *      org.apache.wicket.authorization.Action)
+	 */
+	public boolean isActionAuthorized(final Component component, final Action action)
+	{
+		if (component == null)
+		{
+			throw new IllegalArgumentException("argument component has to be not null");
+		}
+		if (action == null)
+		{
+			throw new IllegalArgumentException("argument action has to be not null");
+		}
+
+		final Roles roles = rolesAuthorizedToPerformAction(component, action);
+		if (roles != null)
+		{
+			return hasAny(roles);
+		}
+		return true;
+	}
+

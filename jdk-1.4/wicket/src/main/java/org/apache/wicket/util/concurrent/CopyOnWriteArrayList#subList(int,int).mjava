@@ -1,0 +1,31 @@
+	/**
+	 * Returns a view of the portion of this List between fromIndex, inclusive,
+	 * and toIndex, exclusive. The returned List is backed by this List, so
+	 * changes in the returned List are reflected in this List, and vice-versa.
+	 * While mutative operations are supported, they are probably not very
+	 * useful for CopyOnWriteArrays.
+	 * </p>
+	 * The semantics of the List returned by this method become undefined if the
+	 * backing list (i.e., this List) is <i>structurally modified</i> in any
+	 * way other than via the returned List. (Structural modifications are those
+	 * that change the size of the List, or otherwise perturb it in such a
+	 * fashion that iterations in progress may yield incorrect results.)
+	 * 
+	 * @param fromIndex
+	 *            low endpoint (inclusive) of the subList.
+	 * @param toKey
+	 *            high endpoint (exclusive) of the subList.
+	 * @return a view of the specified range within this List.
+	 * @exception IndexOutOfBoundsException
+	 *                Illegal endpoint index value (fromIndex &lt; 0 || toIndex
+	 *                &gt; size || fromIndex &gt; toIndex).
+	 */
+	public synchronized List subList(int fromIndex, int toIndex)
+	{
+		// synchronized since sublist ctor depends on it.
+		int len = array_.length;
+		if (fromIndex < 0 || toIndex > len || fromIndex > toIndex)
+			throw new IndexOutOfBoundsException();
+		return new COWSubList(this, fromIndex, toIndex);
+	}
+

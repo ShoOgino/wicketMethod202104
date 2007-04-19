@@ -1,0 +1,20 @@
+	/**
+	 * Initialize a new WebRequestCycle and all its dependent objects
+	 * 
+	 * @param pageClass
+	 */
+	public void processRequestCycle(final Class pageClass)
+	{
+		setupRequestAndResponse();
+		final WebRequestCycle cycle = createRequestCycle();
+		try
+		{
+			cycle.request(new BookmarkablePageRequestTarget(pageClass));
+		}
+		finally
+		{
+			cycle.getResponse().close();
+		}
+		postProcessRequestCycle(cycle);
+	}
+

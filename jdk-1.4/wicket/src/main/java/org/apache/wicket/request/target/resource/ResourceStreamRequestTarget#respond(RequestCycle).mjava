@@ -1,0 +1,22 @@
+	/**
+	 * Responds by sending the contents of the resource stream.
+	 * 
+	 * @see org.apache.wicket.IRequestTarget#respond(org.apache.wicket.RequestCycle)
+	 */
+	public void respond(RequestCycle requestCycle)
+	{
+		// Get servlet response to use when responding with resource
+		final Response response = requestCycle.getResponse();
+
+		configure(requestCycle, response, resourceStream);
+
+		try
+		{
+			response.write(resourceStream.getInputStream());
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

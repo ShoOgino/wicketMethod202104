@@ -1,0 +1,56 @@
+		/**
+		 * Creates a new auto component that references a package resource.
+		 * 
+		 * @param container
+		 *            the parent container
+		 * @param autoId
+		 *            the automatically generated id for the auto component
+		 * @param pathInfo
+		 *            the path info object that contains information about the
+		 *            link reference
+		 * @param attribute
+		 *            the attribute to replace the value of
+		 * @return a new auto component or null if the path was absolute
+		 */
+		protected final Component newPackageResourceReferenceAutoComponent(
+				final MarkupContainer container, final String autoId, final PathInfo pathInfo,
+				final String attribute)
+		{
+			if (!pathInfo.absolute)
+			{
+				// Href is relative. Create a resource reference pointing at
+				// this file
+
+				// <wicket:head> components are handled differently. We can
+				// not use the container, because it is the container the
+				// header has been added to (e.g. the Page). What we need
+				// however, is the component (e.g. a Panel) which
+				// contributed it.
+				Class clazz = container.getMarkupStream().getContainerClass();
+
+				// However if the markup stream is a merged markup stream
+				// (inheritance),
+				// than we need the class of the markup file which contained the
+				// tag.
+				if (container.getMarkupStream().getTag().getMarkupClass() != null)
+				{
+					clazz = container.getMarkupStream().getTag().getMarkupClass();
+				}
+
+				// Create the component implementing the link
+				ResourceReferenceAutolink autoLink = new ResourceReferenceAutolink(autoId, clazz,
+						pathInfo.reference, attribute);
+				if (autoLink.resourceReference != null)
+				{
+					// if the resource reference is null, it means that it the
+					// reference was not found as a package resource
+					return autoLink;
+				}
+			}
+			// else we can't have absolute resource references, at least not at
+			// this time
+
+			// fall back on default processing
+			return null;
+		}
+

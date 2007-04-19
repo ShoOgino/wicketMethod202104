@@ -1,0 +1,13 @@
+		public void add(int index, Object element)
+		{
+			synchronized (l)
+			{
+				checkForComodification();
+				if (index < 0 || index > size)
+					throw new IndexOutOfBoundsException();
+				l.add(index + offset, element);
+				expectedArray = l.array_;
+				size++;
+			}
+		}
+

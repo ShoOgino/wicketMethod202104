@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.version.IPageVersionManager#beginVersion(boolean)
+	 */
+	public void beginVersion(boolean mergeVersion)
+	{
+		// Create new change list
+		changeList = new ChangeList();
+
+		// if we merge then the version number shouldn't be upgraded.
+		if(!mergeVersion)
+		{
+			// We are working on the next version now
+			currentVersionNumber++;
+			currentAjaxVersionNumber = 0;
+		}
+		else
+		{
+			currentAjaxVersionNumber++;
+		}
+	}
+

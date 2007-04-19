@@ -1,0 +1,32 @@
+	/**
+	 * Performs checks on the valueOf method for the given inputs, checking
+	 * whether the results have the correct number of elements and conform to
+	 * the expected string.
+	 * 
+	 * @param inputs
+	 *            the inputs to check the valueOf method with
+	 * @param expectedNumber
+	 *            the number of elements expected in the resulting StringList
+	 * @param expectedString
+	 *            the expected toString result of the resulting StringList
+	 */
+	private void checkValueOf(String[] inputs, int expectedNumber, String expectedString)
+	{
+		List list = new ArrayList();
+		Object[] objects = new Object[inputs.length];
+		for (int i = 0; i < inputs.length; i++)
+		{
+			String input = inputs[i];
+			list.add(input);
+			objects[i] = input;
+		}
+
+		checkStringList(expectedNumber, expectedString, StringList.valueOf(list));
+		checkStringList(expectedNumber, expectedString, StringList.valueOf(objects));
+		checkStringList(expectedNumber, expectedString, StringList.valueOf(inputs));
+
+		checkElements(StringList.valueOf(list), inputs);
+		checkElements(StringList.valueOf(objects), inputs);
+		checkElements(StringList.valueOf(inputs), inputs);
+	}
+

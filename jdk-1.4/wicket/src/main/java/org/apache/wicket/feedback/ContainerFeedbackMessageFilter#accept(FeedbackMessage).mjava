@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.feedback.IFeedbackMessageFilter#accept(org.apache.wicket.feedback.FeedbackMessage)
+	 */
+	public boolean accept(FeedbackMessage message)
+	{
+		if (message.getReporter() == null)
+		{
+			return false;
+		}
+		else
+		{
+			return container.contains(message.getReporter(), true)
+					|| container == message.getReporter();
+		}
+	}
+

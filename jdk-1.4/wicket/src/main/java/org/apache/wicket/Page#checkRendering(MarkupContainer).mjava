@@ -1,0 +1,77 @@
+	/**
+	 * Throw an exception if not all components rendered.
+	 * 
+	 * @param renderedContainer
+	 *            The page itself if it was a full page render or the container
+	 *            that was rendered standalone
+	 */
+	private final void checkRendering(final MarkupContainer renderedContainer)
+	{
+		// If the application wants component uses checked and
+		// the response is not a redirect
+		final IDebugSettings debugSettings = Application.get().getDebugSettings();
+		if (debugSettings.getComponentUseCheck() && !getResponse().isRedirect())
+		{
+			final Count unrenderedComponents = new Count();
+			final List unrenderedAutoComponents = new ArrayList();
+			final StringBuffer buffer = new StringBuffer();
+			renderedContainer.visitChildren(new IVisitor()
+			{
+				public Object component(final Component component)
+				{
+					// If component never rendered
+					if (renderedComponents == null || !renderedComponents.contains(component))
+					{
+						// If auto component ...
+						if (component.isAuto())
+						{
+							// Add to list of unrendered auto components to
+							// delete below
+							unrenderedAutoComponents.add(component);
+						}
+						else if (component.isVisibleInHierarchy())
+						{
+							// Increase number of unrendered components
+							unrenderedComponents.increment();
+
+							// Add to explanatory string to buffer
+							buffer.append(Integer.toString(unrenderedComponents.getCount()) + ". "
+									+ component + "\n");
+						}
+						else
+						{
+							// if the component is not visible in hierarchy we
+							// should not visit its children since they are also
+							// not visible
+							return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+						}
+					}
+					return CONTINUE_TRAVERSAL;
+				}
+			});
+
+			// Remove any unrendered auto components since versioning couldn't
+			// do it. We can't remove the component in the above visitChildren
+			// callback because we're traversing the list at that time.
+			for (int i = 0; i < unrenderedAutoComponents.size(); i++)
+			{
+				((Component)unrenderedAutoComponents.get(i)).remove();
+			}
+
+			// Throw exception if any errors were found
+			if (unrenderedComponents.getCount() > 0)
+			{
+				// Get rid of set
+				renderedComponents = null;
+
+				// Throw exception
+				throw new WicketRuntimeException(
+						"The component(s) below failed to render. A common problem is that you have added a component in code but forgot to reference it in the markup (thus the component will never be rendered).\n\n"
+								+ buffer.toString());
+			}
+		}
+
+		// Get rid of set
+		renderedComponents = null;
+	}
+

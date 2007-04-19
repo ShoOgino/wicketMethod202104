@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.util.convert.IConverter#convertToObject(java.lang.Object,Locale)
+	 */
+	public Object convertToObject(final String value, Locale locale)
+	{
+		final Number number = parse(value, -Double.MAX_VALUE, Double.MAX_VALUE, locale);
+		// Double.MIN is the smallest nonzero positive number, not the largest
+		// negative number
+
+		if (number == null)
+		{
+			return null;
+		}
+
+		return new Double(number.doubleValue());
+	}
+

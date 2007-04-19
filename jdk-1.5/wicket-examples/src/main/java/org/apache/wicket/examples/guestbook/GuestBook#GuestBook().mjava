@@ -1,0 +1,20 @@
+	/**
+	 * Constructor that is invoked when page is invoked without a session.
+	 */
+	public GuestBook()
+	{
+		// Add comment form
+		add(new CommentForm("commentForm"));
+
+		// Add commentListView of existing comments
+		add(commentListView = new ListView("comments", commentList)
+		{
+			public void populateItem(final ListItem listItem)
+			{
+				final Comment comment = (Comment)listItem.getModelObject();
+				listItem.add(new Label("date", new Model(comment.getDate())));
+				listItem.add(new MultiLineLabel("text", comment.getText()));
+			}
+		}).setVersioned(false);
+	}
+

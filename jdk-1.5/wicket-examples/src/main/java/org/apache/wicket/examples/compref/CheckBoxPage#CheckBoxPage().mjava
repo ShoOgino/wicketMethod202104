@@ -1,0 +1,34 @@
+	/**
+	 * Constructor
+	 */
+	public CheckBoxPage()
+	{
+		final Input input = new Input();
+		setModel(new CompoundPropertyModel(input));
+
+		// Add a FeedbackPanel for displaying our messages
+		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		add(feedbackPanel);
+
+		// Add a form with an onSumbit implementation that sets a message
+		Form form = new Form("form")
+		{
+			protected void onSubmit()
+			{
+				if (input.bool.booleanValue())
+				{
+					info("Ok, ok... we'll check it");
+				}
+				else
+				{
+					info("So you don't want it checked huh?");
+				}
+			}
+		};
+		add(form);
+
+		// add a check box component that uses the model object's 'bool'
+		// property.
+		form.add(new CheckBox("bool"));
+	}
+

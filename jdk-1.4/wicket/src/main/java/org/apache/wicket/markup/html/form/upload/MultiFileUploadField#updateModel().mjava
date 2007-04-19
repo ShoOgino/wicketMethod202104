@@ -1,0 +1,41 @@
+	/**
+	 * @see org.apache.wicket.markup.html.form.FormComponent#updateModel()
+	 */
+	public void updateModel()
+	{
+		final Object object = getModelObject();
+
+		// figure out if there is an existing model object collection for us to
+		// reuse
+		if (object == null)
+		{
+			// no existing collection, push the one we created
+			setModelObject(getConvertedInput());
+		}
+		else
+		{
+			if (!(object instanceof Collection))
+			{
+				// fail early if there is something interesting in the model
+				throw new IllegalStateException("Model object of " + getClass().getName()
+						+ " component must be of type `" + Collection.class.getName() + "<"
+						+ FileUpload.class.getName() + ">` but is of type `"
+						+ object.getClass().getName() + "`");
+			}
+			else
+			{
+				// refresh the existing collection
+				Collection collection = (Collection)object;
+				collection.clear();
+				if (getConvertedInput() != null)
+				{
+					collection.addAll((Collection)getConvertedInput());
+				}
+
+				// push the collection in case the model is listening to
+				// setobject calls
+				setModelObject(collection);
+			}
+		}
+	}
+

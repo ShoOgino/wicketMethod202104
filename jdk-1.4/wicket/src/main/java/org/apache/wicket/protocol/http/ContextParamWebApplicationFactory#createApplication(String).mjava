@@ -1,0 +1,50 @@
+	/**
+	 * Instantiates the application instance.
+	 * 
+	 * @param applicationClassName
+	 *            the classname of the application to create
+	 * @return the web application
+	 */
+	private WebApplication createApplication(final String applicationClassName)
+	{
+		try
+		{
+			ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			if (loader == null)
+			{
+				loader = getClass().getClassLoader();
+			}
+			final Class applicationClass = loader.loadClass(applicationClassName);
+			if (WebApplication.class.isAssignableFrom(applicationClass))
+			{
+				// Construct WebApplication subclass
+				return (WebApplication)applicationClass.newInstance();
+			}
+			else
+			{
+				throw new WicketRuntimeException("Application class " + applicationClassName
+						+ " must be a subclass of WebApplication");
+			}
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new WicketRuntimeException("Unable to create application of class "
+					+ applicationClassName, e);
+		}
+		catch (InstantiationException e)
+		{
+			throw new WicketRuntimeException("Unable to create application of class "
+					+ applicationClassName, e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new WicketRuntimeException("Unable to create application of class "
+					+ applicationClassName, e);
+		}
+		catch (SecurityException e)
+		{
+			throw new WicketRuntimeException("Unable to create application of class "
+					+ applicationClassName, e);
+		}
+	}
+

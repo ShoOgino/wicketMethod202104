@@ -1,0 +1,16 @@
+	/**
+	 * @param visitor
+	 *            The visitor to call at each Page in this PageMap.
+	 */
+	public final void visitPageMaps(final IPageMapVisitor visitor)
+	{
+		for (final Iterator iterator = getAttributeNames().iterator(); iterator.hasNext();)
+		{
+			final String attribute = (String)iterator.next();
+			if (attribute.startsWith(pageMapAttributePrefix))
+			{
+				visitor.pageMap((IPageMap)getAttribute(attribute));
+			}
+		}
+	}
+

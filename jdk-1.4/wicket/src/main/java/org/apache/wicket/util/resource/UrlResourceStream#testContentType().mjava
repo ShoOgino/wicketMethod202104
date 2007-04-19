@@ -1,0 +1,27 @@
+	/**
+	 * Method to test the content type on null or unknown. if this is the case
+	 * the content type is tried to be resolved throw the servlet context
+	 */
+	private void testContentType()
+	{
+		if (contentType == null || contentType.indexOf("unknown") != -1)
+		{
+			Application application = Application.get();
+			if (application instanceof WebApplication)
+			{
+				// TODO Post 1.2: General: For non webapplication another method
+				// should be implemented (getMimeType on application?)
+				contentType = ((WebApplication)application).getServletContext()
+						.getMimeType(url.getFile());
+				if (contentType == null)
+				{
+					contentType = URLConnection.getFileNameMap().getContentTypeFor(url.getFile());
+				}
+			}
+			else
+			{
+				contentType = URLConnection.getFileNameMap().getContentTypeFor(url.getFile());
+			}
+		}
+	}
+

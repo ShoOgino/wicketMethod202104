@@ -1,0 +1,29 @@
+    /**
+     * Tests a given byte array to see if it contains
+     * only valid characters within the Base64 alphabet.
+     *
+     * @param arrayOctect byte array to test
+     * @return <code>true</code> if all bytes are valid characters in the Base64
+     *         alphabet or if the byte array is empty; false, otherwise
+     */
+    public static boolean isArrayByteBase64(byte[] arrayOctect)
+    {
+        arrayOctect = discardWhitespace(arrayOctect);
+
+        int length = arrayOctect.length;
+        if (length == 0)
+        {
+            // shouldn't a 0 length array be valid base64 data?
+            // return false;
+            return true;
+        }
+        for (int i = 0; i < length; i++)
+        {
+            if (!isBase64(arrayOctect[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+

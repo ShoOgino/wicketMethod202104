@@ -1,0 +1,18 @@
+	/**
+	 * Retrieves contact dao bean. This bean should not be serialized so BE
+	 * CAREFUL when using it.
+	 * 
+	 * @return contact dao bean
+	 */
+	public ContactDao getContactDao() {
+		if (contactDao == null) {
+			synchronized (this) {
+				if (contactDao == null) {
+					contactDao = (ContactDao) internalGetApplicationContext()
+							.getBean("contactDao", ContactDao.class);
+				}
+			}
+		}
+		return contactDao;
+	}
+

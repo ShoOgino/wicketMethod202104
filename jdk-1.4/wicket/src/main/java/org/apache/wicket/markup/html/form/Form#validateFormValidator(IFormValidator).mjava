@@ -1,0 +1,35 @@
+	/**
+	 * Validates form with the given form validator
+	 * 
+	 * @param validator
+	 */
+	protected final void validateFormValidator(final IFormValidator validator)
+	{
+		if (validator == null)
+		{
+			throw new IllegalArgumentException("Argument [[validator]] cannot be null");
+		}
+
+		final FormComponent[] dependents = validator.getDependentFormComponents();
+
+		boolean validate = true;
+
+		if (dependents != null)
+		{
+			for (int j = 0; j < dependents.length; j++)
+			{
+				final FormComponent dependent = dependents[j];
+				if (!dependent.isValid())
+				{
+					validate = false;
+					break;
+				}
+			}
+		}
+
+		if (validate)
+		{
+			validator.validate(this);
+		}
+	}
+

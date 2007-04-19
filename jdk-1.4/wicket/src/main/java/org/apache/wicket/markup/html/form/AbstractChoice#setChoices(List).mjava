@@ -1,0 +1,20 @@
+	/**
+	 * Sets the list of choices.
+	 * 
+	 * @param choices
+	 *            the list of choices
+	 * @return this for chaining
+	 */
+	public final AbstractChoice setChoices(List choices)
+	{
+		if ((this.choices != null))
+		{
+			if (isVersioned())
+			{
+				addStateChange(new ChoicesListChange());
+			}
+		}
+		this.choices = new Model((Serializable)choices);
+		return this;
+	}
+

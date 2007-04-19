@@ -1,0 +1,18 @@
+	/**
+	 * Mark each form component on this form invalid.
+	 */
+	protected final void markFormComponentsInvalid()
+	{
+		// call invalidate methods of all nested form components
+		visitFormComponents(new FormComponent.AbstractVisitor()
+		{
+			public void onFormComponent(final FormComponent formComponent)
+			{
+				if (formComponent.isVisibleInHierarchy())
+				{
+					formComponent.invalid();
+				}
+			}
+		});
+	}
+

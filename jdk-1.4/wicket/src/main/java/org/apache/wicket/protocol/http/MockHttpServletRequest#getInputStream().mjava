@@ -1,0 +1,38 @@
+	/**
+	 * Returns an input stream if there has been added some uploaded files. Use
+	 * {@link #addFile(String, File, String)} to add some uploaded files.
+	 * 
+	 * @return The input stream
+	 * @throws IOException
+	 *             If an I/O related problem occurs
+	 */
+	public ServletInputStream getInputStream() throws IOException
+	{
+		if (uploadedFiles != null && uploadedFiles.size() > 0)
+		{
+			String request = buildRequest();
+
+			// Ok lets make an input stream to return
+			final ByteArrayInputStream bais = new ByteArrayInputStream(request
+					.getBytes("ISO-8859-1"));
+
+			return new ServletInputStream()
+			{
+				public int read()
+				{
+					return bais.read();
+				}
+			};
+		}
+		else
+		{
+			return new ServletInputStream()
+			{
+				public int read()
+				{
+					return -1;
+				}
+			};
+		}
+	}
+

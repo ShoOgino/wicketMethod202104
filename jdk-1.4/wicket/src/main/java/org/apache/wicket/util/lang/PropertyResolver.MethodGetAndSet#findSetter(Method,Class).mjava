@@ -1,0 +1,27 @@
+		private final static Method findSetter(Method getMethod, Class clz)
+		{
+			String name = getMethod.getName();
+			if (name.startsWith("get"))
+			{
+				name = "set" + name.substring(3);
+			}
+			else
+			{
+				name = "set" + name.substring(2);
+			}
+			try
+			{
+				Method method = clz.getMethod(name, new Class[] { getMethod.getReturnType() });
+				if (method != null)
+				{
+					method.setAccessible(true);
+				}
+				return method;
+			}
+			catch (Exception e)
+			{
+				log.debug("Cannot find setter corresponding to " + getMethod, e);
+			}
+			return null;
+		}
+

@@ -1,0 +1,102 @@
+	/**
+	 * Clean up the request cycle.
+	 */
+	private void detach()
+	{
+		// clean up target stack; calling detach has effects like
+		// NOTE: don't remove the targets as testing code might need them
+		// furthermore, the targets will be cg-ed with this cycle too
+		for (Iterator iter = requestTargets.iterator(); iter.hasNext();)
+		{
+			IRequestTarget target = (IRequestTarget)iter.next();
+			if (target != null)
+			{
+				try
+				{
+					target.detach(this);
+				}
+				catch (RuntimeException e)
+				{
+					log.error("there was an error cleaning up target " + target + ".", e);
+				}
+			}
+		}
+
+		if (automaticallyClearFeedbackMessages)
+		{
+			// remove any rendered and otherwise obsolute feedback messages from
+			// the session
+			try
+			{
+				if (sessionExists())
+				{
+					getSession().cleanupFeedbackMessages();
+				}
+			}
+			catch (RuntimeException re)
+			{
+				log.error("there was an error cleaning up the feedback messages", re);
+			}
+		}
+
+		// if we have a request logger, update that now
+		try
+		{
+			IRequestLogger requestLogger = getApplication().getRequestLogger();
+			if (requestLogger != null)
+			{
+				requestLogger.requestTime((System.currentTimeMillis() - startTime));
+			}
+		}
+		catch (RuntimeException re)
+		{
+			log.error("there was an error in the RequestLogger ending.", re);
+		}
+
+		// let the session cleanup after a request, flushing changes etc.
+		if (sessionExists())
+		{
+			try
+			{
+				getSession().requestDetached();
+			}
+			catch (RuntimeException re)
+			{
+				log.error("there was an error detaching the request from the session " + session
+						+ ".", re);
+			}
+		}
+
+		if (getResponse() instanceof BufferedWebResponse)
+		{
+			try
+			{
+				((BufferedWebResponse)getResponse()).filter();
+			}
+			catch (RuntimeException re)
+			{
+				log.error("there was an error filtering the response.", re);
+			}
+		}
+
+		try
+		{
+			onEndRequest();
+		}
+		catch (RuntimeException e)
+		{
+			log.error("Exception occurred during onEndRequest", e);
+		}
+
+		// Release thread local resources
+		try
+		{
+			threadDetach();
+		}
+		catch (RuntimeException re)
+		{
+			log.error("Exception occurred during threadDetach", re);
+		}
+
+	}
+

@@ -1,0 +1,33 @@
+	/**
+	 * Processes the component tag.
+	 * 
+	 * @param tag
+	 *            Tag to modify
+	 * @see org.apache.wicket.Component#onComponentTag(ComponentTag)
+	 */
+	protected void onComponentTag(final ComponentTag tag)
+	{
+		// Default handling for component tag
+		super.onComponentTag(tag);
+
+		try
+		{
+			String value = getModelObjectAsString();
+			if (value != null && !"".equals(value))
+			{
+				tag.put("value", value);
+			}
+		}
+		catch (Exception e)
+		{
+			// ignore.
+		}
+
+		// If the subclass specified javascript, use that
+		final String onClickJavaScript = getOnClickScript();
+		if (onClickJavaScript != null)
+		{
+			tag.put("onclick", onClickJavaScript);
+		}
+	}
+

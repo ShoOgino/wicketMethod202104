@@ -1,0 +1,29 @@
+	/**
+	 * Converts the given value to class c.
+	 * 
+	 * @param type
+	 *            Class to get the converter for.
+	 * 
+	 * @return The converter for the given type
+	 * 
+	 * @see org.apache.wicket.util.convert.IConverter#convert(java.lang.Object,
+	 *      java.lang.Class, Locale)
+	 */
+	public final IConverter getConverter(Class type)
+	{
+		// Null is always converted to null
+		if (type == null)
+		{
+			return new DefaultConverter(String.class);
+		}
+
+
+		// Get type converter for class
+		final IConverter converter = get(type);
+		if (converter == null)
+		{
+			return new DefaultConverter(type);
+		}
+		return converter;
+	}
+

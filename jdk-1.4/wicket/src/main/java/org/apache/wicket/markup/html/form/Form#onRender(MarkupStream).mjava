@@ -1,0 +1,20 @@
+	/**
+	 * @see org.apache.wicket.Component#onRender(MarkupStream)
+	 */
+	protected void onRender(final MarkupStream markupStream)
+	{
+		// Force multi-part on if any child form component is multi-part
+		visitFormComponents(new FormComponent.AbstractVisitor()
+		{
+			public void onFormComponent(FormComponent formComponent)
+			{
+				if (formComponent.isVisible() && formComponent.isMultiPart())
+				{
+					setMultiPart(true);
+				}
+			}
+		});
+
+		super.onRender(markupStream);
+	}
+

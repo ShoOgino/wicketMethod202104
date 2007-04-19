@@ -1,0 +1,82 @@
+	/**
+	 * @see WicketTester#newFormTester(String)
+	 *
+	 * @param path
+	 *            path to form component
+	 * @param workingForm
+	 *            form component to be test
+	 * @param wicketTester
+	 *            wicketTester that create FormTester
+	 * @param fillBlankString
+	 *            specify whether filling child Text Components with blank
+	 *            String
+	 */
+	protected FormTester(final String path, final Form workingForm,
+			final WicketTester wicketTester, final boolean fillBlankString)
+	{
+		this.path = path;
+		this.workingForm = workingForm;
+		this.wicketTester = wicketTester;
+		this.wicketTester.setupRequestAndResponse();
+
+		// fill blank String for Text Component.
+		workingForm.visitFormComponents(new FormComponent.AbstractVisitor()
+		{
+			public void onFormComponent(final FormComponent formComponent)
+			{
+				// do nothing for invisible component
+				if (!formComponent.isVisibleInHierarchy())
+				{
+					return;
+				}
+
+				// if component is text field and do not have exist value, fill
+				// blank String if required
+				if (formComponent instanceof AbstractTextComponent)
+				{
+					if (Strings.isEmpty(formComponent.getValue()))
+					{
+						if (fillBlankString)
+						{
+							setFormComponentValue(formComponent, "");
+						}
+					}
+					else
+					{
+						setFormComponentValue(formComponent, formComponent.getValue());
+					}
+				}
+				else if ( (formComponent instanceof DropDownChoice) ||
+						(formComponent instanceof RadioChoice) ||
+						(formComponent instanceof CheckBox))
+				{
+					setFormComponentValue(formComponent, formComponent.getValue());
+				}
+				else if (formComponent instanceof ListMultipleChoice)
+				{
+					final String[] modelValues = formComponent.getValue().split(FormComponent.VALUE_SEPARATOR);
+					for (int i = 0; i < modelValues.length; i++)
+					{
+						addFormComponentValue(formComponent, modelValues[i]);
+					}
+				}
+				else if (formComponent instanceof CheckGroup)
+				{
+					final Collection checkGroupValues = (Collection) formComponent.getModelObject();
+					formComponent.visitChildren(Check.class, new IVisitor()
+					{
+						public Object component(Component component)
+						{
+							if (checkGroupValues.contains(component.getModelObject()))
+							{
+								addFormComponentValue(formComponent, ((Check) component).getValue());
+							}
+							return CONTINUE_TRAVERSAL;
+						}
+					});
+				}
+			}
+
+		});
+	}
+

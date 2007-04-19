@@ -1,0 +1,20 @@
+	/**
+	 * @see org.apache.wicket.settings.IResourceSettings#addResourceFolder(java.lang.String)
+	 */
+	public void addResourceFolder(final String resourceFolder)
+	{
+		// Get resource finder
+		final IResourceFinder finder = getResourceFinder();
+
+		// Make sure it's a path
+		if (!(finder instanceof IResourcePath))
+		{
+			throw new IllegalArgumentException(
+					"To add a resource folder, the application's resource finder must be an instance of IResourcePath");
+		}
+
+		// Cast to resource path and add folder
+		final IResourcePath path = (IResourcePath)finder;
+		path.add(resourceFolder);
+	}
+

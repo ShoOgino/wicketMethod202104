@@ -1,0 +1,20 @@
+	/**
+	 * @see FormComponent#updateModel()
+	 */
+	public void updateModel()
+	{
+		Collection collection = (Collection)getModelObject();
+		if (collection == null)
+		{
+			collection = (Collection)getConvertedInput();
+			setModelObject(collection);
+		}
+		else
+		{
+			modelChanging();
+			collection.clear();
+			collection.addAll((Collection)getConvertedInput());
+			modelChanged();
+		}
+	}
+

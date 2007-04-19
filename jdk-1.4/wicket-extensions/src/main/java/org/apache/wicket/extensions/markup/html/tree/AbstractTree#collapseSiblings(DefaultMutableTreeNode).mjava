@@ -1,0 +1,27 @@
+	/**
+	 * Collapses all the siblings of a given node.
+	 * 
+	 * @param node
+	 *            The node of which to collapse the siblings.
+	 */
+	public void collapseSiblings(final DefaultMutableTreeNode node)
+	{
+		// Collapse all previous siblings
+		DefaultMutableTreeNode previousNode = node.getPreviousSibling();
+		while (null != previousNode)
+		{
+			final TreePath siblingSelection = new TreePath(previousNode.getPath());
+			setExpandedState(siblingSelection, false); // inverse
+			previousNode = previousNode.getPreviousSibling();
+		}
+		// Collapse all following siblings
+		DefaultMutableTreeNode nextNode = node.getNextSibling();
+		while (null != nextNode)
+		{
+			final TreePath siblingSelection = new TreePath(nextNode.getPath());
+			setExpandedState(siblingSelection, false); // inverse
+			// ToDo: Check if previousNode can be null? If so, needs trapping - Gwyn
+			nextNode = previousNode.getNextSibling();
+		}
+	}
+

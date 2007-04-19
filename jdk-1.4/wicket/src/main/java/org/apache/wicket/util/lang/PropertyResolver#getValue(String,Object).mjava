@@ -1,0 +1,28 @@
+	/**
+	 * Looksup the value from the object with the given expression. If the
+	 * expresion, the object itself or one property evalutes to null then a null
+	 * will be returned.
+	 *
+	 * @param expression
+	 *            The expression string with the property to be lookup.
+	 * @param object
+	 *            The object which is evaluated.
+	 * @return The value that is evaluted. Null something in the expression
+	 *         evaluted to null.
+	 */
+	public final static Object getValue(final String expression, final Object object)
+	{
+		if (expression == null || expression.equals("") || object == null)
+		{
+			return object;
+		}
+
+		ObjectAndGetSetter getter = getObjectAndGetSetter(expression, object, false);
+		if (getter == null)
+		{
+			return null;
+		}
+		return getter.getValue();
+
+	}
+

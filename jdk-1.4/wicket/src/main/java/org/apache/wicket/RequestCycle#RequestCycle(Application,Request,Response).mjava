@@ -1,0 +1,24 @@
+	/**
+	 * Constructor. This instance will be set as the current one for this
+	 * thread.
+	 * 
+	 * @param application
+	 *            The application
+	 * @param request
+	 *            The request
+	 * @param response
+	 *            The response
+	 */
+	protected RequestCycle(final Application application, final Request request,
+			final Response response)
+	{
+		this.application = application;
+		this.request = request;
+		this.response = response;
+		this.originalResponse = response;
+		this.processor = safeGetRequestProcessor();
+
+		// Set this RequestCycle into ThreadLocal variable
+		current.set(this);
+	}
+

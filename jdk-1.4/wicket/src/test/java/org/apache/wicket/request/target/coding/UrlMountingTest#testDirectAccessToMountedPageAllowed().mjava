@@ -1,0 +1,14 @@
+	/**
+	 * Test direct access (with wicket parameters) to a mounted page that should
+	 * be allowed. By default, enforcement is not turned on, so we don't set it
+	 * as a setting here.
+	 */
+	public void testDirectAccessToMountedPageAllowed()
+	{
+		tester.setupRequestAndResponse();
+		tester.getServletRequest().setURL(
+				"?wicket:bookmarkablePage=:" + TestPage.class.getName() + "");
+		tester.processRequestCycle();
+		tester.assertRenderedPage(TestPage.class);
+	}
+

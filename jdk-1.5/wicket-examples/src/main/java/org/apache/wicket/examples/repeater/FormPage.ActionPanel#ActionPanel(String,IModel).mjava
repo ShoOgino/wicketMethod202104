@@ -1,0 +1,30 @@
+		/**
+		 * @param id
+		 *            component id
+		 * @param model
+		 *            model for contact
+		 */
+		public ActionPanel(String id, IModel model)
+		{
+			super(id, model);
+			add(new Link("select")
+			{
+				public void onClick()
+				{
+					FormPage.this.setSelected((Contact)getParent().getModelObject());
+				}
+			});
+
+			SubmitLink removeLink = new SubmitLink("remove", form)
+			{
+				public void onSubmit()
+				{
+					Contact contact = (Contact)getParent().getModelObject();
+					info("Removed contact " + contact);
+					DatabaseLocator.getDatabase().delete(contact);
+				}
+			};
+			removeLink.setDefaultFormProcessing(false);
+			add(removeLink);
+		}
+

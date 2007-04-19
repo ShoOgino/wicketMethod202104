@@ -1,0 +1,32 @@
+	/**
+	 * @see java.util.Map#put(java.lang.Object, java.lang.Object)
+	 */
+	public Object put(final Object key, final Object value)
+	{
+		// Replace?
+		if (key.equals(this.key))
+		{
+			final Object oldValue = this.value;
+
+			this.value = value;
+
+			return oldValue;
+		}
+		else
+		{
+			// Is there room for a new entry?
+			if (size() < MAX_ENTRIES)
+			{
+				// Store
+				this.key = key;
+				this.value = value;
+
+				return null;
+			}
+			else
+			{
+				throw new IllegalStateException("Map full");
+			}
+		}
+	}
+

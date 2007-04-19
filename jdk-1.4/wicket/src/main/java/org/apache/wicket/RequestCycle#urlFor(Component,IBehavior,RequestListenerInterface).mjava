@@ -1,0 +1,34 @@
+	/**
+	 * Returns a URL that references a given interface on a given behaviour of a
+	 * component. When the URL is requested from the server at a later time, the
+	 * interface on the behaviour will be called. A URL returned by this method
+	 * will not be stable across sessions and cannot be bookmarked by a user.
+	 * 
+	 * @param component
+	 *            The component to reference
+	 * @param behaviour
+	 *            The behaviour to reference
+	 * @param listener
+	 *            The listener interface on the component
+	 * @return A URL that encodes a page, component, behaviour and interface to
+	 *         call
+	 */
+	public final CharSequence urlFor(final Component component, final IBehavior behaviour,
+			final RequestListenerInterface listener)
+	{
+		int index = component.getBehaviors().indexOf(behaviour);
+		if (index == -1)
+		{
+			throw new IllegalArgumentException("Behavior " + this
+					+ " was not registered with this component: " + component.toString());
+		}
+		RequestParameters params = new RequestParameters();
+		params.setBehaviorId(String.valueOf(index));
+
+		final IRequestTarget target = new BehaviorRequestTarget(component.getPage(), component,
+				listener, params);
+		final IRequestCodingStrategy requestCodingStrategy = getProcessor()
+				.getRequestCodingStrategy();
+		return requestCodingStrategy.encode(this, target);
+	}
+

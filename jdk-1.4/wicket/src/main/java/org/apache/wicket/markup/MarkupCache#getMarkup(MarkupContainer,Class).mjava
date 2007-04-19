@@ -1,0 +1,98 @@
+	/**
+	 * Gets any (immutable) markup resource for the container or any of its
+	 * parent classes (markup inheritance)
+	 * 
+	 * @param container
+	 *            The original requesting markup container
+	 * @param clazz
+	 *            The class to get the associated markup for. If null, the
+	 *            container's class is used, but it can be a parent class of the
+	 *            container as well (markup inheritance)
+	 * @return Markup resource
+	 */
+	private final Markup getMarkup(final MarkupContainer container, final Class clazz)
+	{
+		Class containerClass = clazz;
+		if (clazz == null)
+		{
+			containerClass = container.getClass();
+		}
+		else
+		{
+			if (!clazz.isAssignableFrom(container.getClass()))
+			{
+				throw new WicketRuntimeException("Parameter clazz must be instance of container");
+			}
+		}
+
+		// Get the cache key to be associated with the markup resource stream
+		final IMarkupCacheKeyProvider markupCacheKeyProvider = getMarkupCacheKeyProvider(container);
+		final CharSequence cacheKey = markupCacheKeyProvider.getCacheKey(container, clazz);
+
+		// Markup already in the cache? If cacheKey == null, than don't cache
+		// the markup resource stream
+		Markup markup = null;
+		if (cacheKey != null)
+		{
+			markup = (Markup)markupCache.get(cacheKey);
+		}
+
+		// Must Markup be loaded?
+		if (markup == null)
+		{
+			synchronized (markupCache)
+			{
+				if (cacheKey != null)
+				{
+					markup = (Markup)markupCache.get(cacheKey);
+				}
+
+				// Must Markup be loaded?
+				if (markup == null)
+				{
+					// Who is going to provide the markup resource stream?
+					final IMarkupResourceStreamProvider markupResourceStreamProvider = getMarkupResourceStreamProvider(container);
+
+					// Ask the provider to locate the markup resource stream
+					final IResourceStream resourceStream = markupResourceStreamProvider
+							.getMarkupResourceStream(container, containerClass);
+
+					// Found markup?
+					if (resourceStream != null)
+					{
+						final MarkupResourceStream markupResourceStream;
+						if (resourceStream instanceof MarkupResourceStream)
+						{
+							markupResourceStream = (MarkupResourceStream)resourceStream;
+						}
+						else
+						{
+							markupResourceStream = new MarkupResourceStream(resourceStream,
+									new ContainerInfo(container), containerClass);
+						}
+
+						markupResourceStream.setCacheKey(cacheKey);
+
+						// load the markup and watch for changes
+						markup = loadMarkupAndWatchForChanges(container, markupResourceStream);
+					}
+					else
+					{
+						// flag markup as non-existent (as opposed to null,
+						// which might mean that it's simply not loaded into
+						// the cache)
+						markup = Markup.NO_MARKUP;
+
+						// Save any markup list (or absence of one) for next
+						// time
+						if (cacheKey != null)
+						{
+							markupCache.put(cacheKey, markup);
+						}
+					}
+				}
+			}
+		}
+		return markup;
+	}
+

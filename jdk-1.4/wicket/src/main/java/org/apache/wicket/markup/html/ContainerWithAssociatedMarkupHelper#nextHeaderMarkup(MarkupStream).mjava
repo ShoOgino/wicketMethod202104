@@ -1,0 +1,58 @@
+	/**
+	 * Process next header markup fragment.
+	 * 
+	 * @param associatedMarkupStream
+	 * @return index or -1 when done
+	 */
+	private final int nextHeaderMarkup(final MarkupStream associatedMarkupStream)
+	{
+		// No associated markup => no header section
+		if (associatedMarkupStream == null)
+		{
+			return -1;
+		}
+
+		// Scan the markup for <wicket:head>.
+		MarkupElement elem = associatedMarkupStream.get();
+		while (elem != null)
+		{
+			if (elem instanceof WicketTag)
+			{
+				WicketTag tag = (WicketTag)elem;
+				if (tag.isOpen() && tag.isHeadTag())
+				{
+					if (this.noMoreWicketHeadTagsAllowed == true)
+					{
+						throw new MarkupException(
+								"<wicket:head> tags are only allowed before <body>, </head>, <wicket:panel> etc. tag");
+					}
+					return associatedMarkupStream.getCurrentIndex();
+				}
+				// wicket:head must be before border, panel or extend
+				else if (tag.isOpen()
+						&& (tag.isPanelTag() || tag.isBorderTag() || tag.isExtendTag()))
+				{
+					this.noMoreWicketHeadTagsAllowed = true;
+				}
+			}
+			else if (elem instanceof ComponentTag)
+			{
+				ComponentTag tag = (ComponentTag)elem;
+				// wicket:head must be before </head>
+				if (tag.isClose() && TagUtils.isHeadTag(tag))
+				{
+					this.noMoreWicketHeadTagsAllowed = true;
+				}
+				// wicket:head must be before <body>
+				else if (tag.isOpen() && TagUtils.isBodyTag(tag))
+				{
+					this.noMoreWicketHeadTagsAllowed = true;
+				}
+			}
+			elem = associatedMarkupStream.next();
+		}
+
+		// No (more) wicket:head found
+		return -1;
+	}
+

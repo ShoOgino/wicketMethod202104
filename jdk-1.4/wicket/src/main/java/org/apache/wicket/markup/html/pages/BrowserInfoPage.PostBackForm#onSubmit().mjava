@@ -1,0 +1,31 @@
+		/**
+		 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
+		 */
+		protected void onSubmit()
+		{
+			ClientPropertiesBean propertiesBean = (ClientPropertiesBean)getModelObject();
+
+			WebRequestCycle requestCycle = (WebRequestCycle)getRequestCycle();
+			WebSession session = (WebSession)getSession();
+			ClientInfo clientInfo = session.getClientInfo();
+
+			if (clientInfo == null)
+			{
+				clientInfo = new WebClientInfo(requestCycle);
+				getSession().setClientInfo(clientInfo);
+			}
+
+			if (clientInfo instanceof WebClientInfo)
+			{
+				WebClientInfo info = (WebClientInfo)clientInfo;
+				ClientProperties properties = info.getProperties();
+				propertiesBean.merge(properties);
+			}
+			else
+			{
+				warnNotUsingWebClientInfo(clientInfo);
+			}
+
+			continueToPrevious();
+		}
+

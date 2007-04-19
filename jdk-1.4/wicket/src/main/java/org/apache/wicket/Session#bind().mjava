@@ -1,0 +1,52 @@
+	/**
+	 * Force binding this session to the application's
+	 * {@link ISessionStore session store} if not already done so.
+	 * <p>
+	 * A Wicket application can operate in a session-less mode as long as
+	 * stateless pages are used. Session objects will be then created for each
+	 * request, but they will only live for that request. You can recognize
+	 * temporary sessions by calling {@link #isTemporary()} which basically
+	 * checks whether the session's id is null. Hence, temporary sessions have
+	 * no session id.
+	 * </p>
+	 * <p>
+	 * By calling this method, the session will be bound (made not-temporary) if
+	 * it was not bound yet. It is useful for cases where you want to be
+	 * absolutely sure this session object will be available in next requests.
+	 * </p>
+	 * <p>
+	 * This method should not typically be called by clients
+	 * </p>
+	 */
+	public final void bind()
+	{
+		ISessionStore store = getSessionStore();
+		Request request = RequestCycle.get().getRequest();
+		if (store.lookup(request) == null)
+		{
+			synchronized (this)
+			{
+				// explicitly create a session
+				this.id = store.getSessionId(request, true);
+				// bind it
+				store.bind(request, this);
+
+				if (temporarySessionAttributes != null)
+				{
+					for (Iterator i = temporarySessionAttributes.entrySet().iterator(); i.hasNext();)
+					{
+						Entry entry = (Entry)i.next();
+						store.setAttribute(request, String.valueOf(entry.getKey()), entry
+								.getValue());
+					}
+					temporarySessionAttributes = null;
+				}
+
+			}
+		}
+		else
+		{
+			log.warn("trying to bind an already bound and non-temporary session");
+		}
+	}
+

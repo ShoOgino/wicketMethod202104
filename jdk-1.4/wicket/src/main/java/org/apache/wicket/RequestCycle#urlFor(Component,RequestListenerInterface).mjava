@@ -1,0 +1,43 @@
+	/**
+	 * Returns a URL that references a given interface on a component. When the
+	 * URL is requested from the server at a later time, the interface will be
+	 * called. A URL returned by this method will not be stable across sessions
+	 * and cannot be bookmarked by a user.
+	 * 
+	 * @param component
+	 *            The component to reference
+	 * @param listener
+	 *            The listener interface on the component
+	 * @return A URL that encodes a page, component and interface to call
+	 */
+	public final CharSequence urlFor(final Component component,
+			final RequestListenerInterface listener)
+	{
+		// Get Page holding component and mark it as stateful.
+		final Page page = component.getPage();
+		final IRequestTarget target;
+		if (listener != IRedirectListener.INTERFACE && component.isStateless()
+				&& page.isBookmarkable())
+		{
+			target = new BookmarkableListenerInterfaceRequestTarget(page.getPageMap().getName(),
+					page.getClass(), new PageParameters(), component, listener);
+		}
+		else
+		{
+			page.setPageStateless(Boolean.FALSE);
+
+			// make session non-volatile if not already so
+			final Session session = getSession();
+			if (session.isTemporary())
+			{
+				session.bind();
+			}
+
+			// Get the listener interface name
+			target = new ListenerInterfaceRequestTarget(page, component, listener);
+		}
+		final IRequestCodingStrategy requestCodingStrategy = getProcessor()
+				.getRequestCodingStrategy();
+		return requestCodingStrategy.encode(this, target);
+	}
+

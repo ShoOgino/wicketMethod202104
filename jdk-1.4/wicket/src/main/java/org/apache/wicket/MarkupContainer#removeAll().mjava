@@ -1,0 +1,52 @@
+	/**
+	 * Removes all children from this container.
+	 * <p>
+	 * Note: implementation does not call
+	 * {@link MarkupContainer#remove(Component) } for each component.
+	 */
+	public final void removeAll()
+	{
+		if (children != null)
+		{
+			addStateChange(new Change()
+			{
+				private static final long serialVersionUID = 1L;
+
+				final Object removedChildren = MarkupContainer.this.children;
+
+				public String toString()
+				{
+					return "RemoveAllChange[component: " + getPath() + ", removed Children: "
+							+ removedChildren + "]";
+				}
+
+				public void undo()
+				{
+					MarkupContainer.this.children = removedChildren;
+					int size = children_size();
+					for (int i = 0; i < size; i++)
+					{
+						// Get next child
+						final Component child = children_get(i);
+						child.setParent(MarkupContainer.this);
+					}
+				}
+			});
+
+			// Loop through child components
+			int size = children_size();
+			for (int i = 0; i < size; i++)
+			{
+				// Get next child
+				final Component child = children_get(i);
+
+				// Do not call remove() because the state change would than be
+				// recorded twice.
+				child.detachModel();
+				child.setParent(null);
+			}
+
+			this.children = null;
+		}
+	}
+

@@ -1,0 +1,27 @@
+	/**
+	 * @param a
+	 *            String a
+	 * @param b
+	 *            String b
+	 * @return True if the two strings have the same markup tags
+	 */
+	private static boolean compareMarkup(final String a, final String b)
+	{
+		try
+		{
+			// Parse a and b into markup and compare
+			final Markup amarkup = new MarkupParser(new XmlPullParser()).parse(a);
+			final Markup bmarkup = new MarkupParser(new XmlPullParser()).parse(b);
+			return amarkup.equalTo(bmarkup);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+

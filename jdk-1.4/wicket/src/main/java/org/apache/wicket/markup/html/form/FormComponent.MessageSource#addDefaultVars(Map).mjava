@@ -1,0 +1,42 @@
+		/**
+		 * Creates a new params map that additionaly contains the default input,
+		 * name, label parameters
+		 *
+		 * @param params
+		 *            original params map
+		 * @return new params map
+		 */
+		private Map addDefaultVars(Map params)
+		{
+			// create and fill the new params map
+			final HashMap fullParams;
+			if (params == null)
+			{
+				fullParams = new HashMap(6);
+			}
+			else
+			{
+				fullParams = new HashMap(params.size() + 6);
+				fullParams.putAll(params);
+			}
+
+			// add the input param if not already present
+			if (!fullParams.containsKey("input"))
+			{
+				fullParams.put("input", FormComponent.this.getInput());
+			}
+
+			// add the name param if not already present
+			if (!fullParams.containsKey("name"))
+			{
+				fullParams.put("name", FormComponent.this.getId());
+			}
+
+			// add the label param if not already present
+			if (!fullParams.containsKey("label"))
+			{
+				fullParams.put("label", getLabel());
+			}
+			return fullParams;
+		}
+

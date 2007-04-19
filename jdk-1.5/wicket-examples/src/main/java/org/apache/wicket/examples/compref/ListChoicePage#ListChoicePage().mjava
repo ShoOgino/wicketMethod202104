@@ -1,0 +1,31 @@
+	/**
+	 * Constructor
+	 */
+	public ListChoicePage()
+	{
+		final Input input = new Input();
+		setModel(new CompoundPropertyModel(input));
+
+		// Add a FeedbackPanel for displaying our messages
+		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		add(feedbackPanel);
+
+		// Add a form with an onSumbit implementation that sets a message
+		Form form = new Form("form")
+		{
+			protected void onSubmit()
+			{
+				info("input: " + input);
+			}
+		};
+		add(form);
+
+		// Add a list choice component that uses Input's 'site' property to
+		// designate the
+		// current selection, and that uses the SITES list for the available
+		// options.
+		ListChoice listChoice = new ListChoice("site", SITES);
+		listChoice.setMaxRows(4);
+		form.add(listChoice);
+	}
+

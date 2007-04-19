@@ -1,0 +1,19 @@
+	/**
+	 * @see IPageFactory#newPage(Class, PageParameters)
+	 */
+	public final Page newPage(final Class pageClass, final PageParameters parameters)
+	{
+		// Try to get constructor that takes PageParameters
+		Constructor constructor = constructor(pageClass, PageParameters.class);
+
+		// If we got a PageParameters constructor
+		if (constructor != null)
+		{
+			// return new Page(parameters)
+			return newPage(constructor, parameters);
+		}
+
+		// Always try default constructor if one exists
+		return newPage(pageClass);
+	}
+

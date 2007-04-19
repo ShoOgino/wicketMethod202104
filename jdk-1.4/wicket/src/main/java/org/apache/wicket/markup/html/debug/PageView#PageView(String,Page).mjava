@@ -1,0 +1,54 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param id
+	 *            See Component
+	 * @param page
+	 *            The page to be analyzed
+	 * @see Component#Component(String)
+	 */
+	public PageView(final String id, final Page page)
+	{
+		super(id);
+
+		// Create an empty list. It'll be filled later
+		final List data = new ArrayList();
+
+		// Name of page
+		add(new Label("info", page == null ? "[Stateless Page]" : page.toString()));
+
+		// Get the components data and fill and sort the list
+		data.clear();
+		if (page != null)
+		{
+			data.addAll(getComponentData(page));
+		}
+		Collections.sort(data, new Comparator()
+		{
+			public int compare(Object o1, Object o2)
+			{
+				return ((ComponentData)o1).path.compareTo(((ComponentData)o2).path);
+			}
+		});
+
+		// Create the table containing the list the components
+		add(new ListView("components", data)
+		{
+			private static final long serialVersionUID = 1L;
+
+			/**
+			 * Populate the table with Wicket elements
+			 */
+			protected void populateItem(final ListItem listItem)
+			{
+				final ComponentData componentData = (ComponentData)listItem.getModelObject();
+
+				listItem.add(new Label("row", Integer.toString(listItem.getIndex() + 1)));
+				listItem.add(new Label("path", componentData.path));
+				listItem.add(new Label("size", Bytes.bytes(componentData.size).toString()));
+				listItem.add(new Label("type", componentData.type));
+				listItem.add(new Label("model", componentData.value));
+			}
+		});
+	}
+

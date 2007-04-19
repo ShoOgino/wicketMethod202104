@@ -1,0 +1,30 @@
+	void attachChildren()
+	{
+		super.attachChildren();
+		try
+		{
+			// Loop through child components
+			final int size = children_size();
+			for (int i = 0; i < size; i++)
+			{
+				// Get next child
+				final Component child = children_get(i);
+
+				// Ignore feedback as that was done in Page
+				if (!(child instanceof IFeedback))
+				{
+					// Call begin request on the child
+					child.attach();
+				}
+			}
+		}
+		catch (RuntimeException ex)
+		{
+			if (ex instanceof WicketRuntimeException)
+				throw ex;
+			else
+				throw new WicketRuntimeException("Error attaching this container for rendering: "
+						+ this, ex);
+		}
+	}
+

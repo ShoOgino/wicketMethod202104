@@ -1,0 +1,15 @@
+	RequestData getCurrentRequest()
+	{
+		RequestData rd = (RequestData)currentRequest.get();
+		if (rd == null)
+		{
+			rd = new RequestData();
+			currentRequest.set(rd);
+			synchronized (this)
+			{
+				active++;
+			}
+		}
+		return rd;
+	}
+

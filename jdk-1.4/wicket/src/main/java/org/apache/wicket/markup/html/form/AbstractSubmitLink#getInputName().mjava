@@ -1,0 +1,23 @@
+	/**
+	 * @see org.apache.wicket.markup.html.form.IFormSubmittingComponent#getInputName()
+	 */
+	public String getInputName()
+	{
+		// TODO: This is a copy & paste from the FormComponent class. 
+		String id = getId();
+		final PrependingStringBuffer inputName = new PrependingStringBuffer(id.length());
+		Component c = this;
+		while (true)
+		{
+			inputName.prepend(id);
+			c = c.getParent();
+			if (c == null || (c instanceof Form && ((Form)c).isRootForm()) || c instanceof Page)
+			{
+				break;
+			}
+			inputName.prepend(Component.PATH_SEPARATOR);
+			id = c.getId();
+		}
+		return inputName.toString();
+	}	
+

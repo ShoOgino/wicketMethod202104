@@ -1,0 +1,70 @@
+	/**
+	 * Called by components like Panel and Border which have associated Markup
+	 * and which may have a &lt;wicket:head&gt; tag.
+	 * <p>
+	 * Whereas 'this' might be a Panel or Border, the HtmlHeaderContainer
+	 * parameter has been added to the Page as a container for all headers any
+	 * of its components might wish to contribute.
+	 * <p>
+	 * The headers contributed are rendered in the standard way.
+	 * 
+	 * @param htmlContainer
+	 *            The HtmlHeaderContainer added to the Page
+	 */
+	public final void renderHeadFromAssociatedMarkupFile(final HtmlHeaderContainer htmlContainer)
+	{
+		// Gracefully getAssociateMarkupStream. Throws no exception in case
+		// markup is not found
+		final MarkupStream markupStream = container.getAssociatedMarkupStream(false);
+
+		// No associated markup => no header section
+		if (markupStream == null)
+		{
+			return;
+		}
+
+		// Position pointer at current (first) header
+		this.noMoreWicketHeadTagsAllowed = false;
+		while (nextHeaderMarkup(markupStream) != -1)
+		{
+			Class markupClass = ((WicketTag)markupStream.getTag()).getMarkupClass();
+			if (markupClass == null)
+			{
+				markupClass = markupStream.getContainerClass();
+			}
+			// Create a HeaderPartContainer and associate the markup
+			final HeaderPartContainer headerPart = getHeaderPart(markupClass, markupStream
+					.getCurrentIndex());
+			if (headerPart != null)
+			{
+				// A component's header section must only be added once,
+				// no matter how often the same Component has been added
+				// to the page or any other container in the hierachy.
+				if (htmlContainer.okToRenderComponent(headerPart.getScope(), headerPart.getId()))
+				{
+					htmlContainer.autoAdd(headerPart);
+				}
+				else
+				{
+					// TODO Performance: I haven't found a more efficient
+					// solution yet.
+					// Already added but all the components in this header part
+					// must be touched (that they are rendered)
+					Response response = container.getRequestCycle().getResponse();
+					try
+					{
+						container.getRequestCycle().setResponse(NullResponse.getInstance());
+						htmlContainer.autoAdd(headerPart);
+					}
+					finally
+					{
+						container.getRequestCycle().setResponse(response);
+					}
+				}
+			}
+
+			// Position the stream after <wicket:head>
+			markupStream.skipComponent();
+		}
+	}
+

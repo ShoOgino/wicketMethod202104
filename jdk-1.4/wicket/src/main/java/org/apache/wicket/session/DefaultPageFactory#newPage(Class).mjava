@@ -1,0 +1,37 @@
+	/**
+	 * @see IPageFactory#newPage(Class)
+	 */
+	public final Page newPage(final Class pageClass)
+	{
+		try
+		{
+			// throw an exception in case default constructor is missing
+			// => improved error message
+			pageClass.getConstructor((Class[])null);
+
+			return (Page)pageClass.newInstance();
+		}
+		catch (NoSuchMethodException e)
+		{
+			// a bit of a hack here..
+			Constructor constructor = constructor(pageClass, PageParameters.class);
+			if (constructor != null)
+			{
+				return newPage(constructor, new PageParameters());
+			}
+			else
+			{
+				throw new WicketRuntimeException("Unable to create page from " + pageClass
+						+ ". Class does not have a default contructor", e);
+			}
+		}
+		catch (InstantiationException e)
+		{
+			throw new WicketRuntimeException("Unable to create page from " + pageClass, e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new WicketRuntimeException("Unable to create page from " + pageClass, e);
+		}
+	}
+

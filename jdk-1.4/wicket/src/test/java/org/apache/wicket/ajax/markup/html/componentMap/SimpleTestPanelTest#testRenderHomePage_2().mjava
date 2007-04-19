@@ -1,0 +1,21 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testRenderHomePage_2() throws Exception
+	{
+	    executeTest(SimpleTestPage.class, "SimpleTestPageExpectedResult.html");
+	    
+		tester.setupRequestAndResponse();
+		WebRequestCycle cycle = tester.createRequestCycle();
+		
+		Page page = tester.getLastRenderedPage();
+	    String url = ((SimpleTestPanel)page.get("testPanel")).getTimeBehavior().getCallbackUrl().toString();
+		tester.getServletRequest().setRequestToRedirectString(url);
+
+		tester.processRequestCycle(cycle);
+
+		// Validate the document
+		String document = tester.getServletResponse().getDocument();
+		DiffUtil.validatePage(document, SimpleTestPage.class, "SimpleTestPageExpectedResult-1.html", true);
+	}
+

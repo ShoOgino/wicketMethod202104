@@ -1,0 +1,16 @@
+	/**
+	 * Cleans up all rendered feedback messages and any unrendered, dangling
+	 * feedback messages there may be left after that.
+	 */
+	public void cleanupFeedbackMessages()
+	{
+		// If session scoped, rendered messages got indeed cleaned up, mark the
+		// session as dirty
+		if (feedbackMessages.clear(RENDERED_SESSION_SCOPED_MESSAGES) > 0)
+		{
+			dirty();
+		}
+
+		feedbackMessages.clear(MESSAGES_FOR_COMPONENTS);
+	}
+

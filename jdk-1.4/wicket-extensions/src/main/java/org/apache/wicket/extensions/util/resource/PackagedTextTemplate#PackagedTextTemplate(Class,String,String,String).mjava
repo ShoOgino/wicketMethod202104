@@ -1,0 +1,60 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param clazz
+	 *            The class to be used for retrieving the classloader for
+	 *            loading the packaged template.
+	 * @param fileName
+	 *            the name of the file, relative to the clazz position
+	 * @param contentType
+	 *            The mime type of this resource, such as "image/jpeg" or
+	 *            "text/html"
+	 * @param encoding
+	 *            The file's encoding, e.g. 'UTF-8'
+	 */
+	public PackagedTextTemplate(final Class clazz, final String fileName, final String contentType,
+			final String encoding)
+	{
+		super(contentType);
+
+		String path = Packages.absolutePath(clazz, fileName);
+		IResourceStream stream = streamLocator.locate(clazz, path);
+
+		if (stream == null)
+		{
+			throw new IllegalArgumentException("resource " + fileName + " not found for scope "
+					+ clazz + " (path = " + path + ")");
+		}
+
+		try
+		{
+			if (encoding != null)
+			{
+				buffer.append(Streams.readString(stream.getInputStream(), encoding));
+			}
+			else
+			{
+				buffer.append(Streams.readString(stream.getInputStream()));
+			}
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			try
+			{
+				stream.close();
+			}
+			catch (IOException e)
+			{
+				log.error(e.getMessage(), e);
+			}
+		}
+	}
+

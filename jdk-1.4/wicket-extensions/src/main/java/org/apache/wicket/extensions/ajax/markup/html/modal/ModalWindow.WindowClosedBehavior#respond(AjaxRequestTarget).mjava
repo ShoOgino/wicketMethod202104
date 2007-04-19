@@ -1,0 +1,25 @@
+		protected void respond(AjaxRequestTarget target)
+		{
+			shown = false;
+
+			// should we cleanup the pagemap?
+			if (deletePageMap == true)
+			{
+				// get the pagemap
+				Session session = Session.get();
+				IPageMap pageMap = session.pageMapForName(getPageMapName(), false);
+
+				// if there is any remove it
+				if (pageMap != null)
+				{
+					session.removePageMap(pageMap);
+					deletePageMap = false;
+				}
+			}
+
+			if (windowClosedCallback != null)
+			{
+				windowClosedCallback.onClose(target);
+			}
+		}
+

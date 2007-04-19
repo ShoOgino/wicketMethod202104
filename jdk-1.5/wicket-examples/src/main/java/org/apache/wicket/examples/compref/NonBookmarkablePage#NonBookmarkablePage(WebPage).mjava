@@ -1,0 +1,31 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param referer
+	 *            the refering page
+	 */
+	public NonBookmarkablePage(final WebPage referer)
+	{
+		if (referer == null)
+		{
+			throw new IllegalArgumentException("Argument referer must not be null");
+		}
+
+		// Add a link to navigate back to the refering page. We now use the
+		// PageLink
+		// constructor with the Page instance argument, because we allready have
+		// a page instance
+		// at our disposal
+		add(new PageLink("navigateBackLink", referer));
+
+		// Note that this would have had the same effect
+		//
+		// add(new Link("navigateBackLink")
+		// {
+		// public void onClick()
+		// {
+		// setResponsePage(referer);
+		// }
+		// });
+	}
+

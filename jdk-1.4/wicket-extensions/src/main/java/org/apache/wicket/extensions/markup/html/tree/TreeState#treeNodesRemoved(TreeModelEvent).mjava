@@ -1,0 +1,63 @@
+	/**
+	 * <p>
+	 * Invoked after nodes have been removed from the tree. Note that if a
+	 * subtree is removed from the tree, this method may only be invoked once
+	 * for the root of the removed subtree, not once for each individual set of
+	 * siblings removed.
+	 * </p>
+	 * <p>
+	 * e.path() returns the former parent of the deleted nodes.
+	 * </p>
+	 * <p>
+	 * e.childIndices() returns the indices the nodes had before they were
+	 * deleted in ascending order.
+	 * </p>
+	 * 
+	 * @param e
+	 *			  the tree model event
+	 */
+	public void treeNodesRemoved(TreeModelEvent e)
+	{
+		if (e != null)
+		{
+			int changedIndexs[];
+			int maxCounter;
+			TreePath parentPath = e.getTreePath();
+			TreeStateNode changedParentNode = getNodeForPath(parentPath, false, false);
+
+			changedIndexs = e.getChildIndices();
+			// PENDING(scott): make sure that changedIndexs are sorted in
+			// ascending order.
+			if (changedParentNode != null
+					&& changedIndexs != null && (maxCounter = changedIndexs.length) > 0)
+			{
+				boolean isVisible = (changedParentNode.isVisible() && changedParentNode
+						.isExpanded());
+
+				for (int counter = maxCounter - 1; counter >= 0; counter--)
+				{
+					changedParentNode.removeChildAtModelIndex(changedIndexs[counter],
+							isVisible);
+				}
+				if (isVisible)
+				{
+					if (treeSelectionModel != null)
+					{
+						treeSelectionModel.resetRowSelection();
+					}
+					if (treeModel.getChildCount(changedParentNode.getUserObject()) == 0
+							&& changedParentNode.isLeaf())
+					{
+						// Node has become a leaf, collapse it.
+						changedParentNode.collapse(false);
+					}
+					visibleNodesChanged();
+				}
+				else if (changedParentNode.isVisible())
+				{
+					visibleNodesChanged();
+				}
+			}
+		}
+	}
+

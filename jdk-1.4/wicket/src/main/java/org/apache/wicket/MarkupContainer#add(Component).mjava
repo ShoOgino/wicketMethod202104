@@ -1,0 +1,37 @@
+	/**
+	 * Adds a child component to this container.
+	 * <p>
+	 * Be careful when overriding this method, if not implemented properly it
+	 * may lead to a java component hierarchy which no longer matches the
+	 * template hierarchy, which in turn will lead to an error.
+	 * 
+	 * @param child
+	 *            The child
+	 * @throws IllegalArgumentException
+	 *             Thrown if a child with the same id is replaced by the add
+	 *             operation.
+	 * @return This
+	 */
+	public final MarkupContainer add(final Component child)
+	{
+		if (child == null)
+		{
+			throw new IllegalArgumentException("argument child may not be null");
+		}
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Add " + child.getId() + " to " + this);
+		}
+
+		// Add to map
+		addedComponent(child);
+		if (put(child) != null)
+		{
+			throw new IllegalArgumentException(exceptionMessage("A child with id '" + child.getId()
+					+ "' already exists"));
+		}
+
+		return this;
+	}
+

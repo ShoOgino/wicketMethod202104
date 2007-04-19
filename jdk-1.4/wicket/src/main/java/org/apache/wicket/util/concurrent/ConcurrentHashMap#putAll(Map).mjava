@@ -1,0 +1,43 @@
+	/**
+	 * Copies all of the mappings from the specified map to this one.
+	 * 
+	 * These mappings replace any mappings that this map had for any of the keys
+	 * currently in the specified Map.
+	 * 
+	 * @param t
+	 *            Mappings to be stored in this map.
+	 */
+	public void putAll(Map t)
+	{
+		int n = t.size();
+		if (n == 0)
+		{
+			return;
+		}
+
+		// Expand enough to hold at least n elements without resizing.
+		// We can only resize table by factor of two at a time.
+		// It is faster to rehash with fewer elements, so do it now.
+		for (;;)
+		{
+			Entry[] tab;
+			int max;
+			synchronized (segments[0])
+			{ // must synch on some segment. pick 0.
+				tab = table;
+				max = threshold * CONCURRENCY_LEVEL;
+			}
+			if (n < max)
+			{
+				break;
+			}
+			resize(0, tab);
+		}
+
+		for (Iterator it = t.entrySet().iterator(); it.hasNext();)
+		{
+			Map.Entry entry = (Map.Entry)it.next();
+			put(entry.getKey(), entry.getValue());
+		}
+	}
+

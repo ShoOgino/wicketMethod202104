@@ -1,0 +1,41 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param table
+	 *            data table this toolbar will be attached to
+	 * @param stateLocator
+	 *            locator for the ISortState implementation used by sortable
+	 *            headers
+	 */
+	public HeadersToolbar(final DataTable table, final ISortStateLocator stateLocator)
+	{
+		super(table);
+
+
+		RepeatingView headers = new RepeatingView("headers");
+		add(headers);
+
+		final IColumn[] columns = table.getColumns();
+		for (int i = 0; i < columns.length; i++)
+		{
+			final IColumn column = columns[i];
+
+			WebMarkupContainer item = new WebMarkupContainer(headers.newChildId());
+			headers.add(item);
+
+			WebMarkupContainer header = null;
+			if (column.isSortable())
+			{
+				header = newSortableHeader("header", column.getSortProperty(), stateLocator);
+			}
+			else
+			{
+				header = new WebMarkupContainer("header");
+			}
+			item.add(header);
+			item.setRenderBodyOnly(true);
+			header.add(column.getHeader("label"));
+
+		}
+	}
+

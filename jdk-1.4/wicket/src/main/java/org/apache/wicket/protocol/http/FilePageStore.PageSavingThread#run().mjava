@@ -1,0 +1,49 @@
+		/**
+		 * @see java.lang.Runnable#run()
+		 */
+		public void run()
+		{
+			while (!stop)
+			{
+				try
+				{
+					while (pagesToBeSaved.size() == 0)
+					{
+						Thread.sleep(2000);
+						if (stop)
+							return;
+					}
+					// if ( pagesToBeSaved.size() > 100)
+					// {
+					// System.err.println("max");
+					// Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+					// }
+					// else if ( pagesToBeSaved.size() > 25)
+					// {
+					// System.err.println("normal");
+					// Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+					// }
+					// else
+					// {
+					// System.err.println("min");
+					// Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+					// }
+					Iterator it = pagesToBeSaved.entrySet().iterator();
+					while (it.hasNext())
+					{
+						Map.Entry entry = (Entry)it.next();
+						SessionPageKey key = (SessionPageKey)entry.getKey();
+						if (key.data instanceof byte[])
+						{
+							savePage(key, (byte[])key.data);
+						}
+						it.remove();
+					}
+				}
+				catch (Exception e)
+				{
+					log.error("Error in page save thread", e);
+				}
+			}
+		}
+

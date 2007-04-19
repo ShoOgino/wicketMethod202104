@@ -1,0 +1,33 @@
+	/**
+	 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isActionAuthorized(org.apache.wicket.Component,
+	 *      org.apache.wicket.authorization.Action)
+	 */
+	public boolean isActionAuthorized(final Component component, final Action action)
+	{
+		// Get component's class
+		final Class< ? extends Component> componentClass = component.getClass();
+
+		// Check for a single action
+		if (!check(action, componentClass.getAnnotation(AuthorizeAction.class)))
+		{
+			return false;
+		}
+
+		// Check for multiple actions
+		final AuthorizeActions authorizeActionsAnnotation = componentClass
+				.getAnnotation(AuthorizeActions.class);
+		if (authorizeActionsAnnotation != null)
+		{
+			for (final AuthorizeAction authorizeActionAnnotation : authorizeActionsAnnotation
+					.actions())
+			{
+				if (!check(action, authorizeActionAnnotation))
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+

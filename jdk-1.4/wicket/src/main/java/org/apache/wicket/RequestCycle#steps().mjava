@@ -1,0 +1,54 @@
+	/**
+	 * Loop through the processing steps starting from the current one.
+	 */
+	private final void steps()
+	{
+		try
+		{
+			// get the processor
+			IRequestCycleProcessor processor = safeGetRequestProcessor();
+
+			// Arbitrary maximum number of steps
+			final int maxSteps = Short.MAX_VALUE;
+
+			// Loop through steps
+			for (int totalSteps = 0; currentStep < DONE; totalSteps++)
+			{
+				// There is no way to catch infinite loops since the response
+				// step can always throw an AbstractRestartResponseException and
+				// start the process over at the RESPOND step. So we do a sanity
+				// check here and limit the total number of steps to an
+				// arbitrary maximum that we consider unreasonable for working
+				// code.
+				if (totalSteps >= maxSteps)
+				{
+					throw new IllegalStateException("Request processing executed " + maxSteps
+							+ " steps, which means it is probably in an infinite loop.");
+				}
+				try
+				{
+					step();
+					currentStep++;
+				}
+				catch (AbstractRestartResponseException e)
+				{
+					// if a redirect exception has been issued we abort what we
+					// were doing and begin responding to the top target on the
+					// stack
+					currentStep = RESPOND;
+				}
+			}
+		}
+		finally
+		{
+			// set step manually to clean up
+			currentStep = DETACH_REQUEST;
+
+			// clean up the request
+			detach();
+
+			// set step manually to done
+			currentStep = DONE;
+		}
+	}
+

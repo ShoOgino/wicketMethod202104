@@ -1,0 +1,11 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.IRequestLogger#sessionDestroyed(java.lang.String)
+	 */
+	public void sessionCreated(String sessionId)
+	{
+		liveSessions.put(sessionId, new SessionData(sessionId));
+		if (liveSessions.size() > peakSessions)
+			peakSessions = liveSessions.size();
+		totalCreatedSessions++;
+	}
+

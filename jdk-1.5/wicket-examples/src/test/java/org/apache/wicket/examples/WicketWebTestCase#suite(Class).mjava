@@ -1,0 +1,22 @@
+	/**
+	 * Suite method.
+	 * 
+	 * @param clazz
+	 * @return Test suite
+	 */
+	public static Test suite(Class clazz)
+	{
+		// The javascript 'history' variable is not supported by
+		// httpunit and we don't want httpunit to throw an
+		// exception just because they can not handle it.
+		HttpUnitOptions.setExceptionsThrownOnScriptError(false);
+
+		System.setProperty("wicket.configuration", "deployment");
+		
+		TestSuite suite = new TestSuite();
+		suite.addTestSuite(clazz);
+		JettyTestCaseDecorator deco = new JettyTestCaseDecorator(suite);
+
+		return deco;
+	}
+

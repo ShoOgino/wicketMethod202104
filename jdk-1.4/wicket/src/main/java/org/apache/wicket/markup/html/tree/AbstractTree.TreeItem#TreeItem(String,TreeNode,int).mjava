@@ -1,0 +1,25 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param id
+		 *            The component id
+		 * @param node
+		 *            tree node
+		 * @param level
+		 *            current level
+		 */
+		public TreeItem(String id, final TreeNode node, int level)
+		{
+			super(id, new Model((Serializable)node));
+
+			nodeToItemMap.put(node, this);
+			this.level = level;
+			setOutputMarkupId(true);
+
+			// if this isn't a root item in rootless mode
+			if (level != -1)
+			{
+				populateTreeItem(this, level);
+			}
+		}
+

@@ -1,0 +1,37 @@
+	/**
+	 * simulate selecting an option of a Form Component. Support RadioGroup,
+	 * CheckGroup, and AbstractChoice family currently. The behavior is similar
+	 * to interacting on the browser: For single choice, such as Radio or
+	 * DropDownList, the selection will toggle each other. For multiple choice,
+	 * such as Checkbox or ListMultipleChoice, the selection will cumulate.
+	 *
+	 * @param formComponentId
+	 *            relative path (from form) to selectable formComponent
+	 * @param index
+	 *            index of selectable option, start from 0
+	 */
+	public void select(String formComponentId, int index)
+	{
+		checkClosed();
+		FormComponent component = (FormComponent)workingForm
+		.get(formComponentId);
+
+		ChoiceSelector choiceSelector = choiceSelectorFactory.create(component);
+		choiceSelector.doSelect(index);
+		if (component instanceof DropDownChoice) {
+			try
+			{
+				Method wantOnSelectionChangedNotificationsMethod = DropDownChoice.class.getDeclaredMethod("wantOnSelectionChangedNotifications", new Class[0]);
+				wantOnSelectionChangedNotificationsMethod.setAccessible(true);
+				boolean wantOnSelectionChangedNotifications = ((Boolean)wantOnSelectionChangedNotificationsMethod.invoke(component, new Object[0])).booleanValue();
+				if (wantOnSelectionChangedNotifications) {
+					((DropDownChoice)component).onSelectionChanged();
+				}
+			}
+			catch (Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+	}
+

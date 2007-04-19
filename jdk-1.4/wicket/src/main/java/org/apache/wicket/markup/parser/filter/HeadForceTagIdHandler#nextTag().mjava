@@ -1,0 +1,33 @@
+	/**
+	 * @see org.apache.wicket.markup.parser.IMarkupFilter#nextTag()
+	 */
+	public MarkupElement nextTag() throws ParseException
+	{
+		final ComponentTag tag = (ComponentTag)getParent().nextTag();
+
+		if (tag != null)
+		{
+			// is it a <wicket:head> tag?
+			if (tag instanceof WicketTag && ((WicketTag)tag).isHeadTag())
+			{
+				this.inHead = tag.isOpen();
+			}
+			// no, it's not. Are we in <wicket:head> ?
+			else if (this.inHead == true)
+			{
+				// is the tag open and has empty wicket:id?
+				if ((tag instanceof WicketTag == false) && (tag.getId() == null)
+						&& (tag.isOpen() || tag.isOpenClose()) && needId(tag))
+				{
+					if (tag.getAttributes().get("id") == null)
+					{
+						tag.getAttributes().put("id", headElementIdPrefix + nextValue());
+						tag.setModified(true);
+					}
+				}
+			}
+		}
+
+		return tag;
+	}
+

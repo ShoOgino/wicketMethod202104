@@ -1,0 +1,50 @@
+	/**
+	 * Removes a single instance of the specified element from this Collection,
+	 * if it is present (optional operation). More formally, removes an element
+	 * <code>e</code> such that <code>(o==null ? e==null :
+	 * o.equals(e))</code>,
+	 * if the Collection contains one or more such elements. Returns true if the
+	 * Collection contained the specified element (or equivalently, if the
+	 * Collection changed as a result of the call).
+	 * 
+	 * @param element
+	 *            element to be removed from this Collection, if present.
+	 * @return true if the Collection changed as a result of the call.
+	 */
+	public synchronized boolean remove(Object element)
+	{
+		int len = array_.length;
+		if (len == 0)
+			return false;
+
+		// Copy while searching for element to remove
+		// This wins in the normal case of element being present
+
+		int newlen = len - 1;
+		Object[] newArray = new Object[newlen];
+
+		for (int i = 0; i < newlen; ++i)
+		{
+			if (element == array_[i] || (element != null && element.equals(array_[i])))
+			{
+				// found one; copy remaining and exit
+				for (int k = i + 1; k < len; ++k)
+					newArray[k - 1] = array_[k];
+				array_ = newArray;
+				return true;
+			}
+			else
+				newArray[i] = array_[i];
+		}
+		// special handling for last cell
+
+		if (element == array_[newlen] || (element != null && element.equals(array_[newlen])))
+		{
+			array_ = newArray;
+			return true;
+		}
+		else
+			return false; // throw away copy
+
+	}
+

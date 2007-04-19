@@ -1,0 +1,29 @@
+	/**
+	 * @see javax.swing.event.TreeModelListener#treeNodesChanged(javax.swing.event.TreeModelEvent)
+	 */
+	public final void treeNodesChanged(TreeModelEvent e)
+	{
+		// has root node changed?
+		if (e.getChildren() == null)
+		{
+			if (rootItem != null)
+			{
+				invalidateNode((TreeNode)rootItem.getModelObject(), true);
+			}
+		}
+		else
+		{
+			// go through all changed nodes
+			Object[] children = e.getChildren();
+			if (children != null)
+				for (int i = 0; i < children.length; i++)
+				{
+					TreeNode node = (TreeNode)children[i];
+					if (isNodeVisible(node))
+					{
+						// if the nodes is visible invalidate it
+						invalidateNode(node, true);
+					}
+				}
+		}
+	}

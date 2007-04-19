@@ -1,0 +1,33 @@
+	/**
+	 * @see org.apache.wicket.injection.IFieldValueFactory#getFieldValue(java.lang.reflect.Field,
+	 *      java.lang.Object)
+	 */
+	public Object getFieldValue(Field field, Object fieldOwner) {
+
+		if (field.isAnnotationPresent(SpringBean.class)) {
+			SpringBean annot = field.getAnnotation(SpringBean.class);
+			SpringBeanLocator locator = new SpringBeanLocator(annot.name(),
+					field.getType(), contextLocator);
+
+			// only check the cache if the bean is a singleton
+			if (locator.isSingletonBean() && cache.containsKey(locator)) {
+				return cache.get(locator);
+			}
+
+			// fail early - see if the locator can locate the spring bean
+			if (failFast) {
+				testLocator(locator, fieldOwner, field);
+			}
+
+			Object proxy = LazyInitProxyFactory.createProxy(field.getType(),
+					locator);
+			// only put the proxy into the cache if the bean is a singleton
+			if (locator.isSingletonBean()) {
+				cache.put(locator, proxy);
+			}
+			return proxy;
+		} else {
+			return null;
+		}
+	}
+

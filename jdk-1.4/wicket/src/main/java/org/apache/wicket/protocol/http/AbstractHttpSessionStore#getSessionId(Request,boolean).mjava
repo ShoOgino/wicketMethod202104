@@ -1,0 +1,24 @@
+	/**
+	 * @see org.apache.wicket.session.ISessionStore#getSessionId(org.apache.wicket.Request,
+	 *      boolean)
+	 */
+	public final String getSessionId(Request request, boolean create)
+	{
+		String id = null;
+		WebRequest webRequest = toWebRequest(request);
+		HttpSession httpSession = webRequest.getHttpServletRequest().getSession(false);
+		if (httpSession != null)
+		{
+			id = httpSession.getId();
+		}
+		else if (create)
+		{
+			httpSession = webRequest.getHttpServletRequest().getSession(true);
+			id = httpSession.getId();
+			IRequestLogger logger = application.getRequestLogger();
+			if (logger != null)
+				logger.sessionCreated(id);
+		}
+		return id;
+	}
+

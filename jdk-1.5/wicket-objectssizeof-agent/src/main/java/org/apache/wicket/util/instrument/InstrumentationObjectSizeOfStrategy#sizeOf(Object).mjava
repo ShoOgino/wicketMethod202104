@@ -1,0 +1,24 @@
+	/**
+	 * Calculates full size of object iterating over its hierarchy graph.
+	 * 
+	 * @param obj
+	 *            object to calculate size of
+	 * @return object size
+	 * 
+	 * @see org.apache.wicket.util.lang.Objects.IObjectSizeOfStrategy#sizeOf(java.lang.Object)
+	 */
+	public long sizeOf(Object obj) {
+		if (obj == null) {
+			return 0;
+		}
+		try {
+			SizeRecodingOuputStream recorder = new SizeRecodingOuputStream();
+			recorder.writeObject(obj);
+			return recorder.getTotalSize();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
+
+	}
+

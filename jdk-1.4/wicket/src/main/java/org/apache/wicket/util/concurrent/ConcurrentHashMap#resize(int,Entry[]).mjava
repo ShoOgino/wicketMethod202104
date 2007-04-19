@@ -1,0 +1,31 @@
+	/**
+	 * Gather all locks in order to call rehash, by recursing within synch
+	 * blocks for each segment index.
+	 * 
+	 * @param index
+	 *            the current segment. initially call value must be 0
+	 * @param assumedTab
+	 *            the state of table on first call to resize. If this changes on
+	 *            any call, the attempt is aborted because the table has already
+	 *            been resized by another thread.
+	 */
+	protected void resize(int index, Entry[] assumedTab)
+	{
+		Segment seg = segments[index];
+		synchronized (seg)
+		{
+			if (assumedTab == table)
+			{
+				int next = index + 1;
+				if (next < segments.length)
+				{
+					resize(next, assumedTab);
+				}
+				else
+				{
+					rehash();
+				}
+			}
+		}
+	}
+

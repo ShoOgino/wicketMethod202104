@@ -1,0 +1,21 @@
+	/**
+	 * @see AbstractTree#onBeforeAttach()
+	 */
+	protected void onBeforeAttach()
+	{
+		// has the header been added yet?
+		if (get("sideColumns") == null)
+		{
+			// no. initialize columns first
+			if (columns != null)
+				for (int i = 0; i < columns.length; i++)
+				{
+					IColumn column = columns[i];
+					column.setTreeTable(this);
+				}
+
+			// add the tree table header
+			addHeader();
+		}
+	}
+

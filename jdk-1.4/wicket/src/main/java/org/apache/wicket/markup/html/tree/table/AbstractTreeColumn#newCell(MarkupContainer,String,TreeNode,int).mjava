@@ -1,0 +1,16 @@
+	/**
+	 * @see IColumn#newCell(MarkupContainer, String, TreeNode, int)
+	 */
+	public Component newCell(MarkupContainer parent, String id, TreeNode node, int level)
+	{
+		return TreeTable.newTreeCell(parent, id, node, level, new TreeTable.IRenderNodeCallback()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public String renderNode(TreeNode node)
+			{
+				return AbstractTreeColumn.this.renderNode(node);
+			}
+		}, getTreeTable());
+	}
+

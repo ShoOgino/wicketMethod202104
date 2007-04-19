@@ -1,0 +1,24 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param mask
+	 *            The mask to use for this converter instance
+	 * @param type
+	 *            The type to convert string values to.
+	 * @see MaskFormatter
+	 */
+	public MaskConverter(String mask, Class/* <?> */type)
+	{
+		try
+		{
+			maskFormatter = new MaskFormatter(mask);
+			maskFormatter.setValueClass(type);
+			maskFormatter.setAllowsInvalid(true);
+			maskFormatter.setValueContainsLiteralCharacters(true);
+		}
+		catch (ParseException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

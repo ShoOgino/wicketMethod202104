@@ -1,0 +1,20 @@
+	/**
+	 * Sets the list of choices
+	 * 
+	 * @param choices
+	 *            model representing the list of choices
+	 * @return this for chaining
+	 */
+	public final AbstractChoice setChoices(IModel choices)
+	{
+		if (this.choices != null && this.choices != choices)
+		{
+			if (isVersioned())
+			{
+				addStateChange(new ChoicesListChange());
+			}
+		}
+		this.choices = choices;
+		return this;
+	}
+

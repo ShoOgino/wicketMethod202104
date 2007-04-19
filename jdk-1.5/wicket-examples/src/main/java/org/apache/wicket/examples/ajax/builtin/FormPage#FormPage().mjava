@@ -1,0 +1,52 @@
+	/**
+	 * Constructor
+	 */
+	public FormPage() {
+		// create feedback panel to show errors
+		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		feedback.setOutputMarkupId(true);
+		add(feedback);
+
+		// add form with markup id setter so it can be updated via ajax
+		Form form = new Form("form", new CompoundPropertyModel(bean));
+		add(form);
+		form.setOutputMarkupId(true);
+
+		FormComponent fc;
+
+		// add form components to the form as usual
+
+		fc = new RequiredTextField("name");
+		fc.add(StringValidator.minimumLength(4));
+		fc.setLabel(new ResourceModel("label.name"));
+
+		form.add(fc);
+		form.add(new SimpleFormComponentLabel("name-label", fc));
+
+		fc = new RequiredTextField("email");
+		fc.add(EmailAddressValidator.getInstance());
+		fc.setLabel(new ResourceModel("label.email"));
+
+		form.add(fc);
+		form.add(new SimpleFormComponentLabel("email-label", fc));
+
+		// attach an ajax validation behavior to all form component's onkeydown
+		// event and throttle it down to once per second
+
+		AjaxFormValidatingBehavior.addToAllFormComponents(form, "onkeyup",
+				Duration.ONE_SECOND);
+
+		// add a button that can be used to submit the form via ajax
+		form.add(new AjaxSubmitButton("ajax-submit-button", form) {
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				// repaint the feedback panel so that it is hidden
+				target.addComponent(feedback);
+			}
+
+			protected void onError(AjaxRequestTarget target, Form form) {
+				// repaint the feedback panel so errors are shown
+				target.addComponent(feedback);
+			}
+		});
+	}
+

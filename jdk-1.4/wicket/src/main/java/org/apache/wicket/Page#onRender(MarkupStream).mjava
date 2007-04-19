@@ -1,0 +1,26 @@
+	/**
+	 * Renders this container to the given response object.
+	 * 
+	 * @param markupStream
+	 */
+	protected void onRender(final MarkupStream markupStream)
+	{
+		// Set page's associated markup stream
+		final MarkupStream associatedMarkupStream = getAssociatedMarkupStream(true);
+		setMarkupStream(associatedMarkupStream);
+
+		// Configure response object with locale and content type
+		configureResponse();
+
+		// Render all the page's markup
+		setFlag(FLAG_IS_RENDERING, true);
+		try
+		{
+			renderAll(associatedMarkupStream);
+		}
+		finally
+		{
+			setFlag(FLAG_IS_RENDERING, false);
+		}
+	}
+

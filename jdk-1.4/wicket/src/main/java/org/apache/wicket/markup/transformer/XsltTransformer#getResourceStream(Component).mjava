@@ -1,0 +1,26 @@
+	/**
+	 * Get the XSL resource stream
+	 * 
+	 * @param component
+	 * 
+	 * @return The XSLT file resource stream
+	 */
+	private IResourceStream getResourceStream(final Component component)
+	{
+		final IResourceStream resourceStream;
+
+		String filePath = this.xslFile;
+		if (filePath == null)
+		{
+			filePath = component.findParentWithAssociatedMarkup().getClass()
+				.getPackage().getName().replace('.', '/')
+				+ "/" + component.getId();
+		}
+		
+		resourceStream = Application.get().getResourceSettings().getResourceStreamLocator()
+				.locate(getClass(), filePath, component.getStyle(), component.getLocale(),
+						XsltTransformer.extension);
+		
+		return resourceStream;
+	}
+

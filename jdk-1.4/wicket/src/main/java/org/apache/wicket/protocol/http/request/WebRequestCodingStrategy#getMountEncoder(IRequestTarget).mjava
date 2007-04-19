@@ -1,0 +1,23 @@
+	/**
+	 * Gets the mount encoder for the given request target if any.
+	 * 
+	 * @param requestTarget
+	 *            the request target to match
+	 * @return the mount encoder if any
+	 */
+	protected IRequestTargetUrlCodingStrategy getMountEncoder(IRequestTarget requestTarget)
+	{
+		// TODO Post 1.2: Performance: Optimize algorithm if possible and/ or
+		// cache lookup results
+		for (Iterator i = mountsOnPath.strategies().iterator(); i.hasNext();)
+		{
+			IRequestTargetUrlCodingStrategy encoder = (IRequestTargetUrlCodingStrategy)i.next();
+			if (encoder.matches(requestTarget))
+			{
+				return encoder;
+			}
+		}
+
+		return null;
+	}
+

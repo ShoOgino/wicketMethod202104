@@ -1,0 +1,26 @@
+	/**
+	 * Is this a Wicket request?
+	 * 
+	 * @param relativePath
+	 *            The relativePath
+	 * @return True if this is a Wicket request
+	 */
+	private boolean isWicketRequest(String relativePath)
+	{
+		// Special case home page
+		if (relativePath.equals(""))
+		{
+			return true;
+		}
+
+		// Resources
+		if (relativePath.startsWith(WebRequestCodingStrategy.RESOURCES_PATH_PREFIX))
+		{
+			return true;
+		}
+
+		// Mounted page
+		return webApplication.getRequestCycleProcessor().getRequestCodingStrategy()
+				.urlCodingStrategyForPath(relativePath) != null;
+	}
+

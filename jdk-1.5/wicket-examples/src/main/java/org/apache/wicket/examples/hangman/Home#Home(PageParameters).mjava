@@ -1,0 +1,20 @@
+	/**
+	 * Create the home page.
+	 * 
+	 * @param parameters
+	 *            The parameters for the page (not used)
+	 */
+	public Home(final PageParameters parameters)
+	{
+		final String word = parameters.getString("word");
+		if (word == null)
+		{
+			getGame().newGame(5, new WordGenerator());
+		}
+		else
+		{
+			getGame().newGame(5, new WordGenerator(new String[] { word }));
+		}
+		add(new BookmarkablePageLink("start", Guess.class));
+	}
+

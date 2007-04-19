@@ -1,0 +1,18 @@
+	/**
+	 * Visits the form's children FormComponents and inform them that a new user
+	 * input is available in the Request
+	 */
+	private void inputChanged()
+	{
+		visitFormComponents(new FormComponent.AbstractVisitor()
+		{
+			public void onFormComponent(final FormComponent formComponent)
+			{
+				if (formComponent.isVisibleInHierarchy())
+				{
+					formComponent.inputChanged();
+				}
+			}
+		});
+	}
+

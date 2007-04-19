@@ -1,0 +1,21 @@
+	/**
+	 * Constuctor to get a resource reference to a packaged resource that is
+	 * already bound to the current applicaiton.
+	 * 
+	 * @param scope
+	 *            The scope of the binding
+	 * @param name
+	 *            The name of the resource
+	 * @throws IllegalArgumentException
+	 *             when no corresponding resource is found
+	 * @see ResourceReference#ResourceReference(Class, String)
+	 */
+	public PackageResourceReference(Class scope, String name)
+	{
+		super(scope, name);
+		// This can't be done in the constructor because ResourceReferences can
+		// be declared static in a class that is stored in the session.
+		// checkExists(scope, name, null, null);
+		setHash(scope, name, null, null);
+	}
+

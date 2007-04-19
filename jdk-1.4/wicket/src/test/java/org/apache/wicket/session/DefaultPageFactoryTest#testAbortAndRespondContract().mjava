@@ -1,0 +1,58 @@
+	/**
+	 * Verifies page factory bubbles AbortAndRespondException
+	 */
+	public void testAbortAndRespondContract()
+	{
+		try
+		{
+			tester.setupRequestAndResponse();
+			tester.createRequestCycle();
+			pageFactory.newPage(AbortAndRespondPage1.class);
+			fail();
+		}
+		catch (AbstractRestartResponseException e)
+		{
+			// noop
+		}
+
+		try
+		{
+			pageFactory.newPage(AbortAndRespondPage2.class);
+			fail();
+		}
+		catch (AbstractRestartResponseException e)
+		{
+			// noop
+		}
+
+		try
+		{
+			pageFactory.newPage(AbortAndRespondPage2.class, new PageParameters());
+			fail();
+		}
+		catch (AbstractRestartResponseException e)
+		{
+			// noop
+		}
+
+		try
+		{
+			pageFactory.newPage(AbortAndRespondPage3.class);
+			fail();
+		}
+		catch (AbstractRestartResponseException e)
+		{
+			// noop
+		}
+
+		try
+		{
+			pageFactory.newPage(AbortAndRespondPage3.class, new PageParameters());
+			fail();
+		}
+		catch (AbstractRestartResponseException e)
+		{
+			// noop
+		}
+	}
+

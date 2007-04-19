@@ -1,0 +1,22 @@
+	protected void onEvent(AjaxRequestTarget target)
+	{
+		getForm().onFormSubmitted();
+		if (!getForm().hasError())
+		{
+			onSubmit(target);
+		}
+		if (form.findParent(Page.class) != null)
+		{
+			/*
+			 * there can be cases when a form is replaced with another component
+			 * in the onsubmit() handler of this behavior. in that case form no
+			 * longer has a page and so calling .hasError on it will cause an
+			 * exception, thus the check above.
+			 */
+			if (getForm().hasError())
+			{
+				onError(target);
+			}
+		}
+	}
+
