@@ -2,6 +2,10 @@
 	{
 		final String markupType = getMarkupType(owner);
 
+		// TODO we need to expose this functionality for any class not just for
+		// markupcontainers in markupcache so we dont have to replicate this
+		// logic here
+
 		// Get locator to search for the resource
 		final IResourceStreamLocator locator = Application.get().getResourceSettings()
 				.getResourceStreamLocator();
@@ -23,9 +27,10 @@
 			// Did we find it already?
 			if (resourceStream != null)
 			{
-				ContainerInfo ci = new ContainerInfo(containerClass, locale, style,null, markupType);
+				ContainerInfo ci = new ContainerInfo(containerClass, locale, style, null,
+						markupType);
 				markupResourceStream = new MarkupResourceStream(resourceStream, ci, containerClass);
-				break; 
+				break;
 			}
 
 			// Walk up the class hierarchy one level, if markup has not
