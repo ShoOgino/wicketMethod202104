@@ -1,8 +1,5 @@
 	private MarkupStream findMarkupStream(Component owner)
 	{
-		// TODO we should open up the api to do this for any class
-		// not just a
-		// MarkupContainer so all this logic does not have to be duplicated here
 		final String markupType = getMarkupType(owner);
 
 		// Get locator to search for the resource
@@ -26,12 +23,9 @@
 			// Did we find it already?
 			if (resourceStream != null)
 			{
-				ContainerInfo ci = new ContainerInfo(containerClass, locale, style, null,
-						markupType);
+				ContainerInfo ci = new ContainerInfo(containerClass, locale, style,null, markupType);
 				markupResourceStream = new MarkupResourceStream(resourceStream, ci, containerClass);
-
-				break; // TODO jcompagner: was this break missing here on
-				// purpose?
+				break; 
 			}
 
 			// Walk up the class hierarchy one level, if markup has not
