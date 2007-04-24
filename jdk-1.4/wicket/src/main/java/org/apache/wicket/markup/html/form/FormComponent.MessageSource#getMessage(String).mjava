@@ -15,9 +15,10 @@
 			final Localizer localizer = formComponent.getLocalizer();
 
 			String resource = prefix + getId() + "." + key;
-			
-			// First use the parent for resolving so that form1.textfield1.RequiredValidator can be used.
-			
+
+			// First use the parent for resolving so that
+			// form1.textfield1.RequiredValidator can be used.
+
 			// Note: It is important that the default value of "" is provided
 			// to getString() not to throw a MissingResourceException or to
 			// return a default string like "[Warning: String ..."
@@ -36,21 +37,22 @@
 			if (Strings.isEmpty(message))
 			{
 				// If still empty then use default
-				
+
 				resource = prefix + getId() + "." + key;
-	
-				// Note: It is important that the default value of "" is provided
+
+				// Note: It is important that the default value of "" is
+				// provided
 				// to getString() not to throw a MissingResourceException or to
 				// return a default string like "[Warning: String ..."
 				message = localizer.getString(resource, formComponent, "");
-	
+
 				// If not found, than ...
 				if (Strings.isEmpty(message))
 				{
 					// Try a variation of the resource key
-	
+
 					resource = prefix + key;
-	
+
 					message = localizer.getString(resource, formComponent, "");
 				}
 			}
