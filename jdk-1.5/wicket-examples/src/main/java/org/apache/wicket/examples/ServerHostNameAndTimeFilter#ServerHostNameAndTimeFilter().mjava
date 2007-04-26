@@ -1,0 +1,22 @@
+	/**
+	 * Construct, trying system property 'examples.hostname' for the server id
+	 * or else current time milis.
+	 */
+	public ServerHostNameAndTimeFilter()
+	{
+		String hostId = null;
+		try
+		{
+			hostId = System.getProperty("examples.hostname");
+		}
+		catch (SecurityException e)
+		{
+		}
+		if (Strings.isEmpty(hostId))
+		{
+			hostId = String.valueOf(System.currentTimeMillis());
+		}
+
+		setHostName(hostId);
+	}
+
