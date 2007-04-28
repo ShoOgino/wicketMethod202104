@@ -16,7 +16,16 @@
 				IBehavior behavior = (IBehavior)i.next();
 				if (isBehaviorAccepted(behavior))
 				{
-					behavior.detachModel(this);
+					/*
+					 * TODO eelco: shouldnt we detach model always, accepted or
+					 * not? what if this method returns true during render, but
+					 * false here - something can go undetached
+					 */
+					behavior.detach(this);
+				}
+				if (behavior.isTemporary())
+				{
+					i.remove();
 				}
 			}
 		}
