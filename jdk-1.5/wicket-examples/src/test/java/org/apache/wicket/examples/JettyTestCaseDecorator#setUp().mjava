@@ -6,15 +6,25 @@
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext web = new WebAppContext();
-		web.setContextPath("/wicket-examples");
+		if (contextPath == null)
+			web.setContextPath("/wicket-examples");
+		else
+			web.setContextPath(contextPath);
 
-		String basedir = System.getProperty("basedir");
-		String path = "";
-		if (basedir != null)
-			path = basedir + "/";
-		path += "src/main/webapp";
+		if (webappLocation == null)
+		{
+			String basedir = System.getProperty("basedir");
+			String path = "";
+			if (basedir != null)
+				path = basedir + "/";
+			path += "src/main/webapp";
 
-		web.setWar(path);
+			web.setWar(path);
+		}
+		else
+		{
+			web.setWar(webappLocation);
+		}
 		server.addHandler(web);
 
 		server.start();
