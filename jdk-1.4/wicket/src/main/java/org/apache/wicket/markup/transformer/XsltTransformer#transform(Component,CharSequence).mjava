@@ -5,9 +5,10 @@
 	 * component's id.
 	 * 
 	 * @see org.apache.wicket.markup.transformer.ITransformer#transform(org.apache.wicket.Component,
-	 *      java.lang.String)
+	 *      CharSequence)
 	 */
-	public CharSequence transform(final Component component, final String output) throws Exception
+	public CharSequence transform(final Component component, final CharSequence output)
+			throws Exception
 	{
 		IResourceStream resourceStream = getResourceStream(component);
 
@@ -31,8 +32,8 @@
 			// 3. Use the Transformer to transform an XML Source and send the
 			// output to a Result object.
 			StringWriter writer = new StringWriter();
-			transformer.transform(new StreamSource(new StringReader(output)), new StreamResult(
-					writer));
+			transformer.transform(new StreamSource(new StringReader(output.toString())),
+					new StreamResult(writer));
 
 			return writer.getBuffer();
 		}

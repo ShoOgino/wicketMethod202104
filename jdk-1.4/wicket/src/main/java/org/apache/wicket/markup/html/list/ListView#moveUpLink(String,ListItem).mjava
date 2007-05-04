@@ -14,19 +14,6 @@
 			private static final long serialVersionUID = 1L;
 
 			/**
-			 * @see org.apache.wicket.Component#onBeforeRender()
-			 */
-			protected void onBeforeRender()
-			{
-				super.onBeforeRender();
-				setAutoEnable(false);
-				if (getList().indexOf(item.getModelObject()) == 0)
-				{
-					setEnabled(false);
-				}
-			}
-
-			/**
 			 * @see org.apache.wicket.markup.html.link.Link#onClick()
 			 */
 			public void onClick()
@@ -51,6 +38,19 @@
 					// Swap items and invalidate listView
 					Collections.swap(getList(), index, index - 1);
 					ListView.this.removeAll();
+				}
+			}
+
+			/**
+			 * @see org.apache.wicket.Component#onBeforeRender()
+			 */
+			protected void onBeforeRender()
+			{
+				super.onBeforeRender();
+				setAutoEnable(false);
+				if (getList().indexOf(item.getModelObject()) == 0)
+				{
+					setEnabled(false);
 				}
 			}
 		};
