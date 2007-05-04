@@ -3,21 +3,10 @@
 		 */
 		private void signalModelChange()
 		{
-			if (!attachedButNotRendered)
-			{
-				// if the list view was not yet attached, or
-				// it has already been rendered, setting it dirty will suffice
-				// it will have the effect that next time the list view
-				// is processes, it will recalculate it's children
-				this.dirty = true;
-			}
-			else
-			{
-				// else let the listview recalculate it's childs immediately;
-				// it was attached, but it needs to go trhough that again now
-				// as the signalling component attached after this
-				getModel().detach();
-				super.internalOnAttach();
-			}
+			// else let the listview recalculate it's childs immediately;
+			// it was attached, but it needs to go trhough that again now
+			// as the signalling component attached after this
+			getModel().detach();
+			super.internalOnAttach();
 		}
 

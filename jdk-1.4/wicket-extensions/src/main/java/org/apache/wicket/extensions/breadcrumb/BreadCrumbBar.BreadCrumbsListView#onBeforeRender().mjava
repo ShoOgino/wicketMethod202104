@@ -1,9 +1,13 @@
 		/**
-		 * @see org.apache.wicket.Component#onBeforeRender()
+		 * @see org.apache.wicket.markup.html.list.ListView#onBeforeRender()
 		 */
 		protected void onBeforeRender()
 		{
-			// it this point, we can't change the hierarchy anymore
-			attachedButNotRendered = false;
+			super.onBeforeRender();
+			if (dirty)
+			{
+				super.internalOnAttach();
+				this.dirty = false;
+			}
 		}
 
