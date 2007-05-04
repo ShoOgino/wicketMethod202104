@@ -1,5 +1,12 @@
 		public Page get(int id, int versionNumber)
 		{
+			PageVersions pv = null;
+			if (versionNumber == -1)
+			{
+				int index = pageVersions.indexOf(new PageVersions(id,-1,-1));
+				pv = (PageVersions)pageVersions.get(index);
+				versionNumber = pv.versionid;
+			}
 			String sessionId = getSession().getId();
 			if (lastPage != null && lastPage.getNumericId() == id)
 			{
@@ -13,9 +20,20 @@
 			}
 			if (sessionId != null)
 			{
-				// this is really a page request for a default page. (so without
-				// an ajax version)
-				return getStore().getPage(sessionId, getName(), id, versionNumber, 0);
+				int ajaxVersionNumber = 0;
+				if (pv == null)
+				{
+					int index = pageVersions.indexOf(new PageVersions(id,-1,-1));
+					if (index != -1)
+					{
+						pv = (PageVersions)pageVersions.get(index);
+					}
+				}
+				if (pv != null)
+				{
+					ajaxVersionNumber = pv.ajaxversionid;
+				}
+				return getStore().getPage(sessionId, getName(), id, versionNumber, ajaxVersionNumber);
 			}
 			return null;
 		}

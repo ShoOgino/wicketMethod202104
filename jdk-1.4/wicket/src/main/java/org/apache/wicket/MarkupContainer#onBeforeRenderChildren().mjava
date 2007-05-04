@@ -1,6 +1,6 @@
-	void attachChildren()
+	void onBeforeRenderChildren()
 	{
-		super.attachChildren();
+		super.onBeforeRenderChildren();
 		try
 		{
 			// Loop through child components
@@ -10,8 +10,12 @@
 				// Get next child
 				final Component child = children_get(i);
 
-				// Call begin request on the child
-				child.attach();
+				// Ignore feedback as that was done in Page
+				if (!(child instanceof IFeedback))
+				{
+					// Call begin request on the child
+					child.beforeRender();
+				}
 			}
 		}
 		catch (RuntimeException ex)

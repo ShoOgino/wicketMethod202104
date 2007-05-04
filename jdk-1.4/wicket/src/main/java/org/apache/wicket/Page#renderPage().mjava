@@ -3,6 +3,11 @@
 	 */
 	public final void renderPage()
 	{
+		// if not attached then attach the whole page.
+		if (!isAttached())
+		{
+			attach();
+		}
 		// first try to check if the page can be rendered:
 		if (!isActionAuthorized(RENDER))
 		{
@@ -30,7 +35,7 @@
 			public Object component(Component component)
 			{
 				((IFeedback)component).updateFeedback();
-				component.attach();
+				component.beforeRender();
 				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
@@ -39,9 +44,6 @@
 		{
 			((IFeedback)this).updateFeedback();
 		}
-
-		// Now, do the initialization for the other components
-		attach();
 
 		// Visit all this page's children to reset markup streams and check
 		// rendering authorization, as appropriate. We set any result; positive
@@ -65,8 +67,11 @@
 			}
 		});
 
+		beforeRender();
 		// Handle request by rendering page
 		render(null);
+		
+		afterRender();
 
 		// Check rendering if it happened fully
 		checkRendering(this);

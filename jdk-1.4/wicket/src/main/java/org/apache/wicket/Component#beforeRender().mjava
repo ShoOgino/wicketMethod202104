@@ -1,0 +1,23 @@
+	/**
+	 * Called for every component when the page is getting to be rendered.
+	 * it will call onBeforeRender for this component and all the child components
+	 */
+	public final void beforeRender()
+	{
+		if (!getFlag(FLAG_RENDERING))
+		{
+			setFlag(FLAG_BEFORE_RENDERING, true);
+			setFlag(FLAG_RENDERING, true);
+			onBeforeRender();
+			if (getFlag(FLAG_BEFORE_RENDERING))
+			{
+				throw new IllegalStateException(Component.class.getName()
+						+ " has not been properly rendered. Something in the hierarchy of "
+						+ getClass().getName()
+						+ " has not called super.onBeforeRender() in the override of onBeforeRender() method");
+			}
+		}
+
+		onBeforeRenderChildren();
+	}
+

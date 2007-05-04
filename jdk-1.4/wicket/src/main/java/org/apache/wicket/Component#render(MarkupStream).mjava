@@ -26,26 +26,17 @@
 			try
 			{
 				// Call implementation to render component
-				onBeforeRender();
 				notifyBehaviorsComponentBeforeRender();
-				try
+				final IComponentBorder border = getComponentBorder();
+				if (border != null)
 				{
-					final IComponentBorder border = getComponentBorder();
-					if (border != null)
-					{
-						border.renderBefore(this);
-					}
-					onRender(markupStream);
-					if (border != null)
-					{
-						border.renderAfter(this);
-					}
+					border.renderBefore(this);
 				}
-				finally
+				onRender(markupStream);
+				if (border != null)
 				{
-					onAfterRender();
+					border.renderAfter(this);
 				}
-
 				// Component has been rendered
 				rendered();
 			}
