@@ -1,0 +1,30 @@
+	/**
+	 * Removes behavior from component
+	 * 
+	 * @param behavior
+	 *            behavior to remove
+	 * 
+	 * @return this (to allow method call chaining)
+	 */
+	public Component remove(final IBehavior behavior)
+	{
+		if (behavior == null)
+		{
+			throw new IllegalArgumentException("Argument `behavior` cannot be null");
+		}
+		if (behaviors == null || !behaviors.contains(behavior) == false)
+		{
+			throw new IllegalStateException(
+					"Tried to remove a behavior that was not added to the component. Behavior: "
+							+ behavior.toString());
+		}
+
+		if (!behavior.isTemporary())
+		{
+			addStateChange(new RemovedBehaviorChange(behavior));
+		}
+		behaviors.remove(behavior);
+
+		return this;
+	}
+

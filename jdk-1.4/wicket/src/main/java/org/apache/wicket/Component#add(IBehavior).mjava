@@ -27,8 +27,14 @@
 
 		behaviors.add(behavior);
 
+		if (!behavior.isTemporary())
+		{
+			addStateChange(new AddedBehaviorChange(behavior));
+		}
+
 		// Give handler the opportunity to bind this component
 		behavior.bind(this);
+
 		return this;
 	}
 
