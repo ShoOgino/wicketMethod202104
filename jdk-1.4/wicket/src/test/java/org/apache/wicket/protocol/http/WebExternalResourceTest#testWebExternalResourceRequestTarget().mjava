@@ -1,10 +1,14 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	public void testWebExternalResourceRequestTarget() throws Exception
 	{
 		WebExternalResourceRequestTarget rt = new WebExternalResourceRequestTarget("/index.html");
 		WebRequestCycle cycle = tester.createRequestCycle();
 		cycle.setRequestTarget(rt);
 		tester.processRequestCycle(cycle);
-		assertTrue(getContentType().startsWith("text/html"));
+		assertTrue(tester.getContentTypeFromResponseHeader().startsWith("text/html"));
 		// WebExternalResourceRequestTarget does not set Content-Length
 		// assertEquals(23, getContentLength());
 		tester.assertResultPage(WebExternalResourceTest.class, "index.html");

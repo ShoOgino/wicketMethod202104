@@ -1,20 +1,15 @@
 	/**
-	 * Parse the markup.
+	 * Reads and parses markup from a file.
 	 * 
-	 * @param string
-	 *            The markup
 	 * @return The markup
 	 * @throws IOException
 	 * @throws ResourceStreamNotFoundException
 	 */
-	public final Markup parse(final String string) throws IOException,
-			ResourceStreamNotFoundException
+	public final Markup parse() throws IOException, ResourceStreamNotFoundException
 	{
-		// Remove all existing markup elements
-		this.markup.reset();
-
 		// Initialize the xml parser
-		this.xmlParser.parse(string);
+		this.xmlParser.parse(this.markup.getResource().getInputStream(), this.markupSettings
+				.getDefaultMarkupEncoding());
 
 		// parse the xml markup and tokenize it into wicket relevant markup
 		// elements

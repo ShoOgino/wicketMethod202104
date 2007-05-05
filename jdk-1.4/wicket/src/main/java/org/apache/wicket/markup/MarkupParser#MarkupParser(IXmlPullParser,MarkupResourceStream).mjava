@@ -1,0 +1,20 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param xmlParser
+	 *            The streaming xml parser to read and parse the markup
+	 * @param resource
+	 *            The markup resource (file)
+	 */
+	public MarkupParser(final IXmlPullParser xmlParser, final MarkupResourceStream resource)
+	{
+		this.xmlParser = xmlParser;
+		this.markupSettings = Application.get().getMarkupSettings();
+
+		this.markup = new Markup();
+		this.markup.setResource(resource);
+
+		// Initialize the markup filter chain
+		initializeMarkupFilters();
+	}
+

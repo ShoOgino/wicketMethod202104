@@ -8,10 +8,10 @@
 	public final void testScript() throws ParseException, ResourceStreamNotFoundException,
 			IOException
 	{
-		final MarkupParser parser = new MarkupParser(new XmlPullParser());
+		final MarkupParser parser = new MarkupParser(
+				"<html wicket:id=\"test\"><script language=\"JavaScript\">... <x a> ...</script></html>");
 
-		Markup markup = parser
-				.parse("<html wicket:id=\"test\"><script language=\"JavaScript\">... <x a> ...</script></html>");
+		Markup markup = parser.parse();
 		assertEquals(3, markup.size());
 		assertEquals("html", ((ComponentTag)markup.get(0)).getName());
 		assertEquals("html", ((ComponentTag)markup.get(2)).getName());

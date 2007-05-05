@@ -1,9 +1,15 @@
-	protected int getContentLength()
+	/**
+	 * 
+	 * @return
+	 */
+	public int getContentLengthFromResponseHeader()
 	{
-		String contentLength = ((MockHttpServletResponse)tester.getWicketResponse()
+		String contentLength = ((MockHttpServletResponse)getWicketResponse()
 				.getHttpServletResponse()).getHeader("Content-Length");
 		if (contentLength == null)
+		{
 			throw new WicketRuntimeException("No Content-Length header found");
+		}
 		return Integer.parseInt(contentLength);
 	}
 
