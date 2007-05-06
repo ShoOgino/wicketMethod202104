@@ -1,15 +1,16 @@
 	/**
 	 * Append a new filter to the list of already pre-configured markup filters.
+	 * Add the new filter before the "beforeFilter" which is identified by its
+	 * class.
 	 * 
 	 * @param filter
 	 *            The filter to be appended
 	 * @param beforeFilter
-	 *            The filter should be added before the beforeFilter. If
+	 *            The filter will be added before the beforeFilter. If
 	 *            beforeFilter == null or beforeFilter not found than append to
 	 *            the end
 	 */
-	public final void appendMarkupFilter(final IMarkupFilter filter,
-			final Class beforeFilter)
+	public final void appendMarkupFilter(final IMarkupFilter filter, final Class beforeFilter)
 	{
 		if ((beforeFilter == null) || (this.markupFilterChain == null))
 		{
@@ -29,7 +30,7 @@
 				}
 				current = current.getParent();
 			}
-			
+
 			if (current == null)
 			{
 				filter.setParent(this.markupFilterChain);
