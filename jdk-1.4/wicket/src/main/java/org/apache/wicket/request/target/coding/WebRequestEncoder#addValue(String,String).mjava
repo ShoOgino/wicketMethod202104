@@ -1,0 +1,31 @@
+	/**
+	 * Add a {@link String}
+	 * @param key
+	 * @param value
+	 */
+	public void addValue(String key, String value)
+	{
+		String escapedValue = value;
+		try
+		{
+			escapedValue = URLEncoder.encode(escapedValue, application.getRequestCycleSettings()
+					.getResponseRequestEncoding());
+		}
+		catch (UnsupportedEncodingException ex)
+		{
+			// ignore
+		}
+		if (!firstParameter)
+		{
+			url.append('&');
+		}
+		else
+		{
+			firstParameter = false;
+			url.append('?');
+		}
+		url.append(key);
+		url.append('=');
+		url.append(escapedValue);
+	}
+
