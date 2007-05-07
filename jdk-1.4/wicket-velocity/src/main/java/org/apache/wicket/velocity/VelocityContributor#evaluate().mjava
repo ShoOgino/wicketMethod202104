@@ -1,0 +1,42 @@
+	/**
+	 * Evaluate the template.
+	 * 
+	 * @return The avaluated template
+	 */
+	protected final CharSequence evaluate()
+	{
+		if (!Velocity.resourceExists(templateName))
+		{
+			return null;
+		}
+		// create a Velocity context object using the model if set
+		final VelocityContext ctx = new VelocityContext((Map) model.getObject());
+
+		// create a writer for capturing the Velocity output
+		StringWriter writer = new StringWriter();
+
+		try
+		{
+			// execute the velocity script and capture the output in writer
+			if (!Velocity.mergeTemplate(templateName, encoding, ctx, writer))
+			{
+				return null;
+			}
+
+			// replace the tag's body the Velocity output
+			CharSequence result = writer.getBuffer();
+
+			if (escapeHtml())
+			{
+				// encode the result in order to get valid html output that
+				// does not break the rest of the page
+				result = Strings.escapeMarkup(result.toString());
+			}
+			return result;
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

@@ -1,0 +1,26 @@
+	/**
+	 * Either print or rethrow the throwable.
+	 * 
+	 * @param exception
+	 *            the cause
+	 * @param markupStream
+	 *            the markup stream
+	 * @param openTag
+	 *            the open tag
+	 */
+	private void onException(final Exception exception, final MarkupStream markupStream,
+			final ComponentTag openTag)
+	{
+		if (!throwVelocityExceptions)
+		{
+			// print the exception on the panel
+			String stackTraceAsString = Strings.toString(exception);
+			replaceComponentTagBody(markupStream, openTag, stackTraceAsString);
+		}
+		else
+		{
+			// rethrow the exception
+			throw new WicketRuntimeException(exception);
+		}
+	}
+

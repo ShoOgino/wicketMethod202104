@@ -1,0 +1,87 @@
+	/**
+	 * @see org.apache.wicket.markup.html.panel.Panel#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
+	 *      org.apache.wicket.markup.ComponentTag)
+	 */
+	protected void onComponentTagBody(final MarkupStream markupStream,
+			final ComponentTag openTag)
+	{
+		final Reader templateReader = getTemplateReader();
+		if (templateReader != null)
+		{
+			// Get model as a map
+			final Map map = (Map) getModelObject();
+
+			// create a Velocity context object using the model if set
+			final VelocityContext ctx = new VelocityContext(map);
+
+			// create a writer for capturing the Velocity output
+			StringWriter writer = new StringWriter();
+
+			// string to be used as the template name for log messages in case
+			// of error
+			final String logTag = getId();
+			try
+			{
+				// execute the velocity script and capture the output in writer
+				Velocity.evaluate(ctx, writer, logTag, templateReader);
+
+				// replace the tag's body the Velocity output
+				String result = writer.toString();
+
+				if (escapeHtml)
+				{
+					// encode the result in order to get valid html output that
+					// does not break the rest of the page
+					result = Strings.escapeMarkup(result).toString();
+				}
+
+				if (!getParseGeneratedMarkup())
+				{
+					// now replace the body of the tag with the velocity merge
+					// result
+					replaceComponentTagBody(markupStream, openTag, result);
+				}
+				else
+				{
+					// now parse the velocity merge result
+					Markup markup;
+					try
+					{
+						MarkupParser parser = getApplication().getMarkupSettings()
+								.getMarkupParserFactory().newMarkupParser(
+										new MarkupResourceStream(
+												new StringResourceStream(result)));
+						markup = parser.parse();
+					}
+					catch (ResourceStreamNotFoundException e)
+					{
+						throw new RuntimeException(
+								"Could not parse resulting markup from '"
+										+ templateResource + "'", e);
+					}
+					renderAll(new MarkupStream(markup));
+				}
+			}
+			catch (ParseErrorException e)
+			{
+				onException(e, markupStream, openTag);
+			}
+			catch (MethodInvocationException e)
+			{
+				onException(e, markupStream, openTag);
+			}
+			catch (ResourceNotFoundException e)
+			{
+				onException(e, markupStream, openTag);
+			}
+			catch (IOException e)
+			{
+				onException(e, markupStream, openTag);
+			}
+		}
+		else
+		{
+			replaceComponentTagBody(markupStream, openTag, ""); // just empty it
+		}
+	}
+
