@@ -1,7 +1,8 @@
 	/**
 	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
 	 * <p>
-	 * Sets session for calling thread.
+	 * Sets session for calling thread. Also triggers {@link #attach()} being
+	 * called.
 	 * 
 	 * @param session
 	 *            The session
@@ -12,6 +13,10 @@
 		{
 			throw new IllegalArgumentException("Argument session can not be null");
 		}
+
 		current.set(session);
+
+		// execute any attach logic now
+		session.attach();
 	}
 
