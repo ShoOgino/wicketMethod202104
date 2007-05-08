@@ -7,15 +7,17 @@
 		// Chain together all the different markup filters and configure them
 		this.markupFilterChain = xmlParser;
 
-		appendMarkupFilter(new WicketTagIdentifier(markup));
+		MarkupResourceData markupResourceData = this.markup.getMarkupResourceData();
+		
+		appendMarkupFilter(new WicketTagIdentifier(markupResourceData));
 		appendMarkupFilter(new TagTypeHandler());
 		appendMarkupFilter(new HtmlHandler());
 		appendMarkupFilter(new WicketRemoveTagHandler());
 		appendMarkupFilter(new WicketLinkTagHandler());
-		appendMarkupFilter(new WicketNamespaceHandler(markup));
+		appendMarkupFilter(new WicketNamespaceHandler(markupResourceData));
 
 		// Provided the wicket component requesting the markup is known ...
-		final MarkupResourceStream resource = markup.getResource();
+		final MarkupResourceStream resource = markupResourceData.getResource();
 		if (resource != null)
 		{
 			final ContainerInfo containerInfo = resource.getContainerInfo();
@@ -27,7 +29,7 @@
 				// Pages require additional handlers
 				if (Page.class.isAssignableFrom(containerInfo.getContainerClass()))
 				{
-					appendMarkupFilter(new HtmlHeaderSectionHandler(this.markup));
+					appendMarkupFilter(new HtmlHeaderSectionHandler(markup));
 				}
 
 				appendMarkupFilter(new HeadForceTagIdHandler(containerInfo.getContainerClass()));

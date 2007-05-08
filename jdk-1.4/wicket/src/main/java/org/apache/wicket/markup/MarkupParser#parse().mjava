@@ -7,16 +7,18 @@
 	 */
 	public final Markup parse() throws IOException, ResourceStreamNotFoundException
 	{
+		MarkupResourceData markupResourceData = this.markup.getMarkupResourceData();
+		
 		// Initialize the xml parser
-		this.xmlParser.parse(this.markup.getResource().getInputStream(), this.markupSettings
+		this.xmlParser.parse(markupResourceData.getResource().getInputStream(), this.markupSettings
 				.getDefaultMarkupEncoding());
 
 		// parse the xml markup and tokenize it into wicket relevant markup
 		// elements
 		parseMarkup();
 
-		this.markup.setEncoding(xmlParser.getEncoding());
-		this.markup.setXmlDeclaration(xmlParser.getXmlDeclaration());
+		markupResourceData.setEncoding(xmlParser.getEncoding());
+		markupResourceData.setXmlDeclaration(xmlParser.getXmlDeclaration());
 
 		return this.markup;
 	}

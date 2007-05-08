@@ -32,9 +32,9 @@
 
 			// Make sure all tags of the base markup remember where they are
 			// from
-			if ((baseMarkup.getResource() != null) && (tag.getMarkupClass() == null))
+			if ((baseMarkup.getMarkupResourceData().getResource() != null) && (tag.getMarkupClass() == null))
 			{
-				tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+				tag.setMarkupClass(baseMarkup.getMarkupResourceData().getResource().getMarkupClass());
 			}
 
 			if (element instanceof WicketTag)
@@ -45,7 +45,7 @@
 				// inheritance make sure the child tag is not from one of the
 				// deeper levels
 				if (wtag.isChildTag()
-						&& (tag.getMarkupClass() == baseMarkup.getResource().getMarkupClass()))
+						&& (tag.getMarkupClass() == baseMarkup.getMarkupResourceData().getResource().getMarkupClass()))
 				{
 					if (wtag.isOpenClose())
 					{
@@ -53,7 +53,7 @@
 						childTag = wtag;
 						WicketTag childOpenTag = (WicketTag)wtag.mutable();
 						childOpenTag.getXmlTag().setType(XmlTag.OPEN);
-						childOpenTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+						childOpenTag.setMarkupClass(baseMarkup.getMarkupResourceData().getResource().getMarkupClass());
 						addMarkupElement(childOpenTag);
 						break;
 					}
@@ -159,7 +159,7 @@
 					if (tag.isChildTag() && tag.isClose())
 					{
 						// Ok, skipped the childs content
-						tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+						tag.setMarkupClass(baseMarkup.getMarkupResourceData().getResource().getMarkupClass());
 						addMarkupElement(tag);
 						break;
 					}
@@ -191,7 +191,7 @@
 			// But first add </wicket:child>
 			WicketTag childCloseTag = (WicketTag)childTag.mutable();
 			childCloseTag.getXmlTag().setType(XmlTag.CLOSE);
-			childCloseTag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+			childCloseTag.setMarkupClass(baseMarkup.getMarkupResourceData().getResource().getMarkupClass());
 			addMarkupElement(childCloseTag);
 		}
 		
@@ -202,10 +202,10 @@
 
 			// Make sure all tags of the base markup remember where they are
 			// from
-			if ((element instanceof ComponentTag) && (baseMarkup.getResource() != null))
+			if ((element instanceof ComponentTag) && (baseMarkup.getMarkupResourceData().getResource() != null))
 			{
 				ComponentTag tag = (ComponentTag)element;
-				tag.setMarkupClass(baseMarkup.getResource().getMarkupClass());
+				tag.setMarkupClass(baseMarkup.getMarkupResourceData().getResource().getMarkupClass());
 			}
 		}
 
@@ -213,7 +213,7 @@
 		// it must enclose ALL of the <wicket:head> tags.
 		// Note: HtmlHeaderSectionHandler does something similar, but because
 		// markup filters are not called for merged markup again, ...
-		if (Page.class.isAssignableFrom(markup.getResource().getMarkupClass()))
+		if (Page.class.isAssignableFrom(markup.getMarkupResourceData().getResource().getMarkupClass()))
 		{
 			// Find the position inside the markup for first <wicket:head>,
 			// last </wicket:head> and <head>
