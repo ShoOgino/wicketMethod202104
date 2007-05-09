@@ -1,7 +1,7 @@
 	/**
 	 * WICKET-65 Handle String array in PageParameters
 	 */
-	public void bugTestEncodeStringArray()
+	public void testEncodeStringArray()
 	{
 		WebRequestCodingStrategy wrcs = new WebRequestCodingStrategy();
 		WicketTester app = new WicketTester();
@@ -13,7 +13,7 @@
 				MockPage.class, params);
 		app.setupRequestAndResponse();
 		CharSequence cs = wrcs.encode(app.createRequestCycle(), requestTarget);
-		assertEquals("?a=1&a=2", cs.toString());
+		assertEquals("?wicket:bookmarkablePage=%3Aorg.apache.wicket.protocol.http.MockPage&a=1&a=2", cs.toString());
 		app.destroy();
 	}
 
