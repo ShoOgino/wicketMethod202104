@@ -4,10 +4,35 @@
 	 * @param validator
 	 *            The validator
 	 * @return This
+	 * @throws IllegalArgumentException
+	 *             if validator is null
+	 * @see IValidator
+	 * @see IBehaviorProvider
 	 */
 	public final FormComponent add(final IValidator validator)
 	{
+		if (validator == null)
+		{
+			throw new IllegalArgumentException("validator argument cannot be null");
+		}
+
+		// add the validator
 		validators_add(validator);
+
+		// see whether the validator provides a behavior
+		if (validator instanceof IBehaviorProvider)
+		{
+			IBehavior behavior = ((IBehaviorProvider)validator).newValidationBehavior(this);
+			if (behavior != null)
+			{
+				add(behavior);
+			}
+			// Else just ignore. We're lenient here as people may want to
+			// override a validator but wan't Wicket to ignore the behavior it
+			// was providing
+		}
+
+		// return this for chaining
 		return this;
 	}
 

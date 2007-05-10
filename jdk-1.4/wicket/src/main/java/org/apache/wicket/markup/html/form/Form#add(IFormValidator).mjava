@@ -1,9 +1,12 @@
 	/**
 	 * Adds a form validator to the form.
 	 * 
-	 * @see IFormValidator
 	 * @param validator
 	 *            validator
+	 * @throws IllegalArgumentException
+	 *             if validator is null
+	 * @see IFormValidator
+	 * @see IBehaviorProvider
 	 */
 	public void add(IFormValidator validator)
 	{
@@ -11,6 +14,21 @@
 		{
 			throw new IllegalArgumentException("validator argument cannot be null");
 		}
+
+		// add the validator
 		formValidators_add(validator);
+
+		// see whether the validator provides a behavior
+		if (validator instanceof IBehaviorProvider)
+		{
+			IBehavior behavior = ((IBehaviorProvider)validator).newValidationBehavior(this);
+			if (behavior != null)
+			{
+				add(behavior);
+			}
+			// Else just ignore. We're lenient here as people may want to
+			// override a validator but wan't Wicket to ignore the behavior it
+			// was providing
+		}
 	}
 
