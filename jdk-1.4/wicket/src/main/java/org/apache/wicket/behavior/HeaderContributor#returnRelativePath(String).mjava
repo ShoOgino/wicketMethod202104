@@ -1,0 +1,15 @@
+	// Adds ../ links to make the location relative to the root of the webapp,
+	// provided it's not a fully-qualified URL.
+	private static final String returnRelativePath(String location)
+	{
+		// WICKET-59 allow external URLs.
+		if (location.startsWith("http://") || location.startsWith("https://"))
+		{
+			return location;
+		}
+		else
+		{
+			return RequestCycle.get().getRequest().getRelativePathPrefixToContextRoot() + location;
+		}
+	}
+

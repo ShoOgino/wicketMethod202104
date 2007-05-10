@@ -10,23 +10,8 @@
 	 */
 	public final void redirectToInterceptPage(final Page page)
 	{
-		Session session = Session.get();
-		if (session.isTemporary())
-		{
-			session.bind();
-		}
-		// Get the request cycle
 		final RequestCycle cycle = RequestCycle.get();
-
-		// The intercept continuation URL should be saved exactly as the
-		// original request specified.
-		interceptContinuationURL = cycle.getRequest().getURL();
-
-		// Page map is dirty
-		dirty();
-
-		// Redirect to the page
-		cycle.setRedirect(true);
+		setUpRedirect(cycle);
 		cycle.setResponsePage(page);
 	}
 

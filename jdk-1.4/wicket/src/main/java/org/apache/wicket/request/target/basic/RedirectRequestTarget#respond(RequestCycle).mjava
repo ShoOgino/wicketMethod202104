@@ -5,6 +5,13 @@
 	{
 		Response response = requestCycle.getResponse();
 		response.reset();
-		response.redirect(redirectUrl);
+		if (redirectUrl.startsWith("/") || redirectUrl.startsWith("http://") || redirectUrl.startsWith("https://"))
+		{
+			response.redirect(redirectUrl);
+		}
+		else
+		{
+			response.redirect(RequestCycle.get().getRequest().getRelativePathPrefixToWicketHandler() + redirectUrl);
+		}
 	}
 
