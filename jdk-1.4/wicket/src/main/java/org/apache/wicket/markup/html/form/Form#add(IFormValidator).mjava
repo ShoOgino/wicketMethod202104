@@ -6,7 +6,7 @@
 	 * @throws IllegalArgumentException
 	 *             if validator is null
 	 * @see IFormValidator
-	 * @see IBehaviorProvider
+	 * @see IValidatorAddListener
 	 */
 	public void add(IFormValidator validator)
 	{
@@ -18,17 +18,10 @@
 		// add the validator
 		formValidators_add(validator);
 
-		// see whether the validator provides a behavior
-		if (validator instanceof IBehaviorProvider)
+		// see whether the validator listens for add events
+		if (validator instanceof IValidatorAddListener)
 		{
-			IBehavior behavior = ((IBehaviorProvider)validator).newValidationBehavior(this);
-			if (behavior != null)
-			{
-				add(behavior);
-			}
-			// Else just ignore. We're lenient here as people may want to
-			// override a validator but wan't Wicket to ignore the behavior it
-			// was providing
+			((IValidatorAddListener)validator).onAdded(this);
 		}
 	}
 
