@@ -10,9 +10,11 @@
 	{
 		// If locale has changed from the initial locale used to attach image
 		// resource, then we need to reload the resource in the new locale
-		if ( resourceKind == null && 
-				(!Objects.equal(locale, component.getLocale())
-				|| !Objects.equal(style, component.getStyle())))
+		Locale l = component.getLocale();
+		String s = component.getStyle();
+		if (resourceKind == null &&
+				(!Objects.equal(locale, component.getLocale()) || !Objects.equal(style, component
+						.getStyle())))
 		{
 			// Get new component locale and style
 			this.locale = component.getLocale();
@@ -24,19 +26,24 @@
 		}
 		else
 		{
-			// TODO post 1.2: should we have support for locale changes when the 
+			// TODO post 1.2: should we have support for locale changes when the
 			// resource reference (or resource??) is set manually..
-			// We should get a new resource reference for the current locale then
-			// that points to the same resource but with another locale if it exists.
-			// something like SharedResource.getResourceReferenceForLocale(resourceReference);
+			// We should get a new resource reference for the current locale
+			// then that points to the same resource but with another locale if
+			// it exists. Something like
+			// SharedResource.getResourceReferenceForLocale(resourceReference);
 		}
-		
-		// check if the model contains a resource, if so, load the resource from the model.
+
+		// check if the model contains a resource, if so, load the resource from
+		// the model.
 		Object modelObject = component.getModelObject();
-		if ( modelObject instanceof ResourceReference ) {
-			resourceReference = (ResourceReference) modelObject;
-		} else if ( modelObject instanceof Resource ) {
-			resource = (Resource) modelObject;
+		if (modelObject instanceof ResourceReference)
+		{
+			resourceReference = (ResourceReference)modelObject;
+		}
+		else if (modelObject instanceof Resource)
+		{
+			resource = (Resource)modelObject;
 		}
 
 		// Need to load image resource for this component?
@@ -80,6 +87,6 @@
 		}
 
 		// Set the SRC attribute to point to the component or shared resource
-		tag.put("src", RequestCycle.get().getOriginalResponse().encodeURL(url));	
+		tag.put("src", RequestCycle.get().getOriginalResponse().encodeURL(url));
 	}
 

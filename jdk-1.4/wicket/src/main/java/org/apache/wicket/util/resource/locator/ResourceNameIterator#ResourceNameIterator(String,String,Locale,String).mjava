@@ -14,7 +14,15 @@
 			final String extensions)
 	{
 		this.locale = locale;
-		this.extensions = extensions;
+		if (extensions == null)
+		{
+			this.extensions = Strings.afterLast(path, '.');
+			path = Strings.beforeLast(path, '.');
+		}
+		else
+		{
+			this.extensions = extensions;
+		}
 
 		this.styleIterator = new StyleAndVariationResourceNameIterator(path, style, null);
 	}
