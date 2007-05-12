@@ -24,8 +24,9 @@
 		// Iterate over all registered string resource loaders until the
 		// property has been found
 		String string = null;
-		
-		Iterator iter = Application.get().getResourceSettings().getStringResourceLoaders().iterator();
+
+		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
+		Iterator iter = resourceSettings.getStringResourceLoaders().iterator();
 		while (iter.hasNext())
 		{
 			IStringResourceLoader loader = (IStringResourceLoader)iter.next();
@@ -36,25 +37,27 @@
 			}
 		}
 
-		// If a property value has been found, than replace the placeholder
-		// and we are done
+		if ((string == null) && (defaultValue != null))
+		{
+			// Resource not found, so handle missing resources based on
+			// application configuration and try the default value
+			if (resourceSettings.getUseDefaultOnMissingResource())
+			{
+				string = defaultValue;
+			}
+		}
+
+		// If a property value has been found, or a default value was given,
+		// than replace the placeholder and we are done
 		if (string != null)
 		{
 			return substitutePropertyExpressions(component, string, model);
 		}
 
-		// Resource not found, so handle missing resources based on application
-		// configuration
-		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
-		if (resourceSettings.getUseDefaultOnMissingResource() && (defaultValue != null))
-		{
-			return defaultValue;
-		}
-
 		if (resourceSettings.getThrowExceptionOnMissingResource())
 		{
-			AppendingStringBuffer message = new AppendingStringBuffer("Unable to find resource: "
-					+ key);
+			AppendingStringBuffer message = new AppendingStringBuffer("Unable to find resource: " +
+					key);
 			if (component != null)
 			{
 				message.append(" for component: ");

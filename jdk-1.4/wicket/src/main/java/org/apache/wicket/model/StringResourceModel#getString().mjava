@@ -23,10 +23,13 @@
 
 		// Get the string resource, doing any property substitutions as part
 		// of the get operation
-		String s = localizer.getString(getResourceKey(), component, model);
-		if(s == null) s = defaultValue;
+		String value = localizer.getString(getResourceKey(), component, model, defaultValue);
+		if (value == null)
+		{
+			value = defaultValue;
+		}
 
-		if(s != null)
+		if (value != null)
 		{
 			// Substitute any parameters if necessary
 			Object[] parameters = getParameters();
@@ -42,23 +45,23 @@
 					}
 					else if (model != null && parameters[i] instanceof String)
 					{
-						realParams[i] = PropertyVariableInterpolator.interpolate((String)parameters[i],
-								model.getObject());
+						realParams[i] = PropertyVariableInterpolator.interpolate(
+								(String)parameters[i], model.getObject());
 					}
 					else
 					{
 						realParams[i] = parameters[i];
 					}
 				}
-	
+
 				// Apply the parameters
-				final MessageFormat format = new MessageFormat(s, component != null ? component
+				final MessageFormat format = new MessageFormat(value, component != null ? component
 						.getLocale() : locale);
-				s = format.format(realParams);
+				value = format.format(realParams);
 			}
 		}
 
 		// Return the string resource
-		return s;
+		return value;
 	}
 
