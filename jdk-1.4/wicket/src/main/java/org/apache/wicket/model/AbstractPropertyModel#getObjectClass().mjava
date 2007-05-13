@@ -1,0 +1,21 @@
+	/**
+	 * @return model object class
+	 */
+	public Class getObjectClass()
+	{
+		final String expression = propertyExpression();
+		if (Strings.isEmpty(expression))
+		{
+			// Return a meaningful value for an empty property expression
+			Object target = getTarget();
+			return target != null ? target.getClass() : null;
+		}
+
+		final Object target = getTarget();
+		if (target != null)
+		{
+			return PropertyResolver.getPropertyClass(expression, target);
+		}
+		return null;
+	}
+
