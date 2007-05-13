@@ -1,5 +1,9 @@
 	public String getRelativePathPrefixToContextRoot()
 	{
+		if (relativePathPrefixToWicketHandler != null)
+		{
+			return relativePathPrefixToWicketHandler;
+		}
 		String tmp = getRelativePathPrefixToWicketHandler();
 		String servletPath = getServletPath();
 		if (servletPath == null || servletPath.length() == 0)
@@ -19,6 +23,6 @@
 				prepender.prepend("../");
 			}
 		}
-		return prepender.toString();
+		return relativePathPrefixToWicketHandler = prepender.toString();
 	}
 

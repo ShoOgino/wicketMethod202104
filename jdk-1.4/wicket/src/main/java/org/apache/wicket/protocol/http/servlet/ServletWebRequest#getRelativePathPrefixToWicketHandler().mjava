@@ -1,5 +1,9 @@
 	public String getRelativePathPrefixToWicketHandler()
 	{
+		if (relativePathPrefixToWicketHandler != null)
+		{
+			return relativePathPrefixToWicketHandler;
+		}
 		String relativeUrl = getPath();
 		PrependingStringBuffer prepender = new PrependingStringBuffer();
 
@@ -49,24 +53,35 @@
 			}
 			return prepender.toString();
 		}
-		else if (forwardUrl != null)
+		
+		if (forwardUrl != null)
 		{
 			// Strip off leading slash, if forwardUrl has any length.
 			relativeUrl = forwardUrl.substring(relativeUrl.length() > 0 ? 1 : 0);
 		}
 
-		for (int i = 0; i < relativeUrl.length(); i++)
+		if (depthRelativeToWicketHandler == -1)
 		{
-			if (relativeUrl.charAt(i) == '?')
+			int depth = 0;
+			for (int i = 0; i < relativeUrl.length(); i++)
 			{
-				break;
+				if (relativeUrl.charAt(i) == '?')
+				{
+					break;
+				}
+				if (relativeUrl.charAt(i) == '/')
+				{
+					depth++;
+				}
 			}
-			if (relativeUrl.charAt(i) == '/')
-			{
-				prepender.prepend("../");
-			}
+			depthRelativeToWicketHandler = depth;
 		}
-
-		return prepender.toString();
+		
+		for (int i = 0; i < depthRelativeToWicketHandler; i++)
+		{
+			prepender.prepend("../");
+		}
+		
+		return relativePathPrefixToWicketHandler = prepender.toString();
 	}
 
