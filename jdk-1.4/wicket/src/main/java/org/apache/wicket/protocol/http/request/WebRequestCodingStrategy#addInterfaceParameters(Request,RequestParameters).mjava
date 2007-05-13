@@ -34,18 +34,24 @@
 					? PageMap.DEFAULT_NAME
 					: pageMapName);
 
+			// Extract URL depth after last colon
+			final String urlDepthString = pathComponents[pathComponents.length - 1];
+			final int urlDepth = Strings.isEmpty(urlDepthString) ? 0 : Integer
+					.parseInt(urlDepthString);
+			parameters.setUrlDepth(urlDepth);
+			
 			// Extract behaviour ID after last colon
-			final String behaviourId = pathComponents[pathComponents.length - 1];
+			final String behaviourId = pathComponents[pathComponents.length - 2];
 			parameters.setBehaviorId(behaviourId.length() != 0 ? behaviourId : null);
 
 			// Extract interface name after second-to-last colon
-			final String interfaceName = pathComponents[pathComponents.length - 2];
+			final String interfaceName = pathComponents[pathComponents.length - 3];
 			parameters.setInterfaceName(interfaceName.length() != 0
 					? interfaceName
 					: IRedirectListener.INTERFACE.getName());
 
 			// Extract version
-			final String versionNumberString = pathComponents[pathComponents.length - 3];
+			final String versionNumberString = pathComponents[pathComponents.length - 4];
 			final int versionNumber = Strings.isEmpty(versionNumberString) ? 0 : Integer
 					.parseInt(versionNumberString);
 			parameters.setVersionNumber(versionNumber);
@@ -53,7 +59,7 @@
 			// Component path is everything after pageMapName and before version
 			final int start = pageMapName.length() + 1;
 			final int end = requestString.length() - behaviourId.length() - interfaceName.length()
-					- versionNumberString.length() - 3;
+					- versionNumberString.length() - urlDepthString.length() - 4;
 			final String componentPath = requestString.substring(start, end);
 			parameters.setComponentPath(componentPath);
 		}
