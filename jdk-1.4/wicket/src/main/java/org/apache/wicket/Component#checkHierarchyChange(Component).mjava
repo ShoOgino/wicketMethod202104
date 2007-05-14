@@ -5,15 +5,17 @@
 	 * @param component
 	 *            the component which is about to be added or removed
 	 */
-	private void checkHierarchyChange(Component component)
+	protected void checkHierarchyChange(final Component component)
 	{
 		// Throw exception if modification is attempted during rendering
-		if ( !component.isAuto() && getFlag(FLAG_IS_RENDERING) )
+		if (!component.isAuto() && getFlag(FLAG_RENDERING))
 		{
 			throw new WicketRuntimeException(
 					"Cannot modify component hierarchy during render phase");
 		}
-		else  if ( getFlag(FLAG_ATTACHING) )
+
+		// Throw exception if modification is attempted during attach
+		if (getFlag(FLAG_ATTACHING))
 		{
 			throw new WicketRuntimeException(
 					"Cannot modify component hierarchy during attach phase");
