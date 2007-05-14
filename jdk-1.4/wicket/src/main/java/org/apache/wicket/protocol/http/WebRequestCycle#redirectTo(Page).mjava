@@ -21,6 +21,13 @@
 			final WebResponse currentResponse = getWebResponse();
 			try
 			{
+				redirectUrl = page.urlFor(IRedirectListener.INTERFACE).toString();
+				if (getWebRequest() instanceof ServletWebRequest)
+				{
+					// Get the redirect url and set it in the ServletWebRequest
+					// so that it can be used for relative url calculation.
+					((ServletWebRequest)getWebRequest()).setWicketRedirectUrl(redirectUrl.replaceAll("../", ""));	
+				}
 				// create the redirect response.
 				final BufferedHttpServletResponse servletResponse = new BufferedHttpServletResponse(
 						currentResponse.getHttpServletResponse());
@@ -63,7 +70,6 @@
 					// here on.
 					servletResponse.close();
 
-					redirectUrl = page.urlFor(IRedirectListener.INTERFACE).toString();
 					int index = redirectUrl.indexOf("?");
 					String sessionId = getWebRequest().getHttpServletRequest().getSession(true)
 							.getId();
