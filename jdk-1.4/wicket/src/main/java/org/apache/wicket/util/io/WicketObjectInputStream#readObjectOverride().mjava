@@ -21,6 +21,7 @@
 		else if (token == ClassStreamHandler.CLASS_DEF)
 		{
 			short classDef = in.readShort();
+			ClassStreamHandler oldStreamHandler = currentStreamHandler;
 			currentStreamHandler = ClassStreamHandler.lookup(classDef);
 			if (currentStreamHandler.getStreamClass() == String.class)
 			{
@@ -38,6 +39,7 @@
 					{
 						currentStreamHandler.readFields(this,value);
 					}
+					value = currentStreamHandler.readResolve(value);
 					stack.pop();
 				}
 				catch (IllegalArgumentException ex)
@@ -57,6 +59,7 @@
 					throw new RuntimeException(ex);
 				}
 			}
+			currentStreamHandler = oldStreamHandler;
 		}
 		else if (token == ClassStreamHandler.CLASS)
 		{

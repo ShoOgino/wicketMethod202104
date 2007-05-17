@@ -1,0 +1,16 @@
+	public Object readResolve(Object o) throws NotSerializableException
+	{
+		if (readResolveMethod != null)
+		{
+			try
+			{
+				return readResolveMethod.invoke(o, null);
+			}
+			catch (Exception ex)
+			{
+				throw new NotSerializableException(ex.getMessage());
+			} 
+		}
+		return o;
+	}
+
