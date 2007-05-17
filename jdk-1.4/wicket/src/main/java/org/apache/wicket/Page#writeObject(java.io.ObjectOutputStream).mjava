@@ -2,6 +2,17 @@
 	{
 		s.writeShort(numericId);
 		s.writeObject(pageMapName);
-		s.defaultWriteObject();
+
+
+		IPageSerializer ps = (IPageSerializer)serializer.get();
+
+		if (ps != null)
+		{
+			ps.serializePage(this, s);
+		}
+		else
+		{
+			s.defaultWriteObject();
+		}
 	}
 

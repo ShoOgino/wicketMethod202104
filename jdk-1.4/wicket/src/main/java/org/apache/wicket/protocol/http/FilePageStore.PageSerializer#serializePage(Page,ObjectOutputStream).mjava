@@ -1,11 +1,13 @@
 		/**
+		 * @throws IOException 
 		 * @see org.apache.wicket.Page.IPageSerializer#serializePage(org.apache.wicket.Page)
 		 */
-		public Object serializePage(Page page)
+		public void serializePage(Page page, ObjectOutputStream stream) throws IOException
 		{
 			if (current.id == page.getNumericId())
 			{
-				return page;
+				stream.writeBoolean(false);
+				stream.defaultWriteObject();
 			}
 			SessionPageKey spk = new SessionPageKey(current.sessionId,page);
 			if (!completed.contains(spk) && !previous.contains(spk))
@@ -18,6 +20,7 @@
 				completed.add(current);
 				current = (SessionPageKey)previous.remove(previous.size()-1);
 			}
-			return new PageHolder(page);
+			stream.writeBoolean(true);
+			stream.writeObject(new PageHolder(page));
 		}
 

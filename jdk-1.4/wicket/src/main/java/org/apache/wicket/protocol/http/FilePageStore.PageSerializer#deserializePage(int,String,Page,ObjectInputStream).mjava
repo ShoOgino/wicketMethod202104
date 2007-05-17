@@ -1,0 +1,29 @@
+		public Page deserializePage(int id, String name, Page page, ObjectInputStream stream) throws IOException, ClassNotFoundException
+		{
+			HashMap map = (HashMap)restoredPages.get();
+			if (map != null)
+			{
+				IntHashMap pagesMap = (IntHashMap)map.get(name);
+				if (pagesMap == null)
+				{
+					pagesMap = new IntHashMap();
+					map.put(name, pagesMap);
+				}
+				
+				pagesMap.put(id, page);
+			}
+			
+			boolean b = stream.readBoolean();
+			
+			if (b == false) 
+			{
+				stream.defaultReadObject();
+				return page;
+			} 
+			else 
+			{
+				// the object will resolve to a Page (probably PageHolder)
+				return (Page) stream.readObject();
+			}
+		}
+

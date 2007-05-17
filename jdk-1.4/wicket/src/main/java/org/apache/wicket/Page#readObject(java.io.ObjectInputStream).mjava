@@ -2,12 +2,15 @@
 	{
 		int id = s.readShort();
 		String name = (String)s.readObject();
-		
+
 		IPageSerializer ps = (IPageSerializer)serializer.get();
 		if (ps != null)
 		{
-			ps.deserializePage(id, name, this);
+			pageToResolve = ps.deserializePage(id, name, this, s);
 		}
-		s.defaultReadObject();
+		else
+		{
+			s.defaultReadObject();
+		}
 	}
 
