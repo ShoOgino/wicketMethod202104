@@ -33,8 +33,20 @@
 			}
 		};
 
+		WebMarkupContainer tabsContainer = new WebMarkupContainer("tabs-container")
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+				tag.put("class", getTabContainerCssClass());
+			}
+		};
+		add(tabsContainer);
+
 		// add the loop used to generate tab names
-		add(new Loop("tabs", tabCount)
+		tabsContainer.add(new Loop("tabs", tabCount)
 		{
 			private static final long serialVersionUID = 1L;
 
