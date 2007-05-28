@@ -4,32 +4,38 @@
 		{
 			return relativePathPrefixToContextRoot;
 		}
-		
+
 		// Prepend to get back to the wicket handler.
 		String tmp = getRelativePathPrefixToWicketHandler();
 		PrependingStringBuffer prepender = new PrependingStringBuffer(tmp);
-		
-		String path = getPath();
+
+		String path = Strings.replaceAll(getPath(), "%3A", ":").toString();
 		if (path == null || path.length() == 0)
 		{
 			path = "";
 		}
-		
+
 		// Now prepend to get back from the wicket handler to the root context.
-		
+
 		// Find the absolute path for the wicket filter/servlet
 		String wicketPath = "";
-		
+
 		// We're running as a filter.
-		String servletPath = getServletPath();
-		if (servletPath.endsWith(path)) {
+		String servletPath = Strings.replaceAll(getServletPath(), "%3A", ":").toString();
+
+		// We need to substibute the %3A (or the other way around) to be able to
+		// get a good match, as parts of the path may have been escaped while
+		// others arent
+		if (servletPath.endsWith(path))
+		{
 			wicketPath = servletPath.substring(0, servletPath.length() - path.length() - 1);
 		}
 		// We're running as a servlet
-		else {
+		else
+		{
 			wicketPath = servletPath;
 		}
-		
+
 		for (int i = 0; i < wicketPath.length(); i++)
 		{
 			if (wicketPath.charAt(i) == '/')

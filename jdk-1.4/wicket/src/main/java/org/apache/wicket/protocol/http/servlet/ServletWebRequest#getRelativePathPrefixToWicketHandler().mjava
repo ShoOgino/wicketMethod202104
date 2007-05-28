@@ -27,9 +27,10 @@
 		// that caused the error. Unfortunately, this includes the context path.
 		String errorUrl = (String)httpRequest.getAttribute("javax.servlet.error.request_uri");
 
-		// This gives us a context-relative path for RequestDispatcher.forward stuff, with a leading slash.
+		// This gives us a context-relative path for RequestDispatcher.forward
+		// stuff, with a leading slash.
 		String forwardUrl = (String)httpRequest.getAttribute("javax.servlet.forward.servlet_path");
-		
+
 		if (errorUrl != null)
 		{
 			// Strip off context path from front of URI.
@@ -53,7 +54,7 @@
 			}
 			return prepender.toString();
 		}
-		
+
 		if (forwardUrl != null)
 		{
 			// Strip off leading slash, if forwardUrl has any length.
@@ -80,12 +81,12 @@
 			}
 			depthRelativeToWicketHandler = depth;
 		}
-		
+
 		for (int i = 0; i < depthRelativeToWicketHandler; i++)
 		{
 			prepender.prepend("../");
 		}
-		
+
 		return relativePathPrefixToWicketHandler = prepender.toString();
 	}
 
