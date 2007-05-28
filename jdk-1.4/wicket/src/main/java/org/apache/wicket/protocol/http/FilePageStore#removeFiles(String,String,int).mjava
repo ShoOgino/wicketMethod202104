@@ -1,9 +1,17 @@
-	private void removePage(String sessionId, int id)
+	private void removeFiles(String sessionId, String pageMap, int id)
 	{
 		File sessionDir = new File(getWorkDir(), sessionId);
 		if (sessionDir.exists())
 		{
-			final String filepart = appName + "-page-" + id;
+			final String filepart;
+			if (id != -1)
+			{
+				filepart = appName + "-pm-"+pageMap +"-p-" + id;
+			}
+			else
+			{
+				filepart = appName + "-pm-"+pageMap;
+			}
 			File[] listFiles = sessionDir.listFiles(new FilenameFilter()
 			{
 				public boolean accept(File dir, String name)

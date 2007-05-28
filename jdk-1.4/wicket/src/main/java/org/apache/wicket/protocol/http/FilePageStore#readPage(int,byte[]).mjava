@@ -5,7 +5,7 @@
 	 */
 	private Page readPage(int versionNumber, byte[] bytes)
 	{
-		Page page;
+		Page page = null;
 		Map map = null;
 		try
 		{
@@ -15,8 +15,12 @@
 				restoredPages.set(map);
 				Page.serializer.set(new PageSerializer(null));
 			}
-			page = (Page)Objects.byteArrayToObject(bytes);
-			page = page.getVersion(versionNumber);
+			IPageMapEntry entry = (IPageMapEntry)Objects.byteArrayToObject(bytes);
+			if (entry != null)
+			{
+				page = entry.getPage();
+				page = page.getVersion(versionNumber);
+			}
 		} 
 		finally
 		{
