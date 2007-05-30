@@ -1,0 +1,25 @@
+	/**
+	 * Construct.
+	 */
+	public LazyLoadingPage()
+	{
+		add(new AjaxLazyLoadPanel("lazy"){
+		
+			@Override
+			public Component getLazyLoadComponent(String id)
+			{
+				// sleep for 5 seconds to show the behavior
+				try
+				{
+					Thread.sleep(5000);
+				}
+				catch (InterruptedException e)
+				{
+					throw new RuntimeException(e);
+				}
+				return new Label(id,"Lazy Loaded after 5 seconds");
+			}
+		
+		});
+	}
+
