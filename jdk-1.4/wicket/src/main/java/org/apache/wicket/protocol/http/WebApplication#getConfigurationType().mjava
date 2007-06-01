@@ -1,0 +1,38 @@
+	/**
+	 * @see org.apache.wicket.Application#getConfigurationType()
+	 */
+	public String getConfigurationType()
+	{
+		String result = null;
+		try
+		{
+			result = System.getProperty("wicket." + Application.CONFIGURATION);
+		}
+		catch (SecurityException e)
+		{
+			// Ignore - we're not allowed to read system properties.
+		}
+
+		// If no system parameter check filter/servlet specific <init-param>
+		if (result == null)
+		{
+			result = getInitParameter(Application.CONFIGURATION);
+		}
+
+		// If no system parameter and no <init-param>, then check
+		// <context-param>
+		if (result == null)
+		{
+			result = getServletContext().getInitParameter(Application.CONFIGURATION);
+		}
+
+		// Return result if we have found it, else fall back to DEVELOPMENT mode
+		// as the default.
+		if (result != null)
+		{
+			return result;
+		}
+
+		return Application.DEVELOPMENT;
+	}
+

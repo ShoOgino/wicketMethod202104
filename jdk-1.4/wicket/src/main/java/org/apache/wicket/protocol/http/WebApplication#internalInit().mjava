@@ -26,39 +26,16 @@
 		getPageSettings().addComponentResolver(new AutoLinkResolver());
 
 		// Set resource finder to web app path
-		getResourceSettings().setResourceFinder(new WebApplicationPath(getServletContext()));
+		getResourceSettings().setResourceFinder(getResourceFinder());
 
-		// Check if system property -Dwicket.configuration exists
-		String configuration = null;
-		try
+		// Add optional sourceFolder for resources.
+		String resourceFolder = getInitParameter("sourceFolder");
+		if (resourceFolder != null)
 		{
-			configuration = System.getProperty("wicket." + Application.CONFIGURATION);
+			getResourceSettings().addResourceFolder(resourceFolder);
 		}
-		catch (SecurityException e)
-		{
-			// ignore; it is not allowed to read system properties
-		}
-
-		// If no system parameter check servlet specific <init-param>
-		if (configuration == null)
-		{
-			configuration = getInitParameter(Application.CONFIGURATION);
-		}
-		// If no system parameter and no <init-param>, then check
-		// <context-param>
-		if (configuration == null)
-		{
-			configuration = getServletContext().getInitParameter(Application.CONFIGURATION);
-		}
-
-		// Development mode is the default if no settings have been found
-		if (configuration != null)
-		{
-			configure(configuration, getInitParameter("sourceFolder"));
-		}
-		else
-		{
-			configure(Application.DEVELOPMENT, getInitParameter("sourceFolder"));
-		}
+		
+		// Configure the app.
+		configure();
 	}
 

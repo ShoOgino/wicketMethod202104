@@ -1,28 +1,11 @@
 	/**
-	 * Configures application settings to good defaults for the given
-	 * configuration type (either DEVELOPMENT or DEPLOYMENT).
-	 * 
-	 * @param configurationType
-	 *            The configuration type. Must currently be either DEVELOPMENT
-	 *            or DEPLOYMENT. Currently, if the configuration type is
-	 *            DEVELOPMENT, resources are polled for changes, component usage
-	 *            is checked, wicket tags are not stripped from ouput and a
-	 *            detailed exception page is used. If the type is DEPLOYMENT,
-	 *            component usage is not checked, wicket tags are stripped from
-	 *            output and a non-detailed exception page is used to display
-	 *            errors.
-	 * @param resourceFinder
-	 *            Resource finder for looking up resources
+	 * Configures application settings to good defaults.
 	 */
-	public final void configure(final String configurationType, final IResourceFinder resourceFinder)
+	public final void configure()
 	{
-		this.configurationType = configurationType;
+		final String configurationType = getConfigurationType();
 
-		if (resourceFinder != null)
-		{
-			getResourceSettings().setResourceFinder(resourceFinder);
-		}
-		// As long as this is public api the developermenat and deployment mode
+		// As long as this is public api the development and deployment mode
 		// should counter act each other for all properties.
 		if (DEVELOPMENT.equalsIgnoreCase(configurationType))
 		{
