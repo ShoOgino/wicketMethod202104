@@ -16,34 +16,27 @@
 			return tag;
 		}
 
-		// Don't touch any wicket:id component
-		if (tag.getId() != null)
+		// Don't touch any wicket:id component and any auto-components
+		if ((tag.getId() != null) && (tag.getId().startsWith("-") == false))
 		{
 			return tag;
 		}
 
 		// Work out whether we have any attributes that require us to add a
-		// behaviour that prepends the relative path.
-		boolean addBehaviour = false;
-
+		// behavior that prepends the relative path.
 		for (int i = 0; i < attributeNames.length; i++)
 		{
 			String attrName = attributeNames[i];
 			String attrValue = tag.getAttributes().getString(attrName);
-			if ((attrValue != null) && (attrValue.startsWith("/") == false)
-					&& (attrValue.indexOf(":") < 0) && !(attrValue.startsWith("#")))
+			if ((attrValue != null) && (attrValue.startsWith("/") == false) &&
+					(attrValue.indexOf(":") < 0) && !(attrValue.startsWith("#")))
 			{
-				addBehaviour = true;
+				tag.setId(WICKET_RELATIVE_PATH_PREFIX_CONTAINER_ID);
+				tag.addBehavior(RELATIVE_PATH_BEHAVIOR);
+				tag.setModified(true);
 				break;
 			}
 		}
-
-		if (addBehaviour)
-		{
-			tag.setId(WICKET_RELATIVE_PATH_PREFIX_CONTAINER_ID);
-			tag.setModified(true);
-		}
-
 
 		return tag;
 	}
