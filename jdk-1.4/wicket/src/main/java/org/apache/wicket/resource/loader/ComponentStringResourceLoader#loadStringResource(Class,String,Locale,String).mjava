@@ -23,6 +23,10 @@
 			return null;
 		}
 
+		// Load the properties associated with the path
+		IPropertiesFactory propertiesFactory = Application.get().getResourceSettings()
+				.getPropertiesFactory();
+
 		while (true)
 		{
 			// Create the base path
@@ -33,10 +37,9 @@
 					"properties,xml");
 			while (iter.hasNext())
 			{
-				String newPath = (String) iter.next();
+				String newPath = (String)iter.next();
 
-				// Load the properties associated with the path
-				final Properties props = PropertiesFactory.get().load(clazz, newPath);
+				final Properties props = propertiesFactory.load(clazz, newPath);
 				if (props != null)
 				{
 					// Lookup the value
