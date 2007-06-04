@@ -3,7 +3,8 @@
 		 * @param value
 		 * @param converter
 		 */
-		public final void setValue(final Object object, final Object value, PropertyResolverConverter converter)
+		public final void setValue(final Object object, final Object value,
+				PropertyResolverConverter converter)
 		{
 			if (setMethod == null)
 			{
@@ -12,17 +13,20 @@
 			if (setMethod != null)
 			{
 				Object converted = converter.convert(value, getMethod.getReturnType());
-				if ( converted == null)
+				if (converted == null)
 				{
-					if( value != null )
+					if (value != null)
 					{
-						throw new ConversionException("Can't convert value: " + value + " to class: "
-								+ getMethod.getReturnType() + " for setting it on " + object);
+						throw new ConversionException("Can't convert value: " + value
+								+ " to class: " + getMethod.getReturnType() + " for setting it on "
+								+ object);
 					}
-					else if( getMethod.getReturnType().isPrimitive() )
+					else if (getMethod.getReturnType().isPrimitive())
 					{
-						throw new ConversionException("Can't convert null value to a primitive class: "
-								+ getMethod.getReturnType() + " for setting it on " + object);
+						throw new ConversionException(
+								"Can't convert null value to a primitive class: "
+										+ getMethod.getReturnType() + " for setting it on "
+										+ object);
 					}
 				}
 				try
