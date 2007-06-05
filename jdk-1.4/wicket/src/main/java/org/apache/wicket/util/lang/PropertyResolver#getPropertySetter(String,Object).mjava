@@ -1,9 +1,10 @@
 	/**
 	 * @param expression
 	 * @param object
-	 * @return class of the target property object
+	 * @return Setter method for the property expression or null if such setter
+	 *         doesn't exist (only field)
 	 */
-	public final static Class getPropertyClass(String expression, Object object)
+	public final static Method getPropertySetter(String expression, Object object)
 	{
 		ObjectAndGetSetter setter = getObjectAndGetSetter(expression, object, true);
 		if (setter == null)
@@ -11,6 +12,6 @@
 			throw new WicketRuntimeException("Null object returned for expression: " + expression
 					+ " for getting the target classs of: " + object);
 		}
-		return setter.getTargetClass();
+		return setter.getSetter();
 	}
 

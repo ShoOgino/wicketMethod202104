@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.model.IPropertyReflectionAwareModel#getPropertyGetter()
+	 */
+	public Method getPropertyGetter()
+	{
+		String expression = propertyExpression();
+		if (Strings.isEmpty(expression) == false) 
+		{
+			Object target = getTarget();
+			if (target != null) 
+			{
+				return PropertyResolver.getPropertyGetter(expression, target);
+			}
+		}
+		return null;
+	}
+
