@@ -7,6 +7,11 @@
 	 */
 	public final Class getAliasClass(String alias)
 	{
-		return (Class)aliasClassMap.get(alias);
+		Object classRef = aliasClassMap.get(alias);
+		if (classRef == null)
+		{
+			return null;
+		}
+		return (Class)((WeakReference)classRef).get();
 	}
 
