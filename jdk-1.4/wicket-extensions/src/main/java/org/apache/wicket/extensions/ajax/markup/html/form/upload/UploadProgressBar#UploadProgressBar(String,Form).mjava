@@ -19,6 +19,11 @@
 		statusDiv.setOutputMarkupId(true);
 		add(statusDiv);
 
+		if (!(RequestCycle.get().getRequest() instanceof UploadWebRequest))
+		{
+			log.warn("UploadProgressBar will not work without an UploadWebRequest. See the javadoc for details.");
+		}
+		
 		form.add(new AttributeModifier("onsubmit", true, new Model()
 		{
 
