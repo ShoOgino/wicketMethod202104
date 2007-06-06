@@ -5,26 +5,6 @@
 	 */
 	public final String getModelObjectAsString()
 	{
-		final Object modelObject = getModelObject();
-		if (modelObject != null)
-		{
-			// Get converter
-			final IConverter converter = getConverter(modelObject.getClass());
-
-			// Model string from property
-			final String modelString = converter.convertToString(modelObject, getLocale());
-
-			if (modelString != null)
-			{
-				// If we should escape the markup
-				if (getFlag(FLAG_ESCAPE_MODEL_STRINGS))
-				{
-					// Escape it
-					return Strings.escapeMarkup(modelString, false, true).toString();
-				}
-				return modelString;
-			}
-		}
-		return "";
+		return getModelObjectAsString(getModelObject());
 	}
 
