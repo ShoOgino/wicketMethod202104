@@ -1,0 +1,24 @@
+	/**
+	 * @see org.apache.wicket.markup.html.tree.LabelIconPanel#addComponents(org.apache.wicket.model.IModel, org.apache.wicket.markup.html.tree.BaseTree)
+	 */
+	protected void addComponents(final IModel model, final BaseTree tree)
+	{
+		BaseTree.ILinkCallback callback = new BaseTree.ILinkCallback()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target)
+			{
+				onNodeLinkClicked((TreeNode)model.getObject(), tree, target);
+			}
+		};
+
+		MarkupContainer link = tree.newLink("iconLink", callback);
+		add(link);
+		link.add(newImageComponent("icon", tree, model));
+
+		link = tree.newLink("contentLink", callback);
+		add(link);
+		link.add(newContentComponent("content", tree, model));
+	}
+

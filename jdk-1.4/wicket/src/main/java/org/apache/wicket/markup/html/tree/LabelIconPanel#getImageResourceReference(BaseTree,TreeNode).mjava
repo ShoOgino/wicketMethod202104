@@ -1,0 +1,26 @@
+	/**
+	 * Returns the image resource reference based on the give tree node type.
+	 * 
+	 * @param tree
+	 * @param node
+	 * @return image resource reference
+	 */
+	protected ResourceReference getImageResourceReference(BaseTree tree, TreeNode node)
+	{
+		if (node.isLeaf())
+		{
+			return getResourceItemLeaf(node);
+		}
+		else
+		{
+			if (tree.getTreeState().isNodeExpanded(node))
+			{
+				return getResourceFolderOpen(node);
+			}
+			else
+			{
+				return getResourceFolderClosed(node);
+			}
+		}
+	}
+
