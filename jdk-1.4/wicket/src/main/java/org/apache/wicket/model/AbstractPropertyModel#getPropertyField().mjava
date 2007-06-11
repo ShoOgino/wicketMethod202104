@@ -4,12 +4,18 @@
 	public Field getPropertyField()
 	{
 		String expression = propertyExpression();
-		if (Strings.isEmpty(expression) == false) 
+		if (Strings.isEmpty(expression) == false)
 		{
 			Object target = getTarget();
-			if (target != null) 
+			if (target != null)
 			{
-				return PropertyResolver.getPropertyField(expression, target);
+				try
+				{
+					return PropertyResolver.getPropertyField(expression, target);
+				}
+				catch (Exception ignore)
+				{
+				}
 			}
 		}
 		return null;

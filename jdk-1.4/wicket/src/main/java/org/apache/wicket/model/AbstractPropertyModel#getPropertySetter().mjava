@@ -4,12 +4,18 @@
 	public Method getPropertySetter()
 	{
 		String expression = propertyExpression();
-		if (Strings.isEmpty(expression) == false) 
+		if (Strings.isEmpty(expression) == false)
 		{
 			Object target = getTarget();
-			if (target != null) 
+			if (target != null)
 			{
-				return PropertyResolver.getPropertySetter(expression, target);
+				try
+				{
+					return PropertyResolver.getPropertySetter(expression, target);
+				}
+				catch (Exception ignore)
+				{
+				}
 			}
 		}
 		return null;
