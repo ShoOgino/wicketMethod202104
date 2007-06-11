@@ -1,0 +1,11 @@
+	/**
+	 * Tests String beans.
+	 */
+	public void testStringProxy()
+	{
+		// We special-case String objects to avoid proxying them, as they're final.
+		// See WICKET-603.
+		String proxy = (String)LazyInitProxyFactory.createProxy(String.class, stringObjectLocator);
+		assertEquals("StringLiteral", proxy);
+	}
+
