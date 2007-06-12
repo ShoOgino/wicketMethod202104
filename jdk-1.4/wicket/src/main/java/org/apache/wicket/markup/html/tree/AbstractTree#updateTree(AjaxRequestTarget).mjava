@@ -3,6 +3,8 @@
 	 * Call this method if you modified the tree model during an ajax request
 	 * target and you want to partially update the component on page. Make sure
 	 * that the tree model has fired the proper listener functions.
+	 * <p>
+	 * <b>You can only call this method once in a request.</b>
 	 * 
 	 * @param target
 	 *            Ajax request target used to send the update to the page
@@ -14,6 +16,8 @@
 			return;
 		}
 
+		updateTreeCalled = true;
+		
 		// check whether the model hasn't changed
 		checkModel();
 

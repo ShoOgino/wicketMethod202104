@@ -28,11 +28,18 @@
 					{
 						public void visitItem(TreeItem item)
 						{
-							item.beforeRender();
-							// rewind markupStream
-							markupStream.setCurrentIndex(index);
-							// render child
-							item.onRender(markupStream);
+							try 
+							{
+								item.beforeRender();
+								// rewind markupStream
+								markupStream.setCurrentIndex(index);
+								// render child
+								item.onRender(markupStream);
+							} 
+							finally 
+							{
+								item.afterRender();
+							}
 						}
 					});
 					// children are rendered, clear the flag
