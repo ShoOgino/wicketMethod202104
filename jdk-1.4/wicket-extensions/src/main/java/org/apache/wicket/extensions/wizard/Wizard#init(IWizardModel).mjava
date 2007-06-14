@@ -29,9 +29,13 @@
 
 		wizardModel.addListener(this);
 
-		for (Iterator iter = wizardModel.stepIterator(); iter.hasNext();)
+		Iterator stepsIterator = wizardModel.stepIterator();
+		if (stepsIterator != null)
 		{
-			((IWizardStep)iter.next()).init(wizardModel);
+			while (stepsIterator.hasNext())
+			{
+				((IWizardStep)stepsIterator.next()).init(wizardModel);
+			}
 		}
 
 		// reset model to prepare for action
