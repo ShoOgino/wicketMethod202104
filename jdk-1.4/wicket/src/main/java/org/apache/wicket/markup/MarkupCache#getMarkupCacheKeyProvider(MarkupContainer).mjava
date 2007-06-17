@@ -1,17 +1,21 @@
 	/**
-	 * Determine the markup cache key provider to be used
+	 * Get the markup cache key provider to be used
 	 * 
 	 * @param container
 	 *            The MarkupContainer requesting the markup resource stream
 	 * @return IMarkupResourceStreamProvider
 	 */
-	protected IMarkupCacheKeyProvider getMarkupCacheKeyProvider(final MarkupContainer container)
+	public IMarkupCacheKeyProvider getMarkupCacheKeyProvider(final MarkupContainer container)
 	{
 		if (container instanceof IMarkupCacheKeyProvider)
 		{
 			return (IMarkupCacheKeyProvider)container;
 		}
 
-		return new DefaultMarkupCacheKeyProvider();
+		if (this.markupCacheKeyProvider == null)
+		{
+			this.markupCacheKeyProvider = new DefaultMarkupCacheKeyProvider();
+		}
+		return this.markupCacheKeyProvider;
 	}
 

@@ -1,0 +1,84 @@
+	/**
+	 * @see org.apache.wicket.markup.IMarkupCache#removeMarkup(java.lang.String)
+	 */
+	public final Markup removeMarkup(final String cacheKey)
+	{
+		if (cacheKey == null)
+		{
+			throw new IllegalArgumentException("Parameter 'cacheKey' must not be null");
+		}
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Remove from cache: cacheKey=" + cacheKey);
+		}
+
+		// Remove the markup and any other markup which depends on it
+		// (inheritance)
+		Markup markup = (Markup)markupCache.remove(cacheKey);
+		if (markup != null)
+		{
+			// In practice markup inheritance has probably not more than 3 or 4
+			// levels. And since markup reloading is only enabled in development
+			// mode, this max 4 iterations of the outer loop shouldn't be a
+			// problem.
+			int count;
+			do
+			{
+				count = 0;
+
+				// If a base markup file has been removed from the cache, than
+				// the derived markup should be removed as well.
+				Iterator iter = markupCache.values().iterator();
+				while (iter.hasNext())
+				{
+					Markup cacheMarkup = (Markup)iter.next();
+					MarkupResourceData resourceData = cacheMarkup.getMarkupResourceData()
+							.getBaseMarkupResourceData();
+					if (resourceData != null)
+					{
+						String baseCacheKey = resourceData.getResource().getCacheKey();
+						if (markupCache.get(baseCacheKey) == null)
+						{
+							if (log.isDebugEnabled())
+							{
+								log.debug("Remove from cache: cacheKey=" +
+										cacheMarkup.getMarkupResourceData().getResource()
+												.getCacheKey());
+							}
+
+							iter.remove();
+							count++;
+						}
+					}
+				}
+			}
+			while (count > 0);
+
+			// And now remove all watcher entries associated with markup
+			// resources no longer in the cache. Note that you can not use
+			// Application.get() since removeMarkup() will be call from a
+			// ModificationWatcher thread which has no associated Application.
+			final ModificationWatcher watcher = application.getResourceSettings()
+					.getResourceWatcher(true);
+			if (watcher != null)
+			{
+				Iterator iter = watcher.getEntries().iterator();
+				while (iter.hasNext())
+				{
+					IModifiable modifiable = (IModifiable)iter.next();
+					if (modifiable instanceof MarkupResourceStream)
+					{
+						MarkupResourceStream resourceStream = (MarkupResourceStream)modifiable;
+						String resourceCacheKey = resourceStream.getCacheKey();
+						if (markupCache.containsKey(resourceCacheKey) == false)
+						{
+							iter.remove();
+						}
+					}
+				}
+			}
+		}
+		return markup;
+	}
+

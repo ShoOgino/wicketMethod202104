@@ -1,0 +1,34 @@
+	/**
+	 * Put the markup into the cache if cacheKey is not null and the cache does
+	 * not yet contain the cacheKey. Return the markup stored in the cache if
+	 * cacheKey is present already.
+	 * 
+	 * @param cacheKey
+	 *            If null, than ignore the cache
+	 * @param markup
+	 * @return markup The markup provided, except if the cacheKey already
+	 *         existed in the cache, than the markup from the cache is provided.
+	 */
+	protected Markup putIntoCache(final String cacheKey, Markup markup)
+	{
+		if (cacheKey != null)
+		{
+			if (markupCache.containsKey(cacheKey) == false)
+			{
+				markupCache.put(cacheKey, markup);
+			}
+			else
+			{
+				// We don't lock the cache while loading a markup. Thus it may
+				// happen that the very same markup gets loaded twice (the first
+				// markup being loaded, but not yet in the cache, and another
+				// request requesting the very same markup). Since markup
+				// loading in avg takes less than 100ms, it is not really an
+				// issue. For consistency reasons however, we should always use
+				// the markup loaded first which is why it gets returned.
+				markup = (Markup)markupCache.get(cacheKey);
+			}
+		}
+		return markup;
+	}
+

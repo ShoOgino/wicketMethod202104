@@ -8,15 +8,20 @@
 	 *            The original requesting markup container
 	 * @param markupResourceStream
 	 *            The markup stream to load and begin to watch
+	 * @param enforceReload
+	 *            The cache will be ignored and all, including inherited markup
+	 *            files, will be reloaded. Whatever is in the cache, it will be
+	 *            ignored
 	 * @return The markup in the stream
 	 */
 	private final Markup loadMarkupAndWatchForChanges(final MarkupContainer container,
-			final MarkupResourceStream markupResourceStream)
+			final MarkupResourceStream markupResourceStream, final boolean enforceReload)
 	{
-		if (markupResourceStream.getCacheKey() != null)
+		final String cacheKey = markupResourceStream.getCacheKey();
+		if (cacheKey != null)
 		{
 			// Watch file in the future
-			final ModificationWatcher watcher = application.getResourceSettings()
+			final ModificationWatcher watcher = Application.get().getResourceSettings()
 					.getResourceWatcher(true);
 			if (watcher != null)
 			{
@@ -30,9 +35,9 @@
 						}
 
 						// Remove the markup from the cache. It will be reloaded
-						// next time it the markup is requested.
-						removeMarkup(markupResourceStream);
+						// next time when the markup is requested.
 						watcher.remove(markupResourceStream);
+						removeMarkup(cacheKey);
 					}
 				});
 			}
@@ -42,6 +47,6 @@
 		{
 			log.debug("Loading markup from " + markupResourceStream);
 		}
-		return loadMarkup(container, markupResourceStream);
+		return loadMarkup(container, markupResourceStream, enforceReload);
 	}
 

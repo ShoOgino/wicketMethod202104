@@ -1,0 +1,23 @@
+	/**
+	 * Will be called if the markup was not in the cache yet but could not be
+	 * found either.
+	 * <p>
+	 * Subclasses may change the default implementation. E.g. they might choose
+	 * not update the cache to enforce reloading of any markup not found. This
+	 * might be useful in very dynamic environments.
+	 * 
+	 * @param cacheKey
+	 * @param container
+	 * @return Markup.NO_MARKUP
+	 */
+	protected Markup onMarkupNotFound(final String cacheKey, final MarkupContainer container)
+	{
+		if (log.isDebugEnabled())
+		{
+			log.debug("Markup not found: " + cacheKey);
+		}
+
+		// flag markup as non-existent
+		return putIntoCache(cacheKey, Markup.NO_MARKUP);
+	}
+

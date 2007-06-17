@@ -1,0 +1,16 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.markup.loader.IMarkupLoader#loadMarkup(org.apache.wicket.MarkupContainer,
+	 *      org.apache.wicket.markup.MarkupResourceStream,
+	 *      org.apache.wicket.markup.loader.IMarkupLoader, boolean)
+	 */
+	public final Markup loadMarkup(final MarkupContainer container,
+			final MarkupResourceStream markupResourceStream, final IMarkupLoader baseLoader,
+			final boolean enforceReload) throws IOException, ResourceStreamNotFoundException
+	{
+		// read and parse the markup
+		Markup markup = baseLoader.loadMarkup(container, markupResourceStream, null, enforceReload);
+		markup = checkForMarkupInheritance(container, markup, enforceReload);
+		return markup;
+	}
+

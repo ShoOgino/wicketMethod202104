@@ -1,5 +1,5 @@
 	/**
-	 * Determine the markup resource stream provider to be used
+	 * Get the markup resource stream provider to be used
 	 * 
 	 * @param container
 	 *            The MarkupContainer requesting the markup resource stream
@@ -13,6 +13,10 @@
 			return (IMarkupResourceStreamProvider)container;
 		}
 
-		return new DefaultMarkupResourceStreamProvider();
+		if (this.markupResourceStreamProvider == null)
+		{
+			this.markupResourceStreamProvider = new DefaultMarkupResourceStreamProvider();
+		}
+		return this.markupResourceStreamProvider;
 	}
 

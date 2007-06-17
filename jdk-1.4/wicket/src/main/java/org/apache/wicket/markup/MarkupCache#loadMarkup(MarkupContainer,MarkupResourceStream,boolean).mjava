@@ -1,0 +1,43 @@
+	/**
+	 * Loads markup from a resource stream.
+	 * 
+	 * @param container
+	 *            The original requesting markup container
+	 * @param markupResourceStream
+	 *            The markup resource stream to load
+	 * @param enforceReload
+	 *            The cache will be ignored and all, including inherited markup
+	 *            files, will be reloaded. Whatever is in the cache, it will be
+	 *            ignored
+	 * @return The markup
+	 */
+	private final Markup loadMarkup(final MarkupContainer container,
+			final MarkupResourceStream markupResourceStream, final boolean enforceReload)
+	{
+		String cacheKey = markupResourceStream.getCacheKey();
+		try
+		{
+			Markup markup = getMarkupLoader().loadMarkup(container, markupResourceStream, null,
+					enforceReload);
+
+			// add the markup to the cache.
+			return putIntoCache(cacheKey, markup);
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			log.error("Unable to find markup from " + markupResourceStream, e);
+		}
+		catch (IOException e)
+		{
+			log.error("Unable to read markup from " + markupResourceStream, e);
+		}
+
+		// In case of an error, remove the cache entry
+		if (cacheKey != null)
+		{
+			removeMarkup(cacheKey);
+		}
+
+		return Markup.NO_MARKUP;
+	}
+

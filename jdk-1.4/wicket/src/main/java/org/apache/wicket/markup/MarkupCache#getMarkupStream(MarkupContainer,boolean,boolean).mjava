@@ -1,0 +1,32 @@
+	/**
+	 * @see org.apache.wicket.markup.IMarkupCache#getMarkupStream(org.apache.wicket.MarkupContainer,
+	 *      boolean, boolean)
+	 */
+	public final MarkupStream getMarkupStream(final MarkupContainer container,
+			final boolean enforceReload, final boolean throwException)
+	{
+		if (container == null)
+		{
+			throw new IllegalArgumentException("Parameter 'container' must not be 'null'.");
+		}
+
+		// Look for associated markup
+		final Markup markup = getMarkup(container, container.getClass(), false);
+
+		// If we found markup for this container
+		if (markup != Markup.NO_MARKUP)
+		{
+			return new MarkupStream(markup);
+		}
+
+		if (throwException == true)
+		{
+			// throw exception since there is no associated markup
+			throw new MarkupNotFoundException("Markup not found. Component class: " +
+					container.getClass().getName() +
+					" Enable debug messages for org.apache.wicket.util.resource to get a list of all filenames tried");
+		}
+
+		return null;
+	}
+

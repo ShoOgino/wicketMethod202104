@@ -1,0 +1,20 @@
+	/**
+	 * Wicket's default implementation just uses the cacheKey to retrieve the
+	 * markup from the cache. More sofisticated implementations may call a
+	 * container method to e.g. ignore the cached markup under certain
+	 * situations.
+	 * 
+	 * @param cacheKey
+	 *            If null, than the cache will be ignored
+	 * @param container
+	 * @return null, if not found or to enforce reloading the markup
+	 */
+	protected Markup getMarkupFromCache(final CharSequence cacheKey, final MarkupContainer container)
+	{
+		if (cacheKey != null)
+		{
+			return (Markup)markupCache.get(cacheKey);
+		}
+		return null;
+	}
+
