@@ -1,0 +1,20 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 *            component id
+	 * @param labelProvider
+	 *            label provider (e.g. FormComponent, Radio, Check)
+	 */
+	public SimpleFormComponentLabel(String id, LabeledWebMarkupContainer labelProvider)
+	{
+		super(id, labelProvider);
+		if (labelProvider.getLabel() == null)
+		{
+			throw new IllegalStateException("Provided form component does not have a label set. "
+					+ "Use FormComponent.setLabel(IModel) to set the model "
+					+ "that will feed this label");
+		}
+		setModel(labelProvider.getLabel());
+	}
+

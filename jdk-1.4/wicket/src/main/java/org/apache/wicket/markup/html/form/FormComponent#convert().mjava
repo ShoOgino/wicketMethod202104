@@ -6,7 +6,7 @@
 	 */
 	protected final void convert()
 	{
-		if (type == null)
+		if (typeName == null)
 		{
 			try
 			{
@@ -42,7 +42,7 @@
 		}
 		else
 		{
-			final IConverter converter = getConverter(type);
+			final IConverter converter = getConverter(getType());
 			try
 			{
 				convertedInput = converter.convertToObject(getInput(), getLocale());
@@ -54,11 +54,12 @@
 				{
 					error.addMessageKey(e.getResourceKey());
 				}
-				error.addMessageKey("IConverter." + Classes.simpleName(type));
+				String simpleName = Classes.simpleName(getType());
+				error.addMessageKey("IConverter." + simpleName);
 				error.addMessageKey("IConverter");
 
 
-				error.setVariable("type", Classes.simpleName(type));
+				error.setVariable("type", simpleName);
 				final Locale locale = e.getLocale();
 				if (locale != null)
 				{
