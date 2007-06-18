@@ -1,0 +1,22 @@
+	/**
+	 * Converts submitted choice id string back to choice object.
+	 * 
+	 * @param id
+	 * @return choice object
+	 */
+	protected Object convertChoiceIdToChoice(String id)
+	{
+		final List choices = getChoices();
+		final IChoiceRenderer renderer = getChoiceRenderer();
+		for (int index = 0; index < choices.size(); index++)
+		{
+			// Get next choice
+			final Object choice = choices.get(index);
+			if (renderer.getIdValue(choice, index).equals(id))
+			{
+				return choice;
+			}
+		}
+		return null;
+	}
+
