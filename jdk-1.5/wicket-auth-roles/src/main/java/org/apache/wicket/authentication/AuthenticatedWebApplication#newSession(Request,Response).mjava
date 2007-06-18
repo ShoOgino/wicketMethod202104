@@ -7,13 +7,13 @@
 	{
 		try
 		{
-			return webSessionClass.getDeclaredConstructor(AuthenticatedWebApplication.class,
+			return webSessionClassRef.get().getDeclaredConstructor(AuthenticatedWebApplication.class,
 					Request.class).newInstance(AuthenticatedWebApplication.this, request);
 		}
 		catch (Exception e)
 		{
 			throw new WicketRuntimeException(
-					"Unable to instantiate web session " + webSessionClass, e);
+					"Unable to instantiate web session " + webSessionClassRef.get(), e);
 		}
 	}
 
