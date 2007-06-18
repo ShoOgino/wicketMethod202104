@@ -4,6 +4,9 @@
 	public void testGetTargetSetter() {
 		Address address = new Address();
 		
+		// FIXME: We shouldn't need to run this first in order for the getName() stuff to work.
+		PropertyResolver.setValue("number", address, new Integer(1), CONVERTER);
+		
 		Method method = PropertyResolver.getPropertySetter("number", address);
 		assertEquals(method.getName(), "setNumber");
 		
