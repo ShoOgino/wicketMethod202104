@@ -3,12 +3,18 @@
 	 */
 	public Class getBeanType()
 	{
-		if (beanTypeCache == null)
+		Class clazz = beanTypeCache == null ? null : (Class)beanTypeCache.get();
+		if (clazz == null)
 		{
 			try
 			{
-				beanTypeCache = Class.forName(beanTypeName, true, Thread.currentThread()
+				/* 
+				 * Need to make this scoped, rather than sticking it straight into the WeakReference,
+				 * otherwise it might get garbage collected before we've even returned it!
+				 */
+				clazz = Class.forName(beanTypeName, true, Thread.currentThread()
 						.getContextClassLoader());
+				beanTypeCache = new WeakReference(clazz);
 			}
 			catch (ClassNotFoundException e)
 			{
@@ -18,6 +24,6 @@
 						+ "] bean", e);
 			}
 		}
-		return beanTypeCache;
+		return clazz;
 	}
 
