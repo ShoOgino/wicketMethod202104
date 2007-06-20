@@ -14,6 +14,10 @@
 				return cache.get(locator);
 			}
 
+			if (failFast) {
+				testLocator(locator, fieldOwner, field);
+			}
+
 			Object proxy = LazyInitProxyFactory.createProxy(field.getType(),
 					locator);
 			// only put the proxy into the cache if the bean is a singleton
