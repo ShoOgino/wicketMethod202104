@@ -3,6 +3,14 @@
 	 */
 	public String getString()
 	{
-		return buffer.toString();
+		if (Application.get().getResourceSettings().getStripJavascriptCommentsAndWhitespace())
+		{
+			return JavascriptStripper.stripCommentsAndWhitespace(buffer.toString());
+		}
+		else
+		{
+			// don't strip the comments
+			return buffer.toString();
+		}
 	}
 
