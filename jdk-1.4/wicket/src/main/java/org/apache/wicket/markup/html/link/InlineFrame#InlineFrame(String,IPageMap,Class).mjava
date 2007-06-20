@@ -12,26 +12,6 @@
 	 */
 	public InlineFrame(final String id, final IPageMap pageMap, final Class c)
 	{
-		this(id, pageMap, new IPageLink()
-		{
-			private static final long serialVersionUID = 1L;
-
-			public Page getPage()
-			{
-				// Create page using page factory
-				return Session.get().getPageFactory().newPage(c);
-			}
-
-			public Class getPageIdentity()
-			{
-				return c;
-			}
-		});
-
-		// Ensure that c is a subclass of Page
-		if (!Page.class.isAssignableFrom(c))
-		{
-			throw new IllegalArgumentException("Class " + c + " is not a subclass of Page");
-		}
+		this(id, pageMap, c, null);
 	}
 

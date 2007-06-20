@@ -3,8 +3,19 @@
 	 */
 	public final void onLinkClicked()
 	{
-		RequestCycle.get().getRequest().getRequestParameters().setPageMapName(pageMapName);
-
-		setResponsePage(pageLink.getPage());
+		RequestParameters parameters = RequestCycle.get().getRequest().getRequestParameters();
+		String oldPageMapName = parameters.getPageMapName();
+		try
+		{
+			if (pageMapName != null)
+			{
+				RequestCycle.get().getRequest().getRequestParameters().setPageMapName(pageMapName);
+			}
+			setResponsePage(pageLink.getPage());
+		}
+		finally
+		{
+			RequestCycle.get().getRequest().getRequestParameters().setPageMapName(oldPageMapName);
+		}
 	}
 
