@@ -1,0 +1,49 @@
+	public void testInjectionAndSerialization()
+	{
+		MockWebApplication mockApp = new MockWebApplication(new WebApplication() {
+			@Override
+			protected void outputDevelopmentModeWarning()
+			{
+				// Do nothing.
+			}
+			@Override
+			public Class<WebPage> getHomePage()
+			{
+				return null;
+			}
+		}, null);
+		
+		// Make a new webapp and injector, and register the injector with the
+		// webapp as a component instantiation listener.
+		Application app = mockApp.getApplication();
+		
+		try
+		{
+			Application.set(app);
+			GuiceComponentInjector injector = new GuiceComponentInjector(app, new Module()
+			{
+			
+				public void configure(Binder binder)
+				{
+					binder.bind(ITestService.class).to(TestService.class);
+				}
+			
+			});
+			app.addComponentInstantiationListener(injector);
+			
+			// Create a new component. This should be automatically injected with the ITestService implementation.
+			TestComponent testComponent = new TestComponent("id");
+			
+			// Make sure the service is injected.
+			assertEquals(ITestService.EXPECTED_RESULT, testComponent.getTestService().getString());
+			
+			// Serialize and deserialize the object, and check it still works.
+			TestComponent copiedComponent = (TestComponent)Objects.cloneObject(testComponent);
+			assertEquals(ITestService.EXPECTED_RESULT, copiedComponent.getTestService().getString());
+		}
+		finally
+		{
+			Application.unset();
+		}
+	}
+
