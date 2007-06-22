@@ -17,6 +17,12 @@
 	 */
 	public Object getConvertedInput()
 	{
-		return dateField.getConvertedInput();
+		Object input = dateField.getConvertedInput();
+		if (input != null && getDiscardTime())
+		{
+			// reset time fields
+			input = new DateTime(input).toDateMidnight().toDate();
+		}
+		return input;
 	}
 
