@@ -1,29 +1,30 @@
 	/**
 	 * Gets the date pattern to use for putting selected values in the coupled
-	 * component. If you override this method to support components that would
-	 * otherwise not be supported, you should override
-	 * {@link #checkComponentProvidesDateFormat(Component)} and let it return
-	 * normally.
+	 * component.
 	 * 
 	 * @return The date pattern
 	 */
 	protected String getDatePattern()
 	{
-
+		String format = null;
 		if (component instanceof ITextFormatProvider)
 		{
-			return ((ITextFormatProvider)component).getTextFormat();
+			format = ((ITextFormatProvider)component).getTextFormat();
+			// it is possible that components implement ITextFormatProvider but
+			// don't provide a format
 		}
-		else
+
+		if (format == null)
 		{
-			// cast from hell, but we checked before whether we could
 			IConverter converter = component.getConverter(DateTime.class);
 			if (!(converter instanceof DateConverter))
 			{
 				converter = component.getConverter(Date.class);
 			}
-			return ((SimpleDateFormat)((DateConverter)converter).getDateFormat(component
+			format = ((SimpleDateFormat)((DateConverter)converter).getDateFormat(component
 					.getLocale())).toPattern();
 		}
+
+		return format;
 	}
 
