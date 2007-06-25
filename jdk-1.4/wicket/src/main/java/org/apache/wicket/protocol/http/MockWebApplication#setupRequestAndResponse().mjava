@@ -3,7 +3,7 @@
 	 * the necessary wicket request, response and session objects. The request
 	 * and response objects can be accessed and initialised at this point.
 	 */
-	public void setupRequestAndResponse()
+	public WebRequestCycle setupRequestAndResponse()
 	{
 		servletRequest.initialize();
 		servletResponse.initialize();
@@ -11,8 +11,9 @@
 		parametersForNextRequest.clear();
 		this.wicketRequest = this.application.newWebRequest(servletRequest);
 		this.wicketResponse = this.application.newWebResponse(servletResponse);
-		createRequestCycle();
+		WebRequestCycle requestCycle = createRequestCycle();
 		this.application.getSessionStore().bind(wicketRequest, wicketSession);
 		wicketResponse.setAjax(wicketRequest.isAjax());
+		return requestCycle;
 	}
 

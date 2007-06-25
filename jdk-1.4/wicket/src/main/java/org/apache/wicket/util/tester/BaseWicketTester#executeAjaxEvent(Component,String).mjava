@@ -68,8 +68,12 @@
 				+ " which matches the event: " + event.toString();
 		notNull(failMessage, ajaxEventBehavior);
 
-		setupRequestAndResponse();
-		RequestCycle requestCycle = createRequestCycle();
+		// initialize the request only if needed to allow the user to pass request parameters, see WICKET-254
+		WebRequestCycle requestCycle;
+		if (RequestCycle.get() == null)
+			requestCycle = setupRequestAndResponse();
+		else
+			requestCycle = (WebRequestCycle)RequestCycle.get();
 
 		// If the event is an FormSubmitBehavior then also "submit" the form
 		if (ajaxEventBehavior instanceof AjaxFormSubmitBehavior)
@@ -81,6 +85,6 @@
 		ajaxEventBehavior.onRequest();
 
 		// process the request target
-		requestCycle.getRequestTarget().respond(requestCycle);
+		processRequestCycle(requestCycle);
 	}
 

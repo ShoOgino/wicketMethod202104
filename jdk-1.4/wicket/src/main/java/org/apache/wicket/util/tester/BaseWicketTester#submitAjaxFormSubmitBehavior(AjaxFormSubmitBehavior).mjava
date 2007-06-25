@@ -34,7 +34,9 @@
 					String name = formComponent.getInputName();
 					String value = formComponent.getValue();
 
-					getServletRequest().setParameter(name, value);
+					// Set request parameter with the field value, but do not modify an existing request parameter explicitly set using FormTester.setValue()
+					if (getServletRequest().getParameterMap().get(name) == null)
+						getServletRequest().setParameter(name, value);
 				}
 			}
 		});
