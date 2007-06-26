@@ -3,6 +3,11 @@
 	 */
 	public Object getBean(String name) throws BeansException
 	{
-		throw new UnsupportedOperationException();
+		Object bean = beans.get(name);
+		if (bean == null)
+		{
+			throw new NoSuchBeanDefinitionException(name);
+		}
+		return bean;
 	}
 
