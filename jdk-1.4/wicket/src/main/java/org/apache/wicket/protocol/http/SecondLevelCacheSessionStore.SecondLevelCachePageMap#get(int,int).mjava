@@ -1,3 +1,6 @@
+		/**
+		 * @see org.apache.wicket.PageMap#get(int, int)
+		 */
 		public Page get(int id, int versionNumber)
 		{
 			HashMap pageMaps = (HashMap)usedPages.get();
@@ -12,20 +15,23 @@
 				pages = new IntHashMap();
 				pageMaps.put(getName(), pages);
 			}
-			
+
 			// for now i only get by id.
-			// does it really make any sense that there are multiply instances of the 
+			// does it really make any sense that there are multiply instances
+			// of the
 			// same page are alive in one session??
 			Page page = (Page)pages.get(id);
-			if (page != null) return page;
-			
+			if (page != null)
+				return page;
+
 			PageVersions pv = null;
 			if (versionNumber == -1)
 			{
-				// when no version was specified, get the last touched page for given page id
-				for (int index = pageVersions.size() - 1; index >= 0; --index) 
+				// when no version was specified, get the last touched page for
+				// given page id
+				for (int index = pageVersions.size() - 1; index >= 0; --index)
 				{
-					if (((PageVersions)pageVersions.get(index)).pageid == id) 
+					if (((PageVersions)pageVersions.get(index)).pageid == id)
 					{
 						pv = (PageVersions)pageVersions.get(index);
 						versionNumber = pv.versionid;
@@ -41,7 +47,7 @@
 				{
 					// ask the page store if it is ready saving the page.
 					getStore().pageAccessed(sessionId, page);
-					pages.put(id,page);
+					pages.put(id, page);
 					return page;
 				}
 			}
@@ -50,7 +56,7 @@
 				int ajaxVersionNumber = 0;
 				if (pv == null)
 				{
-					int index = pageVersions.indexOf(new PageVersions(id, versionNumber,-1));
+					int index = pageVersions.indexOf(new PageVersions(id, versionNumber, -1));
 					if (index != -1)
 					{
 						pv = (PageVersions)pageVersions.get(index);
@@ -61,10 +67,11 @@
 					ajaxVersionNumber = pv.ajaxversionid;
 				}
 				lastPage = null;
-				page = getStore().getPage(sessionId, getName(), id, versionNumber, ajaxVersionNumber);
-				pages.put(id,page);
+				page = getStore().getPage(sessionId, getName(), id, versionNumber,
+						ajaxVersionNumber);
+				pages.put(id, page);
 				return page;
-				
+
 			}
 			return null;
 		}
