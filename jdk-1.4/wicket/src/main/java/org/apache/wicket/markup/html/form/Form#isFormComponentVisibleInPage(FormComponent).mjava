@@ -1,0 +1,32 @@
+	/**
+	 * Checks if the specified form component visible and is attached to a page
+	 * 
+	 * @param fc
+	 *            form component
+	 * 
+	 * @return true if the form component and all its parents are visible and
+	 *         there component is in page's hierarchy
+	 */
+	private boolean isFormComponentVisibleInPage(FormComponent fc)
+	{
+		if (fc == null)
+		{
+			throw new IllegalArgumentException("Argument `fc` cannot be null");
+		}
+		Component c = fc;
+		Component last = fc;
+		while (c != null)
+		{
+			if (c.isRenderAllowed() && c.isVisible())
+			{
+				last = c;
+				c = c.getParent();
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return last == this;
+	}
+
