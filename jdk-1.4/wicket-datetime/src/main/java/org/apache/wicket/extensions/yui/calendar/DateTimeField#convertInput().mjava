@@ -1,6 +1,7 @@
 	/**
-	 * Gets the converted input. It combines the inputs of the nested date,
-	 * hours, minutes and am/pm fields and constructs a date from it.
+	 * Sets the converted input, which is an instance of {@link Date}, possibly
+	 * null. It combines the inputs of the nested date, hours, minutes and am/pm
+	 * fields and constructs a date from it.
 	 * <p>
 	 * Note that overriding this method is a better option than overriding
 	 * {@link #updateModel()} like the first versions of this class did. The
@@ -10,12 +11,11 @@
 	 * anyway (so we don't have to override that anymore).
 	 * </p>
 	 * 
-	 * @return instance of {@link Date}, possibly null
-	 * 
-	 * @see org.apache.wicket.markup.html.form.FormComponent#getConvertedInput()
+	 * @see org.apache.wicket.markup.html.form.FormComponent#convertInput()
 	 */
-	public Object getConvertedInput()
+	protected void convertInput()
 	{
+		Object convertedInput = null;
 		Object dateFieldInput = dateField.getConvertedInput();
 		if (dateFieldInput != null)
 		{
@@ -47,7 +47,7 @@
 				}
 
 				// the date will be in the server's timezone
-				return date.toDate();
+				convertedInput = date.toDate();
 			}
 			catch (RuntimeException e)
 			{
@@ -56,6 +56,6 @@
 			}
 		}
 
-		return null;
+		setConvertedInput(convertedInput);
 	}
 
