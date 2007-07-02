@@ -1,6 +1,6 @@
 	private byte[] testMap(final SessionPageKey currentKey)
 	{
-		//System.err.println("TESTMAP:" + currentKey);
+		// System.err.println("TESTMAP:" + currentKey);
 		byte[] bytes = null;
 		List list = (List)pagesToBeSerialized.get(currentKey.sessionId);
 		if (list == null)
@@ -13,18 +13,18 @@
 		}
 		else
 		{
-			while(true)
+			while (true)
 			{
 				SessionPageKey listKey = null;
 				synchronized (list)
 				{
 					if (list.size() > 0)
 					{
-						listKey = (SessionPageKey)list.get(list.size()-1);
+						listKey = (SessionPageKey)list.get(list.size() - 1);
 						Object object = listKey.data;
 						if (object instanceof Page)
 						{
-							list.remove(list.size()-1);
+							list.remove(list.size() - 1);
 						}
 						else if (object == SERIALIZING)
 						{

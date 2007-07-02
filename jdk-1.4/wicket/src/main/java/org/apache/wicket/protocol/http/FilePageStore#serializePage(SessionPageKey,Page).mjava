@@ -1,7 +1,7 @@
 	private byte[] serializePage(SessionPageKey key, Page page)
 	{
 		byte[] bytes = null;
-		//System.err.println("SERIALIZING " + key);
+		// System.err.println("SERIALIZING " + key);
 		long t1 = System.currentTimeMillis();
 		Page.serializer.set(new PageSerializer(key));
 		try
@@ -11,16 +11,17 @@
 			serialized++;
 			if (log.isDebugEnabled() && bytes != null)
 			{
-				log.debug("serializing page " + key.pageClassName + "[" + key.id + "," + key.versionNumber
-						+ "] size: " + bytes.length + " for session " + key.sessionId + " took "
-						+ (System.currentTimeMillis() - t1) + " miliseconds to serialize");
+				log.debug("serializing page " + key.pageClassName + "[" + key.id + "," +
+						key.versionNumber + "] size: " + bytes.length + " for session " +
+						key.sessionId + " took " + (System.currentTimeMillis() - t1) +
+						" miliseconds to serialize");
 			}
 		}
 		finally
 		{
 			Page.serializer.set(null);
 		}
-		//System.err.println("SERIALIZING " + key + " bytes: " + bytes);
+		// System.err.println("SERIALIZING " + key + " bytes: " + bytes);
 		return bytes;
 	}
 

@@ -1,4 +1,5 @@
-		public Page deserializePage(int id, String name, Page page, ObjectInputStream stream) throws IOException, ClassNotFoundException
+		public Page deserializePage(int id, String name, Page page, ObjectInputStream stream)
+				throws IOException, ClassNotFoundException
 		{
 			HashMap pageMaps = (HashMap)SecondLevelCacheSessionStore.usedPages.get();
 			if (pageMaps == null)
@@ -14,15 +15,15 @@
 			}
 			pages.put(id, page);
 			boolean b = stream.readBoolean();
-			if (b == false) 
+			if (b == false)
 			{
 				stream.defaultReadObject();
 				return page;
-			} 
-			else 
+			}
+			else
 			{
 				// the object will resolve to a Page (probably PageHolder)
-				return (Page) stream.readObject();
+				return (Page)stream.readObject();
 			}
 		}
 
