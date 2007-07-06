@@ -26,7 +26,9 @@
 				.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><ajax-response>");
 		Result result = isTrue(failMessage, isAjaxResponse);
 		if (result.wasFailed())
+		{
 			return result;
+		}
 
 		// See if the component has a markup id
 		String markupId = component.getMarkupId();
@@ -35,7 +37,9 @@
 				+ "which means that it can't have been added to the AJAX response";
 		result = isTrue(failMessage, !Strings.isEmpty(markupId));
 		if (result.wasFailed())
+		{
 			return result;
+		}
 
 		// Look for that the component is on the response, using the markup id
 		boolean isComponentInAjaxResponse = ajaxResponse.matches(".*<component id=\"" + markupId
