@@ -1,8 +1,15 @@
 	/**
-	 * @return the maxSize of uploaded files
+	 * Gets the maximum size for uploads. If null, the setting
+	 * {@link IApplicationSettings#getDefaultMaximumUploadSize()} is used.
+	 * 
+	 * @return the maximum size
 	 */
 	public Bytes getMaxSize()
 	{
-		return this.maxSize;
+		if (maxSize == null)
+		{
+			return getApplication().getApplicationSettings().getDefaultMaximumUploadSize();
+		}
+		return maxSize;
 	}
 
