@@ -1,0 +1,26 @@
+	private PageWindowInternal allocatePageWindow(int index, int size)
+	{
+		final PageWindowInternal window;
+		if (index == windows.size())
+		{
+			// new page window
+			window = new PageWindowInternal();
+			window.filePartOffset = getWindowFileOffset(index);
+			totalSize += size;
+			window.filePartSize = size;
+			windows.add(window);
+		}
+		else
+		{
+			// get the window
+			window = (PageWindowInternal)windows.get(index);
+			if (window.filePartSize != size)
+			{
+				adjustWindowSize(index, size);
+			}
+		}
+
+
+		return window;
+	}
+

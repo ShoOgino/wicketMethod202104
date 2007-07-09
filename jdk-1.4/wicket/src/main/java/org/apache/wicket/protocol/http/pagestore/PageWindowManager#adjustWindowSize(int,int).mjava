@@ -1,0 +1,35 @@
+	private void adjustWindowSize(int index, int size)
+	{
+		PageWindowInternal window = (PageWindowInternal)windows.get(index);
+		if (index == windows.size() - 1)
+		{
+			int delta = size - window.filePartSize;
+			totalSize += delta;
+			window.filePartSize = size;
+		}
+		else
+		{
+			while (window.filePartSize < size && index < windows.size() - 1)
+			{
+				mergeWindowWithNext(index);
+			}
+			// done merging - do we have anough room ?
+			if (window.filePartSize < size)
+			{
+				// no, this is the last window
+				int delta = size - window.filePartSize;
+				totalSize += delta;
+				window.filePartSize = size;
+			}
+			else
+			{
+				// yes, we might want to split the window, so that we don't lose
+				// space when
+				// the created window was too big
+				splitWindow(index, size);
+			}
+		}
+
+		window.pageId = -1;
+	}
+

@@ -1,0 +1,26 @@
+	private void splitWindow(int index, int size)
+	{
+		PageWindowInternal window = (PageWindowInternal)windows.get(index);
+		int delta = window.filePartSize - size;
+
+		if (index == windows.size() - 1)
+		{
+			// if this is last window
+			totalSize -= delta;
+			window.filePartSize = size;
+		}
+		else if (window.filePartSize != size)
+		{
+			PageWindowInternal newWindow = new PageWindowInternal();
+			newWindow.pageId = -1;
+			window.filePartSize = size;
+
+			windows.add(index + 1, newWindow);
+
+			newWindow.filePartOffset = getWindowFileOffset(index + 1);
+			newWindow.filePartSize = delta;
+		}
+		
+		idToWindowIndices = null;
+	}
+

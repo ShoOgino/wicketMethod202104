@@ -1,0 +1,24 @@
+	/**
+	 * @param pageId
+	 * @param versionNumber
+	 * @param ajaxVersionNumber
+	 */
+	public void removePage(int pageId, int versionNumber, int ajaxVersionNumber)
+	{
+		int index = getWindowIndex(pageId, versionNumber, ajaxVersionNumber);
+		if (index != -1)
+		{
+			PageWindowInternal window = (PageWindowInternal) windows.get(index);
+			removeWindowIndex(pageId, index);
+			if (index == windows.size() - 1)
+			{
+				windows.remove(index);
+				totalSize -= window.filePartSize;
+			}
+			else
+			{
+				window.pageId = -1;
+			}
+		}
+	}
+

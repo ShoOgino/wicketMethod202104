@@ -1,0 +1,21 @@
+	public void removePage(String sessionId, String pageMap, int id)
+	{
+		SessionEntry entry = getSessionEntry(sessionId, false);
+		if (entry != null)
+		{
+			if (isSynchronous())
+			{
+				removePage(entry, pageMap, id);
+			}
+			else
+			{
+				List pages = getPagesToSaveList(sessionId);
+				synchronized (pages)
+				{
+					flushPagesToSaveList(sessionId, pages);
+					removePage(entry, pageMap, id);
+				}
+			}
+		}
+	}
+

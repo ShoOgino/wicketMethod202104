@@ -1,0 +1,22 @@
+	public void unbind(String sessionId)
+	{
+		SessionEntry entry = (SessionEntry)sessionIdToEntryMap.get(sessionId);
+		if (entry != null)
+		{
+			if (isSynchronous())
+			{
+				entry.unbind();
+			}
+			else
+			{
+				List pages = getPagesToSaveList(sessionId);
+				synchronized (pages)
+				{
+					flushPagesToSaveList(sessionId, pages);
+					entry.unbind();
+				}
+				pagesToSaveAll.remove(sessionId);
+			}
+		}
+	}
+

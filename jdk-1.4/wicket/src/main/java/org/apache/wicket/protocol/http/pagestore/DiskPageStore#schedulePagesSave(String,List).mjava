@@ -1,0 +1,14 @@
+	private void schedulePagesSave(String sessionId, List/* <SerializedPage */ pages)
+	{
+		List list = getPagesToSaveList(sessionId);
+		synchronized (list)
+		{
+			list.addAll(pages);
+			
+			if (list.size() > 0 && pagesToSaveActive.containsKey(sessionId) == false)
+			{
+				pagesToSaveActive.put(sessionId, list);
+			}
+		}
+	}
+
