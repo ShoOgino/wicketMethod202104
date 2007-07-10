@@ -9,7 +9,7 @@
 	public ExceptionErrorPage(final Throwable throwable, final Page page)
 	{
 		this.throwable = throwable;
-		
+
 		// Add exception label
 		add(new MultiLineLabel("exception", Strings.toString(throwable)));
 
@@ -44,14 +44,17 @@
 		// Show container if markup stream is available
 		markupHighlight.setVisible(markupStream != null);
 
-		// Show component tree of the page
-		if (page != null)
+		add(new Link("displayPageViewLink")
 		{
-		    add(new PageView("componentTree", page));
-		}
-		else
-		{
-		    add(new Label("componentTree", ""));
-		}
+			private static final long serialVersionUID = 1L;
+
+			public void onClick()
+			{
+				ExceptionErrorPage.this.replace(new PageView("componentTree", page));
+				setVisible(false);
+			}
+		});
+
+		add(new Label("componentTree", ""));
 	}
 
