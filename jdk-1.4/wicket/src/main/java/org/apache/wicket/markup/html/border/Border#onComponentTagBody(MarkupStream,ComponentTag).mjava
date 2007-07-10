@@ -1,27 +1,23 @@
 	/**
-	 * Render the tag body
-	 * 
 	 * @see org.apache.wicket.Component#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
 	protected final void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 	{
-		// Save open tag for callback later to render body
+		// Remember the data for easy access by the Body component
 		this.openTag = openTag;
+		this.originalMarkupStream = getMarkupStream();
 
-		// initialize
-		this.haveSeenBodyTag = false;
+		// body.isVisible(false) needs a little extra work. We must skip the
+		// markup between <span wicket:id="myBorder"> and </span>
+		if (this.body.isVisible() == false)
+		{
+			this.originalMarkupStream.skipToMatchingCloseTag(openTag);
+		}
 
 		// Render the associated markup
 		renderAssociatedMarkup("border",
 				"Markup for a border component must begin a tag like '<wicket:border>'");
-
-		// There shall exactly only one body tag per border
-		if (haveSeenBodyTag == false)
-		{
-			markupStream.throwMarkupException(
-					"Didn't find <wicket:body/> tag for the border compoment.");
-		}
 	}
 

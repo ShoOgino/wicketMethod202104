@@ -1,0 +1,53 @@
+	/**
+	 * @see org.apache.wicket.markup.resolver.IComponentResolver#resolve(MarkupContainer,
+	 *      MarkupStream, ComponentTag)
+	 * 
+	 * @param container
+	 *            The container parsing its markup
+	 * @param markupStream
+	 *            The current markupStream
+	 * @param tag
+	 *            The current component tag while parsing the markup
+	 * @return true, if componentId was handle by the resolver. False, otherwise
+	 */
+	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+			final ComponentTag tag)
+	{
+		// Must be wicket:body
+		if (tag instanceof WicketTag)
+		{
+			WicketTag wtag = (WicketTag)tag;
+			if (wtag.isBodyTag())
+			{
+				// Find the border parent. There must not be a body container in
+				// between
+				MarkupContainer parent = container.getParent();
+				while (parent != null)
+				{
+					if (parent instanceof Border.BorderBodyContainer)
+					{
+						break;
+					}
+					else if (parent instanceof Border)
+					{
+						Component component = parent.get(tag.getId());
+						if (component != null)
+						{
+							component.render(markupStream);
+
+							log.warn("Please consider to change your java code to something like: " 
+									+ container.getId() 
+									+ ".add(getBodyContainer()); for the component hierarchy to better reflect the markup hierarchy.");
+						}
+
+						return true;
+					}
+					parent = parent.getParent();
+				}
+			}
+		}
+
+		// We were not able to handle the tag
+		return false;
+	}
+

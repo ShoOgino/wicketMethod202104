@@ -1,0 +1,21 @@
+		/**
+		 * @see org.apache.wicket.MarkupContainer#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
+		 *      org.apache.wicket.markup.ComponentTag)
+		 */
+		protected void onComponentTagBody(final MarkupStream markupStream,
+				final ComponentTag openTag)
+		{
+			if (this.wasOpenCloseTag == false)
+			{
+				// It is open-preview-close. Only RawMarkup is allowed within
+				// the preview region, which gets stripped from output
+				markupStream.skipRawMarkup();
+			}
+
+			super.onComponentTagBody(Border.this.originalMarkupStream, Border.this.openTag);
+
+			// no longer needed.
+			Border.this.originalMarkupStream = null;
+			Border.this.openTag = null;
+		}
+

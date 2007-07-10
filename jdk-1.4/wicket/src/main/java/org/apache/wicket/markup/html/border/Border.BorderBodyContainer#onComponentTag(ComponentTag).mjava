@@ -1,0 +1,16 @@
+		/**
+		 * @see org.apache.wicket.Component#onComponentTag(org.apache.wicket.markup.ComponentTag)
+		 */
+		protected void onComponentTag(final ComponentTag tag)
+		{
+			// Convert open-close to open-body-close
+			if (tag.getType() == XmlTag.OPEN_CLOSE)
+			{
+				tag.setType(XmlTag.OPEN);
+				tag.setModified(true);
+				this.wasOpenCloseTag = true;
+			}
+
+			super.onComponentTag(tag);
+		}
+
