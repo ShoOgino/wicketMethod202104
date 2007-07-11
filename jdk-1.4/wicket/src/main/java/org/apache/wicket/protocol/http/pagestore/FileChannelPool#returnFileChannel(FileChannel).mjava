@@ -1,4 +1,7 @@
 	/**
+	 * Returns the channel to the pool. It is necessary to call this for every
+	 * channel obtained by calling {@link #getFileChannel(String, boolean)}.
+	 * 
 	 * @param channel
 	 */
 	public synchronized void returnFileChannel(FileChannel channel)
@@ -12,6 +15,7 @@
 
 		count = new Integer(count.intValue() - 1);
 
+		// decrease the usage count
 		if (count.intValue() == 0)
 		{
 			channelToUseCount.remove(channel);
@@ -21,6 +25,7 @@
 			}
 			else
 			{
+				// this was the last usage, add chanel to idle channels
 				idleChannels.addLast(channel);
 			}
 		}

@@ -1,12 +1,20 @@
+	/**
+	 * Returns the index of the given page in the {@link #windows} list.
+	 * 
+	 * @param pageId
+	 * @param versionNumber
+	 * @param ajaxVersionNumber
+	 * @return
+	 */
 	private int getWindowIndex(int pageId, int versionNumber, int ajaxVersionNumber)
 	{
 		int index = -1;
-		
+
 		if (idToWindowIndices == null)
 		{
 			rebuildIndices();
 		}
-		
+
 		List indices = (List)idToWindowIndices.get(pageId);
 		if (indices != null)
 		{
@@ -15,6 +23,8 @@
 				Integer currentIndex = (Integer)i.next();
 				PageWindowInternal window = (PageWindowInternal)windows
 						.get(currentIndex.intValue());
+
+				// check whether the page window matches requested page
 				if (window.pageId == pageId && window.versionNumber == versionNumber &&
 						window.ajaxVersionNumber == ajaxVersionNumber)
 				{

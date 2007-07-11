@@ -1,4 +1,7 @@
 	/**
+	 * Returns a channel for given file. If the file doesn't exist, the
+	 * createIfDoesNotExit attribute specifies if the file should be crated.
+	 * 
 	 * Do NOT call close on the returned chanel. Instead call
 	 * {@link #returnFileChannel(FileChannel)}
 	 * 
@@ -30,6 +33,8 @@
 
 		if (channel != null)
 		{
+			// increase the usage count for this channel
+
 			Integer count = (Integer)channelToUseCount.get(channel);
 			if (count == null || count.intValue() == 0)
 			{

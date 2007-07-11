@@ -1,20 +1,9 @@
 	public void storePage(String sessionId, Page page)
 	{
-		SessionEntry entry = getSessionEntry(sessionId, true);
-
 		List pages = serializePage(page);
 
-		if (isSynchronous())
-		{
-			for (Iterator i = pages.iterator(); i.hasNext();)
-			{
-				SerializedPage serializedPage = (SerializedPage)i.next();
-				entry.savePage(serializedPage);
-			}
-		}
-		else
-		{
-			schedulePagesSave(sessionId, pages);
-		}
+		onPagesSerialized(sessionId, pages);
+
+		storeSerializedPages(sessionId, pages);
 	}
 

@@ -1,25 +1,47 @@
-	protected List/* SerializedPage */ serializePage(Page page) {
+	/**
+	 * Creates a list of {@link SerializedPage} instances obtained from
+	 * serializing the provided page.
+	 * <p>
+	 * One page instance can be serialized to multiple {@link SerializedPage}
+	 * instances, because each referenced page is serialized separately and
+	 * should also be separately saved On deserialization wicket detects a page
+	 * instance placeholder and loads the appropriate page.
+	 * <p>
+	 * As an example, when there is PageA that has a member variable of type
+	 * PageB, serializing instanceof PageA will result in a list of two
+	 * {@link SerializedPage} instances, one for PageA and another one for the
+	 * referenced PageB.
+	 * 
+	 * @param page
+	 *            page to be serialized
+	 * @return list of {@link SerializedPage}s
+	 */
+	protected List/* <SerializedPage> */serializePage(Page page)
+	{
 		final List result = new ArrayList();
-		
+
 		SerializedPage initialPage = new SerializedPage(page);
 		result.add(initialPage);
-		
-		PageSerializer serializer = new PageSerializer(initialPage) {
+
+		PageSerializer serializer = new PageSerializer(initialPage)
+		{
 			protected void onPageSerialized(SerializedPage page)
 			{
 				result.add(page);
 			}
 		};
-		
+
 		Page.serializer.set(serializer);
-		
+
 		try
 		{
 			initialPage.setData(Objects.objectToByteArray(page.getPageMapEntry()));
-		} finally {
+		}
+		finally
+		{
 			Page.serializer.set(null);
 		}
-		
+
 		return result;
 	}
 

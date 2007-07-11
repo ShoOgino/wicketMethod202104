@@ -1,0 +1,18 @@
+	protected void storeSerializedPages(String sessionId, List /* <SerializedPage> */pages)
+	{
+		SessionEntry entry = getSessionEntry(sessionId, true);
+
+		if (isSynchronous())
+		{
+			for (Iterator i = pages.iterator(); i.hasNext();)
+			{
+				SerializedPage serializedPage = (SerializedPage)i.next();
+				entry.savePage(serializedPage);
+			}
+		}
+		else
+		{
+			schedulePagesSave(sessionId, pages);
+		}
+	}
+

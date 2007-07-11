@@ -1,6 +1,17 @@
+	/**
+	 * Allocates window on given index with to size. If the index is pointing to
+	 * existing window, the window size will be adjusted. Otherwise a new window
+	 * with appropriated size will be created.
+	 * 
+	 * @param index
+	 * @param size
+	 * @return
+	 */
 	private PageWindowInternal allocatePageWindow(int index, int size)
 	{
 		final PageWindowInternal window;
+
+		// new indow
 		if (index == windows.size())
 		{
 			// new page window
@@ -14,6 +25,8 @@
 		{
 			// get the window
 			window = (PageWindowInternal)windows.get(index);
+
+			// adjust if necessary
 			if (window.filePartSize != size)
 			{
 				adjustWindowSize(index, size);
