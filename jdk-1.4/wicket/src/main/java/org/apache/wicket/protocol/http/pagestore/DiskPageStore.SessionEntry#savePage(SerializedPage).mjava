@@ -1,24 +1,36 @@
 		/**
+		 * Saves the serialized page to appropriate pagemap file.
+		 * 
 		 * @param page
 		 */
 		public synchronized void savePage(SerializedPage page)
 		{
+			// only save page that has some data
 			if (page.getData() != null)
 			{
 				PageMapEntry entry = getPageMapEntry(page.getPageMapName(), true);
+
+				// allocate window for page
 				PageWindow window = entry.manager.createPageWindow(page.getPageId(), page
 						.getVersionNumber(), page.getAjaxVersionNumber(), page.getData().length);
+
+				// remove the entry and add it to the end of entry list (to mark
+				// it as last accessed(
 				pageMapEntryList.remove(entry);
 				pageMapEntryList.add(entry);
 
+				// if we exceeded maximum session size, try to remove as many
+				// pagemap as necessary and possible
 				while (getTotalSize() > getMaxSizePerSession() && pageMapEntryList.size() > 1)
 				{
 					removePageMapEntry((PageMapEntry)pageMapEntryList.get(0));
 				}
 
+				// take the filechannel from the pool
 				FileChannel channel = fileChannelPool.getFileChannel(entry.fileName, true);
 				try
 				{
+					// write the content
 					channel.write(ByteBuffer.wrap(page.getData()), window.getFilePartOffset());
 				}
 				catch (IOException e)
@@ -27,6 +39,7 @@
 				}
 				finally
 				{
+					// return the "borrowed" file channel
 					fileChannelPool.returnFileChannel(channel);
 				}
 			}
