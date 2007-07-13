@@ -1,6 +1,6 @@
 	/**
 	 * Create WicketTester and automatically create a WebApplication.
-	 *
+	 * 
 	 * @param homePage
 	 */
 	public WicketTester(final Class homePage)
@@ -15,6 +15,13 @@
 				return homePage;
 			}
 
+			protected ISessionStore newSessionStore()
+			{
+				// Don't use a filestore, or we spawn lots of threads, which
+				// makes things slow.
+				return new HttpSessionStore(this);
+			}
+
 			protected WebResponse newWebResponse(final HttpServletResponse servletResponse)
 			{
 				return new WebResponse(servletResponse);
@@ -23,12 +30,6 @@
 			protected void outputDevelopmentModeWarning()
 			{
 				// Do nothing.
-			}
-			
-			protected ISessionStore newSessionStore()
-			{
-				// Don't use a filestore, or we spawn lots of threads, which makes things slow.
-				return new HttpSessionStore(this);
 			}
 		});
 	}
