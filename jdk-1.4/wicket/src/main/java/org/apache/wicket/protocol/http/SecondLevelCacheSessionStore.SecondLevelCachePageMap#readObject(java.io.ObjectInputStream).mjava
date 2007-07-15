@@ -2,10 +2,15 @@
 		{
 			s.defaultReadObject();
 
-			// if the pagestore is not clustered, we need to read the lastPage instance
+			// if the pagestore is not clustered, we need to read the lastPage
+			// instance
 			if (serializeLastPage)
 			{
-				lastPage = (Page) s.readObject();
+				Serializable page = (Serializable) s.readObject();
+				if (page != null)
+				{
+					lastPageDeserialized = page;
+				}
 			}
 		}
 

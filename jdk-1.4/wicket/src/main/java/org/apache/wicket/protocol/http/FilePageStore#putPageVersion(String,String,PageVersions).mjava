@@ -1,0 +1,14 @@
+	private void putPageVersion(String sessionId, String pageMapName, PageVersions pv)
+	{
+		List list = getPageVersions(sessionId, pageMapName, true);
+		synchronized (list)
+		{
+			list.remove(pv);
+			list.add(pv);
+			if (list.size() > getRecordPageVersionCount())
+			{
+				list.remove(0);
+			}
+		}
+	}
+

@@ -1,0 +1,26 @@
+	private List /* <PageVersions> */getPageVersions(String sessionId, String pageMapName,
+			boolean createIfDoesNotExist)
+	{
+		if (pageMapName == null)
+			pageMapName = "";
+		
+		Map pageMapToList = (Map)pageVersionMap.get(sessionId);
+		if (pageMapToList == null && createIfDoesNotExist == false)
+		{
+			return null;
+		}
+		else if (pageMapToList == null && createIfDoesNotExist == true)
+		{
+			pageMapToList = new ConcurrentHashMap();
+			pageVersionMap.put(sessionId, pageMapToList);
+		}
+
+		List versions = (List)pageMapToList.get(pageMapName);
+		if (versions == null && createIfDoesNotExist)
+		{
+			versions = new ArrayList();
+			pageMapToList.put(pageMapName, versions);
+		}
+		return versions;
+	}
+
