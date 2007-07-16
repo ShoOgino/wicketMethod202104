@@ -8,19 +8,20 @@
 	private void cacheSerializedPage(String sessionId, Page page,
 			List /* <SerializedPage> */pagesList)
 	{
-		RequestCycle requestCycle = RequestCycle.get();
-		if (requestCycle != null)
+		if (getLastRecentlySerializedPagesCacheSize() > 0)
 		{
-			SerializedPagesMetadataEntry entry = (SerializedPagesMetadataEntry)requestCycle
-					.getMetaData(SERIALIZED_PAGES_KEY);
-			if (entry == null)
-			{
-				entry = new SerializedPagesMetadataEntry();
-				entry.sessionId = sessionId;
-				requestCycle.setMetaData(SERIALIZED_PAGES_KEY, entry);
-			}
+			SerializedPageWithSession entry = new SerializedPageWithSession(sessionId, page,
+					pagesList);
 
-			entry.map.put(page, pagesList);
+			synchronized (lastRecentlySerializedPagesCache)
+			{
+				removePageFromLastRecentlySerializedPagesCache(page);
+				lastRecentlySerializedPagesCache.add(entry);
+				if (lastRecentlySerializedPagesCache.size() > getLastRecentlySerializedPagesCacheSize())
+				{
+					lastRecentlySerializedPagesCache.remove(0);
+				}
+			}
 		}
 	}
 
