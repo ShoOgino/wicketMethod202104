@@ -5,15 +5,6 @@
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException
 	{
-		// set application thread local regarless of whether we can find a
-		// session
-		WebApplication webApplication = (WebApplication)filterConfig.getServletContext()
-				.getAttribute(WebApplication.SERVLET_CONTEXT_APPLICATION_KEY);
-		if (webApplication != null)
-		{
-			Application.set(webApplication);
-		}
-
 		HttpServletRequest httpServletRequest = ((HttpServletRequest)request);
 		HttpSession httpSession = httpServletRequest.getSession(false);
 		if (httpSession != null)
@@ -54,12 +45,5 @@
 
 		// go on with processing
 		chain.doFilter(request, response);
-
-		// clean up
-		Session.unset();
-		if (webApplication != null)
-		{
-			Application.unset();
-		}
 	}
 
