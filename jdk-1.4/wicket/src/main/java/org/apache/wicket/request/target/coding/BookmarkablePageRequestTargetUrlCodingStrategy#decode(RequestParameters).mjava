@@ -7,7 +7,8 @@
 				getMountPath().length());
 		final PageParameters parameters = new PageParameters(decodeParameters(parametersFragment,
 				requestParameters.getParameters()));
-		String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
+		String pageMapName = WebRequestCodingStrategy.decodePageMapName((String)parameters
+				.remove(WebRequestCodingStrategy.PAGEMAP));
 		if (requestParameters.getPageMapName() == null)
 		{
 			requestParameters.setPageMapName(pageMapName);
@@ -27,12 +28,13 @@
 		{
 			WebRequestCodingStrategy.addInterfaceParameters(interfaceParameter, requestParameters);
 			return new BookmarkableListenerInterfaceRequestTarget(pageMapName,
-					(Class)bookmarkablePageClassRef.get(), parameters, requestParameters.getComponentPath(),
-					requestParameters.getInterfaceName());
+					(Class)bookmarkablePageClassRef.get(), parameters, requestParameters
+							.getComponentPath(), requestParameters.getInterfaceName());
 		}
 		else
 		{
-			return new BookmarkablePageRequestTarget(pageMapName, (Class)bookmarkablePageClassRef.get(), parameters);
+			return new BookmarkablePageRequestTarget(pageMapName, (Class)bookmarkablePageClassRef
+					.get(), parameters);
 		}
 	}
 

@@ -38,11 +38,12 @@
 		{
 			log.debug(e.getMessage());
 			return null;
-		}		
+		}
 		PageParameters parameters = new PageParameters(decodeParameters(parametersFragment,
 				requestParameters.getParameters()));
 
-		final String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
+		String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
+		pageMapName = WebRequestCodingStrategy.decodePageMapName(pageMapName);
 		requestParameters.setPageMapName(pageMapName);
 
 		// do some extra work for checking whether this is a normal request to a
