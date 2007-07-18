@@ -15,10 +15,15 @@
 			onAttach();
 			if (!getFlag(FLAG_ATTACH_SUPER_CALL_VERIFIED))
 			{
-				throw new IllegalStateException("Component " + this + " of type " + getClass().getName() + " has not been properly attached.  "
-						+ "Something in its class hierarchy has failed to call super.onAttach() in an override of onAttach() method");
+				throw new IllegalStateException(
+						"Component " +
+								this +
+								" of type " +
+								getClass().getName() +
+								" has not been properly attached.  " +
+								"Something in its class hierarchy has failed to call super.onAttach() in an override of onAttach() method");
 			}
-			
+
 			visitChildren(new IVisitor()
 			{
 				public Object component(Component component)
@@ -27,13 +32,18 @@
 					component.onAttach();
 					if (!component.getFlag(FLAG_ATTACH_SUPER_CALL_VERIFIED))
 					{
-						throw new IllegalStateException("Component " + component + " of type " + component.getClass().getName() + " has not been properly attached.  "
-								+ "Something in its class hierarchy has failed to call super.onAttach() in an override of onAttach() method");
+						throw new IllegalStateException(
+								"Component " +
+										component +
+										" of type " +
+										component.getClass().getName() +
+										" has not been properly attached.  " +
+										"Something in its class hierarchy has failed to call super.onAttach() in an override of onAttach() method");
 					}
 					return IVisitor.CONTINUE_TRAVERSAL;
 				}
 			});
-			
+
 			visitChildren(new IVisitor()
 			{
 				public Object component(Component component)
