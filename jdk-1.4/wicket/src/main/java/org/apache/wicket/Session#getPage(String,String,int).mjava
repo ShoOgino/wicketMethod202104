@@ -67,15 +67,15 @@
 					entry = (PageMapsUsedInRequestEntry)pageMapsUsedInRequest.get(pageMap);
 					t = entry != null ? entry.thread : null;
 
-					if (t != null && t != Thread.currentThread()
-							&& (startTime + timeout.getMilliseconds()) < System.currentTimeMillis())
+					if (t != null && t != Thread.currentThread() &&
+							(startTime + timeout.getMilliseconds()) < System.currentTimeMillis())
 					{
 						// if it is still not the right thread..
 						// This either points to long running code (a report
 						// page?) or a deadlock or such
-						throw new WicketRuntimeException("After " + timeout + " the Pagemap "
-								+ pageMapName + " is still locked by: " + t
-								+ ", giving up trying to get the page for path: " + path);
+						throw new WicketRuntimeException("After " + timeout + " the Pagemap " +
+								pageMapName + " is still locked by: " + t +
+								", giving up trying to get the page for path: " + path);
 					}
 				}
 
