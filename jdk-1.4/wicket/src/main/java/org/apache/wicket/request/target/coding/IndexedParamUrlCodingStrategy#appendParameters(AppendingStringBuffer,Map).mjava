@@ -4,7 +4,11 @@
 		while (parameters.containsKey(String.valueOf(i)))
 		{
 			String value = (String)parameters.get(String.valueOf(i));
-			url.append("/").append(urlEncode(value));
+			if (!url.endsWith("/"))
+			{
+				url.append("/");
+			}
+			url.append(urlEncode(value)).append("/");
 			i++;
 		}
 
@@ -13,8 +17,12 @@
 		{
 			i++;
 			pageMap = WebRequestCodingStrategy.encodePageMapName(pageMap);
-			url.append("/").append(WebRequestCodingStrategy.PAGEMAP).append("/").append(
-					urlEncode(pageMap));
+			if (!url.endsWith("/"))
+			{
+				url.append("/");
+			}
+			url.append(WebRequestCodingStrategy.PAGEMAP).append("/").append(urlEncode(pageMap))
+					.append("/");
 		}
 
 		if (i != parameters.size())
