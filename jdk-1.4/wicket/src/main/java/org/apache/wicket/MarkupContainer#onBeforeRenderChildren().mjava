@@ -1,17 +1,26 @@
 	void onBeforeRenderChildren()
 	{
 		super.onBeforeRenderChildren();
+
+		// We need to copy the children list because the children components can
+		// modify the hierarchy in their onBeforeRender.
+		Component[] children = copyChildren();
 		try
 		{
 			// Loop through child components
-			final int size = children_size();
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < children.length; i++)
 			{
 				// Get next child
-				final Component child = children_get(i);
+				final Component child = children[i];
 
 				// Call begin request on the child
-				child.beforeRender();
+				// We need to check whether the child's wasn't removed from the
+				// component in the meanwhile (e.g. from another's child
+				// onBeforeRender)
+				if (child.getParent() == this)
+				{
+					child.beforeRender();
+				}
 			}
 		}
 		catch (RuntimeException ex)
