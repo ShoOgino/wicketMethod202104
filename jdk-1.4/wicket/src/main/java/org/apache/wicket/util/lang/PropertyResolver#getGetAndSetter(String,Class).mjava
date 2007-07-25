@@ -45,7 +45,7 @@
 						method = findMethod(clz, exp);
 						if (method != null)
 						{
-							getAndSetter = new MethodGetAndSet(method, null);
+							getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(method, clz), null);
 						}
 						else
 						{
@@ -133,7 +133,7 @@
 						}
 						else
 						{
-							getAndSetter = new MethodGetAndSet(method, field);
+							getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(method, clz), field);
 						}
 					}
 					else
@@ -145,7 +145,7 @@
 			else
 			{
 				field = findField(clz, exp);
-				getAndSetter = new MethodGetAndSet(method, field);
+				getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(method, clz), field);
 			}
 			getAndSetters.put(exp, getAndSetter);
 		}
