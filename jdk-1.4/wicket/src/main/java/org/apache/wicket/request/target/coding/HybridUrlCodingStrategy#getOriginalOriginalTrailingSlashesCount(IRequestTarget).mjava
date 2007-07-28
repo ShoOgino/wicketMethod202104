@@ -1,0 +1,18 @@
+	/**
+	 * Returns the number of traling slashes in the url when the page in request
+	 * target was created or null if the number can't be determined.
+	 * 
+	 * @param requestTarget
+	 * @return
+	 */
+	private Integer getOriginalOriginalTrailingSlashesCount(IRequestTarget requestTarget)
+	{
+		if (requestTarget instanceof ListenerInterfaceRequestTarget)
+		{
+			ListenerInterfaceRequestTarget target = (ListenerInterfaceRequestTarget)requestTarget;
+			Page page = target.getPage();
+			return (Integer)page.getMetaData(ORIGINAL_TRAILING_SLASHES_COUNT_METADATA_KEY);
+		}
+		return null;
+	}
+

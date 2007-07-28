@@ -1,7 +1,11 @@
+	/**
+	 * @see org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy#decode(org.apache.wicket.request.RequestParameters)
+	 */
 	public IRequestTarget decode(RequestParameters requestParameters)
 	{
 		String parametersFragment = requestParameters.getPath().substring(getMountPath().length());
 
+		// try to extract page info
 		PageInfoExtraction extraction = extractPageInfo(parametersFragment);
 
 		PageInfo pageInfo = extraction.getPageInfo();
@@ -9,6 +13,7 @@
 		Integer pageVersion = pageInfo != null ? pageInfo.getVersionNumber() : null;
 		Integer pageId = pageInfo != null ? pageInfo.getPageId() : null;
 
+		// decode parameters
 		PageParameters parameters = new PageParameters(decodeParameters(extraction
 				.getUrlAfterExtraction(), requestParameters.getParameters()));
 
@@ -27,6 +32,11 @@
 		final String interfaceParameter = (String)parameters
 				.remove(WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
 
+		// we need to remember the amount of trailing slashes after the redirect
+		// (otherwise we'll break relative urls)
+		int originalUrlTrailingSlashesCount = getTrailingSlashesCount(extraction
+				.getUrlAfterExtraction());
+
 		if (interfaceParameter != null)
 		{
 			// stateless listener interface
@@ -39,7 +49,7 @@
 		{
 			// bookmarkable page request
 			return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef.get(),
-					parameters);
+					parameters, originalUrlTrailingSlashesCount);
 		}
 		else
 		// hybrid url
@@ -56,8 +66,10 @@
 			}
 			else
 			{
+				// we didn't find the page, act as bookmarkable page request -
+				// create new instance
 				return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-						.get(), parameters);
+						.get(), parameters, originalUrlTrailingSlashesCount);
 			}
 		}
 
