@@ -1,0 +1,33 @@
+	/**
+	 * @see org.apache.wicket.request.target.coding.AbstractRequestTargetUrlCodingStrategy#matches(java.lang.String)
+	 */
+	public boolean matches(String path)
+	{
+		if (path.startsWith(getMountPath()))
+		{
+			/*
+			 * We need to match /mount/point or /mount/point/with/extra/path,
+			 * but not /mount/pointXXX
+			 */
+			String remainder = path.substring(getMountPath().length());
+			if (remainder.length() == 0 || remainder.startsWith("/"))
+			{
+				return true;
+			}
+			/*
+			 * We also need to accept /mount/point(XXX)
+			 */
+			if (remainder.length() > 2 && remainder.charAt(0) == getBeginSeparator() &&
+					remainder.charAt(remainder.length() - 1) == getEndSeparator())
+			{
+				String substring = remainder.substring(1, remainder.length() - 1);
+				PageInfo info = PageInfo.parsePageInfo(substring);
+				if (info != null)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
