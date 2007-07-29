@@ -13,6 +13,8 @@
 	 * By calling this method, the session will be bound (made not-temporary) if
 	 * it was not bound yet. It is useful for cases where you want to be
 	 * absolutely sure this session object will be available in next requests.
+	 * If the session was already bound ({@link ISessionStore#lookup(Request) returns a session}),
+	 * this call will be a noop.
 	 * </p>
 	 */
 	public final void bind()
@@ -35,10 +37,6 @@
 				}
 				temporarySessionAttributes = null;
 			}
-		}
-		else
-		{
-			log.warn("trying to bind an already bound and non-temporary session");
 		}
 	}
 
