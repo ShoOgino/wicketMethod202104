@@ -28,7 +28,8 @@
 
 		// print out the initialization properties
 		Properties p = new Properties();
-		configureWidgetProperties(p);
+		configure(p);
+
 		// ${calendarInit}
 		StringBuffer calendarInit = new StringBuffer();
 		for (Iterator i = p.entrySet().iterator(); i.hasNext();)
@@ -39,7 +40,7 @@
 			if (value instanceof CharSequence)
 			{
 				calendarInit.append(":\"");
-				calendarInit.append(value);
+				calendarInit.append(Strings.toEscapedUnicode(value.toString()));
 				calendarInit.append("\"");
 			}
 			else if (value instanceof CharSequence[])
@@ -49,12 +50,15 @@
 				for (int j = 0; j < valueArray.length; j++)
 				{
 					CharSequence tmpValue = valueArray[j];
-					calendarInit.append("\"");
-					calendarInit.append(tmpValue);
-					calendarInit.append("\"");
-					if (j < valueArray.length - 1)
+					if (j > 0)
 					{
 						calendarInit.append(",");
+					}
+					if (tmpValue != null)
+					{
+						calendarInit.append("\"");
+						calendarInit.append(Strings.toEscapedUnicode(tmpValue.toString()));
+						calendarInit.append("\"");
 					}
 				}
 				calendarInit.append("]");
@@ -62,7 +66,7 @@
 			else
 			{
 				calendarInit.append(":");
-				calendarInit.append(value);
+				calendarInit.append(Strings.toEscapedUnicode(String.valueOf(value)));
 			}
 			if (i.hasNext())
 			{

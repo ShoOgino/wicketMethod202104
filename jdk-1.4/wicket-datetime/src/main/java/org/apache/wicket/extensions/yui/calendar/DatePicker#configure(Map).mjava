@@ -1,0 +1,29 @@
+	/**
+	 * Gives overriding classes the option of adding (or even changing/
+	 * removing) configuration properties for the javascript widget. See <a
+	 * href="http://developer.yahoo.com/yui/calendar/">the widget's
+	 * documentation</a> for the available options. If you want to override/
+	 * remove properties, you should call
+	 * {@link super#setWidgetProperties(Properties)} first. If you don't call
+	 * that, be aware that you will have to call {@link #localize(Map)} manually
+	 * if you like localized strings to be added.
+	 * 
+	 * @param widgetProperties
+	 *            the current widget properties
+	 */
+	protected void configure(Map widgetProperties)
+	{
+		// localize date fields
+		localize(widgetProperties);
+
+		widgetProperties.put("close", Boolean.TRUE);
+		Object modelObject = component.getModelObject();
+		// null and cast check
+		if (modelObject instanceof Date)
+		{
+			Date date = (Date)modelObject;
+			widgetProperties.put("selected", AbstractCalendar.FORMAT_DATE.format(date));
+			widgetProperties.put("pagedate", AbstractCalendar.FORMAT_PAGEDATE.format(date));
+		}
+	}
+

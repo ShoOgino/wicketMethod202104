@@ -1,0 +1,30 @@
+	/**
+	 * Configure the localized strings for the datepicker widget. This
+	 * implementation uses {@link DateFormatSymbols} and some slight string
+	 * manupilation to get the strings for months and week days. It should work
+	 * well for most locales.
+	 * <p>
+	 * This method is called from {@link #configureWidgetProperties(Map)} and
+	 * can be overriden if you want to customize setting up the localized
+	 * strings but are happy with the rest of
+	 * {@link #configureWidgetProperties(Map)}'s behavior. Note that you can
+	 * call (overridable) method {@link #getLocale()} to get the locale that
+	 * should be used for setting up the widget.
+	 * </p>
+	 * 
+	 * @param widgetProperties
+	 */
+	protected void localize(Map widgetProperties)
+	{
+		DateFormatSymbols dfSymbols = new DateFormatSymbols(getLocale());
+		setWidgetProperty(widgetProperties, "MONTHS_SHORT", filterEmpty(dfSymbols.getShortMonths()));
+		setWidgetProperty(widgetProperties, "MONTHS_LONG", filterEmpty(dfSymbols.getMonths()));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_1CHAR", filterEmpty(substring(dfSymbols
+				.getShortWeekdays(), 1)));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_SHORT", filterEmpty(substring(dfSymbols
+				.getShortWeekdays(), 2)));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_MEDIUM", filterEmpty(dfSymbols
+				.getShortWeekdays()));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_LONG", filterEmpty(dfSymbols.getWeekdays()));
+	}
+
