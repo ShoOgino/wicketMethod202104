@@ -17,10 +17,12 @@
 			/*
 			 * We also need to accept /mount/point(XXX)
 			 */
-			if (remainder.length() > 2 && remainder.charAt(0) == getBeginSeparator() &&
-					remainder.charAt(remainder.length() - 1) == getEndSeparator())
+			if (remainder.length() > getBeginSeparator().length() + getEndSeparator().length() &&
+					remainder.startsWith(getBeginSeparator()) &&
+					remainder.endsWith(getEndSeparator()))
 			{
-				String substring = remainder.substring(1, remainder.length() - 1);
+				String substring = remainder.substring(getBeginSeparator().length(), // 
+						remainder.length() - getEndSeparator().length());
 				PageInfo info = PageInfo.parsePageInfo(substring);
 				if (info != null)
 				{
