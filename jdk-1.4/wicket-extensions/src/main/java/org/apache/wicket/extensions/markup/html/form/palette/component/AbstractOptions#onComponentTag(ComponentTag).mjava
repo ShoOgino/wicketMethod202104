@@ -16,5 +16,13 @@
 		{
 			attrs.put("disabled", "disabled");
 		}
+
+
+		// A piece of javascript to avoid serializing the options during AJAX
+		// serialization.
+		getResponse().write(JavascriptUtils.SCRIPT_OPEN_TAG
+				+ "if (typeof(Wicket) != \"undefined\" && typeof(Wicket.Form) != \"undefined\")"
+				+ "    Wicket.Form.excludeFromAjaxSerialization." + this.getMarkupId() + "='true';"
+				+ JavascriptUtils.SCRIPT_CLOSE_TAG);
 	}
 
