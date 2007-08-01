@@ -39,6 +39,14 @@
 
 		fireOnAfterRespondListeners(response);
 
+		// execute the dom ready javascripts as first javascripts
+		// after component replacement
+		it = domReadyJavascripts.iterator();
+		while (it.hasNext())
+		{
+			String js = (String)it.next();
+			respondInvocation(response, js);
+		}
 		it = appendJavascripts.iterator();
 		while (it.hasNext())
 		{
