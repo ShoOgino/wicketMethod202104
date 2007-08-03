@@ -3,21 +3,11 @@
 	 */
 	public void renderHead(IHeaderResponse response)
 	{
-		// add YUI contributions
+		// add YUILoader
 		// NOTE JavascriptResourceReference takes care of stripping comments
 		// when in deployment (production) mode
-		response
-				.renderJavascriptReference(new JavascriptResourceReference(YuiLib.class, "yahoo.js"));
-		response
-				.renderJavascriptReference(new JavascriptResourceReference(YuiLib.class, "event.js"));
-		response.renderJavascriptReference(new JavascriptResourceReference(YuiLib.class, "dom.js"));
-		response.renderJavascriptReference(new JavascriptResourceReference(DatePicker.class,
-				"calendar.js"));
-		response.renderCSSReference(new CompressedResourceReference(DatePicker.class,
-				"assets/calendar.css"));
-		response.renderJavascriptReference(new JavascriptResourceReference(DatePicker.class,
-				"wicket-date.js"));
-
+		response.renderJavascriptReference(new JavascriptResourceReference(YuiLib.class,
+				"yuiloader-beta.js"));
 		// variables for the initialization script
 		Map variables = new HashMap();
 		String widgetId = getEscapedComponentMarkupId();
@@ -26,6 +16,11 @@
 		variables.put("datePattern", getDatePattern());
 		variables.put("fireChangeEvent", Boolean.valueOf(notifyComponentOnDateSelected()));
 		variables.put("alignWithIcon", Boolean.valueOf(alignWithIcon()));
+		// variables for YUILoader
+		variables.put("pathToWicketDate", RequestCycle.get().urlFor(
+				new JavascriptResourceReference(DatePicker.class, "wicket-date.js")));
+		variables.put("basePath", RequestCycle.get().urlFor(
+				new JavascriptResourceReference(YuiLib.class, "")));
 
 		// print out the initialization properties
 		Properties p = new Properties();
@@ -81,10 +76,10 @@
 				Model.valueOf(variables)).renderHead(response);
 
 		// Initialize the calendar.
-		StringBuffer initBuffer = new StringBuffer();
-		initBuffer.append("init");
-		initBuffer.append(widgetId + "DpJs");
-		initBuffer.append("();");
-		response.renderOnDomReadyJavascript(initBuffer.toString());
+		// StringBuffer initBuffer = new StringBuffer();
+		// initBuffer.append("init");
+		// initBuffer.append(widgetId + "DpJs");
+		// initBuffer.append("();");
+		// response.renderOnDomReadyJavascript(initBuffer.toString());
 	}
 
