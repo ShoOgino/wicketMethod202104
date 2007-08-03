@@ -1,33 +1,62 @@
+		/**
+		 * <ul>
+		 * <li>pageId
+		 * <li>pageId.version
+		 * <li>pageMap (only in if pagemap strats with a letter)
+		 * <li>.pageMap
+		 * <li>pageMap.pageId (only in if pageMap name starts with a letter)
+		 * <li>pageMap.pageId.version
+		 * </ul>
+		 */
 		public String toString()
 		{
 			AppendingStringBuffer buffer = new AppendingStringBuffer(5);
-			
 
-			if (pageMapName != null)
+			final boolean pmEmpty = Strings.isEmpty(pageMapName);
+			final boolean pmStartsWithCharacter = !pmEmpty &&
+					Character.isLetter(pageMapName.charAt(0));
+
+
+			if (pageId != null && pmEmpty && versionNumber.intValue() == 0)
 			{
-				if (versionNumber == null && pageId == null)
-				{
-					buffer.append(getPageInfoSeparator());
-				}
-				buffer.append(pageMapName);
-				if (pageId != null)
-				{
-					buffer.append(getPageInfoSeparator());
-				}
-			}
-			if (pageId != null)
-			{
+				// pageId
 				buffer.append(pageId);
 			}
-			if (pageId != null && (versionNumber == null || versionNumber.intValue() == 0) && pageMapName != null)
+			else if (pageId != null && pmEmpty && versionNumber.intValue() != 0)
 			{
-				buffer.append(getPageInfoSeparator());
-			}
-			if (versionNumber != null && versionNumber.intValue() != 0)
-			{
+				// pageId.version
+				buffer.append(pageId);
 				buffer.append(getPageInfoSeparator());
 				buffer.append(versionNumber);
 			}
+			else if (pageId == null && pmStartsWithCharacter)
+			{
+				// pageMap (must start with letter)
+				buffer.append(pageMapName);
+			}
+			else if (pageId == null && !pmEmpty && !pmStartsWithCharacter)
+			{
+				// .pageMap
+				buffer.append(getPageInfoSeparator());
+				buffer.append(pageMapName);
+			}
+			else if (pmStartsWithCharacter && pageId != null && versionNumber.intValue() == 0)
+			{
+				// pageMap.pageId (pageMap must start with a letter)
+				buffer.append(pageMapName);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(pageId);
+			}
+			else if (!pmEmpty && pageId != null)
+			{
+				// pageMap.pageId.pageVersion
+				buffer.append(pageMapName);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(pageId);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(versionNumber);
+			}
+
 			return buffer.toString();
 		}
 
