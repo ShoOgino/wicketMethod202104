@@ -1,11 +1,18 @@
 	/**
-	 * Gets the locale for the session holding this component.
+	 * Gets the locale for this component. By default, it searches it parent for
+	 * a locale. If no parents (it's a recursive search) returns a locale, it
+	 * gets one from the session.
 	 * 
-	 * @return The locale for the session holding this component
-	 * @see Component#getSession()
+	 * @return The locale to be used for this component
+	 * @see Session#getLocale()
 	 */
 	public Locale getLocale()
 	{
-		return getSession().getLocale();
+		Locale locale = null;
+		if (parent != null)
+		{
+			locale = parent.getLocale();
+		}
+		return (locale != null) ? locale : getSession().getLocale();
 	}
 
