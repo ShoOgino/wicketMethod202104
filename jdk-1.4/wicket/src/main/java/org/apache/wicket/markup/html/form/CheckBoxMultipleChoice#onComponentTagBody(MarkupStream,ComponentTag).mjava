@@ -51,7 +51,16 @@
 				{
 					display = getLocalizer().getString(label, this, label);
 				}
-				CharSequence escaped = Strings.escapeMarkup(display, false, true);
+
+				CharSequence escaped;
+				if (isEscapeLabelMarkup())
+				{
+					escaped = Strings.escapeMarkup(display, false, true);
+				}
+				else
+				{
+					escaped = display;
+				}
 
 				buffer.append("<label for=\"");
 				buffer.append(idAttr);
