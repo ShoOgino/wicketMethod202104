@@ -9,7 +9,7 @@
 		// Get the next tag from the next MarkupFilter in the chain
 		// If null, no more tags are available
 		final ComponentTag tag = nextComponentTag();
-		if (tag == null)
+		if ((tag == null) || tag.isClose())
 		{
 			return tag;
 		}
@@ -26,6 +26,8 @@
 				// that wicket will not merge this as raw markup and instead
 				// pass it on to a resolver
 				tag.setId(WICKET_MESSAGE_CONTAINER_ID);
+				tag.setAutoComponentTag(true);
+				tag.setModified(true);
 			}
 			tag.addBehavior(new AttributeLocalizer());
 		}

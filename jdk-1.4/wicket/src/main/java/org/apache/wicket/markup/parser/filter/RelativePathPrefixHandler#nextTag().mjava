@@ -17,7 +17,8 @@
 		}
 
 		// Don't touch any wicket:id component and any auto-components
-		if ((tag.getId() != null) && (tag.getId().startsWith("-") == false))
+		if ((tag instanceof WicketTag) || (tag.isAutolinkEnabled() == true) ||
+				(tag.getAttributes().get("wicket:id") != null))
 		{
 			return tag;
 		}
@@ -31,7 +32,11 @@
 			if ((attrValue != null) && (attrValue.startsWith("/") == false) &&
 					(attrValue.indexOf(":") < 0) && !(attrValue.startsWith("#")))
 			{
-				tag.setId(WICKET_RELATIVE_PATH_PREFIX_CONTAINER_ID);
+				if (tag.getId() == null)
+				{
+					tag.setId(WICKET_RELATIVE_PATH_PREFIX_CONTAINER_ID);
+					tag.setAutoComponentTag(true);
+				}
 				tag.addBehavior(RELATIVE_PATH_BEHAVIOR);
 				tag.setModified(true);
 				break;
