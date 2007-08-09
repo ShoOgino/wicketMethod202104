@@ -8,11 +8,13 @@
 	 * @param resourceStream
 	 *            the resource stream that will be rendered
 	 */
-	protected void configure(final RequestCycle requestCycle, final Response response, final IResourceStream resourceStream)
+	protected void configure(final RequestCycle requestCycle, final Response response,
+			final IResourceStream resourceStream)
 	{
 		// Configure response with content type of resource, if available
 		String responseType = resourceStream.getContentType();
-		if (responseType != null) {
+		if (responseType != null)
+		{
 			response.setContentType(responseType + "; charset=" + response.getCharacterEncoding());
 		}
 		else
@@ -29,10 +31,11 @@
 		}
 
 		// WICKET-473 Allow IResourceStream.length() to return -1
-		if (resourceStream.length() >= 0)
+		long len = resourceStream.length();
+		if (len >= 0)
 		{
 			// and the content length
-			response.setContentLength(resourceStream.length());
+			response.setContentLength(len);
 		}
 
 		// and content disposition if any
