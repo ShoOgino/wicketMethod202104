@@ -16,19 +16,20 @@
 		if (tag instanceof WicketTag)
 		{
 			final WicketTag wicketTag = (WicketTag)tag;
-			
+			final String id = wicketTag.getId() + container.getPage().getAutoIndex();
+
 			// It must be <wicket:extend...>
 			if (wicketTag.isExtendTag())
 			{
-				container.autoAdd(new TransparentWebMarkupContainer(wicketTag.getId()), markupStream);
-			    return true;
+				container.autoAdd(new TransparentWebMarkupContainer(id), markupStream);
+				return true;
 			}
-			
+
 			// It must be <wicket:child...>
 			if (wicketTag.isChildTag())
 			{
-				container.autoAdd(new TransparentWebMarkupContainer(wicketTag.getId()), markupStream);
-			    return true;
+				container.autoAdd(new TransparentWebMarkupContainer(id), markupStream);
+				return true;
 			}
 		}
 		// We were not able to handle the componentId
