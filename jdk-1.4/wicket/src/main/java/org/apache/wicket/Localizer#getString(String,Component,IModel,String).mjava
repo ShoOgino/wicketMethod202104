@@ -21,20 +21,35 @@
 	public String getString(final String key, final Component component, final IModel model,
 			final String defaultValue) throws MissingResourceException
 	{
-		// Iterate over all registered string resource loaders until the
-		// property has been found
+		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
+
+		// Check the cache first
+		String cacheKey = getCacheKey(key, component);
 		String string = null;
 
-		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
-		Iterator iter = resourceSettings.getStringResourceLoaders().iterator();
-		while (iter.hasNext())
+		// Value not found are cached as well (value = null)
+		if (cache.containsKey(cacheKey))
 		{
-			IStringResourceLoader loader = (IStringResourceLoader)iter.next();
-			string = loader.loadStringResource(component, key);
-			if (string != null)
+			string = getFromCache(cacheKey);
+		}
+		else
+		{
+			// Iterate over all registered string resource loaders until the
+			// property has been found
+
+			Iterator iter = resourceSettings.getStringResourceLoaders().iterator();
+			while (iter.hasNext())
 			{
-				break;
+				IStringResourceLoader loader = (IStringResourceLoader)iter.next();
+				string = loader.loadStringResource(component, key);
+				if (string != null)
+				{
+					break;
+				}
 			}
+
+			// Cache the result incl null if not found
+			putIntoCache(cacheKey, string);
 		}
 
 		if ((string == null) && (defaultValue != null))
