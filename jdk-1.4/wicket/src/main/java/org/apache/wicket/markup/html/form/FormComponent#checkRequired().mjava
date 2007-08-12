@@ -1,31 +1,24 @@
 	/**
-	 * Checks if the form component's 'required' requirement is met
+	 * Checks if the form component's 'required' requirement is met. This method
+	 * should typically only be called when {@link #isRequired()} returns true.
 	 * 
 	 * @return true if the 'required' requirement is met, false otherwise
 	 */
-	//TODO 1.4 why is this public?
 	public boolean checkRequired()
 	{
-		if (isRequired())
+		final String input = getInput();
+
+		// when null, check whether this is natural for that component, or
+		// whether - as is the case with text fields - this can only happen
+		// when the component was disabled
+		if (input == null && !isInputNullable())
 		{
-			final String input = getInput();
-
-			// when null, check whether this is natural for that component, or
-			// whether - as is the case with text fields - this can only happen
-			// when the component was disabled
-			if (input == null && !isInputNullable())
-			{
-				// this value must have come from a disabled field
-				// do not perform validation
-				return true;
-			}
-
-			// peform validation by looking whether the value is null or empty
-			if (Strings.isEmpty(input))
-			{
-				return false;
-			}
+			// this value must have come from a disabled field
+			// do not perform validation
+			return true;
 		}
-		return true;
+
+		// peform validation by looking whether the value is null or empty
+		return !Strings.isEmpty(input);
 	}
 
