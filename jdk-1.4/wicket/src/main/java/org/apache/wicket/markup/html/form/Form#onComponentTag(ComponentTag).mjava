@@ -9,9 +9,23 @@
 
 		if (isRootForm())
 		{
-			tag.put("method", getMethod());
-			tag.put("action", Strings.replaceAll(urlFor(IFormSubmitListener.INTERFACE), "&",
-					"&amp;"));
+			String method = getMethod().toLowerCase();
+			tag.put("method", method);
+			String url = urlFor(IFormSubmitListener.INTERFACE).toString();
+			if (method.equals("get"))
+			{
+				int i = url.indexOf('?');
+				String action = (i > -1) ? url.substring(0, i) : "";
+				tag.put("action", action);
+				// alternatively, we could just put an empty string here, so
+				// that mounted paths stay in good order. I decided against this
+				// as I'm not sure whether that could have side effects with
+				// other encoders
+			}
+			else
+			{
+				tag.put("action", Strings.replaceAll(url, "&", "&amp;"));
+			}
 
 			if (multiPart)
 			{
