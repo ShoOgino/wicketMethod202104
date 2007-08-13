@@ -1,19 +1,19 @@
-		private void writeObject(java.io.ObjectOutputStream s) throws IOException 
+		private void writeObject(java.io.ObjectOutputStream s) throws IOException
 		{
 			s.defaultWriteObject();
-			
+
 			// if the pagestore is not clustered, we need to serialize the
 			// lastPage instance
-			if (serializeLastPage) 
+			if (serializeLastPage)
 			{
 				Serializable page = lastPage;
-				
+
 				IPageStore store = getPageStore();
 				if (page != null && store instanceof ISerializationAwarePageStore)
 				{
 					page = ((ISerializationAwarePageStore)store).prepareForSerialization(lastPage);
 				}
-				
+
 				s.writeObject(page);
 			}
 		}

@@ -1,0 +1,32 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
+	 * Returns the page with given id and versionNumber. It keeps asking
+	 * pageMaps for given page until it finds one that contains it.
+	 * 
+	 * @param pageId
+	 * @param versionNumber
+	 * @return
+	 */
+	public final Page getPage(final int pageId, final int versionNumber)
+	{
+		if (Application.get().getSessionSettings().isPageIdUniquePerSession() == false)
+		{
+			throw new IllegalStateException(
+					"To call this method ISessionSettings.setPageIdUniquePerSession must be set to true");
+		}
+
+		List pageMaps = getPageMaps();
+
+		for (Iterator i = pageMaps.iterator(); i.hasNext();)
+		{
+			IPageMap pm = (IPageMap)i.next();
+			if (pm.containsPage(pageId, versionNumber))
+			{
+				return getPage(pm.getName(), "" + pageId, versionNumber);
+			}
+		}
+
+		return null;
+	}
+

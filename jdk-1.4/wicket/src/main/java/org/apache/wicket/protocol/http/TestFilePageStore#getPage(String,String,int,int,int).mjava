@@ -1,6 +1,8 @@
-	public Page getPage(String sessionId, String pagemap, int id, int versionNumber, int ajaxVersionNumber)
+	public Page getPage(String sessionId, String pagemap, int id, int versionNumber,
+			int ajaxVersionNumber)
 	{
-		SessionPageKey currentKey = new SessionPageKey(sessionId, id, versionNumber, ajaxVersionNumber, pagemap, null);
+		SessionPageKey currentKey = new SessionPageKey(sessionId, id, versionNumber,
+				ajaxVersionNumber, pagemap, null);
 		File sessionDir = new File(getWorkDir(), sessionId);
 		File pageFile = getPageFile(currentKey, sessionDir);
 		if (pageFile.exists())
@@ -29,11 +31,11 @@
 				if (page != null && log.isDebugEnabled())
 				{
 					long t3 = System.currentTimeMillis();
-					log.debug("restoring page " + page.getClass() + "[" + page.getNumericId()
-							+ "," + page.getCurrentVersionNumber() + "] size: "
-							+ pageData.length + " for session " + sessionId + " took "
-							+ (t2 - t1) + " miliseconds to read in and " + (t3 - t2)
-							+ " miliseconds to deserialize");
+					log.debug("restoring page " + page.getClass() + "[" + page.getNumericId() +
+							"," + page.getCurrentVersionNumber() + "] size: " + pageData.length +
+							" for session " + sessionId + " took " + (t2 - t1) +
+							" miliseconds to read in and " + (t3 - t2) +
+							" miliseconds to deserialize");
 				}
 				return page;
 			}
