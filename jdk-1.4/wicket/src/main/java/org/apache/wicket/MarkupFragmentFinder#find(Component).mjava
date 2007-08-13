@@ -58,6 +58,13 @@
 				return markupStream;
 			}
 
+			if (parentWithAssociatedMarkup instanceof Fragment)
+			{
+				markupStream = ((Fragment)parentWithAssociatedMarkup).findComponentIndex(component
+						.getId());
+				return markupStream;
+			}
+
 			// Yet another exception for Border in the code base.
 			// However if the container with the markup is a Border, than
 			// ...
@@ -69,8 +76,8 @@
 			else
 			{
 				throw new WicketRuntimeException(
-						"Unable to find the markup for the component. That may be due to transparent containers or components implementing IComponentResolver: "
-								+ component.toString());
+						"Unable to find the markup for the component. That may be due to transparent containers or components implementing IComponentResolver: " +
+								component.toString());
 			}
 
 			// Not found, reset the stream
