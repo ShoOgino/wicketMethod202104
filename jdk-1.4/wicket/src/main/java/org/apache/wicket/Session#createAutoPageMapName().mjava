@@ -9,13 +9,13 @@
 	 */
 	public synchronized final String createAutoPageMapName()
 	{
-		String name = getAutoPageMapNamePrefix() + autoCreatePageMapCounter +
+		String name = getAutoPageMapNamePrefix() + currentCreateAutoPageMapCounter() +
 				getAutoPageMapNameSuffix();
 		IPageMap pm = pageMapForName(name, false);
 		while (pm != null)
 		{
-			autoCreatePageMapCounter++;
-			name = getAutoPageMapNamePrefix() + autoCreatePageMapCounter +
+			incrementCreateAutoPageMapCounter();
+			name = getAutoPageMapNamePrefix() + currentCreateAutoPageMapCounter() +
 					getAutoPageMapNameSuffix();
 			pm = pageMapForName(name, false);
 		}
