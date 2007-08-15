@@ -4,7 +4,17 @@
 	 */
 	protected FormComponent newEditor(MarkupContainer parent, String componentId, IModel model)
 	{
-		DropDownChoice editor = new DropDownChoice(componentId, model, choices, renderer);
+		DropDownChoice editor = new DropDownChoice(componentId, model, new AbstractReadOnlyModel()
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			public Object getObject()
+			{
+				return choices.getObject();
+			}
+
+		}, renderer);
 		editor.setOutputMarkupId(true);
 		editor.setVisible(false);
 		editor.add(new EditorAjaxBehavior()
