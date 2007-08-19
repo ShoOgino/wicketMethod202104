@@ -15,7 +15,6 @@
 	 */
 	protected void convertInput()
 	{
-		Object convertedInput = null;
 		Object dateFieldInput = dateField.getConvertedInput();
 		if (dateFieldInput != null)
 		{
@@ -47,7 +46,7 @@
 				}
 
 				// the date will be in the server's timezone
-				convertedInput = date.toDate();
+				setConvertedInput(date.toDate());
 			}
 			catch (RuntimeException e)
 			{
@@ -55,7 +54,9 @@
 				invalid();
 			}
 		}
-
-		setConvertedInput(convertedInput);
+		else
+		{
+			setConvertedInput(null);
+		}
 	}
 
