@@ -52,6 +52,71 @@
 					}
 					timeZone = TimeZone.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") + utc);
 				}
+
+				String dstOffset = getUtcDSTOffset();
+				if (timeZone != null && dstOffset != null)
+				{
+					TimeZone dstTimeZone = null;
+					dotPos = dstOffset.indexOf('.');
+					if (dotPos >= 0)
+					{
+						String hours = dstOffset.substring(0, dotPos);
+						String hourPart = dstOffset.substring(dotPos + 1);
+
+						if (hours.startsWith("+"))
+						{
+							hours = hours.substring(1);
+						}
+						int offsetHours = Integer.parseInt(hours);
+						int offsetMins = (int)(Double.parseDouble(hourPart) * 6);
+
+						// construct a GMT timezone offset string from the
+						// retrieved
+						// offset which can be parsed by the TimeZone class.
+
+						AppendingStringBuffer sb = new AppendingStringBuffer("GMT");
+						sb.append(offsetHours > 0 ? "+" : "-");
+						sb.append(Math.abs(offsetHours));
+						sb.append(":");
+						if (offsetMins < 10)
+						{
+							sb.append("0");
+						}
+						sb.append(offsetMins);
+						dstTimeZone = TimeZone.getTimeZone(sb.toString());
+					}
+					else
+					{
+						int offset = Integer.parseInt(dstOffset);
+						if (offset < 0)
+						{
+							dstOffset = dstOffset.substring(1);
+						}
+						dstTimeZone = TimeZone.getTimeZone("GMT" + ((offset > 0) ? "+" : "-") +
+								dstOffset);
+					}
+					// if the dstTimezone (1 July) has a different offset then
+					// the real time zone (1 January) try to combine the 2.
+					if (dstTimeZone != null &&
+							dstTimeZone.getRawOffset() != timeZone.getRawOffset())
+					{
+						int dstSaving = dstTimeZone.getRawOffset() - timeZone.getRawOffset();
+						String[] availableIDs = TimeZone.getAvailableIDs(timeZone.getRawOffset());
+						for (int i = 0; i < availableIDs.length; i++)
+						{
+							TimeZone zone = TimeZone.getTimeZone(availableIDs[i]);
+							if (zone.getDSTSavings() == dstSaving)
+							{
+								// this is a best guess... still the start and end of the DST should
+								// be needed to know to be completely correct, or better yet
+								// not just the GMT offset but the TimeZone ID should be transfered
+								// from the browser.
+								timeZone = zone;
+								break;
+							}
+						}
+					}
+				}
 			}
 		}
 
