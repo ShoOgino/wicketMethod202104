@@ -1,7 +1,6 @@
 	/**
-	 * Load properties file from an IResourceStream and add an
-	 * {@link IChangeListener}to the {@link ModificationWatcher} so that if the
-	 * resource changes, we can reload it automatically.
+	 * Load properties file from an IResourceStream and add an {@link IChangeListener}to the
+	 * {@link ModificationWatcher} so that if the resource changes, we can reload it automatically.
 	 * 
 	 * @param key
 	 *            The key for the resource
@@ -13,14 +12,15 @@
 			final IResourceStream resourceStream)
 	{
 		// Watch file modifications
-		final ModificationWatcher watcher = resourceSettings.getResourceWatcher(true);
+		final ModificationWatcher watcher = application.getResourceSettings().getResourceWatcher(
+				true);
 		if (watcher != null)
 		{
 			watcher.add(resourceStream, new IChangeListener()
 			{
 				public void onChange()
 				{
-					log.info("A properties files has changed. Remove all entries " +
+					log.info("A properties files has changed. Removing all entries " +
 							"from the cache. Resource: " + resourceStream);
 
 					// Clear the whole cache as associated localized files may
@@ -28,7 +28,7 @@
 					clearCache();
 
 					// clear the localizer cache as well
-					Application.get().getResourceSettings().getLocalizer().clearCache();
+					application.getResourceSettings().getLocalizer().clearCache();
 
 					// Inform all listeners
 					Iterator iter = afterReloadListeners.iterator();
