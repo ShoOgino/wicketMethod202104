@@ -20,15 +20,8 @@
 		// We need to absolutize the redirect URL as we are not as smart as a web-browser (WICKET-702)
 		url = getContextPath() + getServletPath() + "/" + redirect;
 
-		try
-		{
-			// Remove occurences of ".." from the path
-			url = new File(url).getCanonicalPath();
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
+		// Remove occurences of ".." from the path
+		url = RequestUtils.removeDoubleDots(url);
 		log.info("Redirecting to " + url);
 	}
 
