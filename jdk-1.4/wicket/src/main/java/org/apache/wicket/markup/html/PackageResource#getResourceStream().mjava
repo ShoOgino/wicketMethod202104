@@ -10,6 +10,12 @@
 		// Check that resource was found
 		if (resourceStream == null)
 		{
+			if (probingOnly)
+			{
+				// Do not abort the request, as we are not yet serving the resource
+				return null;
+			}
+
 			String msg = "Unable to find package resource [path = " + absolutePath + ", style = " +
 					style + ", locale = " + locale + "]";
 			log.warn(msg);
