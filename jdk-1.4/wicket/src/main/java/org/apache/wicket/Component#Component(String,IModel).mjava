@@ -1,6 +1,6 @@
 	/**
-	 * Constructor. All components have names. A component's id cannot be null.
-	 * This constructor includes a model.
+	 * Constructor. All components have names. A component's id cannot be null. This constructor
+	 * includes a model.
 	 * 
 	 * @param id
 	 *            The non-null id of this component
@@ -12,15 +12,7 @@
 	 */
 	public Component(final String id, final IModel model)
 	{
-		setId(id);
-		getApplication().notifyComponentInstantiationListeners(this);
+		this(id);
 		this.model = wrap(model);
-
-		final IDebugSettings debugSettings = Application.get().getDebugSettings();
-		if (debugSettings.isLinePreciseReportingOnNewComponentEnabled())
-		{
-			setMetaData(CONSTRUCTED_AT_KEY, Strings.toString(this, new MarkupException(
-					"constructed")));
-		}
 	}
 
