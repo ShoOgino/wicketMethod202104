@@ -32,16 +32,14 @@
 
 		if (locale != null)
 		{
-			// Request to silently ignore unresolvable resources as we are not serving the resource for now
-			probingOnly = true;
-
-			// Get the resource stream so that the real locale that could be
-			// resolved is set.
-			getResourceStream();
+			/*
+			 * Get the resource stream so that the real locale that could be resolved is set.
+			 * Silently ignore unresolvable resources as we are not serving the resource for now
+			 */
+			getResourceStream(false);
 
 			// Invalidate it again so that it won't hold up resources
 			invalidate();
-			probingOnly = false;
 		}
 	}
 
