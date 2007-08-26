@@ -44,7 +44,8 @@
 					}
 					else if (elem.isClose() && elem.getName().equals("url-pattern"))
 					{
-						urlPattern = parser.getInputFromPositionMarker(elem.getPos()).toString().trim();
+						urlPattern = parser.getInputFromPositionMarker(elem.getPos()).toString()
+								.trim();
 					}
 				}
 				while (urlPattern == null || encounteredFilterName == null);
@@ -65,17 +66,17 @@
 			// 302 redirects that require absolute URLs.
 			if (urlPatterns.size() == 0)
 			{
-				throw new IllegalArgumentException("Error initializing Wicket" + prefixUppered
-						+ " - you have no <" + mapping + "> element with a url-pattern that uses "
-						+ prefix + ": " + filterName);
+				throw new IllegalArgumentException("Error initializing Wicket" + prefixUppered +
+						" - you have no <" + mapping + "> element with a url-pattern that uses " +
+						prefix + ": " + filterName);
 			}
 			String urlPattern = (String)urlPatterns.get(0);
 
 			// Check for leading '/' and trailing '*'.
 			if (!urlPattern.startsWith("/") || !urlPattern.endsWith("*"))
 			{
-				throw new IllegalArgumentException("<" + mapping + "> for Wicket" + prefixUppered
-						+ " \"" + filterName + "\" must start with '/' and end with '*'.");
+				throw new IllegalArgumentException("<" + mapping + "> for Wicket" + prefixUppered +
+						" \"" + filterName + "\" must start with '/' and end with '*'.");
 			}
 
 			// Strip trailing '*' and keep leading '/'.
@@ -83,18 +84,18 @@
 		}
 		catch (IOException e)
 		{
-			throw new ServletException("Error finding <" + prefix + "> " + filterName
-					+ " in web.xml", e);
+			throw new ServletException("Error finding <" + prefix + "> " + filterName +
+					" in web.xml", e);
 		}
 		catch (ParseException e)
 		{
-			throw new ServletException("Error finding <" + prefix + "> " + filterName
-					+ " in web.xml", e);
+			throw new ServletException("Error finding <" + prefix + "> " + filterName +
+					" in web.xml", e);
 		}
 		catch (ResourceStreamNotFoundException e)
 		{
-			throw new ServletException("Error finding <" + prefix + "> " + filterName
-					+ " in web.xml", e);
+			throw new ServletException("Error finding <" + prefix + "> " + filterName +
+					" in web.xml", e);
 		}
 	}
 

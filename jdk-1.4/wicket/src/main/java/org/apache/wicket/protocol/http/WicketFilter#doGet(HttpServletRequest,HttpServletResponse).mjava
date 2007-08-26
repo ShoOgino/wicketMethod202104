@@ -15,11 +15,11 @@
 		String relativePath = getRelativePath(servletRequest);
 
 		// Special-case for home page - we redirect to add a trailing slash.
-		if (relativePath.length() == 0
-				&& !Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
+		if (relativePath.length() == 0 &&
+				!Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
 		{
 			final String redirectUrl = servletRequest.getRequestURI() + "/";
-			servletResponse.sendRedirect(redirectUrl);
+			servletResponse.sendRedirect(servletResponse.encodeRedirectURL(redirectUrl));
 			return;
 		}
 
@@ -72,11 +72,13 @@
 					String queryString = servletRequest.getQueryString();
 					if (!Strings.isEmpty(queryString))
 					{
-						bufferedResponse = webApplication.popBufferedResponse(sessionId, queryString);
+						bufferedResponse = webApplication.popBufferedResponse(sessionId,
+								queryString);
 					}
 					else
 					{
-						bufferedResponse = webApplication.popBufferedResponse(sessionId, relativePath);
+						bufferedResponse = webApplication.popBufferedResponse(sessionId,
+								relativePath);
 					}
 
 					if (bufferedResponse != null)
