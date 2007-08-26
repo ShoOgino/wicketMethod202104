@@ -1,11 +1,11 @@
 	/**
-	 * Get the first page link to render. Adjust the first page link based on
-	 * the current PageableListView page displayed.
+	 * Get the first page link to render. Adjust the first page link based on the current
+	 * PageableListView page displayed.
 	 */
 	private void setStartIndex()
 	{
 		// Which startIndex are we currently using
-		int firstListItem = this.startIndex;
+		int firstListItem = startIndex;
 
 		// How many page links shall be displayed
 		int viewSize = Math.min(getViewSize(), pageable.getPageCount());
@@ -38,17 +38,17 @@
 			firstListItem = 0;
 		}
 
-		if ((viewSize != getIterations()) || (this.startIndex != firstListItem))
+		if ((viewSize != getIterations()) || (startIndex != firstListItem))
 		{
-			this.modelChanging();
+			modelChanging();
 
 			// Tell the ListView what the new start index shall be
-			addStateChange(new StartIndexChange(this.startIndex));
-			this.startIndex = firstListItem;
+			addStateChange(new StartIndexChange(startIndex));
+			startIndex = firstListItem;
 
-			this.setIterations(Math.min(viewSize, pageable.getPageCount()));
+			setIterations(Math.min(viewSize, pageable.getPageCount()));
 
-			this.modelChanged();
+			modelChanged();
 
 			// force all children to be re-rendered
 			removeAll();
