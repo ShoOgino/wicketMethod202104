@@ -5,7 +5,9 @@
 	{
 		super.renderHead(response);
 
-		if (!stopped)
+		WebRequest request = (WebRequest)RequestCycle.get().getRequest();
+
+		if (!stopped && request.isAjax() == false)
 		{
 			response.renderOnLoadJavascript(getJsTimeoutCall(updateInterval));
 		}
