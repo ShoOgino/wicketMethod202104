@@ -57,8 +57,12 @@
 				}
 			}
 
+			final RequestCycle existingRequestCycle = RequestCycle.get();
+
 			// Create a new webrequest
-			final WebRequest request = webApplication.newWebRequest(servletRequest);
+			final WebRequest request = existingRequestCycle != null
+					? (WebRequest)existingRequestCycle.getRequest()
+					: webApplication.newWebRequest(servletRequest);
 
 			// Are we using REDIRECT_TO_BUFFER?
 			if (webApplication.getRequestCycleSettings().getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER)
@@ -96,7 +100,9 @@
 
 			// Create a response object and set the output encoding according to
 			// wicket's application setttings.
-			final WebResponse response = webApplication.newWebResponse(servletResponse);
+			final WebResponse response = existingRequestCycle != null
+					? (WebResponse)existingRequestCycle.getResponse()
+					: webApplication.newWebResponse(servletResponse);
 			response.setAjax(request.isAjax());
 			response.setCharacterEncoding(webApplication.getRequestCycleSettings()
 					.getResponseRequestEncoding());
@@ -104,7 +110,9 @@
 			try
 			{
 				// Create request cycle
-				RequestCycle cycle = webApplication.newRequestCycle(request, response);
+				RequestCycle cycle = existingRequestCycle != null
+						? existingRequestCycle
+						: webApplication.newRequestCycle(request, response);
 
 				try
 				{
