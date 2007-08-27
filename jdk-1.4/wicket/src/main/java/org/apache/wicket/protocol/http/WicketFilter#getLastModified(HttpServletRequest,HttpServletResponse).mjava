@@ -16,19 +16,19 @@
 			final String resourceReferenceKey = pathInfo
 					.substring(WebRequestCodingStrategy.RESOURCES_PATH_PREFIX.length());
 
-			final WebRequest request = webApplication.newWebRequest(servletRequest);
-			final WebResponse response = webApplication.newWebResponse(servletResponse);
-			RequestCycle cycle = webApplication.newRequestCycle(request, response);
-
-			// Try to find shared resource
-			Resource resource = webApplication.getSharedResources().get(resourceReferenceKey);
-
-			// If resource found and it is cacheable
-			if ((resource != null) && resource.isCacheable())
+			Resource resource = null;
+			try
 			{
-				try
+				final WebRequest request = webApplication.newWebRequest(servletRequest);
+				final WebResponse response = webApplication.newWebResponse(servletResponse);
+				RequestCycle cycle = webApplication.newRequestCycle(request, response);
+
+				// Try to find shared resource
+				resource = webApplication.getSharedResources().get(resourceReferenceKey);
+
+				// If resource found and it is cacheable
+				if ((resource != null) && resource.isCacheable())
 				{
-					Application.set(webApplication);
 
 					// Set parameters from servlet request
 					resource.setParameters(request.getParameterMap());
@@ -50,14 +50,16 @@
 
 					return time != null ? time.getMilliseconds() : -1;
 				}
-				catch (AbortException e)
-				{
-					return -1;
-				}
-				finally
+			}
+			catch (AbortException e)
+			{
+				return -1;
+			}
+			finally
+			{
+				if (resource != null)
 				{
 					resource.setParameters(null);
-					Application.unset();
 				}
 			}
 		}
