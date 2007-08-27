@@ -29,7 +29,16 @@
 		String wicketPath = "";
 
 		// We're running as a filter.
-		String servletPath = Strings.replaceAll(getServletPath(), "%3A", ":").toString();
+		String servletPath;
+		try
+		{
+			servletPath = URLDecoder.decode(Strings.replaceAll(getServletPath(), "%3A", ":")
+					.toString(), "UTF-8");
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
 
 		// We need to substibute the %3A (or the other way around) to be able to
 		// get a good match, as parts of the path may have been escaped while
