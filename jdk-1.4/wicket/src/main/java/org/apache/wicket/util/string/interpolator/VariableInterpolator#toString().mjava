@@ -8,14 +8,22 @@
 		// Result buffer
 		final StringBuffer buffer = new StringBuffer();
 
-		// For each occurrences of "${"
+		// For each occurrences of "${"or "$$"
 		int start;
 		int pos = 0;
 
-		while ((start = string.indexOf("${", pos)) != -1)
+		while ((start = lowerPositive(string.indexOf("$$", pos), string.indexOf("${", pos))) != -1)
 		{
 			// Append text before possible variable
 			buffer.append(string.substring(pos, start));
+
+			if (string.charAt(start + 1) == '$')
+			{
+				buffer.append("$");
+				pos = start + 2;
+				continue;
+			}
+
 
 			// Position is now where we found the "${"
 			pos = start;
@@ -38,8 +46,8 @@
 				{
 					if (exceptionOnNullVarValue)
 					{
-						throw new IllegalArgumentException("Value of variable [[" + variableName
-								+ "]] could not be resolved while interpolating [[" + string + "]]");
+						throw new IllegalArgumentException("Value of variable [[" + variableName +
+								"]] could not be resolved while interpolating [[" + string + "]]");
 					}
 					else
 					{
