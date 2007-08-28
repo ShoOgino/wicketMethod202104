@@ -1,6 +1,6 @@
 	/**
-	 * Analyses the passed in interfaceParameter for the relevant parts and puts
-	 * the parts as parameters in the provided request parameters object.
+	 * Analyses the passed in interfaceParameter for the relevant parts and puts the parts as
+	 * parameters in the provided request parameters object.
 	 * 
 	 * @param interfaceParameter
 	 *            The format of the interfaceParameter is: <code>
@@ -51,8 +51,18 @@
 
 		// Extract URL depth after last colon
 		final String urlDepthString = pathComponents[pathComponents.length - 1];
-		final int urlDepth = Strings.isEmpty(urlDepthString) ? -1 : Integer
-				.parseInt(urlDepthString);
+		final int urlDepth;
+		try
+		{
+			urlDepth = Strings.isEmpty(urlDepthString) ? -1 : Integer.parseInt(urlDepthString);
+		}
+		catch (NumberFormatException e)
+		{
+			throw new WicketRuntimeException("Internal error parsing " + INTERFACE_PARAMETER_NAME +
+					" = " + interfaceParameter +
+					"; wrong format for url depth argument. Expected a number but was '" +
+					urlDepthString + "'", e);
+		}
 		parameters.setUrlDepth(urlDepth);
 
 		// Extract behaviour ID after last colon
