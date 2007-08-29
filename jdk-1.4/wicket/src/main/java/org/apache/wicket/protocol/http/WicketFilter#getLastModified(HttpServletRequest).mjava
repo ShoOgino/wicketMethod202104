@@ -5,8 +5,7 @@
 	 * @param servletResponse
 	 * @return The last modified time stamp
 	 */
-	long getLastModified(final HttpServletRequest servletRequest,
-			final HttpServletResponse servletResponse)
+	long getLastModified(final HttpServletRequest servletRequest)
 	{
 		final String pathInfo = getRelativePath(servletRequest);
 
@@ -17,19 +16,28 @@
 					.substring(WebRequestCodingStrategy.RESOURCES_PATH_PREFIX.length());
 
 			Resource resource = null;
+
+			boolean externalCall = !Application.exists();
 			try
 			{
+				// if called externally (i.e. WicketServlet) we need to set the thread local here
+				// AND clean it up at the end of the request
+				if (externalCall)
+				{
+					Application.set(webApplication);
+				}
+
 				// Try to find shared resource
 				resource = webApplication.getSharedResources().get(resourceReferenceKey);
 
 				// If resource found and it is cacheable
 				if ((resource != null) && resource.isCacheable())
 				{
+
 					final WebRequest request = webApplication.newWebRequest(servletRequest);
 					// by pass the webApplication.newWebResponse, this makes a buffered response
-					// that
-					// should be done for head requests
-					final WebResponse response = new WebResponse(servletResponse);
+					// that shouldn't be done for head requests.
+					final WebResponse response = new WebResponse();
 					RequestCycle cycle = webApplication.newRequestCycle(request, response);
 
 
@@ -63,6 +71,12 @@
 				if (resource != null)
 				{
 					resource.setParameters(null);
+				}
+				if (externalCall)
+				{
+					// Clean up thread local application if this was an external call
+					// (if not, doFilter will clean it up)
+					Application.unset();
 				}
 			}
 		}

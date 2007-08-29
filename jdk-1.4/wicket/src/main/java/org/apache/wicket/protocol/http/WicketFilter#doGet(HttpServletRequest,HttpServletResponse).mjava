@@ -12,14 +12,6 @@
 	public void doGet(final HttpServletRequest servletRequest,
 			final HttpServletResponse servletResponse) throws ServletException, IOException
 	{
-		// if called externally (i.e. WicketServlet) we need to set the thread local here
-		// AND clean it up at the end of the request
-		boolean externalCall = !Application.exists();
-		if (externalCall)
-		{
-			Application.set(webApplication);
-		}
-
 		String relativePath = getRelativePath(servletRequest);
 
 		// Special-case for home page - we redirect to add a trailing slash.
@@ -103,21 +95,38 @@
 				}
 			}
 
-			// Create a response object and set the output encoding according to
-			// wicket's application setttings.
-			final WebResponse response = existingRequestCycle != null
-					? (WebResponse)existingRequestCycle.getResponse()
-					: webApplication.newWebResponse(servletResponse);
-			response.setAjax(request.isAjax());
-			response.setCharacterEncoding(webApplication.getRequestCycleSettings()
-					.getResponseRequestEncoding());
-
+			WebResponse response = null;
+			boolean externalCall = !Application.exists();
 			try
 			{
+				// if called externally (i.e. WicketServlet) we need to set the thread local here
+				// AND clean it up at the end of the request
+				if (externalCall)
+				{
+					Application.set(webApplication);
+				}
+
+				// Create a response object and set the output encoding according to
+				// wicket's application setttings.
+				response = webApplication.newWebResponse(servletResponse);
+				response.setAjax(request.isAjax());
+				response.setCharacterEncoding(webApplication.getRequestCycleSettings()
+						.getResponseRequestEncoding());
+
 				// Create request cycle
-				RequestCycle cycle = existingRequestCycle != null
-						? existingRequestCycle
-						: webApplication.newRequestCycle(request, response);
+				RequestCycle cycle = null;
+
+				if (existingRequestCycle != null)
+				{
+					// set the real (maybe) buffered response instead of the empty one
+					// that is created by the last modified call.
+					existingRequestCycle.setResponse(response);
+					cycle = existingRequestCycle;
+				}
+				else
+				{
+					cycle = webApplication.newRequestCycle(request, response);
+				}
 
 				try
 				{
@@ -132,7 +141,8 @@
 			finally
 			{
 				// Close response
-				response.close();
+				if (response != null)
+					response.close();
 
 				// Clean up thread local session
 				Session.unset();

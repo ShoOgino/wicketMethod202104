@@ -10,13 +10,13 @@
 
 		if (isWicketRequest(relativePath))
 		{
-			// Set the webapplication for this thread
-			Application.set(webApplication);
-
 			try
 			{
+				// Set the webapplication for this thread
+				Application.set(webApplication);
+
 				HttpServletResponse httpServletResponse = (HttpServletResponse)response;
-				long lastModified = getLastModified(httpServletRequest, httpServletResponse);
+				long lastModified = getLastModified(httpServletRequest);
 				if (lastModified == -1)
 				{
 					// servlet doesn't support if-modified-since, no reason
