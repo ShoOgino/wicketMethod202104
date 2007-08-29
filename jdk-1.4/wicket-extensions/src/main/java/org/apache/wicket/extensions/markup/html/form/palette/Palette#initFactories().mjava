@@ -1,0 +1,26 @@
+	/**
+	 * One-time init method for components that are created via overridable
+	 * factories. This method is here because we do not want to call overridable
+	 * methods form palette's constructor.
+	 */
+	private void initFactories()
+	{
+		recorderComponent = newRecorderComponent();
+		add(recorderComponent);
+
+		choicesComponent = newChoicesComponent();
+		add(choicesComponent);
+
+		selectionComponent = newSelectionComponent();
+		add(selectionComponent);
+
+
+		add(newAddComponent());
+		add(newRemoveComponent());
+		add(newUpComponent().setVisible(allowOrder));
+		add(newDownComponent().setVisible(allowOrder));
+
+		add(newAvailableHeader(AVAILABLE_HEADER_ID));
+		add(newSelectedHeader(SELECTED_HEADER_ID));
+	}
+
