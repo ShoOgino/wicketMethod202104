@@ -1,10 +1,8 @@
 	/**
-	 * Locate the session for the client of this request in the
-	 * {@link ISessionStore} or create a new one and attach it when none could
-	 * be located and sets it as the current instance for this thread.
-	 * Typically, clients never touch this method, but rather use
-	 * {@link Session#get()}, which does the locating implicitly when not yet
-	 * set as a thread local.
+	 * Locate the session for the client of this request in the {@link ISessionStore} or create a
+	 * new one and attach it when none could be located and sets it as the current instance for this
+	 * thread. Typically, clients never touch this method, but rather use {@link Session#get()},
+	 * which does the locating implicitly when not yet set as a thread local.
 	 * 
 	 * @return The session for the client of this request or a new, unbound
 	 */
@@ -16,19 +14,8 @@
 			throw new IllegalStateException(
 					"you can only locate or create sessions in the context of a request cycle");
 		}
-		Application application = Application.get();
-		ISessionStore sessionStore = application.getSessionStore();
-		Session session = sessionStore.lookup(requestCycle.getRequest());
-
-		if (session == null)
-		{
-			// Create session using session factory
-			session = application.newSession(requestCycle.getRequest(), requestCycle.getResponse());
-		}
-
-		// set thread local
-		set(session);
-
-		return session;
+		Response response = requestCycle.getResponse();
+		Request request = requestCycle.getRequest();
+		return findOrCreate(request, response);
 	}
 
