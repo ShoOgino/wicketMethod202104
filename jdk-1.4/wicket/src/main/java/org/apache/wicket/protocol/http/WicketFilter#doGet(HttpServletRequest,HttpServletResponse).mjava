@@ -57,12 +57,8 @@
 				}
 			}
 
-			final RequestCycle existingRequestCycle = RequestCycle.get();
-
 			// Create a new webrequest
-			final WebRequest request = existingRequestCycle != null
-					? (WebRequest)existingRequestCycle.getRequest()
-					: webApplication.newWebRequest(servletRequest);
+			final WebRequest request = webApplication.newWebRequest(servletRequest);
 
 			// Are we using REDIRECT_TO_BUFFER?
 			if (webApplication.getRequestCycleSettings().getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER)
@@ -114,19 +110,7 @@
 						.getResponseRequestEncoding());
 
 				// Create request cycle
-				RequestCycle cycle = null;
-
-				if (existingRequestCycle != null)
-				{
-					// set the real (maybe) buffered response instead of the empty one
-					// that is created by the last modified call.
-					existingRequestCycle.setResponse(response);
-					cycle = existingRequestCycle;
-				}
-				else
-				{
-					cycle = webApplication.newRequestCycle(request, response);
-				}
+				final RequestCycle cycle = webApplication.newRequestCycle(request, response);
 
 				try
 				{

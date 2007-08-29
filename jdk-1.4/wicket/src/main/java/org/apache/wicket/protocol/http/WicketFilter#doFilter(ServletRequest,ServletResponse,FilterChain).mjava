@@ -42,21 +42,6 @@
 			}
 			finally
 			{
-				// we might have created a request cycle inside getLastModified, so we need to
-				// clean it here (in case the doGet method was not called
-				if (RequestCycle.get() != null)
-				{
-					try
-					{
-						RequestCycle.get().detach();
-					}
-					catch (RuntimeException e)
-					{
-						log.error("error detaching request cycle " + RequestCycle.get() + ": " +
-								e.getMessage(), e);
-					}
-				}
-
 				// always unset the application thread local
 				Application.unset();
 			}

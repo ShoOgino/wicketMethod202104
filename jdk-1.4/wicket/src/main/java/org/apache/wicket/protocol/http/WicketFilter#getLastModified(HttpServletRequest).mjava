@@ -35,10 +35,8 @@
 				{
 
 					final WebRequest request = webApplication.newWebRequest(servletRequest);
-					// by pass the webApplication.newWebResponse, this makes a buffered response
-					// that shouldn't be done for head requests.
-					final WebResponse response = new WebResponse();
-					RequestCycle cycle = webApplication.newRequestCycle(request, response);
+					// make the session available.
+					Session.findOrCreate(request, new WebResponse());
 
 
 					// Set parameters from servlet request
@@ -80,8 +78,6 @@
 				}
 				if (Session.exists())
 				{
-					// TODO should we also call detach? (or requestdetach?)
-					// But that does a lot more and expects a lot more (pages/dirtymap)
 					Session.unset();
 				}
 			}
