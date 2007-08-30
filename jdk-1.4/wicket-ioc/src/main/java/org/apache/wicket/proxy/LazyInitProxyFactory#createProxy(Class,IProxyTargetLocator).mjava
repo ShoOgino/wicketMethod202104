@@ -13,10 +13,11 @@
 	 */
 	public static Object createProxy(Class type, IProxyTargetLocator locator)
 	{
-		if (type == String.class)
+		if (Classes.isPrimitive(type))
 		{
-			// We special-case Strings as sometimes people use these as SpringBeans (WICKET-603).
-			return locator.locateProxyTarget(); 
+			// We special-case primitives as sometimes people use these as
+			// SpringBeans (WICKET-603, WICKET-906). Go figure.
+			return locator.locateProxyTarget();
 		}
 		else if (type.isInterface())
 		{
@@ -24,9 +25,9 @@
 
 			try
 			{
-				return Proxy.newProxyInstance(Thread.currentThread()
-						.getContextClassLoader(), new Class[] {type, Serializable.class,
-						ILazyInitProxy.class, IWriteReplace.class}, handler);
+				return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+						new Class[] { type, Serializable.class, ILazyInitProxy.class,
+								IWriteReplace.class }, handler);
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -37,10 +38,9 @@
 				 * and fall back to the classloader (current) that actually
 				 * loaded this class.
 				 */
-				return Proxy.newProxyInstance(
-						LazyInitProxyFactory.class.getClassLoader(), new Class[] {type,
-								Serializable.class, ILazyInitProxy.class,
-								IWriteReplace.class}, handler);
+				return Proxy.newProxyInstance(LazyInitProxyFactory.class.getClassLoader(),
+						new Class[] { type, Serializable.class, ILazyInitProxy.class,
+								IWriteReplace.class }, handler);
 			}
 
 		}
@@ -49,8 +49,8 @@
 			CGLibInterceptor handler = new CGLibInterceptor(type, locator);
 
 			Enhancer e = new Enhancer();
-			e.setInterfaces(new Class[] {Serializable.class, ILazyInitProxy.class,
-					IWriteReplace.class});
+			e.setInterfaces(new Class[] { Serializable.class, ILazyInitProxy.class,
+					IWriteReplace.class });
 			e.setSuperclass(type);
 			e.setCallback(handler);
 
