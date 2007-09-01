@@ -4,19 +4,21 @@
 	 */
 	public final void beforeRender()
 	{
-		if (isVisible() && !getFlag(FLAG_RENDERING) && !getFlag(FLAG_PREPARED_FOR_RENDER))
+		if (!(this instanceof IFeedback))
 		{
-			setFlag(FLAG_BEFORE_RENDERING_SUPER_CALL_VERIFIED, false);
-
-			onBeforeRender();
-			getApplication().notifyComponentOnBeforeRenderListeners(this);
-			if (!getFlag(FLAG_BEFORE_RENDERING_SUPER_CALL_VERIFIED))
+			internalBeforeRender();
+		}
+		else
+		{
+			// this component is a feedback. Feedback must be initialized last, so that
+			// they can collect messages from other components
+			List feedbacks = (List)getRequestCycle().getMetaData(FEEDBACK_LIST);
+			if (feedbacks == null)
 			{
-				throw new IllegalStateException(Component.class.getName() +
-						" has not been properly rendered. Something in the hierarchy of " +
-						getClass().getName() +
-						" has not called super.onBeforeRender() in the override of onBeforeRender() method");
+				feedbacks = new ArrayList();
+				getRequestCycle().setMetaData(FEEDBACK_LIST, (Serializable)feedbacks);
 			}
+			feedbacks.add(this);
 		}
 	}
 
