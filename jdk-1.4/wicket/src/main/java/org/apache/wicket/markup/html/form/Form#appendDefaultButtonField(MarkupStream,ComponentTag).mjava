@@ -1,11 +1,9 @@
 	/**
-	 * If a default button was set on this form, this method will be called to
-	 * render an extra field with an invisible style so that pressing enter in
-	 * one of the textfields will do a form submit using this button. This
-	 * method is overridable as what we do is best effort only, and may not what
-	 * you want in specific situations. So if you have specific usability
-	 * concerns, or want to follow another strategy, you may override this
-	 * method.
+	 * If a default button was set on this form, this method will be called to render an extra field
+	 * with an invisible style so that pressing enter in one of the textfields will do a form submit
+	 * using this button. This method is overridable as what we do is best effort only, and may not
+	 * what you want in specific situations. So if you have specific usability concerns, or want to
+	 * follow another strategy, you may override this method.
 	 * 
 	 * @param markupStream
 	 *            The markup stream
@@ -20,7 +18,7 @@
 
 		// div that is not visible (but not display:none either)
 		buffer
-				.append("<div style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\"");
+				.append("<div style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\">");
 
 		// add an empty textfield (otherwise IE doesn't work)
 		buffer.append("<input type=\"text\" autocomplete=\"false\"/>");
@@ -29,7 +27,7 @@
 		buffer.append("<input type=\"submit\" onclick=\" var b=Wicket.$('");
 		buffer.append(defaultButton.getMarkupId());
 		buffer
-				.append("'); if (typeof(b.onclick) != 'undefined') {  var r = b.onclick.bind(this)(); if (r != false) b.click(); } else { b.click(); };  return false;\" ");
+				.append("'); if (typeof(b.onclick) != 'undefined') {  var r = b.onclick.bind(b)(); if (r != false) b.click(); } else { b.click(); };  return false;\" ");
 		buffer.append(" />");
 
 		// close div
