@@ -21,15 +21,15 @@
 			}
 			else
 			{
-				// First, see if the processing was triggered by a Wicket button
-				final IFormSubmittingComponent submittingButton = findSubmittingButton();
+				// First, see if the processing was triggered by a Wicket IFormSubmittingComponent
+				final IFormSubmittingComponent submittingComponent = findSubmittingButton();
 
-				// When processing was triggered by a Wicket button and that
-				// button indicates it wants to be called immediately
-				// (without processing), call Button.onSubmit() right away.
-				if (submittingButton != null && !submittingButton.getDefaultFormProcessing())
+				// When processing was triggered by a Wicket IFormSubmittingComponent and that
+				// component indicates it wants to be called immediately
+				// (without processing), call IFormSubmittingComponent.onSubmit() right away.
+				if (submittingComponent != null && !submittingComponent.getDefaultFormProcessing())
 				{
-					submittingButton.onSubmit();
+					submittingComponent.onSubmit();
 				}
 				else
 				{
@@ -37,15 +37,15 @@
 					Form formToProcess = this;
 
 					// find out whether it was a nested form that was submitted
-					if (submittingButton != null)
+					if (submittingComponent != null)
 					{
-						formToProcess = submittingButton.getForm();
+						formToProcess = submittingComponent.getForm();
 					}
 					// process the form for this request
 					if (formToProcess.process())
 					{
 						// let clients handle further processing
-						delegateSubmit(submittingButton);
+						delegateSubmit(submittingComponent);
 					}
 				}
 			}

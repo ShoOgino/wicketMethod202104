@@ -4,25 +4,26 @@
 	 * processing to clients.
 	 * <p>
 	 * This implementation first finds out whether the form processing was triggered by a nested
-	 * button of this form. If that is the case, that button's onSubmit is called first.
+	 * IFormSubmittingComponent of this form. If that is the case, that component's onSubmit is
+	 * called first.
 	 * </p>
 	 * <p>
-	 * Regardless of whether a submitting button was found, the form's onSubmit method is called
+	 * Regardless of whether a submitting component was found, the form's onSubmit method is called
 	 * next.
 	 * </p>
 	 * 
-	 * @param submittingButton
-	 *            the button that triggered this form processing, or null if the processing was
+	 * @param submittingComponent
+	 *            the component that triggered this form processing, or null if the processing was
 	 *            triggered by something else (like a non-Wicket submit button or a javascript
 	 *            execution)
 	 */
-	protected void delegateSubmit(IFormSubmittingComponent submittingButton)
+	protected void delegateSubmit(IFormSubmittingComponent submittingComponent)
 	{
-		// when the given button is not null, it means that it was the
-		// submitting button
-		if (submittingButton != null)
+		// when the given submitting component is not null, it means that it was the
+		// submitting component
+		if (submittingComponent != null)
 		{
-			submittingButton.onSubmit();
+			submittingComponent.onSubmit();
 		}
 
 		// Model was successfully updated with valid data
