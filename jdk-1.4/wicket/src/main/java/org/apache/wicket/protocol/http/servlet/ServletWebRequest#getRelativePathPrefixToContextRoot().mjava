@@ -9,15 +9,8 @@
 		String tmp = getRelativePathPrefixToWicketHandler();
 		PrependingStringBuffer prepender = new PrependingStringBuffer(tmp);
 
-		String path;
-		try
-		{
-			path = URLDecoder.decode(Strings.replaceAll(getPath(), "%3A", ":").toString(), "UTF-8");
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			throw new WicketRuntimeException(e);
-		}
+		String path = RequestUtils.decode(getPath());
+
 		if (path == null || path.length() == 0)
 		{
 			path = "";
@@ -29,18 +22,9 @@
 		String wicketPath = "";
 
 		// We're running as a filter.
-		String servletPath;
-		try
-		{
-			servletPath = URLDecoder.decode(Strings.replaceAll(getServletPath(), "%3A", ":")
-					.toString(), "UTF-8");
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			throw new WicketRuntimeException(e);
-		}
+		String servletPath = RequestUtils.decode(getServletPath());
 
-		// We need to substibute the %3A (or the other way around) to be able to
+		// We need to substitute the %3A (or the other way around) to be able to
 		// get a good match, as parts of the path may have been escaped while
 		// others arent
 		if (servletPath.endsWith(path))
