@@ -1,0 +1,28 @@
+	/**
+	 * Behavour of validation is modified by passing in options:
+	 * 
+	 * @param schemes
+	 *            The set of valid schemes.
+	 * @param options
+	 *            The options should be set using the public constants declared
+	 *            in this class. To set multiple options you simply add them
+	 *            together. For example, ALLOW_2_SLASHES + NO_FRAGMENTS enables
+	 *            both of those options.
+	 */
+	public UrlValidator(String[] schemes, int options)
+	{
+		this.options = options;
+
+		if (isOn(ALLOW_ALL_SCHEMES))
+		{
+			return;
+		}
+
+		if (schemes == null)
+		{
+			schemes = this.defaultSchemes;
+		}
+
+		this.allowedSchemes.addAll(Arrays.asList(schemes));
+	}
+
