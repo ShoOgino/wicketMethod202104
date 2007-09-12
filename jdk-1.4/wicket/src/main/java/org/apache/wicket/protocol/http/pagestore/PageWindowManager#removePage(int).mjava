@@ -11,10 +11,17 @@
 		}
 		List indices = (List)idToWindowIndices.get(pageId);
 
-		for (Iterator i = indices.iterator(); i.hasNext();)
+		if (indices != null)
 		{
-			PageWindowInternal window = (PageWindowInternal)i.next();
-			removePage(window.pageId, window.versionNumber, window.ajaxVersionNumber);
+			for (Iterator i = indices.iterator(); i.hasNext();)
+			{
+				int index = ((Integer)i.next()).intValue();
+				PageWindowInternal window = (PageWindowInternal)windows.get(index);
+				if (window.pageId == pageId)
+				{
+					removePage(window.pageId, window.versionNumber, window.ajaxVersionNumber);
+				}
+			}
 		}
 	}
 
