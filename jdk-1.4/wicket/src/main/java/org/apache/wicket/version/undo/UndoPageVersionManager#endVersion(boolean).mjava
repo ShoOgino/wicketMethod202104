@@ -1,5 +1,5 @@
 	/**
-	 * @see org.apache.wicket.version.IPageVersionManager#endVersion(boolean)
+	 * @see IPageVersionManager#endVersion(boolean)
 	 */
 	public void endVersion(boolean mergeVersion)
 	{
@@ -14,16 +14,17 @@
 		else
 		{
 			ignoreMerge = false;
-			// Push change list onto stack
+			
+			// Push change list onto stack.
 			changeListStack.push(changeList);
 			
-			// If stack is overfull, remove oldest entry
+			// If stack is overfull, remove oldest entry.
 			if (getVersions() > maxVersions)
 			{
 				expireOldestVersion();
 			}
 	
-			// Make memory efficient for replication
+			// Make memory efficient for replication.
 			changeListStack.trimToSize();
 	
 			if (log.isDebugEnabled())

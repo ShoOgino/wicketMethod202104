@@ -1,27 +1,27 @@
 	/**
-	 * @see org.apache.wicket.version.IPageVersionManager#getVersion(int)
+	 * @see IPageVersionManager#getVersion(int)
 	 */
 	public Page getVersion(final int versionNumber)
 	{
-		// If the requested version is at or before the current version
+		// If the requested version is at or before the current version,
 		if (versionNumber <= getCurrentVersionNumber())
 		{
-			// Loop until we reach the right version
+			// loop until we reach the right version.
 			while (getCurrentVersionNumber() > versionNumber)
 			{
-				// Go back one version
+				// Go back one version.
 				if (!undo())
 				{
 					return null;
 				}
 			}
 
-			// Return modified page
+			// Return modified page.
 			return page;
 		}
 		else
 		{
-			// The version is not available
+			// The version is not available.
 			return null;
 		}
 	}
