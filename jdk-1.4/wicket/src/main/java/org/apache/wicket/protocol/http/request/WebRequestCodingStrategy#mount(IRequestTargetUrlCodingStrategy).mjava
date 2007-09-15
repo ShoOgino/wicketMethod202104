@@ -28,11 +28,14 @@
 			path = path.substring(1);
 		}
 
-		if (mountsOnPath.strategyForMount(path) != null)
+		synchronized(mountsOnPath)
 		{
-			throw new WicketRuntimeException(path + " is already mounted for " +
-					mountsOnPath.strategyForMount(path));
+			if (mountsOnPath.strategyForMount(path) != null)
+			{
+				throw new WicketRuntimeException(path + " is already mounted for " +
+						mountsOnPath.strategyForMount(path));
+			}
+			mountsOnPath.mount(path, encoder);
 		}
-		mountsOnPath.mount(path, encoder);
 	}
 

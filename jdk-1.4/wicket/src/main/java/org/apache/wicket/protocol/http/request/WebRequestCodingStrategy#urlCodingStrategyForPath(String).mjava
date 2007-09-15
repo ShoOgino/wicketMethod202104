@@ -3,16 +3,19 @@
 	 */
 	public final IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path)
 	{
-		if (path == null)
+		synchronized(mountsOnPath)
 		{
-			return mountsOnPath.strategyForMount(null);
-		}
-		else
-		{
-			IRequestTargetUrlCodingStrategy strategy = mountsOnPath.strategyForPath(path);
-			if (strategy != null)
+			if (path == null)
 			{
-				return strategy;
+				return mountsOnPath.strategyForMount(null);
+			}
+			else
+			{
+				IRequestTargetUrlCodingStrategy strategy = mountsOnPath.strategyForPath(path);
+				if (strategy != null)
+				{
+					return strategy;
+				}
 			}
 		}
 		return null;
