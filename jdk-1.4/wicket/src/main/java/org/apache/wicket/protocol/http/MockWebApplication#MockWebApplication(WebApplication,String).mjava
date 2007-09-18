@@ -4,15 +4,14 @@
 	 * @param application
 	 *            The wicket application object
 	 * @param path
-	 *            The absolute path on disk to the web tester contents (e.g. war
-	 *            root) - may be null
+	 *            The absolute path on disk to the web tester contents (e.g. war root) - may be null
 	 * @see org.apache.wicket.protocol.http.MockServletContext
 	 */
 	public MockWebApplication(final WebApplication application, final String path)
 	{
 		this.application = application;
 
-		this.context = newServletContext(path);
+		context = newServletContext(path);
 
 		filter = new WicketFilter()
 		{
@@ -68,14 +67,13 @@
 		Application.set(this.application);
 
 		// Construct mock session, request and response
-		this.servletSession = new MockHttpSession(this.context);
-		this.servletRequest = new MockHttpServletRequest(this.application, this.servletSession,
-				this.context);
-		this.servletResponse = new MockHttpServletResponse();
+		servletSession = new MockHttpSession(context);
+		servletRequest = new MockHttpServletRequest(this.application, servletSession, context);
+		servletResponse = new MockHttpServletResponse();
 
 		// Construct request and response using factories
-		this.wicketRequest = this.application.newWebRequest(this.servletRequest);
-		this.wicketResponse = this.application.newWebResponse(this.servletResponse);
+		wicketRequest = this.application.newWebRequest(servletRequest);
+		wicketResponse = this.application.newWebResponse(servletResponse);
 
 		// Create request cycle
 		createRequestCycle();
