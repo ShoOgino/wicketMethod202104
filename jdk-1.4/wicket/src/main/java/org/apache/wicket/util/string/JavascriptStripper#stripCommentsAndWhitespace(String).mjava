@@ -101,7 +101,9 @@
 
 			if (state == STRING_SINGLE_QUOTE)
 			{
-				if (c == '\'' && prev != '\\')
+				// to leave a string expression we need even (or zero) number of backslashes
+				int count = getPrevCount(original, i, '\\');
+				if (c == '\'' && count % 2 == 0)
 				{
 					state = REGULAR_TEXT;
 				}
@@ -111,7 +113,9 @@
 
 			if (state == STRING_DOUBLE_QUOTES)
 			{
-				if (c == '"' && prev != '\\')
+				// to leave a string expression we need even (or zero) number of backslashes
+				int count = getPrevCount(original, i, '\\');
+				if (c == '"' && count % 2 == 0)
 				{
 					state = REGULAR_TEXT;
 				}
@@ -121,7 +125,9 @@
 
 			if (state == REG_EXP)
 			{
-				if (c == '/' && prev != '\\')
+				// to leave regular expression we need even (or zero) number of backslashes
+				int count = getPrevCount(original, i, '\\');
+				if (c == '/' && count % 2 == 0)
 				{
 					state = REGULAR_TEXT;
 				}
