@@ -8,8 +8,17 @@
 		// component. Not as pretty as working with a panel etc, but works
 		// for behaviors and is more efficient
 		Response response = component.getResponse();
-		response
-				.write("\n<span class=\"yui-skin-sam\">&nbsp;<span style=\"display:none;position:absolute;z-index: 99999;\" id=\"");
+		response.write("\n<span class=\"yui-skin-sam\">&nbsp;<span style=\"");
+		if (renderOnLoad())
+		{
+			response.write("display:block;");
+		}
+		else
+		{
+			response.write("display:none;");
+			response.write("position:absolute;");
+		}
+		response.write("z-index: 99999;\" id=\"");
 		response.write(getEscapedComponentMarkupId());
 		response.write("Dp\"></span><img style=\"");
 		response.write(getIconStyle());
@@ -18,6 +27,11 @@
 		response.write("\" src=\"");
 		CharSequence iconUrl = getIconUrl();
 		response.write(Strings.escapeMarkup(iconUrl != null ? iconUrl.toString() : ""));
-		response.write("\" /></span><input type=\"hidden\"/>");
+		response.write("\" />");
+		if (renderOnLoad())
+		{
+			response.write("<br style=\"clear:left;\"/>");
+		}
+		response.write("</span>");
 	}
 
