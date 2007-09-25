@@ -1,0 +1,18 @@
+	private void deleteOpenTag(AppendingStringBuffer responseBuffer, String tagName)
+	{
+		int startIndex, endIndex;
+		// find and remove opening tag
+		if ((startIndex = responseBuffer.indexOf("<"+tagName)) > -1) 
+		{
+			if ((endIndex = responseBuffer.indexOf(">", startIndex)) >-1)
+			{
+				responseBuffer.delete(startIndex, endIndex+1);
+			}
+			// remove closing tag
+			if ((startIndex = responseBuffer.indexOf("</"+tagName+">")) > -1) 
+			{
+				responseBuffer.delete(startIndex, startIndex+tagName.length()+3);
+			}
+		}
+	}
+

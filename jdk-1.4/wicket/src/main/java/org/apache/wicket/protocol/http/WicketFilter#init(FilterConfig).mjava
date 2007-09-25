@@ -84,6 +84,26 @@
 
 			// Give the application the option to log that it is started
 			webApplication.logStarted();
+
+			this.portletOnlyFilter = Boolean.valueOf(filterConfig.getInitParameter(PORTLET_ONLY_FILTER)).booleanValue();
+			
+	        if ( portletContextAvailable == null )
+	        {
+	        	try
+				{
+					Class portletClass = Class.forName("javax.portlet.PortletContext");
+					portletContextAvailable = Boolean.TRUE;
+					filterPortletContext = newWicketFilterPortletContext();
+				}
+				catch (ClassNotFoundException e)
+				{
+					portletContextAvailable = Boolean.FALSE;
+				}
+	        }
+	        if (filterPortletContext != null)
+	        {
+	        	filterPortletContext.initFilter(filterConfig, this.webApplication);
+	        }
 		}
 		finally
 		{

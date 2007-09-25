@@ -3,11 +3,14 @@
 	 */
 	public void renderString(CharSequence string)
 	{
-		String token = string.toString();
-		if (wasRendered(token) == false)
+		if (!closed)
 		{
-			getResponse().write(string);
-			markRendered(token);
+			String token = string.toString();
+			if (wasRendered(token) == false)
+			{
+				getResponse().write(string);
+				markRendered(token);
+			}
 		}
 	}
 

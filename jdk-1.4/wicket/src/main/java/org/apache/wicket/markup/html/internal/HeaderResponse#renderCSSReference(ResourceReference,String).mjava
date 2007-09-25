@@ -4,7 +4,10 @@
 	 */
 	public void renderCSSReference(ResourceReference reference, String media)
 	{
-		CharSequence url = RequestCycle.get().urlFor(reference);
-		renderCSSReference(url.toString(), media);
+		if (!closed)
+		{
+			CharSequence url = RequestCycle.get().urlFor(reference);
+			renderCSSReference(url.toString(), media);
+		}
 	}
 

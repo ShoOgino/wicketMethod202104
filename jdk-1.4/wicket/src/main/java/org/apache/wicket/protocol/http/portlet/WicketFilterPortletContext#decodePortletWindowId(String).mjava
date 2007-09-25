@@ -1,0 +1,18 @@
+    public String decodePortletWindowId(String pathInfo)
+    {
+		String portletWindowId = null;
+    	if (pathInfo != null && pathInfo.startsWith(getServletResourceUrlPortletWindowIdPrefix()))
+    	{
+    		int nextPath = pathInfo.indexOf('/',1);
+    		if (nextPath > -1)
+    		{
+    			portletWindowId = pathInfo.substring(getServletResourceUrlPortletWindowIdPrefix().length(),nextPath);
+    		}
+    		else
+    		{
+    			portletWindowId = pathInfo.substring(getServletResourceUrlPortletWindowIdPrefix().length());
+    		}
+    	}
+    	return portletWindowId;
+    }
+

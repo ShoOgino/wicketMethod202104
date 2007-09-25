@@ -1,0 +1,8 @@
+    public PortletServletRequestWrapper(ServletContext context, HttpServletRequest request, HttpSession proxiedSession, String filterPath)
+    {
+    	this(context, proxiedSession, request, filterPath);
+
+    	String pathInfo = this.requestURI.substring(this.contextPath.length()+filterPath.length());
+    	this.pathInfo = pathInfo == null || pathInfo.length() < 2 ? null : pathInfo;
+    }
+

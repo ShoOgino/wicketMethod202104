@@ -15,52 +15,113 @@
 		// First check to see whether the target is mounted
 		CharSequence url = pathForTarget(requestTarget);
 
-		if (url != null)
+		RequestContext requestContext = RequestContext.get();
+		boolean portletRequest = requestContext.isPortletRequest();
+		boolean sharedResourceURL = false;
+		
+		if (url != null && !portletRequest)
 		{
 			// Do nothing - we've found the URL and it's mounted.
 		}
 		else if (requestTarget instanceof IBookmarkablePageRequestTarget)
 		{
-			url = encode(requestCycle, (IBookmarkablePageRequestTarget)requestTarget);
+			url = requestContext.encodeRenderURL(url == null ? encode(requestCycle, (IBookmarkablePageRequestTarget)requestTarget) : url);
 		}
 		else if (requestTarget instanceof ISharedResourceRequestTarget)
 		{
-			url = encode(requestCycle, (ISharedResourceRequestTarget)requestTarget);
+			url = requestContext.encodeSharedResourceURL(url == null ? encode(requestCycle, (ISharedResourceRequestTarget)requestTarget) : url);
+			sharedResourceURL = true;
 		}
 		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
 		{
-			url = encode(requestCycle, (IListenerInterfaceRequestTarget)requestTarget);
+			if (url == null)
+			{
+				url = encode(requestCycle, (IListenerInterfaceRequestTarget)requestTarget);
+			}
+			if (portletRequest)
+			{
+				IListenerInterfaceRequestTarget iliRequestTarget = (IListenerInterfaceRequestTarget)requestTarget;
+				RequestListenerInterface rli = iliRequestTarget.getRequestListenerInterface();
+				if (IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass())
+					|| IBehaviorListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
+				{
+					url = requestContext.encodeResourceURL(url);
+				}
+				else if (IRedirectListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
+				{
+					if (((WebRequestCycle)requestCycle).getWebRequest().isAjax())
+					{
+                        // TODO: Probably not all Ajax based redirects need to break out of ResourceURL encoding
+						// Need to findout and/or provide some kind of extension how to indicate this
+						url = ((PortletRequestContext)requestContext).encodeRenderURL(url,true);
+					}
+					else
+					{
+						url = requestContext.encodeRenderURL(url);
+					}
+				}
+				else
+				{
+					PortletRequestContext prc = (PortletRequestContext)requestContext;
+					boolean forceActionURL = prc.isAjax();
+					if (forceActionURL)
+					{
+						List behaviors = iliRequestTarget.getTarget().getBehaviors();
+						for (int i = 0, size = behaviors.size(); i<size; i++)
+						{
+							if (AbstractAjaxBehavior.class.isAssignableFrom(behaviors.get(i).getClass()))
+							{
+								forceActionURL = false;
+								break;
+							}
+						}
+					}
+					url = prc.encodeActionURL(url, forceActionURL);
+				}
+			}
 		}
-		else if (requestTarget instanceof IPageRequestTarget)
+		else if (url == null)
 		{
-			// This calls page.urlFor(IRedirectListener.INTERFACE), which calls
-			// the function we're in again. We therefore need to jump out here
-			// and return the url immediately, otherwise we end up prefixing it
-			// with relative path or absolute prefixes twice.
-			return encode(requestCycle, (IPageRequestTarget)requestTarget);
-		}
-		// fallthough for non-default request targets
-		else
-		{
-			url = doEncode(requestCycle, requestTarget);
+			if (requestTarget instanceof IPageRequestTarget)
+			{
+				// This calls page.urlFor(IRedirectListener.INTERFACE), which calls
+				// the function we're in again. We therefore need to jump out here
+				// and return the url immediately, otherwise we end up prefixing it
+				// with relative path or absolute prefixes twice.
+				return encode(requestCycle, (IPageRequestTarget)requestTarget);
+			}
+			// fallthough for non-default request targets
+			else
+			{
+				url = doEncode(requestCycle, requestTarget);
+			}
 		}
 
 		if (url != null)
 		{
-			// Add the actual URL. This will be relative to the Wicket
-			// Servlet/Filter, with no leading '/'.
-			PrependingStringBuffer prepender = new PrependingStringBuffer(url.toString());
-
-			// Prepend prefix to the URL to make it relative to the current
-			// request.
-			prepender.prepend(requestCycle.getRequest().getRelativePathPrefixToWicketHandler());
-
-			String result = prepender.toString();
-			// We need to special-case links to the home page if we're at the
-			// same level.
-			if (result.length() == 0)
+			String result = null;
+			
+			if (!sharedResourceURL && portletRequest)
 			{
-				result = "./";
+				result = url.toString();
+			}
+			else
+			{
+				// Add the actual URL. This will be relative to the Wicket
+			    // Servlet/Filter, with no leading '/'.
+				PrependingStringBuffer prepender = new PrependingStringBuffer(url.toString());
+
+				// Prepend prefix to the URL to make it relative to the current
+				// request.
+				prepender.prepend(requestCycle.getRequest().getRelativePathPrefixToWicketHandler());
+
+				result = prepender.toString();
+				// We need to special-case links to the home page if we're at the
+				// same level.
+				if (result.length() == 0)
+				{
+					result = "./";
+				}
 			}
 			return requestCycle.getOriginalResponse().encodeURL(result);
 		}

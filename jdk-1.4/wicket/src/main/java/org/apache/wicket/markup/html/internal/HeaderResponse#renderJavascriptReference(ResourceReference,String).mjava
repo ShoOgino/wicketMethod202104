@@ -4,7 +4,10 @@
 	 */
 	public void renderJavascriptReference(ResourceReference reference, String id)
 	{
-		CharSequence url = RequestCycle.get().urlFor(reference);
-		renderJavascriptReference(url.toString(), id);
+		if (!closed)
+		{
+			CharSequence url = RequestCycle.get().urlFor(reference);
+			renderJavascriptReference(url.toString(), id);
+		}
 	}
 

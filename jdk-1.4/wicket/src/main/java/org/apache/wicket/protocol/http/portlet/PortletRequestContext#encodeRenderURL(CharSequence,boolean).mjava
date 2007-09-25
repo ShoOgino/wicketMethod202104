@@ -1,0 +1,19 @@
+    public CharSequence encodeRenderURL(CharSequence path, boolean forceRenderURL)
+    {
+        if ((!forceRenderURL && resourceRequest) || RequestCycle.get().isUrlForNewWindowEncoding())
+		{
+			return encodeResourceURL(path);
+		}
+		if ( path != null )
+		{			
+			path = getQualifiedPath(path);
+			if (renderResponse != null)
+			{
+				PortletURL url = renderResponse.createRenderURL();
+				url.setParameter(wicketUrlPortletParameter+portletRequest.getPortletMode().toString(), path.toString());
+				path = saveLastEncodedUrl(url.toString(), path.toString());
+			}
+		}
+		return path;
+	}
+
