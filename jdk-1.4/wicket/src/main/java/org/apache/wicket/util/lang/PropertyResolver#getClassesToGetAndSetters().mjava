@@ -1,13 +1,21 @@
 	private static Map getClassesToGetAndSetters()
 	{
-		Application app = Application.get();
-		Map result = (Map)applicationToClassesToGetAndSetters.get(Application.get());
+		Object key = null;
+		if (Application.exists())
+		{
+			key = Application.get();
+		}
+		else
+		{
+			key = PropertyResolver.class;
+		}
+		Map result = (Map)applicationToClassesToGetAndSetters.get(key);
 		if (result == null)
 		{
 			// Don't synchronize this - Doesn't matter if we create two of them,
 			// as it's only a cache and the first will go out of scope and get
 			// GC'ed.
-			applicationToClassesToGetAndSetters.put(app, result = new ConcurrentHashMap(64));
+			applicationToClassesToGetAndSetters.put(key, result = new ConcurrentHashMap(64));
 		}
 		return result;
 	}
