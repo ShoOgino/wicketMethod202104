@@ -29,7 +29,12 @@
 				new JavascriptResourceReference(YuiLib.class, "")));
 		variables.put("enableMonthYearSelection", Boolean.valueOf(enableMonthYearSelection()));
 		variables.put("hideOnSelect", Boolean.valueOf(hideOnSelect()));
-
+		String script = getAdditionalJavascript();
+		if (script != null)
+		{
+			variables.put("additionalJavascript", script.replace("${calendar}", "YAHOO.wicket."
+					+ widgetId + "DpJs"));
+		}
 		// print out the initialization properties
 		Properties p = new Properties();
 		configure(p);
