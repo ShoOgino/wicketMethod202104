@@ -1,33 +1,28 @@
 	/**
 	 * Click the {@link Link} in the last rendered Page.
 	 * <p>
-	 * This method also works for {@link AjaxLink}, {@link AjaxFallbackLink}
-	 * and {@link AjaxSubmitLink}.
+	 * This method also works for {@link AjaxLink}, {@link AjaxFallbackLink} and
+	 * {@link AjaxSubmitLink}.
 	 * <p>
-	 * On AjaxLinks and AjaxFallbackLinks the onClick method is invoked with a
-	 * valid AjaxRequestTarget. In that way you can test the flow of your
-	 * application when using AJAX.
+	 * On AjaxLinks and AjaxFallbackLinks the onClick method is invoked with a valid
+	 * AjaxRequestTarget. In that way you can test the flow of your application when using AJAX.
 	 * <p>
-	 * When clicking an AjaxSubmitLink the form, which the AjaxSubmitLink is
-	 * attached to is first submitted, and then the onSubmit method on
-	 * AjaxSubmitLink is invoked. If you have changed some values in the form
-	 * during your test, these will also be submitted. This should not be used
-	 * as a replacement for the {@link FormTester} to test your forms. It should
-	 * be used to test that the code in your onSubmit method in AjaxSubmitLink
-	 * actually works.
+	 * When clicking an AjaxSubmitLink the form, which the AjaxSubmitLink is attached to is first
+	 * submitted, and then the onSubmit method on AjaxSubmitLink is invoked. If you have changed
+	 * some values in the form during your test, these will also be submitted. This should not be
+	 * used as a replacement for the {@link FormTester} to test your forms. It should be used to
+	 * test that the code in your onSubmit method in AjaxSubmitLink actually works.
 	 * <p>
-	 * This method is also able to simulate that AJAX (javascript) is disabled
-	 * on the client. This is done by setting the isAjax parameter to false. If
-	 * you have an AjaxFallbackLink you can then check that it doesn't fail when
-	 * invoked as a normal link.
-	 *
+	 * This method is also able to simulate that AJAX (javascript) is disabled on the client. This
+	 * is done by setting the isAjax parameter to false. If you have an AjaxFallbackLink you can
+	 * then check that it doesn't fail when invoked as a normal link.
+	 * 
 	 * @param path
 	 *            path to <code>Link</code> component
 	 * @param isAjax
-	 *            Whether to simulate that AJAX (javascript) is enabled or not.
-	 *            If it's false then AjaxLink and AjaxSubmitLink will fail,
-	 *            since it wouldn't work in real life. AjaxFallbackLink will be
-	 *            invoked with null as the AjaxRequestTarget parameter.
+	 *            Whether to simulate that AJAX (javascript) is enabled or not. If it's false then
+	 *            AjaxLink and AjaxSubmitLink will fail, since it wouldn't work in real life.
+	 *            AjaxFallbackLink will be invoked with null as the AjaxRequestTarget parameter.
 	 */
 	public void clickLink(String path, boolean isAjax)
 	{
@@ -40,15 +35,15 @@
 			// If it's not ajax we fail
 			if (isAjax == false)
 			{
-				fail("Link " + path + "is an AjaxLink and will "
-						+ "not be invoked when AJAX (javascript) is disabled.");
+				fail("Link " + path + "is an AjaxLink and will " +
+						"not be invoked when AJAX (javascript) is disabled.");
 			}
 
 			AjaxLink link = (AjaxLink)linkComponent;
 
 			setupRequestAndResponse();
 			RequestCycle requestCycle = createRequestCycle();
-			AjaxRequestTarget target = new AjaxRequestTarget();
+			AjaxRequestTarget target = new AjaxRequestTarget(link.getPage());
 			requestCycle.setRequestTarget(target);
 
 			link.onClick(target);
@@ -65,7 +60,7 @@
 
 			setupRequestAndResponse();
 			RequestCycle requestCycle = createRequestCycle();
-			AjaxRequestTarget target = new AjaxRequestTarget();
+			AjaxRequestTarget target = new AjaxRequestTarget(link.getPage());
 			requestCycle.setRequestTarget(target);
 
 			link.onClick(target);
@@ -80,8 +75,8 @@
 			// If it's not ajax we fail
 			if (isAjax == false)
 			{
-				fail("Link " + path + "is an AjaxSubmitLink and "
-						+ "will not be invoked when AJAX (javascript) is disabled.");
+				fail("Link " + path + "is an AjaxSubmitLink and " +
+						"will not be invoked when AJAX (javascript) is disabled.");
 			}
 
 			AjaxSubmitLink link = (AjaxSubmitLink)linkComponent;
@@ -120,8 +115,8 @@
 			AbstractLink link = (AbstractLink)linkComponent;
 
 			/*
-			 * If the link is a bookmarkable link, then we need to transfer the
-			 * parameters to the next request.
+			 * If the link is a bookmarkable link, then we need to transfer the parameters to the
+			 * next request.
 			 */
 			if (link instanceof BookmarkablePageLink)
 			{
