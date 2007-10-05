@@ -1,26 +1,6 @@
 	/**
-	 * Cleans up all rendered feedback messages and any unrendered, dangling feedback messages there
-	 * may be left after that.
+	 * Cleans up all rendered feedback messages and any unrendered, dangling
+	 * feedback messages there may be left after that.
 	 */
-	public void cleanupFeedbackMessages()
-	{
-		// remove all component feedback messages if we are either using one
-		// pass or render to buffer render strategy (in which case we can remove
-		// without further delay) or in case the redirect to render strategy is
-		// used, when we're doing the render request (isRedirect should return
-		// false in that case)
-		if (Application.get().getRequestCycleSettings().getRenderStrategy() != IRequestCycleSettings.REDIRECT_TO_RENDER ||
-				(!RequestCycle.get().isRedirect()))
-		{
-			// If session scoped, rendered messages got indeed cleaned up, mark
-			// the session as dirty
-			if (feedbackMessages.clear(RENDERED_SESSION_SCOPED_MESSAGES) > 0)
-			{
-				dirty();
-			}
-
-			// clean up all component related feedback messages
-			feedbackMessages.clear(MESSAGES_FOR_COMPONENTS);
-		}
-	}
+	public abstract void cleanupFeedbackMessages();
 
