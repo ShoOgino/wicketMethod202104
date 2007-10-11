@@ -18,18 +18,20 @@
 		RequestContext requestContext = RequestContext.get();
 		boolean portletRequest = requestContext.isPortletRequest();
 		boolean sharedResourceURL = false;
-		
+
 		if (url != null && !portletRequest)
 		{
 			// Do nothing - we've found the URL and it's mounted.
 		}
 		else if (requestTarget instanceof IBookmarkablePageRequestTarget)
 		{
-			url = requestContext.encodeRenderURL(url == null ? encode(requestCycle, (IBookmarkablePageRequestTarget)requestTarget) : url);
+			url = requestContext.encodeRenderURL(url == null ? encode(requestCycle,
+					(IBookmarkablePageRequestTarget)requestTarget) : url);
 		}
 		else if (requestTarget instanceof ISharedResourceRequestTarget)
 		{
-			url = requestContext.encodeSharedResourceURL(url == null ? encode(requestCycle, (ISharedResourceRequestTarget)requestTarget) : url);
+			url = requestContext.encodeSharedResourceURL(url == null ? encode(requestCycle,
+					(ISharedResourceRequestTarget)requestTarget) : url);
 			sharedResourceURL = true;
 		}
 		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
@@ -42,18 +44,22 @@
 			{
 				IListenerInterfaceRequestTarget iliRequestTarget = (IListenerInterfaceRequestTarget)requestTarget;
 				RequestListenerInterface rli = iliRequestTarget.getRequestListenerInterface();
-				if (IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass())
-					|| IBehaviorListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
+				if (IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()) ||
+						IBehaviorListener.class.isAssignableFrom(rli.getMethod()
+								.getDeclaringClass()))
 				{
 					url = requestContext.encodeResourceURL(url);
 				}
-				else if (IRedirectListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
+				else if (IRedirectListener.class.isAssignableFrom(rli.getMethod()
+						.getDeclaringClass()))
 				{
 					if (((WebRequestCycle)requestCycle).getWebRequest().isAjax())
 					{
-                        // TODO: Probably not all Ajax based redirects need to break out of ResourceURL encoding
-						// Need to findout and/or provide some kind of extension how to indicate this
-						url = ((PortletRequestContext)requestContext).encodeRenderURL(url,true);
+						// TODO: Probably not all Ajax based redirects need to break out of
+						// ResourceURL encoding
+						// Need to findout and/or provide some kind of extension how to indicate
+						// this
+						url = ((PortletRequestContext)requestContext).encodeRenderURL(url, true);
 					}
 					else
 					{
@@ -67,9 +73,10 @@
 					if (forceActionURL)
 					{
 						List behaviors = iliRequestTarget.getTarget().getBehaviors();
-						for (int i = 0, size = behaviors.size(); i<size; i++)
+						for (int i = 0, size = behaviors.size(); i < size; i++)
 						{
-							if (AbstractAjaxBehavior.class.isAssignableFrom(behaviors.get(i).getClass()))
+							if (AbstractAjaxBehavior.class.isAssignableFrom(behaviors.get(i)
+									.getClass()))
 							{
 								forceActionURL = false;
 								break;
@@ -100,7 +107,7 @@
 		if (url != null)
 		{
 			String result = null;
-			
+
 			if (!sharedResourceURL && portletRequest)
 			{
 				result = url.toString();
@@ -108,7 +115,7 @@
 			else
 			{
 				// Add the actual URL. This will be relative to the Wicket
-			    // Servlet/Filter, with no leading '/'.
+				// Servlet/Filter, with no leading '/'.
 				PrependingStringBuffer prepender = new PrependingStringBuffer(url.toString());
 
 				// Prepend prefix to the URL to make it relative to the current

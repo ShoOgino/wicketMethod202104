@@ -9,8 +9,8 @@
 	 *            Component path
 	 * @param versionNumber
 	 *            The version of the page required
-	 * @return The page based on the first path component (the page id), or null
-	 *         if the requested version of the page cannot be found.
+	 * @return The page based on the first path component (the page id), or null if the requested
+	 *         version of the page cannot be found.
 	 */
 	public final Page getPage(final String pageMapName, final String path, final int versionNumber)
 	{
@@ -67,15 +67,15 @@
 					entry = (PageMapsUsedInRequestEntry)pageMapsUsedInRequest.get(pageMap);
 					t = entry != null ? entry.thread : null;
 
-					if (t != null && t != Thread.currentThread()
-							&& (startTime + timeout.getMilliseconds()) < System.currentTimeMillis())
+					if (t != null && t != Thread.currentThread() &&
+							(startTime + timeout.getMilliseconds()) < System.currentTimeMillis())
 					{
 						// if it is still not the right thread..
 						// This either points to long running code (a report
 						// page?) or a deadlock or such
-						throw new WicketRuntimeException("After " + timeout + " the Pagemap "
-								+ pageMapName + " is still locked by: " + t
-								+ ", giving up trying to get the page for path: " + path);
+						throw new WicketRuntimeException("After " + timeout + " the Pagemap " +
+								pageMapName + " is still locked by: " + t +
+								", giving up trying to get the page for path: " + path);
 					}
 				}
 
@@ -93,7 +93,7 @@
 				else
 				{
 					// attach the page now.
-					page.attach();
+					page.onPageAttached();
 					touch(page);
 				}
 				return page;
