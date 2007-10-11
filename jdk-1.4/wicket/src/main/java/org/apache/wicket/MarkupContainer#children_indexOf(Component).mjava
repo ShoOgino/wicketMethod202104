@@ -1,23 +1,18 @@
 	private final int children_indexOf(Component child)
 	{
-		if (children instanceof Component)
+		if (children != null && children instanceof Object[] == false &&
+				getId(children).equals(child.getId()))
 		{
-			if (((Component)children).getId().equals(child.getId()))
-			{
-				return 0;
-			}
+			return 0;
 		}
-		else
+		else if (children instanceof Object[])
 		{
-			if (children != null)
+			final Object[] children = (Object[])this.children;
+			for (int i = 0; i < children.length; i++)
 			{
-				final Component[] components = (Component[])children;
-				for (int i = 0; i < components.length; i++)
+				if (getId(children[i]).equals(child.getId()))
 				{
-					if (components[i].getId().equals(child.getId()))
-					{
-						return i;
-					}
+					return i;
 				}
 			}
 		}
