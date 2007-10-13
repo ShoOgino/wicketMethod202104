@@ -10,6 +10,13 @@
 	 */
 	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
+		// Draw anything before the body?
+		if (!isLinkEnabled() && getBeforeDisabledLink() != null)
+		{
+			getResponse().write(getBeforeDisabledLink());
+		}
+
+
 		if ((label != null) && (label.getObject() != null))
 		{
 			replaceComponentTagBody(markupStream, openTag,
@@ -17,7 +24,14 @@
 		}
 		else
 		{
-			super.onComponentTagBody(markupStream, openTag);
+			renderComponentTagBody(markupStream, openTag);
 		}
+
+		// Draw anything after the body?
+		if (!isLinkEnabled() && getAfterDisabledLink() != null)
+		{
+			getResponse().write(getAfterDisabledLink());
+		}
+
 	}
 
