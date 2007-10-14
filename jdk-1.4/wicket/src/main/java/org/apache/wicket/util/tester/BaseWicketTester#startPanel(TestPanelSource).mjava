@@ -1,13 +1,12 @@
 	/**
-	 * Render a panel defined in <code>TestPanelSource</code>. The usage is similar with
-	 * {@link #startPage(ITestPageSource)}. Please note that testing panel must use supplied
-	 * <code>panelId<code> as component id.
+	 * Renders a <code>Panel</code> defined in <code>TestPanelSource</code>.
+	 * The usage is similar to {@link #startPage(ITestPageSource)}. Please note
+	 * that testing <code>Panel</code> must use the supplied
+	 * <code>panelId<code> as a <code>Component</code> id.
 	 *
 	 * <pre>
-	 * tester.startPanel(new TestPanelSource()
-	 * {
-	 * 	public Panel getTestPanel(String panelId)
-	 * 	{
+	 * tester.startPanel(new TestPanelSource() {
+	 * 	public Panel getTestPanel(String panelId) {
 	 * 		MyData mockMyData = new MyData();
 	 * 		return new MyPanel(panelId, mockMyData);
 	 * 	}
@@ -15,17 +14,14 @@
 	 * </pre>
 	 *
 	 * @param testPanelSource
-	 *            a panel factory that creating test panel instance
-	 * @return Panel rendered panel
+	 *            a <code>Panel</code> factory that creates test <code>Panel</code> instances
+	 * @return a rendered <code>Panel</code>
 	 */
-	public final Panel startPanel(final TestPanelSource testPanelSource)
-	{
-		return (Panel)startPage(new ITestPageSource()
-		{
+	public final Panel startPanel(final TestPanelSource testPanelSource) {
+		return (Panel) startPage(new ITestPageSource() {
 			private static final long serialVersionUID = 1L;
 
-			public Page getTestPage()
-			{
+			public Page getTestPage() {
 				return new DummyPanelPage(testPanelSource);
 			}
 		}).get(DummyPanelPage.TEST_PANEL_ID);

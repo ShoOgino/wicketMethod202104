@@ -1,18 +1,20 @@
 	/**
-	 * Test that a component has been added to a AjaxRequestTarget, using
-	 * {@link AjaxRequestTarget#addComponent(Component)}. This method actually tests that a
-	 * component is on the AJAX response sent back to the client.
+	 * Tests that a <code>Component</code> has been added to a
+	 * <code>AjaxRequestTarget</code>, using
+	 * {@link AjaxRequestTarget#addComponent(Component)}. This method actually
+	 * tests that a <code>Component</code> is on the Ajax response sent back
+	 * to the client.
 	 * <p>
-	 * PLEASE NOTE! This method doesn't actually insert the component in the client DOM tree, using
-	 * javascript. But it shouldn't be needed because you have to trust that the Wicket Ajax
+	 * PLEASE NOTE! This method doesn't actually insert the
+	 * <code>Component</code> in the client DOM tree, using Javascript. But it
+	 * shouldn't be needed because you have to trust that the Wicket Ajax
 	 * Javascript just works.
 	 * 
 	 * @param component
-	 *            The component to test whether it's on the response.
-	 * @return
+	 *            the <code>Component</code> to test
+	 * @return a <code>Result</code>
 	 */
-	public Result isComponentOnAjaxResponse(Component component)
-	{
+	public Result isComponentOnAjaxResponse(Component component) {
 		String failMessage = "A component which is null could not have been added to the AJAX response";
 		notNull(failMessage, component);
 
@@ -25,8 +27,7 @@
 		boolean isAjaxResponse = ajaxResponse
 				.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><ajax-response>");
 		Result result = isTrue(failMessage, isAjaxResponse);
-		if (result.wasFailed())
-		{
+		if (result.wasFailed()) {
 			return result;
 		}
 
@@ -36,14 +37,13 @@
 		failMessage = "The component doesn't have a markup id, "
 				+ "which means that it can't have been added to the AJAX response";
 		result = isTrue(failMessage, !Strings.isEmpty(markupId));
-		if (result.wasFailed())
-		{
+		if (result.wasFailed()) {
 			return result;
 		}
 
 		// Look for that the component is on the response, using the markup id
-		boolean isComponentInAjaxResponse = ajaxResponse.matches("(?s).*<component id=\"" +
-				markupId + "\" ?>.*");
+		boolean isComponentInAjaxResponse = ajaxResponse
+				.matches("(?s).*<component id=\"" + markupId + "\" ?>.*");
 		failMessage = "Component wasn't found in the AJAX response";
 		return isTrue(failMessage, isComponentInAjaxResponse);
 	}

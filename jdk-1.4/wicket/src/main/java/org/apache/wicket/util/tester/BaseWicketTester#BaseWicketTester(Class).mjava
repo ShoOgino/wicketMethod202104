@@ -1,28 +1,26 @@
 	/**
-	 * Create WicketTester and automatically create a WebApplication.
+	 * Creates <code>WicketTester</code> and automatically creates a
+	 * <code>WebApplication</code>.
 	 * 
 	 * @param homePage
+	 *            a home page <code>Class</code>
 	 */
-	public BaseWicketTester(final Class homePage)
-	{
-		this(new WebApplication()
-		{
+	public BaseWicketTester(final Class homePage) {
+		this(new WebApplication() {
 			/**
 			 * @see org.apache.wicket.Application#getHomePage()
 			 */
-			public Class getHomePage()
-			{
+			public Class getHomePage() {
 				return homePage;
 			}
 
-			protected void outputDevelopmentModeWarning()
-			{
+			protected void outputDevelopmentModeWarning() {
 				// Do nothing.
 			}
 
-			protected ISessionStore newSessionStore()
-			{
-				// Don't use a filestore, or we spawn lots of threads, which makes things slow.
+			protected ISessionStore newSessionStore() {
+				// Don't use a filestore, or we spawn lots of threads, which
+				// makes things slow.
 				return new HttpSessionStore(this);
 			}
 
