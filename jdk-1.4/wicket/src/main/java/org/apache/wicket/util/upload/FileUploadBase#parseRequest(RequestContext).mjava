@@ -1,16 +1,15 @@
 	/**
-	 * Processes an <a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867</a>
-	 * compliant <code>multipart/form-data</code> stream.
-	 *
+	 * Processes an <a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867</a> compliant
+	 * <code>multipart/form-data</code> stream.
+	 * 
 	 * @param ctx
 	 *            The context for the request to be parsed.
-	 *
-	 * @return A list of <code>FileItem</code> instances parsed from the
-	 *         request, in the order that they were transmitted.
-	 *
+	 * 
+	 * @return A list of <code>FileItem</code> instances parsed from the request, in the order
+	 *         that they were transmitted.
+	 * 
 	 * @exception FileUploadException
-	 *                if there are problems reading/parsing the request or
-	 *                storing files.
+	 *                if there are problems reading/parsing the request or storing files.
 	 */
 	public List /* FileItem */parseRequest(RequestContext ctx) throws FileUploadException
 	{
@@ -24,9 +23,9 @@
 
 		if ((null == contentType) || (!contentType.toLowerCase().startsWith(MULTIPART)))
 		{
-			throw new InvalidContentTypeException("the request doesn't contain a "
-					+ MULTIPART_FORM_DATA + " or " + MULTIPART_MIXED
-					+ " stream, content type header is " + contentType);
+			throw new InvalidContentTypeException("the request doesn't contain a " +
+					MULTIPART_FORM_DATA + " or " + MULTIPART_MIXED +
+					" stream, content type header is " + contentType);
 		}
 		int requestSize = ctx.getContentLength();
 
@@ -67,8 +66,8 @@
 				if (fieldName != null)
 				{
 					String subContentType = getHeader(headers, CONTENT_TYPE);
-					if (subContentType != null
-							&& subContentType.toLowerCase().startsWith(MULTIPART_MIXED))
+					if (subContentType != null &&
+							subContentType.toLowerCase().startsWith(MULTIPART_MIXED))
 					{
 						// Multiple files.
 						byte[] subBoundary = getBoundary(subContentType);
@@ -126,8 +125,8 @@
 		}
 		catch (IOException e)
 		{
-			throw new FileUploadException("Processing of " + MULTIPART_FORM_DATA
-					+ " request failed. " + e.getMessage(), e);
+			throw new FileUploadException("Processing of " + MULTIPART_FORM_DATA +
+					" request failed. " + e.getMessage(), e);
 		}
 
 		return items;

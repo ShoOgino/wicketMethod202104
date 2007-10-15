@@ -4,24 +4,25 @@
 	protected void setUp() throws Exception
 	{
 		person = new Person();
-		app = new MockWebApplication(new WebApplication() {
+		app = new MockWebApplication(new WebApplication()
+		{
 
 			public Class getHomePage()
 			{
 				return null;
 			}
-			
+
 			protected void outputDevelopmentModeWarning()
 			{
 				// Do nothing.
 			}
-			
+
 			protected ISessionStore newSessionStore()
 			{
 				// Don't use a filestore, or we spawn lots of threads, which makes things slow.
 				return new HttpSessionStore(this);
 			}
-			
+
 		}, "/foo");
 	}
 

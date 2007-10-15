@@ -1,6 +1,6 @@
 	/**
 	 * Processes the component tag.
-	 *
+	 * 
 	 * @param tag
 	 *            Tag to modify
 	 * @see org.apache.wicket.Component#onComponentTag(org.apache.wicket.markup.ComponentTag)
@@ -22,17 +22,20 @@
 				RequestContext rc = RequestContext.get();
 				if (rc.isPortletRequest())
 				{
-					// restore url back to real wicket path as its going to be interpreted by the form itself
+					// restore url back to real wicket path as its going to be interpreted by the
+					// form itself
 					url = ((PortletRequestContext)rc).getLastEncodedPath();
 				}
 				tag.put("onchange", form.getJsForInterfaceUrl(url));
 			}
 			else
 			{
-				// TODO: following doesn't work with portlets, should be posted to a dynamic hidden form
+				// TODO: following doesn't work with portlets, should be posted to a dynamic hidden
+				// form
 				// with an ActionURL or something
-				tag.put("onchange", "window.location.href='" + url + (url.toString().indexOf('?')>-1 ? "&amp;" : "?") + getInputName()
-						+ "=' + this.options[this.selectedIndex].value;");
+				tag.put("onchange", "window.location.href='" + url +
+						(url.toString().indexOf('?') > -1 ? "&amp;" : "?") + getInputName() +
+						"=' + this.options[this.selectedIndex].value;");
 			}
 		}
 

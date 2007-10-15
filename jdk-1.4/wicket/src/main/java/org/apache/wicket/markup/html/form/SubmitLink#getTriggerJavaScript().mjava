@@ -5,7 +5,8 @@
 	 */
 	protected final String getTriggerJavaScript()
 	{
-		if (getForm() != null) {
+		if (getForm() != null)
+		{
 			// find the root form - the one we are really going to submit
 			Form root = getForm().getRootForm();
 			StringBuffer sb = new StringBuffer(100);
@@ -13,7 +14,7 @@
 			sb.append(root.getHiddenFieldId());
 			sb.append("'); e.name=\'");
 			sb.append(getInputName());
-			sb.append("'; e.value='x';");			
+			sb.append("'; e.value='x';");
 			sb.append("var f=document.getElementById('");
 			sb.append(root.getMarkupId());
 			sb.append("');");
@@ -29,12 +30,15 @@
 				{
 					sb.append("var ff=f;");
 				}
-				sb.append("if (ff.onsubmit != undefined) { if (ff.onsubmit()==false) return false; }");
+				sb
+						.append("if (ff.onsubmit != undefined) { if (ff.onsubmit()==false) return false; }");
 			}
 			sb.append("f.submit();e.value='';e.name='';return false;");
 			return sb.toString();
-		} else {
+		}
+		else
+		{
 			return null;
 		}
-	}	
+	}
 

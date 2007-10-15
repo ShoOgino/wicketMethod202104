@@ -3,16 +3,20 @@
 		String wicketURL = null;
 		if (request instanceof ActionRequest)
 		{
-			wicketURL = request.getParameter((String)request.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR));
+			wicketURL = request.getParameter((String)request
+					.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR));
 		}
 		else
 		{
-			wicketURL = request.getParameter((String)request.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR)+request.getPortletMode().toString());
+			wicketURL = request.getParameter((String)request
+					.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR) +
+					request.getPortletMode().toString());
 		}
-        if (wicketURL == null)
-        {
-        	wicketURL = getWicketConfigParameter(request, CONFIG_PARAM_PREFIX+pageType, defaultPage);
-        }
-        return wicketURL;
+		if (wicketURL == null)
+		{
+			wicketURL = getWicketConfigParameter(request, CONFIG_PARAM_PREFIX + pageType,
+					defaultPage);
+		}
+		return wicketURL;
 	}
 

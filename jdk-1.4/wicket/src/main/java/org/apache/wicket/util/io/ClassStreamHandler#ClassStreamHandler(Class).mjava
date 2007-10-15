@@ -3,7 +3,7 @@
 	 * 
 	 * @param cls
 	 *            TODO
-	 * @throws WicketSerializeableException 
+	 * @throws WicketSerializeableException
 	 */
 	private ClassStreamHandler(Class cls) throws WicketSerializeableException
 	{
@@ -15,10 +15,10 @@
 			cons = null;
 			writeObjectMethods = null;
 			readObjectMethods = null;
-			
+
 			writeReplaceMethod = null;
 			readResolveMethod = null;
-			
+
 			if (clz == boolean.class)
 			{
 				primitiveArray = new BooleanPrimitiveArray();
@@ -80,38 +80,41 @@
 		{
 			fields = new ArrayList();
 			primitiveArray = null;
-	    	writeObjectMethods = new ArrayList(2);
+			writeObjectMethods = new ArrayList(2);
 			readObjectMethods = new ArrayList(2);
-			writeReplaceMethod = getInheritableMethod( clz, "writeReplace", null, Object.class);
-		    
-		    readResolveMethod = getInheritableMethod(clz, "readResolve", null, Object.class);
-		    if (readResolveMethod == null)
-		    {
+			writeReplaceMethod = getInheritableMethod(clz, "writeReplace", null, Object.class);
+
+			readResolveMethod = getInheritableMethod(clz, "readResolve", null, Object.class);
+			if (readResolveMethod == null)
+			{
 				cons = getSerializableConstructor(clz);
 				if (cons == null)
 				{
-					throw new WicketSerializeableException("No Serializable constructor found for " + cls);
+					throw new WicketSerializeableException(
+							"No Serializable constructor found for " + cls);
 				}
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				cons = getSerializableConstructor(clz);
-		    }
+			}
 
 			Class parent = cls;
-			while(parent != Object.class)
+			while (parent != Object.class)
 			{
-				Method method = getPrivateMethod(parent, "writeObject", new Class[] { ObjectOutputStream.class }, Void.TYPE);
+				Method method = getPrivateMethod(parent, "writeObject",
+						new Class[] { ObjectOutputStream.class }, Void.TYPE);
 				if (method != null)
 				{
 					writeObjectMethods.add(method);
 				}
-				method = getPrivateMethod(parent, "readObject", new Class[] { ObjectInputStream.class }, Void.TYPE);
+				method = getPrivateMethod(parent, "readObject",
+						new Class[] { ObjectInputStream.class }, Void.TYPE);
 				if (method != null)
 				{
 					readObjectMethods.add(method);
 				}
-				
+
 				parent = parent.getSuperclass();
 			}
 			fillFields(cls);

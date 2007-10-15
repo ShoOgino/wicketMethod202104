@@ -5,11 +5,11 @@
 	{
 		Object value = null;
 		int token = in.read();
-		if(token == ClassStreamHandler.NULL)
+		if (token == ClassStreamHandler.NULL)
 		{
 			return null;
 		}
-		else if ( token == ClassStreamHandler.HANDLE)
+		else if (token == ClassStreamHandler.HANDLE)
 		{
 			short handle = in.readShort();
 			value = handledObjects.get(handle);
@@ -26,18 +26,18 @@
 			if (currentStreamHandler.getStreamClass() == String.class)
 			{
 				value = in.readUTF();
-				handledObjects.put(handleCounter++,value);
+				handledObjects.put(handleCounter++, value);
 			}
 			else
 			{
 				try
 				{
 					value = currentStreamHandler.createObject();
-					handledObjects.put(handleCounter++,value);
+					handledObjects.put(handleCounter++, value);
 					stack.push(value);
-					if ( !currentStreamHandler.invokeReadMethod(this, value))
+					if (!currentStreamHandler.invokeReadMethod(this, value))
 					{
-						currentStreamHandler.readFields(this,value);
+						currentStreamHandler.readFields(this, value);
 					}
 					value = currentStreamHandler.readResolve(value);
 					stack.pop();
@@ -73,7 +73,7 @@
 			ClassStreamHandler lookup = ClassStreamHandler.lookup(classDef);
 			int length = in.readInt();
 			Object[] array = (Object[])Array.newInstance(lookup.getStreamClass(), length);
-			handledObjects.put(handleCounter++,array);
+			handledObjects.put(handleCounter++, array);
 			for (int i = 0; i < array.length; i++)
 			{
 				array[i] = readObjectOverride();
@@ -85,7 +85,7 @@
 			short classDef = in.readShort();
 			ClassStreamHandler lookup = ClassStreamHandler.lookup(classDef);
 			value = lookup.readArray(this);
-			handledObjects.put(handleCounter++,value);
+			handledObjects.put(handleCounter++, value);
 		}
 		else
 		{

@@ -1,7 +1,7 @@
 	/**
-	 * Simulates the firing of an Ajax event. You add an Ajax event to a
-	 * <code>Component</code> by using:
-	 *
+	 * Simulates the firing of an Ajax event. You add an Ajax event to a <code>Component</code> by
+	 * using:
+	 * 
 	 * <pre>
 	 *     ...
 	 *     component.add(new AjaxEventBehavior(&quot;ondblclick&quot;) {
@@ -9,34 +9,34 @@
 	 *     });
 	 *     ...
 	 * </pre>
-	 *
-	 * You can then test that the code inside <code>onEvent</code> actually
-	 * does what it's supposed to, using the <code>WicketTester</code>:
-	 *
+	 * 
+	 * You can then test that the code inside <code>onEvent</code> actually does what it's
+	 * supposed to, using the <code>WicketTester</code>:
+	 * 
 	 * <pre>
 	 *     ...
 	 *     tester.executeAjaxEvent(component, &quot;ondblclick&quot;);
 	 *     // Test that the code inside onEvent is correct.
 	 *     ...
 	 * </pre>
-	 *
-	 * This also works with <code>AjaxFormSubmitBehavior</code>, where it
-	 * will "submit" the <code>Form</code> before executing the command.
+	 * 
+	 * This also works with <code>AjaxFormSubmitBehavior</code>, where it will "submit" the
+	 * <code>Form</code> before executing the command.
 	 * <p>
-	 * PLEASE NOTE! This method doesn't actually insert the
-	 * <code>Component</code> in the client DOM tree, using Javascript.
-	 *
-	 *
+	 * PLEASE NOTE! This method doesn't actually insert the <code>Component</code> in the client
+	 * DOM tree, using Javascript.
+	 * 
+	 * 
 	 * @param component
-	 *            the <code>Component</code> that has the
-	 *            <code>AjaxEventBehavior</code> we want to test. If the
-	 *            <code>Component</code> is <code>null</code>, the test
-	 *            will fail.
+	 *            the <code>Component</code> that has the <code>AjaxEventBehavior</code> we want
+	 *            to test. If the <code>Component</code> is <code>null</code>, the test will
+	 *            fail.
 	 * @param event
-	 *            the event to simulate being fired. If <code>event</code> is
-	 *            <code>null</code>, the test will fail.
+	 *            the event to simulate being fired. If <code>event</code> is <code>null</code>,
+	 *            the test will fail.
 	 */
-	public void executeAjaxEvent(Component component, String event) {
+	public void executeAjaxEvent(Component component, String event)
+	{
 		String failMessage = "Can't execute event on a component which is null.";
 		notNull(failMessage, component);
 
@@ -47,14 +47,17 @@
 		// matches the event parameter.
 		AjaxEventBehavior ajaxEventBehavior = null;
 		List behaviors = component.getBehaviors();
-		for (Iterator iter = behaviors.iterator(); iter.hasNext();) {
-			IBehavior behavior = (IBehavior) iter.next();
+		for (Iterator iter = behaviors.iterator(); iter.hasNext();)
+		{
+			IBehavior behavior = (IBehavior)iter.next();
 
 			// AjaxEventBehavior is the one to look for
-			if (behavior instanceof AjaxEventBehavior) {
-				AjaxEventBehavior tmp = (AjaxEventBehavior) behavior;
+			if (behavior instanceof AjaxEventBehavior)
+			{
+				AjaxEventBehavior tmp = (AjaxEventBehavior)behavior;
 
-				if (event.equals(tmp.getEvent())) {
+				if (event.equals(tmp.getEvent()))
+				{
 					ajaxEventBehavior = tmp;
 				}
 			}
@@ -62,24 +65,27 @@
 
 		// If there haven't been found any event behaviors on the component
 		// which matches the parameters we fail.
-		failMessage = "No AjaxEventBehavior found on component: "
-				+ component.getId() + " which matches the event: "
-				+ event.toString();
+		failMessage = "No AjaxEventBehavior found on component: " + component.getId() +
+				" which matches the event: " + event.toString();
 		notNull(failMessage, ajaxEventBehavior);
 
 		// initialize the request only if needed to allow the user to pass
 		// request parameters, see
 		// WICKET-254
 		WebRequestCycle requestCycle;
-		if (RequestCycle.get() == null) {
+		if (RequestCycle.get() == null)
+		{
 			requestCycle = setupRequestAndResponse();
-		} else {
-			requestCycle = (WebRequestCycle) RequestCycle.get();
+		}
+		else
+		{
+			requestCycle = (WebRequestCycle)RequestCycle.get();
 		}
 
 		// If the event is an FormSubmitBehavior then also "submit" the form
-		if (ajaxEventBehavior instanceof AjaxFormSubmitBehavior) {
-			AjaxFormSubmitBehavior ajaxFormSubmitBehavior = (AjaxFormSubmitBehavior) ajaxEventBehavior;
+		if (ajaxEventBehavior instanceof AjaxFormSubmitBehavior)
+		{
+			AjaxFormSubmitBehavior ajaxFormSubmitBehavior = (AjaxFormSubmitBehavior)ajaxEventBehavior;
 			submitAjaxFormSubmitBehavior(ajaxFormSubmitBehavior);
 		}
 

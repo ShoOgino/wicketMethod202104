@@ -1,6 +1,6 @@
 	/**
 	 * Invoke the setter method for 'name' on object and provide the 'value'
-	 *
+	 * 
 	 * @param object
 	 * @param name
 	 * @param value
@@ -31,16 +31,16 @@
 
 		if (method == null)
 		{
-			throw new MarkupException("Unable to initialize Component. Method with name "
-					+ methodName + " not found");
+			throw new MarkupException("Unable to initialize Component. Method with name " +
+					methodName + " not found");
 		}
 
 		// The method must have a single parameter
 		final Class[] parameterClasses = method.getParameterTypes();
 		if (parameterClasses.length != 1)
 		{
-			throw new MarkupException("Unable to initialize Component. Method with name "
-					+ methodName + " must have one and only one parameter");
+			throw new MarkupException("Unable to initialize Component. Method with name " +
+					methodName + " must have one and only one parameter");
 		}
 
 		// Convert the parameter if necessary, depending on the setter's
@@ -53,28 +53,28 @@
 			final Object param = converter.convertToObject(value, locale);
 			if (param == null)
 			{
-				throw new MarkupException("Unable to convert value '" + value + "' into "
-						+ paramClass + ". May be there is no converter for that type registered?");
+				throw new MarkupException("Unable to convert value '" + value + "' into " +
+						paramClass + ". May be there is no converter for that type registered?");
 			}
 			method.invoke(object, new Object[] { param });
 		}
 		catch (IllegalAccessException ex)
 		{
 			throw new MarkupException(
-					"Unable to initialize Component. Failure while invoking method " + methodName
-							+ ". Cause: " + ex);
+					"Unable to initialize Component. Failure while invoking method " + methodName +
+							". Cause: " + ex);
 		}
 		catch (InvocationTargetException ex)
 		{
 			throw new MarkupException(
-					"Unable to initialize Component. Failure while invoking method " + methodName
-							+ ". Cause: " + ex);
+					"Unable to initialize Component. Failure while invoking method " + methodName +
+							". Cause: " + ex);
 		}
 		catch (NumberFormatException ex)
 		{
 			throw new MarkupException(
-					"Unable to initialize Component. Failure while invoking method " + methodName
-							+ ". Cause: " + ex);
+					"Unable to initialize Component. Failure while invoking method " + methodName +
+							". Cause: " + ex);
 		}
 	}
 

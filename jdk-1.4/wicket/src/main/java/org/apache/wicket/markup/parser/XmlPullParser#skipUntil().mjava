@@ -1,8 +1,7 @@
 	/**
-	 * Whatever will be in between the current index and the closing tag, will
-	 * be ignored (and thus treated as raw markup (text). This is useful for
-	 * tags like 'script'.
-	 *
+	 * Whatever will be in between the current index and the closing tag, will be ignored (and thus
+	 * treated as raw markup (text). This is useful for tags like 'script'.
+	 * 
 	 * @throws ParseException
 	 */
 	private final void skipUntil() throws ParseException
@@ -20,9 +19,9 @@
 			pos = input.find("</", pos + 1);
 			if ((pos == -1) || ((pos + (tagNameLen + 2)) >= input.size()))
 			{
-				throw new ParseException(skipUntilText + " tag not closed (line "
-						+ input.getLineNumber() + ", column " + input.getColumnNumber()
-						+ ")", startIndex);
+				throw new ParseException(skipUntilText + " tag not closed (line " +
+						input.getLineNumber() + ", column " + input.getColumnNumber() + ")",
+						startIndex);
 			}
 
 			lastPos = pos + 2;
@@ -37,8 +36,8 @@
 		lastPos = input.find('>', lastPos + tagNameLen);
 		if (lastPos == -1)
 		{
-			throw new ParseException("Script tag not closed (line " + input.getLineNumber()
-					+ ", column " + input.getColumnNumber() + ")", startIndex);
+			throw new ParseException("Script tag not closed (line " + input.getLineNumber() +
+					", column " + input.getColumnNumber() + ")", startIndex);
 		}
 
 		// Reset the state variable

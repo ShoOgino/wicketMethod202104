@@ -1,6 +1,6 @@
 	/**
 	 * Gets the next tag from the input string.
-	 *
+	 * 
 	 * @return The extracted tag (will always be of type XmlTag).
 	 * @throws ParseException
 	 */
@@ -57,8 +57,8 @@
 		String tagText = lastText.subSequence(1, lastText.length() - 1).toString();
 		if (tagText.length() == 0)
 		{
-			throw new ParseException("Found empty tag: '<>' at position " + openBracketIndex,
-					input.getPosition());
+			throw new ParseException("Found empty tag: '<>' at position " + openBracketIndex, input
+					.getPosition());
 		}
 
 		// Handle special tags like <!-- and <![CDATA ...
@@ -91,8 +91,8 @@
 
 			// If open tag and starts with "s" like "script" or "style", than
 			// ...
-			if ((tagText.length() > 5)
-					&& ((tagText.charAt(0) == 's') || (tagText.charAt(0) == 'S')))
+			if ((tagText.length() > 5) &&
+					((tagText.charAt(0) == 's') || (tagText.charAt(0) == 'S')))
 			{
 				final String lowerCase = tagText.substring(0, 6).toLowerCase();
 				if (lowerCase.startsWith("script"))
@@ -128,8 +128,8 @@
 		}
 		else
 		{
-			throw new ParseException("Malformed tag (line " + input.getLineNumber()
-					+ ", column " + input.getColumnNumber() + ")", openBracketIndex);
+			throw new ParseException("Malformed tag (line " + input.getLineNumber() + ", column " +
+					input.getColumnNumber() + ")", openBracketIndex);
 		}
 	}
 

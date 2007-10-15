@@ -9,20 +9,22 @@
 		HttpServletResponse httpServletResponse;
 
 		boolean inPortletContext = false;
-        if (filterPortletContext != null)
-        {
-        	FilterRequestContext filterRequestContext = new FilterRequestContext((HttpServletRequest)request,(HttpServletResponse)response);
-        	inPortletContext = filterPortletContext.setupFilter(getFilterConfig(), filterRequestContext, getFilterPath((HttpServletRequest)request));
-        	httpServletRequest = filterRequestContext.getRequest();
-        	httpServletResponse = filterRequestContext.getResponse();
-        }
-        else
-        {
-    		httpServletRequest = (HttpServletRequest)request;
+		if (filterPortletContext != null)
+		{
+			FilterRequestContext filterRequestContext = new FilterRequestContext(
+					(HttpServletRequest)request, (HttpServletResponse)response);
+			inPortletContext = filterPortletContext.setupFilter(getFilterConfig(),
+					filterRequestContext, getFilterPath((HttpServletRequest)request));
+			httpServletRequest = filterRequestContext.getRequest();
+			httpServletResponse = filterRequestContext.getResponse();
+		}
+		else
+		{
+			httpServletRequest = (HttpServletRequest)request;
 			httpServletResponse = (HttpServletResponse)response;
-        }
+		}
 
-        if ( portletOnlyFilter && !inPortletContext )
+		if (portletOnlyFilter && !inPortletContext)
 		{
 			chain.doFilter(request, response);
 			return;

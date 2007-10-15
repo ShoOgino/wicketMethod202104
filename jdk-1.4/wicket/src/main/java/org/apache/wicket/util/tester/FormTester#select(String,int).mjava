@@ -1,11 +1,10 @@
 	/**
-	 * Simulates selecting an option of a <code>FormComponent</code>.
-	 * Supports <code>RadioGroup</code>, <code>CheckGroup</code>, and
-	 * <code>AbstractChoice</code> family currently. The behavior is similar
-	 * to interacting on the browser: For a single choice, such as
-	 * <code>Radio</code> or <code>DropDownList</code>, the selection will
-	 * toggle each other. For multiple choice, such as <code>Checkbox</code>
-	 * or <code>ListMultipleChoice</code>, the selection will accumulate.
+	 * Simulates selecting an option of a <code>FormComponent</code>. Supports
+	 * <code>RadioGroup</code>, <code>CheckGroup</code>, and <code>AbstractChoice</code>
+	 * family currently. The behavior is similar to interacting on the browser: For a single choice,
+	 * such as <code>Radio</code> or <code>DropDownList</code>, the selection will toggle each
+	 * other. For multiple choice, such as <code>Checkbox</code> or
+	 * <code>ListMultipleChoice</code>, the selection will accumulate.
 	 * 
 	 * @param formComponentId
 	 *            relative path (from <code>Form</code>) to the selectable
@@ -16,18 +15,21 @@
 	public void select(String formComponentId, int index)
 	{
 		checkClosed();
-		FormComponent component = (FormComponent)workingForm
-		.get(formComponentId);
+		FormComponent component = (FormComponent)workingForm.get(formComponentId);
 
 		ChoiceSelector choiceSelector = choiceSelectorFactory.create(component);
 		choiceSelector.doSelect(index);
-		if (component instanceof DropDownChoice) {
+		if (component instanceof DropDownChoice)
+		{
 			try
 			{
-				Method wantOnSelectionChangedNotificationsMethod = DropDownChoice.class.getDeclaredMethod("wantOnSelectionChangedNotifications", new Class[0]);
+				Method wantOnSelectionChangedNotificationsMethod = DropDownChoice.class
+						.getDeclaredMethod("wantOnSelectionChangedNotifications", new Class[0]);
 				wantOnSelectionChangedNotificationsMethod.setAccessible(true);
-				boolean wantOnSelectionChangedNotifications = ((Boolean)wantOnSelectionChangedNotificationsMethod.invoke(component, new Object[0])).booleanValue();
-				if (wantOnSelectionChangedNotifications) {
+				boolean wantOnSelectionChangedNotifications = ((Boolean)wantOnSelectionChangedNotificationsMethod
+						.invoke(component, new Object[0])).booleanValue();
+				if (wantOnSelectionChangedNotifications)
+				{
 					((DropDownChoice)component).onSelectionChanged();
 				}
 			}

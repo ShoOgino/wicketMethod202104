@@ -1,25 +1,27 @@
-	 public void testNotSerializeable() throws Exception
-	 {
-		 WebApplication app = new WebApplication()
-		 {
-			 public Class getHomePage()
-			 {
-				 return null;
-			 }
-			 
-			 protected ISessionStore newSessionStore()
-			 {
-				 // Don't use a filestore, or we spawn lots of threads, which makes things slow.
-				 return new HttpSessionStore(this);
-			 }
+	public void testNotSerializeable() throws Exception
+	{
+		WebApplication app = new WebApplication()
+		{
+			public Class getHomePage()
+			{
+				return null;
+			}
 
-		 };
+			protected ISessionStore newSessionStore()
+			{
+				// Don't use a filestore, or we spawn lots of threads, which makes things slow.
+				return new HttpSessionStore(this);
+			}
 
-		 try
-		 {
-			 woos.writeObject(app);
-			 assertFalse("webapplication is not serializeable",false);
-		 }
-		 catch(Exception e){ }
-	 }
+		};
+
+		try
+		{
+			woos.writeObject(app);
+			assertFalse("webapplication is not serializeable", false);
+		}
+		catch (Exception e)
+		{
+		}
+	}
 

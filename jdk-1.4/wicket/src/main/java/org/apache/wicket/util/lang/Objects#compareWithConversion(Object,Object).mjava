@@ -1,26 +1,23 @@
 	/**
-	 * Compares two objects for equality, even if it has to convert one of them
-	 * to the other type. If both objects are numeric they are converted to the
-	 * widest type and compared. If one is non-numeric and one is numeric the
-	 * non-numeric is converted to double and compared to the double numeric
-	 * value. If both are non-numeric and Comparable and the types are
-	 * compatible (i.e. v1 is of the same or superclass of v2's type) they are
-	 * compared with Comparable.compareTo(). If both values are non-numeric and
-	 * not Comparable or of incompatible classes this will throw and
-	 * IllegalArgumentException.
-	 *
+	 * Compares two objects for equality, even if it has to convert one of them to the other type.
+	 * If both objects are numeric they are converted to the widest type and compared. If one is
+	 * non-numeric and one is numeric the non-numeric is converted to double and compared to the
+	 * double numeric value. If both are non-numeric and Comparable and the types are compatible
+	 * (i.e. v1 is of the same or superclass of v2's type) they are compared with
+	 * Comparable.compareTo(). If both values are non-numeric and not Comparable or of incompatible
+	 * classes this will throw and IllegalArgumentException.
+	 * 
 	 * @param v1
 	 *            First value to compare
 	 * @param v2
 	 *            second value to compare
-	 *
-	 * @return integer describing the comparison between the two objects. A
-	 *         negative number indicates that v1 < v2. Positive indicates that
-	 *         v1 > v2. Zero indicates v1 == v2.
-	 *
+	 * 
+	 * @return integer describing the comparison between the two objects. A negative number
+	 *         indicates that v1 < v2. Positive indicates that v1 > v2. Zero indicates v1 == v2.
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if the objects are both non-numeric yet of incompatible types
-	 *             or do not implement Comparable.
+	 *             if the objects are both non-numeric yet of incompatible types or do not implement
+	 *             Comparable.
 	 */
 	public static int compareWithConversion(Object v1, Object v2)
 	{
@@ -48,16 +45,16 @@
 				case NONNUMERIC :
 					if ((t1 == NONNUMERIC) && (t2 == NONNUMERIC))
 					{
-						if ((v1 instanceof Comparable)
-								&& v1.getClass().isAssignableFrom(v2.getClass()))
+						if ((v1 instanceof Comparable) &&
+								v1.getClass().isAssignableFrom(v2.getClass()))
 						{
 							result = ((Comparable)v1).compareTo(v2);
 							break;
 						}
 						else
 						{
-							throw new IllegalArgumentException("invalid comparison: "
-									+ v1.getClass().getName() + " and " + v2.getClass().getName());
+							throw new IllegalArgumentException("invalid comparison: " +
+									v1.getClass().getName() + " and " + v2.getClass().getName());
 						}
 					}
 					// else fall through
