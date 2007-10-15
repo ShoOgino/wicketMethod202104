@@ -3,16 +3,15 @@
 	 */
 	public Class getBeanType()
 	{
-		Class clazz = beanTypeCache == null ? null : (Class) beanTypeCache.get();
+		Class clazz = beanTypeCache == null ? null : (Class)beanTypeCache.get();
 		if (clazz == null)
 		{
 			beanTypeCache = new WeakReference(clazz = Classes.resolveClass(beanTypeName));
 			if (clazz == null)
 			{
-				throw new RuntimeException("SpringBeanLocator could not find class ["
-						+ beanTypeName + "] needed to locate the ["
-						+ ((beanName != null) ? (beanName) : ("bean name not specified"))
-						+ "] bean");
+				throw new RuntimeException("SpringBeanLocator could not find class [" +
+						beanTypeName + "] needed to locate the [" +
+						((beanName != null) ? (beanName) : ("bean name not specified")) + "] bean");
 			}
 		}
 		return clazz;
