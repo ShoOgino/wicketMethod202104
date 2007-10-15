@@ -9,8 +9,8 @@
 			response.renderCSSReference(new ResourceReference(YuiLib.class,
 					"calendar/assets/wicket-calendar.css"));
 			String idSelector = "#" + getEscapedComponentMarkupId() + "DpJs";
-			new StringHeaderContributor("<style>" + idSelector + ".yui-calendar .calnavleft, "
-					+ idSelector + ".yui-calendar .calnavright {display: none;}</style>")
+			new StringHeaderContributor("<style>" + idSelector + ".yui-calendar .calnavleft, " +
+					idSelector + ".yui-calendar .calnavright {display: none;}</style>")
 					.renderHead(response);
 		}
 
@@ -39,8 +39,8 @@
 		Properties p = new Properties();
 		configure(p);
 
-		if (enableMonthYearSelection() && p.containsKey("pages")
-				&& Objects.longValue(p.get("pages")) > 1)
+		if (enableMonthYearSelection() && p.containsKey("pages") &&
+				Objects.longValue(p.get("pages")) > 1)
 		{
 			throw new IllegalStateException(
 					"You cannot use a CalendarGroup with month/year selection!");
@@ -100,10 +100,10 @@
 		// ajax requests to not render the yui calendar multiple times
 		if (AjaxRequestTarget.get() != null)
 		{
-			final String javascript = "var e = Wicket.$('" + getEscapedComponentMarkupId() + "Dp"
-					+ "'); if (e != null && typeof(e.parentNode) != 'undefined' && "
-					+ "typeof(e.parentNode.parentNode != 'undefined')) "
-					+ "e.parentNode.parentNode.removeChild(e.parentNode);";
+			final String javascript = "var e = Wicket.$('" + getEscapedComponentMarkupId() + "Dp" +
+					"'); if (e != null && typeof(e.parentNode) != 'undefined' && " +
+					"typeof(e.parentNode.parentNode != 'undefined')) " +
+					"e.parentNode.parentNode.removeChild(e.parentNode);";
 
 			response.renderJavascript(javascript, null);
 		}
