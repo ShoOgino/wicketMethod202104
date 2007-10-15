@@ -1,13 +1,13 @@
 	/**
-	 * Either throws the exception wrapped as {@link WicketRuntimeException} or
-	 * silently ignores it. This method should ignore IO related exceptions like
-	 * connection reset by peer or broken pipe.
+	 * Either throws the exception wrapped as {@link WicketRuntimeException} or silently ignores it.
+	 * This method should ignore IO related exceptions like connection reset by peer or broken pipe.
 	 * 
 	 * @param e
 	 */
-	private void handleException(Exception e) {
+	private void handleException(Exception e)
+	{
 		// FIXME this doesn't catch all. For instance, Jetty (6/ NIO) on
-		// Unix like platforms will not be recogninzed as exceptions
+		// Unix like platforms will not be recognized as exceptions
 		// that should be ignored
 		Throwable throwable = e;
 		boolean ignoreException = false;
@@ -20,16 +20,16 @@
 			else if (throwable instanceof SocketException)
 			{
 				String message = throwable.getMessage();
-				ignoreException = message != null
-						&& (message.indexOf("Connection reset") != -1
-								|| message.indexOf("Broken pipe") != -1
-								|| message.indexOf("Socket closed") != -1 
-								|| message.indexOf("connection abort") != -1);
+				ignoreException = message != null &&
+						(message.indexOf("Connection reset") != -1 ||
+								message.indexOf("Broken pipe") != -1 ||
+								message.indexOf("Socket closed") != -1 || message
+								.indexOf("connection abort") != -1);
 			}
 			else
 			{
-				ignoreException = throwable.getClass().getName().indexOf("ClientAbortException") >= 0
-						|| throwable.getClass().getName().indexOf("EofException") >= 0;
+				ignoreException = throwable.getClass().getName().indexOf("ClientAbortException") >= 0 ||
+						throwable.getClass().getName().indexOf("EofException") >= 0;
 			}
 			if (ignoreException)
 			{
@@ -45,6 +45,6 @@
 		if (!ignoreException)
 		{
 			throw new WicketRuntimeException("Unable to write the response", e);
-		}		
+		}
 	}
 

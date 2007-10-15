@@ -1,6 +1,6 @@
 	/**
 	 * Process next header markup fragment.
-	 * 
+	 *
 	 * @param associatedMarkupStream
 	 * @return index or -1 when done
 	 */
@@ -21,7 +21,7 @@
 				WicketTag tag = (WicketTag)elem;
 				if (tag.isOpen() && tag.isHeadTag())
 				{
-					if (this.noMoreWicketHeadTagsAllowed == true)
+					if (noMoreWicketHeadTagsAllowed == true)
 					{
 						throw new MarkupException(
 								"<wicket:head> tags are only allowed before <body>, </head>, <wicket:panel> etc. tag");
@@ -32,7 +32,7 @@
 				else if (tag.isOpen()
 						&& (tag.isPanelTag() || tag.isBorderTag() || tag.isExtendTag()))
 				{
-					this.noMoreWicketHeadTagsAllowed = true;
+					noMoreWicketHeadTagsAllowed = true;
 				}
 			}
 			else if (elem instanceof ComponentTag)
@@ -41,12 +41,12 @@
 				// wicket:head must be before </head>
 				if (tag.isClose() && TagUtils.isHeadTag(tag))
 				{
-					this.noMoreWicketHeadTagsAllowed = true;
+					noMoreWicketHeadTagsAllowed = true;
 				}
 				// wicket:head must be before <body>
 				else if (tag.isOpen() && TagUtils.isBodyTag(tag))
 				{
-					this.noMoreWicketHeadTagsAllowed = true;
+					noMoreWicketHeadTagsAllowed = true;
 				}
 			}
 			elem = associatedMarkupStream.next();

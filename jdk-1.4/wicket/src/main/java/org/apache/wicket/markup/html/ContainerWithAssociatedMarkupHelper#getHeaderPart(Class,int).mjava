@@ -1,7 +1,7 @@
 	/**
 	 * Gets the header part of the Panel/Border. Returns null if it doesn't have
 	 * a header tag.
-	 * 
+	 *
 	 * @param index
 	 *            A unique index
 	 * @param markupClass
@@ -13,7 +13,7 @@
 	{
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
-		final MarkupStream markupStream = this.container.getAssociatedMarkupStream(false);
+		final MarkupStream markupStream = container.getAssociatedMarkupStream(false);
 
 		// Position markup stream at beginning of header tag
 		markupStream.setCurrentIndex(index);
@@ -29,13 +29,13 @@
 				// create a unique id for the HtmlHeaderContainer to be
 				// created
 				final String headerId = "_" + Classes.simpleName(markupClass)
-						+ this.container.getVariation() + "Header" + index;
+						+ container.getVariation() + "Header" + index;
 
 				// Create the header container and associate the markup with
 				// it
 				String scope = wTag.getAttributes().getString(
 						markupStream.getWicketNamespace() + ":scope");
-				final HeaderPartContainer headerContainer = ((IHeaderPartContainerProvider)this.container)
+				final HeaderPartContainer headerContainer = ((IHeaderPartContainerProvider)container)
 						.newHeaderPartContainer(headerId, scope);
 				headerContainer.setMyMarkupStream(markupStream);
 				headerContainer.setRenderBodyOnly(true);

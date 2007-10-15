@@ -1,64 +1,64 @@
 	/**
 	 * Gets the next tag from the input string.
-	 * 
+	 *
 	 * @return The extracted tag (will always be of type XmlTag).
 	 * @throws ParseException
 	 */
 	public final boolean next() throws ParseException
 	{
 		// Reached end of markup file?
-		if (this.input.getPosition() >= this.input.size())
+		if (input.getPosition() >= input.size())
 		{
 			return false;
 		}
 
-		if (this.skipUntilText != null)
+		if (skipUntilText != null)
 		{
 			skipUntil();
 			return true;
 		}
 
 		// Any more tags in the markup?
-		final int openBracketIndex = this.input.find('<');
+		final int openBracketIndex = input.find('<');
 
 		// Tag or Body?
-		if (this.input.charAt(this.input.getPosition()) != '<')
+		if (input.charAt(input.getPosition()) != '<')
 		{
 			if (openBracketIndex == -1)
 			{
 				// There is no next matching tag.
-				this.lastText = this.input.getSubstring(-1);
-				this.input.setPosition(this.input.size());
-				this.lastType = BODY;
+				lastText = input.getSubstring(-1);
+				input.setPosition(input.size());
+				lastType = BODY;
 				return true;
 			}
 
-			this.lastText = this.input.getSubstring(openBracketIndex);
-			this.input.setPosition(openBracketIndex);
-			this.lastType = BODY;
+			lastText = input.getSubstring(openBracketIndex);
+			input.setPosition(openBracketIndex);
+			lastType = BODY;
 			return true;
 		}
 
 		// Determine the line number
-		this.input.countLinesTo(openBracketIndex);
+		input.countLinesTo(openBracketIndex);
 
 		// Get index of closing tag and advance past the tag
-		int closeBracketIndex = this.input.find('>', openBracketIndex + 1);
+		int closeBracketIndex = input.find('>', openBracketIndex + 1);
 		if (closeBracketIndex == -1)
 		{
 			throw new ParseException("No matching close bracket at position " + openBracketIndex,
-					this.input.getPosition());
+					input.getPosition());
 		}
 
 		// Get the complete tag text
-		this.lastText = this.input.getSubstring(openBracketIndex, closeBracketIndex + 1);
+		lastText = input.getSubstring(openBracketIndex, closeBracketIndex + 1);
 
 		// Get the tagtext between open and close brackets
-		String tagText = this.lastText.subSequence(1, this.lastText.length() - 1).toString();
+		String tagText = lastText.subSequence(1, lastText.length() - 1).toString();
 		if (tagText.length() == 0)
 		{
 			throw new ParseException("Found empty tag: '<>' at position " + openBracketIndex,
-					this.input.getPosition());
+					input.getPosition());
 		}
 
 		// Handle special tags like <!-- and <![CDATA ...
@@ -98,38 +98,38 @@
 				if (lowerCase.startsWith("script"))
 				{
 					// prepare to skip everything between the open and close tag
-					this.skipUntilText = "script";
+					skipUntilText = "script";
 				}
 				else if (lowerCase.startsWith("style"))
 				{
 					// prepare to skip everything between the open and close tag
-					this.skipUntilText = "style";
+					skipUntilText = "style";
 				}
 			}
 		}
 
 		// Parse remaining tag text, obtaining a tag object or null
 		// if it's invalid
-		this.lastTag = parseTagText(tagText);
-		if (this.lastTag != null)
+		lastTag = parseTagText(tagText);
+		if (lastTag != null)
 		{
 			// Populate tag fields
-			this.lastTag.type = type;
-			this.lastTag.pos = openBracketIndex;
-			this.lastTag.length = this.lastText.length();
-			this.lastTag.text = this.lastText;
-			this.lastTag.lineNumber = this.input.getLineNumber();
-			this.lastTag.columnNumber = this.input.getColumnNumber();
+			lastTag.type = type;
+			lastTag.pos = openBracketIndex;
+			lastTag.length = lastText.length();
+			lastTag.text = lastText;
+			lastTag.lineNumber = input.getLineNumber();
+			lastTag.columnNumber = input.getColumnNumber();
 
 			// Move to position after the tag
-			this.input.setPosition(closeBracketIndex + 1);
-			this.lastType = TAG;
+			input.setPosition(closeBracketIndex + 1);
+			lastType = TAG;
 			return true;
 		}
 		else
 		{
-			throw new ParseException("Malformed tag (line " + this.input.getLineNumber()
-					+ ", column " + this.input.getColumnNumber() + ")", openBracketIndex);
+			throw new ParseException("Malformed tag (line " + input.getLineNumber()
+					+ ", column " + input.getColumnNumber() + ")", openBracketIndex);
 		}
 	}
 

@@ -1,8 +1,8 @@
 	/**
 	 * First render the body of the component. And if it is the header component
 	 * of a Page (compared to a Panel or Border), than get the header sections
-	 * from all component in the hierachie and render them as well.
-	 * 
+	 * from all component in the hierarchy and render them as well.
+	 *
 	 * @see org.apache.wicket.MarkupContainer#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
@@ -15,19 +15,19 @@
 		// web response.
 
 		// Temporarily replace the web response with a String response
-		final Response webResponse = this.getResponse();
+		final Response webResponse = getResponse();
 
 		try
 		{
 			final StringResponse response = new StringResponse();
-			this.getRequestCycle().setResponse(response);
+			getRequestCycle().setResponse(response);
 
 			IHeaderResponse headerResponse = getHeaderResponse();
 			if (!response.equals(headerResponse.getResponse()))
 			{
-				this.getRequestCycle().setResponse(headerResponse.getResponse());
+				getRequestCycle().setResponse(headerResponse.getResponse());
 			}
-			
+
 			// In any case, first render the header section directly associated
 			// with the markup
 			super.onComponentTagBody(markupStream, openTag);
@@ -76,7 +76,7 @@
 		finally
 		{
 			// Restore the original response
-			this.getRequestCycle().setResponse(webResponse);
+			getRequestCycle().setResponse(webResponse);
 		}
 	}
 

@@ -1,6 +1,6 @@
 		/**
 		 * Construct.
-		 * 
+		 *
 		 * @param request
 		 * @param url
 		 * @param encodedParamReplacement
@@ -11,10 +11,10 @@
 			this.request = request;
 
 			// Create a copy of the original parameter map
-			this.parameterMap = this.request.getParameterMap();
+			parameterMap = this.request.getParameterMap();
 
 			// Remove the 'x' parameter which contains ALL the encoded params
-			this.parameterMap.remove("x");
+			parameterMap.remove("x");
 			String decodedParamReplacement = encodedParamReplacement;
 			try
 			{
@@ -29,7 +29,7 @@
 			// Add ALL of the params from the decoded 'x' param
 			ValueMap params = new ValueMap();
 			RequestUtils.decodeParameters(decodedParamReplacement, params);
-			this.parameterMap.putAll(params);
+			parameterMap.putAll(params);
 
 			// Rebuild the URL with the 'x' param removed
 			int pos1 = url.indexOf("?x=");
