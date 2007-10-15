@@ -1,5 +1,5 @@
 	protected List discoverExamples(PortletContext portletContext)
-	{		
+	{
 		ArrayList examples = new ArrayList();
 		InputStream is = portletContext.getResourceAsStream("/WEB-INF/portlet.xml");
 		if (is != null)
@@ -13,7 +13,7 @@
 					XmlTag elem;
 					String name;
 					int level;
-					
+
 					do
 					{
 						elem = (XmlTag)parser.nextTag();
@@ -30,22 +30,22 @@
 					String filterQuery = null;
 					String displayName = null;
 					HashMap initParameters = new HashMap();
-					
+
 					level = 0;
-					
+
 					do
 					{
 						elem = (XmlTag)parser.nextTag();
 						name = elem.getName();
-						level = elem.isOpen() ? (level+1) : (level-1);
-						
+						level = elem.isOpen() ? (level + 1) : (level - 1);
+
 						if (level == 1)
 						{
-							if (name.equals("description")||name.equals("display-name"))
+							if (name.equals("description") || name.equals("display-name"))
 							{
 								parser.setPositionMarker();
 							}
-							
+
 							else if (name.equals("init-param"))
 							{
 								String initParamName = null;
@@ -54,10 +54,10 @@
 								{
 									elem = (XmlTag)parser.nextTag();
 									name = elem.getName();
-									level = elem.isOpen() ? (level+1) : (level-1);
+									level = elem.isOpen() ? (level + 1) : (level - 1);
 									if (level == 2)
 									{
-										if (name.equals("name")||name.equals("value"))
+										if (name.equals("name") || name.equals("value"))
 										{
 											parser.setPositionMarker();
 										}
@@ -66,11 +66,13 @@
 									{
 										if (name.equals("name"))
 										{
-											initParamName = parser.getInputFromPositionMarker(elem.getPos()).toString();
+											initParamName = parser.getInputFromPositionMarker(
+													elem.getPos()).toString();
 										}
 										else if (name.equals("value"))
 										{
-											initParamValue = parser.getInputFromPositionMarker(elem.getPos()).toString();
+											initParamValue = parser.getInputFromPositionMarker(
+													elem.getPos()).toString();
 										}
 									}
 								}
@@ -82,24 +84,28 @@
 							}
 						}
 						else if (level == 0)
-						{							
+						{
 							if (name.equals("description"))
 							{
-								description = parser.getInputFromPositionMarker(elem.getPos()).toString();
+								description = parser.getInputFromPositionMarker(elem.getPos())
+										.toString();
 							}
 							else if (name.equals("display-name"))
 							{
-								displayName = parser.getInputFromPositionMarker(elem.getPos()).toString();
+								displayName = parser.getInputFromPositionMarker(elem.getPos())
+										.toString();
 							}
 						}
 					}
 					while (level > -1);
-					filterPath = buildWicketFilterPath((String)initParameters.get(WICKET_FILTER_PATH_PARAM));					
+					filterPath = buildWicketFilterPath((String)initParameters
+							.get(WICKET_FILTER_PATH_PARAM));
 					if (displayName != null && filterPath != null && description != null)
 					{
 						filterQuery = buildWicketFilterQuery(filterPath);
 						validateDefaultPages(initParameters, filterPath, filterQuery);
-						ExampleApplication exampleApplication = new ExampleApplication(displayName, filterPath, filterQuery, initParameters, description);
+						ExampleApplication exampleApplication = new ExampleApplication(displayName,
+								filterPath, filterQuery, initParameters, description);
 						if (exampleApplication.getFilterPath().equals(getWicketFilterPath()))
 						{
 							examples.add(0, exampleApplication);

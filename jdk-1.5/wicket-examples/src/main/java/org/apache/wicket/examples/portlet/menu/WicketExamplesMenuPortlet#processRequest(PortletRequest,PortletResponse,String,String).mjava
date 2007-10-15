@@ -1,8 +1,10 @@
 	/**
-	 * @see org.apache.wicket.protocol.http.portlet.WicketPortlet#processRequest(javax.portlet.PortletRequest, javax.portlet.PortletResponse, java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.apache.wicket.protocol.http.portlet.WicketPortlet#processRequest(javax.portlet.PortletRequest,
+	 *      javax.portlet.PortletResponse, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	protected void processRequest(PortletRequest request, PortletResponse response, String requestType, String pageType) throws PortletException, IOException
+	protected void processRequest(PortletRequest request, PortletResponse response,
+			String requestType, String pageType) throws PortletException, IOException
 	{
 		PortletSession session = request.getPortletSession();
 		ExampleApplication ea = (ExampleApplication)session.getAttribute(EXAMPLE_APPLICATION_ATTR);
@@ -28,7 +30,8 @@
 			}
 			session.setAttribute(EXAMPLE_APPLICATION_ATTR, ea);
 		}
-		if (ea == null || ea.getFilterPath().equals(getWicketFilterPath()) || !PortletMode.VIEW.equals(request.getPortletMode()))
+		if (ea == null || ea.getFilterPath().equals(getWicketFilterPath()) ||
+				!PortletMode.VIEW.equals(request.getPortletMode()))
 		{
 			request.setAttribute(PROCESS_MENU_APPLICATION, Boolean.TRUE);
 			request.setAttribute(EXAMPLE_APPLICATION_ATTR, examples.get(0));
@@ -36,7 +39,8 @@
 		}
 		else
 		{
-			if (WicketPortlet.ACTION_REQUEST.equals(requestType) || request.getParameter(PORTLET_RESOURCE_URL_PARAMETER) != null)
+			if (WicketPortlet.ACTION_REQUEST.equals(requestType) ||
+					request.getParameter(PORTLET_RESOURCE_URL_PARAMETER) != null)
 			{
 				if (request.getParameter(MENU_APPLICATION_URL_PORTLET_PARAMETER) != null)
 				{
