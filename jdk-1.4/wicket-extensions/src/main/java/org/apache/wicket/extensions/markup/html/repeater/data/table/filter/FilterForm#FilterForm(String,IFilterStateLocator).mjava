@@ -12,7 +12,7 @@
 
 		// add hidden field used for managing current focus
 		hidden = new HiddenField("focus-tracker", new Model());
-		
+
 		hidden.add(new AbstractBehavior()
 		{
 			private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@
 			}
 		});
 		add(hidden);
-		
+
 		// add javascript to restore focus to a filter component
 		add(new WebMarkupContainer("focus-restore")
 		{
@@ -32,8 +32,9 @@
 
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 			{
-				AppendingStringBuffer script = new AppendingStringBuffer("<script>_filter_focus_restore('").append(
-						getFocusTrackerFieldCssId()).append("');</script>");
+				AppendingStringBuffer script = new AppendingStringBuffer(
+						"<script>_filter_focus_restore('").append(getFocusTrackerFieldCssId())
+						.append("');</script>");
 				replaceComponentTagBody(markupStream, openTag, script);
 			}
 		});
