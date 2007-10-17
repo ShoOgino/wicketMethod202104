@@ -11,13 +11,13 @@
 	 */
 	public Component setModel(final IModel model)
 	{
+		IModel prevModel = getModelImpl();
 		// Detach current model
-		if (this.model != null)
+		if (prevModel != null)
 		{
-			this.model.detach();
+			prevModel.detach();
 		}
 
-		IModel prevModel = this.model;
 		if (prevModel instanceof IWrapModel)
 		{
 			prevModel = ((IWrapModel)prevModel).getWrappedModel();
@@ -31,7 +31,7 @@
 				addStateChange(new ComponentModelChange(prevModel));
 			}
 
-			this.model = wrap(model);
+			setModelImp(wrap(model));
 		}
 
 		modelChanged();
