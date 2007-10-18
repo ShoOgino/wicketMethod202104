@@ -6,6 +6,16 @@
 	 */
 	protected String getFromCache(final String cacheKey)
 	{
-		return (String)cache.get(cacheKey);
+		final String value = (String)cache.get(cacheKey);
+
+		// ConcurrentHashMap does not allow null values
+		if (value == NULL_VALUE)
+		{
+			return null;
+		}
+		else
+		{
+			return value;
+		}
 	}
 

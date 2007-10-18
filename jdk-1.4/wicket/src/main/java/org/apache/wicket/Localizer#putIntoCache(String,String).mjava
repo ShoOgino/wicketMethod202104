@@ -6,6 +6,14 @@
 	 */
 	protected void putIntoCache(final String cacheKey, final String string)
 	{
-		cache.put(cacheKey, string);
+		// ConcurrentHashMap does not allow null values
+		if (string == null)
+		{
+			cache.put(cacheKey, NULL_VALUE);
+		}
+		else
+		{
+			cache.put(cacheKey, string);
+		}
 	}
 
