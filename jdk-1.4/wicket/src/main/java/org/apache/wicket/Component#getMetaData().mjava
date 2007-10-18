@@ -1,21 +1,25 @@
 	private MetaDataEntry[] getMetaData()
 	{
-		if (data instanceof MetaDataEntry[])
+		MetaDataEntry[] metaData = null;
+
+		// index where we should expect the entry
+		int index = getFlag(FLAG_MODEL_SET) ? 1 : 0;
+
+		int length = data_length();
+
+		if (index < length)
 		{
-			return (MetaDataEntry[])data;
-		}
-		else if (data instanceof Object[])
-		{
-			Object[] tmp = (Object[])data;
-			if (tmp[0] instanceof MetaDataEntry[])
+			Object object = data_get(index);
+			if (object instanceof MetaDataEntry[])
 			{
-				return (MetaDataEntry[])tmp[0];
+				metaData = (MetaDataEntry[])object;
 			}
-			else if (tmp[1] instanceof MetaDataEntry[])
+			else if (object instanceof MetaDataEntry)
 			{
-				return (MetaDataEntry[])tmp[1];
+				metaData = new MetaDataEntry[] { (MetaDataEntry)object };
 			}
 		}
-		return null;
+
+		return metaData;
 	}
 

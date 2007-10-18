@@ -13,46 +13,41 @@
 	 */
 	public String getMarkupId()
 	{
-		String markupId = (String)getMetaData(MARKUP_ID_KEY);
-		if (markupId == null)
+		Object storedMarkupId = getMarkupIdImpl();
+
+		if (storedMarkupId instanceof String)
 		{
-			Page page = findPage();
-			if (page == null)
-			{
-				throw new WicketRuntimeException(
-						"This component is not (yet) coupled to a page. It has to be able "
-								+ "to find the page it is supposed to operate in before you can call "
-								+ "this method (Component#getMarkupId)");
-			}
-			// try to read from markup
-			// TODO getting the id from markup doesn't work everywhere yet.
-			// unfortunately, we have to drop this until we have a good solution
-			// for issue http://issues.apache.org/jira/browse/WICKET-694
-			// markupId = getMarkupAttributes().getString("id");
-
-			// if (markupId == null)
-			// {
-			// if not in the markup, generate one
-
-			markupId = RequestContext.get().encodeMarkupId(getId() + page.getAutoIndex());
-			// make sure id is compliant with w3c requirements (starts with a
-			// letter)
-			char c = markupId.charAt(0);
-			if (!Character.isLetter(c))
-			{
-				markupId = "id" + markupId;
-			}
-
-			// escape some noncompliant characters
-			markupId = Strings.replaceAll(markupId, "_", "__").toString();
-			markupId = markupId.replace('.', '_');
-			markupId = markupId.replace('-', '_');
-
-
-			// }
-			setMetaData(MARKUP_ID_KEY, markupId);
-
+			return (String)storedMarkupId;
 		}
+
+		final int generatedMarkupId = storedMarkupId instanceof Integer ? ((Integer)storedMarkupId)
+				.intValue() : nextAutoIndex();
+
+		if (storedMarkupId == null)
+		{
+			setMarkupIdImpl(new Integer(generatedMarkupId));
+		}
+
+		// try to read from markup
+		// TODO getting the id from markup doesn't work everywhere yet.
+		// unfortunately, we have to drop this until we have a good solution
+		// for issue http://issues.apache.org/jira/browse/WICKET-694
+		// markupId = getMarkupAttributes().getString("id");
+
+		String markupId = RequestContext.get().encodeMarkupId(getId() + generatedMarkupId);
+		// make sure id is compliant with w3c requirements (starts with a
+		// letter)
+		char c = markupId.charAt(0);
+		if (!Character.isLetter(c))
+		{
+			markupId = "id" + markupId;
+		}
+
+		// escape some noncompliant characters
+		markupId = Strings.replaceAll(markupId, "_", "__").toString();
+		markupId = markupId.replace('.', '_');
+		markupId = markupId.replace('-', '_');
+
 		return markupId;
 	}
 
