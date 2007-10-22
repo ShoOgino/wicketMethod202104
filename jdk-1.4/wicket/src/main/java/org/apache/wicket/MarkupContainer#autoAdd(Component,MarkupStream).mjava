@@ -26,21 +26,29 @@
 
 		/* Replace strategy */
 		component.setAuto(true);
-// if (get(component.getId()) != null)
-// {
-// this.remove(component);
-// }
+
+		int index = children_indexOf(component);
+		if (index >= 0)
+		{
+			children_remove(index);
+		}
 		add(component);
 		component.prepareForRender();
-		if (markupStream == null)
+		try
 		{
-			component.render();
+			if (markupStream == null)
+			{
+				component.render();
+			}
+			else
+			{
+				component.render(markupStream);
+			}
 		}
-		else
+		finally
 		{
-			component.render(markupStream);
+			component.afterRender();
 		}
-		remove(component);
 		return true;
 	}
 
