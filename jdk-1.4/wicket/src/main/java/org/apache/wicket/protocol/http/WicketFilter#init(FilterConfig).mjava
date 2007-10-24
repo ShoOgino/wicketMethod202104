@@ -88,18 +88,9 @@
 			portletOnlyFilter = Boolean.valueOf(filterConfig.getInitParameter(PORTLET_ONLY_FILTER))
 					.booleanValue();
 
-			if (portletContextAvailable == null)
+			if (isPortletContextAvailable(filterConfig))
 			{
-				try
-				{
-					Class portletClass = Class.forName("javax.portlet.PortletContext");
-					portletContextAvailable = Boolean.TRUE;
-					filterPortletContext = newWicketFilterPortletContext();
-				}
-				catch (ClassNotFoundException e)
-				{
-					portletContextAvailable = Boolean.FALSE;
-				}
+				filterPortletContext = newWicketFilterPortletContext();
 			}
 			if (filterPortletContext != null)
 			{
