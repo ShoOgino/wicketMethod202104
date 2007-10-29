@@ -5,23 +5,24 @@
 	{
 		onPopulate();
 
-		// TODO possibly enable this only in development mode
-		Iterator i = iterator();
-		while (i.hasNext())
+		if (Application.get().getConfigurationType().equals(Application.DEVELOPMENT))
 		{
-			Component c = (Component)i.next();
-			Matcher matcher = SAFE_CHILD_ID_PATTERN.matcher(c.getId());
-			if (!matcher.matches())
+			Iterator i = iterator();
+			while (i.hasNext())
 			{
-				log.warn("Child component of repeater " + getClass().getName() + ":" + getId() +
-						" has a non-safe child id of " + c.getId() +
-						". Safe child ids must be composed of digits only.");
-				// do not flood the log
-				break;
+				Component c = (Component)i.next();
+				Matcher matcher = SAFE_CHILD_ID_PATTERN.matcher(c.getId());
+				if (!matcher.matches())
+				{
+					log.warn("Child component of repeater " + getClass().getName() + ":" + getId() +
+							" has a non-safe child id of " + c.getId() +
+							". Safe child ids must be composed of digits only.");
+					// do not flood the log
+					break;
+				}
+
 			}
-
 		}
-
 		super.onBeforeRender();
 	}
 
