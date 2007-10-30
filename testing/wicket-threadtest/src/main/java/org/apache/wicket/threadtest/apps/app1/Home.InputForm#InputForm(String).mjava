@@ -4,12 +4,15 @@
 		 * @param name
 		 *            Component name
 		 */
-		public InputForm(String name) {
+		public InputForm(String name)
+		{
 			super(name, new CompoundPropertyModel(new FormInputModel()));
 			add(new LocaleDropDownChoice("localeSelect"));
-			add(new Link("defaultLocaleLink") {
-				public void onClick() {
-					WebRequest request = (WebRequest) getRequest();
+			add(new Link("defaultLocaleLink")
+			{
+				public void onClick()
+				{
+					WebRequest request = (WebRequest)getRequest();
 					setLocale(request.getLocale());
 				}
 			});
@@ -23,7 +26,8 @@
 			add(dateLabel);
 			TextField datePropertyTextField = new TextField("dateProperty", Date.class);
 			add(datePropertyTextField);
-			add(new TextField("integerInRangeProperty", Integer.class).add(NumberValidator.range(0, 100)));
+			add(new TextField("integerInRangeProperty", Integer.class).add(NumberValidator.range(0,
+					100)));
 			add(new CheckBox("booleanProperty"));
 			RadioChoice rc = new RadioChoice("numberRadioChoice", NUMBERS).setSuffix("");
 			rc.setLabel(new Model("number"));
@@ -31,8 +35,10 @@
 
 			RadioGroup group = new RadioGroup("numbersGroup");
 			add(group);
-			ListView persons = new ListView("numbers", NUMBERS) {
-				protected void populateItem(ListItem item) {
+			ListView persons = new ListView("numbers", NUMBERS)
+			{
+				protected void populateItem(ListItem item)
+				{
 					item.add(new Radio("radio", item.getModel()));
 					item.add(new Label("number", item.getModelObjectAsString()));
 				};
@@ -41,8 +47,10 @@
 
 			CheckGroup checks = new CheckGroup("numbersCheckGroup");
 			add(checks);
-			ListView checksList = new ListView("numbers", NUMBERS) {
-				protected void populateItem(ListItem item) {
+			ListView checksList = new ListView("numbers", NUMBERS)
+			{
+				protected void populateItem(ListItem item)
+				{
 					item.add(new Check("check", item.getModel()));
 					item.add(new Label("number", item.getModelObjectAsString()));
 				};
@@ -51,17 +59,24 @@
 
 			add(new ListMultipleChoice("siteSelection", SITES));
 
-			add(new TextField("urlProperty", URL.class) {
-				public IConverter getConverter(Class clazz) {
-					return new IConverter() {
+			add(new TextField("urlProperty", URL.class)
+			{
+				public IConverter getConverter(Class clazz)
+				{
+					return new IConverter()
+					{
 						/**
 						 * @see org.apache.wicket.util.convert.IConverter#convertToObject(java.lang.String,
 						 *      java.util.Locale)
 						 */
-						public Object convertToObject(String value, Locale locale) {
-							try {
+						public Object convertToObject(String value, Locale locale)
+						{
+							try
+							{
 								return new URL(value.toString());
-							} catch (MalformedURLException e) {
+							}
+							catch (MalformedURLException e)
+							{
 								throw new ConversionException("'" + value + "' is not a valid URL");
 							}
 						}
@@ -70,15 +85,18 @@
 						 * @see org.apache.wicket.util.convert.IConverter#convertToString(java.lang.Object,
 						 *      java.util.Locale)
 						 */
-						public String convertToString(Object value, Locale locale) {
+						public String convertToString(Object value, Locale locale)
+						{
 							return value != null ? value.toString() : null;
 						}
 					};
 				}
 			});
 
-			add(new TextField("phoneNumberUS", UsPhoneNumber.class) {
-				public IConverter getConverter(Class clazz) {
+			add(new TextField("phoneNumberUS", UsPhoneNumber.class)
+			{
+				public IConverter getConverter(Class clazz)
+				{
 					return new MaskConverter("(###) ###-####", UsPhoneNumber.class);
 				}
 			});
@@ -87,8 +105,10 @@
 
 			add(new ImageButton("saveButton"));
 
-			add(new Link("resetButtonLink") {
-				public void onClick() {
+			add(new Link("resetButtonLink")
+			{
+				public void onClick()
+				{
 					InputForm.this.modelChanged();
 				}
 			}.add(new Image("resetButtonImage")));

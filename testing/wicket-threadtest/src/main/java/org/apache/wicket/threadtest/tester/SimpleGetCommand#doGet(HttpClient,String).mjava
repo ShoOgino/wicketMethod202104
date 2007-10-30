@@ -3,22 +3,28 @@
 	 *      java.lang.String)
 	 */
 	@Override
-	protected void doGet(HttpClient client, String url) throws Exception {
+	protected void doGet(HttpClient client, String url) throws Exception
+	{
 
 		GetMethod method = new GetMethod(url);
 		method.setFollowRedirects(true);
-		try {
+		try
+		{
 			int code = client.executeMethod(method);
-			if (code != 200) {
+			if (code != 200)
+			{
 				log.error("ERROR! code: " + code);
 				log.error(Streams.readString(method.getResponseBodyAsStream()));
 				// TODO rather than failing, just gather statistics
 				// throw new Exception(new String(method.getResponseBody()));
 			}
-			if (getPrintResponse()) {
+			if (getPrintResponse())
+			{
 				log.info("\n" + Streams.readString(method.getResponseBodyAsStream()));
 			}
-		} finally {
+		}
+		finally
+		{
 			method.releaseConnection();
 		}
 	}

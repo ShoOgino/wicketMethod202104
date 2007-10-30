@@ -3,7 +3,8 @@
 	 * 
 	 * @throws Exception
 	 */
-	public void run() throws Exception {
+	public void run() throws Exception
+	{
 
 		activeThreads = 0;
 
@@ -14,31 +15,43 @@
 
 		Server server = null;
 		GetMethod getMethod = new GetMethod("http://localhost:" + port + "/");
-		try {
+		try
+		{
 			getMethod.setFollowRedirects(true);
 			HttpClient httpClient = new HttpClient(params, manager);
 			int code = httpClient.executeMethod(getMethod);
-			if (code != 200) {
+			if (code != 200)
+			{
 				server = startServer(port);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			server = startServer(port);
-		} finally {
+		}
+		finally
+		{
 			getMethod.releaseConnection();
 		}
 
-		try {
+		try
+		{
 
 			ThreadGroup g = new ThreadGroup("runners");
 			Thread[] threads = new Thread[numberOfThreads];
 			HttpClient client = null;
-			for (int i = 0; i < numberOfThreads; i++) {
+			for (int i = 0; i < numberOfThreads; i++)
+			{
 
-				if (multipleSessions) {
+				if (multipleSessions)
+				{
 					client = new HttpClient(params, manager);
 					client.getHostConfiguration().setHost(host, port);
-				} else {
-					if (client == null) {
+				}
+				else
+				{
+					if (client == null)
+					{
 						client = new HttpClient(params, manager);
 						client.getHostConfiguration().setHost(host, port);
 					}
@@ -48,24 +61,31 @@
 
 			long start = System.currentTimeMillis();
 
-			for (int i = 0; i < numberOfThreads; i++) {
+			for (int i = 0; i < numberOfThreads; i++)
+			{
 				activeThreads++;
 				threads[i].start();
 			}
 
-			while (activeThreads > 0) {
-				synchronized (this) {
+			while (activeThreads > 0)
+			{
+				synchronized (this)
+				{
 					wait();
 				}
 			}
 
 			long end = System.currentTimeMillis();
 			long time = end - start;
-			log.info("\n******** finished in " + Duration.milliseconds(time) + " (" + time + " milis)");
+			log.info("\n******** finished in " + Duration.milliseconds(time) + " (" + time
+					+ " milis)");
 
-		} finally {
+		}
+		finally
+		{
 			MultiThreadedHttpConnectionManager.shutdownAll();
-			if (server != null) {
+			if (server != null)
+			{
 				server.stop();
 			}
 		}
