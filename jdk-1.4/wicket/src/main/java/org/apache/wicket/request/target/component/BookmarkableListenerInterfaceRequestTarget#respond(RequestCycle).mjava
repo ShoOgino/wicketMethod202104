@@ -1,5 +1,16 @@
 	public void respond(RequestCycle requestCycle)
 	{
-		getPage(requestCycle).renderPage();
+		Page page = getPage(requestCycle);
+		// if the listener call wanted to redirect
+		// then do that if the page is not stateless.
+		if (requestCycle.isRedirect() && !page.isPageStateless())
+		{
+			requestCycle.redirectTo(page);
+		}
+		else
+		{
+			// else render the page directly
+			page.renderPage();
+		}
 	}
 
