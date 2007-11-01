@@ -3,6 +3,16 @@
 	 */
 	public boolean matches(String path)
 	{
+		RequestCycle rc = RequestCycle.get();
+
+		// the null check is necessary, as this method is first time called from WicketFilter when
+		// no RequestCycle exists yet
+		if (rc != null && ((WebRequest)rc.getRequest()).isAjax())
+		{
+			// HybridUrlCodingStrategy doesn't make sense for ajax request
+			return false;
+		}
+
 		if (path.startsWith(getMountPath()))
 		{
 			/*
@@ -18,11 +28,10 @@
 			 * We also need to accept /mount/point(XXX)
 			 */
 			if (remainder.length() > getBeginSeparator().length() + getEndSeparator().length() &&
-					remainder.startsWith(getBeginSeparator()) &&
-					remainder.endsWith(getEndSeparator()))
+				remainder.startsWith(getBeginSeparator()) && remainder.endsWith(getEndSeparator()))
 			{
 				String substring = remainder.substring(getBeginSeparator().length(), //
-						remainder.length() - getEndSeparator().length());
+					remainder.length() - getEndSeparator().length());
 				PageInfo info = PageInfo.parsePageInfo(substring);
 				if (info != null)
 				{

@@ -15,7 +15,7 @@
 
 		// decode parameters
 		PageParameters parameters = new PageParameters(decodeParameters(extraction
-				.getUrlAfterExtraction(), requestParameters.getParameters()));
+			.getUrlAfterExtraction(), requestParameters.getParameters()));
 
 		if (requestParameters.getPageMapName() == null)
 		{
@@ -30,12 +30,12 @@
 		// bookmarkable page, or a request to a stateless page (in which case a
 		// wicket:interface parameter should be available
 		final String interfaceParameter = (String)parameters
-				.remove(WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
+			.remove(WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
 
 		// we need to remember the amount of trailing slashes after the redirect
 		// (otherwise we'll break relative urls)
 		int originalUrlTrailingSlashesCount = getTrailingSlashesCount(extraction
-				.getUrlAfterExtraction());
+			.getUrlAfterExtraction());
 
 		boolean redirect = isRedirectOnBookmarkableRequest();
 		if (Strings.isEmpty(pageMapName) != true && alwaysRedirectWhenPageMapIsSpecified())
@@ -48,14 +48,14 @@
 			// stateless listener interface
 			WebRequestCodingStrategy.addInterfaceParameters(interfaceParameter, requestParameters);
 			return new BookmarkableListenerInterfaceRequestTarget(pageMapName, (Class)pageClassRef
-					.get(), parameters, requestParameters.getComponentPath(), requestParameters
-					.getInterfaceName(), requestParameters.getVersionNumber());
+				.get(), parameters, requestParameters.getComponentPath(), requestParameters
+				.getInterfaceName(), requestParameters.getVersionNumber());
 		}
 		else if (pageId == null)
 		{
 			// bookmarkable page request
 			return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef.get(),
-					parameters, originalUrlTrailingSlashesCount, redirect);
+				parameters, originalUrlTrailingSlashesCount, redirect);
 		}
 		else
 		// hybrid url
@@ -63,15 +63,15 @@
 			Page page;
 
 			if (Strings.isEmpty(pageMapName) && Application.exists() &&
-					Application.get().getSessionSettings().isPageIdUniquePerSession())
+				Application.get().getSessionSettings().isPageIdUniquePerSession())
 			{
 				page = Session.get().getPage(pageId.intValue(),
-						pageVersion != null ? pageVersion.intValue() : 0);
+					pageVersion != null ? pageVersion.intValue() : 0);
 			}
 			else
 			{
 				page = Session.get().getPage(pageMapName, "" + pageId,
-						pageVersion != null ? pageVersion.intValue() : 0);
+					pageVersion != null ? pageVersion.intValue() : 0);
 			}
 
 			// check if the found page match the required class
@@ -86,7 +86,7 @@
 				// we didn't find the page, act as bookmarkable page request -
 				// create new instance
 				return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-						.get(), parameters, originalUrlTrailingSlashesCount, redirect);
+					.get(), parameters, originalUrlTrailingSlashesCount, redirect);
 			}
 		}
 
