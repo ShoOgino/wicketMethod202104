@@ -27,7 +27,7 @@
 			Session session = Session.get();
 
 			Session.PageMapAccessMetaData meta = (Session.PageMapAccessMetaData)session
-					.getMetaData(Session.PAGEMAP_ACCESS_MDK);
+				.getMetaData(Session.PAGEMAP_ACCESS_MDK);
 			if (meta == null)
 			{
 				meta = new Session.PageMapAccessMetaData();
@@ -40,7 +40,7 @@
 				// this is the first access to the pagemap, set window.name
 				JavascriptUtils.writeOpenTag(response);
 				response
-						.write("if (window.name=='' || window.name.indexOf('wicket') > -1) { window.name=\"");
+					.write("if (window.name=='' || window.name.indexOf('wicket') > -1) { window.name=\"");
 				response.write("wicket-" + name);
 				response.write("\"; }");
 				JavascriptUtils.writeCloseTag(response);
@@ -56,8 +56,8 @@
 				{
 					IBookmarkablePageRequestTarget current = (IBookmarkablePageRequestTarget)target;
 					BookmarkablePageRequestTarget redirect = new BookmarkablePageRequestTarget(
-							session.createAutoPageMapName(), current.getPageClass(), current
-									.getPageParameters());
+						session.createAutoPageMapName(), current.getPageClass(), current
+							.getPageParameters());
 					url = cycle.urlFor(redirect);
 				}
 				else
@@ -66,11 +66,11 @@
 				}
 				JavascriptUtils.writeOpenTag(response);
 				response
-						.write("if (window.name=='' || (window.name.indexOf('wicket') > -1 && window.name!='" +
-								"wicket-" + name + "')) { window.location=\"");
+					.write("if (window.name=='' || (window.name.indexOf('wicket') > -1 && window.name!='" +
+						"wicket-" + name + "')) { window.location=\"");
 				response.write(url);
 				response
-						.write("\" + (window.location.hash != null ? window.location.hash : \"\"); }");
+					.write("\" + (window.location.hash != null ? window.location.hash : \"\"); }");
 				JavascriptUtils.writeCloseTag(response);
 			}
 		}
