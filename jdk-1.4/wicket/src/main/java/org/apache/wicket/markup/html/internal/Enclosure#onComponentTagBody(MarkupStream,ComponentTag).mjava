@@ -13,12 +13,12 @@
 		if (childComponent == this)
 		{
 			throw new WicketRuntimeException(
-					"Programming error: childComponent == enclose component; endless loop");
+				"Programming error: childComponent == enclose component; endless loop");
 		}
 		else if (childComponent != null)
 		{
 			// Delegate to child component
-			setVisible(childComponent.isVisible());
+			setVisible(childComponent.isVisible() && childComponent.isRenderAllowed());
 		}
 
 		if (isVisible() == true)
