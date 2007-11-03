@@ -17,7 +17,7 @@
 	 *             If resource not found and configuration dictates that exception should be thrown
 	 */
 	public String getString(final String key, final Component component, final IModel model,
-			final String defaultValue) throws MissingResourceException
+		final String defaultValue) throws MissingResourceException
 	{
 		final IResourceSettings resourceSettings = Application.get().getResourceSettings();
 
@@ -32,11 +32,11 @@
 			if (!addedToPage)
 			{
 				logger
-						.warn(
-								"Tried to retrieve a localized string for a component that has not yet been added to the page. "
-										+ "This can sometimes lead to an invalid or no localized resource returned. "
-										+ "Make sure you are not calling Component#getString() inside your Component's constructor. "
-										+ "Offending component: {}", component);
+					.warn(
+						"Tried to retrieve a localized string for a component that has not yet been added to the page. "
+							+ "This can sometimes lead to an invalid or no localized resource returned. "
+							+ "Make sure you are not calling Component#getString() inside your Component's constructor. "
+							+ "Offending component: {}", component);
 			}
 		}
 
@@ -98,8 +98,8 @@
 
 		if (resourceSettings.getThrowExceptionOnMissingResource())
 		{
-			AppendingStringBuffer message = new AppendingStringBuffer("Unable to find resource: "
-					+ key);
+			AppendingStringBuffer message = new AppendingStringBuffer("Unable to find resource: " +
+				key);
 			if (component != null)
 			{
 				message.append(" for component: ");
@@ -107,7 +107,7 @@
 				message.append(" [class=").append(component.getClass().getName()).append("]");
 			}
 			throw new MissingResourceException(message.toString(), (component != null ? component
-					.getClass().getName() : ""), key);
+				.getClass().getName() : ""), key);
 		}
 
 		return "[Warning: String resource for '" + key + "' not found]";
