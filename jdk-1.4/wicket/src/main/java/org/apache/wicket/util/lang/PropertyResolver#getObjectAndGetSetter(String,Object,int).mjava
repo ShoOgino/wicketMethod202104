@@ -1,9 +1,9 @@
 	private static ObjectAndGetSetter getObjectAndGetSetter(final String expression,
-			final Object object, int tryToCreateNull)
+		final Object object, int tryToCreateNull)
 	{
 		final String expressionBracketsSeperated = Strings.replaceAll(expression, "[", ".[")
-				.toString();
-		int index = expressionBracketsSeperated.indexOf('.');
+			.toString();
+		int index = getNextDotIndex(expressionBracketsSeperated, 0);
 		int lastIndex = 0;
 		Object value = object;
 		Class clz = value.getClass();
@@ -21,11 +21,11 @@
 
 				// expression by it self can't be found. try to find a
 				// setPropertyByIndex(int,value) method
-				index = expressionBracketsSeperated.indexOf('.', index + 1);
+				index = getNextDotIndex(expressionBracketsSeperated, index + 1);
 				if (index != -1)
 				{
 					String indexExpression = expressionBracketsSeperated
-							.substring(lastIndex, index);
+						.substring(lastIndex, index);
 					getAndSetter = getGetAndSetter(indexExpression, clz);
 				}
 				else
@@ -66,7 +66,7 @@
 			}
 
 			lastIndex = index + 1;
-			index = expressionBracketsSeperated.indexOf('.', lastIndex);
+			index = getNextDotIndex(expressionBracketsSeperated, lastIndex);
 			if (index == -1)
 			{
 				exp = expressionBracketsSeperated.substring(lastIndex);

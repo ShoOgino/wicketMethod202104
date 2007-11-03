@@ -46,7 +46,7 @@
 						if (method != null)
 						{
 							getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(
-									method, clz), null);
+								method, clz), null);
 						}
 						else
 						{
@@ -58,10 +58,10 @@
 							else
 							{
 								throw new WicketRuntimeException(
-										"The expression '" +
-												exp +
-												"' is neither an index nor is it a method or field for the list " +
-												clz);
+									"The expression '" +
+										exp +
+										"' is neither an index nor is it a method or field for the list " +
+										clz);
 							}
 						}
 					}
@@ -86,7 +86,7 @@
 						else
 						{
 							throw new WicketRuntimeException("can't parse the exp " + exp +
-									" as an index for an array lookup");
+								" as an index for an array lookup");
 						}
 					}
 				}
@@ -111,7 +111,7 @@
 									// getPropertyIndex(int)
 									// and setPropertyIndex(int, object)
 									String name = Character.toUpperCase(propertyName.charAt(0)) +
-											propertyName.substring(1);
+										propertyName.substring(1);
 									method = clz.getMethod("get" + name, new Class[] { int.class });
 									getAndSetter = new ArrayPropertyGetSet(method, parsedIndex);
 
@@ -119,8 +119,8 @@
 								catch (Exception e)
 								{
 									throw new WicketRuntimeException(
-											"no get method defined for class: " + clz +
-													" expression: " + propertyName);
+										"no get method defined for class: " + clz +
+											" expression: " + propertyName);
 								}
 							}
 							else
@@ -130,14 +130,14 @@
 								// not good
 								// programming with beans patterns
 								throw new WicketRuntimeException(
-										"No get method defined for class: " + clz +
-												" expression: " + exp);
+									"No get method defined for class: " + clz + " expression: " +
+										exp);
 							}
 						}
 						else
 						{
 							getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(
-									method, clz), field);
+								method, clz), field);
 						}
 					}
 					else
@@ -150,7 +150,7 @@
 			{
 				field = findField(clz, exp);
 				getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(method, clz),
-						field);
+					field);
 			}
 			getAndSetters.put(exp, getAndSetter);
 		}
