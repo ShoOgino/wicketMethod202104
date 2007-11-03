@@ -1,15 +1,23 @@
 	public Object locateProxyTarget()
 	{
-		GuiceInjectorHolder holder = (GuiceInjectorHolder)Application.get().getMetaData(
+		final GuiceInjectorHolder holder = (GuiceInjectorHolder)Application.get().getMetaData(
 				GuiceInjectorHolder.INJECTOR_KEY);
+
+		final GuiceTypeStore typeStore = (GuiceTypeStore)Application.get().getMetaData(
+				GuiceTypeStore.TYPESTORE_KEY);
+		final Type type = typeStore.getType(typeName);
+
+		// using TypeLiteral to retrieve the key gives us automatic support for
+		// Providers and other injectable TypeLiterals
 		final Key< ? > key;
+
 		if (bindingAnnotation == null)
 		{
-			key = Key.get(Classes.resolveClass(typeName));
+			key = Key.get(TypeLiteral.get(type));
 		}
 		else
 		{
-			key = Key.get(Classes.resolveClass(typeName), bindingAnnotation);
+			key = Key.get(TypeLiteral.get(type), bindingAnnotation);
 		}
 		return holder.getInjector().getInstance(key);
 	}
