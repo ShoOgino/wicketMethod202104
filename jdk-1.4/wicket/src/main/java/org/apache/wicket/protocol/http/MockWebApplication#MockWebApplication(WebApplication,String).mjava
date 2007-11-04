@@ -69,7 +69,7 @@
 		// Construct mock session, request and response
 		servletSession = new MockHttpSession(context);
 		servletRequest = new MockHttpServletRequest(this.application, servletSession, context);
-		servletResponse = new MockHttpServletResponse();
+		servletResponse = new MockHttpServletResponse(servletRequest);
 
 		// Construct request and response using factories
 		wicketRequest = this.application.newWebRequest(servletRequest);
@@ -79,7 +79,7 @@
 		createRequestCycle();
 
 		this.application.getRequestCycleSettings().setRenderStrategy(
-				IRequestCycleSettings.ONE_PASS_RENDER);
+			IRequestCycleSettings.ONE_PASS_RENDER);
 		this.application.getResourceSettings().setResourceFinder(new WebApplicationPath(context));
 		this.application.getPageSettings().setAutomaticMultiWindowSupport(false);
 

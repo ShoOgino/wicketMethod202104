@@ -10,15 +10,15 @@
 		{
 			// handle redirects which are usually managed by the browser
 			// transparently
-			final MockHttpServletResponse httpResponse = (MockHttpServletResponse)cycle
-					.getWebResponse().getHttpServletResponse();
+			final MockHttpServletResponse httpResponse = (MockHttpServletResponse)cycle.getWebResponse()
+				.getHttpServletResponse();
 
 			if (httpResponse.isRedirect())
 			{
 				lastRenderedPage = generateLastRenderedPage(cycle);
 
 				MockHttpServletRequest newHttpRequest = new MockHttpServletRequest(application,
-						servletSession, application.getServletContext());
+					servletSession, application.getServletContext());
 				newHttpRequest.setRequestToRedirectString(httpResponse.getRedirectLocation());
 				wicketRequest = application.newWebRequest(newHttpRequest);
 
