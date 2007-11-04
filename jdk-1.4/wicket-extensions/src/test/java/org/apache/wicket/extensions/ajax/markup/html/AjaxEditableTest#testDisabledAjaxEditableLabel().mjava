@@ -1,0 +1,31 @@
+	/**
+	 * Tests whether disabling/enabling an AjaxEditableLabel also disables/enables the
+	 * <code>LabelBehavior</code>
+	 */
+	public void testDisabledAjaxEditableLabel()
+	{
+		Page page = tester.getLastRenderedPage();
+		AjaxEditableLabel ajaxLabel = (AjaxEditableLabel)page.get("ajaxLabel");
+		AjaxLink toggle = (AjaxLink)page.get("toggle");
+
+		AbstractAjaxBehavior toggleBehavior = (AbstractAjaxBehavior)toggle.getBehaviors().get(0);
+
+		// check for correct rendering
+		tester.assertInvisible("ajaxLabel:editor");
+		tester.assertVisible("ajaxLabel:label");
+
+		// disable ajaxLabel
+		tester.executeBehavior(toggleBehavior);
+
+		// check for the *absence* of the ajax onclick call
+		String markup = tester.getTagById(ajaxLabel.getMarkupId()).getMarkup();
+		assertFalse(markup.matches(".*onclick=\"var wcall=wicketAjaxGet.*"));
+
+		// enable ajaxLabel
+		tester.executeBehavior(toggleBehavior);
+
+		// check for the *presence* of the ajax onclick call
+		markup = tester.getTagById(ajaxLabel.getMarkupId()).getMarkup();
+		assertTrue(markup.matches(".*onclick=\"var wcall=wicketAjaxGet.*"));
+	}
+

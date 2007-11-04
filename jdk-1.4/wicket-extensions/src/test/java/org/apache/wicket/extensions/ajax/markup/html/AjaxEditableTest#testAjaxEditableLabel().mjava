@@ -1,0 +1,26 @@
+	/**
+	 * Tests default AjaxEditableLabel behavior
+	 */
+	public void testAjaxEditableLabel()
+	{
+		Page page = tester.getLastRenderedPage();
+		AjaxEditableLabel ajaxLabel = (AjaxEditableLabel)page.get("ajaxLabel");
+
+		AbstractAjaxBehavior labelBehavior = (AbstractAjaxBehavior)ajaxLabel.get("label")
+			.getBehaviors()
+			.get(0);
+		AbstractAjaxBehavior editorBehavior = (AbstractAjaxBehavior)ajaxLabel.get("editor")
+			.getBehaviors()
+			.get(0);
+
+		// "click" on the label and check for valid visibility
+		tester.executeBehavior(labelBehavior);
+		tester.assertVisible("ajaxLabel:editor");
+		tester.assertInvisible("ajaxLabel:label");
+
+		// "leave" the editor and check for valid visibility
+		tester.executeBehavior(editorBehavior);
+		tester.assertInvisible("ajaxLabel:editor");
+		tester.assertVisible("ajaxLabel:label");
+	}
+
