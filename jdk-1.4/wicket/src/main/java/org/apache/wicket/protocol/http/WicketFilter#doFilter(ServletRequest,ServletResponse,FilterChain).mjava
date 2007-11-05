@@ -3,7 +3,7 @@
 	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException
+		throws IOException, ServletException
 	{
 		HttpServletRequest httpServletRequest;
 		HttpServletResponse httpServletResponse;
@@ -12,9 +12,9 @@
 		if (filterPortletContext != null)
 		{
 			FilterRequestContext filterRequestContext = new FilterRequestContext(
-					(HttpServletRequest)request, (HttpServletResponse)response);
+				(HttpServletRequest)request, (HttpServletResponse)response);
 			inPortletContext = filterPortletContext.setupFilter(getFilterConfig(),
-					filterRequestContext, getFilterPath((HttpServletRequest)request));
+				filterRequestContext, getFilterPath((HttpServletRequest)request));
 			httpServletRequest = filterRequestContext.getRequest();
 			httpServletResponse = filterRequestContext.getResponse();
 		}
@@ -67,6 +67,7 @@
 			{
 				// always unset the application thread local
 				Application.unset();
+				RequestContext.unset();
 			}
 		}
 		else

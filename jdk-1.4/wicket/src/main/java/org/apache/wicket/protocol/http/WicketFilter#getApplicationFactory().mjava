@@ -22,8 +22,9 @@
 			try
 			{
 				// Try to find the specified factory class
-				final Class factoryClass = Thread.currentThread().getContextClassLoader()
-						.loadClass(appFactoryClassName);
+				final Class factoryClass = Thread.currentThread()
+					.getContextClassLoader()
+					.loadClass(appFactoryClassName);
 
 				// Instantiate the factory
 				return (IWebApplicationFactory)factoryClass.newInstance();
@@ -31,7 +32,7 @@
 			catch (ClassCastException e)
 			{
 				throw new WicketRuntimeException("Application factory class " +
-						appFactoryClassName + " must implement IWebApplicationFactory");
+					appFactoryClassName + " must implement IWebApplicationFactory");
 			}
 			catch (ClassNotFoundException e)
 			{

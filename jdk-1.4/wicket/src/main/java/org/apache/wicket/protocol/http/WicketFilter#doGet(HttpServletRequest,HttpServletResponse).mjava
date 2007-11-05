@@ -10,13 +10,13 @@
 	 * @throws IOException
 	 */
 	public void doGet(final HttpServletRequest servletRequest,
-			final HttpServletResponse servletResponse) throws ServletException, IOException
+		final HttpServletResponse servletResponse) throws ServletException, IOException
 	{
 		String relativePath = getRelativePath(servletRequest);
 
 		// Special-case for home page - we redirect to add a trailing slash.
 		if (relativePath.length() == 0 &&
-				!Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
+			!Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
 		{
 			final String redirectUrl = servletRequest.getRequestURI() + "/";
 			servletResponse.sendRedirect(servletResponse.encodeRedirectURL(redirectUrl));
@@ -49,7 +49,7 @@
 					// the request has the same encoding. This is especially
 					// important for forms and form parameters.
 					servletRequest.setCharacterEncoding(webApplication.getRequestCycleSettings()
-							.getResponseRequestEncoding());
+						.getResponseRequestEncoding());
 				}
 				catch (UnsupportedEncodingException ex)
 				{
@@ -73,12 +73,12 @@
 					if (!Strings.isEmpty(queryString))
 					{
 						bufferedResponse = webApplication.popBufferedResponse(sessionId,
-								queryString);
+							queryString);
 					}
 					else
 					{
 						bufferedResponse = webApplication.popBufferedResponse(sessionId,
-								relativePath);
+							relativePath);
 					}
 
 					if (bufferedResponse != null)
@@ -107,7 +107,7 @@
 				response = webApplication.newWebResponse(servletResponse);
 				response.setAjax(request.isAjax());
 				response.setCharacterEncoding(webApplication.getRequestCycleSettings()
-						.getResponseRequestEncoding());
+					.getResponseRequestEncoding());
 
 				createRequestContext(request, response);
 
@@ -138,6 +138,7 @@
 					// Clean up thread local application if this was an external call
 					// (if not, doFilter will clean it up)
 					Application.unset();
+					RequestContext.unset();
 				}
 			}
 		}

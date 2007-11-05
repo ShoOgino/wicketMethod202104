@@ -40,12 +40,14 @@
 					else if (elem.isClose() && elem.getName().equals(name))
 					{
 						encounteredFilterName = parser.getInputFromPositionMarker(elem.getPos())
-								.toString().trim();
+							.toString()
+							.trim();
 					}
 					else if (elem.isClose() && elem.getName().equals("url-pattern"))
 					{
-						urlPattern = parser.getInputFromPositionMarker(elem.getPos()).toString()
-								.trim();
+						urlPattern = parser.getInputFromPositionMarker(elem.getPos())
+							.toString()
+							.trim();
 					}
 				}
 				while (urlPattern == null || encounteredFilterName == null);
@@ -67,8 +69,8 @@
 			if (urlPatterns.size() == 0)
 			{
 				throw new IllegalArgumentException("Error initializing Wicket" + prefixUppered +
-						" - you have no <" + mapping + "> element with a url-pattern that uses " +
-						prefix + ": " + filterName);
+					" - you have no <" + mapping + "> element with a url-pattern that uses " +
+					prefix + ": " + filterName);
 			}
 			String urlPattern = (String)urlPatterns.get(0);
 
@@ -76,7 +78,7 @@
 			if (!urlPattern.startsWith("/") || !urlPattern.endsWith("*"))
 			{
 				throw new IllegalArgumentException("<" + mapping + "> for Wicket" + prefixUppered +
-						" \"" + filterName + "\" must start with '/' and end with '*'.");
+					" \"" + filterName + "\" must start with '/' and end with '*'.");
 			}
 
 			// Strip trailing '*' and keep leading '/'.
@@ -85,17 +87,17 @@
 		catch (IOException e)
 		{
 			throw new ServletException("Error finding <" + prefix + "> " + filterName +
-					" in web.xml", e);
+				" in web.xml", e);
 		}
 		catch (ParseException e)
 		{
 			throw new ServletException("Error finding <" + prefix + "> " + filterName +
-					" in web.xml", e);
+				" in web.xml", e);
 		}
 		catch (ResourceStreamNotFoundException e)
 		{
 			throw new ServletException("Error finding <" + prefix + "> " + filterName +
-					" in web.xml", e);
+				" in web.xml", e);
 		}
 	}
 

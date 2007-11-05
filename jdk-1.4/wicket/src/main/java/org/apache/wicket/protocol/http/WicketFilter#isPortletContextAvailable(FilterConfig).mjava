@@ -8,14 +8,16 @@
 		}
 		else
 		{
-			parameter = config.getServletContext().getInitParameter(DETECT_PORTLET_CONTEXT_FULL_NAME);
+			parameter = config.getServletContext().getInitParameter(
+				DETECT_PORTLET_CONTEXT_FULL_NAME);
 			if (parameter != null)
 			{
 				detectPortletContext = Boolean.valueOf(parameter).booleanValue();
 			}
 			else
 			{
-				InputStream is = Thread.currentThread().getContextClassLoader()
+				InputStream is = Thread.currentThread()
+					.getContextClassLoader()
 					.getResourceAsStream(WICKET_PORTLET_PROPERTIES);
 				if (is != null)
 				{
@@ -23,13 +25,14 @@
 					{
 						Properties properties = new Properties();
 						properties.load(is);
-						detectPortletContext = Boolean.valueOf(properties.getProperty(
-								DETECT_PORTLET_CONTEXT_FULL_NAME, "false")).booleanValue();
+						detectPortletContext = Boolean.valueOf(
+							properties.getProperty(DETECT_PORTLET_CONTEXT_FULL_NAME, "false"))
+							.booleanValue();
 					}
 					catch (IOException e)
 					{
 						throw new ServletException(
-								"Failed to load WicketPortlet.properties from classpath", e);
+							"Failed to load WicketPortlet.properties from classpath", e);
 					}
 				}
 			}
