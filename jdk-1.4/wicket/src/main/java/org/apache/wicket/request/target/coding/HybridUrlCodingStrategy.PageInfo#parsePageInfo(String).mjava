@@ -25,6 +25,19 @@
 				return null;
 			}
 
+			// go trhough the segments to determine if they don't contains invalid characters
+			for (int i = 0; i < segments.length; ++i)
+			{
+				for (int j = 0; j < segments[i].length(); ++j)
+				{
+					char c = segments[i].charAt(j);
+					if (!Character.isLetterOrDigit(c) && c != '-' && c != '_')
+					{
+						return null;
+					}
+				}
+			}
+
 			if (segments.length == 1 && isNumber(segments[0]))
 			{
 				// pageId
