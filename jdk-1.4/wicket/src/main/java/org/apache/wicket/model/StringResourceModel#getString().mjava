@@ -45,7 +45,7 @@
 					else if (model != null && parameters[i] instanceof String)
 					{
 						realParams[i] = PropertyVariableInterpolator.interpolate(
-								(String)parameters[i], model.getObject());
+							(String)parameters[i], model.getObject());
 					}
 					else
 					{
@@ -53,9 +53,11 @@
 					}
 				}
 
+				// escape single quotes for MessageFormat
+				value = Strings.replaceAll(value, "'", "''").toString();
 				// Apply the parameters
-				final MessageFormat format = new MessageFormat(value, component != null ? component
-						.getLocale() : locale);
+				final MessageFormat format = new MessageFormat(value, component != null
+					? component.getLocale() : locale);				
 				value = format.format(realParams);
 			}
 		}
