@@ -23,14 +23,13 @@
 		if (!tag.isOpenClose() && !tag.isOpen())
 		{
 			// We were something other than <tag> or <tag/>
-			markupStream
-				.throwMarkupException("Method renderComponent called on bad markup element: " + tag);
+			markupStream.throwMarkupException("Method renderComponent called on bad markup element: " +
+				tag);
 		}
 
 		if (tag.isOpenClose() && openTag.isOpen())
 		{
-			markupStream
-				.throwMarkupException("You can not modify a open tag to open-close: " + tag);
+			markupStream.throwMarkupException("You can not modify a open tag to open-close: " + tag);
 		}
 
 		try
@@ -64,8 +63,12 @@
 					// rendered.
 					if (getRenderBodyOnly() == false)
 					{
-						final boolean stripWicketTags = Application.get().getMarkupSettings()
-							.getStripWicketTags();
+						final boolean ajaxRequest = getRequest() instanceof WebRequest &&
+							((WebRequest)getRequest()).isAjax();
+
+						final boolean stripWicketTags = ajaxRequest ||
+							Application.get().getMarkupSettings().getStripWicketTags();
+
 						if (!(openTag instanceof WicketTag) || !stripWicketTags)
 						{
 							// Close the manually opened panel tag.
