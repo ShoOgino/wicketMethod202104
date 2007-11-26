@@ -8,7 +8,7 @@
 	 *      java.lang.Class, boolean)
 	 */
 	public final Markup getMarkup(final MarkupContainer container, final Class clazz,
-			final boolean enforceReload)
+		final boolean enforceReload)
 	{
 		Class containerClass = clazz;
 		if (clazz == null)
@@ -18,12 +18,12 @@
 		else if (!clazz.isAssignableFrom(container.getClass()))
 		{
 			throw new WicketRuntimeException("Parameter clazz must be an instance of " +
-					container.getClass().getName() + ", but is a " + clazz.getName());
+				container.getClass().getName() + ", but is a " + clazz.getName());
 		}
 
 		// Get the cache key to be associated with the markup resource stream
 		final String cacheKey = getMarkupCacheKeyProvider(container).getCacheKey(container,
-				containerClass);
+			containerClass);
 
 		// Is the markup already in the cache?
 		Markup markup = (enforceReload == false ? getMarkupFromCache(cacheKey, container) : null);
@@ -36,8 +36,8 @@
 
 			// Who is going to provide the markup resource stream?
 			// And ask the provider to locate the markup resource stream
-			final IResourceStream resourceStream = getMarkupResourceStreamProvider(container)
-					.getMarkupResourceStream(container, containerClass);
+			final IResourceStream resourceStream = getMarkupResourceStreamProvider(container).getMarkupResourceStream(
+				container, containerClass);
 
 			// Found markup?
 			if (resourceStream != null)
@@ -50,14 +50,14 @@
 				else
 				{
 					markupResourceStream = new MarkupResourceStream(resourceStream,
-							new ContainerInfo(container), containerClass);
+						new ContainerInfo(container), containerClass);
 				}
 
 				markupResourceStream.setCacheKey(cacheKey);
 
 				// load the markup and watch for changes
 				markup = loadMarkupAndWatchForChanges(container, markupResourceStream,
-						enforceReload);
+					enforceReload);
 			}
 			else
 			{

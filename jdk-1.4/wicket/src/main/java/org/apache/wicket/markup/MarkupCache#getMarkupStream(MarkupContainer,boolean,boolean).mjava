@@ -3,7 +3,7 @@
 	 *      boolean, boolean)
 	 */
 	public final MarkupStream getMarkupStream(final MarkupContainer container,
-			final boolean enforceReload, final boolean throwException)
+		final boolean enforceReload, final boolean throwException)
 	{
 		if (container == null)
 		{
@@ -11,7 +11,7 @@
 		}
 
 		// Look for associated markup
-		final Markup markup = getMarkup(container, container.getClass(), false);
+		final Markup markup = getMarkup(container, container.getClass(), enforceReload);
 
 		// If we found markup for this container
 		if (markup != Markup.NO_MARKUP)
@@ -23,8 +23,8 @@
 		{
 			// throw exception since there is no associated markup
 			throw new MarkupNotFoundException("Markup not found. Component class: " +
-					container.getClass().getName() +
-					" Enable debug messages for org.apache.wicket.util.resource to get a list of all filenames tried");
+				container.getClass().getName() +
+				" Enable debug messages for org.apache.wicket.util.resource to get a list of all filenames tried");
 		}
 
 		return null;
