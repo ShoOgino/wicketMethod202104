@@ -3,13 +3,22 @@
 		 *      org.apache.wicket.markup.ComponentTag)
 		 */
 		protected void onComponentTagBody(final MarkupStream markupStream,
-				final ComponentTag openTag)
+			final ComponentTag openTag)
 		{
 			if (wasOpenCloseTag == false)
 			{
 				// It is open-preview-close. Only RawMarkup is allowed within
 				// the preview region, which gets stripped from output
 				markupStream.skipRawMarkup();
+			}
+
+			// this check always results in false for normal requests.
+			// in case of ajax requests, the markupstream is not reset after the first render, thus
+			// the current index of the markup stream points to the element after the body.
+			// as a result, no elements are detected and always omitted.
+			if (beginOfBodyIndex != originalMarkupStream.getCurrentIndex())
+			{
+				originalMarkupStream.setCurrentIndex(beginOfBodyIndex);
 			}
 
 			super.onComponentTagBody(originalMarkupStream, Border.this.openTag);

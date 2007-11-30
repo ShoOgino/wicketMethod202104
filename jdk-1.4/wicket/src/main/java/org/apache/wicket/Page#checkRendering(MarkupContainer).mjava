@@ -70,16 +70,22 @@
 					while (iterator2.hasNext())
 					{
 						Component sibling = (Component)iterator2.next();
-						if (!sibling.isVisible() && sibling instanceof MarkupContainer &&
-							((MarkupContainer)sibling).isTransparentResolver())
+						if (!sibling.isVisible())
 						{
-							// we found a transparent container that isn't visible
-							// then ignore this component and only do a debug statement here.
-							log.warn("Component " + component +
-								" wasn't rendered but most likely it has a transparent parent: " +
-								sibling);
-							iterator.remove();
-							break;
+							boolean isTransparentMarkupContainer = sibling instanceof MarkupContainer &&
+								((MarkupContainer)sibling).isTransparentResolver();
+							boolean isComponentResolver = sibling instanceof IComponentResolver;
+							if (isTransparentMarkupContainer || isComponentResolver)
+							{
+								// we found a transparent container that isn't visible
+								// then ignore this component and only do a debug statement here.
+								log.warn("Component " +
+									component +
+									" wasn't rendered but most likely it has a transparent parent: " +
+									sibling);
+								iterator.remove();
+								break;
+							}
 						}
 					}
 				}

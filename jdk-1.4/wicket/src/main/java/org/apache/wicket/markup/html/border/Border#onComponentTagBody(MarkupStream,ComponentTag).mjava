@@ -3,11 +3,14 @@
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
 	protected final void onComponentTagBody(final MarkupStream markupStream,
-			final ComponentTag openTag)
+		final ComponentTag openTag)
 	{
 		// Remember the data for easy access by the Body component
 		this.openTag = openTag;
 		originalMarkupStream = getMarkupStream();
+
+		// Remember the current position (start of border-body) of the markupstream
+		beginOfBodyIndex = originalMarkupStream.getCurrentIndex();
 
 		// body.isVisible(false) needs a little extra work. We must skip the
 		// markup between <span wicket:id="myBorder"> and </span>
@@ -15,9 +18,8 @@
 		{
 			originalMarkupStream.skipToMatchingCloseTag(openTag);
 		}
-
 		// Render the associated markup
 		renderAssociatedMarkup("border",
-				"Markup for a border component must begin a tag like '<wicket:border>'");
+			"Markup for a border component must begin a tag like '<wicket:border>'");
 	}
 
