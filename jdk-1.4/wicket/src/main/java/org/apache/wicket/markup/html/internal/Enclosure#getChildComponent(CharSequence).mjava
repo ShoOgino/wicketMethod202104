@@ -6,9 +6,20 @@
 	private Component getChildComponent(final CharSequence childId)
 	{
 		MarkupContainer parent = getParent();
-		while ((parent != null) && parent.isTransparentResolver())
+		while (parent != null)
 		{
-			parent = parent.getParent();
+			if (parent.isTransparentResolver())
+			{
+				parent = parent.getParent();
+			}
+			else if (parent instanceof BorderBodyContainer)
+			{
+				parent = ((BorderBodyContainer)parent).findParent(Border.class);
+			}
+			else
+			{
+				break;
+			}
 		}
 
 		if (parent == null)
