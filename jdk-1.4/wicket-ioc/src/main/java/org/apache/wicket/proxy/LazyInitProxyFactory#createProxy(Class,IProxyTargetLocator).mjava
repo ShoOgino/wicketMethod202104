@@ -25,8 +25,8 @@
 			try
 			{
 				return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-						new Class[] { type, Serializable.class, ILazyInitProxy.class,
-								IWriteReplace.class }, handler);
+					new Class[] { type, Serializable.class, ILazyInitProxy.class,
+							IWriteReplace.class }, handler);
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -37,8 +37,8 @@
 				 * loaded this class.
 				 */
 				return Proxy.newProxyInstance(LazyInitProxyFactory.class.getClassLoader(),
-						new Class[] { type, Serializable.class, ILazyInitProxy.class,
-								IWriteReplace.class }, handler);
+					new Class[] { type, Serializable.class, ILazyInitProxy.class,
+							IWriteReplace.class }, handler);
 			}
 
 		}
@@ -51,10 +51,16 @@
 					IWriteReplace.class });
 			e.setSuperclass(type);
 			e.setCallback(handler);
+			e.setNamingPolicy(new DefaultNamingPolicy()
+			{
+				public String getClassName(final String prefix, final String source,
+					final Object key, final Predicate names)
+				{
+					return super.getClassName("WICKET_" + prefix, source, key, names);
+				}
+			});
 
 			return e.create();
-
 		}
-
 	}
 
