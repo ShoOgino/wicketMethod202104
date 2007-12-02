@@ -1,0 +1,19 @@
+	/**
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+
+		tester = new WicketTester(new DummyWebApplication()
+		{
+			/**
+			 * Special overwrite to have url compressing for this example.
+			 */
+			protected IRequestCycleProcessor newRequestCycleProcessor()
+			{
+				return new UrlCompressingWebRequestProcessor();
+			}
+		});
+	}
+
