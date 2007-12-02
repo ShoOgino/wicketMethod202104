@@ -7,8 +7,9 @@
 
 		WebRequest request = (WebRequest)RequestCycle.get().getRequest();
 
-		if (!stopped && request.isAjax() == false)
+		if (!stopped && !headRendered)
 		{
+			headRendered = true;
 			response.renderOnLoadJavascript(getJsTimeoutCall(updateInterval));
 		}
 	}

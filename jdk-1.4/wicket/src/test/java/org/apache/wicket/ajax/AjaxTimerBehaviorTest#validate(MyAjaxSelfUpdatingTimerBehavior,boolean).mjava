@@ -9,11 +9,11 @@
 		String document = tester.getServletResponse().getDocument();
 
 		String updateScript = timer.getUpdateScript();
-		String bodyOnLoadUpdateScript = "Wicket.Event.add(window, \"load\", function() { " +
-				updateScript + ";});";
 
 		if (inBodyOnLoad)
 		{
+			String bodyOnLoadUpdateScript = "Wicket.Event.add(window, \"load\", function() { " +
+				updateScript + ";});";
 			validateTimerScript(document, bodyOnLoadUpdateScript);
 		}
 		else
@@ -23,6 +23,12 @@
 
 
 		tester.executeBehavior(timer);
+
+
+		if (inBodyOnLoad)
+		{
+			updateScript = timer.getUpdateScript();
+		}
 
 		// Validate the document
 		document = tester.getServletResponse().getDocument();
