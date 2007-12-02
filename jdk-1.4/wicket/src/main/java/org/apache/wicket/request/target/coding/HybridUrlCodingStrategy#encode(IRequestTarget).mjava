@@ -13,7 +13,12 @@
 
 		final AppendingStringBuffer url = new AppendingStringBuffer(40);
 		url.append(getMountPath());
-		appendParameters(url, parameters);
+
+		// there are cases where the parameters are null
+		if (parameters != null)
+		{
+			appendParameters(url, parameters);
+		}
 
 		// check whether we know if the initial URL ended with slash
 		Integer trailingSlashesCount = getOriginalOriginalTrailingSlashesCount(requestTarget);

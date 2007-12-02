@@ -1,0 +1,28 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param pars
+		 */
+		public TestPage(PageParameters pars)
+		{
+			add(new AjaxLink("ajax")
+			{
+				private static final long serialVersionUID = 1L;
+
+				public void onClick(AjaxRequestTarget target)
+				{
+					getSession().bind();
+					target.addComponent(this);
+				}
+			}.setOutputMarkupId(true));
+			add(new Link("link")
+			{
+				private static final long serialVersionUID = 1L;
+
+				public void onClick()
+				{
+					getSession().invalidate();
+				}
+			});
+		}
+
