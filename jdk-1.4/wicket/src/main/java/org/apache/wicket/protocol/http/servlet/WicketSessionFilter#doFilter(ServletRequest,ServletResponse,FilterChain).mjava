@@ -3,7 +3,7 @@
 	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException
+		throws IOException, ServletException
 	{
 		HttpServletRequest httpServletRequest = ((HttpServletRequest)request);
 		HttpSession httpSession = httpServletRequest.getSession(false);
@@ -18,8 +18,8 @@
 				if (log.isDebugEnabled())
 				{
 					log.debug("session " + session + " set as current for " +
-							httpServletRequest.getContextPath() + "," +
-							httpServletRequest.getServerName());
+						httpServletRequest.getContextPath() + "," +
+						httpServletRequest.getServerName());
 				}
 			}
 			else
@@ -27,9 +27,8 @@
 				if (log.isDebugEnabled())
 				{
 					log.debug("could not set Wicket session: key " + sessionKey +
-							" not found in http session for " +
-							httpServletRequest.getContextPath() + "," +
-							httpServletRequest.getServerName());
+						" not found in http session for " + httpServletRequest.getContextPath() +
+						"," + httpServletRequest.getServerName());
 				}
 			}
 		}
@@ -38,12 +37,18 @@
 			if (log.isDebugEnabled())
 			{
 				log.debug("could not set Wicket session: no http session was created yet for " +
-						httpServletRequest.getContextPath() + "," +
-						httpServletRequest.getServerName());
+					httpServletRequest.getContextPath() + "," + httpServletRequest.getServerName());
 			}
 		}
 
-		// go on with processing
-		chain.doFilter(request, response);
+		try
+		{
+			// go on with processing
+			chain.doFilter(request, response);
+		}
+		finally
+		{
+			Session.unset();
+		}
 	}
 
