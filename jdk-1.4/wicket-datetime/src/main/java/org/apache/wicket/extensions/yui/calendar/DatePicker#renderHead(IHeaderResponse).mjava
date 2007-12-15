@@ -4,16 +4,6 @@
 	public void renderHead(IHeaderResponse response)
 	{
 		YuiLib.load(response);
-		if (enableMonthYearSelection())
-		{
-			response.renderCSSReference(new ResourceReference(YuiLib.class,
-					"calendar/assets/wicket-calendar.css"));
-			String idSelector = "#" + getEscapedComponentMarkupId() + "DpJs";
-			new StringHeaderContributor("<style>" + idSelector + ".yui-calendar .calnavleft, " +
-					idSelector + ".yui-calendar .calnavright {display: none;}</style>")
-					.renderHead(response);
-		}
-
 		// variables for the initialization script
 		Map variables = new HashMap();
 		String widgetId = getEscapedComponentMarkupId();
@@ -23,11 +13,10 @@
 		variables.put("fireChangeEvent", Boolean.valueOf(notifyComponentOnDateSelected()));
 		variables.put("alignWithIcon", Boolean.valueOf(alignWithIcon()));
 		// variables for YUILoader
-		variables.put("pathToWicketDate", RequestCycle.get().urlFor(
-				new JavascriptResourceReference(DatePicker.class, "wicket-date.js")));
 		variables.put("basePath", RequestCycle.get().urlFor(
 				new JavascriptResourceReference(YuiLib.class, "")));
-		variables.put("enableMonthYearSelection", Boolean.valueOf(enableMonthYearSelection()));
+		variables.put("wicketDatePath", RequestCycle.get().urlFor(
+				new JavascriptResourceReference(DatePicker.class, "wicket-date.js")));
 		variables.put("hideOnSelect", Boolean.valueOf(hideOnSelect()));
 		String script = getAdditionalJavascript();
 		if (script != null)
@@ -38,6 +27,10 @@
 		// print out the initialization properties
 		Properties p = new Properties();
 		configure(p);
+		if (!p.containsKey("navigator") && enableMonthYearSelection())
+		{
+			p.put("navigator", Boolean.TRUE);
+		}
 
 		if (enableMonthYearSelection() && p.containsKey("pages") &&
 				Objects.longValue(p.get("pages")) > 1)
