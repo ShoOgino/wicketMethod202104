@@ -2,7 +2,6 @@
 	{
 		if (Strings.isEmpty(licenseHeader))
 		{
-			String header = "";
 			LineNumberReader lineNumberReader = null;
 			InputStream inputStream = null;
 			InputStreamReader inputStreamReader = null;
@@ -14,14 +13,16 @@
 				inputStreamReader = new InputStreamReader(inputStream);
 				lineNumberReader = new LineNumberReader(inputStreamReader);
 
+				StringBuffer header = new StringBuffer();
 				String line = lineNumberReader.readLine();
 				while (line != null)
 				{
-					header += line + LINE_ENDING;
+					header.append(line);
+					header.append(LINE_ENDING);
 					line = lineNumberReader.readLine();
 				}
 
-				licenseHeader = header.trim();
+				licenseHeader = header.toString().trim();
 			}
 			catch (Exception e)
 			{
@@ -39,7 +40,6 @@
 					{ /* Ignore */
 					}
 				}
-				;
 				if (inputStream != null)
 				{
 					try
@@ -50,7 +50,6 @@
 					{ /* Ignore */
 					}
 				}
-				;
 				if (inputStreamReader != null)
 				{
 					try
@@ -61,7 +60,6 @@
 					{ /* Ignore */
 					}
 				}
-				;
 			}
 		}
 

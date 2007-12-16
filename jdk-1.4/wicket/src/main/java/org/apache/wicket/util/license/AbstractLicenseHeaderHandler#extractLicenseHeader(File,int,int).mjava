@@ -1,6 +1,6 @@
 	protected String extractLicenseHeader(File file, int start, int length)
 	{
-		String header = "";
+		StringBuffer header = new StringBuffer();
 		FileReader fileReader = null;
 
 		try
@@ -10,7 +10,8 @@
 
 			for (int i = start; i < length; i++)
 			{
-				header += lineNumberReader.readLine() + LINE_ENDING;
+				header.append(lineNumberReader.readLine());
+				header.append(LINE_ENDING);
 			}
 		}
 		catch (Exception e)
@@ -32,6 +33,6 @@
 			}
 		}
 
-		return header.trim();
+		return header.toString().trim();
 	}
 
