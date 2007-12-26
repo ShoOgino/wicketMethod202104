@@ -27,16 +27,7 @@
 		}
 		else
 		{
-			Response response = getResponse();
-			getRequestCycle().setResponse(NullResponse.getInstance());
-			try
-			{
-				super.onComponentTagBody(markupStream, openTag);
-			}
-			finally
-			{
-				getRequestCycle().setResponse(response);
-			}
+			markupStream.skipUntil(openTag.getName());
 		}
 	}
 
