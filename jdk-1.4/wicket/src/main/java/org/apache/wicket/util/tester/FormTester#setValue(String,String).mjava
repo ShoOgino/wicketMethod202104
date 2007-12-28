@@ -3,7 +3,7 @@
 	 * 
 	 * @param formComponentId
 	 *            relative path (from <code>Form</code>) to the selectable
-	 *            <code>FormComponent</code>
+	 *            <code>FormComponent</code> or <code>IFormSubmittingComponent</code>
 	 * @param value
 	 *            the field value
 	 */
@@ -11,7 +11,14 @@
 	{
 		checkClosed();
 
-		FormComponent formComponent = (FormComponent)workingForm.get(formComponentId);
-		setFormComponentValue(formComponent, value);
+		Component component = workingForm.get(formComponentId);
+		if (component instanceof IFormSubmittingComponent)
+		{
+			setFormSubmittingComponentValue((IFormSubmittingComponent)component, value);
+		}
+		else if (component instanceof FormComponent)
+		{
+			setFormComponentValue((FormComponent)component, value);
+		}
 	}
 
