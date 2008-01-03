@@ -1,9 +1,10 @@
 	/**
 	 * Configure the localized strings for the datepicker widget. This implementation uses
 	 * {@link DateFormatSymbols} and some slight string manupilation to get the strings for months
-	 * and week days. It should work well for most locales.
+	 * and week days. Also, the first week day is set according to the {@link Locale} returned by
+	 * {@link #getLocale()}. It should work well for most locales.
 	 * <p>
-	 * This method is called from {@link #configureWidgetProperties(Map)} and can be overriden if
+	 * This method is called from {@link #configureWidgetProperties(Map)} and can be overridden if
 	 * you want to customize setting up the localized strings but are happy with the rest of
 	 * {@link #configureWidgetProperties(Map)}'s behavior. Note that you can call (overridable)
 	 * method {@link #getLocale()} to get the locale that should be used for setting up the widget.
@@ -14,7 +15,7 @@
 	 * href="http://developer.yahoo.com/yui/examples/calendar/japan/1.html">Japanese</a> examples
 	 * for more info.
 	 * </p>
-	 * 
+	 *
 	 * @param widgetProperties
 	 *            the current widget properties
 	 */
@@ -30,5 +31,8 @@
 		setWidgetProperty(widgetProperties, "WEEKDAYS_MEDIUM", filterEmpty(dfSymbols
 				.getShortWeekdays()));
 		setWidgetProperty(widgetProperties, "WEEKDAYS_LONG", filterEmpty(dfSymbols.getWeekdays()));
+
+		widgetProperties.put("START_WEEKDAY", new Integer(Calendar.getInstance(getLocale())
+				.getFirstDayOfWeek() - 1));
 	}
 
