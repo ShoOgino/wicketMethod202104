@@ -21,13 +21,15 @@
 
 				// if we exceeded maximum session size, try to remove as many
 				// pagemap as necessary and possible
-				while (getTotalSize() > getMaxSizePerSession() && pageMapEntryList.size() > 1)
+				while (getTotalSize() > diskPageStore.getMaxSizePerSession() &&
+					pageMapEntryList.size() > 1)
 				{
 					removePageMapEntry((PageMapEntry)pageMapEntryList.get(0));
 				}
 
 				// take the filechannel from the pool
-				FileChannel channel = fileChannelPool.getFileChannel(entry.fileName, true);
+				FileChannel channel = diskPageStore.fileChannelPool.getFileChannel(entry.fileName,
+					true);
 				try
 				{
 					// write the content
@@ -40,7 +42,7 @@
 				finally
 				{
 					// return the "borrowed" file channel
-					fileChannelPool.returnFileChannel(channel);
+					diskPageStore.fileChannelPool.returnFileChannel(channel);
 				}
 			}
 		}

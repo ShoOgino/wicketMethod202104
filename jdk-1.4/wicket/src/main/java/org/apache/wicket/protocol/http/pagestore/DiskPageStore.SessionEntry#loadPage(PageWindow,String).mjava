@@ -8,7 +8,8 @@
 		public byte[] loadPage(PageWindow window, String pageMapFileName)
 		{
 			byte[] result = null;
-			FileChannel channel = fileChannelPool.getFileChannel(pageMapFileName, false);
+			FileChannel channel = diskPageStore.fileChannelPool.getFileChannel(pageMapFileName,
+				false);
 			if (channel != null)
 			{
 				ByteBuffer buffer = ByteBuffer.allocate(window.getFilePartSize());
@@ -26,7 +27,7 @@
 				}
 				finally
 				{
-					fileChannelPool.returnFileChannel(channel);
+					diskPageStore.fileChannelPool.returnFileChannel(channel);
 				}
 			}
 			return result;
