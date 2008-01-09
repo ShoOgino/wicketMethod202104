@@ -1,19 +1,17 @@
 		private IPageStore getPageStore()
 		{
-			if (sessionStore == null)
+			Application application = Application.get(applicationKey);
+
+			if (application != null)
 			{
-				Application app = Application.exists() ? Application.get() : null;
-				if (app != null)
-				{
-					sessionStore = (SecondLevelCacheSessionStore)app.getSessionStore();
-				}
-			}
-			if (sessionStore != null)
-			{
-				return sessionStore.getStore();
+				SecondLevelCacheSessionStore store = (SecondLevelCacheSessionStore)application.getSessionStore();
+
+				return store.getStore();
 			}
 			else
 			{
+				// may happen when getPageStore() is called before application is initialized
+				// for example on session initialization when cluster node starts
 				return null;
 			}
 		}

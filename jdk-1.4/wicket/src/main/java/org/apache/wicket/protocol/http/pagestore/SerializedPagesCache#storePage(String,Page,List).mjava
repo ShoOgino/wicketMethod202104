@@ -1,0 +1,29 @@
+	/**
+	 * Store the serialized page in cache
+	 * 
+	 * @return
+	 * @param sessionId
+	 * @param page
+	 * @param pagesList
+	 */
+	SerializedPageWithSession storePage(String sessionId, Page page,
+		List /* <SerializedPage> */pagesList)
+	{
+		SerializedPageWithSession entry = new SerializedPageWithSession(sessionId, page, pagesList);
+
+		if (size > 0)
+		{
+			synchronized (cache)
+			{
+				removePage(page);
+				cache.add(entry);
+				if (cache.size() > size)
+				{
+					cache.remove(0);
+				}
+			}
+		}
+
+		return entry;
+	}
+

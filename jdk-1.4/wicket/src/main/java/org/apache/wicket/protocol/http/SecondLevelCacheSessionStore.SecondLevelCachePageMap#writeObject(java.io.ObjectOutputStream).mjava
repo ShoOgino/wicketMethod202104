@@ -3,16 +3,16 @@
 
 			s.defaultWriteObject();
 
-			// if the pagestore is not clustered, we need to serialize the
-			// lastPage instance
-			if (serializeLastPage)
-			{
-				Serializable page = lastPage;
+			IPageStore store = getPageStore();
 
-				IPageStore store = getPageStore();
-				if (page != null && store instanceof ISerializationAwarePageStore)
+			// for IClusteredPageStore we just skip serializing the page, pagestore takes care of it
+			if (sessionId != null && store instanceof IClusteredPageStore == false)
+			{
+				Object page = lastPage;
+				if (store instanceof ISerializationAwarePageStore)
 				{
-					page = ((ISerializationAwarePageStore)store).prepareForSerialization(lastPage);
+					page = ((ISerializationAwarePageStore)store).prepareForSerialization(sessionId,
+						page);
 				}
 
 				try

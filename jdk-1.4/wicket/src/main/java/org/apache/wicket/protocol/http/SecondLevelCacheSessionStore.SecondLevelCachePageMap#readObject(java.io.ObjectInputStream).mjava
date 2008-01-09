@@ -3,15 +3,16 @@
 		{
 			s.defaultReadObject();
 
-			// if the pagestore is not clustered, we need to read the lastPage
-			// instance
-			if (serializeLastPage)
+			IPageStore store = getPageStore();
+
+			if (sessionId != null && store instanceof IClusteredPageStore == false)
 			{
-				Serializable page = (Serializable)s.readObject();
-				if (page != null)
+				Object lastPage = s.readObject();
+				if (store instanceof ISerializationAwarePageStore)
 				{
-					lastPageDeserialized = page;
+					lastPage = ((ISerializationAwarePageStore)store).restoreAfterSerialization((Serializable)lastPage);
 				}
+				this.lastPage = lastPage;
 			}
 		}
 

@@ -9,6 +9,8 @@
 				String sessionId = session.getId();
 				if (sessionId != null && !session.isSessionInvalidated())
 				{
+					// the id could have changed from null during request
+					this.sessionId = sessionId;
 					getStore().storePage(sessionId, page);
 					setLastPage(page);
 					dirty();
