@@ -21,12 +21,30 @@
 	{
 		// when the given submitting component is not null, it means that it was the
 		// submitting component
+		Form formToProcess = this;
 		if (submittingComponent != null)
 		{
 			submittingComponent.onSubmit();
+			// use the form which the submittingComponent has submitted for further processing
+			formToProcess = submittingComponent.getForm();
 		}
 
 		// Model was successfully updated with valid data
-		onSubmit();
+		formToProcess.onSubmit();
+
+		// call onSubmit on nested forms
+		formToProcess.visitChildren(Form.class, new IVisitor()
+		{
+			public Object component(Component component)
+			{
+				Form form = (Form)component;
+				if (form.isEnabled() && form.isEnableAllowed() && form.isVisibleInHierarchy())
+				{
+					form.onSubmit();
+					return IVisitor.CONTINUE_TRAVERSAL;
+				}
+				return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+			}
+		});
 	}
 

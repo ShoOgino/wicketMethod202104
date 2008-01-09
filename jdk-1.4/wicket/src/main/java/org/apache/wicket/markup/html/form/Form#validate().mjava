@@ -9,7 +9,12 @@
 	 */
 	protected void validate()
 	{
-		validateComponents();
-		validateFormValidators();
+		if (isEnabled() && isEnableAllowed() && isVisibleInHierarchy())
+		{
+			// since this method can be called directly by users, this additional check is needed
+			validateComponents();
+			validateFormValidators();
+			validateNestedForms();
+		}
 	}
 

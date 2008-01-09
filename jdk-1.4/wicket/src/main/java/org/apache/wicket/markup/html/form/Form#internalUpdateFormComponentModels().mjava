@@ -1,0 +1,21 @@
+	/**
+	 * Update the model of all components on this form.
+	 * 
+	 * @see #updateFormComponentModels()
+	 */
+	private void internalUpdateFormComponentModels()
+	{
+		visitFormComponentsPostOrder(new ValidationVisitor()
+		{
+			public void validate(FormComponent formComponent)
+			{
+				Form form = formComponent.getForm();
+				if (form == Form.this)
+				{
+					// Potentially update the model
+					formComponent.updateModel();
+				}
+			}
+		});
+	}
+

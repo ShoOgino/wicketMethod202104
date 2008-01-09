@@ -1,18 +1,9 @@
 	/**
-	 * Mark each form component on this form valid.
+	 * Mark each form component on this form and on nested forms valid.
 	 */
 	protected final void markFormComponentsValid()
 	{
-		// call invalidate methods of all nested form components
-		visitFormComponentsPostOrder(new FormComponent.AbstractVisitor()
-		{
-			public void onFormComponent(final FormComponent formComponent)
-			{
-				if (formComponent.isVisibleInHierarchy())
-				{
-					formComponent.valid();
-				}
-			}
-		});
+		internalMarkFormComponentsValid();
+		markNestedFormComponentsValid();
 	}
 

@@ -1,0 +1,18 @@
+	/**
+	 * Mark each form component on this form valid.
+	 */
+	private void internalMarkFormComponentsValid()
+	{
+		// call valid methods of all nested form components
+		visitFormComponentsPostOrder(new FormComponent.AbstractVisitor()
+		{
+			public void onFormComponent(final FormComponent formComponent)
+			{
+				if (formComponent.getForm() == Form.this && formComponent.isVisibleInHierarchy())
+				{
+					formComponent.valid();
+				}
+			}
+		});
+	}
+

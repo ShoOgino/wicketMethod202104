@@ -6,31 +6,31 @@
 	 */
 	public final IFormSubmittingComponent findSubmittingButton()
 	{
-		IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)getPage()
-				.visitChildren(IFormSubmittingComponent.class, new IVisitor()
+		IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)getPage().visitChildren(
+			IFormSubmittingComponent.class, new IVisitor()
+			{
+				public Object component(final Component component)
 				{
-					public Object component(final Component component)
-					{
-						// Get submitting component
-						final IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)component;
+					// Get submitting component
+					final IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)component;
 
-						// Check for component-name or component-name.x request string
-						if (submittingComponent.getForm() != null &&
-								submittingComponent.getForm().getRootForm() == Form.this &&
-								(getRequest().getParameter(submittingComponent.getInputName()) != null || getRequest()
-										.getParameter(submittingComponent.getInputName() + ".x") != null))
+					// Check for component-name or component-name.x request string
+					if (submittingComponent.getForm() != null &&
+						submittingComponent.getForm().getRootForm() == Form.this &&
+						(getRequest().getParameter(submittingComponent.getInputName()) != null || getRequest().getParameter(
+							submittingComponent.getInputName() + ".x") != null))
+					{
+						if (!component.isVisible())
 						{
-							if (!component.isVisible())
-							{
-								throw new WicketRuntimeException("Submit Button " +
-										submittingComponent.getInputName() + " (path=" +
-										component.getPageRelativePath() + ") is not visible");
-							}
-							return submittingComponent;
+							throw new WicketRuntimeException("Submit Button " +
+								submittingComponent.getInputName() + " (path=" +
+								component.getPageRelativePath() + ") is not visible");
 						}
-						return CONTINUE_TRAVERSAL;
+						return submittingComponent;
 					}
-				});
+					return CONTINUE_TRAVERSAL;
+				}
+			});
 
 		return submittingComponent;
 	}

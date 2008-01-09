@@ -1,7 +1,7 @@
 	/**
-	 * Update the model of all form components using the fields that were sent with the current
-	 * request. This method only updates models when the Form.validate() is called first that takes
-	 * care of the conversion for the FormComponents.
+	 * Update the model of all components on this form and nested forms using the fields that were
+	 * sent with the current request. This method only updates models when the Form.validate() is
+	 * called first that takes care of the conversion for the FormComponents.
 	 * 
 	 * Normally this method will not be called when a validation error occurs in one of the form
 	 * components.
@@ -10,13 +10,7 @@
 	 */
 	protected final void updateFormComponentModels()
 	{
-		visitFormComponentsPostOrder(new ValidationVisitor()
-		{
-			public void validate(FormComponent formComponent)
-			{
-				// Potentially update the model
-				formComponent.updateModel();
-			}
-		});
+		internalUpdateFormComponentModels();
+		updateNestedFormComponentModels();
 	}
 
