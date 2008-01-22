@@ -1,0 +1,31 @@
+	/**
+	 * The stop method on the PageSavingThread didn't wait until the thread was actually finished
+	 * until it continued the execution to the main thread. This can in some situations lead to the
+	 * main thread being terminated before the PageSavingThread.
+	 * 
+	 * This test doesn't do anything but making sure that destroying the {@link DiskPageStore} also
+	 * stops the PageSavingThread.
+	 */
+	public void testStoppingPageSavingThread()
+	{
+		new WicketTester();
+
+		DiskPageStore store = new DiskPageStore()
+		{
+			// Make sure that it's asynchronous, because that's what we are testing here.
+			protected boolean isSynchronous()
+			{
+				return false;
+			}
+		};
+
+		// Assume that the PageSavingThread is in the same ThreadGroup as the current thread.
+		int activeThreadsBefore = Thread.activeCount();
+
+		store.destroy();
+
+		int activeThreadsAfter = Thread.activeCount();
+
+		assertEquals(activeThreadsBefore - 1, activeThreadsAfter);
+	}
+
