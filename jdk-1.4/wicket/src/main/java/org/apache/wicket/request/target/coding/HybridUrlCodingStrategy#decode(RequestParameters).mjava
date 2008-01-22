@@ -82,7 +82,12 @@
 			else
 			{
 				// we didn't find the page, act as bookmarkable page request -
-				// create new instance
+				// create new instance, but only if there is no callback to a non-existing page
+				if (requestParameters.getInterface() != null)
+				{
+					throw new PageExpiredException(
+						"Request cannot be processed. The target page does not exist anymore.");
+				}
 				return new HybridBookmarkablePageRequestTarget(pageMapName,
 					(Class)pageClassRef.get(), parameters, originalUrlTrailingSlashesCount,
 					redirect);
