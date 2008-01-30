@@ -10,34 +10,8 @@
 	 * @return A URL that encodes a page, component and interface to call
 	 */
 	public final CharSequence urlFor(final Component component,
-			final RequestListenerInterface listener)
+		final RequestListenerInterface listener)
 	{
-		// Get Page holding component and mark it as stateful.
-		final Page page = component.getPage();
-		final IRequestTarget target;
-		if (listener != IRedirectListener.INTERFACE && component.isStateless() &&
-				page.isBookmarkable())
-		{
-			PageParameters pageParameters = page.getPageParameters();
-			if (pageParameters == null)
-				pageParameters = new PageParameters();
-			target = new BookmarkableListenerInterfaceRequestTarget(page.getPageMapName(), page
-					.getClass(), pageParameters, component, listener);
-		}
-		else
-		{
-			page.setPageStateless(Boolean.FALSE);
-
-			// make session non-volatile if not already so
-			final Session session = getSession();
-			if (session.isTemporary())
-			{
-				session.bind();
-			}
-
-			// Get the listener interface name
-			target = new ListenerInterfaceRequestTarget(page, component, listener);
-		}
-		return encodeUrlFor(target);
+		return urlFor(component, listener, null);
 	}
 
