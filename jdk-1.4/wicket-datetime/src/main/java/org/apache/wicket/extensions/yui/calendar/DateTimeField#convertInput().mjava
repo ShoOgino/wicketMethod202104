@@ -23,12 +23,6 @@
 
 			try
 			{
-				TimeZone zone = getClientTimeZone();
-				if (zone != null)
-				{
-					date.setZone(DateTimeZone.forTimeZone(zone));
-				}
-
 				boolean use12HourFormat = use12HourFormat();
 				if (hours != null)
 				{
@@ -39,6 +33,13 @@
 				if (use12HourFormat)
 				{
 					date.set(DateTimeFieldType.halfdayOfDay(), amOrPm == AM_PM.PM ? 1 : 0);
+				}
+
+				TimeZone zone = getClientTimeZone();
+				if (zone != null)
+				{
+					date.setMillis(DateTimeZone.getDefault().getMillisKeepLocal(
+							DateTimeZone.forTimeZone(zone), date.getMillis()));
 				}
 
 				// the date will be in the server's timezone
