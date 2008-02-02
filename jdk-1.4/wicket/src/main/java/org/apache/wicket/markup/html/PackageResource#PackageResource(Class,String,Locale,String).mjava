@@ -12,17 +12,18 @@
 	 *            The style of the resource
 	 */
 	protected PackageResource(final Class scope, final String path, final Locale locale,
-			final String style)
+		final String style)
 	{
 		// Convert resource path to absolute path relative to base package
 		absolutePath = Packages.absolutePath(scope, path);
 
-		IPackageResourceGuard guard = Application.get().getResourceSettings()
-				.getPackageResourceGuard();
+		IPackageResourceGuard guard = Application.get()
+			.getResourceSettings()
+			.getPackageResourceGuard();
 		if (!guard.accept(scope, path))
 		{
 			throw new PackageResourceBlockedException("package resource " + absolutePath +
-					" may not be accessed");
+				" may not be accessed");
 		}
 
 		scopeName = scope.getName();
