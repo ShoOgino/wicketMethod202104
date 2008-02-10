@@ -3,7 +3,7 @@
 	 * directly, but work with setResponsePage instead. This method is part of Wicket's internal
 	 * behavior and should only be used when you want to circumvent the normal framework behavior
 	 * and issue the redirect directly.
-	 * 
+	 *
 	 * @param page
 	 *            The page to redirect to
 	 */
@@ -14,7 +14,8 @@
 		// Check if use serverside response for client side redirects
 		IRequestCycleSettings settings = application.getRequestCycleSettings();
 		if ((settings.getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER) &&
-				(application instanceof WebApplication) && !(getWebRequest().isAjax()))
+			(application instanceof WebApplication) && !(getWebRequest().isAjax()) &&
+			(!page.isPageStateless()))
 		{
 			// remember the current response
 			final WebResponse currentResponse = getWebResponse();
@@ -25,12 +26,11 @@
 					// Get the redirect url and set it in the ServletWebRequest
 					// so that it can be used for relative url calculation.
 					((ServletWebRequest)getWebRequest()).setWicketRedirectUrl(Strings.replaceAll(
-							page.urlFor(IRedirectListener.INTERFACE).toString(), "../", "")
-							.toString());
+						page.urlFor(IRedirectListener.INTERFACE).toString(), "../", "").toString());
 				}
 				// create the redirect response.
 				final BufferedHttpServletResponse servletResponse = new BufferedHttpServletResponse(
-						currentResponse.getHttpServletResponse());
+					currentResponse.getHttpServletResponse());
 				final WebResponse redirectResponse = new WebResponse(servletResponse)
 				{
 					public CharSequence encodeURL(CharSequence url)
@@ -81,9 +81,9 @@
 					String stripped = Strings.replaceAll(redirectUrl, "../", "").toString();
 					int index = stripped.indexOf("?");
 					String sessionId = getApplication().getSessionStore().getSessionId(request,
-							true);
-					((WebApplication)application).addBufferedResponse(sessionId, stripped
-							.substring(index + 1), servletResponse);
+						true);
+					((WebApplication)application).addBufferedResponse(sessionId,
+						stripped.substring(index + 1), servletResponse);
 				}
 			}
 			catch (RuntimeException ex)
