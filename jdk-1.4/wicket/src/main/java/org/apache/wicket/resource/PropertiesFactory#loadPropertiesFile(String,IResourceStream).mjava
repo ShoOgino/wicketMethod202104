@@ -8,7 +8,7 @@
 	 * @return The map of loaded resources
 	 */
 	private synchronized Properties loadPropertiesFile(final String key,
-			final IResourceStream resourceStream)
+		final IResourceStream resourceStream)
 	{
 		// Make sure someone else didn't load our resources while we were
 		// waiting for the synchronized lock on the method
@@ -31,15 +31,14 @@
 				try
 				{
 					// Get the InputStream
-					BufferedInputStream in = new BufferedInputStream(resourceStream
-							.getInputStream());
+					BufferedInputStream in = new BufferedInputStream(
+						resourceStream.getInputStream());
 
 					// Determine if resource is a XML File
 					boolean loadAsXml = false;
 					if (resourceStream instanceof IFixedLocationResourceStream)
 					{
-						String location = ((IFixedLocationResourceStream)resourceStream)
-								.locationAsString();
+						String location = ((IFixedLocationResourceStream)resourceStream).locationAsString();
 						if (location != null)
 						{
 							String ext = Strings.lastPathComponent(location, '.').toLowerCase();
