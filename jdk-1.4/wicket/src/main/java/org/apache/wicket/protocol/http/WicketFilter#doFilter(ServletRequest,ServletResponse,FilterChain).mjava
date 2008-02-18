@@ -44,7 +44,10 @@
 				{
 					// servlet doesn't support if-modified-since, no reason
 					// to go through further expensive logic
-					doGet(httpServletRequest, httpServletResponse);
+					if (doGet(httpServletRequest, httpServletResponse) == false)
+					{
+						chain.doFilter(request, response);
+					}
 				}
 				else
 				{

@@ -8,6 +8,10 @@
 		try
 		{
 			cycle.request();
+			if (cycle.wasHandled() == false) 
+			{
+				cycle.setRequestTarget(new WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND));
+			}
 			createRequestCycle();
 		}
 		finally
