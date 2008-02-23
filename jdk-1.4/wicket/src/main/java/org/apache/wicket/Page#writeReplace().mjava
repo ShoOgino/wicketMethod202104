@@ -1,0 +1,15 @@
+	protected Object writeReplace() throws ObjectStreamException
+	{
+
+		IPageSerializer ps = (IPageSerializer)serializer.get();
+
+		if (ps != null)
+		{
+			return ps.getPageReplacementObject(this);
+		}
+		else
+		{
+			return this;
+		}
+	}
+

@@ -1,6 +1,7 @@
-		public Page deserializePage(int id, String pageMapName, Page page, ObjectInputStream stream)
+		public void deserializePage(int id, String pageMapName, Page page, ObjectInputStream stream)
 			throws IOException, ClassNotFoundException
 		{
+			// get the page instance registry
 			HashMap pageMaps = (HashMap)SecondLevelCacheSessionStore.getUsedPages().get();
 			if (pageMaps == null)
 			{
@@ -13,17 +14,13 @@
 				pages = new IntHashMap();
 				pageMaps.put(pageMapName, pages);
 			}
-			boolean b = stream.readBoolean();
-			if (b == false)
-			{
-				stream.defaultReadObject();
-			}
-			else
-			{
-				// the object will resolve to a Page (probably PageHolder)
-				page = (Page)stream.readObject();
-			}
+
+			// register the new page instance so that when the same page is being deserialized
+			// (curricular page references) we can use existing page instance (otherwise deadlock
+			// would happen)
+			
 			pages.put(id, page);
-			return page;
+
+			stream.defaultReadObject();
 		}
 

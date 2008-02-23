@@ -3,26 +3,9 @@
 		 * @see org.apache.wicket.Page.IPageSerializer#serializePage(org.apache.wicket.Page,
 		 *      java.io.ObjectOutputStream)
 		 */
+
 		public void serializePage(Page page, ObjectOutputStream stream) throws IOException
 		{
-			if (current.getPageId() == page.getNumericId())
-			{
-				stream.writeBoolean(false);
-				stream.defaultWriteObject();
-				return;
-			}
-			SerializedPage spk = new SerializedPage(page);
-			if (!completed.contains(spk) && !previous.contains(spk))
-			{
-				previous.add(current);
-				current = spk;
-				byte[] bytes = Objects.objectToByteArray(page.getPageMapEntry());
-				current.setData(bytes);
-				onPageSerialized(current);
-				completed.add(current);
-				current = (SerializedPage)previous.remove(previous.size() - 1);
-			}
-			stream.writeBoolean(true);
-			stream.writeObject(new PageHolder(page));
+			stream.defaultWriteObject();
 		}
 
