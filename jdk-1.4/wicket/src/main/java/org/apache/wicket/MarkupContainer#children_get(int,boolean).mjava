@@ -1,25 +1,39 @@
 	private final Object children_get(int index, boolean reconstruct)
 	{
 		Object component = null;
-		if (index == 0 && children != null && children instanceof Object[] == false)
+		if (children != null)
 		{
-			component = postprocess(children, reconstruct, this, 0);
-			if (children != component)
+			if (children instanceof Object[] == false && children instanceof ChildList == false)
 			{
-				children = component;
+				if (index != 0)
+					throw new ArrayIndexOutOfBoundsException("index " + index +
+						" is greater then 0");
+				component = postprocess(children, reconstruct, this, 0);
+				if (children != component)
+				{
+					children = component;
+				}
+			}
+			else
+			{
+				Object[] children = null;
+				if (this.children instanceof ChildList)
+				{
+					// we have a list
+					children = ((ChildList)this.children).childs;
+				}
+				else
+				{
+					// we have a object array
+					children = (Object[])this.children;
+				}
+				component = postprocess(children[index], reconstruct, this, index);
+				if (children[index] != component)
+				{
+					children[index] = component;
+				}
 			}
 		}
-		else
-		{
-			// we have a list
-			Object[] children = (Object[])this.children;
-			component = postprocess(children[index], reconstruct, this, index);
-			if (children[index] != component)
-			{
-				children[index] = component;
-			}
-		}
-
 		return component;
 	}
 

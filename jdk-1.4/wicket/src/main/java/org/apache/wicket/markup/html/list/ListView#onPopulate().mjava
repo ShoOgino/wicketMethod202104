@@ -32,14 +32,17 @@
 				removeAll();
 			}
 
+			boolean hasChildren = size() != 0;
 			// Loop through the markup in this container for each item
 			for (int i = 0; i < size; i++)
 			{
 				// Get index
 				final int index = firstIndex + i;
 
-				// If this component does not already exist, populate it
-				ListItem item = (ListItem)get(Integer.toString(index));
+				ListItem item = null;
+				if (hasChildren)
+					// If this component does not already exist, populate it
+					item = (ListItem)get(Integer.toString(index));
 				if (item == null)
 				{
 					// Create item for index
