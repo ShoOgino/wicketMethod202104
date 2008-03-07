@@ -15,10 +15,11 @@
 
 		// Remove the markup and any other markup which depends on it
 		// (inheritance)
-		Markup markup = (Markup)markupCache.get(cacheKey);
+		String locationString = (String)markupKeyCache.get(cacheKey);
+		Markup markup = (Markup)markupCache.get(locationString);
 		if (markup != null)
 		{
-			markupCache.remove(cacheKey);
+			markupCache.remove(locationString);
 
 			// In practice markup inheritance has probably not more than 3 or 4
 			// levels. And since markup reloading is only enabled in development
@@ -40,7 +41,9 @@
 					if (resourceData != null)
 					{
 						String baseCacheKey = resourceData.getResource().getCacheKey();
-						if (markupCache.get(baseCacheKey) == null)
+						String baseLocationString = (String)markupKeyCache.get(baseCacheKey);
+						if (baseLocationString != null &&
+							markupCache.get(baseLocationString) == null)
 						{
 							if (log.isDebugEnabled())
 							{
@@ -72,7 +75,9 @@
 					{
 						MarkupResourceStream resourceStream = (MarkupResourceStream)modifiable;
 						String resourceCacheKey = resourceStream.getCacheKey();
-						if (markupCache.containsKey(resourceCacheKey) == false)
+						String resouceLocationString = (String)markupKeyCache.get(resourceCacheKey);
+						if (resouceLocationString != null &&
+							markupCache.containsKey(resouceLocationString) == false)
 						{
 							iter.remove();
 						}
