@@ -5,11 +5,11 @@
 	{
 		final IConverterLocator converter = new ConverterLocator();
 		assertEquals("7", converter.getConverter(Integer.class).convertToString(new Integer(7),
-				Locale.US));
+			Locale.US));
 		assertEquals("7.1", converter.getConverter(Double.class).convertToString(new Double(7.1),
-				Locale.US));
+			Locale.US));
 		assertEquals("7,1", converter.getConverter(Double.class).convertToString(new Double(7.1),
-				DUTCH_LOCALE));
+			DUTCH_LOCALE));
 
 		Calendar cal = Calendar.getInstance(DUTCH_LOCALE);
 		cal.clear();
@@ -17,9 +17,9 @@
 		Date date = cal.getTime();
 
 		assertEquals(date, converter.getConverter(Date.class).convertToObject("24-10-02",
-				DUTCH_LOCALE));
+			DUTCH_LOCALE));
 		assertEquals("24-10-02", converter.getConverter(Date.class).convertToString(date,
-				DUTCH_LOCALE));
+			DUTCH_LOCALE));
 
 		// empty strings should return null, NOT throw NPEs
 		assertNull(converter.getConverter(Integer.class).convertToObject("", Locale.US));
@@ -31,7 +31,7 @@
 		assertNull(converter.getConverter(Date.class).convertToObject("", Locale.US));
 		assertNull(converter.getConverter(Double.class).convertToObject("", Locale.US));
 		assertEquals(Boolean.FALSE, converter.getConverter(Boolean.class).convertToObject("",
-				Locale.US));
+			Locale.US));
 		assertNotNull(converter.getConverter(String.class).convertToObject("", Locale.US));
 	}
 
