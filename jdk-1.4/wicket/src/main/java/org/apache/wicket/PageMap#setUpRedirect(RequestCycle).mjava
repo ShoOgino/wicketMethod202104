@@ -8,7 +8,15 @@
 
 		// The intercept continuation URL should be saved exactly as the
 		// original request specified.
-		interceptContinuationURL = "/" + cycle.getRequest().getURL();
+		// Only if it is an ajax request just redirect to the page where the request is from.
+		if (cycle.getRequest() instanceof WebRequest && ((WebRequest)cycle.getRequest()).isAjax())
+		{
+			interceptContinuationURL = cycle.urlFor(cycle.getRequest().getPage()).toString();
+		}
+		else
+		{
+			interceptContinuationURL = "/" + cycle.getRequest().getURL();
+		}
 
 		// Page map is dirty
 		dirty();
