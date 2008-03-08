@@ -22,7 +22,7 @@
 			// Note: It is important that the default value of "" is provided
 			// to getString() not to throw a MissingResourceException or to
 			// return a default string like "[Warning: String ..."
-			String message = localizer.getString(resource, formComponent.getParent(), "");
+			String message = getString(localizer, resource, formComponent.getParent());
 
 			// If not found, than ...
 			if (Strings.isEmpty(message))
@@ -31,7 +31,7 @@
 
 				resource = prefix + key;
 
-				message = localizer.getString(resource, formComponent.getParent(), "");
+				message = getString(localizer, resource, formComponent.getParent());
 			}
 
 			if (Strings.isEmpty(message))
@@ -44,7 +44,7 @@
 				// provided
 				// to getString() not to throw a MissingResourceException or to
 				// return a default string like "[Warning: String ..."
-				message = localizer.getString(resource, formComponent, "");
+				message = getString(localizer, resource, formComponent);
 
 				// If not found, than ...
 				if (Strings.isEmpty(message))
@@ -52,8 +52,7 @@
 					// Try a variation of the resource key
 
 					resource = prefix + key;
-
-					message = localizer.getString(resource, formComponent, "");
+					message = getString(localizer, resource, formComponent);
 				}
 			}
 
