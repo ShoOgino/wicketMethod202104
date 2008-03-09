@@ -14,8 +14,8 @@
 	 * @return The RequestTarget that was resolved
 	 */
 	protected IRequestTarget resolveListenerInterfaceTarget(final RequestCycle requestCycle,
-			final Page page, final String componentPath, final String interfaceName,
-			final RequestParameters requestParameters)
+		final Page page, final String componentPath, final String interfaceName,
+		final RequestParameters requestParameters)
 	{
 		if (page == null)
 		{
@@ -33,23 +33,22 @@
 		else if (interfaceName.equals(INewBrowserWindowListener.INTERFACE.getName()))
 		{
 			return INewBrowserWindowListener.INTERFACE.newRequestTarget(page, page,
-					INewBrowserWindowListener.INTERFACE, requestParameters);
+				INewBrowserWindowListener.INTERFACE, requestParameters);
 		}
 		else
 		{
 			// Get the listener interface we need to call
-			final RequestListenerInterface listener = RequestListenerInterface
-					.forName(interfaceName);
+			final RequestListenerInterface listener = RequestListenerInterface.forName(interfaceName);
 			if (listener == null)
 			{
 				throw new WicketRuntimeException(
-						"Attempt to access unknown request listener interface " + interfaceName);
+					"Attempt to access unknown request listener interface " + interfaceName);
 			}
 
 			// Get component
 			Component component;
 			final String pageRelativeComponentPath = Strings.afterFirstPathComponent(componentPath,
-					Component.PATH_SEPARATOR);
+				Component.PATH_SEPARATOR);
 			if (Strings.isEmpty(pageRelativeComponentPath))
 			{
 				component = page;
@@ -62,8 +61,8 @@
 			if (component == null)
 			{
 				throw new WicketRuntimeException("component " + pageRelativeComponentPath +
-						" not found on page " + page.getClass().getName() + "[id = " +
-						page.getNumericId() + "], listener interface = " + listener);
+					" not found on page " + page.getClass().getName() + "[id = " +
+					page.getNumericId() + "], listener interface = " + listener);
 			}
 
 			if (!component.isEnableAllowed())

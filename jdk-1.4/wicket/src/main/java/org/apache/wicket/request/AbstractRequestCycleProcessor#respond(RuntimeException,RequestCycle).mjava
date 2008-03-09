@@ -21,14 +21,14 @@
 			// else we need to make a page (see below) or set it hard to a
 			// redirect.
 			Class accessDeniedPageClass = application.getApplicationSettings()
-					.getAccessDeniedPage();
+				.getAccessDeniedPage();
 
 			throw new RestartResponseAtInterceptPageException(accessDeniedPageClass);
 		}
 		else if (e instanceof PageExpiredException)
 		{
 			Class pageExpiredErrorPageClass = application.getApplicationSettings()
-					.getPageExpiredErrorPage();
+				.getPageExpiredErrorPage();
 			boolean mounted = isPageMounted(pageExpiredErrorPageClass);
 			RequestCycle.get().setRedirect(mounted);
 			throw new RestartResponseException(pageExpiredErrorPageClass);
@@ -42,11 +42,11 @@
 
 			// figure out which error page to show
 			Class internalErrorPageClass = application.getApplicationSettings()
-					.getInternalErrorPage();
+				.getInternalErrorPage();
 			Class responseClass = responsePage != null ? responsePage.getClass() : null;
 
 			if (responseClass != internalErrorPageClass &&
-					settings.getUnexpectedExceptionDisplay() == IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE)
+				settings.getUnexpectedExceptionDisplay() == IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE)
 			{
 				throw new RestartResponseException(internalErrorPageClass);
 			}
@@ -59,8 +59,13 @@
 			{
 				// give up while we're ahead!
 				throw new WicketRuntimeException("Internal Error: Could not render error page " +
-						internalErrorPageClass, e);
+					internalErrorPageClass, e);
 			}
+		}
+		else if (requestCycle.getResponse() instanceof WebResponse)
+		{
+			((WebResponse)requestCycle.getResponse()).getHttpServletResponse().setStatus(
+				HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 
