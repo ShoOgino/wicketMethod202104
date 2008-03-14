@@ -2,7 +2,7 @@
 	 * @see org.apache.wicket.Component#onComponentTagBody(MarkupStream, ComponentTag)
 	 */
 	protected final void onComponentTagBody(final MarkupStream markupStream,
-			final ComponentTag openTag)
+		final ComponentTag openTag)
 	{
 		// Iterate through choices
 		final List choices = getChoices();
@@ -45,11 +45,17 @@
 				final String idAttr = getInputName() + "_" + id;
 
 				// Add radio tag
-				buffer.append("<input name=\"").append(getInputName()).append("\"").append(
-						" type=\"radio\"").append(
-						(isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
-						.append((isEnabled() ? "" : " disabled=\"disabled\"")).append(" value=\"")
-						.append(id).append("\" id=\"").append(idAttr).append("\"");
+				buffer.append("<input name=\"")
+					.append(getInputName())
+					.append("\"")
+					.append(" type=\"radio\"")
+					.append((isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
+					.append((isEnabled() ? "" : " disabled=\"disabled\""))
+					.append(" value=\"")
+					.append(id)
+					.append("\" id=\"")
+					.append(idAttr)
+					.append("\"");
 
 				// Should a roundtrip be made (have onSelectionChanged called)
 				// when the option is clicked?
@@ -68,7 +74,7 @@
 							url = ((PortletRequestContext)rc).getLastEncodedPath();
 						}
 						buffer.append(" onclick=\"").append(form.getJsForInterfaceUrl(url)).append(
-								";\"");
+							";\"");
 					}
 					else
 					{
@@ -77,11 +83,13 @@
 						// with an ActionURL or something
 						// NOTE: do not encode the url as that would give
 						// invalid JavaScript
-						buffer.append(" onclick=\"window.location.href='").append(url)
-								.append(
-										(url.toString().indexOf('?') > -1 ? "&amp;" : "?") +
-												getInputName()).append("=").append(id).append(
-										"';\"");
+						buffer.append(" onclick=\"window.location.href='")
+							.append(url)
+							.append(
+								(url.toString().indexOf('?') > -1 ? "&amp;" : "?") + getInputName())
+							.append("=")
+							.append(id)
+							.append("';\"");
 					}
 				}
 
@@ -95,7 +103,7 @@
 				}
 				CharSequence escaped = Strings.escapeMarkup(display, false, true);
 				buffer.append("<label for=\"").append(idAttr).append("\">").append(escaped).append(
-						"</label>");
+					"</label>");
 
 				// Append option suffix
 				buffer.append(getSuffix());
