@@ -26,8 +26,11 @@
 			Markup markup = getMarkupLoader().loadMarkup(container, markupResourceStream, null,
 				enforceReload);
 
-			// add the markup to the cache.
-			markupKeyCache.put(cacheKey, locationString);
+			if (cacheKey != null)
+			{
+				// add the markup to the cache.
+				markupKeyCache.put(cacheKey, locationString);
+			}
 			return putIntoCache(locationString, markup);
 		}
 		catch (ResourceStreamNotFoundException e)
