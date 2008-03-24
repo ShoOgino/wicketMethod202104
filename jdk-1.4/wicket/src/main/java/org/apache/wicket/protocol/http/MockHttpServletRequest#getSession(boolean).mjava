@@ -7,6 +7,8 @@
 	 */
 	public HttpSession getSession(boolean b)
 	{
-		return session;
+		if (b && session instanceof MockHttpSession)
+			((MockHttpSession)session).setTemporary(false);
+		return getSession();
 	}
 

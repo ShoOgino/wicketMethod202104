@@ -1,0 +1,27 @@
+	/**
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+// protected void tearDown() throws Exception
+// {
+// tester.destroy();
+// }
+	/**
+	 * Test if we can keep a session temporary.
+	 */
+	public void testSessionIsTemporary()
+	{
+		tester.startPage(LoginPage.class);
+		tester.setupRequestAndResponse();
+		assertTrue(tester.getWicketSession().isTemporary());
+		tester.processRequestCycle(LoginPage.class);
+		FormTester form = tester.newFormTester("signInPanel:signInForm");
+		form.setValue("username", "test");
+		form.setValue("password", "test");
+		tester.getWicketSession().bind();
+		form.submit();
+		tester.assertRenderedPage(HomePage.class);
+		tester.setupRequestAndResponse();
+		assertFalse(Session.get().isTemporary());
+		tester.processRequestCycle(LoginPage.class);
+	}
+
