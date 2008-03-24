@@ -19,7 +19,12 @@
 		if (relativePath.length() == 0 &&
 			!Strings.stripJSessionId(servletRequest.getRequestURI()).endsWith("/"))
 		{
-			final String redirectUrl = servletRequest.getRequestURI() + "/";
+			String redirectUrl = servletRequest.getRequestURI() + "/";
+			String queryString = servletRequest.getQueryString();
+			if (queryString != null)
+			{
+				redirectUrl += "?" + queryString;
+			}
 			servletResponse.sendRedirect(servletResponse.encodeRedirectURL(redirectUrl));
 			return true;
 		}
@@ -119,7 +124,7 @@
 				{
 					// Process request
 					cycle.request();
-					
+
 					return cycle.wasHandled();
 				}
 				catch (AbortException e)
