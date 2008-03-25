@@ -20,32 +20,30 @@
 				final ByteArrayOutputStream out = new ByteArrayOutputStream(256);
 				ObjectOutputStream oos = new ObjectOutputStream(out);
 				oos.writeObject(object);
-				ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(out
-						.toByteArray()))
+				ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(
+					out.toByteArray()))
 				{
 					// This override is required to resolve classes inside in different bundle, i.e.
 					// The classes can be resolved by OSGI classresolver implementation
 					protected Class resolveClass(ObjectStreamClass desc) throws IOException,
-							ClassNotFoundException
+						ClassNotFoundException
 					{
 						String className = desc.getName();
 
 						try
 						{
 							return Class.forName(className, true, object.getClass()
-									.getClassLoader());
+								.getClassLoader());
 						}
 						catch (ClassNotFoundException ex1)
 						{
 							// ignore this exception.
-							log
-									.debug("Class not found by using objects own classloader, trying the IClassResolver");
+							log.debug("Class not found by using objects own classloader, trying the IClassResolver");
 						}
 
 
 						Application application = Application.get();
-						IApplicationSettings applicationSettings = application
-								.getApplicationSettings();
+						IApplicationSettings applicationSettings = application.getApplicationSettings();
 						IClassResolver classResolver = applicationSettings.getClassResolver();
 
 						Class candidate = null;
