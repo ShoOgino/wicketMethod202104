@@ -9,7 +9,7 @@
 		{
 			protected IStringResourceStream getTemplateResource()
 			{
-				return new UrlResourceStream(this.getClass().getResource("testWithMarkup.html"));
+				return new UrlResourceStream(getClass().getResource("testWithMarkup.html"));
 			}
 
 			public boolean parseGeneratedMarkup()
@@ -17,7 +17,15 @@
 				return true;
 			}
 		};
-		velocityPanel.add(new Label("message", VelocityPage.TEST_STRING));
+		velocityPanel.add(new Label("message", VelocityPage.TEST_STRING)
+		{
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+				// check whether the markupstream can be located
+				getMarkupAttributes();
+			}
+		});
 		add(velocityPanel);
 	}
 

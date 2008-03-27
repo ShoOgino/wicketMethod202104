@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.MarkupContainer#getAssociatedMarkupStream(boolean)
+	 */
+	public MarkupStream getAssociatedMarkupStream(boolean throwException)
+	{
+		Reader reader = getTemplateReader();
+		if (reader == null)
+		{
+			throw new WicketRuntimeException("could not find velocity template for panel: " + this);
+		}
+
+		// evaluate the template and return a new markupstream
+		String result = evaluateVelocityTemplate(reader);
+		return new MarkupStream(getMarkup(result));
+	}
+

@@ -4,76 +4,24 @@
 	 */
 	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
+		currentMarkupStream = markupStream;
+		currentOpenTag = openTag;
+
 		final Reader templateReader = getTemplateReader();
 		if (templateReader != null)
 		{
-			// Get model as a map
-			final Map map = (Map)getModelObject();
-
-			// create a Velocity context object using the model if set
-			final VelocityContext ctx = new VelocityContext(map);
-
-			// create a writer for capturing the Velocity output
-			StringWriter writer = new StringWriter();
-
-			// string to be used as the template name for log messages in case
-			// of error
-			final String logTag = getId();
-			try
+			String result = evaluateVelocityTemplate(templateReader);
+			if (!parseGeneratedMarkup())
 			{
-				// execute the velocity script and capture the output in writer
-				Velocity.evaluate(ctx, writer, logTag, templateReader);
-
-				// replace the tag's body the Velocity output
-				String result = writer.toString();
-
-				if (escapeHtml())
-				{
-					// encode the result in order to get valid html output that
-					// does not break the rest of the page
-					result = Strings.escapeMarkup(result).toString();
-				}
-
-				if (!parseGeneratedMarkup())
-				{
-					// now replace the body of the tag with the velocity merge
-					// result
-					replaceComponentTagBody(markupStream, openTag, result);
-				}
-				else
-				{
-					// now parse the velocity merge result
-					Markup markup;
-					try
-					{
-						MarkupParser parser = getApplication().getMarkupSettings()
-								.getMarkupParserFactory().newMarkupParser(
-										new MarkupResourceStream(new StringResourceStream(result)));
-						markup = parser.parse();
-					}
-					catch (ResourceStreamNotFoundException e)
-					{
-						throw new RuntimeException("Could not parse resulting markup", e);
-					}
-					markupStream.skipRawMarkup();
-					renderAll(new MarkupStream(markup));
-				}
+				// now replace the body of the tag with the velocity merge
+				// result
+				replaceComponentTagBody(markupStream, openTag, result);
 			}
-			catch (ParseErrorException e)
+			else
 			{
-				onException(e, markupStream, openTag);
-			}
-			catch (MethodInvocationException e)
-			{
-				onException(e, markupStream, openTag);
-			}
-			catch (ResourceNotFoundException e)
-			{
-				onException(e, markupStream, openTag);
-			}
-			catch (IOException e)
-			{
-				onException(e, markupStream, openTag);
+				Markup markup = getMarkup(result);
+				markupStream.skipRawMarkup();
+				renderAll(new MarkupStream(markup));
 			}
 		}
 		else
