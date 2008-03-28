@@ -1,0 +1,20 @@
+	/**
+	 * @see org.apache.wicket.markup.IMarkupResourceStreamProvider#getMarkupResourceStream(org.apache.wicket.MarkupContainer,
+	 *      java.lang.Class)
+	 */
+	public IResourceStream getMarkupResourceStream(MarkupContainer container, Class containerClass)
+	{
+		Reader reader = getTemplateReader();
+		if (reader == null)
+		{
+			throw new WicketRuntimeException("could not find velocity template for panel: " + this);
+		}
+
+		// evaluate the template and return a new StringResourceStream
+		StringBuffer sb = new StringBuffer();
+		sb.append("<wicket:panel>");
+		sb.append(evaluateVelocityTemplate(reader));
+		sb.append("</wicket:panel>");
+		return new StringResourceStream(sb.toString());
+	}
+

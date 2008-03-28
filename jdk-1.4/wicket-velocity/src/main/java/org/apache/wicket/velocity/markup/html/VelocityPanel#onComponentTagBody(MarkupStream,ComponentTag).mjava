@@ -2,31 +2,22 @@
 	 * @see org.apache.wicket.markup.html.panel.Panel#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
-	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
-		currentMarkupStream = markupStream;
-		currentOpenTag = openTag;
-
-		final Reader templateReader = getTemplateReader();
-		if (templateReader != null)
+		if (!Strings.isEmpty(stackTraceAsString))
 		{
-			String result = evaluateVelocityTemplate(templateReader);
-			if (!parseGeneratedMarkup())
-			{
-				// now replace the body of the tag with the velocity merge
-				// result
-				replaceComponentTagBody(markupStream, openTag, result);
-			}
-			else
-			{
-				Markup markup = getMarkup(result);
-				markupStream.skipRawMarkup();
-				renderAll(new MarkupStream(markup));
-			}
+			// TODO: only display the velocity error/stacktrace in development mode?
+			replaceComponentTagBody(markupStream, openTag, Strings
+					.toMultilineMarkup(stackTraceAsString));
+		}
+		else if (!parseGeneratedMarkup())
+		{
+			replaceComponentTagBody(markupStream, openTag,
+					evaluateVelocityTemplate(getTemplateReader()));
 		}
 		else
 		{
-			replaceComponentTagBody(markupStream, openTag, ""); // just empty it
+			super.onComponentTagBody(markupStream, openTag);
 		}
 	}
 
