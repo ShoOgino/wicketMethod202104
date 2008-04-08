@@ -5,32 +5,34 @@
 	 * 
 	 * @return The model
 	 */
-	protected IModel initModel()
+	@SuppressWarnings("unchecked")
+	protected IModel<T> initModel()
 	{
+		IModel<T> foundModel = null;
 		// Search parents for CompoundPropertyModel
-		for (Component current = getParent(); current != null; current = current.getParent())
+		for (Component< ? > current = getParent(); current != null; current = current.getParent())
 		{
 			// Get model
 			// Don't call the getModel() that could initialize many inbetween
 			// completely useless models.
 			// IModel model = current.getModel();
-			IModel model = current.getModelImpl();
+			IModel< ? > model = current.getModelImpl();
 
 			if (model instanceof IWrapModel && !(model instanceof IComponentInheritedModel))
 			{
-				model = ((IWrapModel)model).getWrappedModel();
+				model = ((IWrapModel< ? >)model).getWrappedModel();
 			}
 
 			if (model instanceof IComponentInheritedModel)
 			{
 				// return the shared inherited
-				model = ((IComponentInheritedModel)model).wrapOnInheritance(this);
+				foundModel = ((IComponentInheritedModel)model).wrapOnInheritance(this);
 				setFlag(FLAG_INHERITABLE_MODEL, true);
-				return model;
+				break;
 			}
 		}
 
 		// No model for this component!
-		return null;
+		return foundModel;
 	}
 

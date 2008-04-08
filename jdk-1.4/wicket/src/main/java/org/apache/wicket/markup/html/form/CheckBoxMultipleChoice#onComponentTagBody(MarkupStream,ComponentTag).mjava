@@ -2,11 +2,12 @@
 	 * @see org.apache.wicket.Component#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
+	@Override
 	protected final void onComponentTagBody(final MarkupStream markupStream,
-			final ComponentTag openTag)
+		final ComponentTag openTag)
 	{
 		// Iterate through choices
-		final List choices = getChoices();
+		final List<T> choices = getChoices();
 
 		// Buffer to hold generated body
 		final AppendingStringBuffer buffer = new AppendingStringBuffer(70 * (choices.size() + 1));
@@ -18,7 +19,7 @@
 		for (int index = 0; index < choices.size(); index++)
 		{
 			// Get next choice
-			final Object choice = choices.get(index);
+			final T choice = choices.get(index);
 
 			Object displayValue = getChoiceRenderer().getDisplayValue(choice);
 			Class objectClass = displayValue == null ? null : displayValue.getClass();
@@ -46,11 +47,17 @@
 				final String idAttr = getInputName() + "_" + id;
 
 				// Add checkbox element
-				buffer.append("<input name=\"").append(getInputName()).append("\"").append(
-						" type=\"checkbox\"").append(
-						(isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
-						.append((isEnabled() ? "" : " disabled=\"disabled\"")).append(" value=\"")
-						.append(id).append("\" id=\"").append(idAttr).append("\"/>");
+				buffer.append("<input name=\"")
+					.append(getInputName())
+					.append("\"")
+					.append(" type=\"checkbox\"")
+					.append((isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
+					.append((isEnabled() ? "" : " disabled=\"disabled\""))
+					.append(" value=\"")
+					.append(id)
+					.append("\" id=\"")
+					.append(idAttr)
+					.append("\"/>");
 
 				// Add label for checkbox
 				String display = label;

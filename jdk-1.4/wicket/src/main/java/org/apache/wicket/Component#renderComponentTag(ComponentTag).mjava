@@ -17,15 +17,15 @@
 		if (!(tag instanceof WicketTag) || !stripWicketTags)
 		{
 			// Apply behavior modifiers
-			List behaviors = getBehaviorsImpl();
+			List<IBehavior> behaviors = getBehaviorsImpl();
 			if ((behaviors != null) && !behaviors.isEmpty() && !tag.isClose() &&
 				(isIgnoreAttributeModifier() == false))
 			{
 				tag = tag.mutable();
 
-				for (Iterator i = behaviors.iterator(); i.hasNext();)
+				for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
 				{
-					IBehavior behavior = (IBehavior)i.next();
+					IBehavior behavior = i.next();
 
 					// Components may reject some behavior components
 					if (isBehaviorAccepted(behavior))
@@ -38,10 +38,10 @@
 			// apply behaviors that are attached to the component tag.
 			if (tag.hasBehaviors())
 			{
-				Iterator tagBehaviors = tag.getBehaviors();
+				Iterator<IBehavior> tagBehaviors = tag.getBehaviors();
 				while (tagBehaviors.hasNext())
 				{
-					final IBehavior behavior = (IBehavior)tagBehaviors.next();
+					final IBehavior behavior = tagBehaviors.next();
 					behavior.onComponentTag(this, tag);
 				}
 			}

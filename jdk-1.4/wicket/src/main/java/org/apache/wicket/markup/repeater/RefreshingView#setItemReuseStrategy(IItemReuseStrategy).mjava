@@ -7,7 +7,7 @@
 	 *            item reuse strategy
 	 * @return this for chaining
 	 */
-	public RefreshingView setItemReuseStrategy(IItemReuseStrategy strategy)
+	public RefreshingView<T> setItemReuseStrategy(IItemReuseStrategy strategy)
 	{
 		if (strategy == null)
 		{
@@ -24,11 +24,13 @@
 
 					private final IItemReuseStrategy old = itemReuseStrategy;
 
+					@Override
 					public void undo()
 					{
 						itemReuseStrategy = old;
 					}
 
+					@Override
 					public String toString()
 					{
 						return "ItemsReuseStrategyChange[component: " + getPath() + ", reuse: " +

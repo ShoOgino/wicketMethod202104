@@ -3,7 +3,7 @@
 	 */
 	public void requestTime(long timeTaken)
 	{
-		RequestData rd = (RequestData)currentRequest.get();
+		RequestData rd = currentRequest.get();
 		if (rd != null)
 		{
 			synchronized (this)
@@ -32,10 +32,9 @@
 					// log the error and let the request logging continue (this is what happens in
 					// the
 					// detach phase of the request cycle anyway. This provides better diagnostics).
-					log
-							.error(
-									"Exception while determining the size of the session in the request logger: " +
-											e.getMessage(), e);
+					log.error(
+						"Exception while determining the size of the session in the request logger: " +
+							e.getMessage(), e);
 				}
 			}
 			rd.setSessionSize(sizeInBytes);
@@ -45,12 +44,12 @@
 			currentRequest.set(null);
 			if (sessionId != null)
 			{
-				SessionData sd = (SessionData)liveSessions.get(sessionId);
+				SessionData sd = liveSessions.get(sessionId);
 				if (sd == null)
 				{
 					// passivated session or logger only started after it.
 					sessionCreated(sessionId);
-					sd = (SessionData)liveSessions.get(sessionId);
+					sd = liveSessions.get(sessionId);
 				}
 				if (sd != null)
 				{

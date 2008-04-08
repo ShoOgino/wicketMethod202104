@@ -1,25 +1,22 @@
 	/**
 	 * @see org.apache.wicket.markup.html.form.FormComponent#convertValue(String[])
 	 */
-	protected Object convertValue(String[] input) throws ConversionException
+	@Override
+	protected T convertValue(String[] input) throws ConversionException
 	{
 		if (input != null && input.length > 0)
 		{
 			final String value = input[0];
 
 			// retrieve the selected single radio choice component
-			Radio choice = (Radio)visitChildren(new Component.IVisitor()
+			Radio<T> choice = (Radio<T>)visitChildren(Radio.class, new Component.IVisitor<Radio>()
 			{
 
-				public Object component(Component component)
+				public Object component(Radio radio)
 				{
-					if (component instanceof Radio)
+					if (radio.getValue().equals(value))
 					{
-						final Radio radio = (Radio)component;
-						if (radio.getValue().equals(value))
-						{
-							return radio;
-						}
+						return radio;
 					}
 					return CONTINUE_TRAVERSAL;
 				}
@@ -29,12 +26,12 @@
 			if (choice == null)
 			{
 				throw new WicketRuntimeException(
-						"submitted http post value [" +
-								value +
-								"] for RadioGroup component [" +
-								getPath() +
-								"] is illegal because it does not contain relative path to a Radio componnet. " +
-								"Due to this the RadioGroup component cannot resolve the selected Radio component pointed to by the illegal value. A possible reason is that componment hierarchy changed between rendering and form submission.");
+					"submitted http post value [" +
+						value +
+						"] for RadioGroup component [" +
+						getPath() +
+						"] is illegal because it does not contain relative path to a Radio componnet. " +
+						"Due to this the RadioGroup component cannot resolve the selected Radio component pointed to by the illegal value. A possible reason is that componment hierarchy changed between rendering and form submission.");
 			}
 
 

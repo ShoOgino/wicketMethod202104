@@ -4,16 +4,17 @@
 	 * @param markupStream
 	 *            The markup stream
 	 */
+	@Override
 	protected final void onRender(final MarkupStream markupStream)
 	{
 		final int markupStart = markupStream.getCurrentIndex();
 
-		Iterator it = renderIterator();
+		Iterator<Component> it = renderIterator();
 		if (it.hasNext())
 		{
 			do
 			{
-				Component child = (Component)it.next();
+				Component child = it.next();
 				if (child == null)
 				{
 					throw new IllegalStateException("the render iterator returned null for a child");

@@ -4,16 +4,18 @@
 	 * 
 	 * @return iterator over ICellPopulator elements in the populators array
 	 */
-	private Iterator getPopulatorsIterator()
+	private ArrayIteratorAdapter<ICellPopulator<T>> getPopulatorsIterator()
 	{
 		if (populatorsIteratorCache == null)
 		{
-			populatorsIteratorCache = new ArrayIteratorAdapter(internalGetPopulators())
+			populatorsIteratorCache = new ArrayIteratorAdapter<ICellPopulator<T>>(
+				internalGetPopulators())
 			{
 
-				protected IModel model(Object object)
+				@Override
+				protected IModel<ICellPopulator<T>> model(ICellPopulator<T> object)
 				{
-					return new Model((Serializable)object);
+					return new Model<ICellPopulator<T>>(object);
 				}
 
 			};

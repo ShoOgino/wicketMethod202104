@@ -7,9 +7,10 @@
 	 *            The open tag for the body
 	 * @see org.apache.wicket.Component#onComponentTagBody(MarkupStream, ComponentTag)
 	 */
+	@Override
 	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
-		List choices = getChoices();
+		List<E> choices = getChoices();
 		final AppendingStringBuffer buffer = new AppendingStringBuffer((choices.size() * 50) + 16);
 		final String selected = getValue();
 
@@ -18,7 +19,7 @@
 
 		for (int index = 0; index < choices.size(); index++)
 		{
-			final Object choice = choices.get(index);
+			final E choice = choices.get(index);
 			appendOptionHtml(buffer, choice, index, selected);
 		}
 

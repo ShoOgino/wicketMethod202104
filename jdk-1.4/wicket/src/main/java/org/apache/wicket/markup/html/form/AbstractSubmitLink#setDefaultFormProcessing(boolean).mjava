@@ -10,7 +10,7 @@
 	 *            defaultFormProcessing
 	 * @return This
 	 */
-	public final AbstractSubmitLink setDefaultFormProcessing(boolean defaultFormProcessing)
+	public final AbstractSubmitLink<T> setDefaultFormProcessing(boolean defaultFormProcessing)
 	{
 		if (this.defaultFormProcessing != defaultFormProcessing)
 		{
@@ -20,11 +20,13 @@
 
 				boolean formerValue = AbstractSubmitLink.this.defaultFormProcessing;
 
+				@Override
 				public void undo()
 				{
 					AbstractSubmitLink.this.defaultFormProcessing = formerValue;
 				}
 
+				@Override
 				public String toString()
 				{
 					return "DefaultFormProcessingChange[component: " + getPath() +

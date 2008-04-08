@@ -1,0 +1,44 @@
+	/**
+	 * Create a new form component instance to serve as editor.
+	 * 
+	 * @param parent
+	 *            The parent component
+	 * @param componentId
+	 *            Id that should be used by the component
+	 * @param model
+	 *            The model
+	 * @return The editor
+	 */
+	protected FormComponent<T> newEditor(MarkupContainer parent, String componentId, IModel<T> model)
+	{
+		TextField<T> editor = new TextField<T>(componentId, model)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public IConverter getConverter(Class< ? > type)
+			{
+				IConverter c = AjaxEditableLabel.this.getConverter(type);
+				return c != null ? c : super.getConverter(type);
+			}
+
+			@Override
+			protected void onModelChanged()
+			{
+				super.onModelChanged();
+				AjaxEditableLabel.this.onModelChanged();
+			}
+
+			@Override
+			protected void onModelChanging()
+			{
+				super.onModelChanging();
+				AjaxEditableLabel.this.onModelChanging();
+			}
+		};
+		editor.setOutputMarkupId(true);
+		editor.setVisible(false);
+		editor.add(new EditorAjaxBehavior());
+		return editor;
+	}
+

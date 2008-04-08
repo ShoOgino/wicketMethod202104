@@ -1,6 +1,6 @@
 	/**
 	 * Construct.
-	 *
+	 * 
 	 * @param id
 	 * @param form
 	 */
@@ -13,26 +13,31 @@
 
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSubmit(AjaxRequestTarget target)
 			{
 				AjaxSubmitLink.this.onSubmit(target, getForm());
 			}
 
+			@Override
 			protected void onError(AjaxRequestTarget target)
 			{
 				AjaxSubmitLink.this.onError(target, getForm());
 			}
 
+			@Override
 			protected CharSequence getEventHandler()
 			{
 				return new AppendingStringBuffer(super.getEventHandler()).append("; return false;");
 			}
 
+			@Override
 			protected IAjaxCallDecorator getAjaxCallDecorator()
 			{
 				return AjaxSubmitLink.this.getAjaxCallDecorator();
 			}
 
+			@Override
 			protected void onComponentTag(ComponentTag tag)
 			{
 				// write the onclick handler only if link is enabled

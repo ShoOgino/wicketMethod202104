@@ -5,15 +5,15 @@
 	 *            choice ids. this array is nonnull and always contains at least one id.
 	 * @return list of choices.
 	 */
-	protected List convertChoiceIdsToChoices(String[] ids)
+	protected List<T> convertChoiceIdsToChoices(String[] ids)
 	{
-		ArrayList selectedValues = new ArrayList();
+		ArrayList<T> selectedValues = new ArrayList<T>();
 
 		// If one or more ids is selected
 		if (ids != null && ids.length > 0 && !Strings.isEmpty(ids[0]))
 		{
 			// Get values that could be selected
-			final List choices = getChoices();
+			final List<T> choices = getChoices();
 
 			// Loop through selected indices
 			for (int i = 0; i < ids.length; i++)
@@ -21,7 +21,7 @@
 				for (int index = 0; index < choices.size(); index++)
 				{
 					// Get next choice
-					final Object choice = choices.get(index);
+					final T choice = choices.get(index);
 					if (getChoiceRenderer().getIdValue(choice, index).equals(ids[i]))
 					{
 						selectedValues.add(choice);

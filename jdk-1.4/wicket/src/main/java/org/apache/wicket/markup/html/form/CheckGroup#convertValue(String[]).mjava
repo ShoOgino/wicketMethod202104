@@ -1,9 +1,10 @@
 	/**
 	 * @see org.apache.wicket.markup.html.form.FormComponent#convertValue(String[])
 	 */
-	protected Object convertValue(String[] values) throws ConversionException
+	@Override
+	protected Collection<T> convertValue(String[] values) throws ConversionException
 	{
-		List collection = new ArrayList();
+		List<T> collection = new ArrayList<T>();
 
 		/*
 		 * if the input is null we do not need to do anything since the model collection has already
@@ -18,35 +19,32 @@
 
 				if (value != null)
 				{
-					Check checkbox = (Check)visitChildren(new Component.IVisitor()
-					{
-
-						public Object component(Component component)
+					Check<T> checkbox = (Check<T>)visitChildren(Check.class,
+						new Component.IVisitor<Check>()
 						{
-							if (component instanceof Check)
+
+							public Object component(Check check)
 							{
-								final Check check = (Check)component;
 								if (String.valueOf(check.getValue()).equals(value))
 								{
 									return check;
 								}
+								return CONTINUE_TRAVERSAL;
 							}
-							return CONTINUE_TRAVERSAL;
-						}
 
-					});
+						});
 
 					if (checkbox == null)
 					{
 						throw new WicketRuntimeException(
-								"submitted http post value [" +
-										Strings.join(",", values) +
-										"] for CheckGroup component [" +
-										getPath() +
-										"] contains an illegal relative path " +
-										"element [" +
-										value +
-										"] which does not point to a Check component. Due to this the CheckGroup component cannot resolve the selected Check component pointed to by the illegal value. A possible reason is that componment hierarchy changed between rendering and form submission.");
+							"submitted http post value [" +
+								Strings.join(",", values) +
+								"] for CheckGroup component [" +
+								getPath() +
+								"] contains an illegal relative path " +
+								"element [" +
+								value +
+								"] which does not point to a Check component. Due to this the CheckGroup component cannot resolve the selected Check component pointed to by the illegal value. A possible reason is that componment hierarchy changed between rendering and form submission.");
 					}
 
 					// assign the value of the group's model

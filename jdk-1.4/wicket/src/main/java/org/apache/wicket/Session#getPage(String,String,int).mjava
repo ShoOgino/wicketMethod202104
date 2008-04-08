@@ -28,7 +28,7 @@
 			{
 				if (pageMapsUsedInRequest == null)
 				{
-					pageMapsUsedInRequest = new HashMap(3);
+					pageMapsUsedInRequest = new HashMap<IPageMap, PageMapsUsedInRequestEntry>(3);
 				}
 			}
 			synchronized (pageMapsUsedInRequest)
@@ -40,7 +40,7 @@
 				// later
 				Duration timeout = Application.get().getRequestCycleSettings().getTimeout();
 
-				PageMapsUsedInRequestEntry entry = (PageMapsUsedInRequestEntry)pageMapsUsedInRequest.get(pageMap);
+				PageMapsUsedInRequestEntry entry = pageMapsUsedInRequest.get(pageMap);
 
 				// Get page entry for id and version
 				Thread t = entry != null ? entry.thread : null;
@@ -63,7 +63,7 @@
 						throw new WicketRuntimeException(ex);
 					}
 
-					entry = (PageMapsUsedInRequestEntry)pageMapsUsedInRequest.get(pageMap);
+					entry = pageMapsUsedInRequest.get(pageMap);
 					t = entry != null ? entry.thread : null;
 
 					if (t != null && t != Thread.currentThread() &&

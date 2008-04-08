@@ -5,6 +5,7 @@
 	 *            Tag to modify
 	 * @see org.apache.wicket.Component#onComponentTag(org.apache.wicket.markup.ComponentTag)
 	 */
+	@Override
 	protected void onComponentTag(ComponentTag tag)
 	{
 		super.onComponentTag(tag);
@@ -27,12 +28,12 @@
 						url = url.substring(1);
 					}
 					url = RequestCycle.get().getRequest().getRelativePathPrefixToContextRoot() +
-							url;
+						url;
 				}
 
 				// if the tag is an anchor proper
 				if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
-						tag.getName().equalsIgnoreCase("area"))
+					tag.getName().equalsIgnoreCase("area"))
 				{
 					// generate the href attribute
 					tag.put("href", Strings.replaceAll(url, "&", "&amp;"));

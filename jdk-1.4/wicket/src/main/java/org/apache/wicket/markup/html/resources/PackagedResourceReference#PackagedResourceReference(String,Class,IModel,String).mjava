@@ -12,7 +12,7 @@
 	 *            the attribute to replace of the target tag
 	 */
 	public PackagedResourceReference(final String id, final Class referer, final IModel file,
-			final String attributeToReplace)
+		final String attributeToReplace)
 	{
 		super(id);
 
@@ -29,11 +29,12 @@
 			throw new IllegalArgumentException("AttributeToReplace may not be null");
 		}
 
-		IModel srcReplacement = new Model()
+		IModel<String> srcReplacement = new Model<String>()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public Object getObject()
+			@Override
+			public String getObject()
 			{
 				Object o = file.getObject();
 				if (o == null)
@@ -46,7 +47,8 @@
 				}
 				String f = getConverter(String.class).convertToString(o, getLocale());
 				ResourceReference ref = new ResourceReference(referer, f, getLocale(), getStyle());
-				return urlFor(ref);
+				CharSequence url = urlFor(ref);
+				return url != null ? url.toString() : null;
 			}
 		};
 		add(new AttributeModifier(attributeToReplace, true, srcReplacement));

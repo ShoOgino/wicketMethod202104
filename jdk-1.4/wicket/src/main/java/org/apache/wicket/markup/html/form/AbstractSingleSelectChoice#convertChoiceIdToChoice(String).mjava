@@ -5,14 +5,14 @@
 	 *            string id of one of the choice objects in the choices list. can be null.
 	 * @return choice object. null if none match the specified id.
 	 */
-	protected Object convertChoiceIdToChoice(String id)
+	protected T convertChoiceIdToChoice(String id)
 	{
-		final List choices = getChoices();
-		final IChoiceRenderer renderer = getChoiceRenderer();
+		final List<T> choices = getChoices();
+		final IChoiceRenderer<T> renderer = getChoiceRenderer();
 		for (int index = 0; index < choices.size(); index++)
 		{
 			// Get next choice
-			final Object choice = choices.get(index);
+			final T choice = choices.get(index);
 			if (renderer.getIdValue(choice, index).equals(id))
 			{
 				return choice;

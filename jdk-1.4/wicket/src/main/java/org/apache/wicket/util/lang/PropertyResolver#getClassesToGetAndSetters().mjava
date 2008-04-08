@@ -1,4 +1,4 @@
-	private static Map getClassesToGetAndSetters()
+	private static Map<Class, Map> getClassesToGetAndSetters()
 	{
 		Object key = null;
 		if (Application.exists())
@@ -9,13 +9,13 @@
 		{
 			key = PropertyResolver.class;
 		}
-		Map result = (Map)applicationToClassesToGetAndSetters.get(key);
+		Map<Class, Map> result = applicationToClassesToGetAndSetters.get(key);
 		if (result == null)
 		{
 			// Don't synchronize this - Doesn't matter if we create two of them,
 			// as it's only a cache and the first will go out of scope and get
 			// GC'ed.
-			applicationToClassesToGetAndSetters.put(key, result = new ConcurrentHashMap(64));
+			applicationToClassesToGetAndSetters.put(key, result = new ConcurrentHashMap<Class, Map>(64));
 		}
 		return result;
 	}

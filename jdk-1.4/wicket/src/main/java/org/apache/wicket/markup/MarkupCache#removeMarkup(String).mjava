@@ -32,7 +32,7 @@
 
 				// If a base markup file has been removed from the cache, than
 				// the derived markup should be removed as well.
-				Iterator iter = markupCache.getKeys().iterator();
+				Iterator<CharSequence> iter = markupCache.getKeys().iterator();
 				while (iter.hasNext())
 				{
 					Markup cacheMarkup = (Markup)markupCache.get(iter.next());
@@ -67,10 +67,10 @@
 				.getResourceWatcher(true);
 			if (watcher != null)
 			{
-				Iterator iter = watcher.getEntries().iterator();
+				Iterator<IModifiable> iter = watcher.getEntries().iterator();
 				while (iter.hasNext())
 				{
-					IModifiable modifiable = (IModifiable)iter.next();
+					IModifiable modifiable = iter.next();
 					if (modifiable instanceof MarkupResourceStream)
 					{
 						MarkupResourceStream resourceStream = (MarkupResourceStream)modifiable;

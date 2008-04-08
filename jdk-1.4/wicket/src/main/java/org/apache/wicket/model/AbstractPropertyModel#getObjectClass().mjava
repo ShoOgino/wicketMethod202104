@@ -1,14 +1,15 @@
 	/**
 	 * @return model object class
 	 */
-	public Class getObjectClass()
+	@SuppressWarnings("unchecked")
+	public Class<T> getObjectClass()
 	{
 		final String expression = propertyExpression();
 		if (Strings.isEmpty(expression))
 		{
 			// Return a meaningful value for an empty property expression
 			Object target = getTarget();
-			return target != null ? target.getClass() : null;
+			return (Class<T>)(target != null ? target.getClass() : null);
 		}
 
 		final Object target = getTarget();
