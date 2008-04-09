@@ -1,16 +1,16 @@
 	/**
 	 * @see org.apache.wicket.application.IClassResolver#resolveClass(java.lang.String)
 	 */
-	public final Class resolveClass(final String classname) throws ClassNotFoundException
+	public final Class< ? > resolveClass(final String classname) throws ClassNotFoundException
 	{
-		Class clazz = null;
-		WeakReference ref = classes.get(classname);
+		Class< ? > clazz = null;
+		WeakReference<Class< ? >> ref = classes.get(classname);
 
 		// Might be garbage-collected between getting the WeakRef and retrieving
 		// the Class from it.
 		if (ref != null)
 		{
-			clazz = (Class)ref.get();
+			clazz = ref.get();
 		}
 		if (clazz == null)
 		{
@@ -57,7 +57,7 @@
 					}
 					clazz = loader.loadClass(classname);
 				}
-				classes.put(classname, new WeakReference<Class>(clazz));
+				classes.put(classname, new WeakReference<Class< ? >>(clazz));
 			}
 		}
 		return clazz;
