@@ -6,7 +6,7 @@
 		 */
 		public InputForm(String name)
 		{
-			super(name, new CompoundPropertyModel(new FormInputModel()));
+			super(name, new CompoundPropertyModel<FormInputModel>(new FormInputModel()));
 
 			// Dropdown for selecting locale
 			add(new LocaleDropDownChoice("localeSelect"));
@@ -14,6 +14,7 @@
 			// Link to return to default locale
 			add(new Link("defaultLocaleLink")
 			{
+				@Override
 				public void onClick()
 				{
 					WebRequest request = (WebRequest)getRequest();
@@ -21,19 +22,22 @@
 				}
 			});
 
-			RequiredTextField stringTextField = new RequiredTextField("stringProperty");
-			stringTextField.setLabel(new Model("String"));
+			RequiredTextField<String> stringTextField = new RequiredTextField<String>(
+				"stringProperty");
+			stringTextField.setLabel(new Model<String>("String"));
 			add(stringTextField);
-			RequiredTextField integerTextField = new RequiredTextField("integerProperty");
+			RequiredTextField<Integer> integerTextField = new RequiredTextField<Integer>(
+				"integerProperty");
 			add(integerTextField.add(NumberValidator.POSITIVE));
-			add(new RequiredTextField("doubleProperty"));
+			add(new RequiredTextField<Double>("doubleProperty"));
 
-			add(new RequiredTextField("integerInRangeProperty").add(NumberValidator.range(0, 100)));
+			add(new RequiredTextField<Integer>("integerInRangeProperty").add(NumberValidator.range(
+				0, 100)));
 			add(new CheckBox("booleanProperty"));
 			add(new Multiply("multiply"));
 			// display the multiply result
 			Label multiplyLabel = new Label("multiplyLabel", new PropertyModel(getModel(),
-					"multiply"));
+				"multiply"));
 			// just for fun, add a border so that our result will be displayed
 			// as '[ x ]'
 			multiplyLabel.setComponentBorder(new BeforeAndAfterBorder());
@@ -47,6 +51,7 @@
 			add(group);
 			ListView persons = new ListView("numbers", NUMBERS)
 			{
+				@Override
 				protected void populateItem(ListItem item)
 				{
 					item.add(new Radio("radio", item.getModel()));
@@ -59,6 +64,7 @@
 			add(checks);
 			ListView checksList = new ListView("numbers", NUMBERS)
 			{
+				@Override
 				protected void populateItem(ListItem item)
 				{
 					item.add(new Check("check", item.getModel()));
@@ -72,6 +78,7 @@
 			// TextField using a custom converter.
 			add(new TextField("urlProperty", URL.class)
 			{
+				@Override
 				public IConverter getConverter(final Class type)
 				{
 					return new IConverter()
@@ -99,6 +106,7 @@
 			// TextField using a mask converter
 			add(new TextField("phoneNumberUS", UsPhoneNumber.class)
 			{
+				@Override
 				public IConverter getConverter(final Class/* <?> */type)
 				{
 					// US telephone number mask
@@ -113,6 +121,7 @@
 
 			add(new Button("resetButton")
 			{
+				@Override
 				public void onSubmit()
 				{
 					// just set a new instance of the page
