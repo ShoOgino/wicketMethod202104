@@ -2,23 +2,19 @@
 	 * 
 	 * @see org.apache.wicket.resource.IPropertiesFactory#load(java.lang.Class, java.lang.String)
 	 */
-	public Properties load(final Class clazz, final String path)
+	public Properties load(final Class< ? > clazz, final String path)
 	{
 		// Check the cache
 		Properties properties = propertiesCache.get(path);
 
 		if (properties == null)
 		{
-			// If not in the cache than try to load properties
-			IResourceStream stream = application.getResourceSettings()
-				.getResourceStreamLocator()
-				.locate(clazz, path);
-			if (stream != null)
+			Iterator<IPropertiesLoader> iter = propertiesLoader.iterator();
+			while ((properties == null) && iter.hasNext())
 			{
-				// Load the properties from the stream
-				properties = loadPropertiesFileAndWatchForChanges(path, stream);
+				IPropertiesLoader loader = iter.next();
+				properties = loader.load(clazz, path);
 			}
-
 
 			// Cache the lookup
 			if (properties == null)
@@ -30,7 +26,6 @@
 			{
 				propertiesCache.put(path, properties);
 			}
-
 		}
 
 		if (properties == Properties.EMPTY_PROPERTIES)

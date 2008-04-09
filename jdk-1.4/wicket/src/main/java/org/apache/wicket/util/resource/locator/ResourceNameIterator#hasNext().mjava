@@ -4,9 +4,9 @@
 	public boolean hasNext()
 	{
 		// Most inner loop. Loop through all extensions provided
-		if (this.extenstionsIterator != null)
+		if (extenstionsIterator != null)
 		{
-			if (this.extenstionsIterator.hasNext() == true)
+			if (extenstionsIterator.hasNext() == true)
 			{
 				return true;
 			}
@@ -18,38 +18,36 @@
 		}
 
 		// 2nd inner loop: Loop through all Locale combinations
-		if (this.localeIterator != null)
+		if (localeIterator != null)
 		{
-			while (this.localeIterator.hasNext())
+			while (localeIterator.hasNext())
 			{
 				// Get the next Locale from the iterator and start the next
 				// inner iterator over again.
-				String newPath = (String)this.localeIterator.next();
-				this.currentLocale = this.localeIterator.getLocale();
-				this.extenstionsIterator = new ExtensionResourceNameIterator(newPath,
-						this.extensions);
-				if (this.extenstionsIterator.hasNext() == true)
+				String newPath = (String)localeIterator.next();
+				currentLocale = localeIterator.getLocale();
+				extenstionsIterator = new ExtensionResourceNameIterator(newPath, extensions);
+				if (extenstionsIterator.hasNext() == true)
 				{
 					return true;
 				}
 			}
-			this.localeIterator = null;
+			localeIterator = null;
 		}
 
 		// Most outer loop: Loop through all combinations of styles and
 		// variations
-		while (this.styleIterator.hasNext())
+		while (styleIterator.hasNext())
 		{
-			String newPath = (String)this.styleIterator.next();
+			String newPath = (String)styleIterator.next();
 
-			this.localeIterator = new LocaleResourceNameIterator(newPath, this.locale);
-			while (this.localeIterator.hasNext())
+			localeIterator = new LocaleResourceNameIterator(newPath, locale);
+			while (localeIterator.hasNext())
 			{
-				newPath = (String)this.localeIterator.next();
-				this.currentLocale = this.localeIterator.getLocale();
-				this.extenstionsIterator = new ExtensionResourceNameIterator(newPath,
-						this.extensions);
-				if (this.extenstionsIterator.hasNext() == true)
+				newPath = (String)localeIterator.next();
+				currentLocale = localeIterator.getLocale();
+				extenstionsIterator = new ExtensionResourceNameIterator(newPath, extensions);
+				if (extenstionsIterator.hasNext() == true)
 				{
 					return true;
 				}

@@ -3,10 +3,10 @@
 		 *      java.lang.String, org.apache.wicket.markup.resolver.AutoLinkResolver.PathInfo)
 		 */
 		public Component newAutoComponent(final MarkupContainer container, final String autoId,
-				PathInfo pathInfo)
+			PathInfo pathInfo)
 		{
 			if ((pathInfo.extension != null) &&
-					supportedPageExtensions.contains(pathInfo.extension))
+				supportedPageExtensions.contains(pathInfo.extension))
 			{
 				// Obviously a href like href="myPkg.MyLabel.html" will do as
 				// well. Wicket will not throw an exception. It accepts it.
@@ -14,19 +14,20 @@
 
 				Page page = container.getPage();
 				final IClassResolver defaultClassResolver = page.getApplication()
-						.getApplicationSettings().getClassResolver();
-                String className = Packages.absolutePath(page.getClass(), pathInfo.path );
-                className = Strings.replaceAll(className, "/", ".").toString();
-                if(className.startsWith("."))
-                {
-                    className = className.substring(1);
-                }
-                
+					.getApplicationSettings()
+					.getClassResolver();
+				String className = Packages.absolutePath(page.getClass(), pathInfo.path);
+				className = Strings.replaceAll(className, "/", ".").toString();
+				if (className.startsWith("."))
+				{
+					className = className.substring(1);
+				}
+
 				try
 				{
 					final Class clazz = defaultClassResolver.resolveClass(className);
 					return new AutolinkBookmarkablePageLink(autoId, clazz, pathInfo.pageParameters,
-							pathInfo.anchor);
+						pathInfo.anchor);
 				}
 				catch (ClassNotFoundException ex)
 				{
@@ -41,7 +42,7 @@
 					parentWithContainer = container.findParentWithAssociatedMarkup();
 				}
 				if ((parentWithContainer instanceof Page) && !pathInfo.path.startsWith("/") &&
-						page.getMarkupStream().isMergedMarkup())
+					page.getMarkupStream().isMergedMarkup())
 				{
 					Class clazz = container.getMarkupStream().getTag().getMarkupClass();
 					if (clazz != null)
@@ -53,8 +54,8 @@
 						try
 						{
 							clazz = defaultClassResolver.resolveClass(className);
-							return new AutolinkBookmarkablePageLink(autoId, clazz, pathInfo
-									.getPageParameters(), pathInfo.anchor);
+							return new AutolinkBookmarkablePageLink(autoId, clazz,
+								pathInfo.getPageParameters(), pathInfo.anchor);
 						}
 						catch (ClassNotFoundException ex)
 						{
@@ -69,7 +70,7 @@
 				// not a registered type for bookmarkable pages; create a link
 				// to a resource instead
 				return newPackageResourceReferenceAutoComponent(container, autoId, pathInfo,
-						attribute);
+					attribute);
 			}
 
 			// fallthrough

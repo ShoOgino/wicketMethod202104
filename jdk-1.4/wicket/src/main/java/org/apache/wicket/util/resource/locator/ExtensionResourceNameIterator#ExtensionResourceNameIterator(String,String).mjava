@@ -6,13 +6,13 @@
 	 */
 	public ExtensionResourceNameIterator(String path, final String extension)
 	{
-		if (extension == null)
+		if ((extension == null) && (path.indexOf('.') != -1))
 		{
 			// Get the extension from the path provided
 			extensions = new String[] { "." + Strings.lastPathComponent(path, '.') };
 			path = Strings.beforeLastPathComponent(path, '.');
 		}
-		else
+		else if (extension != null)
 		{
 			// Extension can be a comma separated list
 			extensions = Strings.split(extension, ',');
@@ -25,8 +25,13 @@
 				}
 			}
 		}
+		else
+		{
+			extensions = new String[1];
+			extensions[0] = ".";
+		}
 
 		this.path = path;
-		this.index = 0;
+		index = 0;
 	}
 

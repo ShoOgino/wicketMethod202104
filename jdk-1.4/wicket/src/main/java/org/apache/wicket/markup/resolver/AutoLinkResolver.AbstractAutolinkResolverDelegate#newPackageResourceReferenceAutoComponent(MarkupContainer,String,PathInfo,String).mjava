@@ -12,10 +12,10 @@
 		 * @return a new auto component or null if the path was absolute
 		 */
 		protected final Component newPackageResourceReferenceAutoComponent(
-				final MarkupContainer container, final String autoId, final PathInfo pathInfo,
-				final String attribute)
+			final MarkupContainer container, final String autoId, final PathInfo pathInfo,
+			final String attribute)
 		{
-			if (!pathInfo.absolute)
+			if (!pathInfo.absolute && (pathInfo.path != null) && (pathInfo.path.length() > 0))
 			{
 				// Href is relative. Create a resource reference pointing at
 				// this file
@@ -38,7 +38,7 @@
 
 				// Create the component implementing the link
 				ResourceReferenceAutolink autoLink = new ResourceReferenceAutolink(autoId, clazz,
-						pathInfo.reference, attribute);
+					pathInfo.reference, attribute);
 				if (autoLink.resourceReference != null)
 				{
 					// if the resource reference is null, it means that it the

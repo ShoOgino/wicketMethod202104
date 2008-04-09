@@ -1,21 +1,10 @@
 	/**
-	 * Get the string resource for the given combination of class, key, locale and style. The
-	 * information is obtained from a resource bundle associated with the provided Class (or one of
-	 * its super classes).
 	 * 
-	 * @param clazz
-	 *            The Class to find resources to be loaded
-	 * @param key
-	 *            The key to obtain the string for
-	 * @param locale
-	 *            The locale identifying the resource set to select the strings from
-	 * @param style
-	 *            The (optional) style identifying the resource set to select the strings from (see
-	 *            {@link org.apache.wicket.Session})
-	 * @return The string resource value or null if resource not found
+	 * @see org.apache.wicket.resource.loader.IStringResourceLoader#loadStringResource(java.lang.Class,
+	 *      java.lang.String, java.util.Locale, java.lang.String)
 	 */
 	public String loadStringResource(Class clazz, final String key, final Locale locale,
-			final String style)
+		final String style)
 	{
 		if (clazz == null)
 		{
@@ -23,8 +12,9 @@
 		}
 
 		// Load the properties associated with the path
-		IPropertiesFactory propertiesFactory = Application.get().getResourceSettings()
-				.getPropertiesFactory();
+		IPropertiesFactory propertiesFactory = Application.get()
+			.getResourceSettings()
+			.getPropertiesFactory();
 
 		while (true)
 		{
@@ -32,8 +22,7 @@
 			String path = clazz.getName().replace('.', '/');
 
 			// Iterator over all the combinations
-			ResourceNameIterator iter = new ResourceNameIterator(path, style, locale,
-					"properties,xml");
+			ResourceNameIterator iter = new ResourceNameIterator(path, style, locale, null);
 			while (iter.hasNext())
 			{
 				String newPath = (String)iter.next();
