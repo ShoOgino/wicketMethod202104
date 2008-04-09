@@ -4,10 +4,10 @@
 	 * @param component
 	 * @return A MarkupStream which is positioned at the component
 	 */
-	final MarkupStream find(final Component component)
+	final MarkupStream find(final Component< ? > component)
 	{
 		// Get the parent's associated markup stream.
-		MarkupContainer parentWithAssociatedMarkup = component.findParentWithAssociatedMarkup();
+		MarkupContainer< ? > parentWithAssociatedMarkup = component.findParentWithAssociatedMarkup();
 		MarkupStream markupStream = null;
 
 		// Might be that we have to walk up the component hierarchy
@@ -60,8 +60,7 @@
 
 			if (parentWithAssociatedMarkup instanceof Fragment)
 			{
-				markupStream = ((Fragment)parentWithAssociatedMarkup).findComponentIndex(component
-						.getId());
+				markupStream = ((Fragment)parentWithAssociatedMarkup).findComponentIndex(component.getId());
 				return markupStream;
 			}
 
@@ -70,14 +69,13 @@
 			// ...
 			if (parentWithAssociatedMarkup instanceof Border)
 			{
-				parentWithAssociatedMarkup = parentWithAssociatedMarkup
-						.findParentWithAssociatedMarkup();
+				parentWithAssociatedMarkup = parentWithAssociatedMarkup.findParentWithAssociatedMarkup();
 			}
 			else
 			{
 				throw new WicketRuntimeException(
-						"Unable to find the markup for the component. That may be due to transparent containers or components implementing IComponentResolver: " +
-								component.toString());
+					"Unable to find the markup for the component. That may be due to transparent containers or components implementing IComponentResolver: " +
+						component.toString());
 			}
 
 			// Not found, reset the stream
