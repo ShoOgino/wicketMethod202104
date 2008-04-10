@@ -1,6 +1,7 @@
 	/**
 	 * @see org.apache.wicket.examples.WicketExampleApplication#init()
 	 */
+	@Override
 	protected void init()
 	{
 		getResourceSettings().setThrowExceptionOnMissingResource(false);
@@ -9,8 +10,9 @@
 		// Install a simple page authorization strategy, that checks all pages
 		// of type AuthenticatedWebPage.
 		IAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
-				AuthenticatedWebPage.class, SignIn.class)
+			AuthenticatedWebPage.class, SignIn.class)
 		{
+			@Override
 			protected boolean isAuthorized()
 			{
 				// check whether the user is logged on
