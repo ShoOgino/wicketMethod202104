@@ -6,12 +6,9 @@
 		RequestData rd = currentRequest.get();
 		if (rd != null)
 		{
-			synchronized (this)
+			if (active.get() > 0)
 			{
-				if (active > 0)
-				{
-					rd.setActiveRequest(active--);
-				}
+				rd.setActiveRequest(active.decrementAndGet());
 			}
 			Session session = Session.get();
 			String sessionId = session.getId();
