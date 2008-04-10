@@ -3,13 +3,13 @@
 	 * 
 	 * @param response
 	 */
-	public void notifyRenderHeadListener(IHeaderResponse response)
+	public void notifyRenderHeadListener(final IHeaderResponse response)
 	{
 		if (renderHeadListeners != null)
 		{
-			for (Iterator i = renderHeadListeners.iterator(); i.hasNext();)
+			for (Iterator<IHeaderContributor> iter = renderHeadListeners.iterator(); iter.hasNext();)
 			{
-				IHeaderContributor listener = (IHeaderContributor)i.next();
+				IHeaderContributor listener = iter.next();
 				listener.renderHead(response);
 			}
 		}

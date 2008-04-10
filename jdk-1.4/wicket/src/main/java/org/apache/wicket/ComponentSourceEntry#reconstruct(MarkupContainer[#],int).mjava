@@ -1,0 +1,24 @@
+	/**
+	 * Reconstructs the component
+	 * 
+	 * @param parent
+	 *            parent of the component
+	 * @param index
+	 *            position in parent's children
+	 * @return
+	 */
+	Component< ? > reconstruct(MarkupContainer< ? > parent, int index)
+	{
+		Component< ? > component = componentSource.restoreComponent(id);
+
+		if (parent != null)
+		{
+			component.setParent(parent);
+		}
+
+		component.beforeRender();
+
+		parseComponentInfo(parent, componentInfo, component);
+
+		return component;
+	}
