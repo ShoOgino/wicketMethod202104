@@ -1,10 +1,13 @@
+	/**
+	 * 
+	 * @param response
+	 */
 	private void fireOnAfterRespondListeners(final WebResponse response)
 	{
-		Iterator it;
 		// invoke onafterresponse event on listeners
 		if (listeners != null)
 		{
-			final Map components = Collections.unmodifiableMap(markupIdToComponent);
+			final Map<String, Component< ? >> components = Collections.unmodifiableMap(markupIdToComponent);
 
 			// create response that will be used by listeners to append
 			// javascript
@@ -15,13 +18,12 @@
 				{
 					respondInvocation(response, script);
 				}
-
 			};
 
-			it = listeners.iterator();
+			Iterator<IListener> it = listeners.iterator();
 			while (it.hasNext())
 			{
-				((IListener)it.next()).onAfterRespond(components, jsresponse);
+				(it.next()).onAfterRespond(components, jsresponse);
 			}
 		}
 	}

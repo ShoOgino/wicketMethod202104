@@ -3,7 +3,7 @@
 	 * @param response
 	 * @param component
 	 */
-	private void respondHeaderContribution(final Response response, final Component component)
+	private void respondHeaderContribution(final Response response, final Component< ? > component)
 	{
 		headerRendering = true;
 
@@ -11,7 +11,7 @@
 		if (header == null)
 		{
 			header = new AjaxHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID, this);
-			Component oldHeader = component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID);
+			Component< ? > oldHeader = component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID);
 
 			// add or replace the container to page
 
@@ -36,9 +36,9 @@
 
 		if (component instanceof MarkupContainer)
 		{
-			((MarkupContainer)component).visitChildren(new Component.IVisitor()
+			((MarkupContainer< ? >)component).visitChildren(new Component.IVisitor<Component< ? >>()
 			{
-				public Object component(Component component)
+				public Object component(Component< ? > component)
 				{
 					if (component.isVisible())
 					{
