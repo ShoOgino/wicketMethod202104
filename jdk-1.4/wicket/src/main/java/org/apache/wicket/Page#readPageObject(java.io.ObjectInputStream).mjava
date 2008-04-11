@@ -1,9 +1,15 @@
+	/**
+	 * 
+	 * @param s
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	void readPageObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException
 	{
 		int id = s.readShort();
 		String name = (String)s.readObject();
 
-		IPageSerializer ps = (IPageSerializer)serializer.get();
+		IPageSerializer ps = serializer.get();
 		if (ps != null)
 		{
 			ps.deserializePage(id, name, this, s);

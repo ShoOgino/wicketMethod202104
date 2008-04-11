@@ -4,13 +4,13 @@
 	 */
 	final void requestDetached()
 	{
-		List touchedPages = Session.touchedPages.get();
+		List<Page> touchedPages = Session.touchedPages.get();
 		Session.touchedPages.set(null);
 		if (touchedPages != null)
 		{
 			for (int i = 0; i < touchedPages.size(); i++)
 			{
-				Page page = (Page)touchedPages.get(i);
+				Page page = touchedPages.get(i);
 				page.getPageMap().put(page);
 			}
 		}
@@ -32,7 +32,7 @@
 			}
 		}
 
-		List dirtyObjects = Session.dirtyObjects.get();
+		List<IClusterable> dirtyObjects = Session.dirtyObjects.get();
 		Session.dirtyObjects.set(null);
 
 		Map<String, Object> tempMap = new HashMap<String, Object>();
@@ -40,7 +40,7 @@
 		// Go through all dirty entries, replicating any dirty objects
 		if (dirtyObjects != null)
 		{
-			for (final Iterator iterator = dirtyObjects.iterator(); iterator.hasNext();)
+			for (final Iterator<IClusterable> iterator = dirtyObjects.iterator(); iterator.hasNext();)
 			{
 				String attribute = null;
 				Object object = iterator.next();
