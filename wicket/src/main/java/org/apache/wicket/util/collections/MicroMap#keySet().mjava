@@ -1,20 +1,21 @@
 	/**
 	 * @see java.util.Map#keySet()
 	 */
-	public Set keySet()
+	public Set<K> keySet()
 	{
-		return new AbstractSet()
+		return new AbstractSet<K>()
 		{
-			public Iterator iterator()
+			@Override
+			public Iterator<K> iterator()
 			{
-				return new Iterator()
+				return new Iterator<K>()
 				{
 					public boolean hasNext()
 					{
 						return index < MicroMap.this.size();
 					}
 
-					public Object next()
+					public K next()
 					{
 						if (!hasNext())
 						{
@@ -34,6 +35,7 @@
 				};
 			}
 
+			@Override
 			public int size()
 			{
 				return MicroMap.this.size();

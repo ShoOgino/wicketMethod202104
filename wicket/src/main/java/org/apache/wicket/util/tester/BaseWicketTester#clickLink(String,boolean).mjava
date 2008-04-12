@@ -118,7 +118,7 @@
 		 */
 		else if (linkComponent instanceof SubmitLink)
 		{
-			SubmitLink submitLink = (SubmitLink)linkComponent;
+			SubmitLink< ? > submitLink = (SubmitLink)linkComponent;
 
 			String pageRelativePath = submitLink.getInputName();
 			getParametersForNextRequest().put(pageRelativePath, "x");
@@ -127,7 +127,7 @@
 		// if the link is a normal link (or ResourceLink)
 		else if (linkComponent instanceof AbstractLink)
 		{
-			AbstractLink link = (AbstractLink)linkComponent;
+			AbstractLink< ? > link = (AbstractLink)linkComponent;
 
 			/*
 			 * If the link is a bookmarkable link, then we need to transfer the parameters to the
@@ -140,11 +140,11 @@
 				{
 					Field parametersField = BookmarkablePageLink.class.getDeclaredField("parameters");
 					Method getParametersMethod = BookmarkablePageLink.class.getDeclaredMethod(
-						"getPageParameters", null);
+						"getPageParameters", (Class[])null);
 					getParametersMethod.setAccessible(true);
 
 					PageParameters parameters = (PageParameters)getParametersMethod.invoke(
-						bookmarkablePageLink, null);
+						bookmarkablePageLink, (Class[])null);
 					setParametersForNextRequest(parameters);
 				}
 				catch (Exception e)

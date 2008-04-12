@@ -7,7 +7,7 @@
 	 * @return <code>List</code> of messages (as <code>String</code>s)
 	 * @see FeedbackMessage
 	 */
-	public List getMessages(final int level)
+	public List<Serializable> getMessages(final int level)
 	{
 		FeedbackMessages feedbackMessages = Session.get().getFeedbackMessages();
 		List allMessages = feedbackMessages.messages(new IFeedbackMessageFilter()
@@ -19,7 +19,7 @@
 				return message.getLevel() == level;
 			}
 		});
-		List actualMessages = new ArrayList();
+		List<Serializable> actualMessages = new ArrayList<Serializable>();
 		for (Iterator iter = allMessages.iterator(); iter.hasNext();)
 		{
 			actualMessages.add(((FeedbackMessage)iter.next()).getMessage());
