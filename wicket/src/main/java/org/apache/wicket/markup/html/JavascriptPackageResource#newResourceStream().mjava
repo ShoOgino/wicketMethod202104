@@ -1,18 +1,21 @@
 	/**
 	 * @see org.apache.wicket.markup.html.CompressedPackageResource#newResourceStream()
 	 */
+	@Override
 	protected IResourceStream newResourceStream()
 	{
 		final FilteringResourceStream filteringStream = new FilteringResourceStream()
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected byte[] filterContent(byte[] input)
 			{
 				try
 				{
-					if (Application.get().getResourceSettings()
-							.getStripJavascriptCommentsAndWhitespace())
+					if (Application.get()
+						.getResourceSettings()
+						.getStripJavascriptCommentsAndWhitespace())
 					{
 						String s = new String(input, "UTF-8");
 						return JavascriptStripper.stripCommentsAndWhitespace(s).getBytes("UTF-8");
@@ -30,6 +33,7 @@
 				}
 			}
 
+			@Override
 			protected IResourceStream getOriginalResourceStream()
 			{
 				return getPackageResourceStream();
@@ -40,6 +44,7 @@
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected IResourceStream getOriginalResourceStream()
 			{
 				return filteringStream;

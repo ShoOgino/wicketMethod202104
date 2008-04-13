@@ -1,11 +1,12 @@
+	@Override
 	protected void onAfterRender()
 	{
 		super.onAfterRender();
 		if (getApplication().getConfigurationType() == Application.DEVELOPMENT)
 		{
-			HtmlHeaderContainer header = (HtmlHeaderContainer)visitChildren(new IVisitor()
+			HtmlHeaderContainer header = (HtmlHeaderContainer)visitChildren(new IVisitor<Component< ? >>()
 			{
-				public Object component(Component component)
+				public Object component(Component< ? > component)
 				{
 					if (component instanceof HtmlHeaderContainer)
 					{
@@ -35,12 +36,12 @@
 					// Make sure all Components interested in contributing to the header
 					// and there attached behaviors are asked.
 					final HtmlHeaderContainer finalHeader = header;
-					visitChildren(new IVisitor()
+					visitChildren(new IVisitor<Component< ? >>()
 					{
 						/**
 						 * @see org.apache.wicket.Component.IVisitor#component(org.apache.wicket.Component)
 						 */
-						public Object component(Component component)
+						public Object component(Component< ? > component)
 						{
 							component.renderHead(finalHeader);
 							return CONTINUE_TRAVERSAL;
