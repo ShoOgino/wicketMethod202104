@@ -8,20 +8,20 @@
 	 * 
 	 * @see org.apache.wicket.util.convert.IConverter#convertToObject(String, java.util.Locale)
 	 */
-	public final IConverter getConverter(Class type)
+	public final <T> IConverter<T> getConverter(Class<T> type)
 	{
 		// Null is always converted to null
 		if (type == null)
 		{
-			return new DefaultConverter(String.class);
+			return (IConverter<T>)new DefaultConverter<String>(String.class);
 		}
 
 
 		// Get type converter for class
-		final IConverter converter = get(type);
+		final IConverter<T> converter = get(type);
 		if (converter == null)
 		{
-			return new DefaultConverter(type);
+			return new DefaultConverter<T>(type);
 		}
 		return converter;
 	}

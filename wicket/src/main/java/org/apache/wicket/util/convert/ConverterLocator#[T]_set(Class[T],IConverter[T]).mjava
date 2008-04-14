@@ -8,7 +8,7 @@
 	 * @return The previous registered converter for class c or null if none was registered yet for
 	 *         class c
 	 */
-	public final IConverter set(final Class/* ? */c, final IConverter converter)
+	public final <T> IConverter<T> set(final Class<T> c, final IConverter<T> converter)
 	{
 		if (converter == null)
 		{
@@ -18,6 +18,6 @@
 		{
 			throw new IllegalArgumentException("Class cannot be null");
 		}
-		return (IConverter)classToConverter.put(c.getName(), converter);
+		return (IConverter<T>)classToConverter.put(c.getName(), converter);
 	}
 

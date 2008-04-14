@@ -12,12 +12,12 @@
 	 *            Model object to convert to string
 	 * @return The string
 	 */
-	public final String getModelObjectAsString(final Object modelObject)
+	public final String getModelObjectAsString(final T modelObject)
 	{
 		if (modelObject != null)
 		{
 			// Get converter
-			final IConverter converter = getConverter(modelObject.getClass());
+			final IConverter<T> converter = getConverter((Class<T>)modelObject.getClass());
 
 			// Model string from property
 			final String modelString = converter.convertToString(modelObject, getLocale());
