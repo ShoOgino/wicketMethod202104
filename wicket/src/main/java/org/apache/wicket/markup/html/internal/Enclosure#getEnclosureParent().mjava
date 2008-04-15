@@ -1,11 +1,11 @@
 	/**
 	 * Get the real parent container
 	 * 
-	 * @return
+	 * @return enclosure's parent markup container
 	 */
-	private MarkupContainer getEnclosureParent()
+	private MarkupContainer< ? > getEnclosureParent()
 	{
-		MarkupContainer parent = getParent();
+		MarkupContainer< ? > parent = getParent();
 		while (parent != null)
 		{
 			if (parent.isTransparentResolver())
@@ -14,7 +14,7 @@
 			}
 			else if (parent instanceof BorderBodyContainer)
 			{
-				parent = ((BorderBodyContainer)parent).findParent(Border.class);
+				parent = ((Border< ? >.BorderBodyContainer)parent).findParent(Border.class);
 			}
 			else
 			{
