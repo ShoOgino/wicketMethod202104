@@ -10,14 +10,14 @@
 	 * @throws ClassNotFoundException
 	 */
 	private void readObject(final ObjectInputStream inputStream) throws IOException,
-			ClassNotFoundException
+		ClassNotFoundException
 	{
 		inputStream.defaultReadObject();
 
 		final Object object = inputStream.readObject();
 		if (object != null)
 		{
-			componentReference = new WeakReference(object);
+			componentReference = new WeakReference<Component< ? >>((Component< ? >)object);
 		}
 	}
 

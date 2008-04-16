@@ -5,13 +5,13 @@
 	 * @param page
 	 * @return List of component data objects
 	 */
-	private List getComponentData(final Page page)
+	private List<ComponentData> getComponentData(final Page page)
 	{
-		final List data = new ArrayList();
+		final List<ComponentData> data = new ArrayList<ComponentData>();
 
-		page.visitChildren(new IVisitor()
+		page.visitChildren(new IVisitor<Component< ? >>()
 		{
-			public Object component(final Component component)
+			public Object component(final Component< ? > component)
 			{
 				if (!component.getPath().startsWith(PageView.this.getPath()))
 				{
@@ -28,7 +28,7 @@
 					name = Strings.lastPathComponent(name, Component.PATH_SEPARATOR);
 
 					componentData = new ComponentData(component.getPageRelativePath(), name,
-							component.getSizeInBytes());
+						component.getSizeInBytes());
 
 					try
 					{
