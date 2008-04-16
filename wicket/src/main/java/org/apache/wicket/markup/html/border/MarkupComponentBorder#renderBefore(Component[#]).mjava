@@ -2,7 +2,7 @@
 	 * 
 	 * @see org.apache.wicket.IComponentBorder#renderBefore(org.apache.wicket.Component)
 	 */
-	public void renderBefore(Component component)
+	public void renderBefore(Component< ? > component)
 	{
 		final MarkupStream stream = getMarkupStream(component);
 		final Response response = component.getResponse();
@@ -25,9 +25,9 @@
 					else
 					{
 						throw new WicketRuntimeException(
-								"Unexpected tag encountered in markup of component border " +
-										getClass().getName() + ". Tag: " + wt.toString() +
-										", expected tag: <wicket:border>");
+							"Unexpected tag encountered in markup of component border " +
+								getClass().getName() + ". Tag: " + wt.toString() +
+								", expected tag: <wicket:border>");
 					}
 				}
 				else
@@ -39,9 +39,9 @@
 					else
 					{
 						throw new WicketRuntimeException(
-								"Unexpected tag encountered in markup of component border " +
-										getClass().getName() + ". Tag: " + wt.toString() +
-										", expected tag: <wicket:body> or </wicket:body>");
+							"Unexpected tag encountered in markup of component border " +
+								getClass().getName() + ". Tag: " + wt.toString() +
+								", expected tag: <wicket:body> or </wicket:body>");
 					}
 				}
 			}
@@ -54,7 +54,7 @@
 		if (!stream.hasMore())
 		{
 			throw new WicketRuntimeException("Markup for component border " + getClass().getName() +
-					" ended prematurely, was expecting </wicket:border>");
+				" ended prematurely, was expecting </wicket:border>");
 		}
 	}
 

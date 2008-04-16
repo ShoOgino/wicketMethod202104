@@ -6,11 +6,11 @@
 	{
 		onError();
 		// call onError on nested forms
-		visitChildren(Form.class, new IVisitor()
+		visitChildren(Form.class, new IVisitor<Component< ? >>()
 		{
-			public Object component(Component component)
+			public Object component(Component< ? > component)
 			{
-				final Form form = (Form)component;
+				final Form< ? > form = (Form< ? >)component;
 				if (!form.isEnabled() || !form.isEnableAllowed() || !form.isVisibleInHierarchy())
 				{
 					return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
