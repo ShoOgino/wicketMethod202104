@@ -1,0 +1,19 @@
+	@Override
+	protected void onBeforeRender()
+	{
+
+		if (get("first") == null)
+		{
+			// Get the navigation bar and add it to the hierarchy
+			pagingNavigation = newNavigation(pageable, labelProvider);
+			add(pagingNavigation);
+
+			// Add additional page links
+			add(newPagingNavigationLink("first", pageable, 0));
+			add(newPagingNavigationIncrementLink("prev", pageable, -1));
+			add(newPagingNavigationIncrementLink("next", pageable, 1));
+			add(newPagingNavigationLink("last", pageable, -1));
+		}
+		super.onBeforeRender();
+	}
+
