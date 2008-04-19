@@ -9,6 +9,12 @@
 		if (isNodeVisible(parent) && isNodeExpanded(parent))
 		{
 			TreeItem parentItem = (TreeItem)nodeToItemMap.get(parent);
+			
+			if (parentItem.getChildren().isEmpty()) 
+			{
+				invalidateNode(parent, true);
+			}
+			
 			for (int i = 0; i < e.getChildren().length; ++i)
 			{
 				TreeNode node = (TreeNode)e.getChildren()[i];
