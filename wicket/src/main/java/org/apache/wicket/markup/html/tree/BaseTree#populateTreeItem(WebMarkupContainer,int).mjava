@@ -2,10 +2,11 @@
 	 * @see org.apache.wicket.markup.html.tree.AbstractTree#populateTreeItem(org.apache.wicket.markup.html.WebMarkupContainer,
 	 *      int)
 	 */
+	@Override
 	protected void populateTreeItem(WebMarkupContainer item, int level)
 	{
 		// add junction link
-		TreeNode node = (TreeNode)item.getModelObject();
+		Object node = item.getModelObject();
 		Component junctionLink = newJunctionLink(item, JUNCTION_LINK_ID, node);
 		junctionLink.setComponentBorder(new JunctionBorder(node, level));
 		item.add(junctionLink);
@@ -19,9 +20,10 @@
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onComponentTag(Component component, ComponentTag tag)
 			{
-				TreeNode node = (TreeNode)component.getModelObject();
+				Object node = component.getModelObject();
 				if (getTreeState().isNodeSelected(node))
 				{
 					CharSequence oldClass = tag.getString("class");

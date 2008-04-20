@@ -4,7 +4,7 @@
 	public final void treeNodesRemoved(TreeModelEvent e)
 	{
 		// get the parent node of inserted nodes
-		TreeNode parent = (TreeNode)e.getTreePath().getLastPathComponent();
+		Object parent = e.getTreePath().getLastPathComponent();
 		TreeItem parentItem = (TreeItem)nodeToItemMap.get(parent);
 
 		if (isNodeVisible(parent) && isNodeExpanded(parent))
@@ -12,7 +12,7 @@
 			boolean nonEmpty = !parentItem.getChildren().isEmpty();
 			for (int i = 0; i < e.getChildren().length; ++i)
 			{
-				TreeNode node = (TreeNode)e.getChildren()[i];
+				Object node = e.getChildren()[i];
 
 				TreeItem item = (TreeItem)nodeToItemMap.get(node);
 				if (item != null)
@@ -29,7 +29,7 @@
 							removeItem(item);
 
 							// deselect the node
-							getTreeState().selectNode((TreeNode)item.getModelObject(), false);
+							getTreeState().selectNode(item.getModelObject(), false);
 						}
 					});
 

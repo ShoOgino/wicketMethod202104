@@ -4,20 +4,20 @@
 	public final void treeNodesInserted(TreeModelEvent e)
 	{
 		// get the parent node of inserted nodes
-		TreeNode parent = (TreeNode)e.getTreePath().getLastPathComponent();
+		Object parent = e.getTreePath().getLastPathComponent();
 
 		if (isNodeVisible(parent) && isNodeExpanded(parent))
 		{
 			TreeItem parentItem = (TreeItem)nodeToItemMap.get(parent);
-			
-			if (parentItem.getChildren().isEmpty()) 
+
+			if (parentItem.getChildren().isEmpty())
 			{
 				invalidateNode(parent, true);
 			}
-			
+
 			for (int i = 0; i < e.getChildren().length; ++i)
 			{
-				TreeNode node = (TreeNode)e.getChildren()[i];
+				Object node = e.getChildren()[i];
 				int index = e.getChildIndices()[i];
 				TreeItem item = newTreeItem(node, parentItem.getLevel() + 1);
 				itemContainer.add(item);
@@ -25,8 +25,11 @@
 
 				markTheLastButOneChildDirty(parentItem, item);
 
-				dirtyItems.add(item);
-				dirtyItemsCreateDOM.add(item);
+				if (!dirtyItems.contains(item))
+					dirtyItems.add(item);
+
+				if (!dirtyItemsCreateDOM.contains(item))
+					dirtyItemsCreateDOM.add(item);
 			}
 		}
 	}
