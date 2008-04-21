@@ -1,0 +1,13 @@
+	/**
+	 * Test handling of null parameter keys.
+	 */
+	public void testNullHandling2()
+	{
+		MockHttpServletRequest mockRequest = tester.getServletRequest();
+		mockRequest.setRequestToRedirectString("?=m"); // key is encoded as empty string
+		assertEquals("=m", mockRequest.getQueryString());
+		mockRequest.setParameter(null, "m2"); // force null string
+		assertEquals("=m2&=m", mockRequest.getQueryString());
+
+	}
+
