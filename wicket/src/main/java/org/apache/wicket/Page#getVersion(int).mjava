@@ -7,7 +7,7 @@
 	 * @return A Page object with the component/model hierarchy that was attached to this page at
 	 *         the time represented by the requested version.
 	 */
-	public Page getVersion(final int versionNumber)
+	public Page<T> getVersion(final int versionNumber)
 	{
 		// If we're still the original Page and that's what's desired
 		if (versionManager == null)
@@ -36,7 +36,7 @@
 				setFlag(FLAG_TRACK_CHANGES, false);
 
 				// Get page of desired version
-				final Page page;
+				final Page<T> page;
 				if (versionNumber != LATEST_VERSION)
 				{
 					page = versionManager.getVersion(versionNumber);

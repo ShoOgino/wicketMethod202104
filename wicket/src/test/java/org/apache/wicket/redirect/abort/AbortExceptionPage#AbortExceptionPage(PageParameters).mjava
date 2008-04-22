@@ -5,17 +5,18 @@
 		if (!triggerError)
 			throw new AbortWithWebErrorCodeException(1234, "this error will be rendered");
 
-		IModel model = new LoadableDetachableModel()
+		IModel<List<Object>> model = new LoadableDetachableModel<List<Object>>()
 		{
 			private static final long serialVersionUID = -1285116295157071919L;
 
-			protected Object load()
+			@Override
+			protected List<Object> load()
 			{
 				if (triggerError)
 					throw new AbortWithWebErrorCodeException(1234,
 						"this error will NOT be rendered");
 				else
-					return Collections.EMPTY_LIST;
+					return Collections.emptyList();
 			}
 		};
 
@@ -23,6 +24,7 @@
 		{
 			private static final long serialVersionUID = -4176346513350288174L;
 
+			@Override
 			protected void populateItem(final ListItem item)
 			{
 				// not used
