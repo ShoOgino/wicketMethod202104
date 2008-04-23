@@ -1,31 +1,31 @@
 	/**
 	 * Processes an <a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867</a> compliant
 	 * <code>multipart/form-data</code> stream.
-	 *
+	 * 
 	 * @param ctx
 	 *            The context for the request to be parsed.
-	 *
+	 * 
 	 * @return A list of <code>FileItem</code> instances parsed from the request, in the order
 	 *         that they were transmitted.
-	 *
+	 * 
 	 * @exception FileUploadException
 	 *                if there are problems reading/parsing the request or storing files.
 	 */
-	public List /* FileItem */parseRequest(RequestContext ctx) throws FileUploadException
+	public List<FileItem> parseRequest(RequestContext ctx) throws FileUploadException
 	{
 		if (ctx == null)
 		{
 			throw new IllegalArgumentException("ctx parameter cannot be null");
 		}
 
-		ArrayList items = new ArrayList();
+		List<FileItem> items = new ArrayList<FileItem>();
 		String contentType = ctx.getContentType();
 
 		if ((null == contentType) || (!contentType.toLowerCase().startsWith(MULTIPART)))
 		{
 			throw new InvalidContentTypeException("the request doesn't contain a " +
-					MULTIPART_FORM_DATA + " or " + MULTIPART_MIXED +
-					" stream, content type header is " + contentType);
+				MULTIPART_FORM_DATA + " or " + MULTIPART_MIXED +
+				" stream, content type header is " + contentType);
 		}
 		int requestSize = ctx.getContentLength();
 
@@ -37,7 +37,7 @@
 		if (sizeMax >= 0 && requestSize > sizeMax)
 		{
 			throw new SizeLimitExceededException("the request was rejected because "
-					+ "its size exceeds allowed range");
+				+ "its size exceeds allowed range");
 		}
 
 		try
@@ -46,7 +46,7 @@
 			if (boundary == null)
 			{
 				throw new FileUploadException("the request was rejected because "
-						+ "no multipart boundary was found");
+					+ "no multipart boundary was found");
 			}
 
 			InputStream input = ctx.getInputStream();
@@ -61,13 +61,13 @@
 			final int maxHeaderBytes = 65536;
 			while (nextPart)
 			{
-				Map headers = parseHeaders(multi.readHeaders(maxHeaderBytes));
+				Map<String, String> headers = parseHeaders(multi.readHeaders(maxHeaderBytes));
 				String fieldName = getFieldName(headers);
 				if (fieldName != null)
 				{
 					String subContentType = getHeader(headers, CONTENT_TYPE);
 					if (subContentType != null &&
-							subContentType.toLowerCase().startsWith(MULTIPART_MIXED))
+						subContentType.toLowerCase().startsWith(MULTIPART_MIXED))
 					{
 						// Multiple files.
 						byte[] subBoundary = getBoundary(subContentType);
@@ -79,7 +79,7 @@
 							if (getFileName(headers) != null)
 							{
 								FileItem item = createItem(headers, false);
-                                items.add(item);
+								items.add(item);
 								OutputStream os = item.getOutputStream();
 								try
 								{
@@ -103,7 +103,7 @@
 					else
 					{
 						FileItem item = createItem(headers, getFileName(headers) == null);
-                        items.add(item);
+						items.add(item);
 						OutputStream os = item.getOutputStream();
 						try
 						{
@@ -125,12 +125,13 @@
 		}
 		catch (IOException e)
 		{
-            for(int i=0;i<items.size();i++) {
-                FileItem item = (FileItem)items.get(i);
-                item.delete();
-            }
-            throw new FileUploadException("Processing of " + MULTIPART_FORM_DATA +
-					" request failed. " + e.getMessage(), e);
+			for (int i = 0; i < items.size(); i++)
+			{
+				FileItem item = items.get(i);
+				item.delete();
+			}
+			throw new FileUploadException("Processing of " + MULTIPART_FORM_DATA +
+				" request failed. " + e.getMessage(), e);
 		}
 
 		return items;
