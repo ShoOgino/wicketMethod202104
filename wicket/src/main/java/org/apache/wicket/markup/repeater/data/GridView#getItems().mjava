@@ -1,8 +1,10 @@
 	/**
 	 * @see org.apache.wicket.markup.repeater.AbstractPageableView#getItems()
 	 */
-	public Iterator getItems()
+	@Override
+	public Iterator<Item<T>> getItems()
 	{
-		return new ItemsIterator(iterator());
+		Iterator<MarkupContainer< ? >> rows = Generics.iterator(iterator());
+		return new ItemsIterator<T>(rows);
 	}
 

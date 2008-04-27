@@ -5,7 +5,7 @@
 	 *            number of columns
 	 * @return this for chaining
 	 */
-	public GridView setColumns(int cols)
+	public GridView<T> setColumns(int cols)
 	{
 		if (cols < 1)
 		{
@@ -22,11 +22,13 @@
 
 					final int old = columns;
 
+					@Override
 					public void undo()
 					{
 						columns = old;
 					}
 
+					@Override
 					public String toString()
 					{
 						return "GridViewColumnsChange[component: " + getPath() +
