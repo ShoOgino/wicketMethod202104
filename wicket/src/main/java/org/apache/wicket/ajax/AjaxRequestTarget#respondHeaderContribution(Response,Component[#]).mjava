@@ -11,18 +11,8 @@
 		if (header == null)
 		{
 			header = new AjaxHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID, this);
-			Component< ? > oldHeader = component.getPage().get(HtmlHeaderSectionHandler.HEADER_ID);
-
-			// add or replace the container to page
-
-			if (oldHeader != null)
-			{
-				component.getPage().replace(header);
-			}
-			else
-			{
-				component.getPage().add(header);
-			}
+			final Page< ? > page = component.getPage();
+			page.addOrReplace(header);
 		}
 
 		// save old response, set new
