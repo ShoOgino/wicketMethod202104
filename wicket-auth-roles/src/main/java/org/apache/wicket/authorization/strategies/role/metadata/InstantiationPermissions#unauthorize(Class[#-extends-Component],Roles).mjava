@@ -19,10 +19,15 @@
 			throw new IllegalArgumentException("Argument rolesToRemove cannot be null");
 		}
 
-		final Roles roles = rolesForComponentClass.get(componentClass);
+		Roles roles = rolesForComponentClass.get(componentClass);
 		if (roles != null)
 		{
 			roles.removeAll(rolesToRemove);
+		}
+		else
+		{
+			roles = new Roles();
+			rolesForComponentClass.put(componentClass, roles);
 		}
 
 		// If we removed the last authorized role, we authorize the empty role
