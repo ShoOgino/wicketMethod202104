@@ -2,12 +2,14 @@
 	 * 
 	 * @see org.apache.wicket.behavior.AbstractAjaxBehavior#onComponentTag(org.apache.wicket.markup.ComponentTag)
 	 */
+	@Override
 	protected void onComponentTag(final ComponentTag tag)
 	{
 		super.onComponentTag(tag);
 
 		// only add the event handler when the component is enabled.
-		if (getComponent().isEnabled())
+		Component< ? > myComponent = getComponent();
+		if (myComponent.isEnabled() && myComponent.isEnableAllowed())
 		{
 			tag.put(event, getEventHandler());
 		}
