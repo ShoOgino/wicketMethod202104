@@ -1,12 +1,13 @@
 	/**
 	 * @return bean class this locator is configured with
 	 */
-	public Class getBeanType()
+	public Class< ? > getBeanType()
 	{
-		Class clazz = beanTypeCache == null ? null : (Class)beanTypeCache.get();
+		Class< ? > clazz = beanTypeCache == null ? null : (Class< ? >)beanTypeCache.get();
 		if (clazz == null)
 		{
-			beanTypeCache = new WeakReference(clazz = Classes.resolveClass(beanTypeName));
+			beanTypeCache = new WeakReference<Class< ? >>(clazz = Classes
+					.resolveClass(beanTypeName));
 			if (clazz == null)
 			{
 				throw new RuntimeException("SpringBeanLocator could not find class [" +
