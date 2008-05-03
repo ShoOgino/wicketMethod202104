@@ -10,7 +10,7 @@
 	 * 
 	 * @return lazily initializable proxy
 	 */
-	public static Object createProxy(Class type, IProxyTargetLocator locator)
+	public static Object createProxy(Class< ? > type, IProxyTargetLocator locator)
 	{
 		if (PRIMITIVES.contains(type))
 		{
@@ -53,6 +53,7 @@
 			e.setCallback(handler);
 			e.setNamingPolicy(new DefaultNamingPolicy()
 			{
+				@Override
 				public String getClassName(final String prefix, final String source,
 					final Object key, final Predicate names)
 				{

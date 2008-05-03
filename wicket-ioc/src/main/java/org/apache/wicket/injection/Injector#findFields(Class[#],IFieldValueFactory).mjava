@@ -5,9 +5,9 @@
 	 * @param factory
 	 * @return an array of fields that can be injected using the given field value factory
 	 */
-	private Field[] findFields(Class clazz, IFieldValueFactory factory)
+	private Field[] findFields(Class< ? > clazz, IFieldValueFactory factory)
 	{
-		List/* <Field> */matched = new ArrayList();
+		List<Field> matched = new ArrayList<Field>();
 
 		while (clazz != null && !isBoundaryClass(clazz))
 		{
@@ -24,6 +24,6 @@
 			clazz = clazz.getSuperclass();
 		}
 
-		return (Field[])matched.toArray(new Field[matched.size()]);
+		return matched.toArray(new Field[matched.size()]);
 	}
 
