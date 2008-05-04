@@ -28,12 +28,13 @@
 		TreeModel treeModel = convertToTreeModel(l1);
 		final Tree tree = new Tree("tree", treeModel)
 		{
+			@Override
 			protected String renderNode(TreeNode node)
 			{
 				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)node;
 				Object userObject = treeNode.getUserObject();
-				return (userObject instanceof List) ? "<subtree>" : String.valueOf(treeNode
-						.getUserObject());
+				return (userObject instanceof List) ? "<subtree>"
+					: String.valueOf(treeNode.getUserObject());
 			}
 		};
 		// disable ajax links in this example
@@ -42,6 +43,7 @@
 		add(tree);
 		add(new Link("expandAll")
 		{
+			@Override
 			public void onClick()
 			{
 				tree.getTreeState().expandAll();
@@ -50,6 +52,7 @@
 
 		add(new Link("collapseAll")
 		{
+			@Override
 			public void onClick()
 			{
 				tree.getTreeState().collapseAll();
