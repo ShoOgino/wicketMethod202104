@@ -1,13 +1,16 @@
 	/**
 	 * Removes the type converter currently registered for class c.
 	 * 
+	 * @param <C>
+	 *            The type of the converter
 	 * @param c
 	 *            The class for which the converter registration should be removed
 	 * @return The converter that was registered for class c before removal or null if none was
 	 *         registered
 	 */
-	public final <T> IConverter<T> remove(Class<T> c)
+	@SuppressWarnings("unchecked")
+	public final <C> IConverter<C> remove(Class<C> c)
 	{
-		return (IConverter<T>)classToConverter.remove(c.getName());
+		return (IConverter<C>)classToConverter.remove(c.getName());
 	}
 
