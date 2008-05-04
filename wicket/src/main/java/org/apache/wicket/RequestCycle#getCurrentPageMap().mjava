@@ -1,14 +1,14 @@
 	/**
 	 * Attempts to return name of current page map
 	 * 
-	 * @return
+	 * @return name of current page map or null if none
 	 */
 	private String getCurrentPageMap()
 	{
 		IRequestTarget target = RequestCycle.get().getRequestTarget();
 		if (target instanceof IPageRequestTarget)
 		{
-			Page page = ((IPageRequestTarget)target).getPage();
+			Page< ? > page = ((IPageRequestTarget)target).getPage();
 			return page != null ? page.getPageMapName() : null;
 		}
 		else if (target instanceof IBookmarkablePageRequestTarget)
