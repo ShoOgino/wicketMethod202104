@@ -10,10 +10,10 @@
 	 * @param renderer
 	 *            The rendering engine
 	 */
-	public AjaxEditableChoiceLabel(String id, IModel model, IModel choices, IChoiceRenderer renderer)
+	@SuppressWarnings("unchecked")
+	public AjaxEditableChoiceLabel(String id, IModel<T> model, List< ? extends T> choices,
+		IChoiceRenderer<T> renderer)
 	{
-		super(id, model);
-		this.choices = choices;
-		this.renderer = renderer;
+		this(id, model, Model.valueOf(choices), renderer);
 	}
 

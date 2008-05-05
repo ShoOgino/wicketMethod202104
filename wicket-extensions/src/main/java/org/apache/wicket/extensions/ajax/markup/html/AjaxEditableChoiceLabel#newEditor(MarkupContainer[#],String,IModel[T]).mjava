@@ -3,21 +3,22 @@
 	 *      java.lang.String, org.apache.wicket.model.IModel)
 	 */
 	@Override
-	protected FormComponent newEditor(MarkupContainer parent, String componentId, IModel model)
+	protected FormComponent<T> newEditor(MarkupContainer< ? > parent, String componentId,
+		IModel<T> model)
 	{
-		IModel choiceModel = new AbstractReadOnlyModel()
+		IModel<List< ? extends T>> choiceModel = new AbstractReadOnlyModel<List< ? extends T>>()
 		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object getObject()
+			public List< ? extends T> getObject()
 			{
 				return choices.getObject();
 			}
 
 		};
-		DropDownChoice editor = new DropDownChoice(componentId, model, choiceModel, renderer)
+		DropDownChoice<T> editor = new DropDownChoice<T>(componentId, model, choiceModel, renderer)
 		{
 			private static final long serialVersionUID = 1L;
 
