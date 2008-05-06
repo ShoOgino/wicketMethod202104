@@ -1,6 +1,9 @@
 	/**
 	 * Construct.
 	 * 
+	 * @param <T>
+	 *            The model object type of the static content model
+	 * 
 	 * @param title
 	 *            The title of this step
 	 * @param summary
@@ -11,11 +14,12 @@
 	 *            If true, any html of the content will be rendered as is. Otherwise, it will be
 	 *            escaped.
 	 */
-	public StaticContentStep(IModel title, IModel summary, IModel content, boolean allowHtml)
+	public <T> StaticContentStep(IModel<String> title, IModel<String> summary, IModel<T> content,
+		boolean allowHtml)
 	{
 		super(title, summary);
 		this.content = content;
 		this.allowHtml = allowHtml;
-		add(new Label("content", content).setEscapeModelStrings(!allowHtml));
+		add(new Label<T>("content", content).setEscapeModelStrings(!allowHtml));
 	}
 

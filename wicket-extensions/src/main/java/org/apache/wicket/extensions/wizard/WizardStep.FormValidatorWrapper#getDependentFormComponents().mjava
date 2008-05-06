@@ -1,15 +1,14 @@
 		/**
 		 * @see org.apache.wicket.markup.html.form.validation.IFormValidator#getDependentFormComponents()
 		 */
-		public FormComponent[] getDependentFormComponents()
+		public FormComponent< ? >[] getDependentFormComponents()
 		{
 			if (isActiveStep())
 			{
-				Set components = new HashSet();
-				for (Iterator i = validators.iterator(); i.hasNext();)
+				Set<Component< ? >> components = new HashSet<Component< ? >>();
+				for (IFormValidator v : validators)
 				{
-					IFormValidator v = (IFormValidator)i.next();
-					FormComponent[] dependentComponents = v.getDependentFormComponents();
+					FormComponent< ? >[] dependentComponents = v.getDependentFormComponents();
 					if (dependentComponents != null)
 					{
 						int len = dependentComponents.length;
@@ -19,7 +18,7 @@
 						}
 					}
 				}
-				return (FormComponent[])components.toArray(new FormComponent[components.size()]);
+				return components.toArray(new FormComponent[components.size()]);
 			}
 			return null;
 		}
