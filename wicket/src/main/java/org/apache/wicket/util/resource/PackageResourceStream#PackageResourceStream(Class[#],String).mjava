@@ -8,16 +8,16 @@
 	 * @param path
 	 *            The path to the resource
 	 */
-	public PackageResourceStream(Class scope, String path)
+	public PackageResourceStream(Class< ? > scope, String path)
 	{
 		String absolutePath = Packages.absolutePath(scope, path);
 		resourceStream = Application.get().getResourceSettings().getResourceStreamLocator().locate(
-				scope, absolutePath, null, null, null);
+			scope, absolutePath, null, null, null);
 
 		if (resourceStream == null)
 		{
 			throw new WicketRuntimeException("Cannot find resource with " + scope.getName() +
-					" and path " + path);
+				" and path " + path);
 		}
 	}
 
