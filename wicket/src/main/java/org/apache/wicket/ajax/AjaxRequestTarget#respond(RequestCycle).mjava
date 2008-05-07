@@ -3,6 +3,11 @@
 	 */
 	public final void respond(final RequestCycle requestCycle)
 	{
+		for (ITargetRespondListener listener : respondListeners)
+		{
+			listener.onTargetRespond(this);
+		}
+		
 		final Application app = Application.get();
 
 		// Determine encoding
