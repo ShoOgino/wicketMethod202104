@@ -10,7 +10,7 @@
 	public List<Serializable> getMessages(final int level)
 	{
 		FeedbackMessages feedbackMessages = Session.get().getFeedbackMessages();
-		List allMessages = feedbackMessages.messages(new IFeedbackMessageFilter()
+		List<FeedbackMessage> allMessages = feedbackMessages.messages(new IFeedbackMessageFilter()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -20,9 +20,9 @@
 			}
 		});
 		List<Serializable> actualMessages = new ArrayList<Serializable>();
-		for (Iterator iter = allMessages.iterator(); iter.hasNext();)
+		for (FeedbackMessage message : allMessages)
 		{
-			actualMessages.add(((FeedbackMessage)iter.next()).getMessage());
+			actualMessages.add(message.getMessage());
 		}
 		return actualMessages;
 	}

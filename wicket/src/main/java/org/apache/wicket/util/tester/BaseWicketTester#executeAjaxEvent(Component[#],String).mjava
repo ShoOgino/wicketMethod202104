@@ -35,7 +35,7 @@
 	 *            the event to simulate being fired. If <code>event</code> is <code>null</code>,
 	 *            the test will fail.
 	 */
-	public void executeAjaxEvent(Component component, String event)
+	public void executeAjaxEvent(Component<?> component, String event)
 	{
 		String failMessage = "Can't execute event on a component which is null.";
 		notNull(failMessage, component);
@@ -46,11 +46,9 @@
 		// Run through all the behavior and select the LAST ADDED behavior which
 		// matches the event parameter.
 		AjaxEventBehavior ajaxEventBehavior = null;
-		List behaviors = component.getBehaviors();
-		for (Iterator iter = behaviors.iterator(); iter.hasNext();)
+		List<IBehavior> behaviors = component.getBehaviors();
+		for (IBehavior behavior : behaviors)
 		{
-			IBehavior behavior = (IBehavior)iter.next();
-
 			// AjaxEventBehavior is the one to look for
 			if (behavior instanceof AjaxEventBehavior)
 			{

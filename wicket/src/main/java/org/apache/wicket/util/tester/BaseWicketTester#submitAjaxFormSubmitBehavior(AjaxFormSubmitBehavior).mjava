@@ -9,12 +9,12 @@
 	{
 		// We need to get the form submitted, using reflection.
 		// It needs to be "submitted".
-		Form form = null;
+		Form<?> form = null;
 		try
 		{
 			Field formField = AjaxFormSubmitBehavior.class.getDeclaredField("form");
 			formField.setAccessible(true);
-			form = (Form)formField.get(behavior);
+			form = (Form<?>)formField.get(behavior);
 		}
 		catch (Exception e)
 		{
@@ -27,7 +27,7 @@
 		form.visitFormComponents(new FormComponent.AbstractVisitor()
 		{
 			@Override
-			public void onFormComponent(FormComponent formComponent)
+			public void onFormComponent(FormComponent<?> formComponent)
 			{
 				// !(formComponent instanceof Button) &&
 				if (!(formComponent instanceof RadioGroup) &&
