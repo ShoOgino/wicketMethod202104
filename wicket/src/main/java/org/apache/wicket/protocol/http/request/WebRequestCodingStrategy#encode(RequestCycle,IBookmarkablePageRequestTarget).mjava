@@ -12,13 +12,13 @@
 	 * @return the encoded url
 	 */
 	protected CharSequence encode(RequestCycle requestCycle,
-			IBookmarkablePageRequestTarget requestTarget)
+		IBookmarkablePageRequestTarget requestTarget)
 	{
 		// Begin encoding URL
 		final AppendingStringBuffer url = new AppendingStringBuffer(64);
 
 		// Get page Class
-		final Class<? extends Page> pageClass = requestTarget.getPageClass();
+		final Class< ? extends Page> pageClass = requestTarget.getPageClass();
 		final Application application = Application.get();
 
 		// Find pagemap name
@@ -47,8 +47,8 @@
 
 		WebRequestEncoder encoder = new WebRequestEncoder(url);
 		if (!application.getHomePage().equals(pageClass) ||
-				!"".equals(pageMapName) ||
-				(application.getHomePage().equals(pageClass) && requestTarget instanceof BookmarkableListenerInterfaceRequestTarget))
+			!"".equals(pageMapName) ||
+			(application.getHomePage().equals(pageClass) && requestTarget instanceof BookmarkableListenerInterfaceRequestTarget))
 		{
 			/*
 			 * Add <page-map-name>:<bookmarkable-page-class>
@@ -61,7 +61,7 @@
 			 * unencoded url correctly.
 			 */
 			encoder.addValue(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME,
-					pageMapName + Component.PATH_SEPARATOR + pageClass.getName());
+				pageMapName + Component.PATH_SEPARATOR + pageClass.getName());
 		}
 
 		// Get page parameters

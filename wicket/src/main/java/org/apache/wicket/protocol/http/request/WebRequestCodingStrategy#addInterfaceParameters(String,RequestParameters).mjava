@@ -10,7 +10,7 @@
 	 *            parameters object to set the found parts in
 	 */
 	public static void addInterfaceParameters(final String interfaceParameter,
-			final RequestParameters parameters)
+		final RequestParameters parameters)
 	{
 		if (interfaceParameter == null)
 		{
@@ -25,7 +25,7 @@
 		if (pathComponents.length < 6)
 		{
 			throw new WicketRuntimeException("Internal error parsing " + INTERFACE_PARAMETER_NAME +
-					" = " + interfaceParameter);
+				" = " + interfaceParameter);
 		}
 
 		// Extract version
@@ -33,16 +33,16 @@
 		try
 		{
 			versionNumberString = pathComponents[pathComponents.length - 4];
-			final int versionNumber = Strings.isEmpty(versionNumberString) ? 0 : Integer
-					.parseInt(versionNumberString);
+			final int versionNumber = Strings.isEmpty(versionNumberString) ? 0
+				: Integer.parseInt(versionNumberString);
 			parameters.setVersionNumber(versionNumber);
 		}
 		catch (NumberFormatException e)
 		{
 			throw new WicketRuntimeException("Internal error parsing " + INTERFACE_PARAMETER_NAME +
-					" = " + interfaceParameter +
-					"; wrong format for page version argument. Expected a number but was '" +
-					versionNumberString + "'", e);
+				" = " + interfaceParameter +
+				"; wrong format for page version argument. Expected a number but was '" +
+				versionNumberString + "'", e);
 		}
 
 		// Set pagemap name
@@ -59,9 +59,9 @@
 		catch (NumberFormatException e)
 		{
 			throw new WicketRuntimeException("Internal error parsing " + INTERFACE_PARAMETER_NAME +
-					" = " + interfaceParameter +
-					"; wrong format for url depth argument. Expected a number but was '" +
-					urlDepthString + "'", e);
+				" = " + interfaceParameter +
+				"; wrong format for url depth argument. Expected a number but was '" +
+				urlDepthString + "'", e);
 		}
 		parameters.setUrlDepth(urlDepth);
 
@@ -71,14 +71,13 @@
 
 		// Extract interface name after second-to-last colon
 		final String interfaceName = pathComponents[pathComponents.length - 3];
-		parameters.setInterfaceName(interfaceName.length() != 0
-				? interfaceName
-				: IRedirectListener.INTERFACE.getName());
+		parameters.setInterfaceName(interfaceName.length() != 0 ? interfaceName
+			: IRedirectListener.INTERFACE.getName());
 
 		// Component path is everything after pageMapName and before version
 		final int start = pageMapName.length() + 1;
 		final int end = interfaceParameter.length() - behaviourId.length() -
-				interfaceName.length() - versionNumberString.length() - urlDepthString.length() - 4;
+			interfaceName.length() - versionNumberString.length() - urlDepthString.length() - 4;
 		final String componentPath = interfaceParameter.substring(start, end);
 		parameters.setComponentPath(componentPath);
 	}

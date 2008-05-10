@@ -10,7 +10,7 @@
 	 *      org.apache.wicket.IRequestTarget)
 	 */
 	public final CharSequence encode(final RequestCycle requestCycle,
-			final IRequestTarget requestTarget)
+		final IRequestTarget requestTarget)
 	{
 		// First check to see whether the target is mounted
 		CharSequence url = pathForTarget(requestTarget);
@@ -26,12 +26,12 @@
 		else if (requestTarget instanceof IBookmarkablePageRequestTarget)
 		{
 			url = requestContext.encodeRenderURL(url == null ? encode(requestCycle,
-					(IBookmarkablePageRequestTarget)requestTarget) : url);
+				(IBookmarkablePageRequestTarget)requestTarget) : url);
 		}
 		else if (requestTarget instanceof ISharedResourceRequestTarget)
 		{
 			url = requestContext.encodeSharedResourceURL(url == null ? encode(requestCycle,
-					(ISharedResourceRequestTarget)requestTarget) : url);
+				(ISharedResourceRequestTarget)requestTarget) : url);
 			sharedResourceURL = true;
 		}
 		else if (requestTarget instanceof IListenerInterfaceRequestTarget)
@@ -45,13 +45,12 @@
 				IListenerInterfaceRequestTarget iliRequestTarget = (IListenerInterfaceRequestTarget)requestTarget;
 				RequestListenerInterface rli = iliRequestTarget.getRequestListenerInterface();
 				if (IResourceListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()) ||
-						IBehaviorListener.class.isAssignableFrom(rli.getMethod()
-								.getDeclaringClass()))
+					IBehaviorListener.class.isAssignableFrom(rli.getMethod().getDeclaringClass()))
 				{
 					url = requestContext.encodeResourceURL(url);
 				}
 				else if (IRedirectListener.class.isAssignableFrom(rli.getMethod()
-						.getDeclaringClass()))
+					.getDeclaringClass()))
 				{
 					if (((WebRequestCycle)requestCycle).getWebRequest().isAjax())
 					{
@@ -76,7 +75,7 @@
 						for (int i = 0, size = behaviors.size(); i < size; i++)
 						{
 							if (AbstractAjaxBehavior.class.isAssignableFrom(behaviors.get(i)
-									.getClass()))
+								.getClass()))
 							{
 								forceActionURL = false;
 								break;
