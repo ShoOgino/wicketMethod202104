@@ -1,21 +1,10 @@
 		/**
 		 * @see org.apache.wicket.PageMap#get(int, int)
 		 */
+		@Override
 		public Page get(int id, int versionNumber)
 		{
-			HashMap pageMaps = (HashMap)usedPages.get();
-			if (pageMaps == null)
-			{
-				pageMaps = new HashMap();
-				usedPages.set(pageMaps);
-			}
-			IntHashMap pages = (IntHashMap)pageMaps.get(getName());
-			if (pages == null)
-			{
-				pages = new IntHashMap();
-				pageMaps.put(getName(), pages);
-			}
-
+			IntHashMap<Page<?>> pages = getUsedPages(getName());
 			// for now i only get by id.
 			// does it really make any sense that there are multiply instances
 			// of the

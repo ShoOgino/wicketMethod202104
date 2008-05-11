@@ -8,11 +8,10 @@
 			// make sure that all pages are saved in asynchronous mode
 			synchronized (pagesToSaveAll)
 			{
-				for (Iterator i = pagesToSaveAll.entrySet().iterator(); i.hasNext();)
+				for (Entry<String, List<SerializedPage>> entry : pagesToSaveAll.entrySet())
 				{
-					Entry entry = (Entry)i.next();
-					String sessionId = (String)entry.getKey();
-					List pages = (List)entry.getValue();
+					String sessionId = entry.getKey();
+					List<SerializedPage> pages = entry.getValue();
 					synchronized (pages)
 					{
 						flushPagesToSaveList(sessionId, pages);

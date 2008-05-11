@@ -14,15 +14,17 @@
 	 *            page to be serialized
 	 * @return list of {@link SerializedPage}s
 	 */
-	protected List/* <SerializedPage> */serializePage(Page page)
+	@SuppressWarnings("unchecked")
+	protected List<SerializedPage> serializePage(Page page)
 	{
-		final List result = new ArrayList();
+		final List<SerializedPage> result = new ArrayList<SerializedPage>();
 
 		SerializedPage initialPage = new SerializedPage(page);
 		result.add(initialPage);
 
 		PageSerializer serializer = new PageSerializer(initialPage)
 		{
+			@Override
 			protected void onPageSerialized(SerializedPage page)
 			{
 				result.add(page);

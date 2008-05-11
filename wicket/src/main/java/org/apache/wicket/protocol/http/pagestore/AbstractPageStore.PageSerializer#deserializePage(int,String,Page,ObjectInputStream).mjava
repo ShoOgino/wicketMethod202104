@@ -2,23 +2,11 @@
 			throws IOException, ClassNotFoundException
 		{
 			// get the page instance registry
-			HashMap pageMaps = (HashMap)SecondLevelCacheSessionStore.getUsedPages().get();
-			if (pageMaps == null)
-			{
-				pageMaps = new HashMap();
-				SecondLevelCacheSessionStore.getUsedPages().set(pageMaps);
-			}
-			IntHashMap pages = (IntHashMap)pageMaps.get(pageMapName);
-			if (pages == null)
-			{
-				pages = new IntHashMap();
-				pageMaps.put(pageMapName, pages);
-			}
-
+			IntHashMap<Page<?>> pages = SecondLevelCacheSessionStore.getUsedPages(pageMapName);
 			// register the new page instance so that when the same page is being deserialized
 			// (curricular page references) we can use existing page instance (otherwise deadlock
 			// would happen)
-			
+
 			pages.put(id, page);
 
 			stream.defaultReadObject();
