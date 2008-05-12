@@ -4,10 +4,10 @@
 	 * @param component
 	 * @return A MarkupStream which is positioned at the component
 	 */
-	final MarkupStream find(final Component< ? > component)
+	final MarkupStream find(final Component<?> component)
 	{
 		// Get the parent's associated markup stream.
-		MarkupContainer< ? > parentWithAssociatedMarkup = component.findParentWithAssociatedMarkup();
+		MarkupContainer<?> parentWithAssociatedMarkup = component.findParentWithAssociatedMarkup();
 		MarkupStream markupStream = null;
 
 		// Might be that we have to walk up the component hierarchy
@@ -38,6 +38,15 @@
 							// Ok, found it
 							return markupStream;
 						}
+						else
+						{
+							Component<?> parent = component.getParent();
+							if (parent instanceof AbstractRepeater && id != null &&
+								id.equals(parent.getId()))
+							{
+								return markupStream;
+							}
+						}
 					}
 				}
 				catch (IndexOutOfBoundsException ex)
@@ -60,7 +69,7 @@
 
 			if (parentWithAssociatedMarkup instanceof Fragment)
 			{
-				markupStream = ((Fragment< ? >)parentWithAssociatedMarkup).findComponentIndex(component.getId());
+				markupStream = ((Fragment<?>)parentWithAssociatedMarkup).findComponentIndex(component.getId());
 				return markupStream;
 			}
 
