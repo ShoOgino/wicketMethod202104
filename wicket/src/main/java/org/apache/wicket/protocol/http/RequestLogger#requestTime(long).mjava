@@ -3,7 +3,7 @@
 	 */
 	public void requestTime(long timeTaken)
 	{
-		RequestData rd = currentRequest.get();
+		RequestData rd = RequestCycle.get().getMetaData(REQUEST_DATA);
 		if (rd != null)
 		{
 			if (active.get() > 0)
@@ -38,7 +38,6 @@
 			rd.setTimeTaken(timeTaken);
 
 			requests.add(0, rd);
-			currentRequest.set(null);
 			if (sessionId != null)
 			{
 				SessionData sd = liveSessions.get(sessionId);
