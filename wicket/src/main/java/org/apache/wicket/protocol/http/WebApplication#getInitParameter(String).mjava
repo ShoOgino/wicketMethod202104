@@ -1,5 +1,5 @@
 	/**
-	 * Gets an init parameter from the filter's context.
+	 * Gets an init parameter of the filter, or null if the parameter does not exist.
 	 * 
 	 * @param key
 	 *            the key to search for
@@ -11,8 +11,9 @@
 		{
 			return wicketFilter.getFilterConfig().getInitParameter(key);
 		}
-		throw new IllegalStateException("servletContext is not set yet. Any code in your"
-			+ " Application object that uses the wicketServlet/Filter instance should be put"
-			+ " in the init() method instead of your constructor");
+		throw new IllegalStateException("init parameter '" + key +
+			"' is not set yet. Any code in your" +
+			" Application object that uses the wicketServlet/Filter instance should be put" +
+			" in the init() method instead of your constructor");
 	}
 
