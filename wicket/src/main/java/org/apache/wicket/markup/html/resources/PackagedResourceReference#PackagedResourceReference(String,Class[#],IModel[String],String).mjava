@@ -2,17 +2,17 @@
 	 * Construct.
 	 * 
 	 * @param id
-	 *            component id
+	 * 		component id
 	 * @param referer
-	 *            the class that is referring; is used as the relative root for getting the resource
+	 * 		the class that is referring; is used as the relative root for getting the resource
 	 * @param file
-	 *            model that supplies the relative location of the packaged file. Must return an
-	 *            instance of {@link String}
+	 * 		model that supplies the relative location of the packaged file. Must return an instance
+	 * 		of {@link String}
 	 * @param attributeToReplace
-	 *            the attribute to replace of the target tag
+	 * 		the attribute to replace of the target tag
 	 */
-	public PackagedResourceReference(final String id, final Class referer, final IModel<String> file,
-		final String attributeToReplace)
+	public PackagedResourceReference(final String id, final Class<?> referer,
+		final IModel<String> file, final String attributeToReplace)
 	{
 		super(id);
 
@@ -36,13 +36,13 @@
 			@Override
 			public String getObject()
 			{
-        String str = file.getObject();
+				String str = file.getObject();
 				if (str == null)
 				{
 					throw new IllegalArgumentException("The model must provide a non-null object");
 				}
-        // can this check be safely removed?
-        if (!(str instanceof String))
+				// can this check be safely removed?
+				if (!(str instanceof String))
 				{
 					throw new IllegalArgumentException("The model must provide a string");
 				}
