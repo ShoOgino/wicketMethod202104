@@ -2,6 +2,12 @@
 	 * Traverses all child components of the given class in this container, calling the visitor's
 	 * visit method at each one.
 	 * 
+	 * Make sure that if you give a type S that the clazz parameter will only resolve to those
+	 * types. Else a class cast exception will occur.
+	 * 
+	 * @param <S>
+	 *            The type that goes into the Visitor.component() method.
+	 * 
 	 * @param clazz
 	 *            The class of child to visit, or null to visit all children
 	 * @param visitor
@@ -9,8 +15,9 @@
 	 * @return The return value from a visitor which halted the traversal, or null if the entire
 	 *         traversal occurred
 	 */
-	public final Object visitChildren(final Class< ? > clazz,
-		final IVisitor< ? extends Component< ? >> visitor)
+	public final <S extends Component<?>> Object visitChildren(final Class<?> clazz,
+		final IVisitor<S> visitor)
+
 	{
 		if (visitor == null)
 		{
@@ -21,16 +28,16 @@
 		for (int i = 0; i < children_size(); i++)
 		{
 			// Get next child component
-			final Component< ? > child = children_get(i);
+			final Component<?> child = children_get(i);
 			Object value = null;
-
-			IVisitor vis = visitor;
 
 			// Is the child of the correct class (or was no class specified)?
 			if (clazz == null || clazz.isInstance(child))
 			{
 				// Call visitor
-				value = vis.component(child);
+				@SuppressWarnings("unchecked")
+				S s = (S)child;
+				value = visitor.component(s);
 
 				// If visitor returns a non-null value, it halts the traversal
 				if ((value != IVisitor.CONTINUE_TRAVERSAL) &&
@@ -45,7 +52,7 @@
 				(value != IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER))
 			{
 				// visit the children in the container
-				value = ((MarkupContainer< ? >)child).visitChildren(clazz, visitor);
+				value = ((MarkupContainer<?>)child).visitChildren(clazz, visitor);
 
 				// If visitor returns a non-null value, it halts the traversal
 				if ((value != IVisitor.CONTINUE_TRAVERSAL) &&

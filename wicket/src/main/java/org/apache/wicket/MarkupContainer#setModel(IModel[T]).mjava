@@ -4,18 +4,18 @@
 	@Override
 	public MarkupContainer<T> setModel(final IModel<T> model)
 	{
-		final IModel< ? > previous = getModelImpl();
+		final IModel<?> previous = getModelImpl();
 		super.setModel(model);
 		if (previous instanceof IComponentInheritedModel)
 		{
-			visitChildren(new IVisitor<Component< ? >>()
+			visitChildren(new IVisitor<Component<?>>()
 			{
-				public Object component(Component< ? > component)
+				public Object component(Component<?> component)
 				{
-					IModel< ? > compModel = component.getModel();
+					IModel<?> compModel = component.getModel();
 					if (compModel instanceof IWrapModel)
 					{
-						compModel = ((IWrapModel< ? >)compModel).getWrappedModel();
+						compModel = ((IWrapModel<?>)compModel).getWrappedModel();
 					}
 					if (compModel == previous)
 					{
