@@ -6,9 +6,9 @@
 		String errorMessage = null;
 
 		// try any message keys ...
-		for (Iterator iterator = keys.iterator(); iterator.hasNext();)
+		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
 		{
-			errorMessage = messageSource.getMessage((String)iterator.next());
+			errorMessage = messageSource.getMessage(iterator.next());
 			if (errorMessage != null)
 			{
 				break;
@@ -24,7 +24,7 @@
 		// if a message was found perform variable substitution
 		if (errorMessage != null)
 		{
-			final Map p = (vars == null) ? Collections.EMPTY_MAP : vars;
+			final Map<String, Object> p = (vars != null) ? vars : EMPTY_VARS;
 			errorMessage = messageSource.substitute(errorMessage, p);
 		}
 		return errorMessage;
