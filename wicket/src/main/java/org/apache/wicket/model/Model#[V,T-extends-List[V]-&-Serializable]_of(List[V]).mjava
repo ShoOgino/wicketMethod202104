@@ -1,0 +1,18 @@
+	/**
+	 * Factory method for models that contain lists. This factory method will automatically rebuild
+	 * a nonserializable <code>list</code> into a serializable one.
+	 * 
+	 * @param <V>
+	 *            value type in list
+	 * @param <T>
+	 *            model type
+	 * @param list
+	 *            The List, which may or may not be Serializable
+	 * @return A Model object wrapping the List
+	 */
+	@SuppressWarnings("unchecked")
+	public static <V, T extends List<V> & Serializable> Model<T> of(final List<V> list)
+	{
+		return new Model<T>((T)(list instanceof Serializable ? list : new ArrayList<V>(list)));
+	}
+
