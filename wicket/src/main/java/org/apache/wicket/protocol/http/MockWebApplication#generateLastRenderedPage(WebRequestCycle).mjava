@@ -3,9 +3,9 @@
 	 * @param cycle
 	 * @return Last page
 	 */
-	private Page generateLastRenderedPage(WebRequestCycle cycle)
+	private Page<?> generateLastRenderedPage(WebRequestCycle cycle)
 	{
-		Page newLastRenderedPage = cycle.getResponsePage();
+		Page<?> newLastRenderedPage = cycle.getResponsePage();
 		if (newLastRenderedPage == null)
 		{
 			Class responseClass = cycle.getResponsePageClass();
@@ -22,7 +22,7 @@
 					// create a new request cycle for the newPage call
 					createRequestCycle();
 					IBookmarkablePageRequestTarget pageClassRequestTarget = (IBookmarkablePageRequestTarget)target;
-					Class< ? extends Page> pageClass = pageClassRequestTarget.getPageClass();
+					Class<? extends Page<?>> pageClass = pageClassRequestTarget.getPageClass();
 					PageParameters parameters = pageClassRequestTarget.getPageParameters();
 					if (parameters == null || parameters.size() == 0)
 					{

@@ -6,21 +6,22 @@
 	public void testRenderDisallowedComponent() throws Exception
 	{
 		tester.getApplication().getSecuritySettings().setAuthorizationStrategy(
-				new DummyAuthorizationStrategy()
+			new DummyAuthorizationStrategy()
+			{
+				/**
+				 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isActionAuthorized(org.apache.wicket.Component,
+				 *      org.apache.wicket.authorization.Action)
+				 */
+				@Override
+				public boolean isActionAuthorized(Component component, Action action)
 				{
-					/**
-					 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isActionAuthorized(org.apache.wicket.Component,
-					 *      org.apache.wicket.authorization.Action)
-					 */
-					public boolean isActionAuthorized(Component component, Action action)
+					if (action == Component.RENDER && component instanceof Label)
 					{
-						if (action == Component.RENDER && component instanceof Label)
-						{
-							return false;
-						}
-						return true;
+						return false;
 					}
-				});
+					return true;
+				}
+			});
 		tester.startPage(AuthTestPage1.class);
 		tester.assertRenderedPage(AuthTestPage1.class);
 		tester.assertInvisible("label");

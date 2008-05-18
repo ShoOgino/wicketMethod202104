@@ -6,13 +6,14 @@
 	public void testCreateDisallowedComponent() throws Exception
 	{
 		tester.getApplication().getSecuritySettings().setAuthorizationStrategy(
-				new DummyAuthorizationStrategy()
+			new DummyAuthorizationStrategy()
+			{
+				@Override
+				public boolean isInstantiationAuthorized(Class c)
 				{
-					public boolean isInstantiationAuthorized(Class c)
-					{
-						return false;
-					}
-				});
+					return false;
+				}
+			});
 		try
 		{
 			new WebComponent("test");
