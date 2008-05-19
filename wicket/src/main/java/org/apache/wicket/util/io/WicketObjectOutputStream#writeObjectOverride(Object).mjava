@@ -1,6 +1,7 @@
 	/**
 	 * @see java.io.ObjectOutputStream#writeObjectOverride(java.lang.Object)
 	 */
+	@Override
 	protected final void writeObjectOverride(Object obj) throws IOException
 	{
 		if (obj == null)
@@ -18,18 +19,18 @@
 		{
 			if (obj instanceof Class)
 			{
-				ClassStreamHandler classHandler = ClassStreamHandler.lookup((Class)obj);
+				ClassStreamHandler classHandler = ClassStreamHandler.lookup((Class<?>)obj);
 				out.write(ClassStreamHandler.CLASS);
 				out.writeShort(classHandler.getClassId());
 			}
 			else
 			{
-				Class cls = obj.getClass();
+				Class<?> cls = obj.getClass();
 				handledObjects.assign(obj);
 
 				if (cls.isArray())
 				{
-					Class componentType = cls.getComponentType();
+					Class<?> componentType = cls.getComponentType();
 					ClassStreamHandler classHandler = ClassStreamHandler.lookup(componentType);
 					if (componentType.isPrimitive())
 					{
@@ -41,16 +42,14 @@
 						}
 						catch (WicketSerializeableException wse)
 						{
-							wse
-									.addTrace(componentType.getName() + "[" + Array.getLength(obj) +
-											"]");
+							wse.addTrace(componentType.getName() + "[" + Array.getLength(obj) + "]");
 							throw wse;
 						}
 						catch (Exception e)
 						{
 							throw new WicketSerializeableException(
-									"Error writing primitive array of " + componentType.getName() +
-											"[" + Array.getLength(obj) + "]", e);
+								"Error writing primitive array of " + componentType.getName() +
+									"[" + Array.getLength(obj) + "]", e);
 						}
 					}
 					else
@@ -74,14 +73,14 @@
 						catch (Exception e)
 						{
 							throw new WicketSerializeableException("Error writing array of " +
-									componentType.getName() + "[" + length + "]", e);
+								componentType.getName() + "[" + length + "]", e);
 						}
 					}
 					return;
 				}
 				else
 				{
-					Class realClz = cls;
+					Class<?> realClz = cls;
 					classHandler = ClassStreamHandler.lookup(realClz);
 
 					Object object = classHandler.writeReplace(obj);
@@ -117,7 +116,7 @@
 							if (realClz != cls)
 							{
 								wse.addTrace(realClz.getName() + "(ReplaceOf:" + cls.getName() +
-										")");
+									")");
 							}
 							else
 							{
@@ -130,13 +129,13 @@
 							if (realClz != cls)
 							{
 								throw new WicketSerializeableException("Error writing fields for " +
-										realClz.getName() + "(ReplaceOf:" + cls.getName() + ")", e);
+									realClz.getName() + "(ReplaceOf:" + cls.getName() + ")", e);
 
 							}
 							else
 							{
 								throw new WicketSerializeableException("Error writing fields for " +
-										realClz.getName(), e);
+									realClz.getName(), e);
 							}
 						}
 						finally

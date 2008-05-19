@@ -6,6 +6,7 @@
 			final ObjectOutputStream oos = new ObjectOutputStream(out);
 			return new ObjectOutputStream()
 			{
+				@Override
 				protected final void writeObjectOverride(final Object obj) throws IOException
 				{
 					try
@@ -32,11 +33,13 @@
 					}
 				}
 
+				@Override
 				public void flush() throws IOException
 				{
 					oos.flush();
 				}
 
+				@Override
 				public void close() throws IOException
 				{
 					oos.close();

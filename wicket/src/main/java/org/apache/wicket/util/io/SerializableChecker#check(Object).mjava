@@ -5,14 +5,14 @@
 			return;
 		}
 
-		Class cls = obj.getClass();
+		Class<?> cls = obj.getClass();
 		nameStack.add(simpleName);
 		traceStack.add(new TraceSlot(obj, fieldDescription));
 
 		if (!(obj instanceof Serializable) && (!Proxy.isProxyClass(cls)))
 		{
 			throw new WicketNotSerializableException(
-				  toPrettyPrintedStack(obj.getClass().getName()), exception);
+				toPrettyPrintedStack(obj.getClass().getName()), exception);
 		}
 
 		ObjectStreamClass desc;
@@ -22,10 +22,10 @@
 			{
 				desc = (ObjectStreamClass)LOOKUP_METHOD.invoke(null, new Object[] { cls,
 						Boolean.TRUE });
-				Class repCl;
-				if (!((Boolean)HAS_WRITE_REPLACE_METHOD_METHOD.invoke(desc, null)).booleanValue() ||
-						(obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, new Object[] { obj })) == null ||
-						(repCl = obj.getClass()) == cls)
+				Class<?> repCl;
+				if (!((Boolean)HAS_WRITE_REPLACE_METHOD_METHOD.invoke(desc, (Object[])null)).booleanValue() ||
+					(obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, new Object[] { obj })) == null ||
+					(repCl = obj.getClass()) == cls)
 				{
 					break;
 				}
@@ -48,7 +48,7 @@
 		else if (cls.isArray())
 		{
 			checked.put(obj, null);
-			Class ccl = cls.getComponentType();
+			Class<?> ccl = cls.getComponentType();
 			if (!(ccl.isPrimitive()))
 			{
 				Object[] objs = (Object[])obj;
@@ -94,7 +94,7 @@
 					throw (WicketNotSerializableException)e;
 				}
 				log.warn("error delegating to Externalizable : " + e.getMessage() + ", path: " +
-						currentPath());
+					currentPath());
 			}
 		}
 		else
@@ -113,7 +113,7 @@
 				try
 				{
 					writeObjectMethod = cls.getDeclaredMethod("writeObject",
-							new Class[] { java.io.ObjectOutputStream.class });
+						new Class[] { java.io.ObjectOutputStream.class });
 				}
 				catch (SecurityException e)
 				{
@@ -140,6 +140,7 @@
 						enableReplaceObject(true);
 					}
 
+					@Override
 					protected Object replaceObject(Object streamObj) throws IOException
 					{
 						if (streamObj == original)
@@ -174,7 +175,7 @@
 						throw (WicketNotSerializableException)e;
 					}
 					log.warn("error delegating to writeObject : " + e.getMessage() + ", path: " +
-							currentPath());
+						currentPath());
 				}
 			}
 			else
@@ -182,7 +183,7 @@
 				Object[] slots;
 				try
 				{
-					slots = (Object[])GET_CLASS_DATA_LAYOUT_METHOD.invoke(desc, null);
+					slots = (Object[])GET_CLASS_DATA_LAYOUT_METHOD.invoke(desc, (Object[])null);
 				}
 				catch (Exception e)
 				{

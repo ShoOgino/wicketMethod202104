@@ -10,7 +10,7 @@
 	 *            if true, disable persistence for all FormComponents on that page. If false, it
 	 *            will remain unchanged.
 	 */
-	public final void removePersistedFormData(final Class< ? extends Form> formClass,
+	public final void removePersistedFormData(final Class<? extends Form> formClass,
 		final boolean disablePersistence)
 	{
 		// Check that formClass is an instanceof Form
@@ -21,16 +21,16 @@
 		}
 
 		// Visit all children which are an instance of formClass
-		visitChildren(formClass, new IVisitor<Component< ? >>()
+		visitChildren(formClass, new IVisitor<Component<?>>()
 		{
-			public Object component(final Component< ? > component)
+			public Object component(final Component<?> component)
 			{
 				// They must be of type Form as well
 				if (component instanceof Form)
 				{
 					// Delete persistent FormComponent data and disable
 					// persistence
-					((Form< ? >)component).removePersistentFormComponentValues(disablePersistence);
+					((Form<?>)component).removePersistentFormComponentValues(disablePersistence);
 				}
 				return CONTINUE_TRAVERSAL;
 			}

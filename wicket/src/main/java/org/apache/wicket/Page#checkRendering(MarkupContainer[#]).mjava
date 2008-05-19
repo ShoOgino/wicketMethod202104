@@ -5,18 +5,18 @@
 	 *            The page itself if it was a full page render or the container that was rendered
 	 *            standalone
 	 */
-	private final void checkRendering(final MarkupContainer< ? > renderedContainer)
+	private final void checkRendering(final MarkupContainer<?> renderedContainer)
 	{
 		// If the application wants component uses checked and
 		// the response is not a redirect
 		final IDebugSettings debugSettings = Application.get().getDebugSettings();
 		if (debugSettings.getComponentUseCheck() && !getResponse().isRedirect())
 		{
-			final List<Component< ? >> unrenderedComponents = new ArrayList<Component< ? >>();
+			final List<Component<?>> unrenderedComponents = new ArrayList<Component<?>>();
 			final StringBuffer buffer = new StringBuffer();
-			renderedContainer.visitChildren(new IVisitor<Component< ? >>()
+			renderedContainer.visitChildren(new IVisitor<Component<?>>()
 			{
-				public Object component(final Component< ? > component)
+				public Object component(final Component<?> component)
 				{
 					// If component never rendered
 					if (renderedComponents == null || !renderedComponents.contains(component))
@@ -59,21 +59,21 @@
 				// Get rid of set
 				renderedComponents = null;
 
-				Iterator<Component< ? >> iterator = unrenderedComponents.iterator();
+				Iterator<Component<?>> iterator = unrenderedComponents.iterator();
 
 				while (iterator.hasNext())
 				{
-					Component< ? > component = iterator.next();
+					Component<?> component = iterator.next();
 					// Now first test if the component has a sibling that is a transparent resolver.
 
-					Iterator<Component< ? >> iterator2 = component.getParent().iterator();
+					Iterator<Component<?>> iterator2 = component.getParent().iterator();
 					while (iterator2.hasNext())
 					{
-						Component< ? > sibling = iterator2.next();
+						Component<?> sibling = iterator2.next();
 						if (!sibling.isVisible())
 						{
 							boolean isTransparentMarkupContainer = sibling instanceof MarkupContainer &&
-								((MarkupContainer< ? >)sibling).isTransparentResolver();
+								((MarkupContainer<?>)sibling).isTransparentResolver();
 							boolean isComponentResolver = sibling instanceof IComponentResolver;
 							if (isTransparentMarkupContainer || isComponentResolver)
 							{
