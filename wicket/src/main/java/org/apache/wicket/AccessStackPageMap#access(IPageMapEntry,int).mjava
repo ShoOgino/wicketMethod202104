@@ -11,7 +11,7 @@
 		int id = entry.getNumericId();
 		for (int i = accessStack.size() - 1; i >= 0; i--)
 		{
-			final Access access = (Access)accessStack.get(i);
+			final Access access = accessStack.get(i);
 
 			// If we found id and version in access stack
 			if (access.id == id && access.version == version)
@@ -33,14 +33,14 @@
 					if (top instanceof Page)
 					{
 						// If there's more than one version
-						Page topPage = (Page)top;
+						Page<?> topPage = (Page<?>)top;
 						if (topPage.getVersions() > 1)
 						{
 							// Remove version the top access version (-1)
 							topPage.getVersion(topAccess.getVersion() - 1);
 						}
 						else if (topPage.getNumericId() != access.id &&
-								topPage.getCurrentVersionNumber() != access.version)
+							topPage.getCurrentVersionNumber() != access.version)
 						{
 							// Remove whole page
 							remove(topPage);

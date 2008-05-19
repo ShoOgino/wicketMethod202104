@@ -8,11 +8,12 @@
 		add(feedbackPanel);
 
 		// Add a form with 2 SubmitLinks that can be called
-		Form form = new Form("form");
+		Form<?> form = new Form<Void>("form");
 		add(form);
 
-		SubmitLink internal = new SubmitLink("internal")
+		SubmitLink<?> internal = new SubmitLink<Void>("internal")
 		{
+			@Override
 			public void onSubmit()
 			{
 				info("internal onsubmit");
@@ -20,8 +21,9 @@
 		};
 		form.add(internal);
 
-		SubmitLink external = new SubmitLink("external", form)
+		SubmitLink<?> external = new SubmitLink<Void>("external", form)
 		{
+			@Override
 			public void onSubmit()
 			{
 				info("external onsubmit");

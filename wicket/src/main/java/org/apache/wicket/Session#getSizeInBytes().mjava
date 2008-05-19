@@ -4,9 +4,8 @@
 	public final long getSizeInBytes()
 	{
 		long size = Objects.sizeof(this);
-		for (final Iterator<Object> iterator = getPageMaps().iterator(); iterator.hasNext();)
+		for (IPageMap pageMap : getPageMaps())
 		{
-			final IPageMap pageMap = (IPageMap)iterator.next();
 			size += pageMap.getSizeInBytes();
 		}
 		return size;

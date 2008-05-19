@@ -16,14 +16,13 @@
 				"To call this method ISessionSettings.setPageIdUniquePerSession must be set to true");
 		}
 
-		List<Object> pageMaps = getPageMaps();
+		List<IPageMap> pageMaps = getPageMaps();
 
-		for (Iterator<Object> i = pageMaps.iterator(); i.hasNext();)
+		for (IPageMap pageMap : pageMaps)
 		{
-			IPageMap pm = (IPageMap)i.next();
-			if (pm.containsPage(pageId, versionNumber))
+			if (pageMap.containsPage(pageId, versionNumber))
 			{
-				return getPage(pm.getName(), "" + pageId, versionNumber);
+				return getPage(pageMap.getName(), "" + pageId, versionNumber);
 			}
 		}
 

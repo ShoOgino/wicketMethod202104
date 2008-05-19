@@ -3,13 +3,14 @@
 	 */
 	public void testCompoundPropertyModel()
 	{
-		CompoundPropertyModel emptyModel = new CompoundPropertyModel("");
+		CompoundPropertyModel<?> emptyModel = new CompoundPropertyModel<String>("");
 		String expected = "Model:classname=[org.apache.wicket.model.CompoundPropertyModel]:nestedModel=[]";
 		assertEquals(expected, emptyModel.toString());
 
 		Properties properties = new Properties();
 		properties.put("name", "foo");
-		CompoundPropertyModel stringProperty = new CompoundPropertyModel(properties);
+		CompoundPropertyModel<Properties> stringProperty = new CompoundPropertyModel<Properties>(
+			properties);
 
 		expected = "Model:classname=[org.apache.wicket.model.CompoundPropertyModel]:nestedModel=[{name=foo}]";
 		assertEquals(expected, stringProperty.toString());
@@ -19,10 +20,11 @@
 		assertEquals(expected, stringProperty.toString());
 
 		InnerPOJO innerPOJO = new InnerPOJO();
-		CompoundPropertyModel pojoProperty = new CompoundPropertyModel(innerPOJO);
+		CompoundPropertyModel<InnerPOJO> pojoProperty = new CompoundPropertyModel<InnerPOJO>(
+			innerPOJO);
 
 		expected = "Model:classname=[org.apache.wicket.model.CompoundPropertyModel]:nestedModel=[" +
-				innerPOJO + "]";
+			innerPOJO + "]";
 		assertEquals(expected, pojoProperty.toString());
 	}
 

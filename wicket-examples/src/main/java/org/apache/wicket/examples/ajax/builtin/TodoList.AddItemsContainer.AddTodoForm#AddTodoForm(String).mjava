@@ -6,12 +6,13 @@
 			 */
 			public AddTodoForm(String id)
 			{
-				super(id, new CompoundPropertyModel(new TodoItem()));
+				super(id, new CompoundPropertyModel<TodoItem>(new TodoItem()));
 				setOutputMarkupId(true);
-				add(new TextField("text"));
-				add(new AjaxButton("add", this)
+				add(new TextField<String>("text"));
+				add(new AjaxButton<Void>("add", this)
 				{
-					protected void onSubmit(AjaxRequestTarget target, Form form)
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 					{
 						// retrieve the todo item
 						TodoItem item = (TodoItem)getParent().getModelObject();
@@ -21,9 +22,10 @@
 					}
 				});
 
-				add(new AjaxButton("cancel", this)
+				add(new AjaxButton<Void>("cancel", this)
 				{
-					public void onSubmit(AjaxRequestTarget target, Form form)
+					@Override
+					public void onSubmit(AjaxRequestTarget target, Form<?> form)
 					{
 						onCancelTodo(target);
 					}

@@ -6,13 +6,14 @@
 	 */
 	public void testAjaxFallbackLinkClick()
 	{
-		final Page page = new MockPageWithLink();
+		final Page<?> page = new MockPageWithLink();
 
 		// Create a link, which we test is actually invoked
-		page.add(new AjaxFallbackLink("ajaxLink")
+		page.add(new AjaxFallbackLink<Void>("ajaxLink")
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
 				linkClicked = true;
@@ -27,7 +28,7 @@
 			 */
 			private static final long serialVersionUID = 1L;
 
-			public Page getTestPage()
+			public Page<?> getTestPage()
 			{
 				return page;
 			}

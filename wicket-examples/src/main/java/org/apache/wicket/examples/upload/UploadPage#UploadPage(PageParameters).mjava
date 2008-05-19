@@ -20,10 +20,11 @@
 		add(simpleUploadForm);
 
 		// Add folder view
-		add(new Label("dir", uploadFolder.getAbsolutePath()));
-		fileListView = new FileListView("fileList", new LoadableDetachableModel()
+		add(new Label<String>("dir", uploadFolder.getAbsolutePath()));
+		fileListView = new FileListView("fileList", new LoadableDetachableModel<List<File>>()
 		{
-			protected Object load()
+			@Override
+			protected List<File> load()
 			{
 				return Arrays.asList(getUploadFolder().listFiles());
 			}

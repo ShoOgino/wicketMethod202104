@@ -2,11 +2,12 @@
 	 * @param entry
 	 *            The entry to remove
 	 */
+	@Override
 	public final void removeEntry(final IPageMapEntry entry)
 	{
 		if (entry == null)
 		{
-			// TODO this shouldn't happen but to many people are still getting
+			// TODO this shouldn't happen but too many people are still getting
 			// this now and then/
 			// so first this "fix"
 			log.warn("PageMap.removeEntry called with an null entry");
@@ -19,10 +20,10 @@
 			session.removeAttribute(attributeForId(entry.getNumericId()));
 
 			// Remove page from acccess stack
-			final Iterator stack = accessStack.iterator();
+			final Iterator<Access> stack = accessStack.iterator();
 			while (stack.hasNext())
 			{
-				final Access access = (Access)stack.next();
+				final Access access = stack.next();
 				if (access.id == entry.getNumericId())
 				{
 					stack.remove();

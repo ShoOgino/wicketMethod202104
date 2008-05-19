@@ -2,7 +2,8 @@
 		 * @see org.apache.wicket.markup.resolver.AutoLinkResolver.IAutolinkResolverDelegate#newAutoComponent(org.apache.wicket.MarkupContainer,
 		 *      java.lang.String, org.apache.wicket.markup.resolver.AutoLinkResolver.PathInfo)
 		 */
-		public Component< ? > newAutoComponent(final MarkupContainer< ? > container,
+		@SuppressWarnings("unchecked")
+		public Component<?> newAutoComponent(final MarkupContainer<?> container,
 			final String autoId, PathInfo pathInfo)
 		{
 			if ((pathInfo.extension != null) &&
@@ -25,7 +26,7 @@
 
 				try
 				{
-					final Class< ? extends Page> clazz = (Class< ? extends Page>)defaultClassResolver.resolveClass(className);
+					final Class<? extends Page<?>> clazz = (Class<? extends Page<?>>)defaultClassResolver.resolveClass(className);
 					return new AutolinkBookmarkablePageLink(autoId, clazz, pathInfo.pageParameters,
 						pathInfo.anchor);
 				}
@@ -36,7 +37,7 @@
 				}
 
 				// Make sure base markup pages (inheritance) are handled correct
-				MarkupContainer< ? > parentWithContainer = container;
+				MarkupContainer<?> parentWithContainer = container;
 				if (container.getParent() != null)
 				{
 					parentWithContainer = container.findParentWithAssociatedMarkup();
@@ -44,7 +45,9 @@
 				if ((parentWithContainer instanceof Page) && !pathInfo.path.startsWith("/") &&
 					page.getMarkupStream().isMergedMarkup())
 				{
-					Class clazz = container.getMarkupStream().getTag().getMarkupClass();
+					Class<? extends Page<?>> clazz = (Class<? extends Page<?>>)container.getMarkupStream()
+						.getTag()
+						.getMarkupClass();
 					if (clazz != null)
 					{
 						// Href is relative. Resolve the url given relative to
@@ -53,7 +56,7 @@
 
 						try
 						{
-							clazz = defaultClassResolver.resolveClass(className);
+							clazz = (Class<? extends Page<?>>)defaultClassResolver.resolveClass(className);
 							return new AutolinkBookmarkablePageLink(autoId, clazz,
 								pathInfo.getPageParameters(), pathInfo.anchor);
 						}

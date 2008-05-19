@@ -1,0 +1,48 @@
+	/**
+	 * Configure the localized strings for the datepicker widget. This
+	 * implementation uses {@link DateFormatSymbols} and some slight string
+	 * manupilation to get the strings for months and week days. Also, the first
+	 * week day is set according to the {@link Locale} returned by
+	 * {@link #getLocale()}. It should work well for most locales.
+	 * <p>
+	 * This method is called from {@link #configureWidgetProperties(Map)} and
+	 * can be overridden if you want to customize setting up the localized
+	 * strings but are happy with the rest of
+	 * {@link #configureWidgetProperties(Map)}'s behavior. Note that you can
+	 * call (overridable) method {@link #getLocale()} to get the locale that
+	 * should be used for setting up the widget.
+	 * </p>
+	 * <p>
+	 * See YUI Calendar's <a
+	 * href="http://developer.yahoo.com/yui/examples/calendar/germany/1.html">
+	 * German</a> and <a
+	 * href="http://developer.yahoo.com/yui/examples/calendar/japan/1.html">Japanese</a>
+	 * examples for more info.
+	 * </p>
+	 * 
+	 * @param widgetProperties
+	 *            the current widget properties
+	 */
+	protected void localize(Map<String, Object> widgetProperties) {
+		DateFormatSymbols dfSymbols = new DateFormatSymbols(getLocale());
+		if (Locale.SIMPLIFIED_CHINESE.equals(getLocale())) {
+			dfSymbols.setShortWeekdays(new String[] { "", "\u65E5", "\u4E00",
+					"\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D" });
+		}
+		setWidgetProperty(widgetProperties, "MONTHS_SHORT",
+				filterEmpty(dfSymbols.getShortMonths()));
+		setWidgetProperty(widgetProperties, "MONTHS_LONG",
+				filterEmpty(dfSymbols.getMonths()));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_1CHAR",
+				filterEmpty(substring(dfSymbols.getShortWeekdays(), 1)));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_SHORT",
+				filterEmpty(substring(dfSymbols.getShortWeekdays(), 2)));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_MEDIUM",
+				filterEmpty(dfSymbols.getShortWeekdays()));
+		setWidgetProperty(widgetProperties, "WEEKDAYS_LONG",
+				filterEmpty(dfSymbols.getWeekdays()));
+
+		widgetProperties.put("START_WEEKDAY", new Integer(Calendar.getInstance(
+				getLocale()).getFirstDayOfWeek() - 1));
+	}
+

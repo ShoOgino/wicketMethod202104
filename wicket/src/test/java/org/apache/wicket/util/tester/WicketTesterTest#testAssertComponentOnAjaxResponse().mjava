@@ -3,18 +3,20 @@
 	 */
 	public void testAssertComponentOnAjaxResponse()
 	{
-		final Page page = new MockPageWithLink();
-		AjaxLink ajaxLink = new AjaxLink(MockPageWithLink.LINK_ID)
+		final Page<?> page = new MockPageWithLink();
+		AjaxLink<?> ajaxLink = new AjaxLink<Void>(MockPageWithLink.LINK_ID)
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
 				// Replace the link with a normal Link
-				Link link = new Link(MockPageWithLink.LINK_ID)
+				Link<?> link = new Link<Void>(MockPageWithLink.LINK_ID)
 				{
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public void onClick()
 					{
 						// Do nothing
@@ -35,7 +37,7 @@
 		{
 			private static final long serialVersionUID = 1L;
 
-			public Page getTestPage()
+			public Page<?> getTestPage()
 			{
 				return page;
 			}
@@ -49,7 +51,7 @@
 		tester.assertComponent(MockPageWithLink.LINK_ID, Link.class);
 
 		// Get the new link component
-		Component component = tester.getComponentFromLastRenderedPage(MockPageWithLink.LINK_ID);
+		Component<?> component = tester.getComponentFromLastRenderedPage(MockPageWithLink.LINK_ID);
 
 		// This must not fail
 		tester.assertComponentOnAjaxResponse(component);

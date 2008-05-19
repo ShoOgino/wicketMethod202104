@@ -7,12 +7,15 @@
 		public FilesBrowser(String id)
 		{
 			super(id);
-			ListView lv = new ListView("file", new PackagedResourcesModel())
+			ListView<String> lv = new ListView<String>("file", new PackagedResourcesModel())
 			{
-				protected void populateItem(ListItem item)
+				@Override
+				protected void populateItem(ListItem<String> item)
 				{
-					AjaxFallbackLink link = new AjaxFallbackLink("link", item.getModel())
+					AjaxFallbackLink<String> link = new AjaxFallbackLink<String>("link",
+						item.getModel())
 					{
+						@Override
 						public void onClick(AjaxRequestTarget target)
 						{
 							setName(getModelObjectAsString());
@@ -24,7 +27,7 @@
 							}
 						}
 					};
-					link.add(new Label("name", item.getModelObjectAsString()));
+					link.add(new Label<String>("name", item.getModelObjectAsString()));
 					item.add(link);
 				}
 			};

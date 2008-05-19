@@ -4,10 +4,11 @@
 	public void testBasicAjaxLinkClick()
 	{
 		// Create a link, which we test is actually invoked
-		final AjaxLink ajaxLink = new AjaxLink("ajaxLink")
+		final AjaxLink<?> ajaxLink = new AjaxLink<Void>("ajaxLink")
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
 				linkClicked = true;
@@ -22,9 +23,9 @@
 			 */
 			private static final long serialVersionUID = 1L;
 
-			public Page getTestPage()
+			public Page<?> getTestPage()
 			{
-				Page page = new MockPageWithLink();
+				Page<?> page = new MockPageWithLink();
 				page.add(ajaxLink);
 
 				return page;

@@ -10,18 +10,18 @@
 	 * @return The external page link
 	 */
 	public static BookmarkablePageLink link(final String name, final Book book,
-			final String noBookTitle)
+		final String noBookTitle)
 	{
 		final BookmarkablePageLink link = new BookmarkablePageLink(name, BookDetails.class);
 
 		if (book != null)
 		{
 			link.setParameter("id", book.getId());
-			link.add(new Label("title", new Model(book)));
+			link.add(new Label<Book>("title", new Model<Book>(book)));
 		}
 		else
 		{
-			link.add(new Label("title", noBookTitle));
+			link.add(new Label<String>("title", noBookTitle));
 			link.setEnabled(false);
 		}
 

@@ -1,15 +1,14 @@
 	/**
 	 * @return A list of all PageMaps in this session.
 	 */
-	public final List<Object> getPageMaps()
+	public final List<IPageMap> getPageMaps()
 	{
-		final List<Object> list = new ArrayList<Object>();
-		for (final Iterator<String> iterator = getAttributeNames().iterator(); iterator.hasNext();)
+		final List<IPageMap> list = new ArrayList<IPageMap>();
+		for (String attribute : getAttributeNames())
 		{
-			final String attribute = iterator.next();
 			if (attribute.startsWith(pageMapAttributePrefix))
 			{
-				list.add(getAttribute(attribute));
+				list.add((IPageMap)getAttribute(attribute));
 			}
 		}
 		return list;

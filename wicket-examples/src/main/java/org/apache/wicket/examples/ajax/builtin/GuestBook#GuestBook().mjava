@@ -8,18 +8,19 @@
 		add(commentForm);
 
 		// the WebMarkupContainer is used to update the listview in an ajax call
-		comments = new WebMarkupContainer("comments");
+		comments = new WebMarkupContainer<Void>("comments");
 		add(comments.setOutputMarkupId(true));
 
 		// Add commentListView of existing comments
-		comments.add(commentListView = new ListView("comments", new PropertyModel(this,
-				"commentList"))
+		comments.add(commentListView = new ListView<Comment>("comments",
+			new PropertyModel<List<Comment>>(this, "commentList"))
 		{
-			public void populateItem(final ListItem listItem)
+			@Override
+			public void populateItem(final ListItem<Comment> listItem)
 			{
-				final Comment comment = (Comment)listItem.getModelObject();
-				listItem.add(new Label("date", new Model(comment.getDate())));
-				listItem.add(new MultiLineLabel("text", comment.getText()));
+				final Comment comment = listItem.getModelObject();
+				listItem.add(new Label<Date>("date", new Model<Date>(comment.getDate())));
+				listItem.add(new MultiLineLabel<String>("text", comment.getText()));
 			}
 		});
 
@@ -36,10 +37,12 @@
 		// specific stuff, like rendering our components.
 		commentForm.add(new AjaxFormSubmitBehavior(commentForm, "onsubmit")
 		{
+			@Override
 			protected IAjaxCallDecorator getAjaxCallDecorator()
 			{
 				return new AjaxCallDecorator()
 				{
+					@Override
 					public CharSequence decorateScript(CharSequence script)
 					{
 						return script + "return false;";
@@ -47,6 +50,7 @@
 				};
 			}
 
+			@Override
 			protected void onSubmit(AjaxRequestTarget target)
 			{
 				// add the list of components that need to be updated
@@ -55,7 +59,7 @@
 
 				// focus the textarea again
 				target.appendJavascript("document.getElementById('" + text.getMarkupId() +
-						"').focus();");
+					"').focus();");
 			}
 
 			@Override

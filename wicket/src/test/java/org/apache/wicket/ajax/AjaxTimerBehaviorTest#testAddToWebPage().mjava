@@ -6,12 +6,13 @@
 		Duration dur = Duration.seconds(20);
 		final MyAjaxSelfUpdatingTimerBehavior timer = new MyAjaxSelfUpdatingTimerBehavior(dur);
 		final MockPageWithLinkAndComponent page = new MockPageWithLinkAndComponent();
-		Label label = new Label(MockPageWithLinkAndComponent.COMPONENT_ID, "Hello");
+		Label<String> label = new Label<String>(MockPageWithLinkAndComponent.COMPONENT_ID, "Hello");
 		page.add(label);
-		page.add(new Link(MockPageWithLinkAndComponent.LINK_ID)
+		page.add(new Link<Void>(MockPageWithLinkAndComponent.LINK_ID)
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onClick()
 			{
 				// do nothing, link is just used to simulate a roundtrip
@@ -24,7 +25,7 @@
 		{
 			private static final long serialVersionUID = 1L;
 
-			public Page getTestPage()
+			public Page<?> getTestPage()
 			{
 				return page;
 			}

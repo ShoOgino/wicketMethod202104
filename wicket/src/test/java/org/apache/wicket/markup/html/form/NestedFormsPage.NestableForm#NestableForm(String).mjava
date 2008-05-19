@@ -1,29 +1,37 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param id
+		 * 		the form's id
+		 */
 		public NestableForm(String id)
 		{
 			super(id);
-			setModel(new CompoundPropertyModel(this));
+			setModel(new CompoundPropertyModel<NestableForm>(this));
 
-			TextField firstField = new RequiredTextField("first");
-			TextField secondField = new TextField("second");
+			TextField<String> firstField = new RequiredTextField<String>("first");
+			TextField<String> secondField = new TextField<String>("second");
 			add(firstField);
 			add(secondField);
 
 			add(new EqualInputValidator(firstField, secondField));
-			add(new AjaxSubmitLink("ajaxSubmit", this)
+			add(new AjaxSubmitLink<Void>("ajaxSubmit", this)
 			{
 				private static final long serialVersionUID = 1L;
 
-				protected void onSubmit(AjaxRequestTarget target, Form form)
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 				{
 					target.addComponent(feedback);
 				}
 
-				protected void onError(AjaxRequestTarget target, Form form)
+				@Override
+				protected void onError(AjaxRequestTarget target, Form<?> form)
 				{
 					target.addComponent(feedback);
 				}
 			});
 			add(new ToggleLink("toggle", this));
-			add(new SubmitLink("submit"));
+			add(new SubmitLink<Void>("submit"));
 		}
 

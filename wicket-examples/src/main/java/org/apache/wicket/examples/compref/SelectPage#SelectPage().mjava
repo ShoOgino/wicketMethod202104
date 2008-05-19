@@ -4,15 +4,16 @@
 	public SelectPage()
 	{
 		final Input input = new Input();
-		setModel(new CompoundPropertyModel(input));
+		setModel(new CompoundPropertyModel<Input>(input));
 
 		// Add a FeedbackPanel for displaying our messages
 		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 		add(feedbackPanel);
 
 		// Add a form with an onSubmit implementation that sets a message
-		Form form = new Form("form")
+		Form<?> form = new Form<Void>("form")
 		{
+			@Override
 			protected void onSubmit()
 			{
 				info("input: " + input);
@@ -22,10 +23,10 @@
 
 		Select site = new Select("site");
 		form.add(site);
-		site.add(new SelectOption("site1", new Model("tss")));
-		site.add(new SelectOption("site2", new Model("jl")));
-		site.add(new SelectOption("site3", new Model("sd")));
-		site.add(new SelectOption("site4", new Model("bn")));
+		site.add(new SelectOption<String>("site1", new Model<String>("tss")));
+		site.add(new SelectOption<String>("site2", new Model<String>("jl")));
+		site.add(new SelectOption<String>("site3", new Model<String>("sd")));
+		site.add(new SelectOption<String>("site4", new Model<String>("bn")));
 
 		Select choices = new Select("choices");
 		form.add(choices);
@@ -37,14 +38,14 @@
 				return object.toString();
 			}
 
-			public IModel getModel(Object value)
+			public IModel<Serializable> getModel(Object value)
 			{
-				return new Model((Serializable)value);
+				return new Model<Serializable>((Serializable)value);
 			}
 
 		};
 		choices.add(new SelectOptions("manychoices", new Model((Serializable)MANY_CHOICES),
-				renderer));
+			renderer));
 
 	}
 

@@ -1,19 +1,21 @@
 	/**
 	 * @see org.apache.wicket.markup.html.panel.Panel#onComponentTagBody(org.apache.wicket.markup.
-	 * 	MarkupStream, org.apache.wicket.markup.ComponentTag)
+	 *      MarkupStream, org.apache.wicket.markup.ComponentTag)
 	 */
 	@Override
 	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
 		if (!Strings.isEmpty(stackTraceAsString))
 		{
-			// TODO: only display the velocity error/stacktrace in development mode?
+			// TODO: only display the velocity error/stacktrace in development
+			// mode?
 			replaceComponentTagBody(markupStream, openTag, Strings
 					.toMultilineMarkup(stackTraceAsString));
 		}
 		else if (!parseGeneratedMarkup())
 		{
-			// check that no components have been added in case the generated markup should not be
+			// check that no components have been added in case the generated
+			// markup should not be
 			// parsed
 			if (size() > 0)
 			{

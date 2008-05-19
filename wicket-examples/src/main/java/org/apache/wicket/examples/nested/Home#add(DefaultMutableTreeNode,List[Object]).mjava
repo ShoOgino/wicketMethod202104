@@ -1,0 +1,28 @@
+	/**
+	 * Add a sublist to the parent.
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param sub
+	 *            the sub list
+	 */
+	@SuppressWarnings("unchecked")
+	private void add(DefaultMutableTreeNode parent, List<Object> sub)
+	{
+		for (Iterator<Object> i = sub.iterator(); i.hasNext();)
+		{
+			Object o = i.next();
+			if (o instanceof List)
+			{
+				DefaultMutableTreeNode child = new DefaultMutableTreeNode(o);
+				parent.add(child);
+				add(child, (List<Object>)o);
+			}
+			else
+			{
+				DefaultMutableTreeNode child = new DefaultMutableTreeNode(o);
+				parent.add(child);
+			}
+		}
+	}
+

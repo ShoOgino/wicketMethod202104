@@ -4,9 +4,10 @@
 	public CheckGroupPage()
 	{
 
-		final CheckGroup group = new CheckGroup("group", new ArrayList());
-		Form form = new Form("form")
+		final CheckGroup<Person> group = new CheckGroup<Person>("group", new ArrayList<Person>());
+		Form<?> form = new Form<Void>("form")
 		{
+			@Override
 			protected void onSubmit()
 			{
 				info("selected person(s): " + group.getModelObjectAsString());
@@ -16,14 +17,18 @@
 		add(form);
 		form.add(group);
 		group.add(new CheckGroupSelector("groupselector"));
-		ListView persons = new ListView("persons", ComponentReferenceApplication.getPersons())
+		ListView<Person> persons = new ListView<Person>("persons",
+			ComponentReferenceApplication.getPersons())
 		{
 
-			protected void populateItem(ListItem item)
+			@Override
+			protected void populateItem(ListItem<Person> item)
 			{
-				item.add(new Check("checkbox", item.getModel()));
-				item.add(new Label("name", new PropertyModel(item.getModel(), "name")));
-				item.add(new Label("lastName", new PropertyModel(item.getModel(), "lastName")));
+				item.add(new Check<Person>("checkbox", item.getModel()));
+				item.add(new Label<String>("name", new PropertyModel<String>(item.getModel(),
+					"name")));
+				item.add(new Label<String>("lastName", new PropertyModel<String>(item.getModel(),
+					"lastName")));
 			}
 
 		};

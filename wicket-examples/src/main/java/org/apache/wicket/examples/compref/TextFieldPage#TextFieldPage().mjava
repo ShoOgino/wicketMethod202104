@@ -17,15 +17,16 @@
 		// property model's actual object is an instance of 'Input', it will map
 		// to
 		// Input's 'text' property.
-		setModel(new CompoundPropertyModel(input));
+		setModel(new CompoundPropertyModel<Input>(input));
 
 		// Add a FeedbackPanel for displaying our messages
 		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 		add(feedbackPanel);
 
 		// Add a form with an onSumbit implementation that sets a message
-		Form form = new Form("form")
+		Form<?> form = new Form<Void>("form")
 		{
+			@Override
 			protected void onSubmit()
 			{
 				info("input: " + input);
@@ -35,7 +36,7 @@
 
 		// add a simple text field that uses Input's 'text' property. Nothing
 		// can go wrong here
-		form.add(new TextField("text"));
+		form.add(new TextField<String>("text"));
 
 		// here we add a text field that uses Input's 'integer' property.
 		// Something could go
@@ -60,6 +61,6 @@
 		// with key 'form.integer.IConverter'. Read more about how this works
 		// in the javadocs
 		// of AbstractValidator
-		form.add(new TextField("integer", Integer.class));
+		form.add(new TextField<Integer>("integer", Integer.class));
 	}
 
