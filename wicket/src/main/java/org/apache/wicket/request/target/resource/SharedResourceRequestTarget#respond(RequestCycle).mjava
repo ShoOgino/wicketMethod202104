@@ -1,7 +1,7 @@
 	/**
 	 * Respond by looking up the shared resource and delegating the actual response to that
 	 * resource.
-	 *
+	 * 
 	 * @see org.apache.wicket.IRequestTarget#respond(org.apache.wicket.RequestCycle)
 	 */
 	public void respond(RequestCycle requestCycle)
@@ -19,7 +19,7 @@
 			{
 				String className = resourceKey.substring(0, ix);
 				IClassResolver resolver = application.getApplicationSettings().getClassResolver();
-				Class scope = null;
+				Class<?> scope = null;
 				try
 				{
 					// First try to match mounted resources.
@@ -31,9 +31,11 @@
 					{
 						scope = resolver.resolveClass(className);
 					}
-          final CharSequence escapeString = application.getResourceSettings().getParentFolderPlaceholder();
-          // get path component of resource key, replace '..' with escape sequence to prevent crippled urls in browser 
-          String path = resourceKey.substring(ix + 1).replace(escapeString, "..");
+					final CharSequence escapeString = application.getResourceSettings()
+						.getParentFolderPlaceholder();
+					// get path component of resource key, replace '..' with escape sequence to
+					// prevent crippled urls in browser
+					String path = resourceKey.substring(ix + 1).replace(escapeString, "..");
 
 					if (PackageResource.exists(scope, path, null, null))
 					{
