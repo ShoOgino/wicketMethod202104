@@ -5,13 +5,15 @@
 	 * automatically be added, effectively denying access to all roles (if this was not done, all
 	 * roles would suddenly have access since no authorization is equivalent to full access).
 	 * 
+	 * @param <T>
+	 * 
 	 * @param componentClass
 	 *            The component type
 	 * @param roles
 	 *            The comma separated list of roles that are no longer to be authorized to create
 	 *            instances of type componentClass
 	 */
-	public static final void unauthorize(final Class<? extends Component> componentClass,
+	public static final <T extends Component<?>> void unauthorize(final Class<T> componentClass,
 		final String roles)
 	{
 		final InstantiationPermissions permissions = Application.get().getMetaData(

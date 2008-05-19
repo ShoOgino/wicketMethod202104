@@ -1,8 +1,7 @@
 	/**
 	 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isInstantiationAuthorized(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
-	public boolean isInstantiationAuthorized(final Class componentClass)
+	public <T extends Component<?>> boolean isInstantiationAuthorized(final Class<T> componentClass)
 	{
 		// We are authorized unless we are found not to be
 		boolean authorized = true;
@@ -19,7 +18,7 @@
 		}
 
 		// Check class annotation
-		final AuthorizeInstantiation classAnnotation = (AuthorizeInstantiation)componentClass.getAnnotation(AuthorizeInstantiation.class);
+		final AuthorizeInstantiation classAnnotation = componentClass.getAnnotation(AuthorizeInstantiation.class);
 		if (classAnnotation != null)
 		{
 			// If roles are defined for the class, that overrides the package
