@@ -1,0 +1,18 @@
+	/**
+	 * Applies the series of deltas in this revision as patches to the given text.
+	 * 
+	 * @param target
+	 *            the text to patch.
+	 * @throws PatchFailedException
+	 *             if any of the patches cannot be applied.
+	 */
+	public synchronized void applyTo(List<Object> target) throws PatchFailedException
+	{
+		ListIterator<Delta> i = deltas_.listIterator(deltas_.size());
+		while (i.hasPrevious())
+		{
+			Delta delta = i.previous();
+			delta.patch(target);
+		}
+	}
+

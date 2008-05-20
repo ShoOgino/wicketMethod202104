@@ -1,16 +1,17 @@
 	/**
 	 * @param wois
+	 * @param object
 	 * @throws WicketSerializeableException
 	 */
 	public void readFields(WicketObjectInputStream wois, Object object)
-			throws WicketSerializeableException
+		throws WicketSerializeableException
 	{
 		FieldAndIndex fai = null;
 		try
 		{
 			for (int i = 0; i < fields.size(); i++)
 			{
-				fai = (FieldAndIndex)fields.get(i);
+				fai = fields.get(i);
 				fai.readField(object, wois);
 			}
 		}
@@ -22,7 +23,7 @@
 		catch (Exception ex)
 		{
 			throw new WicketSerializeableException("Error reading field: " + fai.field.getName() +
-					" for object class: " + object.getClass(), ex);
+				" for object class: " + object.getClass(), ex);
 		}
 	}
 

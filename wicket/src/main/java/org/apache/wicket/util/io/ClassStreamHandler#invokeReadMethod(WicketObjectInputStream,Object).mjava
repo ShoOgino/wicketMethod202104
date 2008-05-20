@@ -1,6 +1,7 @@
 	/**
 	 * @param wois
-	 * @return
+	 * @param obj
+	 * @return if read method was invoked
 	 */
 	public boolean invokeReadMethod(WicketObjectInputStream wois, Object obj)
 	{
@@ -8,7 +9,7 @@
 		{
 			for (int i = readObjectMethods.size(); --i >= 0;)
 			{
-				Method method = (Method)readObjectMethods.get(i);
+				Method method = readObjectMethods.get(i);
 				try
 				{
 					method.invoke(obj, new Object[] { wois });
