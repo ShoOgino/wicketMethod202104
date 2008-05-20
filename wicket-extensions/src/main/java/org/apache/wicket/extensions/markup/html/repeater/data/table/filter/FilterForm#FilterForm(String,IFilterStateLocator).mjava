@@ -11,14 +11,14 @@
 		this.locator = locator;
 
 		// add hidden field used for managing current focus
-		hidden = new HiddenField("focus-tracker", new Model());
+		hidden = new HiddenField<Void>("focus-tracker", new Model());
 
 		hidden.add(new AbstractBehavior()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onComponentTag(Component component, ComponentTag tag)
+			public void onComponentTag(Component<?> component, ComponentTag tag)
 			{
 				tag.put("id", getFocusTrackerFieldCssId());
 				super.onComponentTag(component, tag);
@@ -27,7 +27,7 @@
 		add(hidden);
 
 		// add javascript to restore focus to a filter component
-		add(new WebMarkupContainer("focus-restore")
+		add(new WebMarkupContainer<Void>("focus-restore")
 		{
 			private static final long serialVersionUID = 1L;
 
