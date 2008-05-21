@@ -1,7 +1,7 @@
 		/**
 		 * @see org.apache.wicket.version.IPageVersionManager#rollbackPage(int)
 		 */
-		public Page rollbackPage(int numberOfVersions)
+		public Page<T> rollbackPage(int numberOfVersions)
 		{
 			String sessionId = page.getSession().getId();
 			if (sessionId != null)
@@ -20,8 +20,8 @@
 				// current page version.
 				if (ajaxNumber >= numberOfVersions)
 				{
-					return store.getPage(sessionId, page.getPageMapName(), page.getNumericId(),
-						versionNumber, ajaxNumber - numberOfVersions);
+					return (Page<T>)store.getPage(sessionId, page.getPageMapName(),
+						page.getNumericId(), versionNumber, ajaxNumber - numberOfVersions);
 				}
 				else
 				{
@@ -37,8 +37,8 @@
 						log.error("trying to rollback to many versions, jumping over 2 page versions is not supported yet.");
 						return null;
 					}
-					return store.getPage(sessionId, page.getPageMapName(), page.getNumericId(),
-						versionNumber, ajaxNumber);
+					return (Page<T>)store.getPage(sessionId, page.getPageMapName(),
+						page.getNumericId(), versionNumber, ajaxNumber);
 				}
 			}
 

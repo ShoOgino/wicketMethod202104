@@ -16,15 +16,15 @@
 			if (request instanceof IMultipartWebRequest)
 			{
 				// retrieve the filename->FileItem map from request
-				final Map itemNameToItem = ((IMultipartWebRequest)request).getFiles();
-				Iterator it = itemNameToItem.entrySet().iterator();
+				final Map<String, FileItem> itemNameToItem = ((IMultipartWebRequest)request).getFiles();
+				Iterator<Entry<String, FileItem>> it = itemNameToItem.entrySet().iterator();
 				while (it.hasNext())
 				{
 					// iterate over the map and build the list of filenames
 
-					final Entry entry = (Entry)it.next();
-					final String name = (String)entry.getKey();
-					final FileItem item = (FileItem)entry.getValue();
+					final Entry<String, FileItem> entry = it.next();
+					final String name = entry.getKey();
+					final FileItem item = entry.getValue();
 
 					if (!Strings.isEmpty(name) &&
 						name.startsWith(getInputName() + MAGIC_SEPARATOR) &&
