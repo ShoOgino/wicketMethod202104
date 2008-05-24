@@ -4,7 +4,7 @@
 	 * @param tabIndex
 	 * @return new loop item
 	 */
-	protected LoopItem newTabContainer(int tabIndex)
+	protected LoopItem newTabContainer(final int tabIndex)
 	{
 		return new LoopItem(tabIndex)
 		{
@@ -30,6 +30,12 @@
 					cssClass += " last";
 				}
 				tag.put("class", cssClass.trim());
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return getTabs().get(tabIndex).isVisible();
 			}
 
 		};

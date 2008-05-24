@@ -16,20 +16,25 @@
 
 		ITab tab = tabs.get(index);
 
-		Panel<?> panel = tab.getPanel(TAB_PANEL_ID);
+		final Component<?> component;
+		
+		if (tab.isVisible())		
+			component = tab.getPanel(TAB_PANEL_ID);
+		else
+			component = new WebMarkupContainer<Void>(TAB_PANEL_ID);
 
-		if (panel == null)
+		if (component == null)
 		{
 			throw new WicketRuntimeException("ITab.getPanel() returned null. TabbedPanel [" +
 				getPath() + "] ITab index [" + index + "]");
 
 		}
 
-		if (!panel.getId().equals(TAB_PANEL_ID))
+		if (!component.getId().equals(TAB_PANEL_ID))
 		{
 			throw new WicketRuntimeException(
 				"ITab.getPanel() returned a panel with invalid id [" +
-					panel.getId() +
+					component.getId() +
 					"]. You must always return a panel with id equal to the provided panelId parameter. TabbedPanel [" +
 					getPath() + "] ITab index [" + index + "]");
 		}
@@ -37,11 +42,11 @@
 
 		if (get(TAB_PANEL_ID) == null)
 		{
-			add(panel);
+			add(component);
 		}
 		else
 		{
-			replace(panel);
+			replace(component);
 		}
 	}
 

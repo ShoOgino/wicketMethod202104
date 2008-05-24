@@ -2,11 +2,19 @@
 	@Override
 	protected void onBeforeRender()
 	{
-		super.onBeforeRender();
 		if (!hasBeenRendered() && getSelectedTab() == -1)
-		{
-			// select the first tab by default
-			setSelectedTab(0);
-		}
+        {
+            List<ITab> tabs = getTabs();
+            for (int i = 0; i < tabs.size(); ++i)
+            {
+                ITab tab = tabs.get(i);
+                if (tab.isVisible())
+                {
+                    setSelectedTab(i);
+                    break;
+                }
+            }
+        }
+        super.onBeforeRender();
 	}
 
