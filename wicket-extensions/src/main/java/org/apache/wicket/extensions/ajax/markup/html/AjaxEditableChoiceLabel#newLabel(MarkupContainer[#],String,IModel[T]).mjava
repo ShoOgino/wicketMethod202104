@@ -1,5 +1,5 @@
 	@Override
-	protected WebComponent<T> newLabel(MarkupContainer< ? > parent, String componentId,
+	protected WebComponent<T> newLabel(MarkupContainer<?> parent, String componentId,
 		IModel<T> model)
 	{
 		Label<T> label = new Label<T>(componentId, model)
@@ -7,9 +7,9 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public IConverter<T> getConverter(Class<T> type)
+			public <X> IConverter<X> getConverter(Class<X> type)
 			{
-				IConverter<T> c = AjaxEditableChoiceLabel.this.getConverter(type);
+				IConverter<X> c = AjaxEditableChoiceLabel.this.getConverter(type);
 				return c != null ? c : super.getConverter(type);
 			}
 
@@ -20,8 +20,7 @@
 				if (renderer != null)
 				{
 					Object displayObject = renderer.getDisplayValue(getModelObject());
-					Class< ? > objectClass = (displayObject == null ? null
-						: displayObject.getClass());
+					Class<?> objectClass = (displayObject == null ? null : displayObject.getClass());
 
 
 					if (objectClass != null && objectClass != String.class)
