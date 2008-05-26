@@ -5,7 +5,7 @@
 	protected void onDetach()
 	{
 		// cleanup any opened filestreams
-		Collection<FileUpload> uploads = (Collection<FileUpload>)getConvertedInput();
+		Collection<FileUpload> uploads = getConvertedInput();
 		if (uploads != null)
 		{
 			Iterator<FileUpload> it = uploads.iterator();
@@ -20,10 +20,10 @@
 		inputArrayCache = null;
 
 		// clean up the model because we don't want FileUpload objects in session
-		Object modelObject = getModelObject();
-		if (modelObject != null && (modelObject instanceof Collection))
+		Collection<FileUpload> modelObject = getModelObject();
+		if (modelObject != null)
 		{
-			((Collection<FileUpload>)modelObject).clear();
+			modelObject.clear();
 		}
 
 		super.onDetach();

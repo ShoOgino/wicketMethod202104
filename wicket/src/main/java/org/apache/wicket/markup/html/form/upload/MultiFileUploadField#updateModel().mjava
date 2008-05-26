@@ -4,39 +4,27 @@
 	@Override
 	public void updateModel()
 	{
-		final Object object = getModelObject();
+		final Collection<FileUpload> collection = getModelObject();
 
 		// figure out if there is an existing model object collection for us to
 		// reuse
-		if (object == null)
+		if (collection == null)
 		{
 			// no existing collection, push the one we created
 			setModelObject(getConvertedInput());
 		}
 		else
 		{
-			if (!(object instanceof Collection))
+			// refresh the existing collection
+			collection.clear();
+			if (getConvertedInput() != null)
 			{
-				// fail early if there is something interesting in the model
-				throw new IllegalStateException("Model object of " + getClass().getName() +
-					" component must be of type `" + Collection.class.getName() + "<" +
-					FileUpload.class.getName() + ">` but is of type `" +
-					object.getClass().getName() + "`");
+				collection.addAll(getConvertedInput());
 			}
-			else
-			{
-				// refresh the existing collection
-				Collection<FileUpload> collection = (Collection<FileUpload>)object;
-				collection.clear();
-				if (getConvertedInput() != null)
-				{
-					collection.addAll((Collection<FileUpload>)getConvertedInput());
-				}
 
-				// push the collection in case the model is listening to
-				// setobject calls
-				setModelObject(collection);
-			}
+			// push the collection in case the model is listening to
+			// setobject calls
+			setModelObject(collection);
 		}
 	}
 
