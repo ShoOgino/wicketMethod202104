@@ -1,24 +1,24 @@
 	/**
 	 * @return The parent form for this form component
 	 */
-	public Form getForm()
+	public Form<?> getForm()
 	{
-		class FindFormVisitor implements Component.IVisitor
+		class FindFormVisitor implements Component.IVisitor<Form<?>>
 		{
-			Form form = null;
+			Form<?> form = null;
 
-			public Object component(Component component)
+			public Object component(Form<?> component)
 			{
-				form = (Form)component;
+				form = component;
 				return Component.IVisitor.STOP_TRAVERSAL;
 			}
 		}
 
-		Form form = findParent(Form.class);
+		Form<?> form = findParent(Form.class);
 		if (form == null)
 		{
 			// check whether the form is a child of a surrounding border
-			final Border border = findParent(Border.class);
+			final Border<?> border = findParent(Border.class);
 			if (border != null)
 			{
 				FindFormVisitor formVisitor = new FindFormVisitor();
