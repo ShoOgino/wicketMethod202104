@@ -10,7 +10,7 @@
 	 *             in case the component could not be created
 	 */
 	// Wicket is current not using any bean util jar, which is why ...
-	private final Component< ? > createComponent(final MarkupContainer< ? > container,
+	private final Component<?> createComponent(final MarkupContainer<?> container,
 		final WicketTag tag)
 	{
 		// If no component name is given, create a page-unique one yourself.
@@ -29,19 +29,18 @@
 
 		// construct the component. It must have a constructor with a single
 		// String (componentId) parameter.
-		final Component< ? > component;
+		final Component<?> component;
 		try
 		{
 			// Load the class. In case a Groovy Class Resolver has been provided,
 			// the name might be a Groovy file.
 			// Note: Spring based components are not supported this way. May be we
 			// should provide a ComponentFactory like we provide a PageFactory.
-			final Class< ? > componentClass = container.getSession()
-				.getClassResolver()
-				.resolveClass(classname);
+			final Class<?> componentClass = container.getSession().getClassResolver().resolveClass(
+				classname);
 
-			final Constructor< ? > constructor = componentClass.getConstructor(new Class[] { String.class });
-			component = (Component< ? >)constructor.newInstance(new Object[] { componentId });
+			final Constructor<?> constructor = componentClass.getConstructor(new Class[] { String.class });
+			component = (Component<?>)constructor.newInstance(new Object[] { componentId });
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -80,12 +79,12 @@
 		}
 
 		// Get all remaining attributes and invoke the component's setters
-		Iterator<Map.Entry<String, String>> iter = tag.getAttributes().entrySet().iterator();
+		Iterator<Map.Entry<String, Object>> iter = tag.getAttributes().entrySet().iterator();
 		while (iter.hasNext())
 		{
-			final Map.Entry<String, String> entry = iter.next();
+			final Map.Entry<String, Object> entry = iter.next();
 			final String key = entry.getKey();
-			final String value = entry.getValue();
+			final String value = entry.getValue().toString();
 
 			// Ignore attributes 'name' and 'class'
 			if ("name".equalsIgnoreCase(key) || ("class".equalsIgnoreCase(key)))
