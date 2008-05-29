@@ -1,6 +1,9 @@
 	/**
 	 * Construct.
 	 * 
+	 * @param <C>
+	 *            type of page.
+	 * 
 	 * @param mountPath
 	 *            the mount path
 	 * @param bookmarkablePageClass
@@ -8,8 +11,8 @@
 	 * @param pageMapName
 	 *            the page map name if any
 	 */
-	public BookmarkablePageRequestTargetUrlCodingStrategy(final String mountPath,
-		final Class bookmarkablePageClass, String pageMapName)
+	public <C extends Page<?>> BookmarkablePageRequestTargetUrlCodingStrategy(
+		final String mountPath, final Class<C> bookmarkablePageClass, String pageMapName)
 	{
 		super(mountPath);
 
@@ -18,7 +21,8 @@
 			throw new IllegalArgumentException("Argument bookmarkablePageClass must be not null");
 		}
 
-		bookmarkablePageClassRef = new WeakReference(bookmarkablePageClass);
+		bookmarkablePageClassRef = new WeakReference<Class<? extends Page<?>>>(
+			bookmarkablePageClass);
 		this.pageMapName = pageMapName;
 	}
 
