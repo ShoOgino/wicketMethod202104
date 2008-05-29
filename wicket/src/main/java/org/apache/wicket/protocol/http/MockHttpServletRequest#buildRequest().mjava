@@ -11,9 +11,9 @@
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			// Add parameters
-			for (Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();)
+			for (Iterator<String> iterator = parameters.keySet().iterator(); iterator.hasNext();)
 			{
-				final String name = (String)iterator.next();
+				final String name = iterator.next();
 				newAttachment(out);
 				out.write("; name=\"".getBytes());
 				out.write(name.getBytes());
@@ -27,11 +27,11 @@
 			// Add files
 			if (uploadedFiles != null)
 			{
-				for (Iterator iterator = uploadedFiles.keySet().iterator(); iterator.hasNext();)
+				for (Iterator<String> iterator = uploadedFiles.keySet().iterator(); iterator.hasNext();)
 				{
-					String fieldName = (String)iterator.next();
+					String fieldName = iterator.next();
 
-					UploadedFile uf = (UploadedFile)uploadedFiles.get(fieldName);
+					UploadedFile uf = uploadedFiles.get(fieldName);
 
 					newAttachment(out);
 					out.write("; name=\"".getBytes());

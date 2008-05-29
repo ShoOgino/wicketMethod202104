@@ -2,7 +2,8 @@
 	 * @see org.apache.wicket.protocol.http.SecondLevelCacheSessionStore.IPageStore#getPage(java.lang.String,
 	 *      java.lang.String, int, int, int)
 	 */
-	public Page getPage(String sessionId, String pagemap, int id, int versionNumber,
+
+	public <T> Page<T> getPage(String sessionId, String pagemap, int id, int versionNumber,
 		int ajaxVersionNumber)
 	{
 		SessionEntry entry = getSessionEntry(sessionId, false);
@@ -28,7 +29,9 @@
 
 			if (data != null)
 			{
-				return deserializePage(data, versionNumber);
+				@SuppressWarnings("unchecked")
+				final Page<T> ret = deserializePage(data, versionNumber);
+				return ret;
 			}
 		}
 

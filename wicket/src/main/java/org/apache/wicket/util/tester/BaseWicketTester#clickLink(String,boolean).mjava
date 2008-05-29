@@ -117,7 +117,7 @@
 			SubmitLink<?> submitLink = (SubmitLink<?>)linkComponent;
 
 			String pageRelativePath = submitLink.getInputName();
-			getParametersForNextRequest().put(pageRelativePath, "x");
+			getParametersForNextRequest().put(pageRelativePath, new String[] { "x" });
 			submitForm(submitLink.getForm().getPageRelativePath());
 		}
 		// if the link is a normal link (or ResourceLink)
@@ -141,7 +141,7 @@
 
 					PageParameters parameters = (PageParameters)getParametersMethod.invoke(
 						bookmarkablePageLink, (Object[])null);
-					setParametersForNextRequest(parameters);
+					setParametersForNextRequest(parameters.toRequestParameters());
 				}
 				catch (Exception e)
 				{

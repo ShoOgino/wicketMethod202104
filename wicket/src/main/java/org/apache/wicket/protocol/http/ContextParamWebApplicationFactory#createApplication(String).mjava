@@ -14,7 +14,7 @@
 			{
 				loader = getClass().getClassLoader();
 			}
-			final Class applicationClass = loader.loadClass(applicationClassName);
+			final Class<?> applicationClass = loader.loadClass(applicationClassName);
 			if (WebApplication.class.isAssignableFrom(applicationClass))
 			{
 				// Construct WebApplication subclass
@@ -23,28 +23,28 @@
 			else
 			{
 				throw new WicketRuntimeException("Application class " + applicationClassName +
-						" must be a subclass of WebApplication");
+					" must be a subclass of WebApplication");
 			}
 		}
 		catch (ClassNotFoundException e)
 		{
 			throw new WicketRuntimeException("Unable to create application of class " +
-					applicationClassName, e);
+				applicationClassName, e);
 		}
 		catch (InstantiationException e)
 		{
 			throw new WicketRuntimeException("Unable to create application of class " +
-					applicationClassName, e);
+				applicationClassName, e);
 		}
 		catch (IllegalAccessException e)
 		{
 			throw new WicketRuntimeException("Unable to create application of class " +
-					applicationClassName, e);
+				applicationClassName, e);
 		}
 		catch (SecurityException e)
 		{
 			throw new WicketRuntimeException("Unable to create application of class " +
-					applicationClassName, e);
+				applicationClassName, e);
 		}
 	}
 

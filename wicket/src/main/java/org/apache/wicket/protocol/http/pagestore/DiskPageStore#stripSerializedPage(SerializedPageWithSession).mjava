@@ -4,14 +4,14 @@
 	 * The data can be stripped because it's already stored on disk
 	 * 
 	 * @param page
-	 * @return
+	 * @return SerializedPageWithSession data
 	 */
 	private SerializedPageWithSession stripSerializedPage(SerializedPageWithSession page)
 	{
 		List<SerializedPage> pages = new ArrayList<SerializedPage>(page.pages.size());
-		for (Iterator i = page.pages.iterator(); i.hasNext();)
+		for (Iterator<SerializedPage> i = page.pages.iterator(); i.hasNext();)
 		{
-			SerializedPage sp = (SerializedPage)i.next();
+			SerializedPage sp = i.next();
 			pages.add(new SerializedPage(sp.getPageId(), sp.getPageMapName(),
 				sp.getVersionNumber(), sp.getAjaxVersionNumber(), null));
 		}
