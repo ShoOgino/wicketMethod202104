@@ -40,9 +40,16 @@
 			@Override
 			protected CharSequence getEventHandler()
 			{
+				final String script = AjaxButton.this.getOnClickScript();
+
 				AppendingStringBuffer handler = new AppendingStringBuffer();
-				handler.append(AjaxButton.this.getOnClickScript());
-				handler.append(";").append(super.getEventHandler());
+
+				if (!Strings.isEmpty(script))
+				{
+					handler.append(script).append(";");
+				}
+
+				handler.append(super.getEventHandler());
 				handler.append("; return false;");
 				return handler;
 			}
