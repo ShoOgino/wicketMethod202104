@@ -4,7 +4,7 @@
 	 * @param id
 	 * @param form
 	 */
-	public AjaxButton(String id, final Form< ? > form)
+	public AjaxButton(String id, final Form<?> form)
 	{
 		super(id);
 		this.form = form;
@@ -40,7 +40,11 @@
 			@Override
 			protected CharSequence getEventHandler()
 			{
-				return new AppendingStringBuffer(super.getEventHandler()).append("; return false;");
+				AppendingStringBuffer handler = new AppendingStringBuffer();
+				handler.append(AjaxButton.this.getOnClickScript());
+				handler.append(";").append(super.getEventHandler());
+				handler.append("; return false;");
+				return handler;
 			}
 
 			/**
