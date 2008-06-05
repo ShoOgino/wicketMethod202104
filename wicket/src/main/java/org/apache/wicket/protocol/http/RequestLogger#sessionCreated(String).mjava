@@ -4,10 +4,10 @@
 	public void sessionCreated(String sessionId)
 	{
 		liveSessions.put(sessionId, new SessionData(sessionId));
-		if (liveSessions.size() > peakSessions)
+		if (liveSessions.size() > peakSessions.get())
 		{
-			peakSessions = liveSessions.size();
+			peakSessions.set(liveSessions.size());
 		}
-		totalCreatedSessions++;
+		totalCreatedSessions.incrementAndGet();
 	}
 
