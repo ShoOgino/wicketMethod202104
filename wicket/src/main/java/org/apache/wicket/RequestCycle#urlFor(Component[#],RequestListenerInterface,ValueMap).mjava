@@ -38,7 +38,6 @@
 					// to do the endoding. This leads to double encoding
 					// - Doug Donohoe
 					// @see https://issues.apache.org/jira/browse/WICKET-1627
-					// pageParameters.add(encodeQueryStringItem(key), encodeQueryStringItem(value));
 					pageParameters.add(key, value);
 				}
 			}
@@ -66,17 +65,13 @@
 			if (params != null)
 			{
 				AppendingStringBuffer buff = new AppendingStringBuffer(url);
-				Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
-				while (it.hasNext())
-				{
-					final Map.Entry<String, Object> entry = it.next();
-					final String key = entry.getKey();
-					final String value = entry.getValue().toString();
-					buff.append("&");
-					buff.append(encodeQueryStringItem(key));
-					buff.append("=");
-					buff.append(encodeQueryStringItem(value));
-				}
+                WebRequestEncoder encoder = new WebRequestEncoder(buff);
+                for (Entry<String, Object> stringObjectEntry : params.entrySet())
+                {
+                    final String key = stringObjectEntry.getKey();
+                    final String value = stringObjectEntry.getValue().toString();
+                    encoder.addValue(key, value);
+                }
 
 				url = buff;
 			}
