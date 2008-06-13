@@ -6,15 +6,18 @@
 			IResourceStream stream = getOriginalResourceStream();
 			try
 			{
-				byte ret[] = cache.get();
-				if (ret != null && timeStamp != null)
+				byte ret[];
+				if (cache != null)
 				{
-					if (timeStamp.equals(stream.lastModifiedTime()))
+					ret = cache.get();
+					if (ret != null && timeStamp != null)
 					{
-						return ret;
+						if (timeStamp.equals(stream.lastModifiedTime()))
+						{
+							return ret;
+						}
 					}
 				}
-
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				GZIPOutputStream zout = new GZIPOutputStream(out);
 				Streams.copy(stream.getInputStream(), zout);
