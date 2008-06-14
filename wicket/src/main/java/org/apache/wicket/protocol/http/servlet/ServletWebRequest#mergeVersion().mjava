@@ -7,9 +7,17 @@
 	 * 
 	 * @see org.apache.wicket.Request#mergeVersion()
 	 */
+	@Override
 	public boolean mergeVersion()
 	{
-		RequestListenerInterface intface = getRequestParameters().getInterface();
-		return isAjax() || intface == IRedirectListener.INTERFACE;
+		if (forceNewVersion == true)
+		{
+			return false;
+		}
+		else
+		{
+			RequestListenerInterface intface = getRequestParameters().getInterface();
+			return isAjax() || intface == IRedirectListener.INTERFACE;
+		}
 	}
 
