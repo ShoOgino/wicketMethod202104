@@ -1,0 +1,38 @@
+		/**
+		 * Returns a unique id that represents this class' name. This can be used for compressing
+		 * class names. Notice this id should not be used across cluster nodes.
+		 * 
+		 * @param clazz
+		 * @return long id of class name
+		 */
+		public long id(Class<?> clazz)
+		{
+			final String name = clazz.getName();
+			nameToIdLock.readLock().lock();
+			try
+			{
+				Long id = nameToId.get(name);
+				if (id == null)
+				{
+					nameToIdLock.readLock().unlock();
+					nameToIdLock.writeLock().lock();
+					try
+					{
+						nameToId.put(name, nameCounter);
+						id = nameCounter;
+						nameCounter++;
+					}
+					finally
+					{
+						nameToIdLock.readLock().lock();
+						nameToIdLock.writeLock().unlock();
+					}
+				}
+				return id;
+			}
+			finally
+			{
+				nameToIdLock.readLock().unlock();
+			}
+		}
+

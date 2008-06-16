@@ -16,11 +16,26 @@
 			Component<?> cursor = component;
 			while (cursor != null)
 			{
-				buffer.append("-").append(cursor.getClass().getName());
-				buffer.append(":").append(cursor.getId());
-				cursor = cursor.getParent();
+				buffer.append("-").append(metaDatabase.id(cursor.getClass()));
+
 				if (cursor instanceof Page)
+				{
 					break;
+				}
+
+				if (cursor.getParent() != null && !(cursor.getParent() instanceof AbstractRepeater))
+				{
+					/*
+					 * only append component id if parent is not a repeater because
+					 * 
+					 * (a) these ids are irrelevant when generating resource cache keys
+					 * 
+					 * (b) they cause a lot of redundant keys to be generated
+					 */
+					buffer.append(":").append(cursor.getId());
+				}
+				cursor = cursor.getParent();
+
 			}
 
 			buffer.append("-").append(component.getLocale());
