@@ -2,24 +2,33 @@
 	@Override
 	protected void onBeforeRender()
 	{
-		if (!hasBeenRendered() && getSelectedTab() == -1)
-        {
-            List<ITab> tabs = getTabs();
-            for (int i = 0; i < tabs.size(); ++i)
-            {
-                ITab tab = tabs.get(i);
-                if (tab.isVisible())
-                {
-                    setSelectedTab(i);
-                    break;
-                }
-            }
-            
-            if (tabs.size() == 0)
-            {
-            	add(new WebMarkupContainer<Void>(TAB_PANEL_ID)).setVisible(false);
-            }
-        }
-        super.onBeforeRender();
+		if (getSelectedTab() == -1 || isTabVisible(getSelectedTab()) == false)
+		{
+			// find first visible selected tab
+			int selected = 0;
+			for (int i = 0; i < tabs.size(); i++)
+			{
+				if (isTabVisible(i))
+				{
+					selected = i;
+					break;
+				}
+			}
+
+			if (selected == tabs.size())
+			{
+				/*
+				 * none of the tabs are selected...
+				 * 
+				 * we do not need to do anything special because the check in setSelectedTab() will
+				 * replace the current tab panel with an empty one
+				 */
+				selected = 0;
+			}
+
+			setSelectedTab(selected);
+		}
+
+		super.onBeforeRender();
 	}
 
