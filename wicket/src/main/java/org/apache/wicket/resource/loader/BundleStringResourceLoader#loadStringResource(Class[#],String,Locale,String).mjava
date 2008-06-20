@@ -12,12 +12,16 @@
 	 *            Not used for this implementation (see {@link org.apache.wicket.Session})
 	 * @return The string resource value or null if resource not found
 	 */
-	public final String loadStringResource(final Class< ? > clazz, final String key, Locale locale,
+	public final String loadStringResource(final Class<?> clazz, final String key, Locale locale,
 		final String style)
 	{
 		if (locale == null)
 		{
-			locale = Locale.getDefault();
+			locale = Session.get().getLocale();
+			if (locale == null)
+			{
+				locale = Locale.getDefault();
+			}
 		}
 		try
 		{
