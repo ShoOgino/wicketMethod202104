@@ -13,7 +13,11 @@
 		}
 		textValue = textValue.replaceAll("\\\"", "&quot;");
 
-		response.write("<li textvalue=\"" + textValue + "\">");
+        response.write("<li textvalue=\"" + textValue + "\"");
+        final CharSequence handler = getOnSelectJavascriptExpression(object);
+        if(handler != null)
+            response.write(" onselect=\"" + handler + '"');
+        response.write(">");
 		renderChoice(object, response, criteria);
 		response.write("</li>");
 	}
