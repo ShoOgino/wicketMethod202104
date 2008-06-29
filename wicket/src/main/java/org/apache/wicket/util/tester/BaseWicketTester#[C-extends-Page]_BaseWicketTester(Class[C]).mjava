@@ -1,0 +1,38 @@
+	/**
+	 * Creates <code>WicketTester</code> and automatically creates a <code>WebApplication</code>.
+	 * 
+	 * @param <C>
+	 * 
+	 * @param homePage
+	 *            a home page <code>Class</code>
+	 */
+	public <C extends Page> BaseWicketTester(final Class<C> homePage)
+	{
+		this(new WebApplication()
+		{
+			/**
+			 * @see org.apache.wicket.Application#getHomePage()
+			 */
+			@Override
+			public Class<? extends Page> getHomePage()
+			{
+				return homePage;
+			}
+
+			@Override
+			protected void outputDevelopmentModeWarning()
+			{
+				// Do nothing.
+			}
+
+			@Override
+			protected ISessionStore newSessionStore()
+			{
+				// Don't use a filestore, or we spawn lots of threads, which
+				// makes things slow.
+				return new HttpSessionStore(this);
+			}
+
+		}, null);
+	}
+

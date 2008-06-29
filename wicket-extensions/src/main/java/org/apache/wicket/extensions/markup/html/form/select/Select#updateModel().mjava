@@ -1,9 +1,10 @@
 	/**
 	 * @see FormComponent#updateModel()
 	 */
+	@Override
 	public void updateModel()
 	{
-		Object object = getModelObject();
+		Object object = getDefaultModelObject();
 		boolean supportsMultiple = object instanceof Collection;
 
 		Object converted = getConvertedInput();
@@ -21,11 +22,11 @@
 			}
 			modelChanged();
 			// force notify of model update via setObject()
-			getModel().setObject(modelCollection);
+			setDefaultModelObject(modelCollection);
 		}
 		else
 		{
-			setModelObject(converted);
+			setDefaultModelObject(converted);
 		}
 	}
 

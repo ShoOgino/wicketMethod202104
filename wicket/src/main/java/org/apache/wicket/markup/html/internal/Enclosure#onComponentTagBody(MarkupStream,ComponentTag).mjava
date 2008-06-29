@@ -6,7 +6,7 @@
 	@Override
 	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
-		final Component< ? > controller = getChildComponent();
+		final Component controller = getChildComponent();
 		if (controller == this)
 		{
 			throw new WicketRuntimeException(
@@ -16,13 +16,13 @@
 		setVisible(controller.determineVisibility());
 
 		// transfer visibility to direct children
-		originalVisibilityStatus = new HashMap<Component< ? >, Boolean>();
+		originalVisibilityStatus = new HashMap<Component, Boolean>();
 		DirectChildTagIterator it = new DirectChildTagIterator(markupStream, openTag);
-		MarkupContainer< ? > controllerParent = getEnclosureParent();
+		MarkupContainer controllerParent = getEnclosureParent();
 		while (it.hasNext())
 		{
 			ComponentTag t = it.next();
-			Component< ? > child = controllerParent.get(t.getId());
+			Component child = controllerParent.get(t.getId());
 			if (child != null)
 			{
 				// record original visiblity allowed value, will restore later

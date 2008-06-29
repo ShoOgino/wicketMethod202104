@@ -1,0 +1,41 @@
+	/**
+	 * Sets the given model.
+	 * <p>
+	 * WARNING: DO NOT OVERRIDE THIS METHOD UNLESS YOU HAVE A VERY GOOD REASON FOR IT. OVERRIDING
+	 * THIS MIGHT OPEN UP SECURITY LEAKS AND BREAK BACK-BUTTON SUPPORT.
+	 * </p>
+	 * 
+	 * @param model
+	 *            The model
+	 * @return This
+	 */
+	public Component setDefaultModel(final IModel<?> model)
+	{
+		IModel<?> prevModel = getModelImpl();
+		// Detach current model
+		if (prevModel != null)
+		{
+			prevModel.detach();
+		}
+
+		IModel<?> wrappedModel = prevModel;
+		if (prevModel instanceof IWrapModel)
+		{
+			wrappedModel = ((IWrapModel<?>)prevModel).getWrappedModel();
+		}
+
+		// Change model
+		if (wrappedModel != model)
+		{
+			if (wrappedModel != null)
+			{
+				addStateChange(new ComponentModelChange(wrappedModel));
+			}
+
+			setModelImpl(wrap(model));
+		}
+
+		modelChanged();
+		return this;
+	}
+

@@ -1,0 +1,33 @@
+	/**
+	 * Replaces a child component of this container with another or just adds it in case no child
+	 * with the same id existed yet.
+	 * 
+	 * @param childs
+	 *            The child(s) to be added or replaced
+	 * @return This
+	 */
+	public final MarkupContainer addOrReplace(final Component... childs)
+	{
+		for (Component child : childs)
+		{
+
+			checkHierarchyChange(child);
+
+			if (child == null)
+			{
+				throw new IllegalArgumentException("argument child must be not null");
+			}
+
+			if (get(child.getId()) == null)
+			{
+				add(child);
+			}
+			else
+			{
+				replace(child);
+			}
+		}
+
+		return this;
+	}
+

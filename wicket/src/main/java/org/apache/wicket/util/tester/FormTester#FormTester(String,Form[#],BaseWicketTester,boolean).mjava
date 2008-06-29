@@ -24,7 +24,7 @@
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public void onFormComponent(final FormComponent<?> formComponent)
+			public void onFormComponent(final FormComponent formComponent)
 			{
 				// do nothing for invisible component
 				if (!formComponent.isVisibleInHierarchy())
@@ -64,12 +64,12 @@
 				}
 				else if (formComponent instanceof CheckGroup)
 				{
-					final Collection<?> checkGroupValues = (Collection<?>)formComponent.getModelObject();
-					formComponent.visitChildren(Check.class, new IVisitor<Component<?>>()
+					final Collection<?> checkGroupValues = (Collection<?>)formComponent.getDefaultModelObject();
+					formComponent.visitChildren(Check.class, new IVisitor<Component>()
 					{
-						public Object component(Component<?> component)
+						public Object component(Component component)
 						{
-							if (checkGroupValues.contains(component.getModelObject()))
+							if (checkGroupValues.contains(component.getDefaultModelObject()))
 							{
 								addFormComponentValue(formComponent,
 									((Check<?>)component).getValue());
@@ -83,14 +83,14 @@
 					// TODO 1.5: see if all these transformations can be factored out into
 					// checkgroup/radiogroup by them implementing some sort of interface {
 					// getValue(); } otherwise all these implementation details leak into the tester
-					final Object value = formComponent.getModelObject();
+					final Object value = formComponent.getDefaultModelObject();
 					if (value != null)
 					{
-						formComponent.visitChildren(Radio.class, new IVisitor<Component<?>>()
+						formComponent.visitChildren(Radio.class, new IVisitor<Component>()
 						{
-							public Object component(Component<?> component)
+							public Object component(Component component)
 							{
-								if (value.equals(component.getModelObject()))
+								if (value.equals(component.getDefaultModelObject()))
 								{
 									addFormComponentValue(formComponent,
 										((Radio<?>)component).getValue());

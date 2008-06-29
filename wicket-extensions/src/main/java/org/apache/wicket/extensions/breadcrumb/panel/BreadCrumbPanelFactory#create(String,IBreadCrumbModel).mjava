@@ -4,10 +4,10 @@
 	 */
 	public final BreadCrumbPanel create(String componentId, IBreadCrumbModel breadCrumbModel)
 	{
-		Constructor ctor = getConstructor();
+		Constructor<? extends BreadCrumbPanel> ctor = getConstructor();
 		try
 		{
-			return (BreadCrumbPanel)ctor.newInstance(new Object[] { componentId, breadCrumbModel });
+			return ctor.newInstance(new Object[] { componentId, breadCrumbModel });
 		}
 		catch (Exception e)
 		{

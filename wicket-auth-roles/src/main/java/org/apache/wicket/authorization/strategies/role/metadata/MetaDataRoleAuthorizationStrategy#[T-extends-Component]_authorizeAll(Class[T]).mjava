@@ -1,0 +1,18 @@
+	/**
+	 * Grants permission to all roles to create instances of the given component class.
+	 * 
+	 * @param <T>
+	 * 
+	 * @param componentClass
+	 *            The component class
+	 */
+	public static final <T extends Component> void authorizeAll(final Class<T> componentClass)
+	{
+		Application application = Application.get();
+		InstantiationPermissions authorizedRoles = application.getMetaData(INSTANTIATION_PERMISSIONS);
+		if (authorizedRoles != null)
+		{
+			authorizedRoles.authorizeAll(componentClass);
+		}
+	}
+

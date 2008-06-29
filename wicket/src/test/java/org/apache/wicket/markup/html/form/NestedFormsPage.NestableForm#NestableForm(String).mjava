@@ -7,7 +7,7 @@
 		public NestableForm(String id)
 		{
 			super(id);
-			setModel(new CompoundPropertyModel<NestableForm>(this));
+			setDefaultModel(new CompoundPropertyModel<NestableForm>(this));
 
 			TextField<String> firstField = new RequiredTextField<String>("first");
 			TextField<String> secondField = new TextField<String>("second");
@@ -15,7 +15,7 @@
 			add(secondField);
 
 			add(new EqualInputValidator(firstField, secondField));
-			add(new AjaxSubmitLink<Void>("ajaxSubmit", this)
+			add(new AjaxSubmitLink("ajaxSubmit", this)
 			{
 				private static final long serialVersionUID = 1L;
 
@@ -32,6 +32,6 @@
 				}
 			});
 			add(new ToggleLink("toggle", this));
-			add(new SubmitLink<Void>("submit"));
+			add(new SubmitLink("submit"));
 		}
 

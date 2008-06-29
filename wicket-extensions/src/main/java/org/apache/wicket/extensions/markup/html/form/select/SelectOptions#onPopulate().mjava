@@ -1,6 +1,7 @@
 	/**
 	 * @see org.apache.wicket.Component#onBeforeRender()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	protected final void onPopulate()
 	{
@@ -9,7 +10,7 @@
 			// populate this repeating view with SelectOption components
 			removeAll();
 
-			Collection<? extends T> modelObject = getModelObject();
+			Collection<? extends T> modelObject = (Collection<? extends T>)getDefaultModelObject();
 
 			if (modelObject != null)
 			{
@@ -25,7 +26,7 @@
 				while (it.hasNext())
 				{
 					// we need a container to represent a row in repeater
-					WebMarkupContainer<?> row = new WebMarkupContainer<Void>(newChildId());
+					WebMarkupContainer row = new WebMarkupContainer(newChildId());
 					row.setRenderBodyOnly(true);
 					add(row);
 

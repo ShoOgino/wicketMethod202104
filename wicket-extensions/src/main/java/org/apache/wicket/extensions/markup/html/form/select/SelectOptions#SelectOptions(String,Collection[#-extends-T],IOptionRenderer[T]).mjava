@@ -5,8 +5,10 @@
 	 * @param elements
 	 * @param renderer
 	 */
+	@SuppressWarnings("unchecked")
 	public SelectOptions(String id, Collection<? extends T> elements, IOptionRenderer<T> renderer)
 	{
-		this(id, new Model((Serializable)elements), renderer);
+		this(id, new Model((elements instanceof Serializable) ? (Serializable)elements
+			: new ArrayList<T>(elements)), renderer);
 	}
 

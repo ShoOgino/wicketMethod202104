@@ -26,7 +26,7 @@
 	 */
 	public void clickLink(String path, boolean isAjax)
 	{
-		Component<?> linkComponent = getComponentFromLastRenderedPage(path);
+		Component linkComponent = getComponentFromLastRenderedPage(path);
 
 		// if the link is an AjaxLink, we process it differently
 		// than a normal link
@@ -39,7 +39,7 @@
 					"not be invoked when AJAX (javascript) is disabled.");
 			}
 
-			AjaxLink<?> link = (AjaxLink<?>)linkComponent;
+			AjaxLink link = (AjaxLink)linkComponent;
 
 			setupRequestAndResponse(true);
 			WebRequestCycle requestCycle = createRequestCycle();
@@ -57,7 +57,7 @@
 		// Link.
 		else if (linkComponent instanceof AjaxFallbackLink && isAjax)
 		{
-			AjaxFallbackLink<?> link = (AjaxFallbackLink<?>)linkComponent;
+			AjaxFallbackLink link = (AjaxFallbackLink)linkComponent;
 
 			setupRequestAndResponse(true);
 			WebRequestCycle requestCycle = createRequestCycle();
@@ -80,7 +80,7 @@
 					"will not be invoked when AJAX (javascript) is disabled.");
 			}
 
-			AjaxSubmitLink<?> link = (AjaxSubmitLink<?>)linkComponent;
+			AjaxSubmitLink link = (AjaxSubmitLink)linkComponent;
 
 			// We cycle through the attached behaviors and select the
 			// LAST matching behavior as the one we handle.
@@ -114,7 +114,7 @@
 		 */
 		else if (linkComponent instanceof SubmitLink)
 		{
-			SubmitLink<?> submitLink = (SubmitLink<?>)linkComponent;
+			SubmitLink submitLink = (SubmitLink)linkComponent;
 
 			String pageRelativePath = submitLink.getInputName();
 			getParametersForNextRequest().put(pageRelativePath, new String[] { "x" });
@@ -123,7 +123,7 @@
 		// if the link is a normal link (or ResourceLink)
 		else if (linkComponent instanceof AbstractLink)
 		{
-			AbstractLink<?> link = (AbstractLink<?>)linkComponent;
+			AbstractLink link = (AbstractLink)linkComponent;
 
 			/*
 			 * If the link is a bookmarkable link, then we need to transfer the parameters to the

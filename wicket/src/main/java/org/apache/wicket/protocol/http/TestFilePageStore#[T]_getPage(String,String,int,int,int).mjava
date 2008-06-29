@@ -1,4 +1,4 @@
-	public <T> Page<T> getPage(String sessionId, String pagemap, int id, int versionNumber,
+	public <T> Page getPage(String sessionId, String pagemap, int id, int versionNumber,
 		int ajaxVersionNumber)
 	{
 		SessionPageKey currentKey = new SessionPageKey(sessionId, id, versionNumber,
@@ -26,7 +26,7 @@
 					bb.get(pageData);
 				}
 				long t2 = System.currentTimeMillis();
-				Page<?> page = (Page<?>)Objects.byteArrayToObject(pageData);
+				Page page = (Page)Objects.byteArrayToObject(pageData);
 				page = page.getVersion(versionNumber);
 				if (page != null && log.isDebugEnabled())
 				{
@@ -37,7 +37,7 @@
 						" miliseconds to read in and " + (t3 - t2) + " miliseconds to deserialize");
 				}
 				@SuppressWarnings("unchecked")
-				final Page<T> ret = (Page<T>)page;
+				final Page ret = (Page)page;
 				return ret;
 			}
 			catch (Exception e)

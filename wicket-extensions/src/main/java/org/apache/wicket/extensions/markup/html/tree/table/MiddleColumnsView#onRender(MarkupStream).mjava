@@ -4,6 +4,7 @@
 	 * @param markupStream
 	 *            The markup stream of this component
 	 */
+	@Override
 	protected void onRender(final MarkupStream markupStream)
 	{
 		final int markupStart = markupStream.getCurrentIndex();
@@ -19,9 +20,9 @@
 
 		for (int i = 0; i < columns.size(); ++i)
 		{
-			Component component = (Component)components.get(i);
-			IRenderable renderable = (IRenderable)renderables.get(i);
-			IColumn column = (IColumn)columns.get(i);
+			Component component = components.get(i);
+			IRenderable renderable = renderables.get(i);
+			IColumn column = columns.get(i);
 
 			// write the wrapping column markup
 			response.write("<span class=\"b_\" style=\"width:" + nf.format(widths[i]) + "%\">");
@@ -48,7 +49,7 @@
 			{
 				// no renderable or component. fail
 				throw new IllegalStateException(
-						"Either renderable or cell component must be created for this noode");
+					"Either renderable or cell component must be created for this noode");
 			}
 
 			// end of wrapping markup
@@ -70,7 +71,7 @@
 					{
 						Response old = RequestCycle.get().setResponse(NullResponse.getInstance());
 						markupStream.setCurrentIndex(markupStart);
-						((Component)components.get(i)).render(markupStream);
+						(components.get(i)).render(markupStream);
 						RequestCycle.get().setResponse(old);
 						rendered = true;
 					}

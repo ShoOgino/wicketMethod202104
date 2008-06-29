@@ -1,0 +1,30 @@
+	/**
+	 * @see org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel#newLabel(org.apache.wicket.MarkupContainer,
+	 *      java.lang.String, org.apache.wicket.model.IModel)
+	 */
+	@Override
+	protected MultiLineLabel newLabel(MarkupContainer parent, String componentId, IModel<T> model)
+	{
+		MultiLineLabel label = new MultiLineLabel(componentId, model)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			{
+				Object modelObject = getDefaultModelObject();
+				if (modelObject == null || "".equals(modelObject))
+				{
+					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+				}
+				else
+				{
+					super.onComponentTagBody(markupStream, openTag);
+				}
+			}
+		};
+		label.setOutputMarkupId(true);
+		label.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
+		return label;
+	}
+

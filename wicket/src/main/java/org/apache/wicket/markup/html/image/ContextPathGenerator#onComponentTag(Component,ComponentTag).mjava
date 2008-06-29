@@ -1,0 +1,16 @@
+	/** {@inheritDoc} **/
+	@Override
+	public void onComponentTag(Component component, ComponentTag tag)
+	{
+		// get the path
+		final String path = contextRelativePath.getObject();
+
+		// generate prefix that will make path context relative
+		final String prefix = component.getRequest().getRelativePathPrefixToContextRoot();
+
+		// join the two path pieces
+		final String contextRelativePath = Strings.join("/", path, prefix);
+
+		tag.put("src", contextRelativePath);
+	}
+

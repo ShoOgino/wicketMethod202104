@@ -1,0 +1,36 @@
+	/**
+	 * Sets the backing model object; shorthand for getModel().setObject(object).
+	 * 
+	 * @param object
+	 *            The object to set
+	 * @return This
+	 */
+	@SuppressWarnings("unchecked")
+	public final Component setDefaultModelObject(final Object object)
+	{
+		final IModel<Object> model = (IModel<Object>) getDefaultModel();
+
+		// Check whether anything can be set at all
+		if (model == null)
+		{
+			throw new IllegalStateException(
+				"Attempt to set model object on null model of component: " + getPageRelativePath());
+		}
+
+		// Check authorization
+		if (!isActionAuthorized(ENABLE))
+		{
+			throw new UnauthorizedActionException(this, ENABLE);
+		}
+
+		// Check whether this will result in an actual change
+		if (!getModelComparator().compare(this, object))
+		{
+			modelChanging();
+			model.setObject(object);
+			modelChanged();
+		}
+
+		return this;
+	}
+

@@ -1,18 +1,19 @@
 	/**
 	 * @return Gets the parent model in case no explicit model was specified.
 	 */
+	@SuppressWarnings("unchecked")
 	private IModel<T> getParentModel()
 	{
 		// the #getModel() call below will resolve and assign any inheritable
 		// model this component can use. Set that directly to the label and
 		// editor so that those components work like this enclosing panel
 		// does not exist (must have that e.g. with CompoundPropertyModels)
-		IModel<T> m = getModel();
+		IModel<T> m = (IModel<T>)getDefaultModel();
 
 		// check that a model was found
 		if (m == null)
 		{
-			Component<?> parent = getParent();
+			Component parent = getParent();
 			String msg = "No model found for this component, either pass one explicitly or "
 				+ "make sure an inheritable model is available.";
 			if (parent == null)
