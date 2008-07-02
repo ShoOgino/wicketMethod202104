@@ -6,22 +6,6 @@
 	 */
 	public final void prepareForRender()
 	{
-		beforeRender();
-		List<Component> feedbacks = getRequestCycle().getMetaData(FEEDBACK_LIST);
-		if (feedbacks != null)
-		{
-			for (Iterator<Component> i = feedbacks.iterator(); i.hasNext();)
-			{
-				Component feedback = i.next();
-				feedback.internalBeforeRender();
-			}
-		}
-		getRequestCycle().setMetaData(FEEDBACK_LIST, null);
-		markRendering();
-
-		// check authorization
-		// first the component itself
-		// (after attach as otherwise list views etc wont work)
-		setRenderAllowed();
+		prepareForRender(true);
 	}
 
