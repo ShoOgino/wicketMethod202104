@@ -1,6 +1,6 @@
 	/**
 	 * Returns the javascript used to open the window.
-	 * 
+	 *
 	 * @return javascript that opens the window
 	 */
 	private String getWindowOpenJavascript()
@@ -9,8 +9,7 @@
 
 		if (isCustomComponent() == true)
 		{
-			buffer.append("var element = document.getElementById(\"" + getContentMarkupId() +
-				"\");\n");
+			buffer.append("var element = document.getElementById(\"" + getContentMarkupId() + "\");\n");
 		}
 
 		buffer.append("var settings = new Object();\n");
@@ -80,10 +79,8 @@
 		// attach notification request
 		if ((isCustomComponent() == false && deletePageMap) || windowClosedCallback != null)
 		{
-			WindowClosedBehavior behavior = (WindowClosedBehavior)getBehaviors(
-				WindowClosedBehavior.class).get(0);
-			buffer.append("settings.onClose = function() { " + behavior.getCallbackScript() +
-				" };\n");
+			WindowClosedBehavior behavior = (WindowClosedBehavior) getBehaviors(WindowClosedBehavior.class).get(0);
+			buffer.append("settings.onClose = function() { " + behavior.getCallbackScript() + " };\n");
 
 			haveCloseCallback = true;
 		}
@@ -93,10 +90,8 @@
 		// to close window property (thus cleaning the shown flag)
 		if (closeButtonCallback != null || haveCloseCallback == false)
 		{
-			CloseButtonBehavior behavior = (CloseButtonBehavior)getBehaviors(
-				CloseButtonBehavior.class).get(0);
-			buffer.append("settings.onCloseButton = function() { " + behavior.getCallbackScript() +
-				"};\n");
+			CloseButtonBehavior behavior = (CloseButtonBehavior) getBehaviors(CloseButtonBehavior.class).get(0);
+			buffer.append("settings.onCloseButton = function() { " + behavior.getCallbackScript() + "};\n");
 		}
 
 		postProcessSettings(buffer);
