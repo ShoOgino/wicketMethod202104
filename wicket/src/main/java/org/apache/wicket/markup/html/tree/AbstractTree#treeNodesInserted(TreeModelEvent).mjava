@@ -3,6 +3,11 @@
 	 */
 	public final void treeNodesInserted(TreeModelEvent e)
 	{
+		if (dirtyAll)
+		{
+			return;
+		}
+		
 		// get the parent node of inserted nodes
 		Object parent = e.getTreePath().getLastPathComponent();
 
@@ -13,7 +18,7 @@
 			if (parentItem != null)
 			{
 			
-				if (parentItem.getChildren().isEmpty())
+				if (parentItem.getChildren() == null || parentItem.getChildren().isEmpty())
 				{
 					invalidateNode(parent, true);
 				}
