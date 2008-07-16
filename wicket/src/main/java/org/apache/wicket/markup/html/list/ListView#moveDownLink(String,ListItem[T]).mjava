@@ -6,9 +6,9 @@
 	 * @param item
 	 * @return The link component
 	 */
-	public final Link moveDownLink(final String id, final ListItem<T> item)
+	public final Link<Void> moveDownLink(final String id, final ListItem<T> item)
 	{
-		return new Link(id)
+		return new Link<Void>(id)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -18,7 +18,7 @@
 			@Override
 			public void onClick()
 			{
-				final int index = getList().indexOf(item.getDefaultModelObject());
+				final int index = getList().indexOf(item.getModelObject());
 				if (index != -1)
 				{
 					addStateChange(new Change()
@@ -49,7 +49,7 @@
 			{
 				super.onBeforeRender();
 				setAutoEnable(false);
-				if (getList().indexOf(item.getDefaultModelObject()) == (getList().size() - 1))
+				if (getList().indexOf(item.getModelObject()) == (getList().size() - 1))
 				{
 					setEnabled(false);
 				}

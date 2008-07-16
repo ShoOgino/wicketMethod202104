@@ -6,9 +6,9 @@
 	 * @param item
 	 * @return The link component
 	 */
-	public final Link removeLink(final String id, final ListItem<T> item)
+	public final Link<Void> removeLink(final String id, final ListItem<T> item)
 	{
-		return new Link(id)
+		return new Link<Void>(id)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@
 				{
 					private static final long serialVersionUID = 1L;
 
-					final int oldIndex = getList().indexOf(item.getDefaultModelObject());
+					final int oldIndex = getList().indexOf(item.getModelObject());
 					final T removedObject = item.getModelObject();
 
 					@Override
@@ -36,7 +36,7 @@
 				item.modelChanging();
 
 				// Remove item and invalidate listView
-				getList().remove(item.getDefaultModelObject());
+				getList().remove(item.getModelObject());
 
 				ListView.this.modelChanged();
 				ListView.this.removeAll();

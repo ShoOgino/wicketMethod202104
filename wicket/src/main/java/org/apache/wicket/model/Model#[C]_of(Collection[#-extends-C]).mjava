@@ -1,18 +1,15 @@
 	/**
 	 * Factory method for models that contain collections. This factory method will automatically
 	 * rebuild a nonserializable <code>collection</code> into a serializable {@link ArrayList}.
-	 * 
-	 * @param <V>
-	 *            value type in set
-	 * @param <T>
+	 * @param <C>
 	 *            model type
 	 * @param set
-	 *            The Set, which may or may not be Serializable
+	 *            The Collection, which may or may not be Serializable
 	 * @return A Model object wrapping the Set
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> IModel<Collection<T>> of(final Collection<T> set)
+	public static <C> IModel<Collection<? extends C>> of(final Collection<? extends C> set)
 	{
-		return new Model((Serializable)(set instanceof Serializable ? set : new ArrayList<T>(set)));
+        return new WildcardCollectionModel<C>(set);
 	}
 

@@ -2,17 +2,15 @@
 	 * Factory method for models that contain lists. This factory method will automatically rebuild
 	 * a nonserializable <code>list</code> into a serializable one.
 	 * 
-	 * @param <V>
-	 *            value type in list
-	 * @param <T>
+	 * @param <C>
 	 *            model type
 	 * @param list
 	 *            The List, which may or may not be Serializable
 	 * @return A Model object wrapping the List
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> IModel<List<T>> of(final List<T> list)
+	public static <C> IModel<List<? extends C>> of(final List<? extends C> list)
 	{
-		return new Model((Serializable)(list instanceof Serializable ? list : new ArrayList(list)));
+        return new WildcardListModel<C>(list);
 	}
 
