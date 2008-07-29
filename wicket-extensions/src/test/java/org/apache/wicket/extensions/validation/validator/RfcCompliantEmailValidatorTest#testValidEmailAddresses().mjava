@@ -3,8 +3,7 @@
 	 */
 	public void testValidEmailAddresses()
 	{
-		RfcCompliantEmailAddressValidator validator = RfcCompliantEmailAddressValidator
-				.getInstance();
+		IValidator validator = RfcCompliantEmailAddressValidator.getInstance();
 
 		String[] validEmails = new String[] { "bill.gates@gmail.com",
 				"firstname.middlename@lastname.dk", "buy@something.nu", "user@post.inet.tele.dk",
@@ -13,10 +12,9 @@
 		for (int i = 0; i < validEmails.length; i++)
 		{
 			String emailAddress = validEmails[i];
-
-			Matcher matcher = validator.getPattern().matcher(emailAddress);
-
-			assertTrue(emailAddress + " wasn't valid but should be", matcher.matches());
+			Validatable validatable = new Validatable(emailAddress);
+			validator.validate(validatable);
+			assertTrue(emailAddress + " wasn't valid but should be", validatable.isValid());
 		}
 	}
 
