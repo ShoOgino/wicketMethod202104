@@ -2,6 +2,7 @@
 	 * @see org.apache.wicket.markup.html.tree.AbstractTree#populateTreeItem(org.apache.wicket.markup.html.WebMarkupContainer,
 	 *      int)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void populateTreeItem(WebMarkupContainer item, int level)
 	{
@@ -12,7 +13,8 @@
 		item.add(junctionLink);
 
 		// add node component
-		Component nodeComponent = newNodeComponent(NODE_COMPONENT_ID, item.getDefaultModel());
+		Component nodeComponent = newNodeComponent(NODE_COMPONENT_ID,
+			(IModel<Object>)item.getDefaultModel());
 		item.add(nodeComponent);
 
 		// add behavior that conditionally adds the "selected" CSS class name
