@@ -7,7 +7,8 @@
 		{
 			private static final long serialVersionUID = 1L;
 
-			protected String newValue(String currentValue, String replacementValue)
+			@Override
+            protected String newValue(String currentValue, String replacementValue)
 			{
 				return "the replacement";
 			}
@@ -16,8 +17,8 @@
 		ComponentTag tag = new ComponentTag(xmlTag);
 		tag.setId("test");
 		tag.setName("id");
-		modifier.replaceAttibuteValue(null, tag);
-		Map attributes = tag.getAttributes();
+		modifier.replaceAttributeValue(null, tag);
+		Map<String,Object> attributes = tag.getAttributes();
 		assertTrue(!attributes.isEmpty());
 		String replacement = (String)attributes.get("test");
 		assertNotNull(replacement);
