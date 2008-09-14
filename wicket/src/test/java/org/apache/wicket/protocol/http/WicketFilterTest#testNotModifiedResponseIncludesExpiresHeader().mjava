@@ -1,4 +1,5 @@
-	public void testNotModifiedResponseIncludesExpiresHeader() throws IOException, ServletException, ParseException
+	public void testNotModifiedResponseIncludesExpiresHeader() throws IOException,
+		ServletException, ParseException
 	{
 		application = new DummyWebApplication();
 		WicketFilter filter = new WicketFilter();
@@ -6,8 +7,10 @@
 		Application.set(application);
 		DynamicImageResource resource = new DynamicImageResource()
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
-            protected byte[] getImageData()
+			protected byte[] getImageData()
 			{
 				throw new UnsupportedOperationException("Not implemented");
 			}
@@ -15,12 +18,14 @@
 		resource.setCacheable(true);
 		application.getSharedResources().add("foo.gif", resource);
 		MockHttpServletRequest request = new MockHttpServletRequest(application, null, null);
-		request.setURL(request.getContextPath() +  "/app/" + "resources/" + Application.class.getName() + "/foo.gif");
+		request.setURL(request.getContextPath() + "/app/" + "resources/" +
+			Application.class.getName() + "/foo.gif");
 		setIfModifiedSinceToNextWeek(request);
 		MockHttpServletResponse response = new MockHttpServletResponse(request);
 		filter.doFilter(request, response, new FilterChain()
 		{
-			public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException
+			public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse)
+				throws IOException, ServletException
 			{
 			}
 		});
@@ -29,6 +34,7 @@
 		assertNotNull("Expires header must be set on not modified response", responseExpiresHeader);
 
 		Date responseExpires = headerDateFormat.parse(responseExpiresHeader);
-		assertTrue("Expected later than current date but was " + responseExpires, responseExpires.after(new Date()));
+		assertTrue("Expected later than current date but was " + responseExpires,
+			responseExpires.after(new Date()));
 	}
 
