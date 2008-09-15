@@ -2,7 +2,8 @@
 	 * @see org.apache.wicket.markup.html.IHeaderContributor#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
 	 */
 	@Override
-	public void renderHead(IHeaderResponse response) {
+	public void renderHead(IHeaderResponse response)
+	{
 		YuiLib.load(response);
 		// variables for the initialization script
 		Map<String, Object> variables = new HashMap<String, Object>();
@@ -14,90 +15,99 @@
 		variables.put("alignWithIcon", alignWithIcon());
 		variables.put("hideOnSelect", hideOnSelect());
 		// variables for YUILoader
-		variables.put("basePath", Strings.stripJSessionId(RequestCycle.get()
-				.urlFor(YUI)));
-		variables.put("wicketDatePath", Strings.stripJSessionId(RequestCycle
-				.get().urlFor(WICKET_DATE)));
-		if (Application.DEVELOPMENT.equals(Application.get()
-				.getConfigurationType())) {
+		variables.put("basePath", Strings.stripJSessionId(RequestCycle.get().urlFor(YUI)));
+		variables.put("wicketDatePath", Strings.stripJSessionId(RequestCycle.get().urlFor(
+				WICKET_DATE)));
+		if (Application.DEVELOPMENT.equals(Application.get().getConfigurationType()))
+		{
 			variables.put("filter", "filter: \"RAW\",");
 			variables.put("allowRollup", false);
-		} else {
+		}
+		else
+		{
 			variables.put("filter", "");
 			variables.put("allowRollup", true);
 		}
 
 		String script = getAdditionalJavascript();
-		if (script != null) {
-			variables.put("additionalJavascript", Strings.replaceAll(script,
-					"${calendar}", "YAHOO.wicket." + widgetId + "DpJs"));
+		if (script != null)
+		{
+			variables.put("additionalJavascript", Strings.replaceAll(script, "${calendar}",
+					"YAHOO.wicket." + widgetId + "DpJs"));
 		}
 		// print out the initialization properties
 		Map<String, Object> p = new HashMap<String, Object>();
 		configure(p);
-		if (!p.containsKey("navigator") && enableMonthYearSelection()) {
+		if (!p.containsKey("navigator") && enableMonthYearSelection())
+		{
 			p.put("navigator", Boolean.TRUE);
 		}
 
-		if (enableMonthYearSelection() && p.containsKey("pages")
-				&& Objects.longValue(p.get("pages")) > 1) {
+		if (enableMonthYearSelection() && p.containsKey("pages") &&
+				Objects.longValue(p.get("pages")) > 1)
+		{
 			throw new IllegalStateException(
 					"You cannot use a CalendarGroup with month/year selection!");
 		}
 
 		// ${calendarInit}
 		StringBuffer calendarInit = new StringBuffer();
-		for (Iterator<Entry<String, Object>> i = p.entrySet().iterator(); i
-				.hasNext();) {
+		for (Iterator<Entry<String, Object>> i = p.entrySet().iterator(); i.hasNext();)
+		{
 			Entry<String, Object> entry = i.next();
 			calendarInit.append(entry.getKey());
 			Object value = entry.getValue();
-			if (value instanceof CharSequence) {
+			if (value instanceof CharSequence)
+			{
 				calendarInit.append(":\"");
 				calendarInit.append(Strings.toEscapedUnicode(value.toString()));
 				calendarInit.append("\"");
-			} else if (value instanceof CharSequence[]) {
+			}
+			else if (value instanceof CharSequence[])
+			{
 				calendarInit.append(":[");
-				CharSequence[] valueArray = (CharSequence[]) value;
-				for (int j = 0; j < valueArray.length; j++) {
+				CharSequence[] valueArray = (CharSequence[])value;
+				for (int j = 0; j < valueArray.length; j++)
+				{
 					CharSequence tmpValue = valueArray[j];
-					if (j > 0) {
+					if (j > 0)
+					{
 						calendarInit.append(",");
 					}
-					if (tmpValue != null) {
+					if (tmpValue != null)
+					{
 						calendarInit.append("\"");
-						calendarInit.append(Strings.toEscapedUnicode(tmpValue
-								.toString()));
+						calendarInit.append(Strings.toEscapedUnicode(tmpValue.toString()));
 						calendarInit.append("\"");
 					}
 				}
 				calendarInit.append("]");
-			} else {
-				calendarInit.append(":");
-				calendarInit.append(Strings.toEscapedUnicode(String
-						.valueOf(value)));
 			}
-			if (i.hasNext()) {
+			else
+			{
+				calendarInit.append(":");
+				calendarInit.append(Strings.toEscapedUnicode(String.valueOf(value)));
+			}
+			if (i.hasNext())
+			{
 				calendarInit.append(",");
 			}
 		}
 		variables.put("calendarInit", calendarInit.toString());
 
 		// render initialization script with the variables interpolated
-		TextTemplate datePickerJs = new PackagedTextTemplate(DatePicker.class,
-				"DatePicker.js");
+		TextTemplate datePickerJs = new PackagedTextTemplate(DatePicker.class, "DatePicker.js");
 		datePickerJs.interpolate(variables);
 		response.renderOnDomReadyJavascript(datePickerJs.asString());
 
 		// remove previously generated markup (see onRendered) via javascript in
 		// ajax requests to not render the yui calendar multiple times
-		if (AjaxRequestTarget.get() != null) {
-			final String javascript = "var e = Wicket.$('"
-					+ getEscapedComponentMarkupId()
-					+ "Dp"
-					+ "'); if (e != null && typeof(e.parentNode) != 'undefined' && "
-					+ "typeof(e.parentNode.parentNode != 'undefined')) "
-					+ "e.parentNode.parentNode.removeChild(e.parentNode);";
+		if (AjaxRequestTarget.get() != null)
+		{
+			final String javascript = "var e = Wicket.$('" + getEscapedComponentMarkupId() + "Dp" +
+					"'); if (e != null && typeof(e.parentNode) != 'undefined' && " +
+					"typeof(e.parentNode.parentNode != 'undefined')) " +
+					"e.parentNode.parentNode.removeChild(e.parentNode);";
 
 			response.renderJavascript(javascript, null);
 		}

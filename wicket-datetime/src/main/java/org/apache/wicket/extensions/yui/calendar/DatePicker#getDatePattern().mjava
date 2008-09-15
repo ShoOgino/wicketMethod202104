@@ -1,24 +1,27 @@
 	/**
-	 * Gets the date pattern to use for putting selected values in the coupled
-	 * component.
+	 * Gets the date pattern to use for putting selected values in the coupled component.
 	 * 
 	 * @return The date pattern
 	 */
-	protected String getDatePattern() {
+	protected String getDatePattern()
+	{
 		String format = null;
-		if (component instanceof ITextFormatProvider) {
-			format = ((ITextFormatProvider) component).getTextFormat();
+		if (component instanceof ITextFormatProvider)
+		{
+			format = ((ITextFormatProvider)component).getTextFormat();
 			// it is possible that components implement ITextFormatProvider but
 			// don't provide a format
 		}
 
-		if (format == null) {
-			IConverter<?> converter = component.getConverter(DateTime.class);
-			if (!(converter instanceof DateConverter)) {
+		if (format == null)
+		{
+			IConverter converter = component.getConverter(DateTime.class);
+			if (!(converter instanceof DateConverter))
+			{
 				converter = component.getConverter(Date.class);
 			}
-			format = ((SimpleDateFormat) ((DateConverter) converter)
-					.getDateFormat(component.getLocale())).toPattern();
+			format = ((SimpleDateFormat)((DateConverter)converter).getDateFormat(component
+					.getLocale())).toPattern();
 		}
 
 		return format;

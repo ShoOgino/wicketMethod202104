@@ -9,20 +9,20 @@
 	 * @see org.apache.wicket.util.convert.IConverter#convertToObject(String, java.util.Locale)
 	 */
 	@SuppressWarnings("unchecked")
-	public final <T> IConverter<T> getConverter(Class<T> type)
+	public final IConverter getConverter(Class<?> type)
 	{
 		// Null is always converted to null
 		if (type == null)
 		{
-			return (IConverter<T>)new DefaultConverter<String>(String.class);
+			return new DefaultConverter(String.class);
 		}
 
 
 		// Get type converter for class
-		final IConverter<T> converter = get(type);
+		final IConverter converter = get(type);
 		if (converter == null)
 		{
-			return new DefaultConverter<T>(type);
+			return new DefaultConverter(type);
 		}
 		return converter;
 	}
