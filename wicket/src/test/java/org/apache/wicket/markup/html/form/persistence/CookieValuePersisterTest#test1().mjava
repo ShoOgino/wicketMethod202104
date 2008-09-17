@@ -2,6 +2,7 @@
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings({"unchecked"})
 	public void test1() throws Exception
 	{
 		// How does the test work: Make sure you have a page, form and form
@@ -10,7 +11,7 @@
 
 		// Get the form and form component created
 		final TestForm form = (TestForm)page.get("form");
-		final TextField textField = (TextField)form.get("input");
+		final TextField<String> textField = (TextField<String>)form.get("input");
 
 		// Make sure a valid cycle is available through RequestCycle.get().
 		// The RequestCycle's constructor will attach the new cycle to
@@ -38,7 +39,7 @@
 		assertNull(getRequestCookies(cycle));
 		assertEquals(1, getResponseCookies(cycle).size());
 		assertEquals("test", ((Cookie)getResponseCookies(cycle).get(0)).getValue());
-		assertEquals("form:input", ((Cookie)getResponseCookies(cycle).get(0)).getName());
+		assertEquals("form.input", ((Cookie)getResponseCookies(cycle).get(0)).getName());
 		assertEquals("/WicketTester$DummyWebApplication",
 			((Cookie)getResponseCookies(cycle).get(0)).getPath());
 
@@ -50,7 +51,7 @@
 		assertNull(getRequestCookies(cycle));
 		assertEquals(1, getResponseCookies(cycle).size());
 		assertEquals("test", ((Cookie)getResponseCookies(cycle).get(0)).getValue());
-		assertEquals("form:input", ((Cookie)getResponseCookies(cycle).get(0)).getName());
+		assertEquals("form.input", ((Cookie)getResponseCookies(cycle).get(0)).getName());
 		assertEquals("/WicketTester$DummyWebApplication",
 			((Cookie)getResponseCookies(cycle).get(0)).getPath());
 
@@ -85,7 +86,7 @@
 		persister.clear(textField);
 		assertEquals(1, getRequestCookies(cycle).length);
 		assertEquals(2, getResponseCookies(cycle).size());
-		assertEquals("form:input", ((Cookie)getResponseCookies(cycle).get(1)).getName());
+		assertEquals("form.input", ((Cookie)getResponseCookies(cycle).get(1)).getName());
 		assertEquals(0, ((Cookie)getResponseCookies(cycle).get(1)).getMaxAge());
 	}
 
