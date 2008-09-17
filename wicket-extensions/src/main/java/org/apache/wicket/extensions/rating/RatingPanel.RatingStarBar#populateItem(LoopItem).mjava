@@ -1,11 +1,13 @@
+		@Override
 		protected void populateItem(LoopItem item)
 		{
 			// Use an AjaxFallbackLink for rating to make voting work even
 			// without Ajax.
-			AjaxFallbackLink link = new AjaxFallbackLink("link")
+			AjaxFallbackLink<Void> link = new AjaxFallbackLink<Void>("link")
 			{
 				private static final long serialVersionUID = 1L;
 
+				@Override
 				public void onClick(AjaxRequestTarget target)
 				{
 					LoopItem item = (LoopItem)getParent();
@@ -23,9 +25,10 @@
 					}
 				}
 
+				@Override
 				public boolean isEnabled()
 				{
-					return !((Boolean)hasVoted.getObject()).booleanValue();
+					return !hasVoted.getObject();
 				}
 			};
 

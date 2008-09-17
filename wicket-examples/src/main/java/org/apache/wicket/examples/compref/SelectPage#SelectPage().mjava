@@ -30,7 +30,7 @@
 
 		Select choices = new Select("choices");
 		form.add(choices);
-		IOptionRenderer renderer = new IOptionRenderer()
+		IOptionRenderer<String> renderer = new IOptionRenderer<String>()
 		{
 
 			public String getDisplayValue(Object object)
@@ -38,14 +38,14 @@
 				return object.toString();
 			}
 
-			public IModel<Serializable> getModel(Object value)
+			public IModel<String> getModel(Object value)
 			{
-				return new Model<Serializable>((Serializable)value);
+				return new Model<String>((String) value);
 			}
 
 		};
-		choices.add(new SelectOptions("manychoices", new Model((Serializable)MANY_CHOICES),
-			renderer));
+		IModel<Collection<? extends String>> model = new WildcardCollectionModel<String>(MANY_CHOICES);
+		choices.add(new SelectOptions<String>("manychoices", model, renderer));
 
 	}
 
