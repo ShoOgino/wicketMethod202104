@@ -8,20 +8,18 @@
 		panel.setPersistent(true);
 
 		// test will call persistFromComponentData(), which is private
-		this.form.onFormSubmitted();
+		form.onFormSubmitted();
 
 		// validate
-		Collection cookies = tester.getServletResponse().getCookies();
+		Collection<Cookie> cookies = tester.getServletResponse().getCookies();
 		Assert.assertEquals(2, cookies.size());
-		Iterator iter = cookies.iterator();
-		while (iter.hasNext())
+		for (Cookie cooky : cookies)
 		{
-			Cookie cookie = (Cookie)iter.next();
-			Assert.assertNotNull(page.get(cookie.getName()));
+			Assert.assertNotNull(page.get(cooky.getName()));
 			// Skip "deleted" cookies
-			if (page.get(cookie.getName()).getDefaultModelObjectAsString() != "")
+			if (page.get(cooky.getName()).getDefaultModelObjectAsString() != "")
 			{
-				Assert.assertEquals(cookie.getValue(), page.get(cookie.getName())
+				Assert.assertEquals(cooky.getValue(), page.get(cooky.getName())
 						.getDefaultModelObjectAsString());
 			}
 		}

@@ -1,8 +1,3 @@
-	/**
-	 * 
-	 * @throws IOException
-	 * @throws ServletException
-	 */
 	public void testRemoveFromPage() throws IOException, ServletException
 	{
 		panel.setPersistent(true);
@@ -11,7 +6,7 @@
 		page.removePersistedFormData(SignInPanel.SignInForm.class, true);
 
 		// validate
-		Collection cookieCollection = tester.getServletResponse().getCookies();
+		Collection<Cookie> cookieCollection = tester.getServletResponse().getCookies();
 		// Cookies are remove by setting maxAge == 0
 		Assert.assertEquals(2, cookieCollection.size());
 
@@ -28,10 +23,8 @@
 		// validate
 		cookieCollection = tester.getServletResponse().getCookies();
 		Assert.assertEquals(4, cookieCollection.size());
-		Iterator iter = cookieCollection.iterator();
-		while (iter.hasNext())
+		for (Cookie cookie : cookieCollection)
 		{
-			Cookie cookie = (Cookie)iter.next();
 			Assert.assertNotNull(page.get(cookie.getName()));
 			Assert.assertEquals(cookie.getMaxAge(), 0);
 		}
