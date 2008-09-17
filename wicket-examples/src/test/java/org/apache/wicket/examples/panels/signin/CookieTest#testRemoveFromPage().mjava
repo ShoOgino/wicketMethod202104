@@ -11,8 +11,8 @@
 		Assert.assertEquals(2, cookieCollection.size());
 
 		// initialize
-		final Cookie cookieUsername = new Cookie("panel:signInForm:username", "juergen");
-		final Cookie cookiePassword = new Cookie("panel:signInForm:password", "test");
+		final Cookie cookieUsername = new Cookie("panel.signInForm.username", "juergen");
+		final Cookie cookiePassword = new Cookie("panel.signInForm.password", "test");
 		final Cookie[] cookies = new Cookie[] { cookieUsername, cookiePassword };
 
 		tester.getServletRequest().setCookies(cookies);
@@ -25,7 +25,8 @@
 		Assert.assertEquals(4, cookieCollection.size());
 		for (Cookie cookie : cookieCollection)
 		{
-			Assert.assertNotNull(page.get(cookie.getName()));
+			String pathOfStoredComponent = cookie.getName().replaceAll("\\.", ":");
+			Assert.assertNotNull(page.get(pathOfStoredComponent));
 			Assert.assertEquals(cookie.getMaxAge(), 0);
 		}
 	}
