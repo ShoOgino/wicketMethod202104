@@ -1,0 +1,20 @@
+	/**
+	 * Rewrites a relative url to be context relative, leaves absolute urls same.
+	 * 
+	 * @param url
+	 * @param request
+	 * @return rewritten url
+	 */
+	public static String rewriteToContextRelative(String url, Request request)
+	{
+		if (isRelative(url))
+		{
+			final String prefix = request.getRelativePathPrefixToContextRoot();
+			return prefix + url;
+		}
+		else
+		{
+			return url;
+		}
+	}
+
