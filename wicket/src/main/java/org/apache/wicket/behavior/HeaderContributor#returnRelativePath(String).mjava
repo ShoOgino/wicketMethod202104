@@ -10,7 +10,10 @@
 		}
 		else
 		{
-			return RequestCycle.get().getRequest().getRelativePathPrefixToContextRoot() + location;
+			return RequestCycle.get()
+				.getProcessor()
+				.getRequestCodingStrategy()
+				.rewriteStaticRelativeUrl(location);
 		}
 	}
 

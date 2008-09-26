@@ -2,23 +2,14 @@
 	@Override
 	public void onComponentTag(Component component, ComponentTag tag)
 	{
-		// get the path
+		// get path
 		final String path = contextRelativePath.getObject();
 
-		// generate prefix that will make path context relative
-		final String prefix = component.getRequest().getRelativePathPrefixToContextRoot();
+		final String rewritten = component.getRequestCycle()
+			.getProcessor()
+			.getRequestCodingStrategy()
+			.rewriteStaticRelativeUrl(path);
 
-		final String contextRelativePath;
-		if (!Strings.isEmpty(prefix))
-		{
-			// join the two path pieces
-			contextRelativePath = Strings.join("/", prefix, path);
-		}
-		else
-		{
-			contextRelativePath = path;
-		}
-
-		tag.put("src", contextRelativePath);
+		tag.put("src", rewritten);
 	}
 
