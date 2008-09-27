@@ -31,9 +31,9 @@
 		// If we don't have an even number of pairs
 		if (pairs.length % 2 != 0)
 		{
-			// give up
-			throw new IllegalStateException("URL fragment has unmatched key/value " + "pair: " +
-					urlFragment);
+			log.warn("URL fragment has unmatched key/value pairs, responding with 404. Fragment: " +
+				urlFragment);
+			throw new AbortWithWebErrorCodeException(404);
 		}
 
 		// Loop through pairs
