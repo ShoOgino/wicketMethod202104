@@ -5,18 +5,21 @@
 	 */
 	private void internalUpdateFormComponentModels()
 	{
-		visitFormComponentsPostOrder(new ValidationVisitor()
+		FormComponent.visitComponentsPostOrder(this, new FormModelUpdateVisitor(this));
+
+		MarkupContainer border = findParent(Border.class);
+		if (border != null)
 		{
-			@Override
-			public void validate(FormComponent<?> formComponent)
+			Iterator<? extends Component> iter = border.iterator();
+			Component.IVisitor<Component> visitor = new FormModelUpdateVisitor(null);
+			while (iter.hasNext())
 			{
-				Form<?> form = formComponent.getForm();
-				if (form == Form.this)
+				Component child = iter.next();
+				if (child instanceof IFormModelUpdateListener)
 				{
-					// Potentially update the model
-					formComponent.updateModel();
+					visitor.component(child);
 				}
 			}
-		});
+		}
 	}
 
