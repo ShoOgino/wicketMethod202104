@@ -1,0 +1,17 @@
+	protected WebRequestCycle resolveRequestCycle()
+	{
+		// initialize the request only if needed to allow the user to pass
+		// request parameters, see
+		// WICKET-254
+		WebRequestCycle requestCycle;
+		if (RequestCycle.get() == null)
+		{
+			requestCycle = setupRequestAndResponse(true);
+		}
+		else
+		{
+			requestCycle = (WebRequestCycle)RequestCycle.get();
+		}
+		return requestCycle;
+	}
+
