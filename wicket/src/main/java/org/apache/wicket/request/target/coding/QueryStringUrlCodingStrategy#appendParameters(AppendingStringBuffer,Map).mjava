@@ -6,19 +6,12 @@
 	 * @param parameters
 	 *            parameter names mapped to parameter values
 	 */
+	@Override
 	protected void appendParameters(AppendingStringBuffer url, Map parameters)
 	{
 		if (parameters != null && parameters.size() > 0)
 		{
-			final Iterator entries;
-			if (UnitTestSettings.getSortUrlParameters())
-			{
-				entries = new TreeMap(parameters).entrySet().iterator();
-			}
-			else
-			{
-				entries = parameters.entrySet().iterator();
-			}
+			final Iterator entries = parameters.entrySet().iterator();
 			WebRequestEncoder encoder = new WebRequestEncoder(url);
 			while (entries.hasNext())
 			{

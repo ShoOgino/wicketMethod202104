@@ -35,22 +35,15 @@
 		if (!parameterNamesToAdd.isEmpty())
 		{
 			boolean first = true;
-			final Iterator iterator;
-			if (UnitTestSettings.getSortUrlParameters())
-			{
-				iterator = new TreeSet(parameterNamesToAdd).iterator();
-			}
-			else
-			{
-				iterator = parameterNamesToAdd.iterator();
-			}
+			final Iterator iterator = parameterNamesToAdd.iterator();
 			while (iterator.hasNext())
 			{
 				url.append(first ? '?' : '&');
 				String parameterName = (String)iterator.next();
 				final Object param = parameters.get(parameterName);
 				String value = param instanceof String[] ? ((String[])param)[0] : (String)param;
-				url.append(urlEncodeQueryComponent(parameterName)).append("=").append(urlEncodeQueryComponent(value));
+				url.append(urlEncodeQueryComponent(parameterName)).append("=").append(
+					urlEncodeQueryComponent(value));
 				first = false;
 			}
 		}
