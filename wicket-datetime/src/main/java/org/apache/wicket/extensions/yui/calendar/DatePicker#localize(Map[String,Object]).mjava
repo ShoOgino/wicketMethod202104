@@ -21,7 +21,25 @@
 	 */
 	protected void localize(Map<String, Object> widgetProperties)
 	{
-		DateFormatSymbols dfSymbols = new DateFormatSymbols(getLocale());
+		DateFormatSymbols dfSymbols = null;
+		if (GETINSTANCEMETHOD != null)
+		{
+			// try to use JDK 6 DateFormatSymbols.getInstance(Locale)
+			try
+			{
+				dfSymbols = (DateFormatSymbols)GETINSTANCEMETHOD.invoke(null,
+						new Object[] { getLocale() });
+			}
+			catch (Exception e)
+			{
+				// ignore
+			}
+		}
+		if (dfSymbols == null)
+		{
+			dfSymbols = new DateFormatSymbols(getLocale());
+		}
+
 		if (Locale.SIMPLIFIED_CHINESE.equals(getLocale()))
 		{
 			dfSymbols.setShortWeekdays(new String[] { "", "\u65E5", "\u4E00", "\u4E8C", "\u4E09",
