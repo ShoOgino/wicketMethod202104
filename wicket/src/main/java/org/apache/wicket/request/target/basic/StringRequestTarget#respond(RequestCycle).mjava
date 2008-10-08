@@ -7,28 +7,16 @@
 	{
 		// Get servlet response to use when responding with resource
 		final Response response = requestCycle.getResponse();
-		response.setContentType(contentType);
-		final StringBufferResourceStream stream = new StringBufferResourceStream(contentType);
-		stream.setCharset(charset);
-		stream.append(string);
+		response.setContentType(contentType + ";charset=" + encoding);
 
-		// Respond with resource
+		// send string to client
 		try
 		{
-			final OutputStream out = response.getOutputStream();
-			try
-			{
-				Streams.copy(stream.getInputStream(), out);
-			}
-			finally
-			{
-				stream.close();
-				out.flush();
-			}
+			response.getOutputStream().write(string.getBytes(encoding));
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
-			throw new WicketRuntimeException("Unable to render resource stream " + stream, e);
+			throw new WicketRuntimeException("Unable to render string: " + e.getMessage(), e);
 		}
 	}
 
