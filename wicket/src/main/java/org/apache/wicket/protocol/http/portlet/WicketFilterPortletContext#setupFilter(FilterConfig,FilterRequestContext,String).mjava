@@ -1,30 +1,48 @@
+	/**
+	 * Sets up the filter to process a given request cycle. Potentially wraps the request and
+	 * response objects with portlet specific wrappers.
+	 * 
+	 * <p>
+	 * Also sets up the session proxy using Apache Portals Bridge to ensure portlet session
+	 * isolation. This is an option feature of Portal 2.0 spec so we just use portal bridges instead
+	 * as it guarantees us support.
+	 * 
+	 * @see org.apache.portals.bridges.util.ServletPortletSessionProxy
+	 * @param config
+	 *            filter configuration
+	 * @param filterRequestContext
+	 * @param filterPath
+	 * @return true if we are in a portlet environment
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	public boolean setupFilter(FilterConfig config, FilterRequestContext filterRequestContext,
-			String filterPath) throws IOException, ServletException
+		String filterPath) throws IOException, ServletException
 	{
 		boolean inPortletContext = false;
 		PortletConfig portletConfig = (PortletConfig)filterRequestContext.getRequest()
-				.getAttribute("javax.portlet.config");
+			.getAttribute("javax.portlet.config");
 		if (portletConfig != null)
 		{
 			inPortletContext = true;
-			WicketResponseState responseState = (WicketResponseState)filterRequestContext
-					.getRequest().getAttribute(WicketPortlet.RESPONSE_STATE_ATTR);
-			filterRequestContext.setRequest(new PortletServletRequestWrapper(config
-					.getServletContext(), filterRequestContext.getRequest(),
-					ServletPortletSessionProxy.createProxy(filterRequestContext.getRequest()),
-					filterPath));
+			WicketResponseState responseState = (WicketResponseState)filterRequestContext.getRequest()
+				.getAttribute(WicketPortlet.RESPONSE_STATE_ATTR);
+			filterRequestContext.setRequest(new PortletServletRequestWrapper(
+				config.getServletContext(), filterRequestContext.getRequest(),
+				ServletPortletSessionProxy.createProxy(filterRequestContext.getRequest()),
+				filterPath));
 			if (WicketPortlet.ACTION_REQUEST.equals(filterRequestContext.getRequest().getAttribute(
-					WicketPortlet.REQUEST_TYPE_ATTR)))
+				WicketPortlet.REQUEST_TYPE_ATTR)))
 			{
 				filterRequestContext.setResponse(new PortletActionServletResponseWrapper(
-						filterRequestContext.getResponse(), responseState));
+					filterRequestContext.getResponse(), responseState));
 			}
 			else
 			{
-				filterRequestContext
-						.setResponse(new PortletRenderServletResponseWrapper(filterRequestContext
-								.getResponse(), (RenderResponse)filterRequestContext.getRequest()
-								.getAttribute("javax.portlet.response"), responseState));
+				filterRequestContext.setResponse(new PortletRenderServletResponseWrapper(
+					filterRequestContext.getResponse(),
+					(RenderResponse)filterRequestContext.getRequest().getAttribute(
+						"javax.portlet.response"), responseState));
 			}
 		}
 		else
@@ -32,15 +50,15 @@
 			ServletContext context = config.getServletContext();
 			HttpServletRequest request = filterRequestContext.getRequest();
 			String pathInfo = request.getRequestURI().substring(
-					request.getContextPath().length() + filterPath.length());
+				request.getContextPath().length() + filterPath.length());
 			String portletWindowId = decodePortletWindowId(pathInfo);
 			if (portletWindowId != null)
 			{
 				HttpSession proxiedSession = ServletPortletSessionProxy.createProxy(request,
-						portletWindowId);
+					portletWindowId);
 				pathInfo = stripWindowIdFromPathInfo(pathInfo);
 				filterRequestContext.setRequest(new PortletServletRequestWrapper(context, request,
-						proxiedSession, filterPath, pathInfo));
+					proxiedSession, filterPath, pathInfo));
 			}
 		}
 		return inPortletContext;

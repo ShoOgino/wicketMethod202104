@@ -1,29 +1,42 @@
+	/**
+	 * Package private constructor which is called from either of the two public constructors - sets
+	 * up the various portlet specific versions of the context path, servlet path, request URI
+	 * etc...
+	 * 
+	 * @param context
+	 * @param proxiedSession
+	 * @param request
+	 * @param filterPath
+	 */
 	protected PortletServletRequestWrapper(ServletContext context, HttpSession proxiedSession,
-			HttpServletRequest request, String filterPath)
+		HttpServletRequest request, String filterPath)
 	{
 		super(request);
-		this.session = proxiedSession;
+		session = proxiedSession;
 		if (proxiedSession == null)
 		{
-			this.session = request.getSession(false);
+			session = request.getSession(false);
 		}
-		this.servletPath = makeServletPath(filterPath);
-		if ((this.contextPath = (String)request.getAttribute("javax.servlet.include.context_path")) != null)
+		servletPath = makeServletPath(filterPath);
+		// retrieve the correct contextPath, requestURI and queryString
+		// if request is an include
+		if ((contextPath = (String)request.getAttribute("javax.servlet.include.context_path")) != null)
 		{
-			this.requestURI = (String)request.getAttribute("javax.servlet.include.request_uri");
-			this.queryString = (String)request.getAttribute("javax.servlet.include.query_string");
+			requestURI = (String)request.getAttribute("javax.servlet.include.request_uri");
+			queryString = (String)request.getAttribute("javax.servlet.include.query_string");
 		}
-		else if ((this.contextPath = (String)request
-				.getAttribute("javax.servlet.forward.context_path")) != null)
+		// else if request is a forward
+		else if ((contextPath = (String)request.getAttribute("javax.servlet.forward.context_path")) != null)
 		{
-			this.requestURI = (String)request.getAttribute("javax.servlet.forward.request_uri");
-			this.queryString = (String)request.getAttribute("javax.servlet.forward.query_string");
+			requestURI = (String)request.getAttribute("javax.servlet.forward.request_uri");
+			queryString = (String)request.getAttribute("javax.servlet.forward.query_string");
 		}
+		// else it is a normal request
 		else
 		{
-			this.contextPath = request.getContextPath();
-			this.requestURI = request.getRequestURI();
-			this.queryString = request.getQueryString();
+			contextPath = request.getContextPath();
+			requestURI = request.getRequestURI();
+			queryString = request.getQueryString();
 		}
 	}
 

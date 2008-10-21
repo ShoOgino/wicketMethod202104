@@ -1,18 +1,29 @@
+	/**
+	 * Consumes and processes all portlet requests. All the doX methods delegate to this method,
+	 * including processAction and serveResource.
+	 * 
+	 * @param request
+	 * @param response
+	 * @param requestType
+	 * @param pageType
+	 * @throws PortletException
+	 * @throws IOException
+	 */
 	protected void processRequest(PortletRequest request, PortletResponse response,
-			String requestType, String pageType) throws PortletException, IOException
+		String requestType, String pageType) throws PortletException, IOException
 	{
 		String wicketURL = null;
 		String wicketFilterPath = null;
 		String wicketFilterQuery = null;
 
 		request.setAttribute(WICKET_URL_PORTLET_PARAMETER_ATTR,
-				getWicketUrlPortletParameter(request));
+			getWicketUrlPortletParameter(request));
 
 		wicketURL = getWicketURL(request, pageType, getDefaultPage(pageType));
 		wicketFilterPath = getWicketConfigParameter(request, WICKET_FILTER_PATH,
-				this.wicketFilterPath);
+			this.wicketFilterPath);
 		wicketFilterQuery = getWicketConfigParameter(request, WICKET_FILTER_QUERY,
-				this.wicketFilterQuery);
+			this.wicketFilterQuery);
 
 		boolean actionRequest = ACTION_REQUEST.equals(requestType);
 
@@ -57,7 +68,7 @@
 				{
 					rd.include(req, res);
 					processActionResponseState(wicketURL, wicketFilterPath, wicketFilterQuery,
-							(ActionRequest)request, (ActionResponse)response, responseState);
+						(ActionRequest)request, (ActionResponse)response, responseState);
 				}
 				catch (ServletException e)
 				{
@@ -79,30 +90,28 @@
 					if (redirectLocation != null)
 					{
 						redirectLocation = fixWicketUrl(redirectLocation, wicketFilterPath,
-								wicketFilterQuery);
+							wicketFilterQuery);
 						boolean validWicketUrl = redirectLocation.startsWith(wicketFilterPath);
 						if (portletResourceURL != null)
 						{
 							if (validWicketUrl)
 							{
 								HashMap parameters = new HashMap(2);
-								parameters
-										.put(
-												(String)request
-														.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR) +
-														request.getPortletMode().toString(),
-												new String[] { redirectLocation });
+								parameters.put(
+									(String)request.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR) +
+										request.getPortletMode().toString(),
+									new String[] { redirectLocation });
 								parameters.put(PORTLET_RESOURCE_URL_PARAMETER,
-										new String[] { "true" });
+									new String[] { "true" });
 								redirectLocation = resourceURLFactory.createResourceURL(
-										getPortletConfig(), (RenderRequest)request,
-										(RenderResponse)response, parameters);
+									getPortletConfig(), (RenderRequest)request,
+									(RenderResponse)response, parameters);
 							}
 							getHttpServletResponse(this, request, response).sendRedirect(
-									redirectLocation);
+								redirectLocation);
 						}
 						else if (validWicketUrl &&
-								((previousURL == null || previousURL != redirectLocation)))
+							((previousURL == null || previousURL != redirectLocation)))
 						{
 							previousURL = wicketURL;
 							wicketURL = redirectLocation;

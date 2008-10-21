@@ -1,7 +1,20 @@
+	/**
+	 * Tries to find if a PortletContext is available. Searches for the 'detect portlet context'
+	 * flag in various places and if true, tries to load the {@link javax.portlet.PortletContext}.
+	 * 
+	 * @param config
+	 *            the FilterConfig object
+	 * @return true if {@link javax.portlet.PortletContext} was successfully loaded
+	 * @throws ServletException
+	 *             on IO errors
+	 */
 	protected boolean isPortletContextAvailable(FilterConfig config) throws ServletException
 	{
 		boolean detectPortletContext = false;
+
+		// search for portlet detection boolean in various places
 		String parameter = config.getInitParameter(DETECT_PORTLET_CONTEXT);
+		// search filter parameter
 		if (parameter != null)
 		{
 			detectPortletContext = Boolean.valueOf(parameter).booleanValue();
@@ -10,6 +23,7 @@
 		{
 			parameter = config.getServletContext().getInitParameter(
 				DETECT_PORTLET_CONTEXT_FULL_NAME);
+			// search web.xml context paramter
 			if (parameter != null)
 			{
 				detectPortletContext = Boolean.valueOf(parameter).booleanValue();
@@ -19,6 +33,7 @@
 				InputStream is = Thread.currentThread()
 					.getContextClassLoader()
 					.getResourceAsStream(WICKET_PORTLET_PROPERTIES);
+				// search wicket.properties
 				if (is != null)
 				{
 					try
@@ -39,6 +54,7 @@
 		}
 		if (detectPortletContext)
 		{
+			// load the portlet context
 			try
 			{
 				Class<?> portletClass = Class.forName("javax.portlet.PortletContext");

@@ -1,11 +1,27 @@
+	/**
+	 * FIXME javadoc
+	 * 
+	 * <p>
+	 * Registers the default pages and their URLs for the different {@link PortletMode}s. Also
+	 * corrects and slightly incorrect URLs (see {@link #fixWicketUrl(String, String, String)}).
+	 * 
+	 * <p>
+	 * If no specific page was specified for a given portlet mode (VIEW, EDIT etc) then the page for
+	 * that mode is set to be the same page as that of the VIEW mode.
+	 * 
+	 * @see PortletMode
+	 * @see #fixWicketUrl(String, String, String)
+	 * @param defaultPages
+	 * @param wicketFilterPath
+	 * @param wicketFilterQuery
+	 */
 	protected void validateDefaultPages(Map defaultPages, String wicketFilterPath,
-			String wicketFilterQuery)
+		String wicketFilterQuery)
 	{
 		String viewPage = fixWicketUrl((String)defaultPages.get(PARAM_VIEW_PAGE), wicketFilterPath,
-				wicketFilterQuery);
-		defaultPages.put(PARAM_VIEW_PAGE, viewPage.startsWith(wicketFilterPath)
-				? viewPage
-				: wicketFilterPath);
+			wicketFilterQuery);
+		defaultPages.put(PARAM_VIEW_PAGE, viewPage.startsWith(wicketFilterPath) ? viewPage
+			: wicketFilterPath);
 
 		String defaultPage = (String)defaultPages.get(PARAM_ACTION_PAGE);
 		if (defaultPage == null)
@@ -16,8 +32,7 @@
 		{
 			defaultPage = fixWicketUrl(defaultPage, wicketFilterPath, wicketFilterQuery);
 			defaultPages.put(PARAM_ACTION_PAGE, defaultPage.startsWith(wicketFilterPath)
-					? defaultPage
-					: viewPage);
+				? defaultPage : viewPage);
 		}
 
 		defaultPage = (String)defaultPages.get(PARAM_CUSTOM_PAGE);
@@ -29,8 +44,7 @@
 		{
 			defaultPage = fixWicketUrl(defaultPage, wicketFilterPath, wicketFilterQuery);
 			defaultPages.put(PARAM_CUSTOM_PAGE, defaultPage.startsWith(wicketFilterPath)
-					? defaultPage
-					: viewPage);
+				? defaultPage : viewPage);
 		}
 
 		defaultPage = (String)defaultPages.get(PARAM_HELP_PAGE);
@@ -42,8 +56,7 @@
 		{
 			defaultPage = fixWicketUrl(defaultPage, wicketFilterPath, wicketFilterQuery);
 			defaultPages.put(PARAM_HELP_PAGE, defaultPage.startsWith(wicketFilterPath)
-					? defaultPage
-					: viewPage);
+				? defaultPage : viewPage);
 		}
 
 		defaultPage = (String)defaultPages.get(PARAM_EDIT_PAGE);
@@ -55,8 +68,7 @@
 		{
 			defaultPage = fixWicketUrl(defaultPage, wicketFilterPath, wicketFilterQuery);
 			defaultPages.put(PARAM_EDIT_PAGE, defaultPage.startsWith(wicketFilterPath)
-					? defaultPage
-					: viewPage);
+				? defaultPage : viewPage);
 		}
 	}
 

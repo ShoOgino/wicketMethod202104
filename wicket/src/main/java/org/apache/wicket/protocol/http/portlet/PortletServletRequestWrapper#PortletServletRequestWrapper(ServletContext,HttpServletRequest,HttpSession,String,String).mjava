@@ -1,10 +1,26 @@
+	/**
+	 * FIXME javadoc
+	 * 
+	 * <p>
+	 * Public constructor called when not running in a portlet environment, which is passed in the
+	 * path info instead of deriving it. It overrides the generated request URI from the internal
+	 * constructor.
+	 * 
+	 * @param context
+	 * @param request
+	 * @param proxiedSession
+	 * @param filterPath
+	 *            ???
+	 * @param pathInfo
+	 *            ???
+	 */
 	public PortletServletRequestWrapper(ServletContext context, HttpServletRequest request,
-			HttpSession proxiedSession, String filterPath, String pathInfo)
+		HttpSession proxiedSession, String filterPath, String pathInfo)
 	{
 		this(context, proxiedSession, request, filterPath);
 
 		this.pathInfo = pathInfo;
-		// override requestURI
-		this.requestURI = this.contextPath + this.servletPath + (pathInfo != null ? pathInfo : "");
+		// override requestURI which is setup in the protected constructor
+		requestURI = contextPath + servletPath + (pathInfo != null ? pathInfo : "");
 	}
 

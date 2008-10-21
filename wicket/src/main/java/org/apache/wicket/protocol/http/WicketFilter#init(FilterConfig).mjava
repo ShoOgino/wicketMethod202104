@@ -1,4 +1,20 @@
 	/**
+	 * As per {@link javax.servlet.Filter#init(FilterConfig)}, is called by the web container to
+	 * indicate to a filter that it is being placed into service.
+	 * 
+	 * {@link WicketFilter#init(FilterConfig)} goes through a series of steps of steps to
+	 * initialise;
+	 * <ol>
+	 * <li>Sets up ignore paths
+	 * <li>Records class loaders
+	 * <li>Finds the filter's path - {@link WicketFilter#filterPath}
+	 * <li>Sets up the {@link IWebApplicationFactory} and {@link WebApplication} for this filter,
+	 * including it's initialisation.
+	 * <li>Initialise {@link WebApplication} request listeners.
+	 * <li>Log start of Application
+	 * <li>Detect if running in a {@link Portlet} context and if so intialise the
+	 * {@link WicketFilterPortletContext}
+	 * </ol>
 	 * 
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
@@ -89,10 +105,12 @@
 			portletOnlyFilter = Boolean.valueOf(filterConfig.getInitParameter(PORTLET_ONLY_FILTER))
 				.booleanValue();
 
+			// sets up Portlet context if this application is deployed as a portlet
 			if (isPortletContextAvailable(filterConfig))
 			{
 				filterPortletContext = newWicketFilterPortletContext();
 			}
+			// if WicketFilterPortletContext instantiation succeeded, initialise it
 			if (filterPortletContext != null)
 			{
 				filterPortletContext.initFilter(filterConfig, webApplication);

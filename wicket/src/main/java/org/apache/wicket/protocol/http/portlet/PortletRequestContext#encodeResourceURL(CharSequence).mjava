@@ -1,6 +1,10 @@
 	/**
+	 * Override to encode the path to the resource with the portal specific URL (e.g. adds portlet
+	 * window id etc...) and includes the actual Wicket URL as a URL parameter.
+	 * 
 	 * @see org.apache.wicket.RequestContext#encodeResourceURL(java.lang.CharSequence)
 	 */
+	@Override
 	public CharSequence encodeResourceURL(CharSequence path)
 	{
 		if (path != null)
@@ -12,13 +16,12 @@
 				{
 					HashMap parameters = new HashMap(2);
 					parameters.put(wicketUrlPortletParameter +
-							portletRequest.getPortletMode().toString(), new String[] { path
-							.toString() });
+						portletRequest.getPortletMode().toString(),
+						new String[] { path.toString() });
 					parameters.put(WicketPortlet.PORTLET_RESOURCE_URL_PARAMETER,
-							new String[] { "true" });
+						new String[] { "true" });
 					path = saveLastEncodedUrl(resourceURLFactory.createResourceURL(portletConfig,
-							(RenderRequest)portletRequest, renderResponse, parameters), path
-							.toString());
+						(RenderRequest)portletRequest, renderResponse, parameters), path.toString());
 				}
 				catch (PortletException e)
 				{
