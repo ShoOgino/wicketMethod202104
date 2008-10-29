@@ -12,24 +12,17 @@
 		checkComponentTagAttribute(tag, "type", "checkbox");
 
 		final String value = getValue();
-		if (value != null)
+		final IConverter converter = getConverter(Boolean.class);
+		final Boolean checked = (Boolean)converter.convertToObject(value, getLocale());
+
+		if (Boolean.TRUE.equals(checked))
 		{
-			try
-			{
-				if (Strings.isTrue(value))
-				{
-					tag.put("checked", "checked");
-				}
-				else
-				{
-					// In case the attribute was added at design time
-					tag.remove("checked");
-				}
-			}
-			catch (StringValueConversionException e)
-			{
-				throw new WicketRuntimeException("Invalid boolean value \"" + value + "\"", e);
-			}
+			tag.put("checked", "checked");
+		}
+		else
+		{
+			// In case the attribute was added at design time
+			tag.remove("checked");
 		}
 
 		// Should a roundtrip be made (have onSelectionChanged called) when the
