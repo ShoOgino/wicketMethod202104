@@ -1,31 +1,26 @@
 	/**
-	 * 
 	 * @see org.apache.wicket.resource.loader.IStringResourceLoader#loadStringResource(java.lang.Class,
 	 *      java.lang.String, java.util.Locale, java.lang.String)
 	 */
-	@Override
-	public String loadStringResource(final Class<?> clazz, final String key, final Locale locale,
+	public String loadStringResource(Class<?> clazz, final String key, final Locale locale,
 		final String style)
 	{
-		if (clazz == null)
+		// only care about IValidator subclasses
+		if (clazz == null || !IValidator.class.isAssignableFrom(clazz))
 		{
 			return null;
 		}
 
-		String packageName = clazz.getPackage().getName();
-		packageName = packageName.replace('.', '/');
-
-		// Load the properties associated with the path
 		IPropertiesFactory propertiesFactory = Application.get()
 			.getResourceSettings()
 			.getPropertiesFactory();
 
-		while (packageName.length() > 0)
+		while (true)
 		{
-			// Create the base path
-			String path = packageName + "/" + filename;
+			// figure out the base path for the class
+			String path = clazz.getName().replace('.', '/');
 
-			// Iterator over all the combinations
+			// iterate over all the combinations
 			ResourceNameIterator iter = new ResourceNameIterator(path, style, locale, null);
 			while (iter.hasNext())
 			{
@@ -48,8 +43,14 @@
 				}
 			}
 
-			// Didn't find the key yet, continue searching if possible
-			packageName = Strings.beforeLast(packageName, '/');
+			// Move to the next superclass
+			clazz = clazz.getSuperclass();
+
+			if (clazz == null || Object.class.equals(clazz))
+			{
+				// nothing more to search, done
+				break;
+			}
 		}
 
 		// not found
