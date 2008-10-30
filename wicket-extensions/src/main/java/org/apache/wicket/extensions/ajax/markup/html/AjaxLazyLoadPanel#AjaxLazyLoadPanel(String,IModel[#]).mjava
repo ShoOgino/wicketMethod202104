@@ -6,8 +6,6 @@
 	{
 		super(id, model);
 		setOutputMarkupId(true);
-		final Component loadingComponent = getLoadingComponent("content");
-		add(loadingComponent.setRenderBodyOnly(true));
 
 		add(new AbstractDefaultAjaxBehavior()
 		{
@@ -19,6 +17,7 @@
 				Component component = getLazyLoadComponent("content");
 				AjaxLazyLoadPanel.this.replace(component.setRenderBodyOnly(true));
 				target.addComponent(AjaxLazyLoadPanel.this);
+				setState((byte)2);
 			}
 
 			@Override
@@ -31,7 +30,7 @@
 			@Override
 			public boolean isEnabled(Component component)
 			{
-				return get("content") == loadingComponent;
+				return state < 2;
 			}
 		});
 	}
