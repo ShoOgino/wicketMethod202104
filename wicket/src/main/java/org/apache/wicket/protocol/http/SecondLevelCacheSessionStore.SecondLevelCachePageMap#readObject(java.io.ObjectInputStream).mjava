@@ -8,7 +8,11 @@
 			if (sessionId != null && store instanceof IClusteredPageStore == false)
 			{
 				Object lastPage = s.readObject();
-				if (store instanceof ISerializationAwarePageStore)
+				if (lastPage == null)
+				{
+					log.warn("PageMap deserialization - got nulll lastPage");
+				}
+				else if (store instanceof ISerializationAwarePageStore)
 				{
 					lastPage = ((ISerializationAwarePageStore)store).restoreAfterSerialization((Serializable)lastPage);
 				}
