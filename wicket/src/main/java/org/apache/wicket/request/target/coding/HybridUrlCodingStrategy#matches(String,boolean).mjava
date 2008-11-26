@@ -2,7 +2,7 @@
 	 * @see org.apache.wicket.request.target.coding.AbstractRequestTargetUrlCodingStrategy#matches(java.lang.String)
 	 */
 	@Override
-	public boolean matches(String path)
+	public boolean matches(String path, boolean caseSensitive)
 	{
 		RequestCycle rc = RequestCycle.get();
 
@@ -14,7 +14,7 @@
 			return false;
 		}
 
-		if (path.startsWith(getMountPath()))
+		if (Strings.startsWith(path, getMountPath(), caseSensitive))
 		{
 			/*
 			 * We need to match /mount/point or /mount/point/with/extra/path, but not
