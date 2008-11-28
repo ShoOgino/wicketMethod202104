@@ -41,18 +41,22 @@
 		boolean inPortletContext = false;
 		if (filterPortletContext != null)
 		{
+			// collect the request and response together for convenience handling
 			FilterRequestContext filterRequestContext = new FilterRequestContext(
 				(HttpServletRequest)request, (HttpServletResponse)response);
 
-			// FIXME comment
+			// sets up the FilterRequestContext for this request, such as wrapping the request and
+			// response objects
 			inPortletContext = filterPortletContext.setupFilter(getFilterConfig(),
 				filterRequestContext, getFilterPath((HttpServletRequest)request));
 
+			// Retrieve and assign the portlet wrapped request/response objects
 			httpServletRequest = filterRequestContext.getRequest();
 			httpServletResponse = filterRequestContext.getResponse();
 		}
 		else
 		{
+			// assign plane HTTP servlet request/response objects
 			httpServletRequest = (HttpServletRequest)request;
 			httpServletResponse = (HttpServletResponse)response;
 		}
@@ -69,6 +73,7 @@
 
 		final String relativePath = getRelativePath(httpServletRequest);
 
+		// check against ignore paths and pass on if a match is found
 		if (ignorePaths.size() > 0 && relativePath.length() > 0)
 		{
 			for (String path : ignorePaths)
@@ -95,12 +100,14 @@
 				// Set the webapplication for this thread
 				Application.set(webApplication);
 
+				// last modified time stamp
 				long lastModified = getLastModified(httpServletRequest);
 				if (lastModified == -1)
 				{
 					// servlet doesn't support if-modified-since, no reason
 					// to go through further expensive logic
-					if (doGet(httpServletRequest, httpServletResponse) == false)
+					boolean requestHandledByWicket = doGet(httpServletRequest, httpServletResponse);
+					if (requestHandledByWicket == false)
 					{
 						chain.doFilter(request, response);
 					}
@@ -149,6 +156,7 @@
 		}
 		else
 		{
+			// request isn't for us
 			chain.doFilter(request, response);
 		}
 	}

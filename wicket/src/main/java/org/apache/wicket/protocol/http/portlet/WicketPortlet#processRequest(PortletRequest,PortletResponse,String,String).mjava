@@ -12,13 +12,17 @@
 	protected void processRequest(PortletRequest request, PortletResponse response,
 		String requestType, String pageType) throws PortletException, IOException
 	{
+
 		String wicketURL = null;
 		String wicketFilterPath = null;
 		String wicketFilterQuery = null;
 
+		// FIXME portal comment: sets the name of the parameter to store the wicket url as a request
+		// attribute, so that we can ?...?
 		request.setAttribute(WICKET_URL_PORTLET_PARAMETER_ATTR,
 			getWicketUrlPortletParameter(request));
 
+		// get the actual wicketURL for this request, to be passed onto Wicket core for processing
 		wicketURL = getWicketURL(request, pageType, getDefaultPage(pageType));
 		wicketFilterPath = getWicketConfigParameter(request, WICKET_FILTER_PATH,
 			this.wicketFilterPath);
@@ -27,6 +31,8 @@
 
 		boolean actionRequest = ACTION_REQUEST.equals(requestType);
 
+		// store the response state and request type in the request object, so they can be looked up
+		// from a different context
 		WicketResponseState responseState = new WicketResponseState();
 
 		request.setAttribute(RESPONSE_STATE_ATTR, responseState);
@@ -38,8 +44,12 @@
 			request.setAttribute(PORTLET_RESOURCE_URL_ATTR, portletResourceURL);
 		}
 
+		// FIXME javadoc - need explanation of why action requests are special
+		// need to record the effective wicket url of the rendered result, so that the subsequent
+		// portlet 'view' requests can delegate to wicket to render the correct location/wicket url.
 		if (actionRequest)
 		{
+			// create the request dispatcher, to delegate the request to the wicket filter
 			ServletContext servletContext = getServletContext(this, request, response);
 			HttpServletRequest req = getHttpServletRequest(this, request, response);
 			HttpServletResponse res = getHttpServletResponse(this, request, response);
@@ -66,6 +76,7 @@
 				}
 				try
 				{
+  				    // delegate to wicket filter - this is where the magic happens
 					rd.include(req, res);
 					processActionResponseState(wicketURL, wicketFilterPath, wicketFilterQuery,
 						(ActionRequest)request, (ActionResponse)response, responseState);

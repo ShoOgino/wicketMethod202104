@@ -47,19 +47,21 @@
 
 			checkCharacterEncoding(servletRequest);
 
-			// Create a new webrequest
+			// Create a new webrequest to wrap the request
 			final WebRequest request = webApplication.newWebRequest(servletRequest);
 
 			// Are we using REDIRECT_TO_BUFFER?
 			if (webApplication.getRequestCycleSettings().getRenderStrategy() == IRequestCycleSettings.REDIRECT_TO_BUFFER)
 			{
 				// Try to see if there is a redirect stored
+				// try get an existing session
 				ISessionStore sessionStore = webApplication.getSessionStore();
 				String sessionId = sessionStore.getSessionId(request, false);
 				if (sessionId != null)
 				{
 					BufferedHttpServletResponse bufferedResponse = null;
 					String queryString = servletRequest.getQueryString();
+					// look for buffered response
 					if (!Strings.isEmpty(queryString))
 					{
 						bufferedResponse = webApplication.popBufferedResponse(sessionId,
@@ -70,7 +72,7 @@
 						bufferedResponse = webApplication.popBufferedResponse(sessionId,
 							relativePath);
 					}
-
+					// if a buffered response was found
 					if (bufferedResponse != null)
 					{
 						bufferedResponse.writeTo(servletResponse);
@@ -81,6 +83,7 @@
 				}
 			}
 
+			// either not REDIRECT_TO_BUFFER or no waiting buffer found - begin the request cycle
 			WebResponse response = null;
 			boolean externalCall = !Application.exists();
 			try
