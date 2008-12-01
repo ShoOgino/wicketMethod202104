@@ -10,21 +10,21 @@
 		if ((key != null) && (key.length() > 0))
 		{
 			// Go through mappers.
-			Map mapper;
+			Map<String,String> mapper;
 			String charset;
 
-			for (int i = 0; i < mappers.length; i++)
+			for (int i = 0; i < mappers.size(); i++)
 			{
-				mapper = mappers[i];
+				mapper = mappers.get(i);
 				if (mapper != null)
 				{
-					charset = (String)mapper.get(key);
+					charset = mapper.get(key);
 					if (charset != null)
 					{
 						// Update the cache.
 						if (i > MAP_CACHE)
 						{
-							mappers[MAP_CACHE].put(key, charset);
+							mappers.get(MAP_CACHE).put(key, charset);
 						}
 
 						return charset;
@@ -33,7 +33,7 @@
 			}
 
 			// Not found, add an empty string to the cache.
-			mappers[MAP_CACHE].put(key, "");
+			mappers.get(MAP_CACHE).put(key, "");
 		}
 
 		return "";
