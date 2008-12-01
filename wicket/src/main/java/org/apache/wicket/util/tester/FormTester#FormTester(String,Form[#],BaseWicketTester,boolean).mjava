@@ -24,7 +24,7 @@
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public void onFormComponent(final FormComponent formComponent)
+			public void onFormComponent(final FormComponent<?> formComponent)
 			{
 				// do nothing for invisible component
 				if (!formComponent.isVisibleInHierarchy())
@@ -57,9 +57,9 @@
 				{
 					final String[] modelValues = formComponent.getValue().split(
 						FormComponent.VALUE_SEPARATOR);
-					for (int i = 0; i < modelValues.length; i++)
+					for (String modelValue : modelValues)
 					{
-						addFormComponentValue(formComponent, modelValues[i]);
+						addFormComponentValue(formComponent, modelValue);
 					}
 				}
 				else if (formComponent instanceof CheckGroup)
