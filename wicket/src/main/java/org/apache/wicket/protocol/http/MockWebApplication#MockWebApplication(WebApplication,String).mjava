@@ -71,7 +71,15 @@
 		servletSession = new MockHttpSession(context);
 		servletSession.setTemporary(initializeHttpSessionAsTemporary());
 		servletRequest = new MockHttpServletRequest(this.application, servletSession, context);
-		servletResponse = new MockHttpServletResponse(servletRequest);
+		servletResponse = new MockHttpServletResponse(servletRequest)
+		{
+			@Override
+			public void addCookie(Cookie cookie)
+			{
+				super.addCookie(cookie);
+				cookiesOfThisSession.add(cookie);
+			}
+		};
 
 		// Construct request and response using factories
 		wicketRequest = this.application.newWebRequest(servletRequest);
