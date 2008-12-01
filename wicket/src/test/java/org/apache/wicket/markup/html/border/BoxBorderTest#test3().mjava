@@ -3,15 +3,16 @@
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings({"unchecked"})
 	public void test3() throws Exception
 	{
 		executeTest(BoxBorderTestPage_3.class, "BoxBorderTestPage_ExpectedResult_3.html");
 
 		Border border = (Border)tester.getLastRenderedPage().get("border");
 		assertNotNull(border);
-		Form form = (Form)tester.getLastRenderedPage().get("border:myForm");
+		Form<?> form = (Form<?>)tester.getLastRenderedPage().get("border:myForm");
 
-		TextField input = (TextField)tester.getLastRenderedPage().get("border:name");
+		TextField<String> input = (TextField<String>)tester.getLastRenderedPage().get("border:name");
 		assertEquals("", input.getDefaultModelObjectAsString());
 
 		tester.setupRequestAndResponse();
@@ -22,7 +23,7 @@
 
 		tester.processRequestCycle();
 
-		input = (TextField)tester.getLastRenderedPage().get("border:name");
+		input = (TextField<String>)tester.getLastRenderedPage().get("border:name");
 		assertEquals("jdo", input.getDefaultModelObjectAsString());
 	}
 

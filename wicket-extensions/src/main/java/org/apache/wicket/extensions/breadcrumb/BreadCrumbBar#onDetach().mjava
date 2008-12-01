@@ -1,19 +1,18 @@
 	/**
 	 * @see org.apache.wicket.Component#onDetach()
 	 */
+	@Override
 	protected void onDetach()
 	{
 		super.onDetach();
-		for (Iterator i = decorated.allBreadCrumbParticipants().iterator(); i.hasNext();)
+		for (IBreadCrumbParticipant crumb : decorated.allBreadCrumbParticipants())
 		{
-			IBreadCrumbParticipant crumb = (IBreadCrumbParticipant)i.next();
 			if (crumb instanceof Component)
 			{
-				((Component)crumb).detach();
-			}
-			else if (crumb instanceof IDetachable)
+				((Component) crumb).detach();
+			} else if (crumb instanceof IDetachable)
 			{
-				((IDetachable)crumb).detach();
+				((IDetachable) crumb).detach();
 			}
 		}
 	}
