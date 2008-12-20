@@ -27,7 +27,6 @@
 		Matcher matchIPV4Pat = Pattern.compile(IP_V4_DOMAIN_PATTERN).matcher(hostIP);
 		ipV4Address = matchIPV4Pat.matches();
 
-
 		if (ipV4Address)
 		{
 			// this is an IP address so check components
@@ -93,24 +92,22 @@
 					segmentCount++;
 				}
 			}
-			String topLevel = domainSegment[segmentCount - 1];
-			if (topLevel.length() < 2 || topLevel.length() > 4)
-			{
-				return false;
-			}
 
-			// First letter of top level must be a alpha
-			Matcher alphaMatcher = Pattern.compile(ALPHA_PATTERN).matcher(topLevel.substring(0, 1));
-
-			if (!alphaMatcher.matches())
+			if (segmentCount > 1)
 			{
-				return false;
-			}
+				String topLevel = domainSegment[segmentCount - 1];
+				if (topLevel.length() < 2 || topLevel.length() > 4)
+				{
+					return false;
+				}
 
-			// Make sure there's a host name preceding the authority.
-			if (segmentCount < 2)
-			{
-				return false;
+				// First letter of top level must be a alpha
+				Matcher alphaMatcher = Pattern.compile(ALPHA_PATTERN).matcher(
+					topLevel.substring(0, 1));
+				if (!alphaMatcher.matches())
+				{
+					return false;
+				}
 			}
 		}
 
