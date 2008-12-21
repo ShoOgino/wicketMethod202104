@@ -1,0 +1,67 @@
+	/**
+	 * @param image
+	 *            The image to process
+	 * @throws IllegalArgumentException
+	 *             Thrown if image is not TYPE_INT_ARGB
+	 */
+	OpaqueRegion(final BufferedImage image)
+	{
+		// Check image type
+		if (image.getType() != BufferedImage.TYPE_INT_ARGB)
+		{
+			throw new IllegalArgumentException("image must be TYPE_INT_ARGB");
+		}
+
+		// Initialize rectangle list
+		rectangles = new ArrayList<Rectangle>();
+
+		// Get color model for image
+		final ColorModel colorModel = image.getColorModel();
+
+		// Process scan-lines
+		final int dx = image.getWidth();
+		final int dy = image.getHeight();
+		for (int y = 0; y < dy; y++)
+		{
+			// No start line yet
+			int startx = -1;
+
+			// Process pixels in scan line
+			for (int x = 0; x < dx; x++)
+			{
+				// Get pixel
+				final int pixel = image.getRGB(x, y);
+
+				// If the pixel is opaque
+				if (colorModel.getAlpha(pixel) > 0)
+				{
+					// If no opaque rectangle has been started
+					if (startx == -1)
+					{
+						// start one at the current pixel
+						startx = x;
+					}
+				}
+				else
+				{
+					// Pixel is transparent. If we started a rectangle
+					if (startx != -1)
+					{
+						// close the rectangle and add it to the list
+						rectangles.add(new Rectangle(startx, y, x - startx - 1, 1));
+
+						// The next rectangle is not started yet
+						startx = -1;
+					}
+				}
+			}
+
+			// If there is a rectangle open still
+			if (startx != -1)
+			{
+				// close the rectangle and add it to the list
+				rectangles.add(new Rectangle(startx, y, dx - startx - 1, 1));
+			}
+		}
+	}
+
