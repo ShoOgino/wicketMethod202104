@@ -1,4 +1,4 @@
-	private static Map<Class<?>, Map<String, IGetAndSet>> getClassesToGetAndSetters()
+	private static IClassCache getClassesToGetAndSetters()
 	{
 		Object key = null;
 		if (Application.exists())
@@ -9,14 +9,10 @@
 		{
 			key = PropertyResolver.class;
 		}
-		Map<Class<?>, Map<String, IGetAndSet>> result = applicationToClassesToGetAndSetters.get(key);
+		IClassCache result = applicationToClassesToGetAndSetters.get(key);
 		if (result == null)
 		{
-			// Don't synchronize this - Doesn't matter if we create two of them,
-			// as it's only a cache and the first will go out of scope and get
-			// GC'ed.
-			result = Generics.newConcurrentHashMap(64);
-			applicationToClassesToGetAndSetters.put(key, result);
+			applicationToClassesToGetAndSetters.put(key, result = new DefaultClassCache());
 		}
 		return result;
 	}
