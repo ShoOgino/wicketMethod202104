@@ -4,7 +4,10 @@
 	 */
 	public boolean accept(Class<?> scope, String path)
 	{
-		String absolutePath = Packages.absolutePath(scope, path);
-		return acceptAbsolutePath(absolutePath);
+		IPackageResourceGuard guard = Application.get()
+			.getResourceSettings()
+			.getPackageResourceGuard();
+
+		return guard.accept(scope, path);
 	}
 

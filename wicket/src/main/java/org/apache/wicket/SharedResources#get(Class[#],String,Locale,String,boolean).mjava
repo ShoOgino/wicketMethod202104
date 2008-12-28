@@ -16,6 +16,12 @@
 	public final Resource get(final Class<?> scope, final String name, final Locale locale,
 		final String style, boolean exact)
 	{
+		if (exact)
+		{
+			final String resourceKey = resourceKey(scope, name, locale, style);
+			return get(resourceKey);
+		}
+
 		// 1. Look for fully qualified entry with locale and style
 		if (locale != null && style != null)
 		{
@@ -24,10 +30,6 @@
 			if (resource != null)
 			{
 				return resource;
-			}
-			if (exact)
-			{
-				return null;
 			}
 		}
 
@@ -40,10 +42,6 @@
 			{
 				return resource;
 			}
-			if (exact)
-			{
-				return null;
-			}
 		}
 
 		// 3. Look for entry without locale
@@ -54,10 +52,6 @@
 			if (resource != null)
 			{
 				return resource;
-			}
-			if (exact)
-			{
-				return null;
 			}
 		}
 

@@ -17,16 +17,11 @@
 	{
 		// Store resource
 		final String key = resourceKey(scope, name, locale, style);
-		synchronized (resourceMap)
+		if (resourceMap.putIfAbsent(key, resource) == null)
 		{
-			Resource value = resourceMap.get(key);
-			if (value == null)
+			if (log.isDebugEnabled())
 			{
-				resourceMap.put(key, resource);
-				if (log.isDebugEnabled())
-				{
-					log.debug("added shared resource " + key);
-				}
+				log.debug("added shared resource " + key);
 			}
 		}
 	}
