@@ -16,6 +16,7 @@
 		final HtmlHeaderContainer container)
 	{
 		page.renderHead(container);
+
 		// Make sure all Components interested in contributing to the header
 		// and there attached behaviors are asked.
 		page.visitChildren(new IVisitor<Component>()
@@ -30,10 +31,7 @@
 					component.renderHead(container);
 					return IVisitor.CONTINUE_TRAVERSAL;
 				}
-				else
-				{
-					return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
-				}
+				return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
 			}
 		});
 	}
