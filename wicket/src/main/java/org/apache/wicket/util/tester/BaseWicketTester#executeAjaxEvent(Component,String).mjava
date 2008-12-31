@@ -36,6 +36,8 @@
 	 */
 	public void executeAjaxEvent(Component component, String event)
 	{
+		setCreateAjaxRequest(true);
+
 		String failMessage = "Can't execute event on a component which is null.";
 		notNull(failMessage, component);
 
@@ -71,11 +73,8 @@
 		// that the request is not an ajax request -> we have to set the header manually
 		if (!requestCycle.getWebRequest().isAjax())
 		{
-			HttpServletRequest req = requestCycle.getWebRequest().getHttpServletRequest();
-			if (req instanceof MockHttpServletRequest)
-			{
-				((MockHttpServletRequest)req).addHeader("Wicket-Ajax", "Yes");
-			}
+			throw new IllegalStateException(
+				"The ServletWebRequest was created without wicket-ajax header. Please use tester.setCreateAjaxRequest(true)");
 		}
 
 		// If the event is an FormSubmitBehavior then also "submit" the form

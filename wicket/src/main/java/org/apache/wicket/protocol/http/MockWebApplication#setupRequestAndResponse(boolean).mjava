@@ -23,8 +23,11 @@
 		wicketResponse = application.newWebResponse(servletResponse);
 		WebRequestCycle requestCycle = createRequestCycle();
 		if (!initializeHttpSessionAsTemporary())
+		{
 			application.getSessionStore().bind(wicketRequest, wicketSession);
+		}
 		wicketResponse.setAjax(wicketRequest.isAjax());
+		createAjaxRequest = false;
 		return requestCycle;
 	}
 

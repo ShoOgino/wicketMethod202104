@@ -3,24 +3,9 @@
 	 * 
 	 * @see org.apache.wicket.protocol.http.WebRequest#isAjax()
 	 */
-	// TODO matej? should we have a simple way of supporting other ajax things?
-	// or should they just set that same header??
 	@Override
-	public boolean isAjax()
+	public final boolean isAjax()
 	{
-		String ajaxHeader = httpServletRequest.getHeader("Wicket-Ajax");
-		if (Strings.isEmpty(ajaxHeader) == false)
-		{
-			try
-			{
-				return Strings.isTrue(ajaxHeader);
-			}
-			catch (StringValueConversionException e)
-			{
-				// We are not interested in this exception but we log it anyway
-				log.debug("Couldn't convert the Wicket-Ajax header: " + ajaxHeader);
-			}
-		}
-		return false;
+		return ajax;
 	}
 
