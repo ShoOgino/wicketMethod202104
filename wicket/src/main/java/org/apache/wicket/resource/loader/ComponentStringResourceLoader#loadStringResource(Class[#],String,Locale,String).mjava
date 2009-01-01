@@ -11,11 +11,14 @@
 			return null;
 		}
 
-		// Load the properties associated with the path
-		IPropertiesFactory propertiesFactory = Application.get()
-			.getResourceSettings()
-			.getPropertiesFactory();
+		if (log.isDebugEnabled())
+		{
+			log.debug("key: '" + key + "'; class: '" + clazz.getName() + "'; locale: '" + locale +
+				"'; Style: '" + style + "'");
+		}
 
+		// Load the properties associated with the path
+		IPropertiesFactory propertiesFactory = getPropertiesFactory();
 		while (true)
 		{
 			// Create the base path
@@ -36,10 +39,26 @@
 					{
 						if (log.isDebugEnabled())
 						{
-							log.debug("Found resource from: " + props + "; key: " + key);
+							log.debug("Found property '" + key + "' in: '" + props + "'" +
+								"; value: '" + value + "'");
 						}
 
 						return value;
+					}
+					else
+					{
+						if (log.isDebugEnabled())
+						{
+							log.debug("Found properties file: '" + newPath +
+								"' but it doesn't contain the property");
+						}
+					}
+				}
+				else
+				{
+					if (log.isDebugEnabled())
+					{
+						// log.debug("Properties file not found: '" + newPath + "'");
 					}
 				}
 			}

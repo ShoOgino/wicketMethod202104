@@ -5,51 +5,27 @@
 		{
 			final FormComponent<T> formComponent = FormComponent.this;
 
-			// retrieve prefix that will be used to construct message keys
-			String prefix = formComponent.getValidatorKeyPrefix();
-			if (Strings.isEmpty(prefix))
-			{
-				prefix = "";
-			}
+			// Use the following log4j config for detailed logging on the property resolution
+			// process
+			// log4j.logger.org.apache.wicket.resource.loader=DEBUG
+			// log4j.logger.org.apache.wicket.Localizer=DEBUG
 
 			final Localizer localizer = formComponent.getLocalizer();
 
-			String resource = prefix + getId() + "." + key;
-
-			// First use the parent for resolving so that
-			// form1.textfield1.Required can be used.
-
-			String message = getString(localizer, resource, formComponent.getParent());
+			// retrieve prefix that will be used to construct message keys
+			String prefix = formComponent.getValidatorKeyPrefix();
+			String message = null;
+			if (!Strings.isEmpty(prefix))
+			{
+				String resource = prefix + "." + key;
+				message = getString(localizer, resource, formComponent);
+			}
 
 			// If not found, than ...
 			if (Strings.isEmpty(message))
 			{
 				// Try a variation of the resource key
-				resource = prefix + key;
-
-				message = getString(localizer, resource, formComponent.getParent());
-			}
-
-			if (Strings.isEmpty(message))
-			{
-				// If still empty then use default
-
-				resource = prefix + getId() + "." + key;
-
-				// Note: It is important that the default value of "" is
-				// provided
-				// to getString() not to throw a MissingResourceException or to
-				// return a default string like "[Warning: String ..."
-				message = getString(localizer, resource, formComponent);
-
-				// If not found, than ...
-				if (Strings.isEmpty(message))
-				{
-					// Try a variation of the resource key
-
-					resource = prefix + key;
-					message = getString(localizer, resource, formComponent);
-				}
+				message = getString(localizer, key, formComponent);
 			}
 
 			// convert empty string to null in case our default value of "" was
