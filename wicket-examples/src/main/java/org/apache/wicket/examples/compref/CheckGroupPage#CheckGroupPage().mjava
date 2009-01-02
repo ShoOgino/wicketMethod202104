@@ -3,7 +3,6 @@
 	 */
 	public CheckGroupPage()
 	{
-
 		final CheckGroup<Person> group = new CheckGroup<Person>("group", new ArrayList<Person>());
 		Form<?> form = new Form("form")
 		{
@@ -20,7 +19,9 @@
 		ListView<Person> persons = new ListView<Person>("persons",
 			ComponentReferenceApplication.getPersons())
 		{
-
+			/**
+			 * @see org.apache.wicket.markup.html.list.ListView#populateItem(org.apache.wicket.markup.html.list.ListItem)
+			 */
 			@Override
 			protected void populateItem(ListItem<Person> item)
 			{
@@ -33,6 +34,7 @@
 
 		};
 
+		persons.setReuseItems(true);
 		group.add(persons);
 
 		add(new FeedbackPanel("feedback"));
