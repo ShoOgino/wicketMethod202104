@@ -34,6 +34,13 @@
 					// stack
 					response.reset();
 					currentStep = RESPOND;
+
+					// wicket-2013: create a new session if invalidated
+					if (getSession().isSessionInvalidated())
+					{
+						session = null;
+						Session.unset();
+					}
 				}
 			}
 		}
