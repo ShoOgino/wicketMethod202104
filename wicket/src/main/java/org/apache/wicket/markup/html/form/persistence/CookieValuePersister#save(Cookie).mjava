@@ -25,10 +25,12 @@
 				cookie.setDomain(domain);
 			}
 
-			cookie.setPath(getWebRequest().getHttpServletRequest().getContextPath());
-			// cookie.setPath("/");
-			// cookie.setPath(getWebRequest().getContextPath());
-
+			String path = getWebRequest().getHttpServletRequest().getContextPath();
+			if (Strings.isEmpty(path))
+			{
+				path = "/";
+			}
+			cookie.setPath(path);
 			cookie.setVersion(getSettings().getVersion());
 			cookie.setSecure(getSettings().getSecure());
 
@@ -36,7 +38,8 @@
 
 			if (log.isDebugEnabled())
 			{
-				log.debug("saved: " + cookieToDebugString(cookie));
+				log.debug("Cookie saved: " + cookieToDebugString(cookie) + "; request URI=" +
+					getWebRequest().getHttpServletRequest().getRequestURI());
 			}
 
 			return cookie;
