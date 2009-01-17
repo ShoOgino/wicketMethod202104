@@ -10,29 +10,34 @@
 			page.startComponentRender(component);
 		}
 
-		// Let component render itself
-		if (component instanceof Page)
+		// Render the component
+		try
 		{
-			// Use the default Page request target, if component is a Page
-			new PageRequestTarget((Page)component).respond(requestCycle);
-		}
-		else
-		{
-			// Render the component
-			try
+			// Let pages render itself
+			if (component instanceof Page)
+			{
+				// Use the default Page request target, if component is a Page
+				new PageRequestTarget((Page)component).respond(requestCycle);
+			}
+			else
 			{
 				// Render the component
 				component.renderComponent();
 			}
-			finally
-			{
-				component.getPage().detach();
-			}
 		}
-
-		if (page != null)
+		finally
 		{
-			page.endComponentRender(component);
+			if (page != null)
+			{
+				try
+				{
+					page.endComponentRender(component);
+				}
+				finally
+				{
+					page.detach();
+				}
+			}
 		}
 	}
 
