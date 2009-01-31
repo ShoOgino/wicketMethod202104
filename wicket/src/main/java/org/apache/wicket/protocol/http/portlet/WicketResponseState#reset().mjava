@@ -1,8 +1,20 @@
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletResponseWrapper#reset()
+	 */
 	public void reset()
 	{
-		errorCode = 0;
-		errorMessage = null;
-		statusCode = 0;
-		redirectLocation = null;
+		resetBuffer(); // fails if committed
+		headers = null;
+		cookies = null;
+		hasStatus = false;
+		contentLength = -1;
+		if (printWriter == null)
+		{
+			contentType = null;
+			characterEncoding = null;
+			locale = null;
+		}
 	}
 

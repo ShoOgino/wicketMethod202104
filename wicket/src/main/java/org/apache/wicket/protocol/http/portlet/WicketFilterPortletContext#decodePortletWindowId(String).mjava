@@ -23,6 +23,19 @@
 			{
 				portletWindowId = pathInfo.substring(getServletResourceUrlPortletWindowIdPrefix().length());
 			}
+
+			if (portletWindowId.length() > 2 && portletWindowId.charAt(0) == ':')
+			{
+				// Support for JBoss Portal which provides portletWindowIds containing a '/'
+				// character which cannot be used within a path parameter.
+				// slash encoder is provided as prefix of the real portletWindowId
+				char slashEncoder = portletWindowId.charAt(2);
+				portletWindowId = portletWindowId.substring(2);
+				if (slashEncoder != ':')
+				{
+					portletWindowId = portletWindowId.replace(slashEncoder, '/');
+				}
+			}
 		}
 		else
 		// pathInfo was empty or didn't start with the window id prefix

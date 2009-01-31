@@ -1,0 +1,26 @@
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletResponseWrapper#resetBuffer()
+	 */
+	public void resetBuffer()
+	{
+		failIfCommitted();
+		if (outputStream != null)
+		{
+			try
+			{
+				outputStream.flush();
+			}
+			catch (Exception e)
+			{
+			}
+			byteOutputBuffer.reset();
+		}
+		else if (printWriter != null)
+		{
+			printWriter.flush();
+			charOutputBuffer.reset();
+		}
+	}
+

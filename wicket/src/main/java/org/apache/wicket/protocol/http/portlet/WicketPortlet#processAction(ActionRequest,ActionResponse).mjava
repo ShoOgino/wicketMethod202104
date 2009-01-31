@@ -1,12 +1,17 @@
 	/**
 	 * Delegates to {@link #processRequest(PortletRequest, PortletResponse, String, String)}.
 	 * 
+	 * <p>
+	 * Stores the {@link ActionResponse} so that {@link PortletEventService#broadcast} can send
+	 * events using {@link ActionResponse#setEvent}
+	 * 
+	 * @see PortletEventService#broadcastToPortletListeners
 	 * @see #processRequest(PortletRequest, PortletResponse, String, String)
 	 */
 	@Override
 	public void processAction(ActionRequest request, ActionResponse response)
 		throws PortletException, IOException
 	{
-		processRequest(request, response, ACTION_REQUEST, PARAM_ACTION_PAGE);
+		processRequest(request, response, PARAM_ACTION_PAGE);
 	}
 
