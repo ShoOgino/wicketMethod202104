@@ -1,12 +1,50 @@
 	private boolean removeBehavior(final IBehavior behavior)
 	{
 		final int start = getFlag(FLAG_MODEL_SET) ? 1 : 0;
-		for (int i = start; i < data_length(); ++i)
+		final int len = data_length();
+		for (int i = start; i < len; ++i)
 		{
 			Object o = data_get(i);
-			if (o.equals(behavior))
+			if (o != null && o.equals(behavior))
 			{
-				data_remove(i);
+				// behaviors that produce urls depend on their index in the behaviors list,
+				// therefore we cannot blindly shrink the array by removing this behavior's slot.
+				// Instead we check if there are any behaviors downstream that will be affected by
+				// this, and if there are we set this behavior's slot to null instead of removing it
+				// to preserve indexes of behaviors downstream.
+				boolean listenersAfter = false;
+				for (int j = i + 1; j < len; j++)
+				{
+					if (data_get(j) instanceof IBehaviorListener)
+					{
+						listenersAfter = true;
+						break;
+					}
+				}
+
+				if (listenersAfter)
+				{
+					data_set(i, null);
+				}
+				else
+				{
+					data_remove(i);
+
+					if (o instanceof IBehaviorListener)
+					{
+						// this was a listener which mightve caused holes in the array, see if we
+						// can clean them up. notice: at this point we already know there are no
+						// listeners that can be affected by index change downstream because this is
+						// the last one in the array
+						for (int j = i - 1; j >= start; j--)
+						{
+							if (data_get(j) == null)
+							{
+								data_remove(j);
+							}
+						}
+					}
+				}
 				return true;
 			}
 		}
