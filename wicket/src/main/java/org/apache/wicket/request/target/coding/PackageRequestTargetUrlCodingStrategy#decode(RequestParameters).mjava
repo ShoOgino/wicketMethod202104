@@ -32,7 +32,7 @@
 		try
 		{
 			bookmarkablePageClass = Session.get().getClassResolver().resolveClass(
-					bookmarkablePageClassName);
+				bookmarkablePageClassName);
 		}
 		catch (Exception e)
 		{
@@ -40,7 +40,7 @@
 			return null;
 		}
 		PageParameters parameters = new PageParameters(decodeParameters(parametersFragment,
-				requestParameters.getParameters()));
+			requestParameters.getParameters()));
 
 		String pageMapName = (String)parameters.remove(WebRequestCodingStrategy.PAGEMAP);
 		pageMapName = WebRequestCodingStrategy.decodePageMapName(pageMapName);
@@ -49,15 +49,14 @@
 		// do some extra work for checking whether this is a normal request to a
 		// bookmarkable page, or a request to a stateless page (in which case a
 		// wicket:interface parameter should be available
-		final String interfaceParameter = (String)parameters
-				.remove(WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
+		final String interfaceParameter = (String)parameters.remove(WebRequestCodingStrategy.INTERFACE_PARAMETER_NAME);
 
 		if (interfaceParameter != null)
 		{
 			WebRequestCodingStrategy.addInterfaceParameters(interfaceParameter, requestParameters);
 			return new BookmarkableListenerInterfaceRequestTarget(pageMapName,
-					bookmarkablePageClass, parameters, requestParameters.getComponentPath(),
-					requestParameters.getInterfaceName(), requestParameters.getVersionNumber());
+				bookmarkablePageClass, parameters, requestParameters.getComponentPath(),
+				requestParameters.getInterfaceName(), requestParameters.getVersionNumber());
 		}
 		else
 		{
