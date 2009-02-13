@@ -26,7 +26,7 @@
 		boolean addedToPage = false;
 		if (component != null)
 		{
-			if ((component instanceof Page) || null != component.findParent(Page.class))
+			if ((component instanceof Page) || (null != component.findParent(Page.class)))
 			{
 				addedToPage = true;
 			}
@@ -46,7 +46,7 @@
 
 		// If this component is not yet added to page we do not want to check
 		// cache as we can generate an invalid cache key
-		if ((cache != null) && addedToPage)
+		if ((cache != null) && ((component == null) || addedToPage))
 		{
 			cacheKey = getCacheKey(key, component);
 		}
