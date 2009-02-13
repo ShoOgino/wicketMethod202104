@@ -1,5 +1,7 @@
 	/**
 	 * Creates a new Page using the given constructor and argument.
+	 * <p>
+	 * Note that you can not create a Page with PageParameters and pass null.
 	 * 
 	 * @param constructor
 	 *            The constructor to invoke
@@ -10,14 +12,19 @@
 	 *             Thrown if the Page cannot be instantiated using the given constructor and
 	 *             argument.
 	 */
-	private final Page newPage(final Constructor<?> constructor, final Object argument)
+	private final Page createPage(final Constructor<? extends Page> constructor,
+		final PageParameters argument)
 	{
 		try
 		{
 			if (argument != null)
-				return (Page)constructor.newInstance(new Object[] { argument });
+			{
+				return constructor.newInstance(new Object[] { argument });
+			}
 			else
-				return (Page)constructor.newInstance(new Object[] {});
+			{
+				return constructor.newInstance();
+			}
 		}
 		catch (InstantiationException e)
 		{
