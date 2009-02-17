@@ -15,7 +15,10 @@
 		}
 		else
 		{
+			// wicket-2061: getURL() returns a properly <b>decoded</b> URL. But we need is a
+			// properly <b>encoded</b> URL.
 			interceptContinuationURL = "/" + cycle.getRequest().getURL();
+			interceptContinuationURL = WicketURLEncoder.FULL_PATH_INSTANCE.encode(interceptContinuationURL);
 		}
 
 		// Page map is dirty

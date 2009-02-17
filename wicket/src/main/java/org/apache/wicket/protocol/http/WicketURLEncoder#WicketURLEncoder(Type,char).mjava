@@ -3,9 +3,13 @@
 	 * 
 	 * @param type
 	 *            encoder type
+	 * @param stopChar
+	 *            stop encoding when stopChar found
 	 */
-	protected WicketURLEncoder(Type type)
+	protected WicketURLEncoder(Type type, char stopChar)
 	{
+		this.stopChar = stopChar;
+
 		/*
 		 * This note from java.net.URLEncoder ==================================
 		 * 
@@ -48,10 +52,10 @@
 		 * sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "=" // -- PATH
 		 * COMPONENT -- //
 		 * 
-		 * path = (see RFC for all variations) path-abempty = *( "/" segment ) segment = *pchar
-		 * pchar = unreserved / pct-encoded / sub-delims / ":" / "@" // -- QUERY COMPONENT -- //
+		 * path = (see RFC for all variations) path-abempty =( "/" segment ) segment =pchar pchar =
+		 * unreserved / pct-encoded / sub-delims / ":" / "@" // -- QUERY COMPONENT -- //
 		 * 
-		 * query = *( pchar / "/" / "?" )
+		 * query =( pchar / "/" / "?" )
 		 */
 
 		// unreserved
@@ -97,9 +101,9 @@
 			// this code consistent with java.net.URLEncoder version
 			case QUERY :
 				dontNeedEncoding.set(' '); /*
-				 * encoding a space to a + is done in the encode()
-				 * method
-				 */
+											 * encoding a space to a + is done in the encode()
+											 * method
+											 */
 				dontNeedEncoding.set('/'); // to allow direct passing of URL in query
 				dontNeedEncoding.set('?'); // to allow direct passing of URL in query
 				break;
@@ -112,6 +116,18 @@
 				dontNeedEncoding.set('&');
 				dontNeedEncoding.set('=');
 				dontNeedEncoding.set('+');
+				break;
+
+			// same as path, but '/' will not be encoded
+			case FULL_PATH :
+				// encode ' ' with a % instead of + in path portion
+
+				// path component sub-delim values we do not need to escape
+				dontNeedEncoding.set('&');
+				dontNeedEncoding.set('=');
+				dontNeedEncoding.set('+');
+
+				dontNeedEncoding.set('/');
 				break;
 		}
 	}

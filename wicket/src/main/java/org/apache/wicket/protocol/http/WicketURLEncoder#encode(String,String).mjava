@@ -14,7 +14,9 @@
 		CharArrayWriter charArrayWriter = new CharArrayWriter();
 
 		if (enc == null)
+		{
 			throw new NullPointerException("charsetName");
+		}
 
 		try
 		{
@@ -29,11 +31,18 @@
 			throw new WicketRuntimeException(new UnsupportedEncodingException(enc));
 		}
 
+		boolean stopEncoding = false;
 		for (int i = 0; i < s.length();)
 		{
 			int c = s.charAt(i);
+
+			if ((stopEncoding == false) && (c == stopChar))
+			{
+				stopEncoding = true;
+			}
+
 			// System.out.println("Examining character: " + c);
-			if (dontNeedEncoding.get(c))
+			if ((stopEncoding == true) || dontNeedEncoding.get(c))
 			{
 				if (c == ' ')
 				{
