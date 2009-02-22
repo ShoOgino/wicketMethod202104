@@ -10,7 +10,25 @@
 		// Create shared resources repository
 		sharedResources = new SharedResources(this);
 
-		// TODO why not move to internalInit??
-		initializeComponentInstantiationListener();
+		// Install default component instantiation listener that uses
+		// authorization strategy to check component instantiations.
+		addComponentInstantiationListener(new IComponentInstantiationListener()
+		{
+			/**
+			 * @see org.apache.wicket.application.IComponentInstantiationListener#onInstantiation(org.apache.wicket.Component)
+			 */
+			public void onInstantiation(final Component component)
+			{
+				final Class<? extends Component> cl = component.getClass();
+				// If component instantiation is not authorized
+				if (!Session.get().getAuthorizationStrategy().isInstantiationAuthorized(cl))
+				{
+					// then call any unauthorized component instantiation
+					// listener
+					getSecuritySettings().getUnauthorizedComponentInstantiationListener()
+						.onUnauthorizedInstantiation(component);
+				}
+			}
+		});
 	}
 
