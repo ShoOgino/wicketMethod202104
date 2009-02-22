@@ -31,17 +31,15 @@
 			{
 				if (formComponent.isVisible())
 				{
-					// !(formComponent instanceof Button) &&
 					if (!(formComponent instanceof RadioGroup) &&
-						!(formComponent instanceof CheckGroup))
+						!(formComponent instanceof CheckGroup) &&
+						!(formComponent.getClass().isAssignableFrom(Button.class)))
 					{
 						String name = formComponent.getInputName();
 						String value = formComponent.getValue();
 
-						// Set request parameter with the field value, but do not
-						// modify an existing
-						// request parameter explicitly set using
-						// FormTester.setValue()
+						// Set request parameter with the field value, but do not modify an existing
+						// request parameter explicitly set using FormTester.setValue()
 						if (getServletRequest().getParameterMap().get(name) == null)
 						{
 							getServletRequest().setParameter(name, value);
