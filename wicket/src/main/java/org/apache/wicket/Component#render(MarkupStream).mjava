@@ -19,6 +19,13 @@
 
 		setMarkupStream(markupStream);
 
+		if (markupStream != null)
+		{
+			// Guarantee that the markupStream is set and determineVisibility not yet tested
+			// See WICKET-2049
+			markupStream.getTag().onBeforeRender(this, markupStream);
+		}
+
 		// Determine if component is visible using it's authorization status
 		// and the isVisible property.
 		if (determineVisibility())
