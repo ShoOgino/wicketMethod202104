@@ -14,6 +14,14 @@
 			try
 			{
 				oos = objectStreamFactory.newObjectOutputStream(out);
+				if (Application.exists())
+				{
+					oos.writeObject(Application.get().getApplicationKey());
+				}
+				else
+				{
+					oos.writeObject(null);
+				}
 				oos.writeObject(object);
 			}
 			finally
