@@ -14,26 +14,8 @@
 		add(new Label("id", session.getId()));
 		add(new Label("locale", session.getLocale().toString()));
 		add(new Label("style", session.getStyle() == null ? "[None]" : session.getStyle()));
-		add(new Label("size", new Model<Bytes>()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Bytes getObject()
-			{
-				return Bytes.bytes(Objects.sizeof(session));
-			}
-		}));
-		add(new Label("totalSize", new Model<Bytes>()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Bytes getObject()
-			{
-				return Bytes.bytes(session.getSizeInBytes());
-			}
-		}));
+		add(new Label("size", new SessionSizeModel(session)));
+		add(new Label("totalSize", new SessionTotalSizeModel(session)));
 
 		// Get pagemaps
 		final List<IPageMap> pagemaps = session.getPageMaps();
