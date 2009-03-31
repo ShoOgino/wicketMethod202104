@@ -1,0 +1,21 @@
+		/**
+		 * @see org.apache.wicket.PageMap#put(org.apache.wicket.Page)
+		 */
+		@Override
+		public void put(Page page)
+		{
+			if (!page.isPageStateless())
+			{
+				Session session = getSession();
+				String sessionId = session.getId();
+				if (sessionId != null && !session.isSessionInvalidated())
+				{
+					// the id could have changed from null during request
+					this.sessionId = sessionId;
+					getStore().storePage(sessionId, page);
+					setLastPage(page);
+					dirty();
+				}
+			}
+		}
+

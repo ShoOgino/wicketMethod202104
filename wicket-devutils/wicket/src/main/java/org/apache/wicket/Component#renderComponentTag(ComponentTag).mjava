@@ -1,0 +1,57 @@
+	/**
+	 * Writes a simple tag out to the response stream. Any components that might be referenced by
+	 * the tag are ignored. Also undertakes any tag attribute modifications if they have been added
+	 * to the component.
+	 * 
+	 * @param tag
+	 *            The tag to write
+	 */
+	protected final void renderComponentTag(ComponentTag tag)
+	{
+		final boolean ajaxRequest = getRequest() instanceof WebRequest &&
+			((WebRequest)getRequest()).isAjax();
+
+		final boolean stripWicketTags = ajaxRequest ||
+			Application.get().getMarkupSettings().getStripWicketTags();
+
+		if (!(tag instanceof WicketTag) || !stripWicketTags)
+		{
+			// Apply behavior modifiers
+			List<IBehavior> behaviors = getBehaviors();
+			if ((behaviors != null) && !behaviors.isEmpty() && !tag.isClose() &&
+				(isIgnoreAttributeModifier() == false))
+			{
+				tag = tag.mutable();
+
+				for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
+				{
+					IBehavior behavior = i.next();
+
+					// Components may reject some behavior components
+					if (isBehaviorAccepted(behavior))
+					{
+						behavior.onComponentTag(this, tag);
+					}
+				}
+			}
+
+			// apply behaviors that are attached to the component tag.
+			if (tag.hasBehaviors())
+			{
+				Iterator<? extends IBehavior> tagBehaviors = tag.getBehaviors();
+				while (tagBehaviors.hasNext())
+				{
+					final IBehavior behavior = tagBehaviors.next();
+					if (behavior.isEnabled(this))
+					{
+						behavior.onComponentTag(this, tag);
+					}
+					behavior.detach(this);
+				}
+			}
+
+			// Write the tag
+			tag.writeOutput(getResponse(), stripWicketTags, findMarkupStream().getWicketNamespace());
+		}
+	}
+

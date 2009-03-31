@@ -1,0 +1,47 @@
+	/**
+	 * FIXME javadoc - what's special about this implementation?
+	 * 
+	 * @see org.apache.wicket.IRequestTarget#respond(org.apache.wicket.RequestCycle)
+	 */
+	public void respond(RequestCycle requestCycle)
+	{
+		Response response = requestCycle.getResponse();
+		response.reset();
+		if (redirectUrl.startsWith("/"))
+		{
+			// context-absolute url
+
+			RequestContext rc = RequestContext.get();
+			String continueTo = null;
+			if (rc.isPortletRequest() && ((PortletRequestContext)rc).isEmbedded())
+			{
+				response.redirect(redirectUrl);
+			}
+			else
+			{
+				String location = RequestCycle.get()
+					.getProcessor()
+					.getRequestCodingStrategy()
+					.rewriteStaticRelativeUrl(redirectUrl.substring(1));
+				if (location.startsWith("./") && location.length() > 2)
+				{
+					location = location.substring(2);
+				}
+				response.redirect(location);
+			}
+		}
+		else if (redirectUrl.contains("://"))
+		{
+			// absolute url
+			response.redirect(redirectUrl);
+		}
+		else
+		{
+			// relative url
+			response.redirect(RequestCycle.get()
+				.getRequest()
+				.getRelativePathPrefixToWicketHandler() +
+				redirectUrl);
+		}
+	}
+

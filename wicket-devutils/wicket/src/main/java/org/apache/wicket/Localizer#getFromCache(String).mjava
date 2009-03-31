@@ -1,0 +1,23 @@
+	/**
+	 * Get the value associated with the key from the cache.
+	 * 
+	 * @param cacheKey
+	 * @return The value of the key
+	 */
+	protected String getFromCache(final String cacheKey)
+	{
+		if (cache == null)
+		{
+			return null;
+		}
+
+		final String value = cache.get(cacheKey);
+
+		// ConcurrentHashMap does not allow null values
+		if (value == NULL_VALUE)
+		{
+			return null;
+		}
+		return value;
+	}
+

@@ -1,0 +1,163 @@
+	/**
+	 * As per {@link javax.servlet.Filter#doFilter}, is called by the container each time a
+	 * request/response pair is passed through the chain due to a client request for a resource at
+	 * the end of the chain. The FilterChain passed in to this method allows the Filter to pass on
+	 * the request and response to the next entity in the chain.
+	 * 
+	 * <p>
+	 * Delegates to {@link WicketFilter#doGet} for actual response rendering.
+	 * 
+	 * <p>
+	 * {@link WicketFilter#doFilter} goes through a series of steps of steps to process a request;
+	 * <ol>
+	 * <li>If running in a portlet context, sets up the {@link WicketFilterPortletContext}
+	 * retrieving the portlet specific ({@link PortletServletRequestWrapper} and
+	 * {@link PortletServletResponseWrapper}) wrapped request and response objects.
+	 * <li>Otherwise retrieves standard {@link HttpServletRequest} and {@link HttpServletResponse}
+	 * objects.
+	 * <li>Passes on requests down the filter chain if configured as a portlet _only_ filter but not
+	 * running in a portlet context. USE CASE IS WHAT?
+	 * <li>Checks against registered ignore paths, and passes the request on down the chain if a
+	 * match is found.
+	 * <li>Pass the request to underling servlet style
+	 * {@link WicketFilter#doGet(HttpServletRequest, HttpServletResponse)} to attempt actually
+	 * rendering the response Wicket style.
+	 * <li>Potentially respond with "not-modified" for resource type requests
+	 * <li>Finally pass on the request if we didn't handle it
+	 * </ol>
+	 * 
+	 * @see WicketFilterPortletContext
+	 * @see PortletServletRequestWrapper
+	 * @see PortletServletResponseWrapper
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
+	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 */
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+		throws IOException, ServletException
+	{
+		HttpServletRequest httpServletRequest;
+		HttpServletResponse httpServletResponse;
+
+		boolean inPortletContext = false;
+		if (filterPortletContext != null)
+		{
+			// collect the request and response together for convenience handling
+			FilterRequestContext filterRequestContext = new FilterRequestContext(
+				(HttpServletRequest)request, (HttpServletResponse)response);
+
+			// sets up the FilterRequestContext for this request, such as wrapping the request and
+			// response objects
+			inPortletContext = filterPortletContext.setupFilter(getFilterConfig(),
+				filterRequestContext, getFilterPath((HttpServletRequest)request));
+
+			// Retrieve and assign the portlet wrapped request/response objects
+			httpServletRequest = filterRequestContext.getRequest();
+			httpServletResponse = filterRequestContext.getResponse();
+		}
+		else
+		{
+			// assign plane HTTP servlet request/response objects
+			httpServletRequest = (HttpServletRequest)request;
+			httpServletResponse = (HttpServletResponse)response;
+		}
+
+		// If we are a filter which is only meant to process requests in a portlet context, and we
+		// are in fact not in a portlet context, stop processing now and pass to next filter in the
+		// chain.
+		boolean passToNextFilter = portletOnlyFilter && !inPortletContext;
+		if (passToNextFilter)
+		{
+			chain.doFilter(request, response);
+			return;
+		}
+
+		final String relativePath = getRelativePath(httpServletRequest);
+
+		// check against ignore paths and pass on if a match is found
+		if (ignorePaths.size() > 0 && relativePath.length() > 0)
+		{
+			for (String path : ignorePaths)
+			{
+				if (relativePath.startsWith(path))
+				{
+					log.debug("Ignoring request {}", httpServletRequest.getRequestURL());
+					chain.doFilter(request, response);
+					return;
+				}
+			}
+		}
+
+
+		if (isWicketRequest(relativePath))
+		{
+			Application previous = null;
+			if (Application.exists())
+			{
+				previous = Application.get();
+			}
+			try
+			{
+				// Set the webapplication for this thread
+				Application.set(webApplication);
+
+				// last modified time stamp
+				long lastModified = getLastModified(httpServletRequest);
+				if (lastModified == -1)
+				{
+					// servlet doesn't support if-modified-since, no reason
+					// to go through further expensive logic
+					boolean requestHandledByWicket = doGet(httpServletRequest, httpServletResponse);
+					if (requestHandledByWicket == false)
+					{
+						chain.doFilter(request, response);
+					}
+				}
+				else
+				{
+					long ifModifiedSince;
+					try
+					{
+						ifModifiedSince = httpServletRequest.getDateHeader("If-Modified-Since");
+					}
+					catch (IllegalArgumentException e)
+					{
+						log.warn("Invalid If-Modified-Since header", e);
+						ifModifiedSince = -1;
+					}
+					if (ifModifiedSince < (lastModified / 1000 * 1000))
+					{
+						// If the servlet mod time is later, call doGet()
+						// Round down to the nearest second for a proper compare
+						// A ifModifiedSince of -1 will always be less
+						maybeSetLastModified(httpServletResponse, lastModified);
+						doGet(httpServletRequest, httpServletResponse);
+					}
+					else
+					{
+						httpServletResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+						httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() +
+							Duration.hours(1).getMilliseconds());
+					}
+				}
+			}
+			finally
+			{
+				// unset the application thread local if it didn't exist already.
+				if (previous == null)
+				{
+					Application.unset();
+					RequestContext.unset();
+				}
+				else
+				{
+					Application.set(previous);
+				}
+			}
+		}
+		else
+		{
+			// request isn't for us
+			chain.doFilter(request, response);
+		}
+	}
+

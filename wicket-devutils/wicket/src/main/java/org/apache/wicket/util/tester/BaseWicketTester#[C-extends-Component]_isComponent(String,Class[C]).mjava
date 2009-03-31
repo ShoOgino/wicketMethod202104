@@ -1,0 +1,19 @@
+	/**
+	 * assert component class
+	 * 
+	 * @param <C>
+	 * 
+	 * @param path
+	 *            path to component
+	 * @param expectedComponentClass
+	 *            expected component class
+	 * @return a <code>Result</code>
+	 */
+	public <C extends Component> Result isComponent(String path, Class<C> expectedComponentClass)
+	{
+		Component component = getComponentFromLastRenderedPage(path);
+		return isTrue("component '" + Classes.simpleName(component.getClass()) + "' is not type:" +
+			Classes.simpleName(expectedComponentClass),
+			expectedComponentClass.isAssignableFrom(component.getClass()));
+	}
+

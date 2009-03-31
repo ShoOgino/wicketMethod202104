@@ -1,0 +1,23 @@
+	/**
+	 * Checks to see if the request was ajax based. If so we send a 404 so that the
+	 * org.apache.wicket.ajax.IAjaxCallDecorator failure script is executed.
+	 * 
+	 * @param e
+	 */
+	private void handlePageExpiredException(final PageExpiredException e)
+	{
+		Response response = getOriginalResponse();
+		if (response instanceof BufferedWebResponse)
+		{
+			BufferedWebResponse bufferedWebResponse = (BufferedWebResponse)response;
+			Request request = getRequest();
+			if (bufferedWebResponse.isAjax() &&
+				request.getParameter(SourcesPage.PAGE_CLASS) != null)
+			{
+				// If there is a better way to figure out if SourcesPage was the request, we should
+				// do that.
+				throw new AbortWithWebErrorCodeException(404);
+			}
+		}
+	}
+

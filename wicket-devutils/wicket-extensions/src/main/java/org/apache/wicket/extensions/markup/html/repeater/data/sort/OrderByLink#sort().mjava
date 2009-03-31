@@ -1,0 +1,30 @@
+	/**
+	 * Re-sort data provider according to this link
+	 * 
+	 * @return this
+	 */
+	public final OrderByLink sort()
+	{
+		if (isVersioned())
+		{
+			// version the old state
+			Change change = new SortStateChange();
+			addStateChange(change);
+		}
+
+		ISortState state = stateLocator.getSortState();
+
+		int oldDir = state.getPropertySortOrder(property);
+
+		int newDir = ISortState.ASCENDING;
+
+		if (oldDir == ISortState.ASCENDING)
+		{
+			newDir = ISortState.DESCENDING;
+		}
+
+		state.setPropertySortOrder(property, newDir);
+
+		return this;
+	}
+

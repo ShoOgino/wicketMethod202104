@@ -1,0 +1,98 @@
+	/**
+	 * handle the current step in the request processing.
+	 */
+	private final void step()
+	{
+		try
+		{
+			switch (currentStep)
+			{
+				case PREPARE_REQUEST : {
+					// prepare the request
+					prepare();
+					break;
+				}
+				case RESOLVE_TARGET : {
+					// resolve the target of the request using the request
+					// parameters
+					final IRequestTarget target = processor.resolve(this,
+						request.getRequestParameters());
+
+					// has to result in a request target
+					if (target == null)
+					{
+						handled = false;
+						currentStep = DONE;
+						// throw new WicketRuntimeException(
+						// "the processor did not resolve to any request target");
+					}
+					// Add (inserting at the bottom) in case before or during
+					// target resolving one or more request targets were pushed
+					// on the stack before this. If that is the case, they
+					// should be handled before this
+					requestTargets.add(0, target);
+					break;
+				}
+				case PROCESS_EVENTS : {
+					processEventsAndRespond();
+					break;
+				}
+				case RESPOND : {
+					// generate a response
+					respond();
+					break;
+				}
+				default : {
+					// nothing
+				}
+			}
+		}
+		catch (AbortException e)
+		{
+			throw e;
+		}
+		catch (RuntimeException e)
+		{
+			/*
+			 * check if the raised exception wraps an abort exception. if so, it is probably wise to
+			 * unwrap and rethrow the abort exception
+			 */
+			Throwable cause = e.getCause();
+			while (cause != null)
+			{
+				if (cause instanceof AbortException)
+				{
+					throw ((AbortException)cause);
+				}
+				cause = cause.getCause();
+			}
+			if (!handlingException)
+			{
+				// set step manually to handle exception
+				handlingException = true;
+
+				// probably our last chance the exception can be logged.
+				// Note that a PageExpiredException should not be logged, because
+				// it's not an internal error
+				if (!(e instanceof PageExpiredException))
+				{
+					logRuntimeException(e);
+				}
+
+				// try to play nicely and let the request processor handle the
+				// exception response. If that doesn't work, any runtime exception
+				// will automatically be bubbled up
+				if (processor != null)
+				{
+					processor.respond(e, this);
+				}
+			}
+			else
+			{
+				// hmmm, we were already handling an exception! give up
+				log.error(
+					"unexpected exception when handling another exception: " + e.getMessage(), e);
+			}
+		}
+	}
+

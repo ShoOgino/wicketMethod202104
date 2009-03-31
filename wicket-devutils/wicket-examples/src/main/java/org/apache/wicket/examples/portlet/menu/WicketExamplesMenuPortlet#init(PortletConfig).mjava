@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.portlet.WicketPortlet#init(javax.portlet.PortletConfig)
+	 */
+	@Override
+	public void init(PortletConfig config) throws PortletException
+	{
+		super.init(config);
+		if (examples == null)
+		{
+			examples = discoverExamples(config.getPortletContext());
+			if (examples == null)
+			{
+				examples = Collections.emptyList();
+			}
+			else
+			{
+				examples = Collections.unmodifiableList(examples);
+			}
+			config.getPortletContext().setAttribute(EXAMPLES, examples);
+		}
+	}
+

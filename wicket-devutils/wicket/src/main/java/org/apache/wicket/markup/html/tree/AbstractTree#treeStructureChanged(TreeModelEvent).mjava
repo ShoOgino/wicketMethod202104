@@ -1,0 +1,24 @@
+	/**
+	 * @see javax.swing.event.TreeModelListener#treeStructureChanged(javax.swing.event.TreeModelEvent)
+	 */
+	public final void treeStructureChanged(TreeModelEvent e)
+	{
+		if (dirtyAll)
+		{
+			return;
+		}
+
+		// get the parent node of changed nodes
+		Object node = e.getTreePath().getLastPathComponent();
+
+		// has the tree root changed?
+		if (e.getTreePath().getPathCount() == 1)
+		{
+			invalidateAll();
+		}
+		else
+		{
+			invalidateNodeWithChildren(node);
+		}
+	}
+

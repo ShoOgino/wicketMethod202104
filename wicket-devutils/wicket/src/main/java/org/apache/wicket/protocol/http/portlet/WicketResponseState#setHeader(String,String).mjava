@@ -1,0 +1,16 @@
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.http.HttpServletResponseWrapper#setHeader(java.lang.String,
+	 * java.lang.String)
+	 */
+	public void setHeader(String name, String value)
+	{
+		if (isMimeResponse && !committed)
+		{
+			ArrayList<String> headerList = getHeaderList(name, true);
+			headerList.clear();
+			headerList.add(value);
+		}
+	}
+

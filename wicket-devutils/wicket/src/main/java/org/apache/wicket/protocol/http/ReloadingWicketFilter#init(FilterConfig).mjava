@@ -1,0 +1,32 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.WicketFilter#init(javax.servlet.FilterConfig)
+	 */
+	public void init(final FilterConfig filterConfig) throws ServletException
+	{
+		reloadingClassLoader.setListener(new IChangeListener()
+		{
+			public void onChange()
+			{
+				// Remove the ModificationWatcher from the current reloading class loader
+				reloadingClassLoader.destroy();
+
+				/*
+				 * Create a new classloader, as there is no way to clear a ClassLoader's cache. This
+				 * supposes that we don't share objects across application instances, this is almost
+				 * true, except for Wicket's Session object.
+				 */
+				reloadingClassLoader = new ReloadingClassLoader(getClass().getClassLoader());
+				try
+				{
+					init(filterConfig);
+				}
+				catch (ServletException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+		});
+
+		super.init(filterConfig);
+	}
+

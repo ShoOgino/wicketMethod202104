@@ -1,0 +1,125 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 * 
+	 * Get the page for the given path.
+	 * 
+	 * FIXME javadoc - where does it look? where does it get the page from?
+	 * 
+	 * @param pageMapName
+	 *            The name of the page map where the page is
+	 * @param componentPath
+	 *            Component path
+	 * @param versionNumber
+	 *            The version of the page required
+	 * @return The page based on the first path component (the page id), or null if the requested
+	 *         version of the page cannot be found.
+	 */
+	public final Page getPage(final String pageMapName, final String componentPath,
+		final int versionNumber)
+	{
+		if (log.isDebugEnabled())
+		{
+			log.debug("Getting page [path = " + componentPath + ", versionNumber = " +
+				versionNumber + "]");
+		}
+
+		// Get page map by name, creating the default page map automatically
+		IPageMap pageMap = pageMapForName(pageMapName, pageMapName == PageMap.DEFAULT_NAME);
+		if (pageMap != null)
+		{
+			synchronized (usedPageMaps) // get a lock so be sure that only one
+			// is made
+			{
+				if (pageMapsUsedInRequest == null)
+				{
+					pageMapsUsedInRequest = new HashMap<IPageMap, PageMapsUsedInRequestEntry>(3);
+				}
+			}
+			synchronized (pageMapsUsedInRequest)
+			{
+				long startTime = System.currentTimeMillis();
+
+				// TODO For now only use the setting. Might be extended with
+				// something overridable on request/ page/ request target level
+				// later
+				Duration timeout = Application.get().getRequestCycleSettings().getTimeout();
+
+				PageMapsUsedInRequestEntry entry = pageMapsUsedInRequest.get(pageMap);
+
+				// Get page entry for id and version
+				Thread t = entry != null ? entry.thread : null;
+				while (t != null && t != Thread.currentThread())
+				{
+					if (isCurrentRequestValid(entry.requestCycle) == false)
+					{
+						// we need to ignore this request. That's because it is
+						// an ajax request
+						// while regular page request is being processed
+						throw new IgnoreAjaxRequestException();
+					}
+
+					try
+					{
+						pageMapsUsedInRequest.wait(timeout.getMilliseconds());
+					}
+					catch (InterruptedException ex)
+					{
+						throw new WicketRuntimeException(ex);
+					}
+
+					entry = pageMapsUsedInRequest.get(pageMap);
+					t = entry != null ? entry.thread : null;
+
+					if (t != null && t != Thread.currentThread() &&
+						(startTime + timeout.getMilliseconds()) < System.currentTimeMillis())
+					{
+						AppendingStringBuffer asb = new AppendingStringBuffer(100);
+						asb.append("After " + timeout + " the Pagemap " + pageMapName +
+							" is still locked by: " + t +
+							", giving up trying to get the page for path: " + componentPath);
+						// if it is still not the right thread..
+						// This either points to long running code (a report
+						// page?) or a deadlock or such
+						try
+						{
+							StackTraceElement[] stackTrace = t.getStackTrace();
+							asb.append("\n\tBegin of stack trace of " + t);
+							for (StackTraceElement stackTraceElement : stackTrace)
+							{
+								asb.append("\n\t");
+								asb.append(stackTraceElement);
+							}
+							asb.append("\n\tEnd of stack trace of " + t);
+						}
+						catch (Exception e)
+						{
+							// ignore
+						}
+						throw new WicketRuntimeException(asb.toString());
+					}
+				}
+
+				PageMapsUsedInRequestEntry newEntry = new PageMapsUsedInRequestEntry();
+				newEntry.thread = Thread.currentThread();
+				newEntry.requestCycle = RequestCycle.get();
+				pageMapsUsedInRequest.put(pageMap, newEntry);
+				final String id = Strings.firstPathComponent(componentPath,
+					Component.PATH_SEPARATOR);
+				Page page = pageMap.get(Integer.parseInt(id), versionNumber);
+				if (page == null)
+				{
+					pageMapsUsedInRequest.remove(pageMap);
+					pageMapsUsedInRequest.notifyAll();
+				}
+				else
+				{
+					// attach the page now.
+					page.onPageAttached();
+					touch(page);
+				}
+				return page;
+			}
+		}
+		return null;
+	}
+

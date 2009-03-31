@@ -1,0 +1,50 @@
+	/**
+	 * Called (by the default implementation of 'process') when all fields validated, the form was
+	 * updated and it's data was allowed to be persisted. It is meant for delegating further
+	 * processing to clients.
+	 * <p>
+	 * This implementation first finds out whether the form processing was triggered by a nested
+	 * IFormSubmittingComponent of this form. If that is the case, that component's onSubmit is
+	 * called first.
+	 * </p>
+	 * <p>
+	 * Regardless of whether a submitting component was found, the form's onSubmit method is called
+	 * next.
+	 * </p>
+	 * 
+	 * @param submittingComponent
+	 *            the component that triggered this form processing, or null if the processing was
+	 *            triggered by something else (like a non-Wicket submit button or a javascript
+	 *            execution)
+	 */
+	protected void delegateSubmit(IFormSubmittingComponent submittingComponent)
+	{
+		// when the given submitting component is not null, it means that it was the
+		// submitting component
+		Form<?> formToProcess = this;
+		if (submittingComponent != null)
+		{
+			// use the form which the submittingComponent has submitted for further processing
+			formToProcess = submittingComponent.getForm();
+			submittingComponent.onSubmit();
+		}
+
+		// Model was successfully updated with valid data
+		formToProcess.onSubmit();
+
+		// call onSubmit on nested forms
+		formToProcess.visitChildren(Form.class, new IVisitor<Form<?>>()
+		{
+			public Object component(Form<?> component)
+			{
+				Form<?> form = component;
+				if (form.isEnabledInHierarchy() && form.isVisibleInHierarchy())
+				{
+					form.onSubmit();
+					return IVisitor.CONTINUE_TRAVERSAL;
+				}
+				return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+			}
+		});
+	}
+

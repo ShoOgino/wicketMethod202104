@@ -1,0 +1,44 @@
+	/**
+	 * @param component
+	 *            Component being added
+	 */
+	private final void addedComponent(final Component component)
+	{
+		// Check for degenerate case
+		if (component == this)
+		{
+			throw new IllegalArgumentException("Component can't be added to itself");
+		}
+
+		MarkupContainer parent = component.getParent();
+		if (parent != null)
+		{
+			parent.remove(component);
+		}
+
+		// Set child's parent
+		component.setParent(this);
+
+		final Page page = findPage();
+
+		final IDebugSettings debugSettings = Application.get().getDebugSettings();
+		if (debugSettings.isLinePreciseReportingOnAddComponentEnabled())
+		{
+			component.setMetaData(ADDED_AT_KEY, Strings.toString(component, new MarkupException(
+				"added")));
+		}
+
+		if (page != null)
+		{
+			page.componentAdded(component);
+		}
+
+		// if the PREPARED_FOR_RENDER flag is set, we have already called
+		// beforeRender on this
+		// component's children. So we need to initialize the newly added one
+		if (isPreparedForRender())
+		{
+			component.beforeRender();
+		}
+	}
+

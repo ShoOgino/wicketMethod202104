@@ -1,0 +1,76 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestCycleProcessor#respond(java.lang.RuntimeException,
+	 *      org.apache.wicket.RequestCycle)
+	 */
+	public void respond(RuntimeException e, RequestCycle requestCycle)
+	{
+		// If application doesn't want debug info showing up for users
+		final Application application = Application.get();
+		final IExceptionSettings settings = application.getExceptionSettings();
+		final Page responsePage = requestCycle.getResponsePage();
+
+		Page override = onRuntimeException(responsePage, e);
+		if (override != null)
+		{
+			throw new RestartResponseException(override);
+		}
+		else if (e instanceof AuthorizationException)
+		{
+			// are authorization exceptions always thrown before the real
+			// render?
+			// else we need to make a page (see below) or set it hard to a
+			// redirect.
+			Class<? extends Page> accessDeniedPageClass = application.getApplicationSettings()
+				.getAccessDeniedPage();
+
+			throw new RestartResponseAtInterceptPageException(accessDeniedPageClass);
+		}
+		else if (e instanceof PageExpiredException)
+		{
+			Class<? extends Page> pageExpiredErrorPageClass = application.getApplicationSettings()
+				.getPageExpiredErrorPage();
+			boolean mounted = isPageMounted(pageExpiredErrorPageClass);
+			RequestCycle.get().setRedirect(mounted);
+			throw new RestartResponseException(pageExpiredErrorPageClass);
+		}
+		else if (settings.getUnexpectedExceptionDisplay() != IExceptionSettings.SHOW_NO_EXCEPTION_PAGE)
+		{
+			// we do not want to redirect - we want to inline the error output
+			// and preserve the url so when the refresh button is pressed we
+			// rerun the code that caused the error
+			// However we don't what to do this in a situation where we are in portlet mode
+			if (!RequestContext.get().isPortletRequest())
+			{
+				requestCycle.setRedirect(false);
+			}
+
+			// figure out which error page to show
+			Class<? extends Page> internalErrorPageClass = application.getApplicationSettings()
+				.getInternalErrorPage();
+			Class<? extends Page> responseClass = responsePage != null ? responsePage.getClass()
+				: null;
+
+			if (responseClass != internalErrorPageClass &&
+				settings.getUnexpectedExceptionDisplay() == IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE)
+			{
+				throw new RestartResponseException(internalErrorPageClass);
+			}
+			else if (responseClass != ExceptionErrorPage.class)
+			{
+				// Show full details
+				throw new RestartResponseException(new ExceptionErrorPage(e, responsePage));
+			}
+			else
+			{
+				// give up while we're ahead!
+				throw new WicketRuntimeException("Internal Error: Could not render error page " +
+					internalErrorPageClass, e);
+			}
+		}
+		else if (requestCycle.getResponse() instanceof WebResponse)
+		{
+			((WebResponse)requestCycle.getResponse()).getHttpServletResponse().setStatus(
+				HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+	}
+

@@ -1,0 +1,37 @@
+	/**
+	 * Returns the channel to the pool. It is necessary to call this for every channel obtained by
+	 * calling {@link #getFileChannel(String, boolean)}.
+	 * 
+	 * @param channel
+	 */
+	public synchronized void returnFileChannel(FileChannel channel)
+	{
+		Integer count = channelToUseCount.get(channel);
+
+		if (count == null || count.intValue() == 0)
+		{
+			throw new IllegalArgumentException("Trying to return unused channel");
+		}
+
+		count = new Integer(count.intValue() - 1);
+
+		// decrease the usage count
+		if (count.intValue() == 0)
+		{
+			channelToUseCount.remove(channel);
+			if (channelsToDeleteOnReturn.contains(channel))
+			{
+				closeAndDelete(channel);
+			}
+			else
+			{
+				// this was the last usage, add chanel to idle channels
+				idleChannels.addLast(channel);
+			}
+		}
+		else
+		{
+			channelToUseCount.put(channel, count);
+		}
+	}
+

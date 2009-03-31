@@ -1,0 +1,17 @@
+	/**
+	 * Initializes Page by adding it to the Session and initializing it.
+	 */
+	private final void init()
+	{
+		final RequestCycle cycle = getRequestCycle();
+		String pageMapName = null;
+		if (cycle != null)
+		{
+			RequestParameters parameters = getRequest().getRequestParameters();
+			pageMapName = parameters.getPageMapName();
+		}
+
+		final IPageMap pageMap = PageMap.forName(pageMapName);
+		init(pageMap);
+	}
+

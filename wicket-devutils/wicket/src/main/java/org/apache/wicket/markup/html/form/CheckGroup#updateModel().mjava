@@ -1,0 +1,21 @@
+	/**
+	 * @see FormComponent#updateModel()
+	 */
+	@Override
+	public void updateModel()
+	{
+		Collection<T> collection = getModelObject();
+		if (collection == null)
+		{
+			collection = getConvertedInput();
+			setDefaultModelObject(collection);
+		}
+		else
+		{
+			modelChanging();
+			collection.clear();
+			collection.addAll(getConvertedInput());
+			modelChanged();
+		}
+	}
+

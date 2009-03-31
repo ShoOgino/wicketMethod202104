@@ -1,0 +1,18 @@
+	/**
+	 * 
+	 */
+	public void testComponentsAddedToAjax()
+	{
+		test2.setVisible(false);
+		test3.setVisible(false).setOutputMarkupPlaceholderTag(true);
+
+		tester.clickLink("link");
+
+		// test1 should be added without any problems
+		assertFalse(tester.isComponentOnAjaxResponse(test1).wasFailed());
+		// test2 is not in the ajax response because it's invisible
+		assertTrue(tester.isComponentOnAjaxResponse(test2).wasFailed());
+		// test3 is in the ajax response because it renders a placeholder tag
+		assertFalse(tester.isComponentOnAjaxResponse(test3).wasFailed());
+	}
+

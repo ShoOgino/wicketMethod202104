@@ -1,0 +1,38 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.util.file.IResourceFinder#find(Class, String)
+	 */
+	public IResourceStream find(final Class< ? > clazz, final String pathname)
+	{
+		Iterator<Folder> foldersIter = folders.iterator();
+		while (foldersIter.hasNext())
+		{
+			Folder folder = foldersIter.next();
+			final File file = new File(folder, pathname);
+			if (file.exists())
+			{
+				return new FileResourceStream(file);
+			}
+		}
+
+		Iterator<String> webappPathsIter = webappPaths.iterator();
+		while (webappPathsIter.hasNext())
+		{
+			String path = webappPathsIter.next();
+			try
+			{
+				final URL url = servletContext.getResource(path + pathname);
+				if (url != null)
+				{
+					return new UrlResourceStream(url);
+				}
+			}
+			catch (Exception ex)
+			{
+				// ignore, file couldn't be found
+			}
+		}
+
+		return null;
+	}
+

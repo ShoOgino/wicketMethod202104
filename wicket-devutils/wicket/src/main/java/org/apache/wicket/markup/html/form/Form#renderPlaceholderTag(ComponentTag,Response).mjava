@@ -1,0 +1,21 @@
+	@Override
+	protected void renderPlaceholderTag(ComponentTag tag, Response response)
+	{
+		if (isRootForm())
+		{
+			super.renderPlaceholderTag(tag, response);
+		}
+		else
+		{
+			// rewrite inner form tag as div
+			response.write("<div style=\"display:none\"");
+			if (getOutputMarkupId())
+			{
+				response.write(" id=\"");
+				response.write(getMarkupId());
+				response.write("\"");
+			}
+			response.write("></div>");
+		}
+	}
+

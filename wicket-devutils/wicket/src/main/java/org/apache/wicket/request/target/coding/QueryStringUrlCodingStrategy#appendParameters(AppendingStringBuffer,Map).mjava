@@ -1,0 +1,27 @@
+	/**
+	 * Append the parameters to the end of the URL.
+	 * 
+	 * @param url
+	 *            the relative reference URL
+	 * @param parameters
+	 *            parameter names mapped to parameter values
+	 */
+	@Override
+	protected void appendParameters(AppendingStringBuffer url, Map parameters)
+	{
+		if (parameters != null && parameters.size() > 0)
+		{
+			final Iterator entries = parameters.entrySet().iterator();
+			WebRequestEncoder encoder = new WebRequestEncoder(url);
+			while (entries.hasNext())
+			{
+				Map.Entry entry = (Entry)entries.next();
+
+				if (entry.getValue() != null)
+				{
+					encoder.addValue(entry.getKey().toString(), entry.getValue());
+				}
+			}
+		}
+	}
+

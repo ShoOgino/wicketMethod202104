@@ -1,0 +1,34 @@
+	/**
+	 * Adds a column to be rendered.
+	 * 
+	 * @param column
+	 *            The column to add
+	 * @param component
+	 *            The component
+	 * @param renderable
+	 *            The renderer
+	 */
+	public void addColumn(IColumn column, Component component, IRenderable renderable)
+	{
+		if (column.isVisible())
+		{
+			// if the column is aligned to the left, just append it.
+			// Otherwise we prepend it, because we want columns aligned to right
+			// to be rendered reverse order (because they will have set
+			// float:right
+			// in css, so they will be displayed in reverse order too).
+			if (column.getLocation().getAlignment() == Alignment.LEFT)
+			{
+				columns.add(column);
+				components.add(component);
+				renderables.add(renderable);
+			}
+			else
+			{
+				columns.add(0, column);
+				components.add(0, component);
+				renderables.add(0, renderable);
+			}
+		}
+	}
+

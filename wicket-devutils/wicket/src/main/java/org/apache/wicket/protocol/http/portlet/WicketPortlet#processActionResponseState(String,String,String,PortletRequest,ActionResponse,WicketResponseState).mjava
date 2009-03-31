@@ -1,0 +1,46 @@
+	/**
+	 * Handles redirects set from processing the action. Checks the response state after the action
+	 * has been processed by Wicket for the presence of a redirect URL, and if present,
+	 * 'portletifies' the URL. If the URL is a redirect to within the scope of this portlet, leaves
+	 * it to be handled in a subsequent render call, or if not, sends the redirect to the client.
+	 * The recorded url is then used in by wicket in the subsequnt 'VIEW' requests by the portal, to
+	 * render the correct Page.
+	 * 
+	 * @see IRequestCycleSettings#REDIRECT_TO_RENDER
+	 * @param wicketURL
+	 * @param wicketFilterPath
+	 * @param wicketFilterQuery
+	 * @param request
+	 * @param response
+	 * @param responseState
+	 * @throws PortletException
+	 * @throws IOException
+	 */
+	protected void processActionResponseState(String wicketURL, String wicketFilterPath,
+		String wicketFilterQuery, PortletRequest request, ActionResponse response,
+		WicketResponseState responseState) throws PortletException, IOException
+	{
+		// write out Cookies to ActionResponse
+		responseState.flush();
+		String redirectLocationUrl = responseState.getRedirectLocation();
+		if (log.isDebugEnabled())
+		{
+			log.debug("redirectURL after include:" + redirectLocationUrl);
+		}
+		if (redirectLocationUrl != null)
+		{
+			wicketURL = fixWicketUrl(redirectLocationUrl, wicketFilterPath, wicketFilterQuery);
+			if (wicketURL.startsWith(wicketFilterPath))
+			{
+				String portletMode = request.getPortletMode().toString();
+				String wicketUrlPrefix = (String)request.getAttribute(WicketPortlet.WICKET_URL_PORTLET_PARAMETER_ATTR);
+				String redirectUrlKey = wicketUrlPrefix + portletMode;
+				response.setRenderParameter(redirectUrlKey, wicketURL);
+			}
+			else
+			{
+				response.sendRedirect(redirectLocationUrl);
+			}
+		}
+	}
+

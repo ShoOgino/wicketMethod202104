@@ -1,0 +1,29 @@
+	/**
+	 * @return The uploaded file
+	 */
+	public FileUpload getFileUpload()
+	{
+		// Get request
+		final Request request = getRequest();
+
+		// If we successfully installed a multipart request
+		if (request instanceof IMultipartWebRequest)
+		{
+			// Get the item for the path
+			final FileItem item = ((IMultipartWebRequest)request).getFile(getInputName());
+
+			// Only update the model when there is a file (larger than zero
+			// bytes)
+			if (item != null && item.getSize() > 0)
+			{
+				if (fileUpload == null)
+				{
+					fileUpload = new FileUpload(item);
+				}
+
+				return fileUpload;
+			}
+		}
+		return null;
+	}
+

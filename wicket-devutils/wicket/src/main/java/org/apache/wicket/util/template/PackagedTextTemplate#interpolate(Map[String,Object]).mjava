@@ -1,0 +1,28 @@
+	/**
+	 * Interpolates a <code>Map</code> of variables with the content and replaces the content with
+	 * the result. Variables are denoted in the <code>String</code> by the
+	 * <code>syntax ${variableName}</code>. The contents will be altered by replacing each variable
+	 * of the form <code>${variableName}</code> with the value returned by
+	 * <code>variables.getValue("variableName")</code>.
+	 * <p>
+	 * WARNING: there is no going back to the original contents after the interpolation is done. If
+	 * you need to do different interpolations on the same original contents, use the method
+	 * {@link #asString(Map)} instead.
+	 * </p>
+	 * 
+	 * @param variables
+	 *            a <code>Map</code> of variables to interpolate
+	 * @return this for chaining
+	 */
+	@Override
+	public final TextTemplate interpolate(Map<String, Object> variables)
+	{
+		if (variables != null)
+		{
+			String result = new MapVariableInterpolator(buffer.toString(), variables).toString();
+			buffer.delete(0, buffer.length());
+			buffer.append(result);
+		}
+		return this;
+	}
+

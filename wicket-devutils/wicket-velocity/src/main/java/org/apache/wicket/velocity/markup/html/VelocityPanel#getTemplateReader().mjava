@@ -1,0 +1,22 @@
+	/**
+	 * Gets a reader for the velocity template.
+	 * 
+	 * @return reader for the velocity template
+	 */
+	private Reader getTemplateReader()
+	{
+		final IStringResourceStream resource = getTemplateResource();
+		if (resource == null)
+		{
+			throw new IllegalArgumentException("getTemplateResource must return a resource");
+		}
+
+		final String template = resource.asString();
+		if (template != null)
+		{
+			return new StringReader(template);
+		}
+
+		return null;
+	}
+

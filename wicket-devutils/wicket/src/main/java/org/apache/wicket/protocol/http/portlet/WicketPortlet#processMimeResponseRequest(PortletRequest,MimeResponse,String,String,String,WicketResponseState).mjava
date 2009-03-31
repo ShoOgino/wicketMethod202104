@@ -1,0 +1,119 @@
+	/**
+	 * Loops until wicket processing does not result in a redirect (redirects have to be caught, and
+	 * fed back into Wicket as we only want the portlet redirected, not the entire page of course).
+	 * 
+	 * @param request
+	 * @param response
+	 * @param requestType
+	 * @param wicketURL
+	 * @param wicketFilterPath
+	 * @param wicketFilterQuery
+	 * @param responseState
+	 * @throws PortletException
+	 * @throws IOException
+	 */
+	private void processMimeResponseRequest(PortletRequest request, MimeResponse response,
+		String wicketURL, String wicketFilterPath, String wicketFilterQuery,
+		WicketResponseState responseState) throws PortletException, IOException
+	{
+		PortletRequestDispatcher rd = null;
+		String previousURL = null;
+		// FIXME portal comment: explain while loop
+		// keep looping until wicket processing does not result in a redirect (redirects have to
+		// be caught, and fed back into Wicket as we only want the portlet redirected, not the
+		// entire page of course.
+		while (true)
+		{
+			rd = getPortletContext().getRequestDispatcher(wicketURL);
+			if (rd != null)
+			{
+				// Need to use RequestDispatcher.include here otherwise internally rewinding on a
+				// redirect
+				// won't be allowed (calling forward will close the response)
+				rd.include(request, response);
+
+				// process _other_ response states - check for redirects as a result of wicket
+				// processing the request
+
+				String redirectLocation = responseState.getRedirectLocation();
+				if (log.isDebugEnabled())
+				{
+					log.debug("redirect url after inclusion:" + redirectLocation);
+				}
+				if (redirectLocation != null)
+				{
+					redirectLocation = fixWicketUrl(redirectLocation, wicketFilterPath,
+						wicketFilterQuery);
+					boolean validWicketUrl = redirectLocation.startsWith(wicketFilterPath);
+					if (validWicketUrl)
+					{
+						if (previousURL == null || previousURL != redirectLocation)
+						{
+							previousURL = wicketURL;
+							wicketURL = redirectLocation;
+							((RenderResponse)response).reset();
+							responseState.clear();
+							continue;
+						}
+						else
+						{
+							// internal Wicket redirection loop: unsure yet what to send out from
+							// here
+							// TODO: determine what kind of error (message or page) should be
+							// written out
+							// for now: no output available/written :(
+							responseState.clear();
+							break;
+						}
+					}
+					else
+					{
+						responseState.clear();
+						if (responseState.isResourceResponse())
+						{
+							// Formally, the Portlet 2.0 Spec doesn't support directly redirecting
+							// from serveResource. However, it is possible to write response headers
+							// to the ResourceResponse (using setProperty), which means the
+							// technical implementation of a response.redirect call might be
+							// "simulated" by writing out:
+
+							// a) setting response.setStatus(SC_FOUND)
+							// b) setting header "Location" to the redirectLocation
+
+							// Caveat 1:
+							// ResourceResponse.setStatus isn't supported either, but this can be
+							// done by setting the header property ResourceResponse.HTTP_STATUS_CODE
+
+							// Caveat 2: Actual handling of Response headers as set through
+							// PortletResponse.setProperty is completely optional by the Portlet
+							// Spec so it really depends on the portlet container implementation
+							// (and environment, e.g. consider using WSRP here...) if this will
+							// work.
+
+							// On Apache Pluto/Jetspeed-2, the above descibed handling *will* be
+							// implemented as expected!
+
+							// HttpServletResponse.SC_FOUND == 302, defined by Servlet API >= 2.4
+							response.setProperty(ResourceResponse.HTTP_STATUS_CODE,
+								Integer.toString(302));
+							response.setProperty("Location", redirectLocation);
+						}
+						else
+						{
+							// TODO: unhandled/unsupport RenderResponse redirect
+							log.error("Wicket redirecting outside of its own application during Render which is unsupported. Target url: " +
+								redirectLocation);
+						}
+						break;
+					}
+				}
+				else
+				{
+					// write response state out to the PortletResponse
+					responseState.flush();
+				}
+			}
+			break;
+		}
+	}
+

@@ -1,0 +1,19 @@
+	/**
+	 * Common functionality to be called by processEvents()
+	 * 
+	 * @param requestCycle
+	 *            The request cycle
+	 */
+	protected void onProcessEvents(final RequestCycle requestCycle)
+	{
+		getPage().startComponentRender(getTarget());
+
+		final Application application = requestCycle.getApplication();
+		// and see if we have to redirect the render part by default
+		IRequestCycleSettings.RenderStrategy strategy = application.getRequestCycleSettings()
+				.getRenderStrategy();
+		boolean issueRedirect = (strategy == IRequestCycleSettings.REDIRECT_TO_RENDER || strategy == IRequestCycleSettings.REDIRECT_TO_BUFFER);
+
+		requestCycle.setRedirect(issueRedirect);
+	}
+

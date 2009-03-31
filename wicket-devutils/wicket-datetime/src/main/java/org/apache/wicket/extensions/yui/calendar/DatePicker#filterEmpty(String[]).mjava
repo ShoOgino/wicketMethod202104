@@ -1,0 +1,25 @@
+	/**
+	 * Filter all empty elements (workaround for {@link DateFormatSymbols} returning arrays with
+	 * empty elements).
+	 * 
+	 * @param array
+	 *            array to filter
+	 * @return filtered array (without null or empty string elements)
+	 */
+	protected final String[] filterEmpty(String[] array)
+	{
+		if (array == null)
+		{
+			return null;
+		}
+		List<String> l = new ArrayList<String>(array.length);
+		for (int i = 0; i < array.length; i++)
+		{
+			if (!Strings.isEmpty(array[i]))
+			{
+				l.add(array[i]);
+			}
+		}
+		return l.toArray(new String[l.size()]);
+	}
+

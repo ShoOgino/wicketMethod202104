@@ -1,0 +1,37 @@
+	/**
+	 * Gets any cookies for request.
+	 * 
+	 * @param name
+	 *            The name of the cookie to be looked up
+	 * 
+	 * @return Any cookies for this request
+	 */
+	private Cookie getCookie(String name)
+	{
+		try
+		{
+			Cookie cookie = getWebRequest().getCookie(name);
+			if (log.isDebugEnabled())
+			{
+				if (cookie != null)
+				{
+					log.debug("Found Cookie with name=" + name + " and request URI=" +
+						getWebRequest().getHttpServletRequest().getRequestURI());
+				}
+				else
+				{
+					log.debug("Unable to find Cookie with name=" + name + " and request URI=" +
+						getWebRequest().getHttpServletRequest().getRequestURI());
+				}
+			}
+
+			return cookie;
+		}
+		catch (NullPointerException ex)
+		{
+			// Ignore any app server problem here
+		}
+
+		return null;
+	}
+

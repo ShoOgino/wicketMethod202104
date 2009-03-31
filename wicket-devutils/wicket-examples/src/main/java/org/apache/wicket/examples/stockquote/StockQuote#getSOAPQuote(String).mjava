@@ -1,0 +1,33 @@
+	/**
+	 * Calls the SOAP service to get the stock quote for the symbol.
+	 * 
+	 * @param symbol
+	 *            the name to search for
+	 * @return the SOAP response containing the stockquote
+	 */
+	private String getSOAPQuote(String symbol)
+	{
+		String response = "";
+
+		try
+		{
+			final URL url = new URL(serviceUrl);
+			final String message = createMessage(symbol);
+
+			// Create the connection where we're going to send the file.
+			HttpURLConnection httpConn = setUpHttpConnection(url, message.length());
+
+			// Everything's set up; send the XML that was read in to
+			// the service.
+			writeRequest(message, httpConn);
+
+			// Read the response and write it to standard out.
+			response = readResult(httpConn);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return response;
+	}
+

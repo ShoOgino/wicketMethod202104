@@ -1,0 +1,98 @@
+	/**
+	 * Gets the string currently represented by this string resource model. The string that is
+	 * returned may vary for each call to this method depending on the values contained in the model
+	 * and an the parameters that were passed when this string resource model was created.
+	 * 
+	 * @return The string
+	 */
+	public final String getString()
+	{
+		final Localizer localizer = getLocalizer();
+
+		// Make sure we have a localizer before commencing
+		if (getLocalizer() == null)
+		{
+			if (component != null)
+			{
+				setLocalizer(component.getLocalizer());
+			}
+			else
+			{
+				throw new IllegalStateException("No localizer has been set");
+			}
+		}
+
+		// Make sure we have the locale
+		if (locale == null)
+		{
+			locale = Session.get().getLocale();
+		}
+
+		String value = null;
+		// Substitute any parameters if necessary
+		Object[] parameters = getParameters();
+		if (parameters == null)
+		{
+			// Get the string resource, doing any property substitutions as part
+			// of the get operation
+			value = localizer.getString(getResourceKey(), component, model, defaultValue);
+			if (value == null)
+			{
+				value = defaultValue;
+			}
+		}
+		else
+		{
+			// Get the string resource, doing not any property substitutions
+			// that has to be done later after MessageFormat
+			value = localizer.getString(getResourceKey(), component, null, defaultValue);
+			if (value == null)
+			{
+				value = defaultValue;
+			}
+			if (value != null)
+			{
+				// Build the real parameters
+				Object[] realParams = new Object[parameters.length];
+				for (int i = 0; i < parameters.length; i++)
+				{
+					if (parameters[i] instanceof IModel)
+					{
+						realParams[i] = ((IModel<?>)parameters[i]).getObject();
+					}
+					else if (model != null && parameters[i] instanceof String)
+					{
+						realParams[i] = PropertyVariableInterpolator.interpolate(
+							(String)parameters[i], model.getObject());
+					}
+					else
+					{
+						realParams[i] = parameters[i];
+					}
+				}
+
+				if (model != null)
+				{
+					// First escape all substitute properties so that message format doesn't try to
+					// parse that.
+					value = Strings.replaceAll(value, "${", "$'{'").toString();
+				}
+				// Apply the parameters
+				final MessageFormat format = new MessageFormat(value, component != null
+					? component.getLocale() : locale);
+				value = format.format(realParams);
+
+				if (model != null)
+				{
+					// un escape the substitute properties
+					value = Strings.replaceAll(value, "$'{'", "${").toString();
+					// now substitute the properties
+					value = localizer.substitutePropertyExpressions(component, value, model);
+				}
+			}
+		}
+
+		// Return the string resource
+		return value;
+	}
+

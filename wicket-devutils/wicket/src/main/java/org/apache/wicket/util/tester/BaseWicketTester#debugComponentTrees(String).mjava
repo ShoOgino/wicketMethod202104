@@ -1,0 +1,19 @@
+	/**
+	 * Dumps the <code>Component</code> trees to log. Show only the <code>Component</code>s whose
+	 * paths contain the filter <code>String</code>.
+	 * 
+	 * @param filter
+	 *            a filter <code>String</code>
+	 */
+	public void debugComponentTrees(String filter)
+	{
+		log.info("debugging ----------------------------------------------");
+		for (WicketTesterHelper.ComponentData obj : WicketTesterHelper.getComponentData(getLastRenderedPage()))
+		{
+			if (obj.path.matches(".*" + filter + ".*"))
+			{
+				log.info("path\t" + obj.path + " \t" + obj.type + " \t[" + obj.value + "]");
+			}
+		}
+	}
+

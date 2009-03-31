@@ -1,0 +1,25 @@
+	/**
+	 * Sets a locale-charset mapping.
+	 * 
+	 * @param key
+	 *            the key for the charset.
+	 * @param charset
+	 *            the corresponding charset.
+	 */
+	@SuppressWarnings({"unchecked"})
+	public final synchronized void setCharSet(final String key, final String charset)
+	{
+		HashMap<String,String> mapper = (HashMap<String,String>) mappers.get(MAP_PROG);
+		if (mapper != null)
+		{
+			mapper = (HashMap<String, String>) mapper.clone();
+		}
+		else
+		{
+			mapper = new HashMap<String, String>();
+		}
+		mapper.put(key, charset);
+		mappers.add(MAP_PROG, mapper);
+		mappers.get(MAP_CACHE).clear();
+	}
+

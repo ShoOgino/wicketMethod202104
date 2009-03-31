@@ -1,0 +1,35 @@
+		/**
+		 * Checks if the specified path matches any mount, and if so returns the coding strategy for
+		 * that mount. Returns null if the path doesn't match any mounts.
+		 * 
+		 * NOTE: path here is not the mount - it is the full url path
+		 * 
+		 * @param path
+		 *            non-null url path
+		 * @return coding strategy or null
+		 */
+		public IRequestTargetUrlCodingStrategy strategyForPath(String path)
+		{
+			if (path == null)
+			{
+				throw new IllegalArgumentException("Argument [[path]] cannot be null");
+			}
+			if (caseSensitiveMounts == false)
+			{
+				path = path.toLowerCase();
+			}
+			for (Entry<String, IRequestTargetUrlCodingStrategy> entry : map.entrySet())
+			{
+				final String key = entry.getKey();
+				if (path.startsWith(key))
+				{
+					IRequestTargetUrlCodingStrategy strategy = entry.getValue();
+					if (strategy.matches(path, caseSensitiveMounts))
+					{
+						return strategy;
+					}
+				}
+			}
+			return null;
+		}
+

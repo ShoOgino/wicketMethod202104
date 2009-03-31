@@ -1,0 +1,37 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param path
+	 * @param extension
+	 */
+	public ExtensionResourceNameIterator(String path, final String extension)
+	{
+		if ((extension == null) && (path.indexOf('.') != -1))
+		{
+			// Get the extension from the path provided
+			extensions = new String[] { "." + Strings.lastPathComponent(path, '.') };
+			path = Strings.beforeLastPathComponent(path, '.');
+		}
+		else if (extension != null)
+		{
+			// Extension can be a comma separated list
+			extensions = Strings.split(extension, ',');
+			for (int i = extensions.length - 1; i >= 0; i--)
+			{
+				extensions[i] = extensions[i].trim();
+				if (!extensions[i].startsWith("."))
+				{
+					extensions[i] = "." + extensions[i];
+				}
+			}
+		}
+		else
+		{
+			extensions = new String[1];
+			extensions[0] = ".";
+		}
+
+		this.path = path;
+		index = 0;
+	}
+

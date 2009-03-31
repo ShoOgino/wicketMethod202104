@@ -1,0 +1,24 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testBookmarkableLink() throws Exception
+	{
+		// for WebPage without default constructor, I define a TestPageSource to
+		// let the page be instatiated lately.
+		tester.startPage(new ITestPageSource()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public Page getTestPage()
+			{
+				Book mockBook = new Book("xxId", "xxName");
+				return new ViewBook(mockBook);
+			}
+		});
+
+		// assertion
+		tester.assertRenderedPage(ViewBook.class);
+		tester.clickLink("link");
+		tester.assertRenderedPage(CreateBook.class);
+	}
+

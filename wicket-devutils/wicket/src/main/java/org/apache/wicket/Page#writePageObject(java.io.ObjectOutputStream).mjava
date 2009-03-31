@@ -1,0 +1,22 @@
+	/**
+	 * 
+	 * @param s
+	 * @throws IOException
+	 */
+	void writePageObject(java.io.ObjectOutputStream s) throws IOException
+	{
+		s.writeShort(numericId);
+		s.writeObject(pageMapName);
+
+		IPageSerializer ps = serializer.get();
+
+		if (ps != null)
+		{
+			ps.serializePage(this, s);
+		}
+		else
+		{
+			s.defaultWriteObject();
+		}
+	}
+

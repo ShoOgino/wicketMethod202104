@@ -1,0 +1,40 @@
+	/**
+	 * Test that an AjaxLink's onClick method is actually invoked.
+	 */
+	public void testBasicAjaxLinkClick()
+	{
+		// Create a link, which we test is actually invoked
+		final AjaxLink<Void> ajaxLink = new AjaxLink<Void>("ajaxLink")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				linkClicked = true;
+				ajaxRequestTarget = target;
+			}
+		};
+
+		tester.startPage(new ITestPageSource()
+		{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public Page getTestPage()
+			{
+				Page page = new MockPageWithLink();
+				page.add(ajaxLink);
+
+				return page;
+			}
+		});
+
+		tester.clickLink("ajaxLink");
+
+		assertTrue(linkClicked);
+		assertNotNull(ajaxRequestTarget);
+	}
+

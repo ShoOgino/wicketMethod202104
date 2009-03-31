@@ -1,0 +1,26 @@
+	/**
+	 * 
+	 * @param annotations
+	 * @return
+	 * @throws MoreThanOneBindingException
+	 */
+	private Annotation findBindingAnnotation(final Annotation[] annotations)
+			throws MoreThanOneBindingException
+	{
+		Annotation bindingAnnotation = null;
+
+		// Work out if we have a BindingAnnotation on this parameter.
+		for (Annotation annotation : annotations)
+		{
+			if (annotation.annotationType().getAnnotation(BindingAnnotation.class) != null)
+			{
+				if (bindingAnnotation != null)
+				{
+					throw new MoreThanOneBindingException();
+				}
+				bindingAnnotation = annotation;
+			}
+		}
+		return bindingAnnotation;
+	}
+

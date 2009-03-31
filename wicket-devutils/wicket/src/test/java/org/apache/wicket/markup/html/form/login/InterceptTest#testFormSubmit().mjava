@@ -1,0 +1,28 @@
+	/**
+	 * 
+	 */
+	public void testFormSubmit()
+	{
+		application = new WicketTester(new MyMockWebApplication()
+		{
+			@Override
+			protected WebResponse newWebResponse(HttpServletResponse response)
+			{
+				return new BufferedWebResponse(response);
+			}
+		});
+		// same as above but uses different technique to login
+		application.setupRequestAndResponse();
+		application.processRequestCycle();
+		MockLoginPage loginPage = (MockLoginPage)application.getLastRenderedPage();
+		assertEquals(((MyMockWebApplication)application.getApplication()).getLoginPage(),
+			loginPage.getClass());
+		FormTester form = application.newFormTester("form");
+		form.setValue("username", "admin");
+		form.submit();
+		assertEquals(application.getApplication().getHomePage(), application.getLastRenderedPage()
+			.getClass());
+
+		application.assertPageLink("link", PageA.class);
+	}
+

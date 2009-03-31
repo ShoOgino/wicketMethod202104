@@ -1,0 +1,26 @@
+		@Override
+		protected void onDetach()
+		{
+			super.onDetach();
+			Object object = getModelObject();
+			if (object instanceof IDetachable)
+			{
+				((IDetachable)object).detach();
+			}
+
+			if (isRenderChildren())
+			{
+				// visit every child
+				visitItemChildren(this, new IItemCallback()
+				{
+					public void visitItem(TreeItem item)
+					{
+						item.detach();
+					}
+				});
+			}
+
+			// children are rendered, clear the flag
+			setRenderChildren(false);
+		}
+

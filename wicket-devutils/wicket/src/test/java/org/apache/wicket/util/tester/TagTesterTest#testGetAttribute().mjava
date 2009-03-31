@@ -1,0 +1,37 @@
+	/**
+	 * Get attribute should return the value of the attribute.
+	 * 
+	 * If the attribute doesn't exist on the tag, the method should return null.
+	 */
+	public void testGetAttribute()
+	{
+		TagTester tester = TagTester.createTagByAttribute(MARKUP_1, "id", "test");
+		assertNotNull(tester);
+
+		assertEquals("class1", tester.getAttribute("class"));
+
+		// Nested
+		tester = TagTester.createTagByAttribute(MARKUP_1, "id", "test2");
+		assertNotNull(tester);
+
+		assertEquals("class2", tester.getAttribute("class"));
+
+		// Case insensitive
+		tester = TagTester.createTagByAttribute(MARKUP_1, "id", "test2");
+		assertNotNull(tester);
+
+		assertEquals("class2", tester.getAttribute("CLASS"));
+
+		// Return null if no attribute
+		tester = TagTester.createTagByAttribute(MARKUP_1, "id", "test");
+		assertNotNull(tester);
+
+		assertNull(tester.getAttribute("noattribute"));
+
+		// Test that an empty attribute is returned as an empty string
+		tester = TagTester.createTagByAttribute("<p id=\"test\" empty=\"\">Mock</p>", "id", "test");
+		assertNotNull(tester);
+
+		assertEquals("", tester.getAttribute("empty"));
+	}
+

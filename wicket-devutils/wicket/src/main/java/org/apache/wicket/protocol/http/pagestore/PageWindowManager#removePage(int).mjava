@@ -1,0 +1,29 @@
+	/**
+	 * Removes all page windows for given page. Removes all page versions.
+	 * 
+	 * @param pageId
+	 */
+	public void removePage(int pageId)
+	{
+		if (idToWindowIndices == null)
+		{
+			rebuildIndices();
+		}
+		List<Integer> indicesList = idToWindowIndices.get(pageId);
+
+		if (indicesList != null)
+		{
+			// we need to make a copy, as the removePage removes index from indicesList
+			Object[] indices = indicesList.toArray();
+			for (int i = 0; i < indices.length; i++)
+			{
+				int index = ((Integer)indices[i]).intValue();
+				PageWindowInternal window = windows.get(index);
+				if (window.pageId == pageId)
+				{
+					removePage(window.pageId, window.versionNumber, window.ajaxVersionNumber);
+				}
+			}
+		}
+	}
+

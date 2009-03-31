@@ -1,0 +1,60 @@
+	/**
+	 * Constructor.
+	 * <p>
+	 * NOTE: Please use <code>RequestUtils.decodeParameters()</code> if you wish to properly decode
+	 * a request URL.
+	 * 
+	 * @param keyValuePairs
+	 *            list of key/value pairs separated by a given delimiter. For example, "
+	 *            <code>param1=foo,param2=bar</code>" where delimiter is "<code>,</code>".
+	 * @param delimiter
+	 *            delimiter <code>String</code> used to separate key/value pairs
+	 */
+	public ValueMap(final String keyValuePairs, final String delimiter)
+	{
+		super();
+
+		int start = 0;
+		int equalsIndex = keyValuePairs.indexOf('=');
+		int delimiterIndex = keyValuePairs.indexOf(delimiter, equalsIndex);
+		if (delimiterIndex == -1)
+		{
+			delimiterIndex = keyValuePairs.length();
+		}
+		while (equalsIndex != -1)
+		{
+			if (delimiterIndex < keyValuePairs.length())
+			{
+				int equalsIndex2 = keyValuePairs.indexOf('=', delimiterIndex + 1);
+				if (equalsIndex2 != -1)
+				{
+					delimiterIndex = keyValuePairs.lastIndexOf(delimiter, equalsIndex2);
+				}
+				else
+				{
+					delimiterIndex = keyValuePairs.length();
+				}
+			}
+			String key = keyValuePairs.substring(start, equalsIndex);
+			String value = keyValuePairs.substring(equalsIndex + 1, delimiterIndex);
+			put(key, value);
+			if (delimiterIndex < keyValuePairs.length())
+			{
+				start = delimiterIndex + 1;
+				equalsIndex = keyValuePairs.indexOf('=', start);
+				if (equalsIndex != -1)
+				{
+					delimiterIndex = keyValuePairs.indexOf(delimiter, equalsIndex);
+					if (delimiterIndex == -1)
+					{
+						delimiterIndex = keyValuePairs.length();
+					}
+				}
+			}
+			else
+			{
+				equalsIndex = -1;
+			}
+		}
+	}
+

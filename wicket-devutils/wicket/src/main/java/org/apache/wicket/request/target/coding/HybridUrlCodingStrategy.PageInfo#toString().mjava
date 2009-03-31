@@ -1,0 +1,72 @@
+		/**
+		 * <ul>
+		 * <li>pageId
+		 * <li>pageId.version
+		 * <li>pageMap (only in if pagemap starts with a letter)
+		 * <li>.pageMap
+		 * <li>pageMap.pageId (only in if pageMap name starts with a letter)
+		 * <li>pageMap.pageId.version
+		 * </ul>
+		 */
+		@Override
+		public String toString()
+		{
+			String pageMapName = this.pageMapName;
+
+			// we don't need to encode the pageMapName when the pageId is unique
+			// per session
+			if (pageMapName != null && pageId != null && Application.exists() &&
+				Application.get().getSessionSettings().isPageIdUniquePerSession())
+			{
+				pageMapName = null;
+			}
+
+			AppendingStringBuffer buffer = new AppendingStringBuffer(5);
+
+			final boolean pmEmpty = Strings.isEmpty(pageMapName);
+			final boolean pmContainsLetter = !pmEmpty && !isNumber(pageMapName);
+
+
+			if (pageId != null && pmEmpty && versionNumber.intValue() == 0)
+			{
+				// pageId
+				buffer.append(pageId);
+			}
+			else if (pageId != null && pmEmpty && versionNumber.intValue() != 0)
+			{
+				// pageId.version
+				buffer.append(pageId);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(versionNumber);
+			}
+			else if (pageId == null && pmContainsLetter)
+			{
+				// pageMap (must start with letter)
+				buffer.append(pageMapName);
+			}
+			else if (pageId == null && !pmEmpty && !pmContainsLetter)
+			{
+				// .pageMap
+				buffer.append(getPageInfoSeparator());
+				buffer.append(pageMapName);
+			}
+			else if (pmContainsLetter && pageId != null && versionNumber.intValue() == 0)
+			{
+				// pageMap.pageId (pageMap must start with a letter)
+				buffer.append(pageMapName);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(pageId);
+			}
+			else if (!pmEmpty && pageId != null)
+			{
+				// pageMap.pageId.pageVersion
+				buffer.append(pageMapName);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(pageId);
+				buffer.append(getPageInfoSeparator());
+				buffer.append(versionNumber);
+			}
+
+			return buffer.toString();
+		}
+

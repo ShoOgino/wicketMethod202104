@@ -1,0 +1,22 @@
+	/**
+	 * Re-constitute the <tt>HashSet</tt> instance from a stream.
+	 * 
+	 * @param inputStream
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException,
+		IOException
+	{
+		inputStream.defaultReadObject();
+
+		map = new ConcurrentHashMap<E, Object>();
+
+		int size = inputStream.readInt();
+		for (int i = 0; i < size; i++)
+		{
+			E e = (E)inputStream.readObject();
+			map.put(e, PRESENT);
+		}
+	}
+

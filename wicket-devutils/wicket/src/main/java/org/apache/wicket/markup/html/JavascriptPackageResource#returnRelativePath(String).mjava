@@ -1,0 +1,22 @@
+	/**
+	 * 
+	 * @param location
+	 * @return relative path
+	 */
+	private static final String returnRelativePath(String location)
+	{
+		// WICKET-59 allow external URLs, WICKET-612 allow absolute URLs.
+		if (location.startsWith("http://") || location.startsWith("https://") ||
+			location.startsWith("/"))
+		{
+			return location;
+		}
+		else
+		{
+			return RequestCycle.get()
+				.getProcessor()
+				.getRequestCodingStrategy()
+				.rewriteStaticRelativeUrl(location);
+		}
+	}
+

@@ -1,0 +1,20 @@
+	/**
+	 * @see org.apache.wicket.model.IDetachable#detach()
+	 */
+	@Override
+	public void detach()
+	{
+		if (attached)
+		{
+			attached = false;
+			transientModelObject = null;
+
+			if (log.isDebugEnabled())
+			{
+				log.debug("removed transient object for " + this + ", requestCycle " +
+					RequestCycle.get());
+			}
+			onDetach();
+		}
+	}
+

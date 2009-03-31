@@ -1,0 +1,36 @@
+	/**
+	 * Encodes Map into a url fragment and append that to the provided url buffer.
+	 * 
+	 * @param url
+	 *            url so far
+	 * 
+	 * @param parameters
+	 *            Map object to be encoded
+	 */
+	protected void appendParameters(AppendingStringBuffer url, Map<?, ?> parameters)
+	{
+		if (parameters != null && parameters.size() > 0)
+		{
+			for (Entry<?, ?> entry1 : parameters.entrySet())
+			{
+				Object value = ((Entry<?, ?>)entry1).getValue();
+				if (value != null)
+				{
+					if (value instanceof String[])
+					{
+						String[] values = (String[])value;
+						for (String value1 : values)
+						{
+							appendValue(url, ((Entry<?, ?>)entry1).getKey().toString(), value1);
+						}
+					}
+					else
+					{
+						appendValue(url, ((Entry<?, ?>)entry1).getKey().toString(),
+							value.toString());
+					}
+				}
+			}
+		}
+	}
+

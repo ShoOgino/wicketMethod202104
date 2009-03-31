@@ -1,0 +1,39 @@
+	/**
+	 * Tries to load static image at the given path and throws an exception if the image cannot be
+	 * located.
+	 * 
+	 * @param path
+	 * 		The path to the image
+	 * @throws WicketRuntimeException
+	 * 		Thrown if the image cannot be located
+	 */
+	@SuppressWarnings("unchecked")
+	private void loadStaticImage(final String path)
+	{
+		MarkupContainer parent = component.findParentWithAssociatedMarkup();
+		if (parent instanceof Border)
+		{
+			parent = parent.getParent();
+		}
+		final Class scope = parent.getClass();
+		resourceReference = new ResourceReference(scope, path)
+		{
+			private static final long serialVersionUID = 1L;
+
+			/**
+			 * @see org.apache.wicket.ResourceReference#newResource()
+			 */
+			@Override
+			protected Resource newResource()
+			{
+				PackageResource pr = PackageResource.get(getScope(), getName(),
+					LocalizedImageResource.this.locale, style);
+				locale = pr.getLocale();
+				return pr;
+			}
+		};
+		resourceReference.setLocale(locale);
+		resourceReference.setStyle(style);
+		bind();
+	}
+

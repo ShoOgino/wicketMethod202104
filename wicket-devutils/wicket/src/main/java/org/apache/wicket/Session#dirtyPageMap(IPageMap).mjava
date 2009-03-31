@@ -1,0 +1,21 @@
+	/**
+	 * @param map
+	 *            The page map to add to dirty objects list
+	 */
+	void dirtyPageMap(final IPageMap map)
+	{
+		if (!map.isDefault())
+		{
+			synchronized (usedPageMaps)
+			{
+				usedPageMaps.remove(map);
+				usedPageMaps.addLast(map);
+			}
+		}
+		List<IClusterable> dirtyObjects = getDirtyObjectsList();
+		if (!dirtyObjects.contains(map))
+		{
+			dirtyObjects.add(map);
+		}
+	}
+

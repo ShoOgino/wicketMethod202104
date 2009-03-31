@@ -1,0 +1,22 @@
+	/**
+	 * Test that a component will update it's model when authorization is ok.
+	 * 
+	 * @throws Exception
+	 */
+	public void testEnabledAllowedComponent() throws Exception
+	{
+		tester.getApplication().getSecuritySettings().setAuthorizationStrategy(
+			new DummyAuthorizationStrategy());
+
+		tester.startPage(AuthTestPage1.class);
+		tester.assertRenderedPage(AuthTestPage1.class);
+		tester.setParameterForNextRequest("form:stringInput", "test");
+		tester.submitForm("form");
+		tester.assertRenderedPage(AuthTestPage1.class);
+		AuthTestPage1 page = (AuthTestPage1)tester.getLastRenderedPage();
+		assertTrue(page.isSubmitted());
+		Input input = page.getTestModel();
+		assertNotNull(input.getStringInput());
+		assertEquals("test", input.getStringInput());
+	}
+

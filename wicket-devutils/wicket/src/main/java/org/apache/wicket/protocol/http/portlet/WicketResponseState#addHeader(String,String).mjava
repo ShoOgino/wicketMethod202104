@@ -1,0 +1,14 @@
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.http.HttpServletResponseWrapper#addHeader(java.lang.String,
+	 * java.lang.String)
+	 */
+	public void addHeader(String name, String value)
+	{
+		if (isMimeResponse && !committed)
+		{
+			getHeaderList(name, true).add(value);
+		}
+	}
+

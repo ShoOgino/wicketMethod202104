@@ -1,0 +1,41 @@
+		/**
+		 * @see org.apache.wicket.PageMap#get(int, int)
+		 */
+		@Override
+		public Page get(int id, int versionNumber)
+		{
+			IntHashMap<Page> pages = getUsedPages(getName());
+			// for now i only get by id.
+			// does it really make any sense that there are multiply instances
+			// of the
+			// same page are alive in one session??
+			Page page = (Page)pages.get(id);
+			if (page != null)
+			{
+				return page;
+			}
+
+			String sessionId = getSession().getId();
+			if (getLastPage() != null && getLastPage().getNumericId() == id)
+			{
+				page = versionNumber != -1 ? getLastPage().getVersion(versionNumber)
+					: getLastPage();
+				if (page != null)
+				{
+					// ask the page store if it is ready saving the page.
+					getStore().pageAccessed(sessionId, page);
+					pages.put(id, page);
+					return page;
+				}
+			}
+			if (sessionId != null)
+			{
+				setLastPage(null);
+				page = getStore().getPage(sessionId, getName(), id, versionNumber, -1);
+				pages.put(id, page);
+				return page;
+
+			}
+			return null;
+		}
+

@@ -1,0 +1,30 @@
+	/**
+	 * FOR INTERNAL USE ONLY
+	 * 
+	 * @return unmodified list of behaviors which may contain null entries
+	 */
+	public final List<IBehavior> getBehaviorsRawList()
+	{
+		if (data != null)
+		{
+			// if the model is set, we must skip it
+			final int startIndex = getFlag(FLAG_MODEL_SET) ? 1 : 0;
+			int length = data_length();
+
+			if (length > startIndex)
+			{
+				final ArrayList<IBehavior> result = new ArrayList<IBehavior>();
+				for (int i = startIndex; i < length; ++i)
+				{
+					Object o = data_get(i);
+					if (o == null || o instanceof IBehavior)
+					{
+						result.add((IBehavior)o);
+					}
+				}
+				return result;
+			}
+		}
+		return null;
+	}
+

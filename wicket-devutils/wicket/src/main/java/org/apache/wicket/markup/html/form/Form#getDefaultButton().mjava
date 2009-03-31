@@ -1,0 +1,27 @@
+	/**
+	 * Gets the default IFormSubmittingComponent. If set (not null), a hidden submit component will
+	 * be rendered right after the form tag, so that when users press enter in a textfield, this
+	 * submit component's action will be selected. If no default component is set (it is null),
+	 * nothing additional is rendered.
+	 * <p>
+	 * WARNING: note that this is a best effort only. Unfortunately having a 'default' button in a
+	 * form is ill defined in the standards, and of course IE has it's own way of doing things.
+	 * </p>
+	 * There can be only one default submit component per form hierarchy. So if you want to get the
+	 * default component on a nested form, it will actually delegate the call to root form. </b>
+	 * 
+	 * @return The submit component to set as the default IFormSubmittingComponent, or null when you
+	 *         want to 'unset' any previously set default IFormSubmittingComponent
+	 */
+	public final IFormSubmittingComponent getDefaultButton()
+	{
+		if (isRootForm())
+		{
+			return defaultSubmittingComponent;
+		}
+		else
+		{
+			return getRootForm().getDefaultButton();
+		}
+	}
+

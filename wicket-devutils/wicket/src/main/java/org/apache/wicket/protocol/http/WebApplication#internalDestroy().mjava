@@ -1,0 +1,18 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL IT.
+	 */
+	@Override
+	protected void internalDestroy()
+	{
+		// destroy the resource watcher
+		ModificationWatcher resourceWatcher = getResourceSettings().getResourceWatcher(false);
+		if (resourceWatcher != null)
+		{
+			resourceWatcher.destroy();
+		}
+		super.internalDestroy();
+		bufferedResponses.clear();
+		getSessionStore().destroy();
+		FileCleaner.destroy();
+	}
+

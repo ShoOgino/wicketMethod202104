@@ -1,0 +1,39 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.SecondLevelCacheSessionStore.IPageStore#getPage(java.lang.String,
+	 *      java.lang.String, int, int, int)
+	 */
+
+	public <T> Page getPage(String sessionId, String pagemap, int id, int versionNumber,
+		int ajaxVersionNumber)
+	{
+		SessionEntry entry = getSessionEntry(sessionId, false);
+		if (entry != null)
+		{
+			byte[] data;
+
+			if (isSynchronous())
+			{
+				data = entry.loadPage(pagemap, id, versionNumber, ajaxVersionNumber);
+			}
+			else
+			{
+				// we need to make sure that the there are no pending pages to
+				// be saved before loading a page
+				List<SerializedPage> pages = getPagesToSaveList(sessionId);
+				synchronized (pages)
+				{
+					flushPagesToSaveList(sessionId, pages);
+					data = entry.loadPage(pagemap, id, versionNumber, ajaxVersionNumber);
+				}
+			}
+
+			if (data != null)
+			{
+				final Page ret = deserializePage(data, versionNumber);
+				return ret;
+			}
+		}
+
+		return null;
+	}
+

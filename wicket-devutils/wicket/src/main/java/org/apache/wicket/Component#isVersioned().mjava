@@ -1,0 +1,26 @@
+	/**
+	 * @return True if this component is versioned
+	 */
+	public boolean isVersioned()
+	{
+		// Is the component itself versioned?
+		if (!getFlag(FLAG_VERSIONED))
+		{
+			return false;
+		}
+		else
+		{
+			// If there's a parent and this component is versioned
+			if (parent != null)
+			{
+				// Check if the parent is unversioned. If any parent
+				// (recursively) is unversioned, then this component is too
+				if (!parent.isVersioned())
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+

@@ -1,0 +1,17 @@
+	/**
+	 * Returns the last modified time of resource
+	 * 
+	 * @return last modified time or null if the time can not be determined
+	 */
+	public Time lastModifiedTime()
+	{
+		if (lastModifiedTimeUpdate == 0 ||
+			lastModifiedTimeUpdate < System.currentTimeMillis() - 5 * (1000 * 60))
+		{
+			lastModifiedTime = getResourceStream().lastModifiedTime();
+			lastModifiedTimeUpdate = System.currentTimeMillis();
+		}
+		return lastModifiedTime;
+
+	}
+

@@ -1,0 +1,26 @@
+	/**
+	 * Calculates enabled state of the component taking its hierarchy into account. A component is
+	 * enabled iff it is itself enabled ({@link #isEnabled()} and {@link #isEnableAllowed()} both
+	 * return <code>true</code>), and all of its parents are enabled.
+	 * 
+	 * @return <code>true</code> if this component is enabled</code>
+	 */
+	public final boolean isEnabledInHierarchy()
+	{
+		Boolean state = getMetaData(ENABLED_IN_HIERARCHY_CACHE_KEY);
+		if (state == null)
+		{
+			state = isEnabled() && isEnableAllowed();
+			if (state)
+			{
+				Component parent = getParent();
+				if (parent != null)
+				{
+					state = state && parent.isEnabledInHierarchy();
+				}
+			}
+			setMetaData(ENABLED_IN_HIERARCHY_CACHE_KEY, state);
+		}
+		return state;
+	}
+

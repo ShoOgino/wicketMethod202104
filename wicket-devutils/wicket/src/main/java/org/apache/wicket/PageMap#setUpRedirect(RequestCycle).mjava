@@ -1,0 +1,30 @@
+	private void setUpRedirect(final RequestCycle cycle)
+	{
+		Session session = Session.get();
+		if (session.isTemporary())
+		{
+			session.bind();
+		}
+
+		// The intercept continuation URL should be saved exactly as the
+		// original request specified.
+		// Only if it is an ajax request just redirect to the page where the request is from.
+		if (cycle.getRequest() instanceof WebRequest && ((WebRequest)cycle.getRequest()).isAjax())
+		{
+			interceptContinuationURL = cycle.urlFor(cycle.getRequest().getPage()).toString();
+		}
+		else
+		{
+			// wicket-2061: getURL() returns a properly <b>decoded</b> URL. But we need is a
+			// properly <b>encoded</b> URL.
+			interceptContinuationURL = "/" + cycle.getRequest().getURL();
+			interceptContinuationURL = WicketURLEncoder.FULL_PATH_INSTANCE.encode(interceptContinuationURL);
+		}
+
+		// Page map is dirty
+		dirty();
+
+		// Redirect to the page
+		cycle.setRedirect(true);
+	}
+

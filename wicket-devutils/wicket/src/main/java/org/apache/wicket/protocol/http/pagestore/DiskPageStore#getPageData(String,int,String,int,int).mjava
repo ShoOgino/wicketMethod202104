@@ -1,0 +1,31 @@
+	private byte[] getPageData(String sessionId, int pageId, String pageMapName, int versionNumber,
+		int ajaxVersionNumber)
+	{
+		SessionEntry entry = getSessionEntry(sessionId, false);
+		if (entry != null)
+		{
+			byte[] data;
+
+			if (isSynchronous())
+			{
+				data = entry.loadPage(pageMapName, pageId, versionNumber, ajaxVersionNumber);
+			}
+			else
+			{
+				// we need to make sure that the there are no pending pages to
+				// be saved before loading a page
+				List<SerializedPage> pages = getPagesToSaveList(sessionId);
+				synchronized (pages)
+				{
+					flushPagesToSaveList(sessionId, pages);
+					data = entry.loadPage(pageMapName, pageId, versionNumber, ajaxVersionNumber);
+				}
+			}
+			return data;
+		}
+		else
+		{
+			return null;
+		}
+	}
+

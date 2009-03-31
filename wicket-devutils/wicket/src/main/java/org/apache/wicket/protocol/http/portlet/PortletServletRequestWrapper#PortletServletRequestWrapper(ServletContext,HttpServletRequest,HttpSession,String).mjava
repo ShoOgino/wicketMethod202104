@@ -1,0 +1,21 @@
+	/**
+	 * FIXME javadoc
+	 * 
+	 * <p>
+	 * Public constructor which internally builds the path info from request URI, instead of
+	 * deriving it.
+	 * 
+	 * @param context
+	 * @param request
+	 * @param proxiedSession
+	 * @param filterPath
+	 */
+	public PortletServletRequestWrapper(ServletContext context, HttpServletRequest request,
+		HttpSession proxiedSession, String filterPath)
+	{
+		this(context, proxiedSession, request, filterPath);
+
+		String pathInfo = requestURI.substring(contextPath.length() + filterPath.length());
+		this.pathInfo = pathInfo == null || pathInfo.length() < 2 ? null : pathInfo;
+	}
+

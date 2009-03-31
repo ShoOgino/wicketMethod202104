@@ -1,0 +1,26 @@
+	private final void internalBeforeRender()
+	{
+		if ((determineVisibility() || callOnBeforeRenderIfNotVisible()) &&
+			!getFlag(FLAG_RENDERING) && !getFlag(FLAG_PREPARED_FOR_RENDER))
+		{
+			setFlag(FLAG_BEFORE_RENDERING_SUPER_CALL_VERIFIED, false);
+
+			getApplication().notifyPreComponentOnBeforeRenderListeners(this);
+
+			// clear the enabled in hierarchy cache as it may change as a result of form processing
+			// or other logic executed in onbeforerender (WICKET-2063)
+			setMetaData(Component.ENABLED_IN_HIERARCHY_CACHE_KEY, null);
+
+			onBeforeRender();
+			getApplication().notifyPostComponentOnBeforeRenderListeners(this);
+
+			if (!getFlag(FLAG_BEFORE_RENDERING_SUPER_CALL_VERIFIED))
+			{
+				throw new IllegalStateException(Component.class.getName() +
+					" has not been properly rendered. Something in the hierarchy of " +
+					getClass().getName() +
+					" has not called super.onBeforeRender() in the override of onBeforeRender() method");
+			}
+		}
+	}
+

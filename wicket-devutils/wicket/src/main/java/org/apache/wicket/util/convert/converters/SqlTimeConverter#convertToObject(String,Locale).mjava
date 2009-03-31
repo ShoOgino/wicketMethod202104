@@ -1,0 +1,23 @@
+	/** @see org.apache.wicket.util.convert.converters.DateConverter#convertToObject(java.lang.String,java.util.Locale) */
+	public Time convertToObject(String value, Locale locale)
+	{
+		if (value == null)
+			return null;
+		if (locale == null)
+			locale = Locale.getDefault();
+		DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+		try
+		{
+			Date date = format.parse(value);
+			return new Time(date.getTime());
+		}
+		catch (ParseException e)
+		{
+			throw new ConversionException("Cannot parse '" + value + "' using format " + format).setSourceValue(
+				value)
+				.setTargetType(getTargetType())
+				.setConverter(this)
+				.setLocale(locale);
+		}
+	}
+

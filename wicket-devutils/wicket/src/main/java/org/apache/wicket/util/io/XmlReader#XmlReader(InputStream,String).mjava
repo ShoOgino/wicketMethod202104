@@ -1,0 +1,28 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param inputStream
+	 *            The InputStream to read the xml data from
+	 * @param defaultEncoding
+	 *            Default character encoding to use when not specified in XML declaration, specify
+	 *            null to use JVM default
+	 * @throws IOException
+	 *             In case something went wrong while reading the data
+	 */
+	public XmlReader(final InputStream inputStream, final String defaultEncoding)
+			throws IOException
+	{
+		// The xml parser does not have a parent filter
+		super();
+
+		this.inputStream = inputStream;
+		encoding = defaultEncoding;
+
+		if (inputStream == null)
+		{
+			throw new IllegalArgumentException("Parameter 'inputStream' must not be null");
+		}
+
+		init();
+	}
+

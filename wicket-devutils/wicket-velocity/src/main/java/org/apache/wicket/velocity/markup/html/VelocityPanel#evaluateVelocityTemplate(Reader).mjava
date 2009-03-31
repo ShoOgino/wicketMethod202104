@@ -1,0 +1,60 @@
+	/**
+	 * Evaluates the template and returns the result.
+	 * 
+	 * @param templateReader
+	 *            used to read the template
+	 * @return the result of evaluating the velocity template
+	 */
+	private String evaluateVelocityTemplate(Reader templateReader)
+	{
+		if (evaluatedTemplate == null)
+		{
+			// Get model as a map
+			final Map map = (Map)getDefaultModelObject();
+
+			// create a Velocity context object using the model if set
+			final VelocityContext ctx = new VelocityContext(map);
+
+			// create a writer for capturing the Velocity output
+			StringWriter writer = new StringWriter();
+
+			// string to be used as the template name for log messages in case
+			// of error
+			final String logTag = getId();
+			try
+			{
+				// execute the velocity script and capture the output in writer
+				Velocity.evaluate(ctx, writer, logTag, templateReader);
+
+				// replace the tag's body the Velocity output
+				evaluatedTemplate = writer.toString();
+
+				if (escapeHtml())
+				{
+					// encode the result in order to get valid html output that
+					// does not break the rest of the page
+					evaluatedTemplate = Strings.escapeMarkup(evaluatedTemplate).toString();
+				}
+				return evaluatedTemplate;
+			}
+			catch (IOException e)
+			{
+				onException(e);
+			}
+			catch (ParseErrorException e)
+			{
+				onException(e);
+			}
+			catch (MethodInvocationException e)
+			{
+				onException(e);
+			}
+			catch (ResourceNotFoundException e)
+			{
+				onException(e);
+			}
+			return null;
+		}
+		return evaluatedTemplate;
+	}
+

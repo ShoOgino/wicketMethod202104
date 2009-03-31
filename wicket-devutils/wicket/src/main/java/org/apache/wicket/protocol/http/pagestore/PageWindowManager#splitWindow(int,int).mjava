@@ -1,0 +1,33 @@
+	/**
+	 * Splits the window with given index to two windows. First of those will have size specified by
+	 * the argument, the other one will fill up the rest of the original window.
+	 * 
+	 * @param index
+	 * @param size
+	 */
+	private void splitWindow(int index, int size)
+	{
+		PageWindowInternal window = windows.get(index);
+		int delta = window.filePartSize - size;
+
+		if (index == windows.size() - 1)
+		{
+			// if this is last window
+			totalSize -= delta;
+			window.filePartSize = size;
+		}
+		else if (window.filePartSize != size)
+		{
+			PageWindowInternal newWindow = new PageWindowInternal();
+			newWindow.pageId = -1;
+			window.filePartSize = size;
+
+			windows.add(index + 1, newWindow);
+
+			newWindow.filePartOffset = getWindowFileOffset(index + 1);
+			newWindow.filePartSize = delta;
+		}
+
+		idToWindowIndices = null;
+	}
+

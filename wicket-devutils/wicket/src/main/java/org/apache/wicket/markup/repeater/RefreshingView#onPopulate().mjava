@@ -1,0 +1,14 @@
+	/**
+	 * Refresh the items in the view. Delegates the creation of items to the selected item reuse
+	 * strategy
+	 */
+	@Override
+	protected final void onPopulate()
+	{
+		Iterator<IModel<T>> models = getItemModels();
+		Iterator<Item<T>> items = getItemReuseStrategy().getItems(newItemFactory(), models,
+			getItems());
+		removeAll();
+		addItems(items);
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Called for every component when the page is getting to be rendered. it will call
+	 * onBeforeRender for this component and all the child components
+	 */
+	public final void beforeRender()
+	{
+		if (!(this instanceof IFeedback))
+		{
+			internalBeforeRender();
+		}
+		else
+		{
+			// this component is a feedback. Feedback must be initialized last, so that
+			// they can collect messages from other components
+			List<Component> feedbacks = getRequestCycle().getMetaData(FEEDBACK_LIST);
+			if (feedbacks == null)
+			{
+				feedbacks = new ArrayList<Component>();
+				getRequestCycle().setMetaData(FEEDBACK_LIST, feedbacks);
+			}
+			feedbacks.add(this);
+		}
+	}
+

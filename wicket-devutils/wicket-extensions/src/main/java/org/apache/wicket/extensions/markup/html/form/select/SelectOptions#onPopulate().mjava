@@ -1,0 +1,42 @@
+	/**
+	 * @see org.apache.wicket.Component#onBeforeRender()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	protected final void onPopulate()
+	{
+		if (size() == 0 || recreateChoices)
+		{
+			// populate this repeating view with SelectOption components
+			removeAll();
+
+			Collection<? extends T> modelObject = (Collection<? extends T>)getDefaultModelObject();
+
+			if (modelObject != null)
+			{
+				if (!(modelObject instanceof Collection))
+				{
+					throw new WicketRuntimeException("Model object " + modelObject +
+						" not a collection");
+				}
+
+				// iterator over model objects for SelectOption components
+				Iterator<? extends T> it = modelObject.iterator();
+
+				while (it.hasNext())
+				{
+					// we need a container to represent a row in repeater
+					WebMarkupContainer row = new WebMarkupContainer(newChildId());
+					row.setRenderBodyOnly(true);
+					add(row);
+
+					// we add our actual SelectOption component to the row
+					T value = it.next();
+					String text = renderer.getDisplayValue(value);
+					IModel<T> model = renderer.getModel(value);
+					row.add(newOption(text, model));
+				}
+			}
+		}
+	}
+

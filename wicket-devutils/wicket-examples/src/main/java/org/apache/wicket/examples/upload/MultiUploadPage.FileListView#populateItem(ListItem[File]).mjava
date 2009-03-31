@@ -1,0 +1,19 @@
+		/**
+		 * @see ListView#populateItem(ListItem)
+		 */
+		@Override
+		protected void populateItem(ListItem<File> listItem)
+		{
+			final File file = listItem.getModelObject();
+			listItem.add(new Label("file", file.getName()));
+			listItem.add(new Link("delete")
+			{
+				@Override
+				public void onClick()
+				{
+					Files.remove(file);
+					info("Deleted " + file);
+				}
+			});
+		}
+

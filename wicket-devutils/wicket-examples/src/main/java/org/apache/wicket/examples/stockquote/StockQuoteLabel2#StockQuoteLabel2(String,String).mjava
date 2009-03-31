@@ -1,0 +1,24 @@
+	/**
+	 * Constructor taking the symbol directly.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param symbol
+	 *            the symbol to look up
+	 */
+	public StockQuoteLabel2(String id, final String symbol)
+	{
+		super(id, new AbstractReadOnlyModel<String>()
+		{
+			/**
+			 * Gets the stockquote for the given symbol.
+			 */
+			@Override
+			public String getObject()
+			{
+				final StockQuote quote = new StockQuote(symbol);
+				return quote.getQuote();
+			}
+		});
+	}
+

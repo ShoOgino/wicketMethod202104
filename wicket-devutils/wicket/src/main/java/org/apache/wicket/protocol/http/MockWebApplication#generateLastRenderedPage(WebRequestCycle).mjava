@@ -1,0 +1,50 @@
+	/**
+	 * 
+	 * @param cycle
+	 * @return Last page
+	 */
+	private Page generateLastRenderedPage(WebRequestCycle cycle)
+	{
+		Page newLastRenderedPage = cycle.getResponsePage();
+		if (newLastRenderedPage == null)
+		{
+			Class<? extends Page> responseClass = cycle.getResponsePageClass();
+			if (responseClass != null)
+			{
+				Session.set(cycle.getSession());
+				IRequestTarget target = cycle.getRequestTarget();
+				if (target instanceof IPageRequestTarget)
+				{
+					newLastRenderedPage = ((IPageRequestTarget)target).getPage();
+				}
+				else if (target instanceof IBookmarkablePageRequestTarget)
+				{
+					// create a new request cycle for the newPage call
+					createRequestCycle();
+					IBookmarkablePageRequestTarget pageClassRequestTarget = (IBookmarkablePageRequestTarget)target;
+					Class<? extends Page> pageClass = pageClassRequestTarget.getPageClass();
+					PageParameters parameters = pageClassRequestTarget.getPageParameters();
+					if (parameters == null || parameters.size() == 0)
+					{
+						newLastRenderedPage = application.getSessionSettings()
+							.getPageFactory()
+							.newPage(pageClass);
+					}
+					else
+					{
+						newLastRenderedPage = application.getSessionSettings()
+							.getPageFactory()
+							.newPage(pageClass, parameters);
+					}
+				}
+			}
+		}
+
+		if (newLastRenderedPage == null)
+		{
+			newLastRenderedPage = lastRenderedPage;
+		}
+
+		return newLastRenderedPage;
+	}
+

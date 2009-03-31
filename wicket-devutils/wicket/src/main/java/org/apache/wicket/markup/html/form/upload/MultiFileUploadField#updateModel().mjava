@@ -1,0 +1,30 @@
+	/**
+	 * @see org.apache.wicket.markup.html.form.FormComponent#updateModel()
+	 */
+	@Override
+	public void updateModel()
+	{
+		final Collection<FileUpload> collection = getModelObject();
+
+		// figure out if there is an existing model object collection for us to
+		// reuse
+		if (collection == null)
+		{
+			// no existing collection, push the one we created
+			setDefaultModelObject(getConvertedInput());
+		}
+		else
+		{
+			// refresh the existing collection
+			collection.clear();
+			if (getConvertedInput() != null)
+			{
+				collection.addAll(getConvertedInput());
+			}
+
+			// push the collection in case the model is listening to
+			// setobject calls
+			setDefaultModelObject(collection);
+		}
+	}
+

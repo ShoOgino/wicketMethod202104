@@ -1,0 +1,14 @@
+	/**
+	 * @see org.apache.wicket.session.ISessionStore#lookup(org.apache.wicket.Request)
+	 */
+	public Session lookup(Request request)
+	{
+		String sessionId = getSessionId(request, false);
+		if (sessionId != null)
+		{
+			WebRequest webRequest = toWebRequest(request);
+			return (Session)getAttribute(webRequest, Session.SESSION_ATTRIBUTE_NAME);
+		}
+		return null;
+	}
+

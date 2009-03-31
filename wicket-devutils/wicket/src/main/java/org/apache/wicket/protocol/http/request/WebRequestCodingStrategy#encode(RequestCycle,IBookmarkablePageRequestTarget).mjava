@@ -1,0 +1,87 @@
+	/**
+	 * Encode a page class target.
+	 * 
+	 * If you override this method to behave different then also
+	 * {@link #addBookmarkablePageParameters(Request, RequestParameters)} should be overridden to be
+	 * in sync with that behavior.
+	 * 
+	 * @param requestCycle
+	 *            the current request cycle
+	 * @param requestTarget
+	 *            the target to encode
+	 * @return the encoded url
+	 */
+	protected CharSequence encode(RequestCycle requestCycle,
+		IBookmarkablePageRequestTarget requestTarget)
+	{
+		// Begin encoding URL
+		final AppendingStringBuffer url = new AppendingStringBuffer(64);
+
+		// Get page Class
+		final Class<? extends Page> pageClass = requestTarget.getPageClass();
+		final Application application = Application.get();
+
+		// Find pagemap name
+		String pageMapName = requestTarget.getPageMapName();
+		if (pageMapName == null)
+		{
+			IRequestTarget currentTarget = requestCycle.getRequestTarget();
+			if (currentTarget instanceof IPageRequestTarget)
+			{
+				Page currentPage = ((IPageRequestTarget)currentTarget).getPage();
+				final IPageMap pageMap = currentPage.getPageMap();
+				if (pageMap.isDefault())
+				{
+					pageMapName = "";
+				}
+				else
+				{
+					pageMapName = pageMap.getName();
+				}
+			}
+			else
+			{
+				pageMapName = "";
+			}
+		}
+
+		WebRequestEncoder encoder = new WebRequestEncoder(url);
+		if (!application.getHomePage().equals(pageClass) ||
+			!"".equals(pageMapName) ||
+			(application.getHomePage().equals(pageClass) && requestTarget instanceof BookmarkableListenerInterfaceRequestTarget))
+		{
+			/*
+			 * Add <page-map-name>:<bookmarkable-page-class>
+			 * 
+			 * Encode the url so it is correct even for class names containing non ASCII characters,
+			 * like ä, æ, ø, å etc.
+			 * 
+			 * The reason for this is that when redirecting to these bookmarkable pages, we need to
+			 * have the url encoded correctly because we can't rely on the browser to interpret the
+			 * unencoded url correctly.
+			 */
+			encoder.addValue(WebRequestCodingStrategy.BOOKMARKABLE_PAGE_PARAMETER_NAME,
+				pageMapName + Component.PATH_SEPARATOR + pageClass.getName());
+		}
+
+		// Get page parameters
+		final PageParameters parameters = requestTarget.getPageParameters();
+		if (parameters != null)
+		{
+			final Iterator<String> iterator = parameters.keySet().iterator();
+			while (iterator.hasNext())
+			{
+				final String key = iterator.next();
+				final String values[] = parameters.getStringArray(key);
+				if (values != null)
+				{
+					for (int i = 0; i < values.length; i++)
+					{
+						encoder.addValue(key, values[i]);
+					}
+				}
+			}
+		}
+		return url;
+	}
+

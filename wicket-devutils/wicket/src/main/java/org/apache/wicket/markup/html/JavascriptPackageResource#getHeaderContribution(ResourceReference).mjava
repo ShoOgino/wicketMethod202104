@@ -1,0 +1,21 @@
+	/**
+	 * Returns a new instance of {@link HeaderContributor} with a header contributor that references
+	 * a java script file that lives in a package.
+	 * 
+	 * @param reference
+	 * 
+	 * @return the new header contributor instance
+	 */
+	public static final HeaderContributor getHeaderContribution(final ResourceReference reference)
+	{
+		return new HeaderContributor(new IHeaderContributor()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void renderHead(IHeaderResponse response)
+			{
+				response.renderJavascriptReference(reference);
+			}
+		});
+	}
+

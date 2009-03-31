@@ -1,0 +1,15 @@
+		/**
+		 * Returns true if the given page exists for specified pageMap
+		 * 
+		 * @param pageMapName
+		 * @param pageId
+		 * @param versionNumber
+		 * @return true if page exists
+		 */
+		public synchronized boolean exists(String pageMapName, int pageId, int versionNumber)
+		{
+			PageMapEntry entry = getPageMapEntry(pageMapName, false);
+			return entry != null &&
+				entry.getManager().getPageWindow(pageId, versionNumber, -1) != null;
+		}
+

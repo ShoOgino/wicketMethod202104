@@ -1,0 +1,47 @@
+	/**
+	 * Adjusts the window on given index to the specified size. If the new size is smaller than the
+	 * window size, the window will be split. Otherwise the window will be merged with as many
+	 * subsequent window as necessary. In case the window is last window in the file, the size will
+	 * be adjusted without splitting or merging.
+	 * 
+	 * @param index
+	 * @param size
+	 */
+	private void adjustWindowSize(int index, int size)
+	{
+		PageWindowInternal window = windows.get(index);
+
+		// last window, just adjust size
+		if (index == windows.size() - 1)
+		{
+			int delta = size - window.filePartSize;
+			totalSize += delta;
+			window.filePartSize = size;
+		}
+		else
+		{
+			// merge as many times as necessary
+			while (window.filePartSize < size && index < windows.size() - 1)
+			{
+				mergeWindowWithNext(index);
+			}
+			// done merging - do we have enough room ?
+			if (window.filePartSize < size)
+			{
+				// no, this is the last window
+				int delta = size - window.filePartSize;
+				totalSize += delta;
+				window.filePartSize = size;
+			}
+			else
+			{
+				// yes, we might want to split the window, so that we don't lose
+				// space when
+				// the created window was too big
+				splitWindow(index, size);
+			}
+		}
+
+		window.pageId = -1;
+	}
+

@@ -1,0 +1,19 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.portlet.WicketPortlet#getWicketConfigParameter(javax.portlet.PortletRequest,
+	 *      java.lang.String, java.lang.String)
+	 */
+	@Override
+	protected String getWicketConfigParameter(PortletRequest request, String paramName,
+		String defaultValue)
+	{
+		if (paramName.equals(WICKET_FILTER_PATH))
+		{
+			return ((ExampleApplication)request.getAttribute(EXAMPLE_APPLICATION_ATTR)).getFilterPath();
+		}
+		else if (paramName.equals(WICKET_FILTER_QUERY))
+		{
+			return ((ExampleApplication)request.getAttribute(EXAMPLE_APPLICATION_ATTR)).getFilterQuery();
+		}
+		return super.getWicketConfigParameter(request, paramName, defaultValue);
+	}
+

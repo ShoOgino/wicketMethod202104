@@ -1,0 +1,20 @@
+	/**
+	 * {@link IBehavior#beforeRender(Component)} Notify all behaviors that are assigned to this
+	 * component that the component is about to be rendered.
+	 */
+	private void notifyBehaviorsComponentBeforeRender()
+	{
+		List<IBehavior> behaviors = getBehaviors();
+		if (behaviors != null)
+		{
+			for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
+			{
+				IBehavior behavior = i.next();
+				if (isBehaviorAccepted(behavior))
+				{
+					behavior.beforeRender(this);
+				}
+			}
+		}
+	}
+

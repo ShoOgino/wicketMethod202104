@@ -1,0 +1,21 @@
+	/**
+	 * Sets whether this component and any children are visible.
+	 * 
+	 * @param visible
+	 *            True if this component and any children should be visible
+	 * @return This
+	 */
+	public final Component setVisible(final boolean visible)
+	{
+		// Is new visibility state a change?
+		if (visible != getFlag(FLAG_VISIBLE))
+		{
+			// record component's visibility change
+			addStateChange(new VisibilityChange(this));
+
+			// Change visibility
+			setFlag(FLAG_VISIBLE, visible);
+		}
+		return this;
+	}
+

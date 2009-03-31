@@ -1,0 +1,20 @@
+	/**
+	 * Returns the offset in file of the window on given index. The offset is counted by getting the
+	 * previous page offset and adding the previous page size to it.
+	 * 
+	 * @param index
+	 * @return window file offset
+	 */
+	private int getWindowFileOffset(int index)
+	{
+		if (index > 0)
+		{
+			PageWindowInternal window = windows.get(index - 1);
+			return window.filePartOffset + window.filePartSize;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+

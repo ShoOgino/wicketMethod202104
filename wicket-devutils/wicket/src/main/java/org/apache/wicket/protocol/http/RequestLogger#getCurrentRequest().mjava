@@ -1,0 +1,13 @@
+	RequestData getCurrentRequest()
+	{
+		RequestCycle requestCycle = RequestCycle.get();
+		RequestData rd = requestCycle.getMetaData(REQUEST_DATA);
+		if (rd == null)
+		{
+			rd = new RequestData();
+			requestCycle.setMetaData(REQUEST_DATA, rd);
+			active.incrementAndGet();
+		}
+		return rd;
+	}
+

@@ -1,0 +1,25 @@
+	/**
+	 * @see org.apache.wicket.IInitializer#init(org.apache.wicket.Application)
+	 */
+	public void init(Application application)
+	{
+		Properties props = getVelocityProperties(application);
+
+		try
+		{
+			if (null != props)
+			{
+				Velocity.init(props);
+			}
+			else
+			{
+				Velocity.init();
+			}
+			log.info("Initialized Velocity successfully");
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

@@ -1,0 +1,35 @@
+		/**
+		 * @param animal
+		 *            The animal
+		 * @return The visible region of the animal
+		 */
+		private OpaqueRegion visibleRegion(final PlacedAnimal animal)
+		{
+			// The index of the animal in the animal list
+			int index = animals.indexOf(animal);
+
+			// Check sanity
+			if (index == -1)
+			{
+				// Invalid animal somehow
+				throw new IllegalArgumentException("animal not in list");
+			}
+			else
+			{
+				// Get the animal's visible region
+				OpaqueRegion visible = animal.getAnimal().visibleRegion;
+
+				// Go through the animals above the given animal
+				for (index++; index < animals.size(); index++)
+				{
+
+					// Remove the higher animal's visible region
+					final PlacedAnimal remove = animals.get(index);
+					visible = visible.subtract(remove.getAnimal().visibleRegion, new Point(
+						remove.location.x - animal.location.x, remove.location.y -
+							animal.location.y));
+				}
+				return visible;
+			}
+		}
+

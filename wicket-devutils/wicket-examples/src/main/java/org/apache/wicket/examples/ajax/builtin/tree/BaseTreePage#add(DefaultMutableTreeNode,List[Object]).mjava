@@ -1,0 +1,21 @@
+	private void add(DefaultMutableTreeNode parent, List<Object> sub)
+	{
+		for (Iterator<Object> i = sub.iterator(); i.hasNext();)
+		{
+			Object o = i.next();
+			if (o instanceof List)
+			{
+				DefaultMutableTreeNode child = new DefaultMutableTreeNode(new ModelBean(
+					"subtree..."));
+				parent.add(child);
+				add(child, (List<Object>)o);
+			}
+			else
+			{
+				DefaultMutableTreeNode child = new DefaultMutableTreeNode(new ModelBean(
+					o.toString()));
+				parent.add(child);
+			}
+		}
+	}
+

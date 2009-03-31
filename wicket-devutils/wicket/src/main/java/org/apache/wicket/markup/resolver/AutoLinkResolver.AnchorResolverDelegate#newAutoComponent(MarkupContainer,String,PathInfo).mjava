@@ -1,0 +1,87 @@
+		/**
+		 * @see org.apache.wicket.markup.resolver.AutoLinkResolver.IAutolinkResolverDelegate#newAutoComponent(org.apache.wicket.MarkupContainer,
+		 *      java.lang.String, org.apache.wicket.markup.resolver.AutoLinkResolver.PathInfo)
+		 */
+		@SuppressWarnings("unchecked")
+		public Component newAutoComponent(final MarkupContainer container, final String autoId,
+			PathInfo pathInfo)
+		{
+			if ((pathInfo.extension != null) &&
+				supportedPageExtensions.contains(pathInfo.extension))
+			{
+				// Obviously a href like href="myPkg.MyLabel.html" will do as
+				// well. Wicket will not throw an exception. It accepts it.
+
+
+				Page page = container.getPage();
+				final IClassResolver defaultClassResolver = page.getApplication()
+					.getApplicationSettings()
+					.getClassResolver();
+				String className = Packages.absolutePath(page.getClass(), pathInfo.path);
+				className = Strings.replaceAll(className, "/", ".").toString();
+				if (className.startsWith("."))
+				{
+					className = className.substring(1);
+				}
+
+				try
+				{
+					final Class<? extends Page> clazz = (Class<? extends Page>)defaultClassResolver.resolveClass(className);
+					return new AutolinkBookmarkablePageLink<Void>(autoId, clazz, pathInfo.pageParameters,
+						pathInfo.anchor);
+				}
+				catch (ClassNotFoundException ex)
+				{
+					log.warn("Did not find corresponding java class: " + className);
+					// fall through
+				}
+
+				// Make sure base markup pages (inheritance) are handled correct
+				MarkupContainer parentWithContainer = container;
+				if (container.getParent() != null)
+				{
+					parentWithContainer = container.findParentWithAssociatedMarkup();
+				}
+				if ((parentWithContainer instanceof Page) && !pathInfo.path.startsWith("/") &&
+					page.getMarkupStream().isMergedMarkup())
+				{
+					Class<? extends Page> clazz = (Class<? extends Page>)container.getMarkupStream()
+						.getTag()
+						.getMarkupClass();
+					if (clazz != null)
+					{
+						// Href is relative. Resolve the url given relative to
+						// the current page
+						className = Packages.absolutePath(clazz, pathInfo.path);
+						className = Strings.replaceAll(className, "/", ".").toString();
+						if (className.startsWith("."))
+						{
+							className = className.substring(1);
+						}
+
+						try
+						{
+							clazz = (Class<? extends Page>)defaultClassResolver.resolveClass(className);
+							return new AutolinkBookmarkablePageLink<Void>(autoId, clazz,
+								pathInfo.getPageParameters(), pathInfo.anchor);
+						}
+						catch (ClassNotFoundException ex)
+						{
+							log.warn("Did not find corresponding java class: " + className);
+							// fall through
+						}
+					}
+				}
+			}
+			else
+			{
+				// not a registered type for bookmarkable pages; create a link
+				// to a resource instead
+				return newPackageResourceReferenceAutoComponent(container, autoId, pathInfo,
+					attribute);
+			}
+
+			// fallthrough
+			return null;
+		}
+

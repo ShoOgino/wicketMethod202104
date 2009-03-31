@@ -1,0 +1,25 @@
+	/**
+	 * Removes the attribute with the given name.
+	 * 
+	 * @param name
+	 *            the name of the attribute to remove
+	 */
+	protected final void removeAttribute(String name)
+	{
+		if (!isTemporary())
+		{
+			RequestCycle cycle = RequestCycle.get();
+			if (cycle != null)
+			{
+				getSessionStore().removeAttribute(cycle.getRequest(), name);
+			}
+		}
+		else
+		{
+			if (temporarySessionAttributes != null)
+			{
+				temporarySessionAttributes.remove(name);
+			}
+		}
+	}
+

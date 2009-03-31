@@ -1,0 +1,16 @@
+	/**
+	 * Accepts a visitor.
+	 * 
+	 * @param visitor
+	 *            the {@link RevisionVisitor} visiting this instance
+	 */
+	public void accept(RevisionVisitor visitor)
+	{
+		visitor.visit(this);
+		Iterator<Delta> iter = deltas_.iterator();
+		while (iter.hasNext())
+		{
+			(iter.next()).accept(visitor);
+		}
+	}
+

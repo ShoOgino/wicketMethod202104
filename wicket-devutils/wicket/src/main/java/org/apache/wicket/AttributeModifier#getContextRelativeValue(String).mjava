@@ -1,0 +1,28 @@
+	/**
+	 * Checks if <code>value</code> represents a path and if it does transforms it into a relative
+	 * path
+	 * 
+	 * @param value
+	 * @return value as a relative path or untouched if not a path
+	 */
+	protected String getContextRelativeValue(String value)
+	{
+		if ("href".equals(attribute) || "src".equals(attribute))
+		{
+			RequestContext rc = RequestContext.get();
+			if (rc.isPortletRequest() &&
+				!(value.startsWith("http://") || value.startsWith("https://")))
+			{
+				if ("href".equals(attribute))
+				{
+					value = ((PortletRequestContext)rc).encodeRenderURL(value).toString();
+				}
+				else
+				{
+					value = ((PortletRequestContext)rc).encodeSharedResourceURL(value).toString();
+				}
+			}
+		}
+		return value;
+	}
+

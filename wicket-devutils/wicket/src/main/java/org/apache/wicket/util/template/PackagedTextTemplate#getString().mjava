@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.util.resource.AbstractStringResourceStream#getString()
+	 */
+	@Override
+	public String getString()
+	{
+		if (Application.get().getResourceSettings().getStripJavascriptCommentsAndWhitespace())
+		{
+			return JavascriptStripper.stripCommentsAndWhitespace(buffer.toString());
+		}
+		else
+		{
+			// don't strip the comments
+			return buffer.toString();
+		}
+	}
+

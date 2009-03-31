@@ -1,0 +1,25 @@
+		/**
+		 * @param location
+		 *            The cursor location that was clicked
+		 * @return Any animal that might be at the given location or null if none found (the user
+		 *         clicked on grass)
+		 */
+		private PlacedAnimal atLocation(final Point location)
+		{
+			// Reverse list for z-ordered hit-testing
+			final List<PlacedAnimal> reversedAnimals = new ArrayList<PlacedAnimal>(animals);
+			Collections.reverse(reversedAnimals);
+
+			// Return any animal at the given location
+			for (final PlacedAnimal animal : reversedAnimals)
+			{
+				if (animal.contains(location))
+				{
+					return animal;
+				}
+			}
+
+			// No animal found
+			return null;
+		}
+

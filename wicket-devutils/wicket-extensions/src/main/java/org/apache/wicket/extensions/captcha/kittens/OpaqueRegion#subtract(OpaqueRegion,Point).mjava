@@ -1,0 +1,111 @@
+	/**
+	 * @param removeRegion
+	 *            The region to subtract from this one
+	 * @param offset
+	 *            An offset to apply to the remove region
+	 * @return This region with the given region removed
+	 */
+	OpaqueRegion subtract(final OpaqueRegion removeRegion, final Point offset)
+	{
+		// Create new rectangle list
+		final List<Rectangle> newRectangles = new ArrayList<Rectangle>();
+
+		// For each rectangle
+		for (final Rectangle rectangle : rectangles)
+		{
+			// Get y
+			final int y = rectangle.y;
+
+			// Work list starts with the current rectangle in this opaque region
+			final List<Rectangle> workList = new ArrayList<Rectangle>();
+			workList.add(new Rectangle(rectangle));
+
+			// For each rectangle in the region to remove
+			for (final Rectangle remove : removeRegion.rectangles)
+			{
+				// Offset the rectangle
+				final Rectangle offsetRemove = new Rectangle(remove);
+				offsetRemove.translate(offset.x, offset.y);
+
+				// If we've gone past a possible match
+				if (offsetRemove.y > y)
+				{
+					// quit
+					break;
+				}
+
+				// If we're processing a rectangle on the right scan-line
+				if (offsetRemove.y == y)
+				{
+					// Get rectangle x1 and x2
+					int rx1 = offsetRemove.x;
+					int rx2 = offsetRemove.x + offsetRemove.width;
+
+					// Go through work list to remove the given rectangle
+					for (int i = 0; i < workList.size(); i++)
+					{
+						// Get rectangle from work list
+						final Rectangle work = workList.get(i);
+
+						// Get work x1, x2
+						int x1 = work.x;
+						int x2 = work.x + work.width;
+
+						// Compare left and right sides
+						if (rx1 <= x1 && rx2 >= x2)
+						{
+							// Whole rectangle is obscured
+							workList.remove(i);
+						}
+						else
+						{
+							// Check which sides are in
+							boolean leftIn = rx1 >= x1 && rx1 < x2;
+							boolean rightIn = rx2 > x1 && rx2 <= x2;
+
+							if (leftIn)
+							{
+								if (rightIn)
+								{
+									// Split in two
+									if (rx1 - x1 > 0)
+									{
+										workList.set(i, new Rectangle(x1, y, rx1 - x1, 1));
+									}
+
+									if (x2 - rx2 > 0)
+									{
+										workList.add(i + 1, new Rectangle(rx2, y, x2 - rx2, 1));
+									}
+
+								}
+								else
+								{
+									// Chop off right side
+									if (rx1 - x1 > 0)
+									{
+										workList.set(i, new Rectangle(x1, y, rx1 - x1, 1));
+									}
+								}
+							}
+							else if (rightIn)
+							{
+								// Chop off left side
+								if (x2 - rx2 > 0)
+								{
+									workList.set(i, new Rectangle(rx2, y, x2 - rx2, 1));
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// Add the rectangle(s) to the new list
+			newRectangles.addAll(workList);
+		}
+
+		// Return new opaque region
+		return new OpaqueRegion(newRectangles);
+	}
+

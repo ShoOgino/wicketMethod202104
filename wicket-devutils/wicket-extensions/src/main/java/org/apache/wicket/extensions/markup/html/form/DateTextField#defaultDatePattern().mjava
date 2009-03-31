@@ -1,0 +1,21 @@
+	/**
+	 * Try to get datePattern from user session locale. If it is not possible, it will return
+	 * {@link #DEFAULT_PATTERN}
+	 * 
+	 * @return date pattern
+	 */
+	private static String defaultDatePattern()
+	{
+		// It is possible to retrieve from session?
+		Locale locale = Session.get().getLocale();
+		if (locale != null)
+		{
+			DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+			if (format instanceof SimpleDateFormat)
+			{
+				return ((SimpleDateFormat)format).toPattern();
+			}
+		}
+		return DEFAULT_PATTERN;
+	}
+

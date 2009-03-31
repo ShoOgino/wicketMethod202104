@@ -1,0 +1,20 @@
+	/**
+	 * Converts this <code>Time</code> to a <code>Date String</code> using the <code>Date</code>
+	 * formatter 'h.mma'.
+	 * 
+	 * @param calendar
+	 *            the <code>Calendar</code> to use in the conversion
+	 * @return the <code>Date</code> <code>String</code>
+	 */
+	public final String toTimeString(final Calendar calendar)
+	{
+		synchronized (timeFormat)
+		{
+			synchronized (calendar)
+			{
+				timeFormat.setCalendar(calendar);
+				return timeFormat.format(new Date(getMilliseconds())).toLowerCase();
+			}
+		}
+	}
+

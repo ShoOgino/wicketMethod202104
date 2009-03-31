@@ -1,0 +1,26 @@
+	/**
+	 * The model object is assumed to be a Collection, and it is modified in-place. Then
+	 * {@link Model#setObject(Object)} is called with the same instance: it allows the Model to be
+	 * notified of changes even when {@link Model#getObject()} returns a different
+	 * {@link Collection} at every invocation.
+	 * 
+	 * @see FormComponent#updateModel()
+	 */
+	protected final void updateModel()
+	{
+		// prepare model
+		Collection<T> model = getModelCollection();
+		model.clear();
+
+		// update model
+		Iterator<T> it = getRecorderComponent().getSelectedChoices();
+
+		while (it.hasNext())
+		{
+			final T selectedChoice = it.next();
+			model.add(selectedChoice);
+		}
+
+		setDefaultModelObject(model);
+	}
+

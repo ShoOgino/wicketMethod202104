@@ -1,0 +1,31 @@
+	/**
+	 * Gets the url that references this handler.
+	 * 
+	 * @param onlyTargetActivePage
+	 *            if true the callback to this behavior will be ignore if the page is not the last
+	 *            one the user accessed
+	 * 
+	 * @return the url that references this handler
+	 */
+	public CharSequence getCallbackUrl(final boolean onlyTargetActivePage)
+	{
+		if (getComponent() == null)
+		{
+			throw new IllegalArgumentException(
+				"Behavior must be bound to a component to create the URL");
+		}
+
+		final RequestListenerInterface rli;
+
+		if (onlyTargetActivePage)
+		{
+			rli = IActivePageBehaviorListener.INTERFACE;
+		}
+		else
+		{
+			rli = IBehaviorListener.INTERFACE;
+		}
+
+		return getComponent().urlFor(this, rli);
+	}
+

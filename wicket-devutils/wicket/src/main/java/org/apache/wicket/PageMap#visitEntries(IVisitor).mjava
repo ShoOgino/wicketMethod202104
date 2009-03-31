@@ -1,0 +1,18 @@
+	/**
+	 * @param visitor
+	 *            The visitor to call at each Page in this PageMap.
+	 */
+	protected final void visitEntries(final IVisitor visitor)
+	{
+		final Session session = Session.get();
+		final List<String> attributes = session.getAttributeNames();
+		for (final Iterator<String> iterator = attributes.iterator(); iterator.hasNext();)
+		{
+			final String attribute = iterator.next();
+			if (attribute.startsWith(attributePrefix()))
+			{
+				visitor.entry((IPageMapEntry)session.getAttribute(attribute));
+			}
+		}
+	}
+

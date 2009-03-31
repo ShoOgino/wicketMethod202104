@@ -1,0 +1,28 @@
+	/**
+	 * Saves all entries from the specified list.
+	 * 
+	 * @param sessionId
+	 * @param list
+	 */
+	protected void flushPagesToSaveList(String sessionId, List<SerializedPage> list)
+	{
+		if (list != null)
+		{
+			for (Iterator<SerializedPage> i = list.iterator(); i.hasNext();)
+			{
+				try
+				{
+					SerializedPage page = i.next();
+					getSessionEntry(sessionId, true).savePage(page);
+				}
+				catch (Exception e)
+				{
+					// We have to catch the exception here to process the other entries,
+					// otherwise there would be a big memory leak
+					log.error("Error flushing page", e);
+				}
+			}
+			list.clear();
+		}
+	}
+

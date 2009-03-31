@@ -1,0 +1,96 @@
+	/**
+	 * @param id
+	 *            Component id
+	 * @param imageSize
+	 *            Size of kitten captcha image
+	 */
+	public KittenCaptchaPanel(final String id, final Dimension imageSize)
+	{
+		super(id);
+
+		// Save image size
+		this.imageSize = imageSize;
+
+		// Create animal list
+		animals = new PlacedAnimalList();
+
+		// Need to ajax refresh
+		setOutputMarkupId(true);
+
+		// Show how many animals have been selected
+		animalSelectionLabel = new Label("animalSelectionLabel", new AbstractReadOnlyModel()
+		{
+			private static final long serialVersionUID = 6792322972316712326L;
+
+			@Override
+			public Object getObject()
+			{
+				return imageResource.selectString();
+			}
+		});
+		animalSelectionLabel.setOutputMarkupId(true);
+		add(animalSelectionLabel);
+
+		// Image referencing captcha image resource
+		image = new NonCachingImage("image", imageResource = new CaptchaImageResource(animals));
+		image.add(new AjaxEventBehavior("onclick")
+		{
+			private static final long serialVersionUID = 7480352029955897654L;
+
+			@Override
+			protected CharSequence getCallbackScript(boolean onlyTargetActivePage)
+			{
+				// Call-back script shows loading indicator and makes wicket
+				// ajax request passing in mouse co-ordinates
+				return generateCallbackScript("showLoadingIndicator(); wicketAjaxGet('" +
+					getCallbackUrl(onlyTargetActivePage) +
+					"&amp;x=' + getEventX(this, event) + '&amp;y=' + getEventY(this, event)");
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void onEvent(final AjaxRequestTarget target)
+			{
+				// Get clicked cursor position
+				final WebRequest request = (WebRequest)RequestCycle.get().getRequest();
+				final Map<String, String[]> parameters = request.getParameterMap();
+				final int x = Integer.parseInt(parameters.get("x")[0]);
+				final int y = Integer.parseInt(parameters.get("y")[0]);
+
+				// Force refresh
+				imageResource.clearData();
+
+				// Find any animal at the clicked location
+				final PlacedAnimal animal = animals.atLocation(new Point(x, y));
+
+				// If the user clicked on an animal
+				if (animal != null)
+				{
+					// Toggle the animal's highlighting
+					animal.isHighlighted = !animal.isHighlighted;
+
+					// Instead of reload entire image just change the src
+					// attribute, this reduces the flicker
+					final StringBuilder javascript = new StringBuilder();
+					javascript.append("Wicket.$('" + image.getMarkupId() + "').src = '");
+					CharSequence url = image.urlFor(IResourceListener.INTERFACE);
+					javascript.append(url);
+					javascript.append((url.toString().indexOf('?') > -1 ? "&amp;" : "?") + "rand=" +
+						Math.random());
+					javascript.append("'");
+					target.appendJavascript(javascript.toString());
+				}
+				else
+				{
+					// The user didn't click on an animal, so hide the loading
+					// indicator
+					target.appendJavascript(" hideLoadingIndicator();");
+				}
+
+				// Update the selection label
+				target.addComponent(animalSelectionLabel);
+			}
+		});
+		add(image);
+	}
+

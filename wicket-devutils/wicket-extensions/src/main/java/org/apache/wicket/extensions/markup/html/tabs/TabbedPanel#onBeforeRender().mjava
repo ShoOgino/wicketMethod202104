@@ -1,0 +1,34 @@
+	// @see org.apache.wicket.Component#onAttach()
+	@Override
+	protected void onBeforeRender()
+	{
+		if (getSelectedTab() == -1 || isTabVisible(getSelectedTab()) == false)
+		{
+			// find first visible selected tab
+			int selected = 0;
+			for (int i = 0; i < tabs.size(); i++)
+			{
+				if (isTabVisible(i))
+				{
+					selected = i;
+					break;
+				}
+			}
+
+			if (selected == tabs.size())
+			{
+				/*
+				 * none of the tabs are selected...
+				 * 
+				 * we do not need to do anything special because the check in setSelectedTab() will
+				 * replace the current tab panel with an empty one
+				 */
+				selected = 0;
+			}
+
+			setSelectedTab(selected);
+		}
+
+		super.onBeforeRender();
+	}
+

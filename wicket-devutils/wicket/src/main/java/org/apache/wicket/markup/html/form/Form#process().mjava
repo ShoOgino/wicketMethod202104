@@ -1,0 +1,55 @@
+	/**
+	 * Process the form. Though you can override this method to provide your whole own algorithm, it
+	 * is not recommended to do so.
+	 * <p>
+	 * See the class documentation for further details on the form processing
+	 * </p>
+	 * 
+	 * @deprecated use {@link #process(IFormSubmittingComponent)}
+	 * 
+	 * @return False if the form had an error
+	 */
+	@Deprecated
+	public boolean process()
+	{
+		if (!isEnabledInHierarchy() || !isVisibleInHierarchy())
+		{
+			// since process() can be called outside of the default form workflow, an additional
+			// check is needed
+			return false;
+		}
+
+		// run validation
+		validate();
+
+		// If a validation error occurred
+		if (hasError())
+		{
+			// mark all children as invalid
+			markFormComponentsInvalid();
+
+			// let subclass handle error
+			callOnError();
+
+			// Form has an error
+			return false;
+		}
+		else
+		{
+			// mark all children as valid
+			markFormComponentsValid();
+
+			// before updating, call the interception method for clients
+			beforeUpdateFormComponentModels();
+
+			// Update model using form data
+			updateFormComponentModels();
+
+			// Persist FormComponents if requested
+			persistFormComponentData();
+
+			// Form has no error
+			return true;
+		}
+	}
+

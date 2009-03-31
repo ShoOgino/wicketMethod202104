@@ -1,0 +1,52 @@
+	/**
+	 * Helper method for all the places where an Ajax call should submit an associated
+	 * <code>Form</code>.
+	 * 
+	 * @param behavior
+	 *            The <code>AjaxFormSubmitBehavior</code> with the <code>Form</code> to "submit"
+	 */
+	private void submitAjaxFormSubmitBehavior(AjaxFormSubmitBehavior behavior)
+	{
+		// We need to get the form submitted, using reflection.
+		// It needs to be "submitted".
+		Form<?> form = null;
+		try
+		{
+			Field formField = AjaxFormSubmitBehavior.class.getDeclaredField("form");
+			formField.setAccessible(true);
+			form = (Form<?>)formField.get(behavior);
+		}
+		catch (Exception e)
+		{
+			fail(e.getMessage());
+		}
+
+		String failMessage = "No form attached to the submitlink.";
+		notNull(failMessage, form);
+
+		form.visitFormComponents(new FormComponent.AbstractVisitor()
+		{
+			@Override
+			public void onFormComponent(FormComponent<?> formComponent)
+			{
+				if (formComponent.isVisible())
+				{
+					if (!(formComponent instanceof RadioGroup) &&
+						!(formComponent instanceof CheckGroup) &&
+						!(formComponent.getClass().isAssignableFrom(Button.class)))
+					{
+						String name = formComponent.getInputName();
+						String value = formComponent.getValue();
+
+						// Set request parameter with the field value, but do not modify an existing
+						// request parameter explicitly set using FormTester.setValue()
+						if (getServletRequest().getParameterMap().get(name) == null)
+						{
+							getServletRequest().setParameter(name, value);
+						}
+					}
+				}
+			}
+		});
+	}
+

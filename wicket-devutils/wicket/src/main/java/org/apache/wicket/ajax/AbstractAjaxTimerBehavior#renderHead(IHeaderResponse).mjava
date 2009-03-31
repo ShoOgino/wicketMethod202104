@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.behavior.AbstractAjaxBehavior#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
+	 */
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+
+		WebRequest request = (WebRequest)RequestCycle.get().getRequest();
+
+		if (!stopped && (!headRendered || !request.isAjax()))
+		{
+			headRendered = true;
+			response.renderOnLoadJavascript(getJsTimeoutCall(updateInterval));
+		}
+	}
+
