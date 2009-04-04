@@ -3,12 +3,25 @@
 	 * 
 	 * @return The string representation of this object.
 	 */
+	@Override
 	public String toString()
 	{
 		StringBuffer sbTemp = new StringBuffer();
 		sbTemp.append("boundary='");
-		sbTemp.append(String.valueOf(boundary));
-		sbTemp.append("'\nbufSize=");
+		for (byte b : boundary)
+		{
+			if (Character.isDefined(b))
+			{
+				sbTemp.append((char)b);
+			}
+			else
+			{
+				sbTemp.append("#");
+				sbTemp.append(b);
+				sbTemp.append(";");
+			}
+		}
+		sbTemp.append("'; bufSize=");
 		sbTemp.append(bufSize);
 		return sbTemp.toString();
 	}
