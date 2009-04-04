@@ -36,8 +36,15 @@
 
 			@Override
 			protected void populateItem(ListItem<IDebugBarContributor> item) {
-				item.add(item.getModelObject().createComponent("contrib",
-						DebugBar.this));
+				IDebugBarContributor contrib = item.getModelObject();
+				Component comp = contrib.createComponent("contrib", DebugBar.this);
+				if (comp == null) {
+					// some contributors only add information to the debug bar
+					//	and don't actually create a contributed component
+					item.setVisibilityAllowed(false);
+				} else {
+					item.add(comp);
+				}
 			}
 		});
 	}
