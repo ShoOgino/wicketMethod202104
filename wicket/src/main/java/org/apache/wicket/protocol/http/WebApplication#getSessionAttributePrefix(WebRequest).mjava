@@ -6,16 +6,12 @@
 	 *            the request
 	 * 
 	 * @return the prefix for storing variables in the actual session
+	 * @deprecated since 1.4RC3 please use {@link #getSessionAttributePrefix(WebRequest, String)}
+	 *             instead
 	 */
+	@Deprecated
 	public String getSessionAttributePrefix(final WebRequest request)
 	{
-		if (sessionAttributePrefix == null)
-		{
-			sessionAttributePrefix = "wicket:" +
-				getWicketFilter().getFilterConfig().getFilterName() + ":";
-		}
-		// Namespacing for session attributes is provided by
-		// adding the servlet path
-		return sessionAttributePrefix;
+		return getSessionAttributePrefix(request, null);
 	}
 
