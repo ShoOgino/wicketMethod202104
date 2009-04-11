@@ -1,12 +1,12 @@
 	/**
-	 * Adds an <code>IModifiable</code> object and an <code>IChangeListener</code> object to
-	 * call when the modifiable object is modified.
+	 * Adds an <code>IModifiable</code> object and an <code>IChangeListener</code> object to call
+	 * when the modifiable object is modified.
 	 * 
 	 * @param modifiable
 	 *            an <code>IModifiable</code> object to monitor
 	 * @param listener
-	 *            an <code>IChangeListener</code> to call if the <code>IModifiable</code> object
-	 *            is modified
+	 *            an <code>IChangeListener</code> to call if the <code>IModifiable</code> object is
+	 *            modified
 	 * @return <code>true</code> if the set did not already contain the specified element
 	 */
 	public final boolean add(final IModifiable modifiable, final IChangeListener listener)
@@ -17,13 +17,14 @@
 		// Found it?
 		if (entry == null)
 		{
-			if (modifiable.lastModifiedTime() != null)
+			Time lastModifiedTime = modifiable.lastModifiedTime();
+			if (lastModifiedTime != null)
 			{
 				// Construct new entry
 				final Entry newEntry = new Entry();
 
 				newEntry.modifiable = modifiable;
-				newEntry.lastModifiedTime = modifiable.lastModifiedTime();
+				newEntry.lastModifiedTime = lastModifiedTime;
 				newEntry.listeners.add(listener);
 
 				// Put in map

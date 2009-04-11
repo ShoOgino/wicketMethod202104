@@ -2,10 +2,17 @@
 	 * @see org.apache.wicket.util.watch.IModifiable#lastModifiedTime()
 	 * @return The last time this resource was modified
 	 */
+	@Override
 	public Time lastModifiedTime()
 	{
 		if (file != null)
 		{
+			// In case the file has been removed by now
+			if (file.exists() == false)
+			{
+				return null;
+			}
+
 			long lastModified = file.lastModified();
 			if (lastModified != this.lastModified)
 			{
@@ -40,6 +47,7 @@
 					close = true;
 					lastModified = urlConnection.getLastModified();
 				}
+
 				// update the last modified time.
 				if (lastModified != this.lastModified)
 				{
@@ -59,8 +67,11 @@
 				}
 				else
 				{
-					log.error("getLastModified for " + url + " failed: " + e.getMessage());
+					log.warn("getLastModified for " + url + " failed: " + e.getMessage());
 				}
+
+				// Allow modification watcher to detect the problem
+				return null;
 			}
 			finally
 			{
