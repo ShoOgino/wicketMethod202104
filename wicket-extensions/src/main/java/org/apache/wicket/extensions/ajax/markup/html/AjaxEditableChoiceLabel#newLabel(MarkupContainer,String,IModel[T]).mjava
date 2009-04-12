@@ -1,3 +1,7 @@
+	/**
+	 * @see org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel#newLabel(org.apache.wicket.MarkupContainer,
+	 *      java.lang.String, org.apache.wicket.model.IModel)
+	 */
 	@Override
 	protected WebComponent newLabel(MarkupContainer parent, String componentId, IModel<T> model)
 	{
@@ -22,14 +26,14 @@
 					Object displayObject = renderer.getDisplayValue((T)getDefaultModelObject());
 					Class<?> objectClass = (displayObject == null ? null : displayObject.getClass());
 
-
-					if (objectClass != null && objectClass != String.class)
+					if ((objectClass != null) && (objectClass != String.class))
 					{
-						final IConverter converter = Application.get()
-							.getConverterLocator()
-							.getConverter(objectClass);
-
+						final IConverter converter = getConverter(objectClass);
 						displayValue = converter.convertToString(displayObject, getLocale());
+					}
+					else if (displayObject != null)
+					{
+						displayValue = displayObject.toString();
 					}
 				}
 
