@@ -1,15 +1,26 @@
 	/**
 	 * get enum implementation
+	 * 
+	 * @param key
+	 * @param eClass
+	 * @param defaultValue
+	 * @param <T>
+	 * @return Enum
 	 */
 	@SuppressWarnings( { "unchecked" })
-	private <T extends Enum<T>> T getEnumImpl(String key, Class<?> eClass, T defaultValue)
+	private <T extends Enum<T>> T getEnumImpl(final String key, final Class<?> eClass,
+		final T defaultValue)
 	{
 		if (eClass == null)
+		{
 			throw new IllegalArgumentException("eClass value cannot be null");
+		}
 
 		String value = getString(key);
 		if (value == null)
+		{
 			return defaultValue;
+		}
 
 		Method valueOf = null;
 		try
