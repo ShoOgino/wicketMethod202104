@@ -1,13 +1,17 @@
-	/** {@inheritDoc} */
+	/**
+	 * @see org.apache.wicket.request.target.coding.AbstractRequestTargetUrlCodingStrategy#appendParameters(org.apache.wicket.util.string.AppendingStringBuffer,
+	 *      java.util.Map)
+	 */
 	@Override
-	protected void appendParameters(AppendingStringBuffer url, Map parameters)
+	protected void appendParameters(AppendingStringBuffer url, Map<String, ?> parameters)
 	{
 		if (!url.endsWith("/"))
 		{
 			url.append("/");
 		}
 
-		Set parameterNamesToAdd = new HashSet(parameters.keySet());
+		Set<String> parameterNamesToAdd = new HashSet<String>(parameters.keySet());
+
 		// Find index of last specified parameter
 		boolean foundParameter = false;
 		int lastSpecifiedParameter = parameterNames.length;
@@ -39,11 +43,9 @@
 		if (!parameterNamesToAdd.isEmpty())
 		{
 			boolean first = true;
-			final Iterator iterator = parameterNamesToAdd.iterator();
-			while (iterator.hasNext())
+			for (String parameterName : parameterNamesToAdd)
 			{
 				url.append(first ? '?' : '&');
-				String parameterName = (String)iterator.next();
 				final Object param = parameters.get(parameterName);
 				String value = param instanceof String[] ? ((String[])param)[0] : (String)param;
 				url.append(urlEncodeQueryComponent(parameterName)).append("=").append(
