@@ -4,9 +4,13 @@
 	@Override
 	public String getString()
 	{
-		if (Application.get().getResourceSettings().getStripJavascriptCommentsAndWhitespace())
+		IJavascriptCompressor compressor = Application.get()
+			.getResourceSettings()
+			.getJavascriptCompressor();
+
+		if (compressor != null)
 		{
-			return JavascriptStripper.stripCommentsAndWhitespace(buffer.toString());
+			return compressor.compress(buffer.toString());
 		}
 		else
 		{
