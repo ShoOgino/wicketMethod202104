@@ -7,8 +7,8 @@
 	 *            whether after hitting the page with URL in bookmarkable form it should be
 	 *            redirected to hybrid URL - needed for ajax to work properly after page refresh
 	 */
-	public HybridUrlCodingStrategy(String mountPath, Class pageClass,
-		boolean redirectOnBookmarkableRequest)
+	public HybridUrlCodingStrategy(final String mountPath, final Class<? extends Page> pageClass,
+		final boolean redirectOnBookmarkableRequest)
 	{
 		super(mountPath);
 
@@ -17,7 +17,7 @@
 			throw new IllegalArgumentException("mountPath can not end with a '/': " + mountPath);
 		}
 
-		pageClassRef = new WeakReference(pageClass);
+		pageClassRef = new WeakReference<Class<? extends Page>>(pageClass);
 		this.redirectOnBookmarkableRequest = redirectOnBookmarkableRequest;
 	}
 

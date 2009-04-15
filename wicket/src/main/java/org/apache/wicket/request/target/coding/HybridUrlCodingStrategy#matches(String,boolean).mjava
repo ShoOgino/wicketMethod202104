@@ -2,13 +2,13 @@
 	 * @see org.apache.wicket.request.target.coding.AbstractRequestTargetUrlCodingStrategy#matches(java.lang.String)
 	 */
 	@Override
-	public boolean matches(String path, boolean caseSensitive)
+	public boolean matches(final String path, final boolean caseSensitive)
 	{
 		RequestCycle rc = RequestCycle.get();
 
 		// the null check is necessary, as this method is first time called from WicketFilter when
 		// no RequestCycle exists yet
-		if (rc != null && ((WebRequest)rc.getRequest()).isAjax())
+		if ((rc != null) && ((WebRequest)rc.getRequest()).isAjax())
 		{
 			// HybridUrlCodingStrategy doesn't make sense for ajax request
 			return false;
@@ -21,14 +21,14 @@
 			 * /mount/pointXXX
 			 */
 			String remainder = path.substring(getMountPath().length());
-			if (remainder.length() == 0 || remainder.startsWith("/"))
+			if ((remainder.length() == 0) || remainder.startsWith("/"))
 			{
 				return true;
 			}
 			/*
 			 * We also need to accept /mount/point(XXX)
 			 */
-			if (remainder.length() > getBeginSeparator().length() + getEndSeparator().length() &&
+			if ((remainder.length() > getBeginSeparator().length() + getEndSeparator().length()) &&
 				remainder.startsWith(getBeginSeparator()) && remainder.endsWith(getEndSeparator()))
 			{
 				String substring = remainder.substring(getBeginSeparator().length(), //

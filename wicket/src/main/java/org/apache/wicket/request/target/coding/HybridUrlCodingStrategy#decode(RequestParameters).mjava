@@ -1,7 +1,7 @@
 	/**
 	 * @see org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy#decode(org.apache.wicket.request.RequestParameters)
 	 */
-	public IRequestTarget decode(RequestParameters requestParameters)
+	public IRequestTarget decode(final RequestParameters requestParameters)
 	{
 		String parametersFragment = requestParameters.getPath().substring(getMountPath().length());
 
@@ -36,7 +36,7 @@
 		int originalUrlTrailingSlashesCount = getTrailingSlashesCount(extraction.getUrlAfterExtraction());
 
 		boolean redirect = isRedirectOnBookmarkableRequest();
-		if (Strings.isEmpty(pageMapName) != true && alwaysRedirectWhenPageMapIsSpecified())
+		if ((Strings.isEmpty(pageMapName) != true) && alwaysRedirectWhenPageMapIsSpecified())
 		{
 			redirect = true;
 		}
@@ -45,14 +45,14 @@
 		{
 			// stateless listener interface
 			WebRequestCodingStrategy.addInterfaceParameters(interfaceParameter, requestParameters);
-			return new BookmarkableListenerInterfaceRequestTarget(pageMapName,
-				(Class)pageClassRef.get(), parameters, requestParameters.getComponentPath(),
+			return new BookmarkableListenerInterfaceRequestTarget(pageMapName, pageClassRef.get(),
+				parameters, requestParameters.getComponentPath(),
 				requestParameters.getInterfaceName(), requestParameters.getVersionNumber());
 		}
 		else if (pageId == null)
 		{
 			// bookmarkable page request
-			return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef.get(),
+			return new HybridBookmarkablePageRequestTarget(pageMapName, pageClassRef.get(),
 				parameters, originalUrlTrailingSlashesCount, redirect);
 		}
 		else
@@ -73,7 +73,7 @@
 			}
 
 			// check if the found page match the required class
-			if (page != null && page.getClass().equals(pageClassRef.get()))
+			if ((page != null) && page.getClass().equals(pageClassRef.get()))
 			{
 				requestParameters.setInterfaceName(IRedirectListener.INTERFACE.getName());
 				RequestCycle.get().getRequest().setPage(page);
@@ -85,14 +85,12 @@
 				// create new instance, but only if there is no callback to a non-existing page
 				if (requestParameters.getInterface() != null)
 				{
-					handleExpiredPage(pageMapName, (Class)pageClassRef.get(),
+					handleExpiredPage(pageMapName, pageClassRef.get(),
 						originalUrlTrailingSlashesCount, redirect);
 				}
-				return new HybridBookmarkablePageRequestTarget(pageMapName,
-					(Class)pageClassRef.get(), parameters, originalUrlTrailingSlashesCount,
-					redirect);
+				return new HybridBookmarkablePageRequestTarget(pageMapName, pageClassRef.get(),
+					parameters, originalUrlTrailingSlashesCount, redirect);
 			}
 		}
-
 	}
 

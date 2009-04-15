@@ -2,9 +2,9 @@
 	 * Extracts the PageInfo string.
 	 * 
 	 * @param url
-	 * @return
+	 * @return extract page info
 	 */
-	protected PageInfoExtraction extractPageInfo(String url)
+	protected PageInfoExtraction extractPageInfo(final String url)
 	{
 		int begin = url.lastIndexOf(getBeginSeparator());
 		PageInfo last = null;
@@ -12,7 +12,7 @@
 		while (begin != -1)
 		{
 			String substring = url.substring(begin);
-			if (substring.length() > getBeginSeparator().length() + getEndSeparator().length() &&
+			if ((substring.length() > getBeginSeparator().length() + getEndSeparator().length()) &&
 				substring.startsWith(getBeginSeparator()) && substring.endsWith(getEndSeparator()))
 			{
 				String pageInfoString = substring.substring(getBeginSeparator().length(), //
@@ -30,6 +30,7 @@
 			}
 			begin = url.lastIndexOf(getBeginSeparator(), begin - 1);
 		}
+
 		if (last != null)
 		{
 			return new PageInfoExtraction(url.substring(0, url.length() - lastSubstring.length()),
