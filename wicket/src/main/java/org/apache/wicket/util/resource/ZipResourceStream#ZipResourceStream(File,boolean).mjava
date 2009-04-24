@@ -1,0 +1,28 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param dir
+	 *            The directory where to look for files. The directory itself will not be included
+	 *            in the ZIP.
+	 * @param recursive
+	 *            If true, all subdirs will be zipped as well
+	 */
+	public ZipResourceStream(final File dir, final boolean recursive)
+	{
+		if ((dir == null) || !dir.isDirectory())
+		{
+			throw new IllegalArgumentException("Not a directory: " + dir);
+		}
+
+		bytearray = new ByteArrayOutputStream();
+		try
+		{
+			ZipOutputStream out = new ZipOutputStream(bytearray);
+			zipDir(dir, out, "", recursive);
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+
