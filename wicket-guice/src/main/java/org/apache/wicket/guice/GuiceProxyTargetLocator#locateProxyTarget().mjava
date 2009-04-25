@@ -42,6 +42,16 @@
 		{
 			key = Key.get(TypeLiteral.get(type), bindingAnnotation);
 		}
-		return holder.getInjector().getInstance(key);
+
+		Injector injector = holder.getInjector();
+
+		// if the Inject annotation is marked optional and no binding is found
+		// then skip this injection (WICKET-2241)
+		if (optional && injector.getBinding(key) == null)
+		{
+			return null;
+		}
+
+		return injector.getInstance(key);
 	}
 
