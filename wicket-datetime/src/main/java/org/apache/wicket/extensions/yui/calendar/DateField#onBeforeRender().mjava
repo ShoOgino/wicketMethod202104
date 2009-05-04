@@ -4,6 +4,14 @@
 	@Override
 	protected void onBeforeRender()
 	{
+		if (dateField == null)
+		{
+			// intiailize datefield and datepicker
+			PropertyModel<Date> dateFieldModel = new PropertyModel<Date>(this, "date");
+			add(dateField = newDateTextField("date", dateFieldModel));
+			dateField.add(newDatePicker());
+		}
+
 		dateField.setRequired(isRequired());
 
 		// obsolete with WICKET-1919
