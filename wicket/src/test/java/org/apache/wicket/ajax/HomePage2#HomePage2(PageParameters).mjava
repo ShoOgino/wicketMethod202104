@@ -1,0 +1,30 @@
+	/**
+	 * Constructor that is invoked when page is invoked without a session.
+	 * 
+	 * @param parameters
+	 *            Page parameters
+	 */
+	public HomePage2(final PageParameters parameters)
+	{
+
+		setOutputMarkupId(true);
+		add(new Label("msg", new PropertyModel<String>(this, "_message")));
+		add(new AjaxLink("link")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget tgt)
+			{
+				_message = "ajax link clicked";
+
+				// Adding the entire page to the ajax request target
+				// should force the entire page to be re-requested by the
+				// browser, thereby reverting the _message value.
+				tgt.addComponent(getPage());
+
+				// And it works. However the when testing this behavior
+				// with WicketTester, the _message value does not revert.
+				// See TestHomePage.java.
+			}
+		});
+	}
+
