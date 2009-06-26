@@ -20,17 +20,11 @@
 
 			// Ask all behaviors if they have something to contribute to the
 			// header or body onLoad tag.
-			List<IBehavior> behaviors = getBehaviors();
-			if (behaviors != null)
+			for (IBehavior behavior : getBehaviors())
 			{
-				final Iterator<IBehavior> iter = behaviors.iterator();
-				while (iter.hasNext())
+				if (behavior instanceof IHeaderContributor && isBehaviorAccepted(behavior))
 				{
-					IBehavior behavior = iter.next();
-					if (behavior instanceof IHeaderContributor && isBehaviorAccepted(behavior))
-					{
-						((IHeaderContributor)behavior).renderHead(container.getHeaderResponse());
-					}
+					((IHeaderContributor)behavior).renderHead(container.getHeaderResponse());
 				}
 			}
 		}

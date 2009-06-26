@@ -4,16 +4,11 @@
 	 */
 	private void notifyBehaviorsComponentBeforeRender()
 	{
-		List<IBehavior> behaviors = getBehaviors();
-		if (behaviors != null)
+		for (IBehavior behavior : getBehaviors())
 		{
-			for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
+			if (isBehaviorAccepted(behavior))
 			{
-				IBehavior behavior = i.next();
-				if (isBehaviorAccepted(behavior))
-				{
-					behavior.beforeRender(this);
-				}
+				behavior.beforeRender(this);
 			}
 		}
 	}

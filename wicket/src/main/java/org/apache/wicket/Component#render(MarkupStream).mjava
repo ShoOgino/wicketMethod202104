@@ -60,22 +60,17 @@
 			{
 				// Call each behaviors onException() to allow the
 				// behavior to clean up
-				List<IBehavior> behaviors = getBehaviors();
-				if (behaviors != null)
+				for (IBehavior behavior : getBehaviors())
 				{
-					for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
+					if (isBehaviorAccepted(behavior))
 					{
-						IBehavior behavior = i.next();
-						if (isBehaviorAccepted(behavior))
+						try
 						{
-							try
-							{
-								behavior.exception(this, ex);
-							}
-							catch (Throwable ex2)
-							{
-								log.error("Error while cleaning up after exception", ex2);
-							}
+							behavior.exception(this, ex);
+						}
+						catch (Throwable ex2)
+						{
+							log.error("Error while cleaning up after exception", ex2);
 						}
 					}
 				}

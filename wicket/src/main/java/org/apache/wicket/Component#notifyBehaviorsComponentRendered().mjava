@@ -5,16 +5,11 @@
 	private void notifyBehaviorsComponentRendered()
 	{
 		// notify the behaviors that component has been rendered
-		List<IBehavior> behaviors = getBehaviors();
-		if (behaviors != null)
+		for (IBehavior behavior : getBehaviors())
 		{
-			for (Iterator<IBehavior> i = behaviors.iterator(); i.hasNext();)
+			if (isBehaviorAccepted(behavior))
 			{
-				IBehavior behavior = i.next();
-				if (isBehaviorAccepted(behavior))
-				{
-					behavior.afterRender(this);
-				}
+				behavior.afterRender(this);
 			}
 		}
 	}
