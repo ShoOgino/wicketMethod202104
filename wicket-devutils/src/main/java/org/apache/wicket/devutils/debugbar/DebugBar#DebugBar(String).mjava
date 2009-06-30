@@ -1,51 +1,55 @@
-	public DebugBar(String id) {
-		super(id);
-		setMarkupId("wicketDebugBar");
-		setOutputMarkupId(true);
-		add(new AttributeModifier("class", true,
-				new AbstractReadOnlyModel<String>() {
-					private static final long serialVersionUID = 1L;
+    public DebugBar(String id)
+    {
+        super(id);
+        setMarkupId("wicketDebugBar");
+        setOutputMarkupId(true);
+        add(new AttributeModifier("class", true, new AbstractReadOnlyModel<String>()
+        {
+            private static final long serialVersionUID = 1L;
 
-					@Override
-					public String getObject() {
-						return "wicketDebugBar"
-								+ (DebugBar.this.hasErrorMessage() ? "Error"
-										: "");
-					}
+            @Override
+            public String getObject()
+            {
+                return "wicketDebugBar" + (DebugBar.this.hasErrorMessage() ? "Error" : "");
+            }
 
-				}));
-		add(CSSPackageResource.getHeaderContribution(DebugBar.class,
-				"wicket-debugbar.css"));
-		add(JavascriptPackageResource.getHeaderContribution(DebugBar.class,
-				"wicket-debugbar.js"));
-		add(new Image("logo", new ResourceReference(DebugBar.class,
-				"wicket.png")));
-		add(new Image("removeImg", new ResourceReference(DebugBar.class,
-				"remove.png")));
-		List<IDebugBarContributor> contributors = getContributors();
-		if (contributors.isEmpty()) {
-			// we do this so that if you have multiple applications running in
-			// the same container,
-			// each ends up registering its' own contributors (wicket-examples
-			// for example)
-			registerStandardContributors();
-			contributors = getContributors();
-		}
-		add(new ListView<IDebugBarContributor>("contributors", contributors) {
-			private static final long serialVersionUID = 1L;
+        }));
+        add(CSSPackageResource.getHeaderContribution(DebugBar.class, "wicket-debugbar.css"));
+        add(JavascriptPackageResource.getHeaderContribution(DebugBar.class, "wicket-debugbar.js"));
+        add(new Image("logo", new ResourceReference(DebugBar.class, "wicket.png")));
+        add(new Image("removeImg", new ResourceReference(DebugBar.class, "remove.png")));
+        List<IDebugBarContributor> contributors = getContributors();
+        
+        // no longer necessary, registered from DebugBarInitializer
+        // if (contributors.isEmpty())
+        // {
+        // we do this so that if you have multiple applications running in
+        // the same container,
+        // each ends up registering its' own contributors (wicket-examples
+        // for example)
+        // registerStandardContributors(Application.get());
+        // contributors = getContributors();
+        // }
+        add(new ListView<IDebugBarContributor>("contributors", contributors)
+        {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void populateItem(ListItem<IDebugBarContributor> item) {
-				IDebugBarContributor contrib = item.getModelObject();
-				Component comp = contrib.createComponent("contrib", DebugBar.this);
-				if (comp == null) {
-					// some contributors only add information to the debug bar
-					//	and don't actually create a contributed component
-					item.setVisibilityAllowed(false);
-				} else {
-					item.add(comp);
-				}
-			}
-		});
-	}
+            @Override
+            protected void populateItem(ListItem<IDebugBarContributor> item)
+            {
+                IDebugBarContributor contrib = item.getModelObject();
+                Component comp = contrib.createComponent("contrib", DebugBar.this);
+                if (comp == null)
+                {
+                    // some contributors only add information to the debug bar
+                    // and don't actually create a contributed component
+                    item.setVisibilityAllowed(false);
+                }
+                else
+                {
+                    item.add(comp);
+                }
+            }
+        });
+    }
 

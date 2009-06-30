@@ -1,0 +1,20 @@
+    /**
+     * Register your own custom contributor that will be part of the debug bar. You must have the
+     * context of an application for this thread at the time of calling this method.
+     * 
+     * @param application
+     * @param contrib
+     *            custom contributor - can not be null
+     */
+    public static void registerContributor(IDebugBarContributor contrib, Application application)
+    {
+        if (contrib == null)
+        {
+            throw new IllegalArgumentException("contrib can not be null");
+        }
+
+        List<IDebugBarContributor> contributors = getContributors(application);
+        contributors.add(contrib);
+        application.setMetaData(CONTRIBS_META_KEY, contributors);
+    }
+
