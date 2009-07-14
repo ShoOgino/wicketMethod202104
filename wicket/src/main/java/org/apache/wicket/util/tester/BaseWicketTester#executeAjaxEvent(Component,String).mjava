@@ -34,7 +34,7 @@
 	 *            the event to simulate being fired. If <code>event</code> is <code>null</code>, the
 	 *            test will fail.
 	 */
-	public void executeAjaxEvent(Component component, String event)
+	public void executeAjaxEvent(final Component component, final String event)
 	{
 		setCreateAjaxRequest(true);
 
@@ -43,6 +43,12 @@
 
 		failMessage = "event must not be null";
 		notNull(failMessage, event);
+
+		if (component.isVisibleInHierarchy() == false)
+		{
+			fail("The component is currently not visible in the hierarchy and thus you can not fire events on it." +
+				" Component: " + component + "; Event: " + event);
+		}
 
 		// Run through all the behavior and select the LAST ADDED behavior which
 		// matches the event parameter.
