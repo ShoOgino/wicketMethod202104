@@ -14,15 +14,26 @@
 	public final void prepareForRender(boolean setRenderingFlag)
 	{
 		beforeRender();
-		List<Component> feedbacks = getRequestCycle().getMetaData(FEEDBACK_LIST);
-		if (feedbacks != null)
+
+		if (setRenderingFlag)
 		{
-			for (Component feedback : feedbacks)
+			// only process feedback panel when we are about to be rendered.
+			// setRenderingFlag is false in case prepareForRender is called only to build component
+			// hierarchy (i.e. in BookmarkableListenerInterfaceRequestTarget).
+			// prepareForRender(true) is always called before the actual rendering is done so
+			// that's where feedback panels gather the messages
+
+			List<Component> feedbacks = getRequestCycle().getMetaData(FEEDBACK_LIST);
+			if (feedbacks != null)
 			{
-				feedback.internalBeforeRender();
+				for (Component feedback : feedbacks)
+				{
+					feedback.internalBeforeRender();
+				}
 			}
+			getRequestCycle().setMetaData(FEEDBACK_LIST, null);
 		}
-		getRequestCycle().setMetaData(FEEDBACK_LIST, null);
+
 		markRendering(setRenderingFlag);
 
 		// check authorization
