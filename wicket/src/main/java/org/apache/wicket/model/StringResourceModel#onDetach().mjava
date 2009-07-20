@@ -10,6 +10,19 @@
 			model.detach();
 		}
 
+		// some parameters can be imodels, detach them
+		if (parameters != null)
+		{
+			for (Object parameter : parameters)
+			{
+				if (parameter instanceof IModel<?>)
+				{
+					((IModel<?>)parameter).detach();
+				}
+			}
+		}
+
+
 		// Null out references
 		localizer = null;
 		locale = null;
