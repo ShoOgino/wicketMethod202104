@@ -64,5 +64,17 @@
 				"Could not parse markup from markup resource stream: " +
 					markupResourceStream.toString());
 		}
+		finally
+		{
+			try
+			{
+				markupResourceStream.close();
+			}
+			catch (IOException e)
+			{
+				throw new WicketRuntimeException("Cannot close markup resource stream: " +
+					markupResourceStream, e);
+			}
+		}
 	}
 
