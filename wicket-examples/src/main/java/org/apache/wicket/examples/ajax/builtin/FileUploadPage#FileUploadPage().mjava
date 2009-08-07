@@ -1,0 +1,57 @@
+	/**
+	 * Constructor
+	 */
+	public FileUploadPage()
+	{
+
+		// create a feedback panel
+		final Component feedback = new FeedbackPanel("feedback").setOutputMarkupPlaceholderTag(true);
+		add(feedback);
+
+		// create the form
+		Form<?> form = new Form<Void>("form")
+		{
+			/**
+			 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
+			 */
+			@Override
+			protected void onSubmit()
+			{
+				// display uploaded info
+				info("Text: " + text.getModelObject());
+				FileUpload upload = file.getFileUpload();
+				if (upload == null)
+				{
+					info("No file uploaded");
+				}
+				else
+				{
+					info("File-Name: " + upload.getClientFileName() + " File-Size: " +
+						Bytes.bytes(upload.getSize()).toString());
+				}
+			}
+		};
+		form.setMaxSize(Bytes.megabytes(1));
+		add(form);
+
+		// create a textfield to demo non-file content
+		form.add(text = new TextField<String>("text", new Model<String>()));
+
+		// create the file upload field
+		form.add(file = new FileUploadField("file"));
+
+		// create the ajax button used to submit the form
+		form.add(new AjaxButton("ajaxSubmit")
+		{
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+			{
+				info("This request was processed using AJAX");
+
+				// ajax-update the feedback panel
+				target.addComponent(feedback);
+			}
+
+		});
+	}
+
