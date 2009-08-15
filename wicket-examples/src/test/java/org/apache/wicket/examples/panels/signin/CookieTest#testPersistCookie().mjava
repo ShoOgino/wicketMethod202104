@@ -6,9 +6,12 @@
 	public void testPersistCookie() throws IOException, ServletException
 	{
 		panel.setPersistent(true);
+		tester.getServletRequest().setParameter("username", "johndoe");
+		tester.getServletRequest().setParameter("password", "secret");
+		tester.getServletRequest().setParameter("rememberMeRow:rememberMe", "on");
 
-		// test will call persistFromComponentData(), which is private
 		form.onFormSubmitted();
+
 
 		// validate
 		Collection<Cookie> cookies = tester.getServletResponse().getCookies();
@@ -16,12 +19,15 @@
 		for (Cookie cooky : cookies)
 		{
 			String pathOfStoredComponent = cooky.getName().replaceAll("\\.", ":");
+			if (!pathOfStoredComponent.equals("panel:signInForm:username"))
+			{
+				continue;
+			}
 			Assert.assertNotNull(page.get(pathOfStoredComponent));
 			// Skip "deleted" cookies
 			if (!page.get(pathOfStoredComponent).getDefaultModelObjectAsString().equals(""))
 			{
-				Assert.assertEquals(cooky.getValue(), page.get(pathOfStoredComponent)
-						.getDefaultModelObjectAsString());
+				Assert.assertEquals(cooky.getValue(), "johndoe");
 			}
 		}
 	}
