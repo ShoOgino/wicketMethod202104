@@ -1,0 +1,22 @@
+    /** {@inheritDoc} */
+    @Override
+    protected String addPageInfo(String url, PageInfo pageInfo)
+    {
+        if (pageInfo == null)
+        {
+            return url;
+        }
+        else
+        {
+            // Insert the page info at the and of the path and before the querystring.
+            if (url.indexOf('?') == -1)
+            {
+                return url + getBeginSeparator() + pageInfo.toString() + getEndSeparator();
+            }
+            else
+            {
+                return Strings.firstPathComponent(url, '?') + getBeginSeparator() + pageInfo.toString() + getEndSeparator() + '?' + Strings.afterFirstPathComponent(url, '?');
+            }
+        }
+    }
+
