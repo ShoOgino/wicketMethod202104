@@ -8,7 +8,13 @@
 		protected java.util.Properties loadProperties(BufferedInputStream in) throws IOException
 		{
 			java.util.Properties properties = new java.util.Properties();
+		    // If we are on JDK 6 we load from Reader
+		    if (loadFromReaderAvailable) {
 			properties.load(in);
+	        // If we are on JDK <=5 then we convert to ASCII
+		    } else {
+	            properties.load(readUTFStreamToEscapedASCII(in));
+		    }
 			return properties;
 		}
 
