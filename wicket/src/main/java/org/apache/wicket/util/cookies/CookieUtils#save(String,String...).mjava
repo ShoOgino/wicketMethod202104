@@ -1,0 +1,25 @@
+	/**
+	 * Create a Cookie with key and value and save it in the browser with the next response
+	 * 
+	 * @param key
+	 * @param values
+	 */
+	public final void save(String key, final String... values)
+	{
+		key = getSaveKey(key);
+		String value = joinValues(values);
+		Cookie cookie = getCookie(key);
+		if (cookie == null)
+		{
+			cookie = new Cookie(key, value);
+		}
+		else
+		{
+			cookie.setValue(value);
+		}
+		cookie.setSecure(false);
+		cookie.setMaxAge(settings.getMaxAge());
+
+		save(cookie);
+	}
+

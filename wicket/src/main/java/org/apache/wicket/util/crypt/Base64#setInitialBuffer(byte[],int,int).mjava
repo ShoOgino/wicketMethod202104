@@ -1,0 +1,24 @@
+	/**
+	 * Sets the streaming buffer. This is a small optimization where we try to buffer directly to
+	 * the consumer's output array for one round (if the consumer calls this method first) instead
+	 * of starting our own buffer.
+	 * 
+	 * @param out
+	 *            byte[] array to buffer directly to.
+	 * @param outPos
+	 *            Position to start buffering into.
+	 * @param outAvail
+	 *            Amount of bytes available for direct buffering.
+	 */
+	void setInitialBuffer(byte[] out, int outPos, int outAvail)
+	{
+		// We can re-use consumer's original output array under
+		// special circumstances, saving on some System.arraycopy().
+		if (out != null && out.length == outAvail)
+		{
+			buffer = out;
+			pos = outPos;
+			readPos = outPos;
+		}
+	}
+

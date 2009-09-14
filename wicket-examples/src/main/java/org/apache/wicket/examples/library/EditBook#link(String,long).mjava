@@ -7,19 +7,18 @@
 	 *            The id of the book that the page will edit
 	 * @return The page link
 	 */
-	public static PageLink link(final String name, final long id)
+	public static Link<Void> link(final String name, final long id)
 	{
-		return new PageLink(name, new IPageLink()
+		return new Link<Void>(name)
 		{
-			public Page getPage()
+			/**
+			 * @see org.apache.wicket.markup.html.link.Link#onClick()
+			 */
+			@Override
+			public void onClick()
 			{
-				return new EditBook(Book.get(id));
+				setResponsePage(new EditBook(Book.get(id)));
 			}
-
-			public Class<? extends Page> getPageIdentity()
-			{
-				return EditBook.class;
-			}
-		});
+		};
 	}
 

@@ -4,12 +4,8 @@
 		@Override
 		public final void onSubmit()
 		{
-			final RequestCycle cycle = getRequestCycle();
-			PageParameters parameters = new PageParameters();
 			final Book book = getModelObject();
-			parameters.put("id", book.getId());
-			cycle.setResponsePage(getSession().getPageFactory().newPage(BookDetails.class,
-				parameters));
-			cycle.setRedirect(true);
+			setResponsePage(new BookDetails(book));
+			// setRedirect(true);
 		}
 

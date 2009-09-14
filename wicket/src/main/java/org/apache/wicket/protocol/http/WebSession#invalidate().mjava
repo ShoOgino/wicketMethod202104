@@ -1,0 +1,16 @@
+	/**
+	 * Call signOut() and remove the logon data from whereever they have been persisted (e.g.
+	 * Cookies)
+	 * 
+	 * @see org.apache.wicket.Session#invalidate()
+	 */
+	@Override
+	public void invalidate()
+	{
+		signOut();
+
+		getApplication().getSecuritySettings().getAuthenticationStrategy().remove();
+
+		super.invalidate();
+	}
+

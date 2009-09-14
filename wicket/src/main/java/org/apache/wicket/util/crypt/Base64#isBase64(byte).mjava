@@ -5,20 +5,11 @@
 	 *            The value to test
 	 * @return <code>true</code> if the value is defined in the the base 64 alphabet,
 	 *         <code>false</code> otherwise.
+	 * @since 1.4
 	 */
-	private static boolean isBase64(byte octet)
+	public static boolean isBase64(byte octet)
 	{
-		if (octet == PAD)
-		{
-			return true;
-		}
-		else if (octet < 0 || base64Alphabet[octet] == -1)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return octet == PAD ||
+			(octet >= 0 && octet < DECODE_TABLE.length && DECODE_TABLE[octet] != -1);
 	}
 

@@ -1,0 +1,39 @@
+	/**
+	 * Gets the cookie with 'name' attached to the latest WebRequest.
+	 * 
+	 * @param name
+	 *            The name of the cookie to be looked up
+	 * 
+	 * @return Any cookies for this request
+	 */
+	private Cookie getCookie(final String name)
+	{
+		String key = getSaveKey(name);
+
+		try
+		{
+			Cookie cookie = getWebRequest().getCookie(key);
+			if (log.isDebugEnabled())
+			{
+				if (cookie != null)
+				{
+					log.debug("Found Cookie with name=" + key + " and request URI=" +
+						getWebRequest().getHttpServletRequest().getRequestURI());
+				}
+				else
+				{
+					log.debug("Unable to find Cookie with name=" + key + " and request URI=" +
+						getWebRequest().getHttpServletRequest().getRequestURI());
+				}
+			}
+
+			return cookie;
+		}
+		catch (NullPointerException ex)
+		{
+			// Ignore any app server problem here
+		}
+
+		return null;
+	}
+

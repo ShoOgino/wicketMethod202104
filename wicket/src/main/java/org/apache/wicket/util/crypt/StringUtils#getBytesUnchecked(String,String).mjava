@@ -1,0 +1,36 @@
+	/**
+	 * Encodes the given string into a sequence of bytes using the named charset, storing the result
+	 * into a new byte array.
+	 * <p>
+	 * This method catches {@link UnsupportedEncodingException} and rethrows it as
+	 * {@link IllegalStateException}, which should never happen for a required charset name. Use
+	 * this method when the encoding is required to be in the JRE.
+	 * </p>
+	 * 
+	 * @param string
+	 *            the String to encode
+	 * @param charsetName
+	 *            The name of a required {@link java.nio.charset.Charset}
+	 * @return encoded bytes
+	 * @throws IllegalStateException
+	 *             Thrown when a {@link UnsupportedEncodingException} is caught, which should never
+	 *             happen for a required charset name.
+	 * @see CharEncoding
+	 * @see String#getBytes(String)
+	 */
+	public static byte[] getBytesUnchecked(String string, String charsetName)
+	{
+		if (string == null)
+		{
+			return null;
+		}
+		try
+		{
+			return string.getBytes(charsetName);
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			throw StringUtils.newIllegalStateException(charsetName, e);
+		}
+	}
+

@@ -1,7 +1,6 @@
 	/**
 	 * @see org.apache.wicket.IInitializer#init(org.apache.wicket.Application)
 	 */
-	@SuppressWarnings("unchecked")
 	public void init(org.apache.wicket.Application application)
 	{
 		try
@@ -41,7 +40,8 @@
 				catch (SecurityException e)
 				{
 					// Ignore - we're not allowed to read this property.
-					log.warn("not allowed to read property wicket.mbean.server.class due to security settings; ignoring");
+					log
+							.warn("not allowed to read property wicket.mbean.server.class due to security settings; ignoring");
 				}
 				if (impl != null)
 				{
@@ -104,8 +104,6 @@
 					":type=Application,name=SecuritySettings"));
 			register(new SessionSettings(application), new ObjectName(domain +
 					":type=Application,name=SessionSettings"));
-			register(new CookieValuePersisterSettings(application), new ObjectName(domain +
-					":type=Application,name=CookieValuePersisterSettings"));
 
 			RequestLogger sessionsBean = new RequestLogger(application);
 			ObjectName sessionsBeanName = new ObjectName(domain + ":type=RequestLogger");

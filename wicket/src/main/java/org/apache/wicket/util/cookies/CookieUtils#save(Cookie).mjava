@@ -1,0 +1,27 @@
+	/**
+	 * Persist/save the data using Cookies.
+	 * 
+	 * @param cookie
+	 *            The Cookie to be persisted.
+	 * @return The cookie provided
+	 */
+	private Cookie save(final Cookie cookie)
+	{
+		if (cookie == null)
+		{
+			return null;
+		}
+
+		initializeCookie(cookie);
+
+		getWebResponse().addCookie(cookie);
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Cookie saved: " + cookieToDebugString(cookie) + "; request URI=" +
+				getWebRequest().getHttpServletRequest().getRequestURI());
+		}
+
+		return cookie;
+	}
+

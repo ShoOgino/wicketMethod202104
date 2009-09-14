@@ -1,0 +1,27 @@
+		/**
+		 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
+		 */
+		@Override
+		public final void onSubmit()
+		{
+			// Get session info
+			SignInSession session = getMySession();
+
+			// Sign the user in
+			if (session.signIn(getUsername(), getPassword()))
+			{
+				if (!continueToOriginalDestination())
+				{
+					setResponsePage(getApplication().getHomePage());
+				}
+			}
+			else
+			{
+				// Get the error message from the properties file associated with the Component
+				String errmsg = getString("loginError", null, "Unable to sign you in");
+
+				// Register the error message with the feedback panel
+				error(errmsg);
+			}
+		}
+
