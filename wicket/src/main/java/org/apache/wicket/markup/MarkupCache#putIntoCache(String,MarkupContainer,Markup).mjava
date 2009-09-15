@@ -16,6 +16,24 @@
 	protected Markup putIntoCache(final String locationString, MarkupContainer container,
 		Markup markup)
 	{
-		return putIntoCache(locationString, markup);
+		if (locationString != null)
+		{
+			if (markupCache.containsKey(locationString) == false)
+			{
+				markupCache.put(locationString, markup);
+			}
+			else
+			{
+				// We don't lock the cache while loading a markup. Thus it may
+				// happen that the very same markup gets loaded twice (the first
+				// markup being loaded, but not yet in the cache, and another
+				// request requesting the very same markup). Since markup
+				// loading in avg takes less than 100ms, it is not really an
+				// issue. For consistency reasons however, we should always use
+				// the markup loaded first which is why it gets returned.
+				markup = markupCache.get(locationString);
+			}
+		}
+		return markup;
 	}
 
