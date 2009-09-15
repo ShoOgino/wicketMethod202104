@@ -16,18 +16,14 @@
 		// anonymous class, which will create the page instance only when
 		// needed.
 
-		add(new PageLink("pageLink", new IPageLink()
+		add(new Link<Void>("pageLink")
 		{
-			public Page getPage()
+			@Override
+			public void onClick()
 			{
-				return new NonBookmarkablePage(PageLinkPage.this);
+				setResponsePage(new NonBookmarkablePage(PageLinkPage.this));
 			}
-
-			public Class<? extends Page> getPageIdentity()
-			{
-				return NonBookmarkablePage.class;
-			}
-		}));
+		});
 
 		// Note that this would have had the same effect, except that the link
 		// wouldn't check

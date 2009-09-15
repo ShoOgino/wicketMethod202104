@@ -39,32 +39,24 @@
 			"3++2 & 5 � >< space + �"));
 
 		// Link to BookDetails page
-		add(new PageLink("bookDetailsLink", new IPageLink()
+		add(new Link<Void>("bookDetailsLink")
 		{
-			public Page getPage()
+			@Override
+			public void onClick()
 			{
-				return new BookDetails(new Book("The Hobbit"));
+				setResponsePage(new BookDetails(new Book("The Hobbit")));
 			}
-
-			public Class<? extends Page> getPageIdentity()
-			{
-				return BookDetails.class;
-			}
-		}));
+		});
 
 		// Delayed link to BookDetails page
-		add(new PageLink("bookDetailsLink2", new IPageLink()
+		add(new Link<Void>("bookDetailsLink2")
 		{
-			public Page getPage()
+			@Override
+			public void onClick()
 			{
-				return new BookDetails(new Book("Inside The Matrix"));
+				setResponsePage(new BookDetails(new Book("Inside The Matrix")));
 			}
-
-			public Class<? extends Page> getPageIdentity()
-			{
-				return BookDetails.class;
-			}
-		}));
+		});
 
 		// Image map link example
 		add(new ImageMap("imageMap").addRectangleLink(0, 0, 100, 100,
