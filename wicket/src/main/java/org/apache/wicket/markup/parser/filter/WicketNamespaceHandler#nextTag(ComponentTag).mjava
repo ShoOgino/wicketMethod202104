@@ -1,0 +1,18 @@
+	/**
+	 * @see org.apache.wicket.markup.parser.filter.BaseMarkupFilter#nextTag(org.apache.wicket.markup.ComponentTag)
+	 */
+	@Override
+	protected final MarkupElement nextTag(ComponentTag tag) throws ParseException
+	{
+		if (tag.isOpen() && "html".equals(tag.getName().toLowerCase()))
+		{
+			final String namespace = determineWicketNamespace(tag);
+			if (namespace != null)
+			{
+				markup.setWicketNamespace(namespace);
+			}
+		}
+
+		return tag;
+	}
+

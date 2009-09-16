@@ -1,12 +1,10 @@
 	/**
-	 * Gets the next tag from the input string.
-	 * 
-	 * @return The extracted tag (will always be of type XmlTag).
+	 * @return The next XML tag
 	 * @throws ParseException
 	 */
 	public final MarkupElement nextTag() throws ParseException
 	{
-		while (next())
+		while (next() != NOT_INITIALIZED)
 		{
 			switch (lastType)
 			{
@@ -17,6 +15,9 @@
 					break;
 
 				case COMMENT :
+					break;
+
+				case CONDITIONAL_COMMENT :
 					break;
 
 				case CDATA :

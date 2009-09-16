@@ -4,21 +4,20 @@
 	private final void initializeMarkupFilters()
 	{
 		// Chain together all the different markup filters and configure them
-		markupFilterChain = xmlParser;
+		markupFilterChain = new RootMarkupFilter(xmlParser);
 
-		MarkupResourceData markupResourceData = markup.getMarkupResourceData();
+		MarkupResourceStream markupResourceStream = markup.getMarkupResourceStream();
 
-		appendMarkupFilter(new WicketTagIdentifier(markupResourceData));
+		appendMarkupFilter(new WicketTagIdentifier(markupResourceStream));
 		appendMarkupFilter(new HtmlHandler());
 		appendMarkupFilter(new WicketRemoveTagHandler());
 		appendMarkupFilter(new WicketLinkTagHandler());
-		appendMarkupFilter(new WicketNamespaceHandler(markupResourceData));
+		appendMarkupFilter(new WicketNamespaceHandler(markupResourceStream));
 
 		// Provided the wicket component requesting the markup is known ...
-		final MarkupResourceStream resource = markupResourceData.getResource();
-		if (resource != null)
+		if ((markupResourceStream != null) && (markupResourceStream.getResource() != null))
 		{
-			final ContainerInfo containerInfo = resource.getContainerInfo();
+			final ContainerInfo containerInfo = markupResourceStream.getContainerInfo();
 			if (containerInfo != null)
 			{
 				appendMarkupFilter(new WicketMessageTagHandler());

@@ -7,31 +7,27 @@
 	 */
 	public MarkupStream getAssociatedMarkupStream(final boolean throwException)
 	{
-		try
+		IMarkupFragment markup = getAssociatedMarkup();
+
+		// If we found markup for this container
+		if (markup != null)
 		{
-			return getApplication().getMarkupSettings().getMarkupCache().getMarkupStream(this,
-				false, throwException);
+			return new MarkupStream(markup);
 		}
-		catch (MarkupException ex)
-		{
-			// re-throw it. The exception contains already all the information
-			// required.
-			throw ex;
-		}
-		catch (MarkupNotFoundException ex)
-		{
-			// re-throw it. The exception contains already all the information
-			// required.
-			throw ex;
-		}
-		catch (WicketRuntimeException ex)
+
+		if (throwException == true)
 		{
 			// throw exception since there is no associated markup
 			throw new MarkupNotFoundException(
-				exceptionMessage("Markup of type '" + getMarkupType() + "' for component '" +
-					getClass().getName() + "' not found." +
-					" Enable debug messages for org.apache.wicket.util.resource to get a list of all filenames tried"),
-				ex);
+				"Markup of type '" +
+					getMarkupType() +
+					"' for component '" +
+					getClass().getName() +
+					"' not found." +
+					" Enable debug messages for org.apache.wicket.util.resource to get a list of all filenames tried.: " +
+					toString());
 		}
+
+		return null;
 	}
 

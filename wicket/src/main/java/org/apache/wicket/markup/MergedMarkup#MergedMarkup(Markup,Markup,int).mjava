@@ -10,23 +10,16 @@
 	 */
 	public MergedMarkup(final Markup markup, final Markup baseMarkup, int extendIndex)
 	{
-		super(new MarkupResourceData());
+		super(markup.getMarkupResourceStream());
 
-		// Copy settings from derived markup
-		getMarkupResourceData().setResource(markup.getMarkupResourceData().getResource());
-		getMarkupResourceData().setXmlDeclaration(
-			markup.getMarkupResourceData().getXmlDeclaration());
-		getMarkupResourceData().setEncoding(markup.getMarkupResourceData().getEncoding());
-		getMarkupResourceData().setWicketNamespace(
-			markup.getMarkupResourceData().getWicketNamespace());
-		getMarkupResourceData().setBaseMarkup(baseMarkup);
+		getMarkupResourceStream().setBaseMarkup(baseMarkup);
 
 		if (log.isDebugEnabled())
 		{
-			String derivedResource = Strings.afterLast(markup.getMarkupResourceData()
+			String derivedResource = Strings.afterLast(markup.getMarkupResourceStream()
 				.getResource()
 				.toString(), '/');
-			String baseResource = Strings.afterLast(baseMarkup.getMarkupResourceData()
+			String baseResource = Strings.afterLast(baseMarkup.getMarkupResourceStream()
 				.getResource()
 				.toString(), '/');
 			log.debug("Merge markup: derived markup: " + derivedResource + "; base markup: " +

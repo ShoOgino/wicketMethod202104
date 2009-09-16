@@ -1,21 +1,19 @@
 	/**
-	 * Gets the next tag from the input string.
-	 * 
-	 * @return The extracted tag (will always be of type XmlTag).
+	 * @return XXX
 	 * @throws ParseException
 	 */
-	public final boolean next() throws ParseException
+	public final int next() throws ParseException
 	{
 		// Reached end of markup file?
 		if (input.getPosition() >= input.size())
 		{
-			return false;
+			return NOT_INITIALIZED;
 		}
 
 		if (skipUntilText != null)
 		{
 			skipUntil();
-			return true;
+			return lastType;
 		}
 
 		// Any more tags in the markup?
@@ -30,13 +28,13 @@
 				lastText = input.getSubstring(-1);
 				input.setPosition(input.size());
 				lastType = BODY;
-				return true;
+				return lastType;
 			}
 
 			lastText = input.getSubstring(openBracketIndex);
 			input.setPosition(openBracketIndex);
 			lastType = BODY;
-			return true;
+			return lastType;
 		}
 
 		// Determine the line number
@@ -66,7 +64,7 @@
 		if ((firstChar == '!') || (firstChar == '?'))
 		{
 			specialTagHandling(tagText, openBracketIndex, closeBracketIndex);
-			return true;
+			return lastType;
 		}
 
 		// Type of the tag, to be determined next
@@ -124,7 +122,7 @@
 			// Move to position after the tag
 			input.setPosition(closeBracketIndex + 1);
 			lastType = TAG;
-			return true;
+			return lastType;
 		}
 		else
 		{

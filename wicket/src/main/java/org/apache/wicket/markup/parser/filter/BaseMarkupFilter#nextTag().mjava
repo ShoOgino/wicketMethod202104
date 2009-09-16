@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.markup.parser.IMarkupFilter#nextTag()
+	 */
+	public final MarkupElement nextTag() throws ParseException
+	{
+		// Get the next tag from the next MarkupFilter in the chain.
+		// If null, no more tags are available
+		final MarkupElement tag = getParent().nextTag();
+		if (tag == null)
+		{
+			return tag;
+		}
+
+		return nextTag((ComponentTag)tag);
+	}
+

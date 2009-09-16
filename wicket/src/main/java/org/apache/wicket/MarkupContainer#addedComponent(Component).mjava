@@ -1,44 +1,60 @@
 	/**
-	 * @param component
+	 * @param child
 	 *            Component being added
 	 */
-	private final void addedComponent(final Component component)
+	private final void addedComponent(final Component child)
 	{
 		// Check for degenerate case
-		if (component == this)
+		if (child == this)
 		{
 			throw new IllegalArgumentException("Component can't be added to itself");
 		}
 
-		MarkupContainer parent = component.getParent();
+		MarkupContainer parent = child.getParent();
 		if (parent != null)
 		{
-			parent.remove(component);
+			parent.remove(child);
 		}
 
 		// Set child's parent
-		component.setParent(this);
+		child.setParent(this);
 
 		final Page page = findPage();
 
 		final IDebugSettings debugSettings = Application.get().getDebugSettings();
 		if (debugSettings.isLinePreciseReportingOnAddComponentEnabled())
 		{
-			component.setMetaData(ADDED_AT_KEY, Strings.toString(component, new MarkupException(
+			child.setMetaData(ADDED_AT_KEY, Strings.toString(child, new MarkupException(
 				"added")));
 		}
 
 		if (page != null)
 		{
-			page.componentAdded(component);
+			child.onConnectedToPage();
+
+			// Tell all children of "component" as well
+			if (child instanceof MarkupContainer)
+			{
+				MarkupContainer container = (MarkupContainer)child;
+				container.visitChildren(new IVisitor<Component>()
+				{
+					public Object component(final Component component)
+					{
+						component.onConnectedToPage();
+						return CONTINUE_TRAVERSAL;
+					}
+				});
+			}
+
+			// Tell the page a component has been added
+			page.componentAdded(child);
 		}
 
 		// if the PREPARED_FOR_RENDER flag is set, we have already called
-		// beforeRender on this
-		// component's children. So we need to initialize the newly added one
+		// beforeRender on this component's children. So we need to initialize the newly added one
 		if (isPreparedForRender())
 		{
-			component.beforeRender();
+			child.beforeRender();
 		}
 	}
 

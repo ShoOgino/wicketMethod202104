@@ -1,0 +1,24 @@
+	/**
+	 * 
+	 * @param rawMarkup
+	 * @return The modified raw markup
+	 */
+	protected CharSequence handleRawText(String rawMarkup)
+	{
+		// Get relevant settings from the Application
+		final boolean stripComments = markupSettings.getStripComments();
+		final boolean compressWhitespace = markupSettings.getCompressWhitespace();
+
+		if (stripComments)
+		{
+			rawMarkup = removeComment(rawMarkup);
+		}
+
+		if (compressWhitespace)
+		{
+			rawMarkup = compressWhitespace(rawMarkup);
+		}
+
+		return rawMarkup;
+	}
+

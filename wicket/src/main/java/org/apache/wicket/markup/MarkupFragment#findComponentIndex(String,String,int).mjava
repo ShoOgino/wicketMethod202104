@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.markup.IMarkupFragment#findComponentIndex(java.lang.String,
+	 *      java.lang.String)
+	 */
+	public final int findComponentIndex(String path, final String id, final int startIndex)
+	{
+		// Prepend rootPath to the 'path' parameter
+		path = (path == null ? rootPath : (rootPath == null ? path : rootPath + ":" + path));
+
+		// Search the markup
+		int index = markup.findComponentIndex(path, id, this.startIndex + startIndex) -
+			this.startIndex;
+
+		if ((index >= 0) && (index < size))
+		{
+			return index;
+		}
+
+		return -1;
+	}
+

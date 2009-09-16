@@ -1,7 +1,7 @@
 	/**
 	 * @see org.apache.wicket.markup.IMarkupCache#removeMarkup(java.lang.String)
 	 */
-	public final Markup removeMarkup(final String cacheKey)
+	public final IMarkupFragment removeMarkup(final String cacheKey)
 	{
 		if (cacheKey == null)
 		{
@@ -16,7 +16,7 @@
 		// Remove the markup and any other markup which depends on it
 		// (inheritance)
 		String locationString = (String)markupKeyCache.get(cacheKey);
-		Markup markup = markupCache.get(locationString);
+		IMarkupFragment markup = markupCache.get(locationString);
 		if (markup != null)
 		{
 			markupCache.remove(locationString);
@@ -36,11 +36,11 @@
 				while (iter.hasNext())
 				{
 					Markup cacheMarkup = markupCache.get(iter.next());
-					MarkupResourceData resourceData = cacheMarkup.getMarkupResourceData()
-						.getBaseMarkupResourceData();
+					MarkupResourceStream resourceData = cacheMarkup.getMarkupResourceStream()
+						.getBaseMarkupResourceStream();
 					if (resourceData != null)
 					{
-						String baseCacheKey = resourceData.getResource().getCacheKey();
+						String baseCacheKey = resourceData.getCacheKey();
 						String baseLocationString = (String)markupKeyCache.get(baseCacheKey);
 						if (baseLocationString != null &&
 							markupCache.get(baseLocationString) == null)
@@ -48,7 +48,7 @@
 							if (log.isDebugEnabled())
 							{
 								log.debug("Remove from cache: cacheKey=" +
-									cacheMarkup.getMarkupResourceData().getResource().getCacheKey());
+									cacheMarkup.getMarkupResourceStream().getCacheKey());
 							}
 
 							iter.remove();

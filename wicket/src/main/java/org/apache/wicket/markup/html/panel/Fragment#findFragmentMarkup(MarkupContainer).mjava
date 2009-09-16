@@ -1,0 +1,35 @@
+	/**
+	 * Find the fragment markup fragment
+	 * 
+	 * @param provider
+	 * @return markup
+	 */
+	private IMarkupFragment findFragmentMarkup(final MarkupContainer provider)
+	{
+		// Get the markup from the provider
+		IMarkupFragment markup = provider.getMarkup();
+		if (provider.hasAssociatedMarkup())
+		{
+			markup = provider.getAssociatedMarkup();
+		}
+
+		// Search the relevant fragment tag
+		if (markup != null)
+		{
+			markup = findFragmentMarkup(markup);
+		}
+
+		// If not yet found, try the parent "calling" markup as well. This is relevant e.g. for
+		// Border and Panel.
+		if ((markup == null) && provider.hasAssociatedMarkup())
+		{
+			markup = provider.getParent().getMarkup(provider);
+			if (markup != null)
+			{
+				markup = findFragmentMarkup(markup);
+			}
+		}
+
+		return markup;
+	}
+

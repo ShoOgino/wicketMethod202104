@@ -1,0 +1,32 @@
+	/**
+	 * @see org.apache.wicket.markup.parser.filter.BaseMarkupFilter#nextTag(org.apache.wicket.markup.ComponentTag)
+	 */
+	@Override
+	protected final MarkupElement nextTag(ComponentTag tag) throws ParseException
+	{
+		if (tag.isClose())
+		{
+			return tag;
+		}
+
+		final String wicketMessageAttribute = tag.getAttributes().getString(
+			WICKET_MESSAGE_ATTRIBUTE_NAME);
+
+		if ((wicketMessageAttribute != null) && (wicketMessageAttribute.trim().length() > 0))
+		{
+			// check if this tag is raw markup
+			if (tag.getId() == null)
+			{
+				// if this is a raw tag we need to set the id to something so
+				// that wicket will not merge this as raw markup and instead
+				// pass it on to a resolver
+				tag.setId(WICKET_MESSAGE_CONTAINER_ID);
+				tag.setAutoComponentTag(true);
+				tag.setModified(true);
+			}
+			tag.addBehavior(new AttributeLocalizer());
+		}
+
+		return tag;
+	}
+

@@ -1,0 +1,25 @@
+	/**
+	 * Get the Markup associated with the Component. If not subclassed, the parent container is
+	 * asked to return the markup of this child component.
+	 * <p/>
+	 * Components like Panel and Border should return the "calling" markup fragment, e.g.
+	 * <code>&lt;span wicket:id="myPanel"&gt;body&lt;/span&gt;</code>. You may use
+	 * Panel/Border/Enclosure.getMarkup(null) to return the associated markup file. And
+	 * Panel/Border/Enclosure.getMarkup(child) will search the child in the appropriate markup
+	 * fragment.
+	 * 
+	 * @see MarkupContainer#getMarkup(Component)
+	 * 
+	 * @return The markup fragment
+	 */
+	public IMarkupFragment getMarkup()
+	{
+		if (parent == null)
+		{
+			throw new MarkupException(
+				"Can not determine Markup. Component is not yet connected to a parent. " +
+					toString());
+		}
+		return parent.getMarkup(this);
+	}
+
