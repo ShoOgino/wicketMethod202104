@@ -12,18 +12,21 @@
 	 *            The locale of the resource
 	 * @param style
 	 *            The style of the resource (see {@link org.apache.wicket.Session})
+	 * @param variation
+	 *            The compoent's variation (of the style)
 	 * @return The resource
 	 */
 	public static PackageResource get(final Class<?> scope, final String path, final Locale locale,
-		final String style)
+		final String style, final String variation)
 	{
 		final SharedResources sharedResources = Application.get().getSharedResources();
 		PackageResource resource = (PackageResource)sharedResources.get(scope, path, locale, style,
-			true);
+			variation, true);
 		if (resource == null)
 		{
-			resource = newPackageResource(scope, path, locale, style);
-			Application.get().getSharedResources().add(scope, path, locale, style, resource);
+			resource = newPackageResource(scope, path, locale, style, variation);
+			Application.get().getSharedResources().add(scope, path, locale, style, variation,
+				resource);
 		}
 		return resource;
 	}

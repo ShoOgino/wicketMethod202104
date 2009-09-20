@@ -1,26 +1,17 @@
 	/**
-	 * Gets the style of this component (see {@link org.apache.wicket.Session}).
+	 * A convinient method. Same as Session.get().getStyle().
 	 * 
-	 * @return The style of this component.
+	 * @return The style of this component respectively the style of the Session.
 	 * 
-	 * @see org.apache.wicket.Session
 	 * @see org.apache.wicket.Session#getStyle()
 	 */
 	public final String getStyle()
 	{
-		String variation = getVariation();
-		String style = getSession().getStyle();
-		if (variation != null && !"".equals(variation))
+		Session session = getSession();
+		if (session == null)
 		{
-			if (style != null && !"".equals(style))
-			{
-				style = variation + "_" + style;
-			}
-			else
-			{
-				style = variation;
-			}
+			throw new WicketRuntimeException("Wicket Session object not avaiable");
 		}
-		return style;
+		return session.getStyle();
 	}
 

@@ -2,15 +2,17 @@
 	 * 
 	 * @param sourcePath
 	 * @param style
+	 * @param variation
 	 * @param locale
 	 * @param extension
 	 */
-	public void createAndTestResource(Path sourcePath, String style, Locale locale, String extension)
+	public void createAndTestResource(Path sourcePath, String style, String variation,
+		Locale locale, String extension)
 	{
 		IResourceStreamLocator locator = new ResourceStreamLocator(sourcePath);
 		IResourceStream resource = locator.locate(this.getClass(), this.getClass()
 			.getName()
-			.replace('.', '/'), style, locale, "txt");
+			.replace('.', '/'), style, variation, locale, "txt");
 		compareFilename(resource, extension);
 	}
 

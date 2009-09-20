@@ -11,13 +11,15 @@
 	 *            The locale of the resource
 	 * @param style
 	 *            The style of the resource (see {@link org.apache.wicket.Session})
+	 * @param variation
+	 *            The component's variation (of the style)
 	 * @return true if a resource could be loaded, false otherwise
 	 */
 	public static boolean exists(final Class<?> scope, final String path, final Locale locale,
-		final String style)
+		final String style, final String variation)
 	{
 		String absolutePath = Packages.absolutePath(scope, path);
 		return Application.get().getResourceSettings().getResourceStreamLocator().locate(scope,
-			absolutePath, style, locale, null) != null;
+			absolutePath, style, variation, locale, null) != null;
 	}
 

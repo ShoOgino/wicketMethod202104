@@ -12,10 +12,12 @@
 	 *            The locale of the resource.
 	 * @param style
 	 *            The style of the resource.
+	 * @param variation
+	 *            The component's variation (of the style)
 	 * @throw IllegalArgumentException when the requested package resource was not found
 	 */
 	public static void bind(Application application, Class<?> scope, String name, Locale locale,
-		String style)
+		String style, final String variation)
 	{
 		if (name == null)
 		{
@@ -23,19 +25,20 @@
 		}
 
 		// first check on a direct hit for efficiency
-		if (exists(scope, name, locale, style))
+		if (exists(scope, name, locale, style, variation))
 		{
 			// we have got a hit, so we may safely assume the name
 			// argument is not a regular expression, and can thus
 			// just add the resource and return
-			PackageResource packageResource = get(scope, name, locale, style);
+			PackageResource packageResource = get(scope, name, locale, style, variation);
 			SharedResources sharedResources = Application.get().getSharedResources();
-			sharedResources.add(scope, name, locale, style, packageResource);
+			sharedResources.add(scope, name, locale, style, variation, packageResource);
 		}
 		else
 		{
 			throw new IllegalArgumentException("no package resource was found for scope " + scope +
-				", name " + name + ", locale " + locale + ", style " + style);
+				", name " + name + ", locale " + locale + ", style " + style + ", variation " +
+				variation);
 		}
 	}
 

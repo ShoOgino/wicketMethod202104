@@ -1,0 +1,33 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param path
+	 *            The path of the resource without extension
+	 * @param style
+	 *            A theme or style (see {@link org.apache.wicket.Session})
+	 * @param variation
+	 *            The component's variation (of the style)
+	 * @param locale
+	 *            The Locale to apply
+	 * @param extensions
+	 *            the filname's extensions (comma separated)
+	 */
+	public ResourceNameIterator(String path, final String style, final String variation,
+		final Locale locale, final String extensions)
+	{
+		this.locale = locale;
+		if ((extensions == null) && (path.indexOf('.') != -1))
+		{
+			this.extensions = Strings.afterLast(path, '.');
+			path = Strings.beforeLast(path, '.');
+		}
+		else
+		{
+			this.extensions = extensions;
+		}
+
+		path = getLocaleFromFilename(path);
+
+		styleIterator = new StyleAndVariationResourceNameIterator(path, style, variation);
+	}
+

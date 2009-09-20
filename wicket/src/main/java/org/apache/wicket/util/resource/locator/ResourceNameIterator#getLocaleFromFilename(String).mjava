@@ -1,30 +1,14 @@
 	/**
-	 * Construct.
+	 * Extract the locale from the filename in case where the user
 	 * 
 	 * @param path
-	 *            The path of the resource without extension
-	 * @param style
-	 *            A theme or style (see {@link org.apache.wicket.Session})
-	 * @param locale
-	 *            The Locale to apply
-	 * @param extensions
-	 *            the filname's extensions (comma separated)
+	 *            The file path
+	 * @return The updated path, without the locale
+	 * @TODO That should really be external to RNI in a helper kind of class
 	 */
-	public ResourceNameIterator(String path, final String style, final Locale locale,
-		final String extensions)
+	protected String getLocaleFromFilename(String path)
 	{
-		this.locale = locale;
-		if ((extensions == null) && (path.indexOf('.') != -1))
-		{
-			this.extensions = Strings.afterLast(path, '.');
-			path = Strings.beforeLast(path, '.');
-		}
-		else
-		{
-			this.extensions = extensions;
-		}
-
-		String filename = Strings.lastPathComponent(path, '/');
+		final String filename = Strings.lastPathComponent(path, '/');
 		Matcher matcher = LOCALE_PATTERN.matcher(filename);
 		if (matcher.find())
 		{
@@ -61,6 +45,6 @@
 			}
 		} // else skip the whole thing... probably user specific underscores used
 
-		styleIterator = new StyleAndVariationResourceNameIterator(path, style, null);
+		return path;
 	}
 

@@ -19,6 +19,7 @@
 		String string = null;
 		Locale locale = component.getLocale();
 		String style = component.getStyle();
+		String variation = component.getVariation();
 
 		// The key prefix is equal to the component path relative to the
 		// current component on the top of the stack.
@@ -37,8 +38,7 @@
 			// component on the path from page down.
 			if ((prefix != null) && (prefix.length() > 0))
 			{
-				string = loadStringResource(clazz, prefix + '.' + key, locale, style);
-
+				string = loadStringResource(clazz, prefix + '.' + key, locale, style, variation);
 				if (string == null)
 				{
 					prefix = Strings.afterFirst(prefix, '.');
@@ -54,7 +54,7 @@
 			for (int i = searchStack.size() - 1; (i >= 0) && (string == null); i--)
 			{
 				Class<?> clazz = searchStack.get(i);
-				string = loadStringResource(clazz, key, locale, style);
+				string = loadStringResource(clazz, key, locale, style, variation);
 			}
 		}
 

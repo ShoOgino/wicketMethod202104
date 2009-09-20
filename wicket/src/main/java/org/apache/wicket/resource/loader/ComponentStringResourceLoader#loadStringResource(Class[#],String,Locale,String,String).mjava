@@ -1,10 +1,10 @@
 	/**
 	 * 
 	 * @see org.apache.wicket.resource.loader.IStringResourceLoader#loadStringResource(java.lang.Class,
-	 *      java.lang.String, java.util.Locale, java.lang.String)
+	 *      java.lang.String, java.util.Locale, java.lang.String, java.lang.String)
 	 */
 	public String loadStringResource(Class<?> clazz, final String key, final Locale locale,
-		final String style)
+		final String style, final String variation)
 	{
 		if (clazz == null)
 		{
@@ -14,7 +14,7 @@
 		if (log.isDebugEnabled())
 		{
 			log.debug("key: '" + key + "'; class: '" + clazz.getName() + "'; locale: '" + locale +
-				"'; Style: '" + style + "'");
+				"'; Style: '" + style + "'; Variation: '" + variation + "'");
 		}
 
 		// Load the properties associated with the path
@@ -25,7 +25,8 @@
 			String path = clazz.getName().replace('.', '/');
 
 			// Iterator over all the combinations
-			ResourceNameIterator iter = new ResourceNameIterator(path, style, locale, null);
+			ResourceNameIterator iter = new ResourceNameIterator(path, style, variation, locale,
+				null);
 			while (iter.hasNext())
 			{
 				String newPath = iter.next();
@@ -58,7 +59,7 @@
 				{
 					if (log.isDebugEnabled())
 					{
-						// log.debug("Properties file not found: '" + newPath + "'");
+						log.debug("Properties file not found: '" + newPath + "'");
 					}
 				}
 			}

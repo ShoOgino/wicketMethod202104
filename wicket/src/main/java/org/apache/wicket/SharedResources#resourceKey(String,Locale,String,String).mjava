@@ -10,9 +10,12 @@
 	 *            The locale
 	 * @param style
 	 *            The style (see {@link org.apache.wicket.Session})
+	 * @param variation
+	 *            The component specific variation of the style
 	 * @return The localized path
 	 */
-	public static String resourceKey(final String path, final Locale locale, final String style)
+	public static String resourceKey(final String path, final Locale locale, final String style,
+		final String variation)
 	{
 		// escape sequence for '..' (prevents crippled urls in browser)
 		final CharSequence parentEscape = Application.get()
@@ -41,12 +44,17 @@
 		// First style because locale can append later on.
 		if (style != null)
 		{
-			buffer.append('_');
+			buffer.append("_");
 			buffer.append(style);
+		}
+		if (variation != null)
+		{
+			buffer.append("_");
+			buffer.append(variation);
 		}
 		if (locale != null)
 		{
-			buffer.append('_');
+			buffer.append("_");
 			boolean l = locale.getLanguage().length() != 0;
 			boolean c = locale.getCountry().length() != 0;
 			boolean v = locale.getVariant().length() != 0;

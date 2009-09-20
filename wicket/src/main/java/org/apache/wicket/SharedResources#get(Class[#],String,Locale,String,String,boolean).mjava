@@ -1,0 +1,44 @@
+	/**
+	 * @param scope
+	 *            The resource's scope
+	 * @param name
+	 *            Name of resource to get
+	 * @param locale
+	 *            The locale of the resource
+	 * @param style
+	 *            The resource style (see {@link org.apache.wicket.Session})
+	 * @param variation
+	 *            The component specific variation of the style
+	 * @param exact
+	 *            If true then only return the resource that is registered for the given locale and
+	 *            style.
+	 * 
+	 * @return The logical resource
+	 */
+	public final Resource get(final Class<?> scope, final String name, final Locale locale,
+		final String style, final String variation, boolean exact)
+	{
+		if (exact)
+		{
+			final String resourceKey = resourceKey(scope, name, locale, style, variation);
+			return get(resourceKey);
+		}
+
+		for (int i = 7; i >= 0; i--)
+		{
+			boolean testLocale = (i & 4) != 0;
+			boolean testStyle = (i & 2) != 0;
+			boolean testVariation = (i & 1) != 0;
+
+			String resourceKey = resourceKey(scope, name, (testLocale ? locale : null), (testStyle
+				? style : null), (testVariation ? variation : null));
+			Resource resource = get(resourceKey);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
+
+		return null;
+	}
+
