@@ -4,42 +4,35 @@
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
 	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	protected void onComponentTagBody(final MarkupStream markupStream, ComponentTag enclosureOpenTag)
 	{
-		final Component controller = getChildComponent();
-		if (controller == this)
-		{
-			throw new WicketRuntimeException(
-				"Programming error: childComponent == enclose component; endless loop");
-		}
+		// init changes map
+		changes = new HashMap<Component, Boolean>();
 
+		// enclosure's parent container
+		final MarkupContainer container = getEnclosureParent();
+
+		// iterate over all child tags and make sure all components are present, resolving them if
+		// necessary
+		ensureAllChildrenPresent(container, markupStream, enclosureOpenTag);
+
+		Component controller = container.get(childId.toString());
+		checkChildComponent(controller);
+
+		// set the enclosure visibility
 		setVisible(controller.determineVisibility());
 
 		// transfer visibility to direct children
-		originalVisibilityStatus = new HashMap<Component, Boolean>();
-		DirectChildTagIterator it = new DirectChildTagIterator(markupStream, openTag);
-		MarkupContainer controllerParent = getEnclosureParent();
-		while (it.hasNext())
-		{
-			ComponentTag t = it.next();
-			Component child = controllerParent.get(t.getId());
-			if (child != null)
-			{
-				// record original visiblity allowed value, will restore later
-				originalVisibilityStatus.put(child, child.isVisibilityAllowed());
-				child.setVisibilityAllowed(isVisible());
+		applyEnclosureVisibilityToChildren(container, markupStream, enclosureOpenTag);
 
-			}
-		}
-		it.rewind();
-
+		// render components inside the enclosure if its visible or skip it if it is not
 		if (isVisible() == true)
 		{
-			super.onComponentTagBody(markupStream, openTag);
+			super.onComponentTagBody(markupStream, enclosureOpenTag);
 		}
 		else
 		{
-			markupStream.skipToMatchingCloseTag(openTag);
+			markupStream.skipToMatchingCloseTag(enclosureOpenTag);
 		}
 	}
 

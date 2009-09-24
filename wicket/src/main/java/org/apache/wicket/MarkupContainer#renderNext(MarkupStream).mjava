@@ -30,33 +30,9 @@
 			}
 			else
 			{
-				// 2rd try: Components like Border and Panel might implement
-				// the ComponentResolver interface as well.
-				MarkupContainer container = this;
-				while (container != null)
+				if (ComponentResolvers.resolve(getApplication(), this, markupStream, tag))
 				{
-					if (container instanceof IComponentResolver)
-					{
-						if (((IComponentResolver)container).resolve(this, markupStream, tag))
-						{
-							return;
-						}
-					}
-
-					container = container.findParent(MarkupContainer.class);
-				}
-
-				// 3rd try: Try application's component resolvers
-				final List<IComponentResolver> componentResolvers = getApplication().getPageSettings()
-					.getComponentResolvers();
-				final Iterator<IComponentResolver> iterator = componentResolvers.iterator();
-				while (iterator.hasNext())
-				{
-					final IComponentResolver resolver = iterator.next();
-					if (resolver.resolve(this, markupStream, tag))
-					{
-						return;
-					}
+					return;
 				}
 
 				if (tag instanceof WicketTag)
