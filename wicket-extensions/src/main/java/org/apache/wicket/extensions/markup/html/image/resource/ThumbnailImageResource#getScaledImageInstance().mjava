@@ -14,7 +14,8 @@
 			originalImage = ImageIO.read(is);
 			if (originalImage == null)
 			{
-				throw new IOException("unable to read image");
+				throw new IOException("Unable to read image: " +
+					unscaledImageResource.getResourceStream().toString());
 			}
 		}
 		catch (IOException e)
@@ -43,7 +44,7 @@
 		int originalWidth = originalImage.getWidth();
 		int originalHeight = originalImage.getHeight();
 
-		if (originalWidth > maxSize || originalHeight > maxSize)
+		if ((originalWidth > maxSize) || (originalHeight > maxSize))
 		{
 			final int newWidth;
 			final int newHeight;
@@ -58,14 +59,17 @@
 				newWidth = (maxSize * originalWidth) / originalHeight;
 				newHeight = maxSize;
 			}
-			Image image = originalImage.getScaledInstance(newWidth, newHeight, scaleHints);
 
-			// convert Image to BufferedImage
-			BufferedImage bufferedImage = new BufferedImage(newWidth, newHeight,
-					BufferedImage.TYPE_INT_ARGB);
-			bufferedImage.createGraphics().drawImage(image, 0, 0, null);
+			// http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html
+			BufferedImage dimg = new BufferedImage(newWidth, newHeight, originalImage.getType());
+			Graphics2D g = dimg.createGraphics();
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.drawImage(originalImage, 0, 0, newWidth, newHeight, 0, 0, originalWidth,
+				originalHeight, null);
+			g.dispose();
 
-			return bufferedImage;
+			return dimg;
 		}
 
 		// no need for resizing
