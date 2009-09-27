@@ -1,0 +1,30 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public void testPanel() throws Exception
+	{
+		Page page = new MyPage();
+		Panel panel = new MyPanel("panel");
+		page.add(panel);
+
+		// Get the associated markup file
+		IMarkupFragment markup = panel.getAssociatedMarkup();
+		compareWithFile(markup, "MyPanel_ExpectedResult.html");
+
+		// The Page is missing the tag to "call" the panel
+		assertNull(panel.getMarkup());
+
+		// Create a Page with proper markup for the panel
+		page = new MyPanelPage();
+		panel = (Panel)page.get("panel");
+
+		// getMarkup() returns the "calling" tags
+		markup = panel.getMarkup();
+		compare(markup, "<span wicket:id=\"panel\">test</span>");
+
+		// getMarkup(null) returns the markup which is used to find a child component
+		markup = panel.getMarkup(null);
+		compare(markup, "<wicket:panel>  <span wicket:id=\"label\">text</span></wicket:panel>");
+	}
+

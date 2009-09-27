@@ -14,16 +14,14 @@
 			// Get the parent markup. Make sure that in case of Border and Panel you get the
 			// associated markup
 			IMarkupFragment markup = getParent().getMarkup(null);
-			for (int i = 0; i < markup.size(); i++)
+			MarkupTagIterator iter = new MarkupTagIterator(markup).setWicketTagsOnly(true)
+				.setOpenTagOnly(true);
+			while (iter.hasNext())
 			{
-				MarkupElement elem = markup.get(i);
-				if (elem instanceof WicketTag)
+				WicketTag tag = iter.nextWicketTag();
+				if (tag.isMessageTag() && key.equals(tag.getAttribute("key")))
 				{
-					WicketTag tag = (WicketTag)elem;
-					if (tag.isMessageTag() && key.equals(tag.getAttribute("key")))
-					{
-						return new MarkupFragment(markup, i);
-					}
+					return iter.getMarkupFragment();
 				}
 			}
 

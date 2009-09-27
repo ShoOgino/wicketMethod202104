@@ -1,0 +1,39 @@
+	/**
+	 * Find a child component. It may have been directly added to the container or to a transparent
+	 * child container. From a user's point of view, it was added to this container.
+	 * 
+	 * @param child
+	 * @return The container the child was actually added to. Null if not found.
+	 */
+	private MarkupContainer findChild(final Component child)
+	{
+		if (get(child.getId()) != null)
+		{
+			return this;
+		}
+
+		MarkupContainer container = (MarkupContainer)visitChildren(MarkupContainer.class,
+			new IVisitor<MarkupContainer>()
+			{
+				public Object component(MarkupContainer container)
+				{
+					if (container.isTransparentResolver())
+					{
+						if (container.getId().equals(child.getId()))
+						{
+							return container;
+						}
+						return IVisitor.CONTINUE_TRAVERSAL;
+					}
+					return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+				}
+			});
+
+		if (container != null)
+		{
+			return container;
+		}
+
+		return null;
+	}
+
