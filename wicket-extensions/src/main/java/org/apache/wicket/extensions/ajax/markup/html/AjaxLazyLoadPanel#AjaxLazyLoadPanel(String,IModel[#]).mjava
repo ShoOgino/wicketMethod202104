@@ -1,10 +1,13 @@
 	/**
+	 * Constructor
+	 * 
 	 * @param id
 	 * @param model
 	 */
-	public AjaxLazyLoadPanel(String id, IModel<?> model)
+	public AjaxLazyLoadPanel(final String id, final IModel<?> model)
 	{
 		super(id, model);
+
 		setOutputMarkupId(true);
 
 		add(new AbstractDefaultAjaxBehavior()
@@ -14,8 +17,8 @@
 			@Override
 			protected void respond(AjaxRequestTarget target)
 			{
-				Component component = getLazyLoadComponent("content");
-				AjaxLazyLoadPanel.this.replace(component.setRenderBodyOnly(true));
+				Component component = getLazyLoadComponent(LAZY_LOAD_COMPONENT_ID);
+				AjaxLazyLoadPanel.this.replace(component);
 				target.addComponent(AjaxLazyLoadPanel.this);
 				setState((byte)2);
 			}
