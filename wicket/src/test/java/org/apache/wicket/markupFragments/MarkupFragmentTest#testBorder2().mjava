@@ -21,8 +21,12 @@
 
 		assertNull(border.getBodyContainer().getAssociatedMarkup());
 
-		markup = border.getBodyContainer().getMarkup();
+		// See explanation in BaseBorder.BorderBodyContainer.getMarkup()
+		markup = border.getBodyContainer().getParent().getMarkup(new WebComponent("_body"));
 		compare(markup, "<wicket:body>333</wicket:body>");
+
+		markup = border.getBodyContainer().getMarkup();
+		compare(markup, "<span wicket:id=\"border2\">test</span>");
 
 		// getMarkup(null) returns the markup which is used to find a child component
 		markup = border.getBodyContainer().getMarkup(null);

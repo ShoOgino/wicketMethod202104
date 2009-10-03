@@ -1,0 +1,45 @@
+	/**
+	 * @see org.apache.wicket.MarkupContainer#getMarkup(org.apache.wicket.Component)
+	 */
+	@Override
+	public IMarkupFragment getMarkup(final Component child)
+	{
+		// Than check if markup can be found in between <wicket:border>...</wicket:border>
+		IMarkupFragment markup = getAssociatedMarkup();
+		if (markup == null)
+		{
+			throw new MarkupException("Unable to find associated markup file for Border: " +
+				this.toString());
+		}
+
+		// Find <wicket:border>
+		int i;
+		for (i = 0; i < markup.size(); i++)
+		{
+			MarkupElement elem = markup.get(i);
+			if (elem instanceof WicketTag)
+			{
+				WicketTag tag = (WicketTag)elem;
+				if (tag.isBorderTag())
+				{
+					break;
+				}
+			}
+		}
+
+		// If child == null, return the markup fragment starting with the <wicket:border> tag
+		if (child == null)
+		{
+			return new MarkupFragment(markup, i);
+		}
+
+		if (child == body)
+		{
+			// Find the markup for the child component
+			return markup.find(null, BODY_ID, i);
+		}
+
+		// Find the markup for the child component
+		return markup.find(null, child.getId(), i);
+	}
+

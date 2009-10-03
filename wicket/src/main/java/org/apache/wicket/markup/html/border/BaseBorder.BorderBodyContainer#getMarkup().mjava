@@ -1,0 +1,21 @@
+		/**
+		 * The implementation is against the rule that getMarkup() returns the components markup
+		 * which in this case would be something like <code>&lt;wicket:body/&gt;</code>. But that
+		 * doesn't work if the body container has been added to some kind of wrapper (e.g. Form,
+		 * another Border, etc.). The reason is that the body container's id and the tag id are
+		 * different. The tag's id always is "_body" where as the body's id is something like
+		 * border.id + "_body". And the reason for that is the Page object, and thus
+		 * Page#getAutoIndex(), not being available when needed in the constructor. So
+		 * BaseBorder.BorderBodyContainer is an exception in that it returns what you would expect
+		 * from getMarkup(null). But don't worry, via
+		 * <code>getBodyContainer().getParent().getMarkup(new WebComponent("_body"));</code> you can
+		 * still get hold of the <code>&lt;wicket:body/&gt;</code> markup if really needed.
+		 * 
+		 * @see org.apache.wicket.Component#getMarkup()
+		 */
+		@Override
+		public IMarkupFragment getMarkup()
+		{
+			return BaseBorder.this.getMarkup();
+		}
+

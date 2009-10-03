@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.Component#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
+	 *      org.apache.wicket.markup.ComponentTag)
+	 */
+	@Override
+	protected final void onComponentTagBody(final MarkupStream markupStream,
+		final ComponentTag openTag)
+	{
+		// Remember the data for easy access by the Body component
+		this.openTag = openTag;
+		originalMarkupStream = markupStream;
+
+		// Remember the current position (start of border-body) of the markupstream
+		beginOfBodyIndex = originalMarkupStream.getCurrentIndex();
+
+		// Render the associated markup
+		renderAssociatedMarkup("border",
+			"Markup for a border component must begin a tag like '<wicket:border>'");
+
+		markupStream.skipToMatchingCloseTag(openTag);
+	}
+
