@@ -4,34 +4,6 @@
 	 */
 	public static Form<?> findForm(Component component)
 	{
-		class FindFormVisitor implements Component.IVisitor<Form<?>>
-		{
-			Form<?> form = null;
-
-			public Object component(Form<?> component)
-			{
-				form = component;
-				return Component.IVisitor.STOP_TRAVERSAL;
-			}
-		}
-
-		Form<?> form = component.findParent(Form.class);
-		if (form == null)
-		{
-			// check whether the form is a child of a surrounding border
-			Border border = component.findParent(Border.class);
-			while ((form == null) && (border != null))
-			{
-				FindFormVisitor formVisitor = new FindFormVisitor();
-				border.visitChildren(Form.class, formVisitor);
-				form = formVisitor.form;
-				if (form == null)
-				{
-					border = border.findParent(Border.class);
-				}
-			}
-		}
-		return form;
-
+		return component.findParent(Form.class);
 	}
 

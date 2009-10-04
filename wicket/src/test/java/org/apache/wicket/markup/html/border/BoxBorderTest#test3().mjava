@@ -12,8 +12,8 @@
 		assertNotNull(border);
 		Form<?> form = (Form<?>)tester.getLastRenderedPage().get("border:myForm");
 
-		TextField<String> input = (TextField<String>)tester.getLastRenderedPage()
-			.get("border:name");
+		TextField<String> input = (TextField<String>)tester.getLastRenderedPage().get(
+			"border:myForm:border_body:name");
 		assertEquals("", input.getDefaultModelObjectAsString());
 
 		tester.setupRequestAndResponse();
@@ -24,7 +24,8 @@
 
 		tester.processRequestCycle();
 
-		input = (TextField<String>)tester.getLastRenderedPage().get("border:name");
+		input = (TextField<String>)tester.getLastRenderedPage().get(
+			"border:myForm:border_body:name");
 		assertEquals("jdo", input.getDefaultModelObjectAsString());
 	}
 
