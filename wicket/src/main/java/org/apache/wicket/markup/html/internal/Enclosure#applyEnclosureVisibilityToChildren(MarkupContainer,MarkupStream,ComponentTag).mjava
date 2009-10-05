@@ -1,14 +1,24 @@
+	/**
+	 * 
+	 * @param container
+	 * @param markupStream
+	 * @param enclosureOpenTag
+	 */
 	private void applyEnclosureVisibilityToChildren(final MarkupContainer container,
-		final MarkupStream markupStream, ComponentTag enclosureOpenTag)
+		final MarkupStream markupStream, final ComponentTag enclosureOpenTag)
 	{
 		DirectChildTagIterator it = new DirectChildTagIterator(markupStream, enclosureOpenTag);
 		while (it.hasNext())
 		{
 			final ComponentTag tag = it.next();
-			final Component child = container.get(tag.getId());
-			// record original visiblity allowed value, will restore later
-			changes.put(child, child.isVisibilityAllowed());
-			child.setVisibilityAllowed(isVisible());
+			if (tag.isAutoComponentTag() == false)
+			{
+				final Component child = container.get(tag.getId());
+
+				// record original visiblity allowed value, will restore later
+				changes.put(child, child.isVisibilityAllowed());
+				child.setVisibilityAllowed(isVisible());
+			}
 		}
 		it.rewind();
 	}
