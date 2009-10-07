@@ -1,0 +1,26 @@
+	/**
+	 * 
+	 */
+	public void testRenderMyPage_1()
+	{
+		// start and render the test page
+		tester.startPage(HomePage_1.class);
+
+		// assert rendered page class
+		tester.assertRenderedPage(HomePage_1.class);
+
+		// assert rendered label component
+		tester.assertLabel("message",
+			"If you see this message wicket is properly configured and running");
+
+		String href = "href=\"resources/org.apache.wicket.markup.resolver.HomePage_1/main.css\"";
+
+		String doc = tester.getServletResponse().getDocument();
+		tester.assertContains(href);
+
+		// When rendered the 2nd time, the result should be same. The href must not contain the
+		// locale
+		tester.startPage(HomePage_1.class);
+		tester.assertContains(href);
+	}
+
