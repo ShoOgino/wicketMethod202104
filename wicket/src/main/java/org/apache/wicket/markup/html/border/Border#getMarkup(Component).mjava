@@ -4,7 +4,7 @@
 	@Override
 	public IMarkupFragment getMarkup(final Component child)
 	{
-		// Than check if markup can be found in between <wicket:border>...</wicket:border>
+		// Border require an associated markup resource file
 		IMarkupFragment markup = getAssociatedMarkup();
 		if (markup == null)
 		{
@@ -33,9 +33,10 @@
 			return new MarkupFragment(markup, i);
 		}
 
+		// Since we created the body component instance, identifying that we found it is easy.
 		if (child == body)
 		{
-			// Find the markup for the child component
+			// Find the markup for the child component. Make sure you use the preset default value.
 			return markup.find(null, BODY_ID, i);
 		}
 
