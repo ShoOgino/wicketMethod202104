@@ -1,0 +1,34 @@
+    /**
+     * Extracts {@link PageParameters} from the URL using the given {@link PageParametersEncoder}.
+     * 
+     * @param request
+     * @param segmentsToSkip
+     *            how many URL segments should be skipped because they "belong" to the
+     *            {@link RequestMapper}
+     * @param encoder
+     * @return PageParameters instance
+     */
+    protected PageParameters extractPageParameters(Request request, int segmentsToSkip,
+            PageParametersEncoder encoder)
+    {
+        Check.argumentNotNull(request, "request");
+        Check.argumentNotNull(encoder, "encoder");
+
+        // strip the segments and first query parameter from URL
+        Url urlCopy = new Url(request.getUrl());
+        while (segmentsToSkip > 0 && urlCopy.getSegments().isEmpty() == false)
+        {
+            urlCopy.getSegments().remove(0);
+            --segmentsToSkip;
+        }
+
+        if (!urlCopy.getQueryParameters().isEmpty() &&
+                Strings.isEmpty(urlCopy.getQueryParameters().get(0).getValue()))
+        {
+            urlCopy.getQueryParameters().remove(0);
+        }
+
+        PageParameters decoded = encoder.decodePageParameters(request.requestWithUrl(urlCopy));
+        return decoded != null ? decoded : new PageParameters();
+    }
+

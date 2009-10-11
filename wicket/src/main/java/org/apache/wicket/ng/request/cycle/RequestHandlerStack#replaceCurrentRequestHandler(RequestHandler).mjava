@@ -1,0 +1,25 @@
+	/**
+	 * Replaces the currently executed {@link RequestHandler} with new {@link RequestHandler}. The
+	 * currently executed {@link RequestHandler} is terminated and the new {@link RequestHandler} is
+	 * executed.
+	 * 
+	 * @param handler
+	 */
+	// FIXME
+	// Is this method really useful for anything? To execute request handler after current 
+	// #scheduleRequestHandlerAfterCurrent is better alternative because it doesn't terminate current 
+	// request handler.
+	// To restart request processing #replaceAllRequestHandlers is better alternative because it unrolls
+	// entire stack and cancels all request handlers in stack
+	public void replaceCurrentRequestHandler(RequestHandler handler)
+	{
+		if (requestHandlers.isEmpty())
+		{
+			executeRequestHandler(handler);
+		}
+		else
+		{
+			throw new ReplaceHandlerException(handler, false);
+		}
+	}
+

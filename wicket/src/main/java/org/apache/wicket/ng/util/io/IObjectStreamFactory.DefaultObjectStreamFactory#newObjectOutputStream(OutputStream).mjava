@@ -1,0 +1,49 @@
+		/**
+		 * @see org.apache.wicket.ng.util.io.IObjectStreamFactory#newObjectOutputStream(java.io.OutputStream)
+		 */
+		public ObjectOutputStream newObjectOutputStream(final OutputStream out) throws IOException
+		{
+			final ObjectOutputStream oos = new ObjectOutputStream(out);
+			return new ObjectOutputStream()
+			{
+				@Override
+				protected final void writeObjectOverride(final Object obj) throws IOException
+				{
+					try
+					{
+						oos.writeObject(obj);
+					}
+					catch (IOException e)
+					{
+						if (SerializableChecker.isAvailable())
+						{
+							// trigger serialization again, but this time gather
+							// some more info
+							new SerializableChecker((NotSerializableException)e).writeObject(obj);
+							// if we get here, we didn't fail, while we
+							// should;
+							throw e;
+						}
+						throw e;
+					}
+					catch (RuntimeException e)
+					{
+						log.error("error writing object " + obj + ": " + e.getMessage(), e);
+						throw e;
+					}
+				}
+
+				@Override
+				public void flush() throws IOException
+				{
+					oos.flush();
+				}
+
+				@Override
+				public void close() throws IOException
+				{
+					oos.close();
+				}
+			};
+		}
+

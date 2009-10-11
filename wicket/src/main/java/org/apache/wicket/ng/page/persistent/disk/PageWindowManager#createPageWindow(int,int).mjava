@@ -1,0 +1,35 @@
+	/**
+	 * Creates and returns a new page window for given page.
+	 * 
+	 * @param pageId
+	 * @param versionNumber
+	 * @param ajaxVersionNumber
+	 * @param size
+	 * @return page window
+	 */
+	public PageWindow createPageWindow(int pageId, int size)
+	{
+		int index = getWindowIndex(pageId);
+
+		// if we found the page window, mark it as invalid
+		if (index != -1)
+		{
+			removeWindowIndex(pageId);
+			(windows.get(index)).pageId = -1;
+		}
+
+		// if we are not going to reuse a page window (because it's not on
+		// indexPointor position or because we didn't find it), increment the
+		// indexPointer
+		if (index == -1 || index != indexPointer)
+		{
+			index = incrementIndexPointer();
+		}
+
+		PageWindowInternal window = allocatePageWindow(index, size);
+		window.pageId = pageId;
+
+		putWindowIndex(pageId, index);
+		return new PageWindow(window);
+	}
+

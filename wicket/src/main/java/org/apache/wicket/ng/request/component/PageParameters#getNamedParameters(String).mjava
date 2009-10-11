@@ -1,0 +1,28 @@
+	/**
+	 * Return list of all values for named parameter with given name
+	 * 
+	 * @param name
+	 * @return list of parameter values
+	 */
+	public List<StringValue> getNamedParameters(String name)
+	{
+		Check.argumentNotNull(name, "name");
+
+		if (namedParameters != null)
+		{
+			List<StringValue> result = new ArrayList<StringValue>();
+			for (Entry entry : namedParameters)
+			{
+				if (entry.key.equals(name))
+				{
+					result.add(StringValue.valueOf(entry.value));
+				}
+			}
+			return Collections.unmodifiableList(result);
+		}
+		else
+		{
+			return Collections.emptyList();
+		}
+	}
+

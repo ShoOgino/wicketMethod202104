@@ -1,0 +1,19 @@
+	/**
+	 * @see java.io.ObjectOutputStream#writeObjectOverride(java.lang.Object)
+	 */
+	@Override
+	protected final void writeObjectOverride(Object obj) throws IOException
+	{
+		if (!available)
+		{
+			return;
+		}
+		root = obj;
+		if (fieldDescription == null)
+		{
+			fieldDescription = (root instanceof RequestableComponent) ? ((RequestableComponent)root).getPath() : "";
+		}
+
+		check(root);
+	}
+

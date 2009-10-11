@@ -1,0 +1,40 @@
+	/**
+	 * Renders page to a {@link BufferedWebResponse}. All URLs in page will be rendered relative to
+	 * <code>targetUrl</code>
+	 * 
+	 * @param targetUrl
+	 * @param requestCycle
+	 * @return BufferedWebResponse containing page body
+	 */
+	protected BufferedWebResponse renderPage(Url targetUrl, RequestCycle requestCycle)
+	{
+		// keep the original response
+		final Response originalResponse = requestCycle.getResponse();
+
+		// buffered web response for page
+		BufferedWebResponse response = new BufferedWebResponse()
+		{
+			@Override
+			public String encodeURL(String url)
+			{
+				return originalResponse.encodeURL(url);
+			}
+		};
+
+		// keep the original base URL
+		Url originalBaseUrl = requestCycle.getUrlRenderer().setBaseUrl(targetUrl);
+
+		try
+		{
+			requestCycle.setResponse(response);
+			getPage().renderPage();
+			return response;
+		}
+		finally
+		{
+			// restore original response and base URL
+			requestCycle.setResponse(originalResponse);
+			requestCycle.getUrlRenderer().setBaseUrl(originalBaseUrl);
+		}
+	}
+

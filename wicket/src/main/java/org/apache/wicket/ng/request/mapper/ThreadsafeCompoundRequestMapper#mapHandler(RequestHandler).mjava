@@ -1,0 +1,25 @@
+    /**
+     * Searches the registered {@link RequestMapper}s to find one that can encode the
+     * {@link RequestHandler}. Each registered {@link RequestMapper} is asked to encode the
+     * {@link RequestHandler} until an encoder that can encode the {@link RequestHandler} is found
+     * or no more encoders are left.
+     * <p>
+     * The handlers are searched in reverse order as they have been registered. More recently
+     * registered handlers have bigger priority.
+     * 
+     * @param handler
+     * @return Url for the handler or <code>null</code> if no encoder for the handler is found.
+     */
+    public Url mapHandler(RequestHandler handler)
+    {
+        for (RequestMapper encoder : mappers)
+        {
+            Url url = encoder.mapHandler(handler);
+            if (url != null)
+            {
+                return url;
+            }
+        }
+        return null;
+    }
+

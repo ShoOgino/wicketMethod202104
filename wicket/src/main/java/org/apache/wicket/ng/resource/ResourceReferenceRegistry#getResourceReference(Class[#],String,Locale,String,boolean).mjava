@@ -1,0 +1,31 @@
+	/**
+	 * Looks up resource reference with specified attributes. If the reference is not found and
+	 * <code>strict</code> is set to <code>false</code>, result of
+	 * {@link #createDefaultResourceReference(Class, String, Locale, String)} is returned.
+	 * 
+	 * @param scope
+	 *            mandatory parameter
+	 * @param name
+	 *            mandatory parameter
+	 * @param locale
+	 * @param style
+	 * @param strict
+	 *            if <code>strict</code> is <code>true</code> only resources that match exactly
+	 *            are returned. Otherwise if there is no resource registered that is an exact
+	 *            match, also resources with <code>null</code> style and locale are tried. If
+	 *            still no resource is found, result of
+	 *            {@link #createDefaultResourceReference(Class, String, Locale, String)} is
+	 *            returned.
+	 * @return {@link ResourceReference} or <code>null</code>
+	 */
+	public ResourceReference getResourceReference(Class<?> scope, String name, Locale locale,
+		String style, boolean strict)
+	{
+		ResourceReference reference = getResourceReference(scope, name, locale, style, strict, false);
+		if (reference == null)
+		{
+			// TODO: Check the class static member for ResourceReferences and register those 
+		}
+		return getResourceReference(scope, name, locale, style, strict, true);
+	}
+

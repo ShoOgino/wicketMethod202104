@@ -1,0 +1,24 @@
+    /**
+	 * 
+	 */
+    public void testDecode8()
+    {
+        Url url = Url.parse("wicket/page?4-6.ILinkListener.5-a-b-c");
+
+        context.setNextPageRenderCount(8);
+
+        try
+        {
+            RequestHandler handler = encoder.mapRequest(getRequest(url));
+
+            ((PageRequestHandler)handler).getPage();
+
+            // should never get here
+            assertFalse(true);
+        }
+        catch (StalePageException e)
+        {
+
+        }
+    }
+

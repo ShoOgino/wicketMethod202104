@@ -1,0 +1,44 @@
+    /**
+     * Returns true if the given url starts with specified segments. Segments that contain
+     * placelhoders are not compared.
+     * 
+     * @param url
+     * @param segments
+     * @return <code>true</code> if the URL starts with the specified segments, <code>false</code>
+     *         otherwise
+     */
+    /*
+     * TODO its funny to have a dependency in this method on the #getPlaceHolder method because we
+     * are forcing everyone who extends this to use the ${placeholder} syntax. We should move
+     * #getPlaceHolder out and rewrite this method to have no dependency on it and match only exact
+     * paths. The mappers that use the syntax will have to provide their own implementations.
+     * 
+     * Either that or have a pluggable placeholder syntax Placeholder { string start, string end}
+     */
+    protected boolean urlStartsWith(Url url, String... segments)
+    {
+        if (url == null)
+        {
+            return false;
+        }
+        else
+        {
+            if (url.getSegments().size() < segments.length)
+            {
+                return false;
+            }
+            else
+            {
+                for (int i = 0; i < segments.length; ++i)
+                {
+                    if (segments[i].equals(url.getSegments().get(i)) == false &&
+                            getPlaceholder(segments[i]) == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+

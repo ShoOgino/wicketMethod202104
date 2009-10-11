@@ -1,0 +1,25 @@
+	/**
+	 * Adds named parameter to a specified position. The {@link RequestMapper}s may or may
+	 * not take the order into account.
+	 * 
+	 * @param name
+	 * @param value
+	 * @param index
+	 */
+	public void addNamedParameter(String name, Object value, int index)
+	{
+		Check.argumentNotNull(name, "name");
+		Check.argumentNotNull(value, "value");
+
+		if (namedParameters == null)
+			namedParameters = new ArrayList<Entry>(1);
+		Entry entry = new Entry();
+		entry.key = name;
+		entry.value = value.toString();
+
+		if (index == -1)
+			namedParameters.add(entry);
+		else
+			namedParameters.add(index, entry);
+	}
+

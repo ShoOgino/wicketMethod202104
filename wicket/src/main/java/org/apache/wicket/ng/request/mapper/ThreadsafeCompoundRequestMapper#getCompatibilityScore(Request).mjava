@@ -1,0 +1,15 @@
+    /**
+     * The scope of the compound mapper is the highest score of the registered mappers.
+     * 
+     * {@inheritDoc}
+     */
+    public int getCompatibilityScore(Request request)
+    {
+        int score = Integer.MIN_VALUE;
+        for (RequestMapper mapper : mappers)
+        {
+            score = Math.max(score, mapper.getCompatibilityScore(request));
+        }
+        return score;
+    }
+

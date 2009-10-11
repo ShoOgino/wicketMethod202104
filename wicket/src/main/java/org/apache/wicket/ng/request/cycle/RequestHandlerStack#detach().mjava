@@ -1,0 +1,27 @@
+	/**
+	 * Detaches all {@link RequestHandler}s.
+	 */
+	public void detach()
+	{
+		if (!requestHandlers.isEmpty())
+		{
+			// All requests handlers should be inactive at this point
+			log.warn("Some of the request handlers are still active.");
+
+			inactiveRequestHandlers.addAll(requestHandlers);
+			requestHandlers.clear();
+		}
+
+		for (RequestHandler handler : inactiveRequestHandlers)
+		{
+			try
+			{
+				handler.detach(getRequestCycle());
+			}
+			catch (Throwable exception)
+			{
+				log.error("Error detaching RequestHandler", exception);
+			}
+		}
+	}
+

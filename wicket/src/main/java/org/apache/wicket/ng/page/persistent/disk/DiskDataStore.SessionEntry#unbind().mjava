@@ -1,0 +1,14 @@
+		/**
+		 * Deletes all files for this session.
+		 */
+		public synchronized void unbind()
+		{
+			diskDataStore.fileChannelPool.closeAndDeleteFileChannel(getFileName());
+			File sessionFolder = diskDataStore.getSessionFolder(sessionId, false);
+			if (sessionFolder.exists())
+			{
+				sessionFolder.delete();
+			}
+			unbound = true;
+		}
+

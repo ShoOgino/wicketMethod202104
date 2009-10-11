@@ -1,0 +1,22 @@
+		/**
+		 * Loads the specified page data.
+		 * 
+		 * @param pageMapName
+		 * @param id
+		 * @return page data or null if the page is no longer in pagemap file
+		 */
+		public synchronized byte[] loadPage(int id)
+		{
+			if (unbound)
+			{
+				return null;
+			}
+			byte[] result = null;
+			PageWindow window = getManager().getPageWindow(id);
+			if (window != null)
+			{
+				result = loadPage(window);
+			}
+			return result;
+		}
+
