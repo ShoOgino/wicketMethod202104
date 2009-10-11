@@ -34,6 +34,8 @@
 			// head first.
 			if (container instanceof WebPage)
 			{
+				final IMarkupFragment markup = markupStream.getMarkupFragment();
+
 				// Create a special header component which will gather
 				// additional input the <head> from 'contributors'.
 				final MarkupContainer header = newHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID +
@@ -53,6 +55,12 @@
 					{
 						return true;
 					}
+
+					@Override
+					public IMarkupFragment getMarkup()
+					{
+						return markup;
+					}
 				};
 
 				header2.setRenderBodyOnly(true);
@@ -63,6 +71,8 @@
 			}
 			else if (container instanceof HtmlHeaderContainer)
 			{
+				final IMarkupFragment markup = markupStream.getMarkupFragment();
+
 				// It is <wicket:head>. Because they do not provide any
 				// additional functionality there are merely a means of surrounding
 				// relevant markup. Thus we simply create a WebMarkupContainer to handle
@@ -76,6 +86,12 @@
 					public boolean isTransparentResolver()
 					{
 						return true;
+					}
+
+					@Override
+					public IMarkupFragment getMarkup()
+					{
+						return markup;
 					}
 				};
 				header.setRenderBodyOnly(true);
