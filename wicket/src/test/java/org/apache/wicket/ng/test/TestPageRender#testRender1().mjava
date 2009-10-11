@@ -2,7 +2,7 @@
 	{
 		// Store current ThreadContext
 		ThreadContext context = ThreadContext.getAndClean();
-		
+
 		// Create MockApplication
 		MockApplication app = new MockApplication();
 		app.setName("TestApplication1");
@@ -17,23 +17,24 @@
 		Response response = new StringResponse();
 
 		// create and execute request cycle
-		MockRequestCycle cycle = (MockRequestCycle) app.createRequestCycle(request, response);
+		MockRequestCycle cycle = (MockRequestCycle)app.createRequestCycle(request, response);
 		cycle.processRequestAndDetach();
-		
+
 		System.out.println("Rendered:");
 		System.out.println(response);
-		
-		// invoke listener on the page		
+
+		// invoke listener on the page
 		request = new MockRequest(Url.parse("wicket/page?0-1.ILinkListener-link"));
 		response = new StringResponse();
-		cycle = (MockRequestCycle) app.createRequestCycle(request, response);
+		cycle = (MockRequestCycle)app.createRequestCycle(request, response);
 		cycle.processRequestAndDetach();
-		
+
 		// invoke the listener again - without parsing the URL
-		cycle = (MockRequestCycle) app.createRequestCycle(request, response);
-		cycle.forceRequestHandler(new ListenerInterfaceRequestHandler(new PageAndComponentProvider(0, null, "link"), ILinkListener.INTERFACE));
+		cycle = (MockRequestCycle)app.createRequestCycle(request, response);
+		cycle.forceRequestHandler(new ListenerInterfaceRequestHandler(new PageAndComponentProvider(
+			0, null, "link"), ILinkListener.INTERFACE));
 		cycle.processRequestAndDetach();
-		
+
 		// cleanup
 		app.destroy();
 		ThreadContext.restore(context);

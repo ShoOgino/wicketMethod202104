@@ -1,17 +1,17 @@
-    public final RequestCycle createRequestCycle(Request request, Response response)
-    {
-        // FIXME exception mapper should come from elsewhere
-        RequestCycleContext context = new RequestCycleContext(request, response,
-                getRootRequestMapper(), new DefaultExceptionMapper());
+	public final RequestCycle createRequestCycle(Request request, Response response)
+	{
+		// FIXME exception mapper should come from elsewhere
+		RequestCycleContext context = new RequestCycleContext(request, response,
+			getRootRequestMapper(), new DefaultExceptionMapper());
 
-        RequestCycle requestCycle = newRequestCycle(context);
-        requestCycle.register(new RequestCycle.DetachCallback()
-        {
-            public void onDetach(RequestCycle requestCycle)
-            {
-                getPageManager().commitRequest();
-            }
-        });
-        return requestCycle;
-    }
+		RequestCycle requestCycle = newRequestCycle(context);
+		requestCycle.register(new RequestCycle.DetachCallback()
+		{
+			public void onDetach(RequestCycle requestCycle)
+			{
+				getPageManager().commitRequest();
+			}
+		});
+		return requestCycle;
+	}
 

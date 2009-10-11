@@ -1,34 +1,34 @@
-    public Url mapHandler(RequestHandler handler)
-    {
-        Mount mount = mapper.mapHandler(handler);
+	public Url mapHandler(RequestHandler handler)
+	{
+		Mount mount = mapper.mapHandler(handler);
 
-        if (mount == null)
-        {
-            return null;
-        }
+		if (mount == null)
+		{
+			return null;
+		}
 
-        // TODO
-        // Check.notNull(mount.getUrl());
-        // Check.notNull(mount.getMountParameters());
+		// TODO
+		// Check.notNull(mount.getUrl());
+		// Check.notNull(mount.getMountParameters());
 
-        for (int i = mountSegments.length; i > 0; i--)
-        {
-            String segment = mountSegments[i - 1];
-            String placeholder = getPlaceholder(segment);
-            String replacement = segment;
+		for (int i = mountSegments.length; i > 0; i--)
+		{
+			String segment = mountSegments[i - 1];
+			String placeholder = getPlaceholder(segment);
+			String replacement = segment;
 
-            if (placeholder != null)
-            {
-                replacement = mount.getMountParameters().getValue(placeholder).toString();
-                if (replacement == null)
-                {
-                    throw new IllegalStateException();// TODO message
-                }
-            }
+			if (placeholder != null)
+			{
+				replacement = mount.getMountParameters().getValue(placeholder).toString();
+				if (replacement == null)
+				{
+					throw new IllegalStateException();// TODO message
+				}
+			}
 
-            mount.getUrl().getSegments().add(0, replacement);
-        }
+			mount.getUrl().getSegments().add(0, replacement);
+		}
 
-        return mount.getUrl();
-    }
+		return mount.getUrl();
+	}
 

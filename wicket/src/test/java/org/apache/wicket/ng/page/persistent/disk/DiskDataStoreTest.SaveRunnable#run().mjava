@@ -1,14 +1,14 @@
 		public void run()
 		{
 			File file;
-			
+
 			while ((file = filesToSave.poll()) != null || saveCount.get() < FILES_COUNT)
 			{
 				if (file != null)
-				{					
+				{
 					byte data[] = file.generateData();
 					dataStore.storeData(file.getSessionId(), file.getId(), data);
-					
+
 					if (saveCount.get() % READ_MODULO == 0)
 					{
 						filesToRead1.add(file);
@@ -16,7 +16,7 @@
 					saveCount.incrementAndGet();
 					bytesWritten.addAndGet(data.length);
 				}
-					
+
 				try
 				{
 					Thread.sleep(random.nextInt(SLEEP_MAX));
@@ -25,8 +25,8 @@
 				{
 					e.printStackTrace();
 				}
-			}						
-			
-			saveDone.set(true);			
-		}		
+			}
+
+			saveDone.set(true);
+		}
 

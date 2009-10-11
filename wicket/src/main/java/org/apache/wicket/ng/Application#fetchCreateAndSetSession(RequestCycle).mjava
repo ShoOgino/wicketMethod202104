@@ -1,18 +1,18 @@
-    Session fetchCreateAndSetSession(RequestCycle requestCycle)
-    {
-        Checks.argumentNotNull(requestCycle, "requestCycle");
+	Session fetchCreateAndSetSession(RequestCycle requestCycle)
+	{
+		Checks.argumentNotNull(requestCycle, "requestCycle");
 
-        Session session = getSessionStore().lookup(requestCycle.getRequest());
-        if (session == null)
-        {
-            session = newSession(requestCycle);
-            ThreadContext.setSession(session);
-            getPageManager().newSessionCreated();
-        }
-        else
-        {
-            ThreadContext.setSession(session);
-        }
-        return session;
-    }
+		Session session = getSessionStore().lookup(requestCycle.getRequest());
+		if (session == null)
+		{
+			session = newSession(requestCycle);
+			ThreadContext.setSession(session);
+			getPageManager().newSessionCreated();
+		}
+		else
+		{
+			ThreadContext.setSession(session);
+		}
+		return session;
+	}
 

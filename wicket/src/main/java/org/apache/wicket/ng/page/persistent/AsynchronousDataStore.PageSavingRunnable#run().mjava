@@ -1,6 +1,6 @@
 		public void run()
 		{
-			while(destroy.get() == false || !entries.isEmpty())
+			while (destroy.get() == false || !entries.isEmpty())
 			{
 				if (entries.isEmpty())
 				{
@@ -8,8 +8,8 @@
 					{
 						synchronized (entries)
 						{
-							entries.wait();	
-						}						
+							entries.wait();
+						}
 					}
 					catch (InterruptedException e)
 					{
@@ -21,11 +21,12 @@
 					Entry entry = entries.poll();
 					if (entry != null)
 					{
-						dataStore.storeData(entry.getSessionId(), entry.getPageId(), entry.getData());
+						dataStore.storeData(entry.getSessionId(), entry.getPageId(),
+							entry.getData());
 						String key = getKey(entry.getPageId(), entry.getSessionId());
 						entryMap.remove(key);
 					}
-				}				
+				}
 			}
 			try
 			{
@@ -37,7 +38,7 @@
 			}
 			synchronized (destroy)
 			{
-				destroy.notify();	
-			}			
+				destroy.notify();
+			}
 		}
 

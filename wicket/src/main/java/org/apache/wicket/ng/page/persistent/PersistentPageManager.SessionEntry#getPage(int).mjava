@@ -1,24 +1,24 @@
-        public synchronized ManageablePage getPage(int id)
-        {
-            // check if pages are in deserialized state
-            if (afterReadObject != null && afterReadObject.isEmpty() == false)
-            {
-                convertAfterReadObjects();
-            }
+		public synchronized ManageablePage getPage(int id)
+		{
+			// check if pages are in deserialized state
+			if (afterReadObject != null && afterReadObject.isEmpty() == false)
+			{
+				convertAfterReadObjects();
+			}
 
-            // try to find page with same id
-            if (pages != null)
-            {
-                for (ManageablePage page : pages)
-                {
-                    if (page.getPageId() == id)
-                    {
-                        return page;
-                    }
-                }
-            }
+			// try to find page with same id
+			if (pages != null)
+			{
+				for (ManageablePage page : pages)
+				{
+					if (page.getPageId() == id)
+					{
+						return page;
+					}
+				}
+			}
 
-            // not found, ask pagestore for the page
-            return getPageStore().getPage(sessionId, id);
-        }
+			// not found, ask pagestore for the page
+			return getPageStore().getPage(sessionId, id);
+		}
 
