@@ -1,0 +1,21 @@
+	/**
+	 * Removes a named parameter
+	 * 
+	 * TODO NG MIGRATION
+	 * 
+	 * @deprecated compatibility with old pageparameters
+	 * @param parameterName
+	 * @return old value if any or <code>null</code>
+	 */
+	@Deprecated
+	public String put(String parameterName, Object value)
+	{
+		String old = getNamedParameter(parameterName).toString();
+		if (old != null)
+		{
+			removeNamedParameter(parameterName);
+		}
+		setNamedParameter(parameterName, value);
+		return old;
+	}
+

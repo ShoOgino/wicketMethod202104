@@ -1,0 +1,28 @@
+	/**
+	 * Constructor
+	 * 
+	 * TODO NG MIGRATION
+	 * 
+	 * @deprecated compatibility with old pageparameters
+	 * 
+	 * @param params
+	 */
+	@Deprecated
+	public PageParameters(ValueMap params)
+	{
+		for (Map.Entry<String, Object> param : params.entrySet())
+		{
+			if (param.getValue() instanceof String[])
+			{
+				for (String value : (String[])param.getValue())
+				{
+					addNamedParameter(param.getKey(), value);
+				}
+			}
+			else
+			{
+				addNamedParameter(param.getKey(), param.getValue());
+			}
+		}
+	}
+

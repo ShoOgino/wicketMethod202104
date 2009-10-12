@@ -19,23 +19,31 @@
 			String[] pathParts = urlPath.split("/");
 			if (pathParts.length > parameterNames.length)
 			{
-                // Some known causes of this situation:
-                // - user edits the URL manually
-                // - a javascript requests resources relative to the current page instead of to the web context
-                String msg = String.format("Found more URL path parts then expected, these will be ignored. Url: '%s', mountpath: '%s', urlPath: '%s', expected %d parameters was %d", getRequestUrl(), getMountPath(), urlPath, parameterNames.length, pathParts.length);
-                if (ignoreUndeclaredParameters) {
-                    logger.info(msg);
-                } else {
-                    throw new IllegalArgumentException(msg);
-                }
+				// Some known causes of this situation:
+				// - user edits the URL manually
+				// - a javascript requests resources relative to the current page instead of to the
+				// web context
+				String msg = String.format(
+					"Found more URL path parts then expected, these will be ignored. Url: '%s', mountpath: '%s', urlPath: '%s', expected %d parameters was %d",
+					getRequestUrl(), getMountPath(), urlPath, parameterNames.length,
+					pathParts.length);
+				if (ignoreUndeclaredParameters)
+				{
+					logger.info(msg);
+				}
+				else
+				{
+					throw new IllegalArgumentException(msg);
+				}
 			}
 
-            int actualParameterCount = Math.min(pathParts.length, parameterNames.length);
-            for (int i = 0; i < actualParameterCount; i++) {
-                params.put(parameterNames[i], urlDecodePathComponent(pathParts[i]));
-            }
+			int actualParameterCount = Math.min(pathParts.length, parameterNames.length);
+			for (int i = 0; i < actualParameterCount; i++)
+			{
+				params.put(parameterNames[i], urlDecodePathComponent(pathParts[i]));
+			}
 		}
 
-		return params;
+		return params.toValueMap();
 	}
 
