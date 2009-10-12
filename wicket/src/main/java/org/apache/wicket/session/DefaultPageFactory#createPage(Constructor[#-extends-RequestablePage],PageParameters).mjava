@@ -12,19 +12,33 @@
 	 *             Thrown if the Page cannot be instantiated using the given constructor and
 	 *             argument.
 	 */
-	private final Page createPage(final Constructor<? extends Page> constructor,
-		final PageParameters argument)
+	private final RequestablePage createPage(
+		final Constructor<? extends RequestablePage> constructor, final PageParameters argument)
 	{
+		final RequestablePage instance;
 		try
 		{
 			if (argument != null)
 			{
-				return constructor.newInstance(new Object[] { argument });
+				instance = constructor.newInstance(new Object[] { argument });
 			}
 			else
 			{
-				return constructor.newInstance();
+				instance = constructor.newInstance();
 			}
+
+			// the page might have not propagate page parameters from constructor. if that's the
+			// case
+			// we force the parameters
+			if (argument != null && instance.getPageParameters() != argument)
+			{
+				instance.getPageParameters().assign(argument);
+			}
+
+			instance.setWasCreatedBookmarkable(true);
+
+			return instance;
+
 		}
 		catch (InstantiationException e)
 		{
