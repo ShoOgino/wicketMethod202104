@@ -1,0 +1,20 @@
+	/**
+	 * Get a proxy object
+	 * 
+	 * @param <T>
+	 * @param returnType
+	 * @param data
+	 * @return A new proxy object
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T read(final Class<T> returnType, final PageParameters data)
+	{
+		if (!returnType.isInterface())
+		{
+			throw new IllegalArgumentException("Must be an interface: returnType=" +
+				returnType.getName());
+		}
+		return (T)Proxy.newProxyInstance(returnType.getClassLoader(), new Class[] { returnType },
+			new MyInvocationHandler(data));
+	}
+
