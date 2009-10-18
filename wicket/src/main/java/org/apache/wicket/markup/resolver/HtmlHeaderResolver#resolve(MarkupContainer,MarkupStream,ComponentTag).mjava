@@ -20,8 +20,9 @@
 		{
 			// Create a special header component which will gather additional
 			// input the <head> from 'contributors'.
-			final WebMarkupContainer header = newHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID +
+			WebMarkupContainer header = newHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID +
 				container.getPage().getAutoIndex());
+			header.setMarkup(markupStream.getMarkupFragment());
 			container.autoAdd(header, markupStream);
 
 			// Yes, we handled the tag
@@ -34,11 +35,9 @@
 			// head first.
 			if (container instanceof WebPage)
 			{
-				final IMarkupFragment markup = markupStream.getMarkupFragment();
-
 				// Create a special header component which will gather
 				// additional input the <head> from 'contributors'.
-				final MarkupContainer header = newHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID +
+				MarkupContainer header = newHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID +
 					container.getPage().getAutoIndex());
 
 				// It is <wicket:head>. Because they do not provide any
@@ -55,14 +54,9 @@
 					{
 						return true;
 					}
-
-					@Override
-					public IMarkupFragment getMarkup()
-					{
-						return markup;
-					}
 				};
 
+				header2.setMarkup(markupStream.getMarkupFragment());
 				header2.setRenderBodyOnly(true);
 
 				header.add(header2);
@@ -71,8 +65,6 @@
 			}
 			else if (container instanceof HtmlHeaderContainer)
 			{
-				final IMarkupFragment markup = markupStream.getMarkupFragment();
-
 				// It is <wicket:head>. Because they do not provide any
 				// additional functionality there are merely a means of surrounding
 				// relevant markup. Thus we simply create a WebMarkupContainer to handle
@@ -87,13 +79,8 @@
 					{
 						return true;
 					}
-
-					@Override
-					public IMarkupFragment getMarkup()
-					{
-						return markup;
-					}
 				};
+				header.setMarkup(markupStream.getMarkupFragment());
 				header.setRenderBodyOnly(true);
 
 				try

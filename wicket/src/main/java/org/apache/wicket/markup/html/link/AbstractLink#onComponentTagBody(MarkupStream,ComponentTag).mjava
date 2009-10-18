@@ -11,7 +11,8 @@
 	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
 		// Draw anything before the body?
-		if (!isLinkEnabled() && getBeforeDisabledLink() != null)
+		boolean beforeAfter = (!isLinkEnabled() && getBeforeDisabledLink() != null);
+		if (beforeAfter)
 		{
 			getResponse().write(getBeforeDisabledLink());
 		}
@@ -20,7 +21,7 @@
 		renderComponentTagBody(markupStream, openTag);
 
 		// Draw anything after the body?
-		if (!isLinkEnabled() && getAfterDisabledLink() != null)
+		if (beforeAfter)
 		{
 			getResponse().write(getAfterDisabledLink());
 		}
