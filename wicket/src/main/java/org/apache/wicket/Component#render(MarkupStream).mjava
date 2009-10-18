@@ -8,23 +8,29 @@
 	 */
 	public final void render(MarkupStream markupStream)
 	{
+		// Remove/Cleanup when migrating to MarkupFragments. Only needed as long as rendering is
+		// based on MarkupStream
 		if (getApplication().getMarkupFragmentEnabled())
 		{
 			// Step 1: Make sure there is a markup available for the Component
 			IMarkupFragment markup = getMarkup();
 			if (!(this instanceof Page) && (markup == null))
 			{
-				throw new IllegalArgumentException("jdo: Markup not found: " + toString());
+				throw new IllegalArgumentException("MarkupFragment not found: " + toString() +
+					". Please see Application.getMarkupFragmentEnabled() as well.");
 			}
 
 			// Step 2: A markup stream based on the markup should yield the same result.
-			if (markupStream != null)
+			if ((markupStream != null) || !(this instanceof Page))
 			{
 				MarkupStream ms = new MarkupStream(markup);
 
 				// We need to skip the component in the original markup stream to avoid
 				// exceptions later on.
-				markupStream.skipComponent();
+				if (markupStream != null)
+				{
+					markupStream.skipComponent();
+				}
 
 				// We want to use the new markup stream
 				markupStream = ms;
