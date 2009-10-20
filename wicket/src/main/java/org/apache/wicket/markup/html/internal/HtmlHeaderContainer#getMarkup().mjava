@@ -4,6 +4,12 @@
 	@Override
 	public IMarkupFragment getMarkup()
 	{
+		if (getParent() == null)
+		{
+			throw new WicketRuntimeException(
+				"Bug: The Wicket internal instance of HtmlHeaderContainer is not connected to a parent");
+		}
+
 		// Get the page markup
 		IMarkupFragment markup = getPage().getMarkup();
 		if (markup == null)
