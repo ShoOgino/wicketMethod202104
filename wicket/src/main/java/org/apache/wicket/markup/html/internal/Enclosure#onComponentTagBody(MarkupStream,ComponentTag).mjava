@@ -1,38 +1,37 @@
 	/**
-	 * 
 	 * @see org.apache.wicket.MarkupContainer#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
 	@Override
-	protected void onComponentTagBody(final MarkupStream markupStream, ComponentTag enclosureOpenTag)
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
-		// init changes map
-		changes = new HashMap<Component, Boolean>();
-
 		// enclosure's parent container
-		final MarkupContainer container = getEnclosureParent();
-
-		// iterate over all child tags and make sure all components are present, resolving them if
-		// necessary
-		ensureAllChildrenPresent(container, markupStream, enclosureOpenTag);
+		MarkupContainer container = getEnclosureParent();
 
 		Component controller = container.get(childId.toString());
 		checkChildComponent(controller);
 
 		// set the enclosure visibility
-		setVisible(controller.determineVisibility());
+		boolean visible = controller.determineVisibility();
 
-		// transfer visibility to direct children
-		applyEnclosureVisibilityToChildren(container, markupStream, enclosureOpenTag);
-
-		// render components inside the enclosure if its visible or skip it if it is not
-		if (isVisible() == true)
+		if (visible)
 		{
-			super.onComponentTagBody(markupStream, enclosureOpenTag);
+			super.onComponentTagBody(markupStream, openTag);
 		}
 		else
 		{
-			markupStream.skipToMatchingCloseTag(enclosureOpenTag);
+			RequestCycle cycle = getRequestCycle();
+			Response response = cycle.getResponse();
+			try
+			{
+				cycle.setResponse(NullResponse.getInstance());
+
+				super.onComponentTagBody(markupStream, openTag);
+			}
+			finally
+			{
+				cycle.setResponse(response);
+			}
 		}
 	}
 
