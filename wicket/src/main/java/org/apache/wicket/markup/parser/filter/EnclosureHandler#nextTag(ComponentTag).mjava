@@ -25,8 +25,7 @@
 			{
 				if (stack == null)
 				{
-					throw new ParseException("Missing open tag for Enclosure: " + tag.toString(),
-						tag.getPos());
+					throw new WicketParseException("Missing open tag for Enclosure:", tag);
 				}
 
 				// Remove the open tag from the stack
@@ -48,8 +47,7 @@
 			}
 			else
 			{
-				throw new ParseException("Open-close tag not allowed for Enclosure: " +
-					tag.toString(), tag.getPos());
+				throw new WicketParseException("Open-close tag not allowed for Enclosure:", tag);
 			}
 		}
 		// Are we inside a wicket:enclosure tag?
@@ -66,9 +64,8 @@
 				// isVisible() to => Exception
 				if (childId != null)
 				{
-					throw new ParseException(
-						"Use <wicket:enclosure child='xxx'> to name the child component",
-						tag.getPos());
+					throw new WicketParseException(
+						"Use <wicket:enclosure child='xxx'> to name the child component:", tag);
 				}
 				// Remember the child id. The open tag will be updated
 				// once the close tag is found. See above.
