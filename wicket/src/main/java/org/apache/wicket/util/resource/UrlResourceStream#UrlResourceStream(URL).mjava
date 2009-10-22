@@ -6,60 +6,35 @@
 	 */
 	public UrlResourceStream(final URL url)
 	{
-		// Save URL
+		// save the url
 		this.url = url;
+
+		// retrieve the content type and length
 		URLConnection connection = null;
 		try
 		{
 			connection = url.openConnection();
 			contentLength = connection.getContentLength();
 			contentType = connection.getContentType();
-			lastModified = connection.getLastModified();
-			try
-			{
-				file = new File(new URI(url.toExternalForm()));
-			}
-			catch (Exception ex)
-			{
-				log.debug("cannot convert url: " + url + " to file (" + ex.getMessage() +
-					"), falling back to the inputstream for polling");
-			}
-			if (file != null && !file.exists())
-			{
-				file = null;
-			}
 		}
 		catch (IOException ex)
 		{
-			// It should be impossible to get here or the original URL
-			// couldn't have been constructed. But we re-throw with details
-			// anyway.
-			final IllegalArgumentException illegalArgumentException = new IllegalArgumentException(
-				"Invalid URL parameter " + url);
-			illegalArgumentException.initCause(ex);
-			throw illegalArgumentException;
+			throw new IllegalArgumentException("Invalid URL parameter " + url, ex);
 		}
 		finally
 		{
-			// if applicable, disconnect
-			if (connection != null)
-			{
-				if (connection instanceof HttpURLConnection)
-				{
-					((HttpURLConnection)connection).disconnect();
-				}
-				else
-				{
-					try
-					{
-						connection.getInputStream().close();
-					}
-					catch (Exception ex)
-					{
-						// ignore
-					}
-				}
-			}
+			Connections.closeQuietly(connection);
 		}
+
+		try
+		{
+			file = Connections.findFile(url);
+		}
+		catch (Exception e)
+		{
+			log.debug("cannot convert url: " + url + " to file (" + e.getMessage() +
+				"), falling back to the inputstream for polling");
+		}
+
 	}
 

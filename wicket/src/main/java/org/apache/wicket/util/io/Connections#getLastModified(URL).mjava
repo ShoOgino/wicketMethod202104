@@ -1,0 +1,40 @@
+	/**
+	 * Gets last modified date of the given {@link URL}
+	 * 
+	 * @param url
+	 * @return last modified timestamp
+	 * @throws IOException
+	 */
+	public static long getLastModified(URL url) throws IOException
+	{
+
+		URLConnection connection = url.openConnection();
+
+		try
+		{
+			if (connection instanceof JarURLConnection)
+			{
+				JarURLConnection jarUrlConnection = (JarURLConnection)connection;
+				URL jarFileUrl = jarUrlConnection.getJarFileURL();
+				URLConnection jarFileConnection = jarFileUrl.openConnection();
+				try
+				{
+					return jarFileConnection.getLastModified();
+				}
+				finally
+				{
+					close(jarFileConnection);
+				}
+			}
+			else
+			{
+				return connection.getLastModified();
+			}
+
+		}
+		finally
+		{
+			close(connection);
+		}
+	}
+
