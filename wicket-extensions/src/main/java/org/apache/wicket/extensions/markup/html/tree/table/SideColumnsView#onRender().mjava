@@ -1,18 +1,13 @@
 	/**
-	 * Renders the columns.
-	 * 
-	 * @param markupStream
-	 *            The markup stream of this component
+	 * @see org.apache.wicket.MarkupContainer#onRender()
 	 */
 	@Override
-	protected void onRender(final MarkupStream markupStream)
+	protected void onRender()
 	{
-		final int markupStart = markupStream.getCurrentIndex();
 		Response response = RequestCycle.get().getResponse();
 
 		boolean firstLeft = true; // whether there was no left column rendered
 		// yet
-		boolean rendered = false;
 
 		for (int i = 0; i < columns.size(); ++i)
 		{
@@ -36,9 +31,7 @@
 
 			if (component != null)
 			{
-				markupStream.setCurrentIndex(markupStart);
-				component.render(markupStream);
-				rendered = true;
+				component.render();
 			}
 			else if (renderable != null)
 			{
@@ -51,12 +44,6 @@
 			}
 
 			response.write("</span></span>\n");
-		}
-
-		// if no component was rendered just advance in the markup stream
-		if (rendered == false)
-		{
-			markupStream.skipComponent();
 		}
 	}
 
