@@ -1,0 +1,29 @@
+	/**
+	 * Called when a runtime exception is caught during the render process
+	 * 
+	 * @param ex
+	 *            The exception caught.
+	 */
+	private void onException(final RuntimeException ex)
+	{
+		// Call each behaviors onException() to allow the
+		// behavior to clean up
+		for (IBehavior behavior : getBehaviors())
+		{
+			if (isBehaviorAccepted(behavior))
+			{
+				try
+				{
+					behavior.exception(this, ex);
+				}
+				catch (Throwable ex2)
+				{
+					log.error("Error while cleaning up after exception", ex2);
+				}
+			}
+		}
+
+		// Re-throw the exception
+		throw ex;
+	}
+

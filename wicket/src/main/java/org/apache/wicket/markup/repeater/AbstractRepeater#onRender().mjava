@@ -5,10 +5,8 @@
 	 *            The markup stream
 	 */
 	@Override
-	protected final void onRender(final MarkupStream markupStream)
+	protected final void onRender()
 	{
-		final int markupStart = markupStream.getCurrentIndex();
-
 		Iterator<? extends Component> it = renderIterator();
 		if (it.hasNext())
 		{
@@ -19,14 +17,9 @@
 				{
 					throw new IllegalStateException("the render iterator returned null for a child");
 				}
-				markupStream.setCurrentIndex(markupStart);
 				renderChild(child);
 			}
 			while (it.hasNext());
-		}
-		else
-		{
-			markupStream.skipComponent();
 		}
 	}
 

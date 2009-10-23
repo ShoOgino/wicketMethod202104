@@ -8,14 +8,13 @@
 	 * @param openTag
 	 *            The open tag
 	 */
-	protected final void renderComponentTagBody(final MarkupStream markupStream,
+	private final void renderComponentTagBody(final MarkupStream markupStream,
 		final ComponentTag openTag)
 	{
 		if ((markupStream != null) && (markupStream.getCurrentIndex() > 0))
 		{
-			// If the original tag has been changed from open-close to open-body-close,
-			// than historically renderComponentTagBody gets called, but actually
-			// it shouldn't do anything since there is no body for that tag.
+			// If the original tag has been changed from open-close to open-body-close, than we are
+			// done. Other components, e.g. BorderBody, rely on this method being called.
 			ComponentTag origOpenTag = (ComponentTag)markupStream.get(markupStream.getCurrentIndex() - 1);
 			if (origOpenTag.isOpenClose())
 			{
@@ -30,21 +29,10 @@
 			// Tags like <p> do not require a close tag, but they may have.
 			render = !openTag.hasNoCloseTag();
 		}
+
 		if (render == true)
 		{
-			// Loop through the markup in this container
-			while (markupStream.hasMore() && !markupStream.get().closes(openTag))
-			{
-				// Render markup element. Doing so must advance the markup
-				// stream
-				final int index = markupStream.getCurrentIndex();
-				renderNext(markupStream);
-				if (index == markupStream.getCurrentIndex())
-				{
-					markupStream.throwMarkupException("Markup element at index " + index +
-						" failed to advance the markup stream");
-				}
-			}
+			renderAll(markupStream, openTag);
 		}
 	}
 

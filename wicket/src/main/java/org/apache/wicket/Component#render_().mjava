@@ -1,0 +1,68 @@
+	/**
+	 * Performs a render of this component as part of a Page level render process.
+	 */
+	private final void render_()
+	{
+		// Step 1: Make sure there is a markup available for the Component
+		IMarkupFragment markup = getMarkup();
+		if (markup == null)
+		{
+			throw new MarkupNotFoundException("Markup not found for Component: " + toString());
+		}
+
+		// Step 2: A markup stream based on the markup should yield the same result.
+		// We want to use the new markup stream
+		MarkupStream markupStream = new MarkupStream(markup);
+		setMarkupStream(markupStream);
+
+		markRendering(true);
+
+		MarkupElement elem = markup.get(0);
+		if (elem instanceof ComponentTag)
+		{
+			// Guarantee that the markupStream is set and determineVisibility not yet tested
+			// See WICKET-2049
+			((ComponentTag)elem).onBeforeRender(this, markupStream);
+		}
+
+		// Determine if component is visible using it's authorization status
+		// and the isVisible property.
+		if (determineVisibility())
+		{
+			setFlag(FLAG_HAS_BEEN_RENDERED, true);
+
+			// Rendering is beginning
+			if (log.isDebugEnabled())
+			{
+				log.debug("Begin render " + this);
+			}
+
+			try
+			{
+				notifyBehaviorsComponentBeforeRender();
+				onRender();
+				notifyBehaviorsComponentRendered();
+
+				// Component has been rendered
+				rendered();
+			}
+			catch (RuntimeException ex)
+			{
+				onException(ex);
+			}
+
+			if (log.isDebugEnabled())
+			{
+				log.debug("End render " + this);
+			}
+		}
+		// elem is null when rendering a page
+		else if ((elem != null) && (elem instanceof ComponentTag))
+		{
+			if (getFlag(FLAG_PLACEHOLDER))
+			{
+				renderPlaceholderTag((ComponentTag)elem, getResponse());
+			}
+		}
+	}
+

@@ -5,11 +5,11 @@
 	 *            the markup stream
 	 * @param openTag
 	 *            the tag to render
-	 * @param renderTagOnly
+	 * @param renderBodyOnly
 	 *            if true, the tag will not be written to the output
 	 */
 	final void renderClosingComponentTag(final MarkupStream markupStream,
-		final ComponentTag openTag, final boolean renderTagOnly)
+		final ComponentTag openTag, final boolean renderBodyOnly)
 	{
 		// Tag should be open tag and not openclose tag
 		if (openTag.isOpen())
@@ -17,32 +17,29 @@
 			// If we found a close tag and it closes the open tag, we're good
 			if (markupStream.atCloseTag() && markupStream.getTag().closes(openTag))
 			{
-				// Get the close tag from the stream
-				ComponentTag closeTag = markupStream.getTag();
-
-				// If the open tag had its id changed
-				if (openTag.getNameChanged())
-				{
-					// change the id of the close tag
-					closeTag = closeTag.mutable();
-					closeTag.setName(openTag.getName());
-					closeTag.setNamespace(openTag.getNamespace());
-				}
-
 				// Render the close tag
-				if (renderTagOnly == false)
+				if (renderBodyOnly == false)
 				{
+					// Get the close tag from the stream
+					ComponentTag closeTag = markupStream.getTag();
+
+					// If the open tag had its id changed
+					if (openTag.getNameChanged())
+					{
+						// change the id of the close tag
+						closeTag = closeTag.mutable();
+						closeTag.setName(openTag.getName());
+						closeTag.setNamespace(openTag.getNamespace());
+					}
+
 					renderComponentTag(closeTag);
 				}
-				markupStream.next();
 			}
-			else
+			else if (openTag.requiresCloseTag())
 			{
-				if (openTag.requiresCloseTag())
-				{
-					// Missing close tag
-					markupStream.throwMarkupException("Expected close tag for " + openTag);
-				}
+				// Missing close tag. Some tags, e.g. <p> are handled like <p/> by most browsers and
+				// thus will not throw an exception.
+				markupStream.throwMarkupException("Expected close tag for " + openTag);
 			}
 		}
 	}

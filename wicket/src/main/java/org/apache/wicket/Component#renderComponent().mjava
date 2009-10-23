@@ -8,15 +8,15 @@
 	 * @param markupStream
 	 *            The markup stream
 	 */
-	public final void renderComponent(final MarkupStream markupStream)
+	public final void renderComponent()
 	{
-		if (markupStream == null)
+		final IMarkupFragment markup = getMarkup();
+		if (markup == null)
 		{
-			throw new NullPointerException(
-				"Parameter 'markupStream' must not be null. Component: " + toString());
+			throw new MarkupException("Markup not found. Component: " + toString());
 		}
 
-		markupIndex = markupStream.getCurrentIndex();
+		final MarkupStream markupStream = new MarkupStream(markup);
 
 		// Get mutable copy of next tag
 		final ComponentTag openTag = markupStream.getTag();
@@ -47,8 +47,7 @@
 			}
 			markupStream.next();
 
-			// Render the body only if open-body-close. Do not render if
-			// open-close.
+			// Render the body only if open-body-close. Do not render if open-close.
 			if (tag.isOpen())
 			{
 				// Render the body
@@ -62,25 +61,13 @@
 				{
 					renderClosingComponentTag(markupStream, tag, getRenderBodyOnly());
 				}
-				else
+				else if (getRenderBodyOnly() == false)
 				{
-					// If a open-close tag has been modified to be
-					// open-body-close than a synthetic close tag must be
-					// rendered.
-					if (getRenderBodyOnly() == false)
+					if (needToRenderTag(openTag))
 					{
-						final boolean ajaxRequest = getRequest() instanceof WebRequest &&
-							((WebRequest)getRequest()).isAjax();
-
-						final boolean stripWicketTags = ajaxRequest ||
-							Application.get().getMarkupSettings().getStripWicketTags();
-
-						if (!(openTag instanceof WicketTag) || !stripWicketTags)
-						{
-							// Close the manually opened tag. And since the
-							// user might have changed the tag name ...
-							getResponse().write(tag.syntheticCloseTagString());
-						}
+						// Close the manually opened tag. And since the user might have changed the
+						// tag name ...
+						getResponse().write(tag.syntheticCloseTagString());
 					}
 				}
 			}

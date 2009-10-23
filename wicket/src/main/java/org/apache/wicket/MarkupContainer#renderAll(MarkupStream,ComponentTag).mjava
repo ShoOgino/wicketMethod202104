@@ -1,0 +1,43 @@
+	/**
+	 * Loop through the markup in this container
+	 * 
+	 * @param markupStream
+	 * @param openTag
+	 */
+	protected final void renderAll(final MarkupStream markupStream, final ComponentTag openTag)
+	{
+		while (markupStream.hasMore())
+		{
+			// In case of Page we need to render the whole file. For all other components just what
+			// is in between the open and the close tag.
+			if ((openTag != null) && markupStream.get().closes(openTag))
+			{
+				break;
+			}
+
+			// Remember where we are
+			final int index = markupStream.getCurrentIndex();
+
+			// Render the markup element
+			renderNext(markupStream);
+
+			// Go back to where we were and move the markup stream forward to whatever the next
+			// element is.
+			markupStream.setCurrentIndex(index);
+			MarkupElement elem = markupStream.get();
+			if (elem instanceof RawMarkup)
+			{
+				markupStream.next();
+			}
+			else if (!markupStream.getTag().isClose())
+			{
+				markupStream.skipComponent();
+			}
+			else
+			{
+				throw new WicketRuntimeException("Ups. This should never happen. " +
+					markupStream.toString());
+			}
+		}
+	}
+

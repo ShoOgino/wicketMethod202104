@@ -1,27 +1,22 @@
 		/**
-		 * @see org.apache.wicket.MarkupContainer#onRender(org.apache.wicket.markup.MarkupStream)
+		 * @see org.apache.wicket.MarkupContainer#onRender()
 		 */
 		@Override
-		protected void onRender(final MarkupStream markupStream)
+		protected void onRender()
 		{
 			// is this root and tree is in rootless mode?
 			if (this == rootItem && isRootLess() == true)
 			{
 				// yes, write empty div with id
 				// this is necessary for createElement js to work correctly
-				String tagName = ((ComponentTag)markupStream.get()).getName();
-				getResponse().write(
-					"<" + tagName + " style=\"display:none\" id=\"" + getMarkupId() + "\"></" +
-						tagName + ">");
-				markupStream.skipComponent();
+				String tagName = ((ComponentTag)getMarkup().get(0)).getName();
+				getResponse().write("<", tagName, " style=\"display:none\" id=\"", getMarkupId(),
+					"\"></", tagName, ">");
 			}
 			else
 			{
-				// remember current index
-				final int index = markupStream.getCurrentIndex();
-
 				// render the item
-				super.onRender(markupStream);
+				super.onRender();
 
 				// should we also render children (ajax response)
 				if (isRenderChildren())
@@ -31,10 +26,8 @@
 					{
 						public void visitItem(TreeItem item)
 						{
-							// rewind markupStream
-							markupStream.setCurrentIndex(index);
 							// render child
-							item.onRender(markupStream);
+							item.onRender();
 
 							// go through the behaviors and invoke IBehavior.afterRender
 							List<IBehavior> behaviors = item.getBehaviors();
@@ -44,7 +37,6 @@
 							}
 						}
 					});
-					//
 				}
 			}
 		}

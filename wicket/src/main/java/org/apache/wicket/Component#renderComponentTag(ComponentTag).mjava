@@ -8,13 +8,7 @@
 	 */
 	protected final void renderComponentTag(ComponentTag tag)
 	{
-		final boolean ajaxRequest = getRequest() instanceof WebRequest &&
-			((WebRequest)getRequest()).isAjax();
-
-		final boolean stripWicketTags = ajaxRequest ||
-			Application.get().getMarkupSettings().getStripWicketTags();
-
-		if (!(tag instanceof WicketTag) || !stripWicketTags)
+		if (needToRenderTag(tag))
 		{
 			// Apply behavior modifiers
 			List<IBehavior> behaviors = getBehaviors();
@@ -49,7 +43,8 @@
 			}
 
 			// Write the tag
-			tag.writeOutput(getResponse(), stripWicketTags, findMarkupStream().getWicketNamespace());
+			tag.writeOutput(getResponse(), !needToRenderTag(null),
+				getMarkup().getMarkupResourceStream().getWicketNamespace());
 		}
 	}
 

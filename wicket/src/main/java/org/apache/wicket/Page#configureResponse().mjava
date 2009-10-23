@@ -26,15 +26,15 @@
 		response.setContentType("text/" + getMarkupType() + "; charset=" + encoding);
 
 		// Write out an xml declaration if the markup stream and settings allow
-		final MarkupStream markupStream = findMarkupStream();
-		if ((markupStream != null) && (markupStream.getXmlDeclaration() != null) &&
+		final IMarkupFragment markup = getMarkup();
+		if ((markup != null) && (markup.getMarkupResourceStream().getXmlDeclaration() != null) &&
 			(application.getMarkupSettings().getStripXmlDeclarationFromOutput() == false))
 		{
 			// Gwyn - Wed, 21 May 2008 12:23:41
 			// If the xml declaration in the markup used double-quotes, use them in the output too
 			// Whether it should be or not, sometimes it's significant...
-			final String quoteChar = (markupStream.getXmlDeclaration().indexOf('\"') == -1) ? "'"
-				: "\"";
+			final String quoteChar = (markup.getMarkupResourceStream().getXmlDeclaration().indexOf(
+				'\"') == -1) ? "'" : "\"";
 
 			response.write("<?xml version=");
 			response.write(quoteChar);

@@ -1,0 +1,23 @@
+		/**
+		 * @see org.apache.wicket.MarkupContainer#onRender()
+		 */
+		@Override
+		protected void onRender()
+		{
+			// is there a root item? (non-empty tree)
+			if (rootItem != null)
+			{
+				IItemCallback callback = new IItemCallback()
+				{
+					public void visitItem(TreeItem item)
+					{
+						// render component
+						item.render();
+					}
+				};
+
+				// visit item and it's children
+				visitItemAndChildren(rootItem, callback);
+			}
+		}
+

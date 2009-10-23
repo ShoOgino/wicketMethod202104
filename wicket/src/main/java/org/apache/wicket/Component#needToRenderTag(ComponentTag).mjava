@@ -1,0 +1,18 @@
+	/**
+	 * 
+	 * @param openTag
+	 * @return true, if the tag shall be rendered
+	 */
+	private boolean needToRenderTag(final ComponentTag openTag)
+	{
+		// If a open-close tag has been modified to be open-body-close than a
+		// synthetic close tag must be rendered.
+		boolean renderTag = (openTag == null ? false : !(openTag instanceof WicketTag));
+		if (renderTag == false)
+		{
+			renderTag = !((getRequest() instanceof WebRequest) && ((WebRequest)getRequest()).isAjax());
+			renderTag &= !getApplication().getMarkupSettings().getStripWicketTags();
+		}
+		return renderTag;
+	}
+

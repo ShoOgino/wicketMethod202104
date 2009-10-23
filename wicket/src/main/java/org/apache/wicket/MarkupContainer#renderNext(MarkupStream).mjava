@@ -11,7 +11,7 @@
 		// Get the current markup element
 		final MarkupElement element = markupStream.get();
 
-		// If it a tag like <wicket..> or <span wicket:id="..." >
+		// If it's a tag like <wicket..> or <span wicket:id="..." >
 		if ((element instanceof ComponentTag) && !markupStream.atCloseTag())
 		{
 			// Get element as tag
@@ -26,7 +26,7 @@
 			// Failed to find it?
 			if (component != null)
 			{
-				component.render(markupStream);
+				component.render();
 			}
 			else
 			{
@@ -68,7 +68,6 @@
 				log.debug("Rendering raw markup");
 			}
 			getResponse().write(element.toCharSequence());
-			markupStream.next();
 		}
 	}
 
