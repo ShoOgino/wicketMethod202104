@@ -1,0 +1,73 @@
+	/**
+	 * 
+	 * @param loader
+	 * @param resourceStream
+	 * @return properties
+	 */
+	private ValueMap loadFromLoader(final IPropertiesLoader loader,
+		final IResourceStream resourceStream)
+	{
+		if (log.isInfoEnabled())
+		{
+			log.info("Loading properties files from " + resourceStream + " with loader " + loader);
+		}
+
+		BufferedInputStream in = null;
+
+		try
+		{
+			// Get the InputStream
+			in = new BufferedInputStream(resourceStream.getInputStream());
+			ValueMap data = loader.loadWicketProperties(in);
+			if (data == null)
+			{
+				java.util.Properties props = loader.loadJavaProperties(in);
+				if (props != null)
+				{
+					// Copy the properties into the ValueMap
+					data = new ValueMap();
+					Enumeration<?> enumeration = props.propertyNames();
+					while (enumeration.hasMoreElements())
+					{
+						String property = (String)enumeration.nextElement();
+						data.put(property, props.getProperty(property));
+					}
+				}
+			}
+			return data;
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			log.warn("Unable to find resource " + resourceStream, e);
+		}
+		catch (IOException e)
+		{
+			log.warn("Unable to find resource " + resourceStream, e);
+		}
+		finally
+		{
+			if (in != null)
+			{
+				try
+				{
+					in.close();
+				}
+				catch (IOException ex)
+				{
+					// ignore
+				}
+			}
+
+			try
+			{
+				resourceStream.close();
+			}
+			catch (IOException ex)
+			{
+				// ignore
+			}
+		}
+
+		return null;
+	}
+

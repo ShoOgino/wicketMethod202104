@@ -1,0 +1,21 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param fileExtension
+	 * @param encoding
+	 */
+	public UtfPropertiesFilePropertiesLoader(final String fileExtension, final String encoding)
+	{
+		this.fileExtension = fileExtension;
+		this.encoding = encoding;
+
+		try
+		{
+			load = java.util.Properties.class.getMethod("load", new Class[] { Reader.class });
+		}
+		catch (NoSuchMethodException ex)
+		{
+			load = null;
+		}
+	}
+

@@ -4,12 +4,13 @@
 	 * @param application
 	 *            Application for this properties factory.
 	 */
-	public PropertiesFactory(Application application)
+	public PropertiesFactory(final Application application)
 	{
 		this.application = application;
 
 		propertiesLoader = new ArrayList<IPropertiesLoader>();
-		propertiesLoader.add(new PropertiesFilePropertiesLoader());
+		propertiesLoader.add(new IsoPropertiesFilePropertiesLoader("properties"));
+		propertiesLoader.add(new UtfPropertiesFilePropertiesLoader("utf8.properties", "utf-8"));
 		propertiesLoader.add(new XmlFilePropertiesLoader("xml"));
 	}
 

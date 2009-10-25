@@ -1,0 +1,40 @@
+	/**
+	 * Add the resource stream to the file being watched
+	 * 
+	 * @param path
+	 * @param resourceStream
+	 * @param watcher
+	 */
+	private void addToWatcher(final String path, final IResourceStream resourceStream,
+		final IModificationWatcher watcher)
+	{
+		watcher.add(resourceStream, new IChangeListener()
+		{
+			public void onChange()
+			{
+				log.info("A properties files has changed. Removing all entries " +
+					"from the cache. Resource: " + resourceStream);
+
+				// Clear the whole cache as associated localized files may
+				// be affected and may need reloading as well.
+				clearCache();
+
+				// Inform all listeners
+				Iterator<IPropertiesChangeListener> iter = afterReloadListeners.iterator();
+				while (iter.hasNext())
+				{
+					IPropertiesChangeListener listener = iter.next();
+					try
+					{
+						listener.propertiesChanged(path);
+					}
+					catch (Throwable ex)
+					{
+						PropertiesFactory.log.error("PropertiesReloadListener has thrown an exception: " +
+							ex.getMessage());
+					}
+				}
+			}
+		});
+	}
+

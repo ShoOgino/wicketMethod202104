@@ -6,14 +6,37 @@
 	{
 		// Check the cache
 		Properties properties = propertiesCache.get(path);
-
 		if (properties == null)
 		{
+			IResourceSettings resourceSettings = Application.get().getResourceSettings();
+
 			Iterator<IPropertiesLoader> iter = propertiesLoader.iterator();
 			while ((properties == null) && iter.hasNext())
 			{
 				IPropertiesLoader loader = iter.next();
-				properties = loader.load(clazz, path);
+				String fullPath = path + loader.getFileExtension();
+
+				// If not in the cache than try to load properties
+				final IResourceStream resourceStream = resourceSettings.getResourceStreamLocator()
+					.locate(clazz, fullPath);
+
+				if (resourceStream == null)
+				{
+					continue;
+				}
+
+				// Watch file modifications
+				final IModificationWatcher watcher = resourceSettings.getResourceWatcher(true);
+				if (watcher != null)
+				{
+					addToWatcher(path, resourceStream, watcher);
+				}
+
+				ValueMap props = loadFromLoader(loader, resourceStream);
+				if (props != null)
+				{
+					properties = new Properties(path, props);
+				}
 			}
 
 			// Cache the lookup
