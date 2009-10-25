@@ -2,7 +2,10 @@
 	 * Construct.
 	 * 
 	 * @param <C>
+	 *            type of page
 	 * 
+	 * @param pageMapName
+	 *            optional page map name
 	 * @param pageClass
 	 *            the class of the page
 	 * @param pageParameters
@@ -11,6 +14,17 @@
 	public <C extends Page> BookmarkablePageRequestTarget(Class<C> pageClass,
 		PageParameters pageParameters)
 	{
-		this(null, pageClass, pageParameters);
+		if (pageClass == null)
+		{
+			throw new IllegalArgumentException("Argument pageClass must be not null");
+		}
+
+		if (!Page.class.isAssignableFrom(pageClass))
+		{
+			throw new IllegalArgumentException("Argument pageClass must be an instance of " +
+				Page.class.getName());
+		}
+		pageClassRef = new WeakReference<Class<? extends Page>>(pageClass);
+		this.pageParameters = (pageParameters == null) ? new PageParameters() : pageParameters;
 	}
 
