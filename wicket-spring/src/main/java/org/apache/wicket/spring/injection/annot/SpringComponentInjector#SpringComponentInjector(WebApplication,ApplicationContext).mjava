@@ -2,9 +2,9 @@
 	 * Constructor
 	 * 
 	 * @param webapp
-	 * 		wicket web application
+	 *            wicket web application
 	 * @param ctx
-	 * 		spring's application context
+	 *            spring's application context
 	 */
 	public SpringComponentInjector(WebApplication webapp, ApplicationContext ctx)
 	{
@@ -20,8 +20,7 @@
 
 		// store context in application's metadata ...
 		webapp.setMetaData(CONTEXT_KEY, new ApplicationContextHolder(ctx));
-
-		// ... and create and register the annotation aware injector
-		InjectorHolder.setInjector(new AnnotSpringInjector(new ContextLocator()));
+		fieldValueFactory = new AnnotProxyFieldValueFactory(new ContextLocator());
+		bind(webapp);
 	}
 
