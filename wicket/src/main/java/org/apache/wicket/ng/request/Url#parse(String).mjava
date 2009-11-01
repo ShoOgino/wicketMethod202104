@@ -1,67 +1,68 @@
-    /**
-     * Parses the given URL string.
-     * 
-     * @param url
-     * @return Url object
-     */
-    public static Url parse(String url)
-    {
-        Checks.argumentNotNull(url, "url");
+	/**
+	 * Parses the given URL string.
+	 * 
+	 * @param url
+	 * @return Url object
+	 */
+	public static Url parse(String url)
+	{
+		Checks.argumentNotNull(url, "url");
 
-        Url result = new Url();
+		Url result = new Url();
 
-        String segments;
-        String query;
+		String segments;
+		String query;
 
-        int qIndex = url.indexOf('?');
+		int qIndex = url.indexOf('?');
 
-        if (qIndex == -1)
-        {
-            segments = url;
-            query = "";
-        }
-        else
-        {
-            segments = url.substring(0, qIndex);
-            query = url.substring(qIndex + 1);
-        }
+		if (qIndex == -1)
+		{
+			segments = url;
+			query = "";
+		}
+		else
+		{
+			segments = url.substring(0, qIndex);
+			query = url.substring(qIndex + 1);
+		}
 
-        if (segments.length() > 0)
-        {
+		if (segments.length() > 0)
+		{
 
-            boolean removeLast = false;
-            if (segments.endsWith("/"))
-            {
-                // we need to append something and remove it after splitting because otherwise the
-                // trailing slashes will be lost
-                segments += "/x";
-                removeLast = true;
-            }
+			boolean removeLast = false;
+			if (segments.endsWith("/"))
+			{
+				// we need to append something and remove it after splitting
+				// because otherwise the
+				// trailing slashes will be lost
+				segments += "/x";
+				removeLast = true;
+			}
 
-            String segmentArray[] = segments.split("/");
+			String segmentArray[] = Strings.split(segments, '/');
 
-            if (removeLast)
-            {
-                segmentArray[segmentArray.length - 1] = null;
-            }
+			if (removeLast)
+			{
+				segmentArray[segmentArray.length - 1] = null;
+			}
 
-            for (String s : segmentArray)
-            {
-                if (s != null)
-                {
-                    result.segments.add(decodeSegment(s));
-                }
-            }
-        }
+			for (String s : segmentArray)
+			{
+				if (s != null)
+				{
+					result.segments.add(decodeSegment(s));
+				}
+			}
+		}
 
-        if (query.length() > 0)
-        {
-            String queryArray[] = query.split("&");
-            for (String s : queryArray)
-            {
-                result.parameters.add(parseQueryParameter(s));
-            }
-        }
+		if (query.length() > 0)
+		{
+			String queryArray[] = Strings.split(query, '&');
+			for (String s : queryArray)
+			{
+				result.parameters.add(parseQueryParameter(s));
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
