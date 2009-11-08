@@ -14,24 +14,38 @@
 		// set the enclosure visibility
 		boolean visible = controller.determineVisibility();
 
-		if (visible)
-		{
-			super.onComponentTagBody(markupStream, openTag);
-		}
-		else
-		{
-			RequestCycle cycle = getRequestCycle();
-			Response response = cycle.getResponse();
-			try
-			{
-				cycle.setResponse(NullResponse.getInstance());
+		// We want to know which components are rendered inside the enclosure
+		final IComponentOnAfterRenderListener listener = new EnclosureListener(this);
 
+		try
+		{
+			// register the listener
+			getApplication().addComponentOnAfterRenderListener(listener);
+
+			if (visible)
+			{
 				super.onComponentTagBody(markupStream, openTag);
 			}
-			finally
+			else
 			{
-				cycle.setResponse(response);
+				RequestCycle cycle = getRequestCycle();
+				Response response = cycle.getResponse();
+				try
+				{
+					cycle.setResponse(NullResponse.getInstance());
+
+					super.onComponentTagBody(markupStream, openTag);
+				}
+				finally
+				{
+					cycle.setResponse(response);
+				}
 			}
+		}
+		finally
+		{
+			// make sure we remove the listener
+			getApplication().removeComponentOnAfterRenderListener(listener);
 		}
 	}
 
