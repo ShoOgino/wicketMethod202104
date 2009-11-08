@@ -1,0 +1,34 @@
+	/**
+	 * Calculates the checksum of a credit card number using the Luhn algorithm (the so-called
+	 * "mod 10" algorithm).
+	 * 
+	 * @param creditCardNumber
+	 *            the credit card number for which the checksum should be calculated
+	 * @return <code>TRUE</code> if the checksum for the given credit card number is valid, else
+	 *         return <code>FALSE</code>
+	 * @see <a href="http://en.wikipedia.org/wiki/Luhn_algorithm">Wikipedie - Luhn algorithm</a>
+	 */
+	private boolean isChecksumCorrect(String creditCardNumber)
+	{
+		String input = creditCardNumber;
+		String numberToCheck = input.replaceAll("[ -]", "");
+		int nulOffset = '0';
+		int sum = 0;
+		for (int i = 1; i <= numberToCheck.length(); i++)
+		{
+			int currentDigit = numberToCheck.charAt(numberToCheck.length() - i) - nulOffset;
+			if ((i % 2) == 0)
+			{
+				currentDigit *= 2;
+				currentDigit = currentDigit > 9 ? currentDigit - 9 : currentDigit;
+				sum += currentDigit;
+			}
+			else
+			{
+				sum += currentDigit;
+			}
+		}
+
+		return (sum % 10) == 0;
+	}
+

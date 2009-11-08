@@ -1,0 +1,28 @@
+	/**
+	 * Check if the credit card is a Diners Club Carte Blanche. A Diners Club Carte Blanche number
+	 * has to start with a number between 300 and 305 and has to have a length of 14. The number has
+	 * to be validated with the Luhn alorithm.
+	 * 
+	 * @param creditCardNumber
+	 *            the credit card number as a string
+	 * @return <code>TRUE</code> if the credit card number seems to be a valid Diners Club Carte
+	 *         Blanche number. Else <code>FALSE</code> will be returned
+	 */
+	private boolean isDinersClubCarteBlanche(String creditCardNumber)
+	{
+		cardId = CreditCardValidator.INVALID;
+		boolean returnValue = false;
+
+		if (creditCardNumber.length() == 14 && creditCardNumber.startsWith("30"))
+		{
+			int firstDigits = Integer.parseInt(creditCardNumber.substring(0, 3));
+			if (firstDigits >= 300 && firstDigits <= 305 && isChecksumCorrect(creditCardNumber))
+			{
+				cardId = CreditCardValidator.DINERS_CLUB_CARTE_BLANCHE;
+				returnValue = true;
+			}
+		}
+
+		return returnValue;
+	}
+
