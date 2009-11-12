@@ -1,6 +1,7 @@
 	protected static String encodeResourceReferenceAttributes(ResourceReferenceAttributes attributes)
 	{
-		if (attributes == null || (attributes.locale == null && attributes.style == null))
+		if (attributes == null ||
+			(attributes.locale == null && attributes.style == null && attributes.variation == null))
 		{
 			return null;
 		}
@@ -15,6 +16,11 @@
 			{
 				res.append("-");
 				res.append(attributes.style);
+			}
+			if (!Strings.isEmpty(attributes.variation))
+			{
+				res.append("-");
+				res.append(attributes.variation);
 			}
 			return res.toString();
 		}
