@@ -9,24 +9,8 @@
 	 */
 	private <C extends Page> void redirectToInterceptPage(final Class<C> interceptPageClass)
 	{
-		final RequestCycle cycle = RequestCycle.get();
-		final Page requestPage = cycle.getRequest().getPage();
+		// TODO Wicket NG: Implement
+		RequestCycle.get().setResponsePage(interceptPageClass);
 
-		/*
-		 * requestPage can be null if we throw the restart response exception before any page is
-		 * instantiated in user's session. if this happens we switch to the pagemap of the request.
-		 */
-		final IPageMap pageMap;
-		if (requestPage != null)
-		{
-			pageMap = requestPage.getPageMap();
-		}
-		else
-		{
-			RequestParameters parameters = cycle.getRequest().getRequestParameters();
-			pageMap = PageMap.forName(parameters.getPageMapName());
-		}
-
-		pageMap.redirectToInterceptPage(interceptPageClass);
 	}
 

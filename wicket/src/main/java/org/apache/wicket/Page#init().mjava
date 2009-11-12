@@ -1,17 +1,22 @@
 	/**
 	 * Initializes Page by adding it to the Session and initializing it.
+	 * 
+	 * @param pageMap
+	 *            The page map to put this page in.
 	 */
 	private final void init()
 	{
-		final RequestCycle cycle = getRequestCycle();
-		String pageMapName = null;
-		if (cycle != null)
+		if (isBookmarkable())
 		{
-			RequestParameters parameters = getRequest().getRequestParameters();
-			pageMapName = parameters.getPageMapName();
+			setStatelessHint(true);
 		}
 
-		final IPageMap pageMap = PageMap.forName(pageMapName);
-		init(pageMap);
+		setNextAvailableId();
+
+		// Set versioning of page based on default
+		setVersioned(Application.get().getPageSettings().getVersionPagesByDefault());
+
+		// All Pages are born dirty so they get clustered right away
+		dirty();
 	}
 
