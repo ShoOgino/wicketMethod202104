@@ -1,0 +1,25 @@
+	/**
+	 * Creates and initializes a new {@link WebApplicationContext}, with the given context as the
+	 * parent. Based on the logic in {@link FrameworkServlet#createWebApplicationContext}
+	 * 
+	 * @param parent
+	 *            parent application context
+	 * @param filter
+	 *            wicket filter
+	 * @return instance of additional application context
+	 * @throws BeansException
+	 */
+	protected final WebApplicationContext createWebApplicationContext(WebApplicationContext parent,
+			WicketFilter filter) throws BeansException
+	{
+		ConfigurableWebApplicationContext wac = newApplicationContext();
+		wac.setParent(parent);
+		wac.setServletContext(filter.getFilterConfig().getServletContext());
+		wac.setConfigLocation(getContextConfigLocation(filter));
+
+		postProcessWebApplicationContext(wac, filter);
+		wac.refresh();
+
+		return wac;
+	}
+
