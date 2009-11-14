@@ -1,0 +1,23 @@
+	/**
+	 * Note:
+	 * 
+	 * @return The next markup element in the stream
+	 */
+	public MarkupElement nextOpenTag()
+	{
+		while (next() != null)
+		{
+			MarkupElement elem = get();
+			if (elem instanceof ComponentTag)
+			{
+				ComponentTag tag = (ComponentTag)elem;
+				if (tag.isOpen() || tag.isOpenClose())
+				{
+					return current = get(currentIndex);
+				}
+			}
+		}
+
+		return null;
+	}
+
