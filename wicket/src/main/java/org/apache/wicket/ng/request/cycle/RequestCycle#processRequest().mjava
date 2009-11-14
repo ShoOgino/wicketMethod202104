@@ -1,38 +1,38 @@
-    /**
-     * Processes the request.
-     * 
-     * @return <code>true</code> if the request resolved to a Wicket request, <code>false</code>
-     *         otherwise.
-     */
-    public boolean processRequest()
-    {
-        try
-        {
-            set(this);
-            RequestHandler handler = resolveRequestHandler();
-            if (handler != null)
-            {
-                executeRequestHandler(handler);
-                return true;
-            }
+	/**
+	 * Processes the request.
+	 * 
+	 * @return <code>true</code> if the request resolved to a Wicket request, <code>false</code>
+	 *         otherwise.
+	 */
+	public boolean processRequest()
+	{
+		try
+		{
+			set(this);
+			RequestHandler handler = resolveRequestHandler();
+			if (handler != null)
+			{
+				executeRequestHandler(handler);
+				return true;
+			}
 
-        }
-        catch (Exception e)
-        {
-            RequestHandler handler = handleException(e);
-            if (handler != null)
-            {
-                executeExceptionRequestHandler(handler, getExceptionRetryCount());
-            }
-            else
-            {
-                log.error("Error during request processing", e);
-            }
-        }
-        finally
-        {
-            set(null);
-        }
-        return false;
-    }
+		}
+		catch (Exception e)
+		{
+			RequestHandler handler = handleException(e);
+			if (handler != null)
+			{
+				executeExceptionRequestHandler(handler, getExceptionRetryCount());
+			}
+			else
+			{
+				log.error("Error during request processing", e);
+			}
+		}
+		finally
+		{
+			set(null);
+		}
+		return false;
+	}
 

@@ -1,5 +1,5 @@
 	@SuppressWarnings("unchecked")
-	public Map<String, List<StringValue>> getPostParameters()
+	private Map<String, List<StringValue>> getPostParameters()
 	{
 		if (postParameters == null)
 		{
@@ -8,7 +8,7 @@
 			{
 				BufferedReader reader = getHttpServletRequest().getReader();
 				String value = Streams.readString(reader);
-				
+
 				if (!Strings.isEmpty(value))
 				{
 					Url url = Url.parse("?" + value);
@@ -26,7 +26,9 @@
 			}
 			catch (IOException e)
 			{
-				logger.warn("Error parsing request body for post parameters; Fallback to ServletRequest#getParameters().", e);
+				logger.warn(
+					"Error parsing request body for post parameters; Fallback to ServletRequest#getParameters().",
+					e);
 				for (String name : (List<String>)Collections.list(getHttpServletRequest().getParameterNames()))
 				{
 					List<StringValue> list = postParameters.get(name);
@@ -41,7 +43,7 @@
 					}
 				}
 			}
-			
+
 		}
 		return postParameters;
 	}

@@ -6,15 +6,16 @@
 		}
 		StringBuilder url = new StringBuilder();
 		String uri = request.getRequestURI();
-		url.append(Strings.stripJSessionId(uri.substring(request.getContextPath().length() + filterPrefix.length() + 1)));		
-		
+		url.append(Strings.stripJSessionId(uri.substring(request.getContextPath().length() +
+			filterPrefix.length() + 1)));
+
 		String query = request.getQueryString();
 		if (!Strings.isEmpty(query))
 		{
 			url.append("?");
 			url.append(query);
 		}
-						
+
 		return Url.parse(Strings.stripJSessionId(url.toString()));
 	}
 
