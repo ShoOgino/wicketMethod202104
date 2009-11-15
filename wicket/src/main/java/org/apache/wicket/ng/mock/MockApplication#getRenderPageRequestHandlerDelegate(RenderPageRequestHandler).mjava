@@ -2,6 +2,13 @@
 	public RenderPageRequestHandlerDelegate getRenderPageRequestHandlerDelegate(
 		RenderPageRequestHandler renderPageRequestHandler)
 	{
-		return new MockRenderPageRequestHandlerDelegate(renderPageRequestHandler);
+		return new MockRenderPageRequestHandlerDelegate(renderPageRequestHandler)
+		{
+			@Override
+			protected void onPageRender(RequestablePage page)
+			{
+				lastRenderedPage = page;
+			}
+		};
 	}
 
