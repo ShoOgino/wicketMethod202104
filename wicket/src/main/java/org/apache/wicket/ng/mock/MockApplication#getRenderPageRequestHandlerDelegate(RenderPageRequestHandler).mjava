@@ -2,12 +2,13 @@
 	public RenderPageRequestHandlerDelegate getRenderPageRequestHandlerDelegate(
 		RenderPageRequestHandler renderPageRequestHandler)
 	{
-		return new MockRenderPageRequestHandlerDelegate(renderPageRequestHandler)
+		return new WebRenderPageRequestHandlerDelegate(renderPageRequestHandler)
 		{
 			@Override
-			protected void onPageRender(RequestablePage page)
+			public void respond(RequestCycle requestCycle)
 			{
-				lastRenderedPage = page;
+				lastRenderedPage = getPageProvider().getPageInstance();
+				super.respond(requestCycle);
 			}
 		};
 	}

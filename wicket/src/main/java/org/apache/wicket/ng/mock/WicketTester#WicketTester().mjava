@@ -1,0 +1,15 @@
+	/**
+	 * Creates a new {@link WicketTester} instance. It also binds it's Application to current thread
+	 * so all activities that needs the original application (if there was one bound to current
+	 * thread) need to wait until {@link #destroy()} is invoked.
+	 */
+	public WicketTester()
+	{
+		oldThreadContext = ThreadContext.getAndClean();
+
+		application = new MockApplication();
+		application.setName("WicketTesterApplication");
+		application.set();
+		application.initApplication();
+	}
+
