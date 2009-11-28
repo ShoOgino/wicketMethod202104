@@ -1,8 +1,7 @@
 	/**
-	 * @see org.apache.wicket.markup.IMarkupFragment#findComponentIndex(java.lang.String,
-	 *      java.lang.String, int)
+	 * @see org.apache.wicket.markup.IMarkupFragment#find(java.lang.String)
 	 */
-	public final int findComponentIndex(final String id, final int startIndex)
+	public final IMarkupFragment find(final String id)
 	{
 		if (Strings.isEmpty(id))
 		{
@@ -10,7 +9,7 @@
 		}
 
 		MarkupStream stream = new MarkupStream(this);
-		stream.setCurrentIndex(Math.max(0, startIndex));
+		stream.setCurrentIndex(0);
 		while (stream.hasMore())
 		{
 			MarkupElement elem = stream.get();
@@ -21,7 +20,7 @@
 				{
 					if (tag.getId().equals(id))
 					{
-						return stream.getCurrentIndex();
+						return stream.getMarkupFragment();
 					}
 					if (tag.isOpen() && !tag.hasNoCloseTag() && !(tag instanceof WicketTag) &&
 						!"head".equals(tag.getName()) && !tag.isAutoComponentTag())
@@ -34,6 +33,6 @@
 			stream.next();
 		}
 
-		return -1;
+		return null;
 	}
 
