@@ -21,7 +21,11 @@
 			final String id = tag.getId();
 
 			// Get the component for the id from the given container
-			final Component component = get(id);
+			Component component = get(id);
+			if (component == null)
+			{
+				component = ComponentResolvers.resolve(this, markupStream, tag);
+			}
 
 			// Failed to find it?
 			if (component != null)
@@ -30,11 +34,6 @@
 			}
 			else
 			{
-				if (ComponentResolvers.resolve(this, markupStream, tag))
-				{
-					return;
-				}
-
 				if (tag instanceof WicketTag)
 				{
 					if (((WicketTag)tag).isChildTag())

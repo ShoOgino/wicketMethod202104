@@ -3,7 +3,7 @@
 	 * @see org.apache.wicket.markup.resolver.IComponentResolver#resolve(org.apache.wicket.MarkupContainer,
 	 *      org.apache.wicket.markup.MarkupStream, org.apache.wicket.markup.ComponentTag)
 	 */
-	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+	public Component resolve(final MarkupContainer container, final MarkupStream markupStream,
 		final ComponentTag tag)
 	{
 		if ((tag instanceof WicketTag) && ((WicketTag)tag).isEnclosureTag())
@@ -22,14 +22,11 @@
 				tag.setModified(true);
 			}
 
-			Enclosure enclosure = new Enclosure(id, tag.getString(EnclosureHandler.CHILD_ATTRIBUTE));
-			container.autoAdd(enclosure, markupStream);
-
 			// Yes, we handled the tag
-			return true;
+			return new Enclosure(id, tag.getString(EnclosureHandler.CHILD_ATTRIBUTE));
 		}
 
 		// We were not able to handle the tag
-		return false;
+		return null;
 	}
 

@@ -2,11 +2,11 @@
 	 * @see org.apache.wicket.markup.resolver.IComponentResolver#resolve(org.apache.wicket.MarkupContainer,
 	 *      org.apache.wicket.markup.MarkupStream, org.apache.wicket.markup.ComponentTag)
 	 */
-	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+	public Component resolve(final MarkupContainer container, final MarkupStream markupStream,
 		final ComponentTag tag)
 	{
 		// make sure nested borders are resolved properly
-		if (rendering == false)
+		if (body.rendering == false)
 		{
 			// We are only interested in border body tags. The tag ID actually is irrelevant since
 			// always preset with the same default
@@ -15,20 +15,11 @@
 				WicketTag wtag = (WicketTag)tag;
 				if (wtag.isBodyTag())
 				{
-					rendering = true;
-					try
-					{
-						body.render();
-					}
-					finally
-					{
-						rendering = false;
-					}
-					return true;
+					return body;
 				}
 			}
 		}
 
-		return false;
+		return null;
 	}
 

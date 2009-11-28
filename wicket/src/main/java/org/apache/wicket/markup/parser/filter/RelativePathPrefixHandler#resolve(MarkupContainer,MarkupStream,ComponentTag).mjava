@@ -3,7 +3,7 @@
 	 * @see org.apache.wicket.markup.resolver.IComponentResolver#resolve(org.apache.wicket.MarkupContainer,
 	 *      org.apache.wicket.markup.MarkupStream, org.apache.wicket.markup.ComponentTag)
 	 */
-	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream,
+	public Component resolve(final MarkupContainer container, final MarkupStream markupStream,
 		final ComponentTag tag)
 	{
 		if ((tag != null) && (tag.getId().startsWith(WICKET_RELATIVE_PATH_PREFIX_CONTAINER_ID)))
@@ -14,20 +14,8 @@
 			// we do not want to mess with the hierarchy, so the container has to be
 			// transparent as it may have wicket components inside. for example a raw anchor tag
 			// that contains a label.
-			final Component wc = new WebMarkupContainer(id)
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public boolean isTransparentResolver()
-				{
-					return tag.isOpenClose() == false;
-				}
-			};
-
-			container.autoAdd(wc, markupStream);
-			return true;
+			return new TransparentWebMarkupContainer(id);
 		}
-		return false;
+		return null;
 	}
 
