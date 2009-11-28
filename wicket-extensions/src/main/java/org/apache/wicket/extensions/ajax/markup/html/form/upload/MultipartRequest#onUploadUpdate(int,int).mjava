@@ -1,0 +1,19 @@
+	/**
+	 * @see org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest#onUploadUpdate(int,
+	 *      int)
+	 */
+	@Override
+	protected void onUploadUpdate(int bytesUploaded, int total)
+	{
+		HttpServletRequest request = ((WebRequest)RequestCycle.get().getRequest()).getHttpServletRequest();
+		UploadInfo info = UploadWebRequest.getUploadInfo(request);
+		if (info == null)
+		{
+			throw new IllegalStateException(
+				"could not find UploadInfo object in session which should have been set when uploaded started");
+		}
+		info.setBytesUploaded(bytesUploaded);
+
+		UploadWebRequest.setUploadInfo(request, info);
+	}
+
