@@ -1,0 +1,39 @@
+    /**
+     * Encodes the given {@link PageParametersNg} to the URL using the given
+     * {@link PageParametersEncoder}. The original URL object is unchanged.
+     * 
+     * @param url
+     * @param pageParameters
+     * @param encoder
+     * @return URL with encoded parameters
+     */
+    protected Url encodePageParameters(Url url, PageParametersNg pageParameters,
+            PageParametersEncoder encoder)
+    {
+        Checks.argumentNotNull(url, "url");
+        Checks.argumentNotNull(encoder, "encoder");
+
+        if (pageParameters == null)
+        {
+            pageParameters = new PageParametersNg();
+        }
+
+        Url parametersUrl = encoder.encodePageParameters(pageParameters);
+        if (parametersUrl != null)
+        {
+            // copy the url
+            url = new Url(url);
+
+            for (String s : parametersUrl.getSegments())
+            {
+                url.getSegments().add(s);
+            }
+            for (QueryParameter p : parametersUrl.getQueryParameters())
+            {
+                url.getQueryParameters().add(p);
+            }
+        }
+
+        return url;
+    }
+
