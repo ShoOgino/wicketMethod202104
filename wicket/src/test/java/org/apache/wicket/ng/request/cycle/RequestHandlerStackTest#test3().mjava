@@ -1,96 +1,96 @@
-    /**
+	/**
 	 * 
 	 */
-    public void test3()
-    {
-        initFlags();
+	public void test3()
+	{
+		initFlags();
 
-        final Response originalResponse = newResponse();
-        final RequestHandlerStack stack = newStack(originalResponse);
+		final Response originalResponse = newResponse();
+		final RequestHandlerStack stack = newStack(originalResponse);
 
-        final RequestHandler handler4 = new RequestHandler()
-        {
-            public void respond(RequestCycle requestCycle)
-            {
-                testFlag4 = true;
+		final RequestHandler handler4 = new RequestHandler()
+		{
+			public void respond(RequestCycle requestCycle)
+			{
+				testFlag4 = true;
 
-                stack.setResponse(newResponse());
-            }
+				stack.setResponse(newResponse());
+			}
 
-            public void detach(RequestCycle requestCycle)
-            {
-                detachedFlag4 = true;
-            }
-        };
+			public void detach(RequestCycle requestCycle)
+			{
+				detachedFlag4 = true;
+			}
+		};
 
-        final RequestHandler handler3 = new RequestHandler()
-        {
-            public void respond(RequestCycle requestCycle)
-            {
-                testFlag3 = false;
-                stack.scheduleRequestHandlerAfterCurrent(handler4);
+		final RequestHandler handler3 = new RequestHandler()
+		{
+			public void respond(RequestCycle requestCycle)
+			{
+				testFlag3 = false;
+				stack.scheduleRequestHandlerAfterCurrent(handler4);
 
-                // make sure that handler4's respond method is fired after this one ends
-                testFlag4 = false;
-                
-                
-                // code must be be reached
-                testFlag3 = true;
-            }
+				// make sure that handler4's respond method is fired after this one ends
+				testFlag4 = false;
 
-            public void detach(RequestCycle requestCycle)
-            {
-                detachedFlag3 = true;
-            }
-        };
 
-        final RequestHandler handler2 = new RequestHandler()
-        {
-            public void respond(RequestCycle requestCycle)
-            {
-                testFlag2 = false;
-                stack.executeRequestHandler(handler3);
-                // code must be reached
-                testFlag2 = true;
-            }
+				// code must be be reached
+				testFlag3 = true;
+			}
 
-            public void detach(RequestCycle requestCycle)
-            {
-                detachedFlag2 = true;
-            }
-        };
+			public void detach(RequestCycle requestCycle)
+			{
+				detachedFlag3 = true;
+			}
+		};
 
-        RequestHandler handler1 = new RequestHandler()
-        {
-            public void respond(RequestCycle requestCycle)
-            {
-                testFlag1 = false;
-                stack.executeRequestHandler(handler2);
+		final RequestHandler handler2 = new RequestHandler()
+		{
+			public void respond(RequestCycle requestCycle)
+			{
+				testFlag2 = false;
+				stack.executeRequestHandler(handler3);
+				// code must be reached
+				testFlag2 = true;
+			}
 
-                // code must be reached
-                testFlag1 = true;
-            }
+			public void detach(RequestCycle requestCycle)
+			{
+				detachedFlag2 = true;
+			}
+		};
 
-            public void detach(RequestCycle requestCycle)
-            {
-                detachedFlag1 = true;
-            }
-        };
+		RequestHandler handler1 = new RequestHandler()
+		{
+			public void respond(RequestCycle requestCycle)
+			{
+				testFlag1 = false;
+				stack.executeRequestHandler(handler2);
 
-        stack.executeRequestHandler(handler1);
+				// code must be reached
+				testFlag1 = true;
+			}
 
-        assertEquals(stack.getResponse(), originalResponse);
+			public void detach(RequestCycle requestCycle)
+			{
+				detachedFlag1 = true;
+			}
+		};
 
-        stack.detach();
+		stack.executeRequestHandler(handler1);
 
-        assertTrue(testFlag1);
-        assertTrue(testFlag2);
-        assertTrue(testFlag3);
-        assertTrue(testFlag4);
+		assertEquals(stack.getResponse(), originalResponse);
 
-        assertTrue(detachedFlag1);
-        assertTrue(detachedFlag2);
-        assertTrue(detachedFlag3);
-        assertTrue(detachedFlag4);
-    }
+		stack.detach();
+
+		assertTrue(testFlag1);
+		assertTrue(testFlag2);
+		assertTrue(testFlag3);
+		assertTrue(testFlag4);
+
+		assertTrue(detachedFlag1);
+		assertTrue(detachedFlag2);
+		assertTrue(detachedFlag3);
+		assertTrue(detachedFlag4);
+	}
 
