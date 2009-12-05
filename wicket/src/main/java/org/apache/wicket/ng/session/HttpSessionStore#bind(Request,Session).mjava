@@ -5,19 +5,19 @@
 	public final void bind(Request request, Session newSession)
 	{
 		if (getAttribute(request, SESSION_ATTRIBUTE_NAME) != newSession)
-		{					
+		{
 			// call template method
 			onBind(request, newSession);
-	
+
 			HttpSession httpSession = getHttpSession(request, false);
-	
+
 			// register an unbinding listener for cleaning up
 			String applicationKey = application.getName();
-			httpSession.setAttribute("Wicket:SessionUnbindingListener-" + applicationKey, new SessionBindingListener(
-					applicationKey, httpSession.getId()));
-	
+			httpSession.setAttribute("Wicket:SessionUnbindingListener-" + applicationKey,
+				new SessionBindingListener(applicationKey, httpSession.getId()));
+
 			// register the session object itself
-			setAttribute(request, SESSION_ATTRIBUTE_NAME, newSession);			
+			setAttribute(request, SESSION_ATTRIBUTE_NAME, newSession);
 		}
 	}
 

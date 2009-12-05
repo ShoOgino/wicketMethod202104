@@ -1,36 +1,36 @@
-    /**
-     * Searches the registered {@link RequestMapper}s to find one that can decode the
-     * {@link Request}. Each registered {@link RequestMapper} is asked to provide the matching
-     * segments count. Then the encoders are asked to decode the request in order depending on the
-     * provided segments count.
-     * <p>
-     * The encoder with highest matching segments count that can decode the request is returned.
-     * 
-     * @param request
-     * @return RequestHandler for the request or <code>null</code> if no encoder for the request is
-     *         found.
-     */
-    public RequestHandler mapRequest(Request request)
-    {
-        List<EncoderWithSegmentsCount> list = new ArrayList<EncoderWithSegmentsCount>(mappers
-                .size());
+	/**
+	 * Searches the registered {@link RequestMapper}s to find one that can decode the
+	 * {@link Request}. Each registered {@link RequestMapper} is asked to provide the matching
+	 * segments count. Then the encoders are asked to decode the request in order depending on the
+	 * provided segments count.
+	 * <p>
+	 * The encoder with highest matching segments count that can decode the request is returned.
+	 * 
+	 * @param request
+	 * @return RequestHandler for the request or <code>null</code> if no encoder for the request is
+	 *         found.
+	 */
+	public RequestHandler mapRequest(Request request)
+	{
+		List<EncoderWithSegmentsCount> list = new ArrayList<EncoderWithSegmentsCount>(
+			mappers.size());
 
-        for (RequestMapper encoder : mappers)
-        {
-            list.add(new EncoderWithSegmentsCount(encoder, encoder.getCompatibilityScore(request)));
-        }
+		for (RequestMapper encoder : mappers)
+		{
+			list.add(new EncoderWithSegmentsCount(encoder, encoder.getCompatibilityScore(request)));
+		}
 
-        Collections.sort(list);
+		Collections.sort(list);
 
-        for (EncoderWithSegmentsCount encoder : list)
-        {
-            RequestHandler handler = encoder.getMapper().mapRequest(request);
-            if (handler != null)
-            {
-                return handler;
-            }
-        }
+		for (EncoderWithSegmentsCount encoder : list)
+		{
+			RequestHandler handler = encoder.getMapper().mapRequest(request);
+			if (handler != null)
+			{
+				return handler;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 

@@ -6,30 +6,32 @@
 			PageComponentInfo info = getPageComponentInfo(url);
 			if (info != null && info.getPageInfo().getPageId() != null)
 			{
-				Integer renderCount = info.getComponentInfo() != null ? info.getComponentInfo().getRenderCount() : null;
+				Integer renderCount = info.getComponentInfo() != null ? info.getComponentInfo()
+					.getRenderCount() : null;
 
 				if (info.getComponentInfo() == null)
 				{
-					DefaultPageProvider provider = new DefaultPageProvider(info.getPageInfo().getPageId(), renderCount);
+					DefaultPageProvider provider = new DefaultPageProvider(info.getPageInfo()
+						.getPageId(), renderCount);
 					provider.setPageSource(getContext());
-					// render page					
+					// render page
 					return new RenderPageRequestHandler(provider);
 				}
 				else
 				{
 					ComponentInfo componentInfo = info.getComponentInfo();
 
-					PageAndComponentProvider provider = new PageAndComponentProvider(info.getPageInfo()
-							.getPageId(), renderCount, componentInfo.getComponentPath());
+					PageAndComponentProvider provider = new PageAndComponentProvider(
+						info.getPageInfo().getPageId(), renderCount,
+						componentInfo.getComponentPath());
 
 					provider.setPageSource(getContext());
-					
-					// listener interface
-					RequestListenerInterface listenerInterface = requestListenerInterfaceFromString(componentInfo
-							.getListenerInterface());
 
-					return new ListenerInterfaceRequestHandler(provider, listenerInterface, componentInfo
-							.getBehaviorIndex());
+					// listener interface
+					RequestListenerInterface listenerInterface = requestListenerInterfaceFromString(componentInfo.getListenerInterface());
+
+					return new ListenerInterfaceRequestHandler(provider, listenerInterface,
+						componentInfo.getBehaviorIndex());
 				}
 			}
 		}

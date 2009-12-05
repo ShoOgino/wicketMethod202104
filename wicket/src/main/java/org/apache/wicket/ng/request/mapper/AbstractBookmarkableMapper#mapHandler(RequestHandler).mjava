@@ -3,7 +3,7 @@
 		if (requestHandler instanceof BookmarkablePageRequestHandler)
 		{
 			// simple bookmarkable URL with no page instance information
-			BookmarkablePageRequestHandler handler = (BookmarkablePageRequestHandler) requestHandler;
+			BookmarkablePageRequestHandler handler = (BookmarkablePageRequestHandler)requestHandler;
 
 			if (!checkPageClass(handler.getPageClass()))
 			{
@@ -11,8 +11,8 @@
 			}
 
 			PageInfo info = new PageInfo();
-			UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(info, null), handler.getPageClass(), handler
-					.getPageParameters());
+			UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(info, null),
+				handler.getPageClass(), handler.getPageParameters());
 
 			return buildUrl(urlInfo);
 		}
@@ -21,7 +21,7 @@
 			// possibly hybrid URL - bookmarkable URL with page instance information
 			// but only allowed if the page was created by bookamarkable URL
 
-			RenderPageRequestHandler handler = (RenderPageRequestHandler) requestHandler;
+			RenderPageRequestHandler handler = (RenderPageRequestHandler)requestHandler;
 			RequestablePage page = handler.getPage();
 
 			if (!checkPageClass(page.getClass()))
@@ -36,9 +36,11 @@
 				{
 					info = new PageInfo(page);
 				}
-				PageComponentInfo pageComponentInfo = info != null ? new PageComponentInfo(info, null) : null;
+				PageComponentInfo pageComponentInfo = info != null ? new PageComponentInfo(info,
+					null) : null;
 
-				UrlInfo urlInfo = new UrlInfo(pageComponentInfo, page.getClass(), handler.getPageParameters());
+				UrlInfo urlInfo = new UrlInfo(pageComponentInfo, page.getClass(),
+					handler.getPageParameters());
 				return buildUrl(urlInfo);
 			}
 			else
@@ -50,7 +52,7 @@
 		else if (requestHandler instanceof BookmarkableListenerInterfaceRequestHandler)
 		{
 			// listener interface URL with page class information
-			BookmarkableListenerInterfaceRequestHandler handler = (BookmarkableListenerInterfaceRequestHandler) requestHandler;
+			BookmarkableListenerInterfaceRequestHandler handler = (BookmarkableListenerInterfaceRequestHandler)requestHandler;
 			RequestablePage page = handler.getPage();
 
 			if (!checkPageClass(page.getClass()))
@@ -60,14 +62,14 @@
 
 			PageInfo pageInfo = new PageInfo(page);
 			ComponentInfo componentInfo = new ComponentInfo(page.getRenderCount(),
-					requestListenerInterfaceToString(handler.getListenerInterface()), handler.getComponent().getPath(),
-					handler.getBehaviorIndex());
+				requestListenerInterfaceToString(handler.getListenerInterface()),
+				handler.getComponent().getPath(), handler.getBehaviorIndex());
 
-			UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(pageInfo, componentInfo), page.getClass(), handler
-					.getPageParameters());
+			UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(pageInfo, componentInfo),
+				page.getClass(), handler.getPageParameters());
 			return buildUrl(urlInfo);
 		}
 
 		return null;
-	}	
+	}
 

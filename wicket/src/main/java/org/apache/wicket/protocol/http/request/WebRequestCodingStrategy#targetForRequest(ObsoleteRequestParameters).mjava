@@ -1,0 +1,13 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestCodingStrategy#targetForRequest(org.apache.wicket.request.ObsoleteRequestParameters)
+	 */
+	public final IRequestTarget targetForRequest(ObsoleteRequestParameters requestParameters)
+	{
+		IRequestTargetUrlCodingStrategy encoder = urlCodingStrategyForPath(requestParameters.getPath());
+		if (encoder == null)
+		{
+			return null;
+		}
+		return encoder.decode(requestParameters);
+	}
+

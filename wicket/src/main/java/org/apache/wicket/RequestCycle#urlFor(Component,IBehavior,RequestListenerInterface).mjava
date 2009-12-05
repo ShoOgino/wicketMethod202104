@@ -21,7 +21,7 @@
 			throw new IllegalArgumentException("Behavior " + this +
 				" was not registered with this component: " + component.toString());
 		}
-		RequestParameters params = new RequestParameters();
+		ObsoleteRequestParameters params = new ObsoleteRequestParameters();
 		params.setBehaviorId(String.valueOf(index));
 		if (request instanceof ServletWebRequest)
 		{
@@ -31,7 +31,7 @@
 			// AJAX requests: If we need to generate a URL within an AJAX
 			// request for another one, it needs to be at the same depth as the
 			// original AJAX request.
-			int urlDepth = swr.getRequestParameters().getUrlDepth();
+			int urlDepth = swr.getObsoleteRequestParameters().getUrlDepth();
 			params.setUrlDepth(urlDepth > -1 ? urlDepth : swr.getDepthRelativeToWicketHandler());
 		}
 
