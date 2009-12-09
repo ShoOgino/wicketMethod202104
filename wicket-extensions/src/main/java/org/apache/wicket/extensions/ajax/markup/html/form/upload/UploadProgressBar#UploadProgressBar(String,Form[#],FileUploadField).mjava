@@ -1,0 +1,66 @@
+	/**
+	 * Constructor that will display the upload progress bar for submissions of the given form, that
+	 * include a file upload in the given file upload field; i.e. if the user did not select a file
+	 * in the given file upload field, the progess bar is not displayed.
+	 * 
+	 * @param id
+	 *            component id (not null)
+	 * @param form
+	 *            form that is submitted (not null)
+	 * @param fileUploadField
+	 *            the file upload field to check for a file upload, or null to display the upload
+	 *            field for every submit of the given form
+	 */
+	public UploadProgressBar(String id, final Form<?> form, final FileUploadField fileUploadField)
+	{
+		super(id);
+		setOutputMarkupId(true);
+		form.setOutputMarkupId(true);
+		if (fileUploadField != null)
+		{
+			fileUploadField.setOutputMarkupId(true);
+		}
+		setRenderBodyOnly(true);
+
+		add(JavascriptPackageResource.getHeaderContribution(JS));
+		ResourceReference css = getCss();
+		if (css != null)
+		{
+			add(CSSPackageResource.getHeaderContribution(css));
+		}
+
+		final WebMarkupContainer barDiv = new WebMarkupContainer("bar");
+		barDiv.setOutputMarkupId(true);
+		add(barDiv);
+
+		final WebMarkupContainer statusDiv = new WebMarkupContainer("status");
+		statusDiv.setOutputMarkupId(true);
+		add(statusDiv);
+
+		if (!(RequestCycle.get().getRequest() instanceof UploadWebRequest) &&
+			!(RequestCycle.get().getRequest() instanceof MultipartRequest))
+		{
+			log.warn("UploadProgressBar will not work without an UploadWebRequest. See the javadoc for details.");
+		}
+
+		form.add(new AttributeModifier("onsubmit", true, new Model<String>()
+		{
+
+			private static final long serialVersionUID = 1L;
+
+
+			@Override
+			public String getObject()
+			{
+				ResourceReference ref = new ResourceReference(RESOURCE_NAME);
+
+				String fileUploadFieldMarkupId = fileUploadField == null ? ""
+					: fileUploadField.getMarkupId();
+				return "var def=new Wicket.WUPB.Def('" + form.getMarkupId() + "', '" +
+					statusDiv.getMarkupId() + "', '" + barDiv.getMarkupId() + "', '" +
+					getPage().urlFor(ref) + "','" + fileUploadFieldMarkupId +
+					"'); Wicket.WUPB.start(def);";
+			}
+		}));
+	}
+
