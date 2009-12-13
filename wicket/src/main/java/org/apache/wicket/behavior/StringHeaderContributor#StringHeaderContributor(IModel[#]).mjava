@@ -2,10 +2,15 @@
 	 * Construct.
 	 * 
 	 * @param contribution
-	 *            header contribution as a model that returns a plain string
+	 *            The contribution as a model that returns a plain string
 	 */
-	public StringHeaderContributor(IModel<?> contribution)
+	public StringHeaderContributor(final IModel<?> contribution)
 	{
-		contributor = new StringContributor(contribution);
+		if (contribution == null)
+		{
+			throw new IllegalArgumentException("argument contribition must be not null");
+		}
+
+		this.contribution = contribution;
 	}
 

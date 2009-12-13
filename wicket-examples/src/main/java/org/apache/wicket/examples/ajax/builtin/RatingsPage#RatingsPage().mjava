@@ -3,24 +3,25 @@
 	 */
 	public RatingsPage()
 	{
-		add(new RatingPanel("rating1", new PropertyModel<Integer>(rating1, "rating"), 5, new PropertyModel<Integer>(
-				rating1, "nrOfVotes"), true)
+		add(new RatingPanel("rating1", new PropertyModel<Integer>(rating1, "rating"), 5,
+			new PropertyModel<Integer>(rating1, "nrOfVotes"), true)
 		{
 			@Override
-			protected boolean onIsStarActive(int star)
+			public boolean onIsStarActive(int star)
 			{
 				return RatingsPage.rating1.isActive(star);
 			}
 
 			@Override
-			protected void onRated(int rating, AjaxRequestTarget target)
+			public void onRated(int rating, AjaxRequestTarget target)
 			{
 				RatingsPage.rating1.addRating(rating);
 			}
 		});
+
 		add(new RatingPanel("rating2", new PropertyModel<Integer>(rating2, "rating"),
-							new Model<Integer>(5), new PropertyModel<Integer>(rating2, "nrOfVotes"),
-							new PropertyModel<Boolean>(this, "hasVoted"), true)
+			new Model<Integer>(5), new PropertyModel<Integer>(rating2, "nrOfVotes"),
+			new PropertyModel<Boolean>(this, "hasVoted"), true)
 		{
 			@Override
 			protected String getActiveStarUrl(int iteration)
@@ -35,13 +36,13 @@
 			}
 
 			@Override
-			protected boolean onIsStarActive(int star)
+			public boolean onIsStarActive(int star)
 			{
 				return RatingsPage.rating2.isActive(star);
 			}
 
 			@Override
-			protected void onRated(int rating, AjaxRequestTarget target)
+			public void onRated(int rating, AjaxRequestTarget target)
 			{
 				// make sure the user can't vote again
 				hasVoted = Boolean.TRUE;
