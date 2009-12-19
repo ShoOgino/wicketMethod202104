@@ -1,0 +1,18 @@
+		/**
+		 * 
+		 * @param s
+		 * @throws IOException
+		 */
+		private void writeObject(final ObjectOutputStream s) throws IOException
+		{
+			s.defaultWriteObject();
+
+			// prepare for serialization and store the pages
+			List<Serializable> l = new ArrayList<Serializable>();
+			for (IManageablePage p : pages)
+			{
+				l.add(getPageStore().prepareForSerialization(sessionId, p));
+			}
+			s.writeObject(l);
+		}
+

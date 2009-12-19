@@ -1,0 +1,17 @@
+		/**
+		 * @see org.apache.wicket.pageStore.RequestAdapter#storeTouchedPages(java.util.List)
+		 */
+		@Override
+		protected void storeTouchedPages(final List<IManageablePage> touchedPages)
+		{
+			if (!touchedPages.isEmpty())
+			{
+				SessionEntry entry = getSessionEntry(true);
+				entry.setPages(touchedPages);
+				for (IManageablePage page : touchedPages)
+				{
+					pageStore.storePage(getSessionId(), page);
+				}
+			}
+		}
+

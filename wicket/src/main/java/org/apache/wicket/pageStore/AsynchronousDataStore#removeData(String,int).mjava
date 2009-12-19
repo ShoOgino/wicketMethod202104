@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.pageStore.IDataStore#removeData(java.lang.String, int)
+	 */
+	public void removeData(final String sessionId, final int id)
+	{
+		synchronized (WRITE_LOCK)
+		{
+			String key = getKey(sessionId, id);
+			if (key != null)
+			{
+				entryMap.remove(key);
+			}
+			Entry entry = entryMap.get(key);
+			if (entry != null)
+			{
+				entries.remove(entry);
+			}
+		}
+		dataStore.removeData(sessionId, id);
+	}
+

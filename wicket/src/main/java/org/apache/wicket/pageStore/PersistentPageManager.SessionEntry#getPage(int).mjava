@@ -1,0 +1,27 @@
+		/**
+		 * 
+		 * @param id
+		 * @return manageable page
+		 */
+		public synchronized IManageablePage getPage(int id)
+		{
+			// check if pages are in deserialized state
+			if (afterReadObject != null && afterReadObject.isEmpty() == false)
+			{
+				convertAfterReadObjects();
+			}
+
+			// try to find page with same id
+			if (pages != null)
+			{
+				IManageablePage page = findPage(id);
+				if (page != null)
+				{
+					return page;
+				}
+			}
+
+			// not found, ask pagestore for the page
+			return getPageStore().getPage(sessionId, id);
+		}
+

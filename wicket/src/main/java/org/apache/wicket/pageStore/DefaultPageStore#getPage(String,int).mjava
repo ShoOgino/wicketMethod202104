@@ -1,0 +1,19 @@
+	/**
+	 * @see org.apache.wicket.pageStore.IPageStore#getPage(java.lang.String, int)
+	 */
+	public IManageablePage getPage(final String sessionId, final int id)
+	{
+		SerializedPage fromCache = serializedPagesCache.getPage(sessionId, id);
+		if (fromCache != null)
+		{
+			return deserializePage(fromCache.data);
+		}
+
+		byte[] data = getPageData(sessionId, id);
+		if (data != null)
+		{
+			return deserializePage(data);
+		}
+		return null;
+	}
+

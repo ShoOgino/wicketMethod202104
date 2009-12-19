@@ -1,0 +1,14 @@
+	/**
+	 * @see org.apache.wicket.pageStore.IDataStore#getData(java.lang.String, int)
+	 */
+	public byte[] getData(final String sessionId, final int id)
+	{
+		SessionEntry sessionEntry = getSessionEntry(sessionId, false);
+		if (sessionEntry == null)
+		{
+			return null;
+		}
+
+		return sessionEntry.loadPage(id);
+	}
+

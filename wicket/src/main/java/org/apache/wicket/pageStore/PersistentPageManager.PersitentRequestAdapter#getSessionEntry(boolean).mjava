@@ -1,0 +1,24 @@
+		/**
+		 * 
+		 * @param create
+		 * @return Session Entry
+		 */
+		private SessionEntry getSessionEntry(boolean create)
+		{
+			SessionEntry entry = (SessionEntry)getSessionAttribute(ATTRIBUTE_NAME);
+			if (entry == null && create)
+			{
+				bind();
+				entry = new SessionEntry(applicationName, getSessionId());
+			}
+			if (entry != null)
+			{
+				synchronized (entry)
+				{
+					setSessionAttribute(ATTRIBUTE_NAME, null);
+					setSessionAttribute(ATTRIBUTE_NAME, entry);
+				}
+			}
+			return entry;
+		}
+

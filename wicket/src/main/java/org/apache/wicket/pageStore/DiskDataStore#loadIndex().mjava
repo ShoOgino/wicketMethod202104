@@ -1,0 +1,34 @@
+	/**
+	 * Load the index
+	 */
+	@SuppressWarnings("unchecked")
+	private void loadIndex()
+	{
+		File storeFolder = getStoreFolder();
+		File index = new File(storeFolder, INDEX_FILE_NAME);
+		if (index.exists() && index.length() > 0)
+		{
+			try
+			{
+				InputStream stream = new FileInputStream(index);
+				ObjectInputStream ois = new ObjectInputStream(stream);
+				Map<String, SessionEntry> map = (Map<String, SessionEntry>)ois.readObject();
+				sessionEntryMap.clear();
+				sessionEntryMap.putAll(map);
+
+				for (Entry<String, SessionEntry> entry : sessionEntryMap.entrySet())
+				{
+					// initialize the diskPageStore reference
+					SessionEntry sessionEntry = entry.getValue();
+					sessionEntry.diskDataStore = this;
+				}
+				stream.close();
+			}
+			catch (Exception e)
+			{
+				log.error("Couldn't load DiskDataStore index from file " + index + ".", e);
+			}
+		}
+		index.delete();
+	}
+

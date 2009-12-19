@@ -1,0 +1,38 @@
+		/**
+		 * Saves the serialized page to appropriate file.
+		 * 
+		 * @param pageId
+		 * @param data
+		 */
+		public synchronized void savePage(int pageId, byte data[])
+		{
+			if (unbound)
+			{
+				return;
+			}
+			// only save page that has some data
+			if (data != null)
+			{
+				// allocate window for page
+				PageWindow window = getManager().createPageWindow(pageId, data.length);
+
+				// take the filechannel from the pool
+				FileChannel channel = diskDataStore.fileChannelPool.getFileChannel(getFileName(),
+					true);
+				try
+				{
+					// write the content
+					channel.write(ByteBuffer.wrap(data), window.getFilePartOffset());
+				}
+				catch (IOException e)
+				{
+					log.error("Error writing to a channel " + channel, e);
+				}
+				finally
+				{
+					// return the "borrowed" file channel
+					diskDataStore.fileChannelPool.returnFileChannel(channel);
+				}
+			}
+		}
+

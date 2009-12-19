@@ -1,0 +1,15 @@
+	/**
+	 * 
+	 * @param sessionId
+	 * @param page
+	 * @return the serialized page information
+	 */
+	protected SerializedPage serializePage(final String sessionId, final IManageablePage page)
+	{
+		Checks.argumentNotNull(sessionId, "sessionId");
+		Checks.argumentNotNull(page, "page");
+
+		byte data[] = Objects.objectToByteArray(page, applicationName);
+		return new SerializedPage(sessionId, page.getPageId(), data);
+	}
+

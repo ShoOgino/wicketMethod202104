@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.pageStore.IDataStore#storeData(java.lang.String, int, byte[])
+	 */
+	public void storeData(final String sessionId, final int id, final byte[] data)
+	{
+		if (entryMap.size() > getMaxQueuedEntries())
+		{
+			dataStore.storeData(sessionId, id, data);
+		}
+		else
+		{
+			Entry entry = new Entry(sessionId, id, data);
+			entryMap.put(getKey(sessionId, id), entry);
+			entries.add(entry);
+			synchronized (entries)
+			{
+				entries.notify();
+			}
+		}
+	}
+

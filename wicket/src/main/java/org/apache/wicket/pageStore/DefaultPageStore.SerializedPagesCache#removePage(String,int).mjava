@@ -1,0 +1,30 @@
+		/**
+		 * 
+		 * @param sessionId
+		 * @param id
+		 * @return
+		 */
+		public SerializedPage removePage(final String sessionId, final int id)
+		{
+			Checks.argumentNotNull(sessionId, "sessionId");
+
+			if (size > 0)
+			{
+				synchronized (cache)
+				{
+					for (Iterator<SoftReference<SerializedPage>> i = cache.iterator(); i.hasNext();)
+					{
+						SoftReference<SerializedPage> ref = i.next();
+						SerializedPage entry = ref.get();
+						if (entry != null && entry.getPageId() == id &&
+							entry.getSessionId().equals(sessionId))
+						{
+							i.remove();
+							return entry;
+						}
+					}
+				}
+			}
+			return null;
+		}
+

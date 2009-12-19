@@ -1,0 +1,24 @@
+		/**
+		 * 
+		 * @param s
+		 * @throws IOException
+		 * @throws ClassNotFoundException
+		 */
+		@SuppressWarnings("unchecked")
+		private void readObject(final ObjectInputStream s) throws IOException,
+			ClassNotFoundException
+		{
+			s.defaultReadObject();
+
+			afterReadObject = new ArrayList<Object>();
+
+			List<Serializable> l = (List<Serializable>)s.readObject();
+
+			// convert to temporary state after deserialization (will need to be processed
+			// by convertAfterReadObject before the pages can be accessed)
+			for (Serializable ser : l)
+			{
+				afterReadObject.add(getPageStore().restoreAfterSerialization(ser));
+			}
+		}
+
