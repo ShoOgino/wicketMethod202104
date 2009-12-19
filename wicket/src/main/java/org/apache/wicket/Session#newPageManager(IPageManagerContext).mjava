@@ -1,0 +1,20 @@
+	/**
+	 * Create a new page manager on each call. By default a PeristentPageManager with a new
+	 * DiskDataStore and new DefaultPageStore.
+	 * 
+	 * @see #getPageManager()
+	 * 
+	 * @param context
+	 *            the page manager context
+	 * @return a new page manager
+	 */
+	protected IPageManager newPageManager(final IPageManagerContext context)
+	{
+		String name = Application.get().getName();
+		int cacheSize = 40;
+		int fileChannelPoolCapacity = 50;
+		IDataStore dataStore = new DiskDataStore(name, 1000000, fileChannelPoolCapacity);
+		IPageStore pageStore = new DefaultPageStore(name, dataStore, cacheSize);
+		return new PersistentPageManager(name, pageStore, context);
+	}
+

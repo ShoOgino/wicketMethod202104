@@ -1,0 +1,46 @@
+	/**
+	 * Executes the specified {@link IRequestHandler}. When the specified {@link IRequestHandler}
+	 * finishes, the {@link IRequestHandler} that invoked this method continues (unless the new
+	 * {@link IRequestHandler} called {@link #replaceAllRequestHandlers(IRequestHandler)}.
+	 * 
+	 * @param handler
+	 */
+	public void executeRequestHandler(IRequestHandler handler)
+	{
+		final boolean first = requestHandlers.isEmpty();
+		requestHandlers.add(handler);
+
+		IRequestHandler replacementHandler = null;
+		Response originalResponse = response;
+		try
+		{
+			handler.respond(getRequestCycle());
+		}
+		catch (ReplaceHandlerException exception)
+		{
+			if (exception.removeAll && !first)
+			{
+				throw exception;
+			}
+			replacementHandler = exception.replacementRequestHandler;
+		}
+		finally
+		{
+			response = originalResponse;
+			requestHandlers.poll();
+			inactiveRequestHandlers.add(handler);
+		}
+
+		IRequestHandler scheduled = scheduledAfterCurrent;
+		scheduledAfterCurrent = null;
+
+		if (replacementHandler != null)
+		{
+			executeRequestHandler(replacementHandler);
+		}
+		else if (scheduled != null)
+		{
+			executeRequestHandler(scheduled);
+		}
+	}
+

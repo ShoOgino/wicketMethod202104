@@ -1,0 +1,14 @@
+	/**
+	 * Convenience method for setting next page to be rendered.
+	 * 
+	 * @param pageClass
+	 * @param parameters
+	 */
+	public void setResponsePage(Class<? extends IRequestablePage> pageClass,
+		PageParametersNg parameters)
+	{
+		IPageProvider provider = new DefaultPageProvider(pageClass, parameters);
+		scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(provider,
+			RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
+	}
+

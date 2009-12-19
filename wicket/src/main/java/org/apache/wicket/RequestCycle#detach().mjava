@@ -83,7 +83,8 @@
 		{
 			try
 			{
-				((BufferedWebResponse)getResponse()).filter();
+				BufferedWebResponse response = (BufferedWebResponse)getResponse();
+				response.filter();
 			}
 			catch (RuntimeException re)
 			{
@@ -109,7 +110,11 @@
 			log.error("Exception occurred during onEndRequest of the SessionStore", e);
 		}
 
-		getApplication().getPageManager().commitRequest();
+		Session session = getSession();
+		if (session != null)
+		{
+			session.getPageManager().commitRequest();
+		}
 
 		// Release thread local resources
 		try

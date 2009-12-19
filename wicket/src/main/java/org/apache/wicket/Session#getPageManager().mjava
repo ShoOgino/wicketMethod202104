@@ -1,6 +1,16 @@
-	public PageManager getPageManager()
+	/**
+	 * Returns the {@link IPageManager} instance.
+	 * 
+	 * @see #newPageManager()
+	 * 
+	 * @return {@link IPageManager} instance.
+	 */
+	public final IPageManager getPageManager()
 	{
-		// TODO. Later page manager should be refactored to be session specific
-		return Application.get().getPageManager();
+		if (pageManager == null)
+		{
+			pageManager = newPageManager(new DefaultPageManagerContext());
+		}
+		return pageManager;
 	}
 
