@@ -94,24 +94,25 @@
 		// encoding type-specific
 		switch (type)
 		{
-		// this code consistent with java.net.URLEncoder version
-		case QUERY:
-			dontNeedEncoding.set(' '); /*
-										 * encoding a space to a + is done in the encode() method
-										 */
-			dontNeedEncoding.set('/'); // to allow direct passing of URL in query
-			dontNeedEncoding.set('?'); // to allow direct passing of URL in query
-			break;
+			// this code consistent with java.net.URLEncoder version
+			case QUERY :
+				dontNeedEncoding.set(' '); /*
+											 * encoding a space to a + is done in the encode()
+											 * method
+											 */
+				dontNeedEncoding.set('/'); // to allow direct passing of URL in query
+				dontNeedEncoding.set('?'); // to allow direct passing of URL in query
+				break;
 
-		// this added to deal with encoding a PATH component
-		case PATH:
-			// encode ' ' with a % instead of + in path portion
+			// this added to deal with encoding a PATH component
+			case PATH :
+				// encode ' ' with a % instead of + in path portion
 
-			// path component sub-delim values we do not need to escape
-			dontNeedEncoding.set('&');
-			dontNeedEncoding.set('=');
-			dontNeedEncoding.set('+');
-			break;
+				// path component sub-delim values we do not need to escape
+				dontNeedEncoding.set('&');
+				dontNeedEncoding.set('=');
+				dontNeedEncoding.set('+');
+				break;
 		}
 	}
 
