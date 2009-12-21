@@ -6,6 +6,17 @@
 	 */
 	public void invalidate()
 	{
+		if (sessionInvalidated == false)
+		{
+			RequestCycle.get().register(new RequestCycle.DetachCallback()
+			{
+				public void onDetach(final RequestCycle requestCycle)
+				{
+					destroy();
+				}
+			});
+		}
+
 		sessionInvalidated = true;
 	}
 

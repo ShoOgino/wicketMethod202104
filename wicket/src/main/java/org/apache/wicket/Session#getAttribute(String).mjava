@@ -9,20 +9,19 @@
 	// revert
 	public final Serializable getAttribute(final String name)
 	{
-		// TODO WICKET-NG remove serializable casts, maps should be <string,serializable>
 		if (!isTemporary())
 		{
 			RequestCycle cycle = RequestCycle.get();
 			if (cycle != null)
 			{
-				return (Serializable)getSessionStore().getAttribute(cycle.getRequest(), name);
+				return getSessionStore().getAttribute(cycle.getRequest(), name);
 			}
 		}
 		else
 		{
 			if (temporarySessionAttributes != null)
 			{
-				return (Serializable)temporarySessionAttributes.get(name);
+				return temporarySessionAttributes.get(name);
 			}
 		}
 		return null;
