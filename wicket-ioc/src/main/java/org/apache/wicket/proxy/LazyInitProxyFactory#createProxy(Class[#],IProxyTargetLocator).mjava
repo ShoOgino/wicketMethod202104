@@ -10,9 +10,9 @@
 	 * 
 	 * @return lazily initializable proxy
 	 */
-	public static Object createProxy(Class< ? > type, IProxyTargetLocator locator)
+	public static Object createProxy(final Class<?> type, final IProxyTargetLocator locator)
 	{
-		if (PRIMITIVES.contains(type))
+		if (PRIMITIVES.contains(type) || Enum.class.isAssignableFrom(type))
 		{
 			// We special-case primitives as sometimes people use these as
 			// SpringBeans (WICKET-603, WICKET-906). Go figure.
