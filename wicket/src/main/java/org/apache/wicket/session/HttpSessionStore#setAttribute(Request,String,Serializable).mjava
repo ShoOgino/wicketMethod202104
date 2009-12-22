@@ -1,0 +1,28 @@
+	/**
+	 * @see org.apache.wicket.session.ISessionStore#setAttribute(org.apache.wicket.Request,
+	 *      java.lang.String, java.io.Serializable)
+	 */
+	public final void setAttribute(final Request request, final String name,
+		final Serializable value)
+	{
+		// ignore call if the session was marked invalid
+		HttpSession httpSession = getHttpSession(request, false);
+		if (httpSession != null)
+		{
+			String attributeName = getSessionAttributePrefix(request) + name;
+			IRequestLogger logger = Application.get().getRequestLogger();
+			if (logger != null)
+			{
+				if (httpSession.getAttribute(attributeName) == null)
+				{
+					logger.objectCreated(value);
+				}
+				else
+				{
+					logger.objectUpdated(value);
+				}
+			}
+			httpSession.setAttribute(attributeName, value);
+		}
+	}
+

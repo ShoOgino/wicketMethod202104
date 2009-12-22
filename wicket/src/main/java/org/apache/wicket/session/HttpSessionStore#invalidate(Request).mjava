@@ -1,0 +1,13 @@
+	/**
+	 * @see org.apache.wicket.session.ISessionStore#invalidate(Request)
+	 */
+	public final void invalidate(final Request request)
+	{
+		HttpSession httpSession = getHttpSession(request, false);
+		if (httpSession != null)
+		{
+			// tell the app server the session is no longer valid
+			httpSession.invalidate();
+		}
+	}
+

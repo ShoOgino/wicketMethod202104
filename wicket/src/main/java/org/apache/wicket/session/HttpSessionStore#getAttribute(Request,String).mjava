@@ -1,0 +1,14 @@
+	/**
+	 * @see org.apache.wicket.session.ISessionStore#getAttribute(org.apache.wicket.Request,
+	 *      java.lang.String)
+	 */
+	public final Serializable getAttribute(final Request request, final String name)
+	{
+		HttpSession httpSession = getHttpSession(request, false);
+		if (httpSession != null)
+		{
+			return (Serializable)httpSession.getAttribute(getSessionAttributePrefix(request) + name);
+		}
+		return null;
+	}
+

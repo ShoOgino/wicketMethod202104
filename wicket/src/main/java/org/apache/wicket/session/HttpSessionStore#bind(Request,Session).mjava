@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.session.ISessionStore#bind(Request, Session)
+	 */
+	public final void bind(final Request request, final Session newSession)
+	{
+		if (getAttribute(request, SESSION_ATTRIBUTE_NAME) != newSession)
+		{
+			// call template method
+			onBind(request, newSession);
+
+			HttpSession httpSession = getHttpSession(request, false);
+
+			// register an unbinding listener for cleaning up
+			String applicationKey = Application.get().getName();
+			httpSession.setAttribute("Wicket:SessionUnbindingListener-" + applicationKey,
+				new SessionBindingListener(applicationKey, httpSession.getId()));
+
+			// register the session object itself
+			setAttribute(request, SESSION_ATTRIBUTE_NAME, newSession);
+		}
+	}
+
