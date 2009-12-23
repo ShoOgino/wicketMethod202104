@@ -4,7 +4,7 @@
 	 * @param url
 	 * @return Url rendered as string
 	 */
-	public String renderUrl(Url url)
+	public String renderUrl(final Url url)
 	{
 		Checks.argumentNotNull(url, "url");
 
@@ -18,11 +18,11 @@
 			List<String> urlSegments = new ArrayList<String>(url.getSegments());
 
 			List<String> newSegments = new ArrayList<String>();
-			
+
 			int common = 0;
-			
+
 			String last = null;
-			
+
 			for (String s : baseUrlSegments)
 			{
 				if (!urlSegments.isEmpty() && s.equals(urlSegments.get(0)))
@@ -31,14 +31,14 @@
 					last = urlSegments.remove(0);
 				}
 			}
-			
+
 			// we want the new URL to have at least one segment (other than possible ../)
 			if (last != null && (urlSegments.isEmpty() || baseUrlSegments.size() == common))
 			{
 				--common;
 				urlSegments.add(0, last);
 			}
-			
+
 			for (int i = common + 1; i < baseUrlSegments.size(); ++i)
 			{
 				newSegments.add("..");
