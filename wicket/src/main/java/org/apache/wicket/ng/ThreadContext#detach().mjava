@@ -1,8 +1,12 @@
 	/**
-	 * Cleans the thread local state.
+	 * Cleans the {@link ThreadContext} and returns previous context.
+	 * 
+	 * @return old {@link ThreadContext}
 	 */
-	public static void detach()
+	public static ThreadContext detach()
 	{
+		ThreadContext value = threadLocal.get();
 		threadLocal.remove();
+		return value;
 	}
 
