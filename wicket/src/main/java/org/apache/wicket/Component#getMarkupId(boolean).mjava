@@ -21,7 +21,6 @@
 	public String getMarkupId(boolean createIfDoesNotExist)
 	{
 		Object storedMarkupId = getMarkupIdImpl();
-
 		if (storedMarkupId instanceof String)
 		{
 			return (String)storedMarkupId;
@@ -40,12 +39,6 @@
 			setMarkupIdImpl(new Integer(generatedMarkupId));
 		}
 
-		// try to read from markup
-		// TODO getting the id from markup doesn't work everywhere yet.
-		// unfortunately, we have to drop this until we have a good solution
-		// for issue http://issues.apache.org/jira/browse/WICKET-694
-		// markupId = getMarkupAttributes().getString("id");
-
 		String markupIdPrefix = "id";
 		if (!Application.get().getConfigurationType().equals(Application.DEPLOYMENT))
 		{
@@ -58,8 +51,8 @@
 		markupIdPostfix = RequestContext.get().encodeMarkupId(markupIdPostfix);
 
 		String markupId = markupIdPrefix + markupIdPostfix;
-		// make sure id is compliant with w3c requirements (starts with a
-		// letter)
+
+		// make sure id is compliant with w3c requirements (starts with a letter)
 		char c = markupId.charAt(0);
 		if (!Character.isLetter(c))
 		{
