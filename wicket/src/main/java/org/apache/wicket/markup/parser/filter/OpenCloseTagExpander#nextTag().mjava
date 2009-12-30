@@ -25,15 +25,15 @@
 				name = tag.getNamespace() + ":" + tag.getName();
 			}
 
-			if (replaceForTags.contains(name.toLowerCase()))
+			if (contains(name))
 			{
-				tag.setType(XmlTag.OPEN);
-				tag.setModified(true);
-
-				next = new ComponentTag(tag.getName(), XmlTag.CLOSE);
-				next.setNamespace(tag.getNamespace());
-				next.setOpenTag(tag);
-				next.setModified(true);
+				if (onFound(tag))
+				{
+					next = new ComponentTag(tag.getName(), XmlTag.CLOSE);
+					next.setNamespace(tag.getNamespace());
+					next.setOpenTag(tag);
+					next.setModified(true);
+				}
 			}
 		}
 		return tag;
