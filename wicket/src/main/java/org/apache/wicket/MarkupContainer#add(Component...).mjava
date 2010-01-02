@@ -34,7 +34,13 @@
 			// Check if the markup is available after the child has been added to the parent
 			try
 			{
-				if ((getParent() != null) && (child.getMarkup() != null))
+				// If not yet triggered, than do now (e.g. Pages)
+				if (getMarkup() != null)
+				{
+					internalOnMarkupAttached();
+				}
+
+				if (child.getMarkup() != null)
 				{
 					child.internalOnMarkupAttached();
 
