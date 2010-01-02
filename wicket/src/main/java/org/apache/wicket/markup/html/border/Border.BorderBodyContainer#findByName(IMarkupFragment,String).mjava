@@ -1,0 +1,45 @@
+		/**
+		 * Search for &lt;wicket:'name' ...&gt; on the same level, but ignoring other "transparent"
+		 * tags such as &lt;wicket:enclosure&gt; etc.
+		 * 
+		 * @param markup
+		 * @param name
+		 * @return null, if not found
+		 */
+		private final IMarkupFragment findByName(final IMarkupFragment markup, final String name)
+		{
+			Checks.argumentNotEmpty(name, "name");
+
+			MarkupStream stream = new MarkupStream(markup);
+
+			// Skip any raw markup
+			stream.skipUntil(ComponentTag.class);
+
+			// Skip <wicket:border>
+			stream.next();
+
+			while (stream.skipUntil(ComponentTag.class))
+			{
+				ComponentTag tag = stream.getTag();
+				if (tag.isOpen() || tag.isOpenClose())
+				{
+					if (tag instanceof WicketTag)
+					{
+						WicketTag wtag = (WicketTag)tag;
+						if (wtag.isBodyTag())
+						{
+							return stream.getMarkupFragment();
+						}
+					}
+					if (tag.isOpen() && !tag.hasNoCloseTag() && !(tag instanceof WicketTag))
+					{
+						stream.skipToMatchingCloseTag(tag);
+					}
+				}
+
+				stream.next();
+			}
+
+			return null;
+		}
+
