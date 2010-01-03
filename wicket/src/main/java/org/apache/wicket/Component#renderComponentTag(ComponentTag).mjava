@@ -5,8 +5,9 @@
 	 * 
 	 * @param tag
 	 *            The tag to write
+	 * @return true, if tag was rendered
 	 */
-	protected final void renderComponentTag(ComponentTag tag)
+	protected final boolean renderComponentTag(ComponentTag tag)
 	{
 		if (needToRenderTag(tag))
 		{
@@ -45,6 +46,10 @@
 			// Write the tag
 			tag.writeOutput(getResponse(), !needToRenderTag(null),
 				getMarkup().getMarkupResourceStream().getWicketNamespace());
+
+			return true;
 		}
+
+		return false;
 	}
 
