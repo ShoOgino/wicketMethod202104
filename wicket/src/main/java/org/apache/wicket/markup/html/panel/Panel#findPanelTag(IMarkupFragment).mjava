@@ -1,6 +1,5 @@
 	/**
-	 * Search for &lt;wicket:'name' ...&gt; on the same level, but ignoring other "transparent" tags
-	 * such as &lt;wicket:enclosure&gt; etc.
+	 * Search for &lt;wicket:panel ...&gt; on the same level.
 	 * 
 	 * @param markup
 	 * @param name
@@ -23,10 +22,7 @@
 						return stream.getMarkupFragment();
 					}
 				}
-				if (tag.isOpen() && !tag.hasNoCloseTag() && !(tag instanceof WicketTag))
-				{
-					stream.skipToMatchingCloseTag(tag);
-				}
+				stream.skipToMatchingCloseTag(tag);
 			}
 
 			stream.next();
