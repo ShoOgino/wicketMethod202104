@@ -1,0 +1,22 @@
+	/**
+	 * Copied from {@link BookmarkablePageRequestTargetUrlCodingStrategy#encode(IRequestHandler)}
+	 * without pageMapName field
+	 * 
+	 * @see org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy#encode(org.apache.wicket.IRequestHandler)
+	 */
+	public CharSequence encode(IRequestHandler requestTarget)
+	{
+		if (!(requestTarget instanceof IBookmarkablePageRequestTarget))
+		{
+			throw new IllegalArgumentException("This encoder can only be used with " +
+				"instances of " + IBookmarkablePageRequestTarget.class.getName());
+		}
+		final AppendingStringBuffer url = new AppendingStringBuffer(40);
+		url.append(getMountPath());
+		final IBookmarkablePageRequestTarget target = (IBookmarkablePageRequestTarget)requestTarget;
+
+		PageParameters pageParameters = target.getPageParameters();
+		appendParameters(url, pageParameters);
+		return url;
+	}
+

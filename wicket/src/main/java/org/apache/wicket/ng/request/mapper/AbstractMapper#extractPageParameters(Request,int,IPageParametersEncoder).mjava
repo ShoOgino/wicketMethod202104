@@ -1,6 +1,5 @@
 	/**
-	 * Extracts {@link PageParametersNg} from the URL using the given {@link IPageParametersEncoder}
-	 * .
+	 * Extracts {@link PageParameters} from the URL using the given {@link IPageParametersEncoder} .
 	 * 
 	 * @param request
 	 * @param segmentsToSkip
@@ -9,7 +8,7 @@
 	 * @param encoder
 	 * @return PageParameters instance
 	 */
-	protected PageParametersNg extractPageParameters(Request request, int segmentsToSkip,
+	protected PageParameters extractPageParameters(Request request, int segmentsToSkip,
 		IPageParametersEncoder encoder)
 	{
 		Checks.argumentNotNull(request, "request");
@@ -29,7 +28,7 @@
 			urlCopy.getQueryParameters().remove(0);
 		}
 
-		PageParametersNg decoded = encoder.decodePageParameters(request.requestWithUrl(urlCopy));
-		return decoded != null ? decoded : new PageParametersNg();
+		PageParameters decoded = encoder.decodePageParameters(request.requestWithUrl(urlCopy));
+		return decoded != null ? decoded : new PageParameters();
 	}
 

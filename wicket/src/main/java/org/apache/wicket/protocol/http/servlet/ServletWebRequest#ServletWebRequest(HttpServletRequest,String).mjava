@@ -9,29 +9,10 @@
 	public ServletWebRequest(HttpServletRequest httpServletRequest, String filterPrefix)
 	{
 		Checks.argumentNotNull(httpServletRequest, "httpServletRequest");
-		// TODO WICKET-NG reenable once sorted
-		// Checks.argumentNotNull(filterPrefix, "filterPrefix");
+		Checks.argumentNotNull(filterPrefix, "filterPrefix");
 
-		url = (filterPrefix != null) ? getUrl(httpServletRequest, filterPrefix) : null;
+		url = getUrl(httpServletRequest, filterPrefix);
 		this.httpServletRequest = httpServletRequest;
-
-		ajax = false;
-		String ajaxHeader = httpServletRequest.getHeader("Wicket-Ajax");
-
-		if (Strings.isEmpty(ajaxHeader))
-			ajaxHeader = httpServletRequest.getParameter("wicket:ajax");
-
-		if (Strings.isEmpty(ajaxHeader) == false)
-		{
-			try
-			{
-				ajax = Strings.isTrue(ajaxHeader);
-			}
-			catch (StringValueConversionException e)
-			{
-				// We are not interested in this exception but we log it anyway
-				log.debug("Couldn't convert the Wicket-Ajax header: " + ajaxHeader);
-			}
-		}
+		this.filterPrefix = filterPrefix;
 	}
 

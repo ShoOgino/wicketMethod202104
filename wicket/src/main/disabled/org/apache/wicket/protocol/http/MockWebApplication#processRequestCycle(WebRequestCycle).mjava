@@ -1,0 +1,25 @@
+	/**
+	 * Create and process the request cycle using the current request and response information.
+	 * 
+	 * @param cycle
+	 */
+	public void processRequestCycle(WebRequestCycle cycle)
+	{
+		try
+		{
+			cycle.request();
+			if (cycle.wasHandled() == false)
+			{
+				cycle.setRequestTarget(new WebErrorCodeResponseHandler(
+					HttpServletResponse.SC_NOT_FOUND));
+			}
+			cycle.detach();
+			createRequestCycle();
+		}
+		finally
+		{
+			cycle.getResponse().close();
+		}
+		postProcessRequestCycle(cycle);
+	}
+

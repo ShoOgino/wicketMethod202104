@@ -1,0 +1,43 @@
+	/**
+	 * FIXME javadoc - what's special about this implementation?
+	 * 
+	 * @see org.apache.wicket.IRequestHandler#respond(org.apache.wicket.RequestCycle)
+	 */
+	public void respond(RequestCycle requestCycle)
+	{
+		WebResponse response = (WebResponse)requestCycle.getResponse();
+
+		if (redirectUrl.startsWith("/"))
+		{
+			// context-absolute url
+
+			RequestContext rc = RequestContext.get();
+			if (rc.isPortletRequest() && ((PortletRequestContext)rc).isEmbedded())
+			{
+				response.sendRedirect(redirectUrl);
+			}
+			else
+			{
+				String location = UrlUtils.rewriteToContextRelative(redirectUrl.substring(1),
+					requestCycle.getRequest());
+
+				// IE does not understand "./" in a path, just "." is okay.
+				if (location.startsWith("./"))
+				{
+					location = location.length() == 2 ? "." : location.substring(2);
+				}
+				response.sendRedirect(location);
+			}
+		}
+		else if (redirectUrl.contains("://"))
+		{
+			// absolute url
+			response.sendRedirect(redirectUrl);
+		}
+		else
+		{
+			// relative url
+			response.sendRedirect(redirectUrl);
+		}
+	}
+

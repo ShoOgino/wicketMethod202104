@@ -1,15 +1,13 @@
-	/**
-	 * Get the session for the calling thread.
-	 * 
-	 * @return Session for calling thread
-	 */
 	public static Session get()
 	{
-		Session session = current.get();
-		if (session == null)
+		Session session = ThreadContext.getSession();
+		if (session != null)
 		{
-			session = findOrCreate();
+			return session;
 		}
-		return session;
+		else
+		{
+			return Application.get().fetchCreateAndSetSession(RequestCycle.get());
+		}
 	}
 

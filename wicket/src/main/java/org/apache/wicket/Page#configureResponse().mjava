@@ -16,8 +16,8 @@
 	{
 		// Get the response and application
 		final RequestCycle cycle = getRequestCycle();
-		final Application application = cycle.getApplication();
-		final Response response = cycle.getResponse();
+		final Application application = Application.get();
+		final WebResponse response = (WebResponse)cycle.getResponse();
 
 		// Determine encoding
 		final String encoding = application.getRequestCycleSettings().getResponseRequestEncoding();
@@ -48,6 +48,7 @@
 		}
 
 		// Set response locale from session locale
-		response.setLocale(getSession().getLocale());
+		// TODO: NG Is this really necessary
+		// response.setLocale(getSession().getLocale());
 	}
 

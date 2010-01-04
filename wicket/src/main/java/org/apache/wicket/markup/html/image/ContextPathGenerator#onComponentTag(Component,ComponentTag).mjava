@@ -5,10 +5,8 @@
 		// get path
 		final String path = contextRelativePath.getObject();
 
-		final String rewritten = component.getRequestCycle()
-			.getProcessor()
-			.getRequestCodingStrategy()
-			.rewriteStaticRelativeUrl(path);
+		final String rewritten = UrlUtils.rewriteToContextRelative(path, RequestCycle.get()
+			.getRequest());
 
 		tag.put("src", rewritten);
 	}

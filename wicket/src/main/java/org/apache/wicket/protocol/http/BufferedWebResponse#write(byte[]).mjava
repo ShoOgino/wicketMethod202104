@@ -1,0 +1,22 @@
+	@Override
+	public void write(byte[] array)
+	{
+		if (builder != null)
+		{
+			throw new IllegalStateException(
+				"Can't call write(byte[]) after write(CharSequence) has been called.");
+		}
+		if (stream == null)
+		{
+			stream = new ByteArrayOutputStream(array.length);
+		}
+		try
+		{
+			stream.write(array);
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

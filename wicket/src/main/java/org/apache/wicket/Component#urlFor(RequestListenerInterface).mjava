@@ -7,6 +7,8 @@
 	 */
 	public final CharSequence urlFor(final RequestListenerInterface listener)
 	{
-		return getRequestCycle().urlFor(this, listener);
+		PageAndComponentProvider provider = new PageAndComponentProvider(getPage(), this);
+		IRequestHandler handler = new ListenerInterfaceRequestHandler(provider, listener);
+		return getRequestCycle().renderUrlFor(handler);
 	}
 

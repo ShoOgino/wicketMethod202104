@@ -1,7 +1,11 @@
 	/**
-	 * Is the request an ajax request?
+	 * Returns whether this request is an Ajax request. This implementation only checks for value of
+	 * wicket:ajax url parameter. Subclasses can use other approach.
 	 * 
-	 * @return True if the ajax is an ajax request. False if it's not.
+	 * @return <code>true</code> if this request is an ajax request, <code>false</code> otherwise.
 	 */
-	public abstract boolean isAjax();
+	public boolean isAjax()
+	{
+		return getRequestParameters().getParameterValue(PARAM_AJAX).toBoolean(false);
+	}
 

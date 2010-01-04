@@ -28,7 +28,11 @@
 		applicationKeyToApplication.put(applicationKey, this);
 
 		sessionStore = newSessionStore();
+		sessionStore.registerUnboundListener(this);
 		converterLocator = newConverterLocator();
+
+		pageManager = newPageManager(getPageManagerContext());
+		resourceReferenceRegistry = newResourceReferenceRegistry();
 
 		// set up default request mapper
 		setRootRequestMapper(new SystemMapper());
