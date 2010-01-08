@@ -8,7 +8,8 @@
 		{
 			// name contains the name of the selected file
 			if (Strings.isEmpty(name) &&
-				Strings.isEmpty(getPage().getRequest().getParameter(SOURCE)))
+				Strings.isEmpty(getPage().getRequest().getRequestParameters().getParameterValue(
+					SOURCE).toOptionalString()))
 			{
 				return "";
 			}
@@ -17,7 +18,10 @@
 			try
 			{
 				StringBuffer sb = new StringBuffer();
-				source = (name != null) ? name : getPage().getRequest().getParameter(SOURCE);
+				source = (name != null) ? name : getPage().getRequest()
+					.getRequestParameters()
+					.getParameterValue(SOURCE)
+					.toOptionalString();
 				InputStream resourceAsStream = getPageTargetClass().getResourceAsStream(source);
 				if (resourceAsStream == null)
 				{

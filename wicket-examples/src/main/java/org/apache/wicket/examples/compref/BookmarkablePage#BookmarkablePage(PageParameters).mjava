@@ -17,13 +17,14 @@
 		// never null, the check is not nescesarry. On the other hand... would
 		// you ever trust
 		// any API enough to just not check it at all?
-		if (pageParameters == null || pageParameters.getString("message") == null)
+		if (pageParameters == null ||
+			pageParameters.getNamedParameter("message").toOptionalString() == null)
 		{
 			message = "This is the default message";
 		}
 		else
 		{
-			message = pageParameters.getString("message");
+			message = pageParameters.getNamedParameter("message").toOptionalString();
 		}
 
 		// Add a label to display the message

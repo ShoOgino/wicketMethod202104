@@ -24,10 +24,15 @@
 	{
 		ResourceReference reference = getResourceReference(scope, name, locale, style, variation,
 			strict, false);
+
 		if (reference == null)
 		{
-			// TODO: Check the class static member for ResourceReferences and register those
+			scanner.scanClass(scope);
 		}
+
+		// try again, it might have been registered by scanner; create default one if necessary
+		reference = getResourceReference(scope, name, locale, style, variation, strict, true);
+
 		return reference;
 	}
 

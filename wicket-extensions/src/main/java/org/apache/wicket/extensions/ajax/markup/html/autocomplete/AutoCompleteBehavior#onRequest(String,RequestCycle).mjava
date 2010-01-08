@@ -13,7 +13,6 @@
 				final String encoding = Application.get()
 					.getRequestCycleSettings()
 					.getResponseRequestEncoding();
-				r.setCharacterEncoding(encoding);
 				r.setContentType("text/xml; charset=" + encoding);
 
 				// Make sure it is not cached by a
@@ -36,6 +35,6 @@
 			}
 
 		};
-		requestCycle.setRequestTarget(target);
+		requestCycle.scheduleRequestHandlerAfterCurrent(target);
 	}
 

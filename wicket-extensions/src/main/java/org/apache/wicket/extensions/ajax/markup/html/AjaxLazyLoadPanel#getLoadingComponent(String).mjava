@@ -5,7 +5,9 @@
 	 */
 	public Component getLoadingComponent(final String markupId)
 	{
-		return new Label(markupId, "<img src=\"" +
-			RequestCycle.get().urlFor(AbstractDefaultAjaxBehavior.INDICATOR) + "\"/>").setEscapeModelStrings(false);
+		IRequestHandler handler = new ResourceReferenceRequestHandler(
+			AbstractDefaultAjaxBehavior.INDICATOR);
+		return new Label(markupId, "<img src=\"" + RequestCycle.get().renderUrlFor(handler) +
+			"\"/>").setEscapeModelStrings(false);
 	}
 

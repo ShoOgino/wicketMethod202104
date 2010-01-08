@@ -15,7 +15,10 @@
 			if (resourceReference != null)
 			{
 				// Set href to link to this link's linkClicked method
-				CharSequence url = getRequestCycle().urlFor(resourceReference);
+
+				ResourceReferenceRequestHandler handler = new ResourceReferenceRequestHandler(
+					resourceReference);
+				CharSequence url = getRequestCycle().renderUrlFor(handler);
 
 				// generate the href attribute
 				tag.put(attribute, Strings.replaceAll(url, "&", "&amp;"));
