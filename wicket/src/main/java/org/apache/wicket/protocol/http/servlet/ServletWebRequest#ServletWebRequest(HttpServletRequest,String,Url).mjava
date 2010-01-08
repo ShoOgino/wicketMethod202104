@@ -1,0 +1,23 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param httpServletRequest
+	 * 
+	 * @param filterPrefix
+	 *            contentPath + filterPath, used to extract the actual {@link Url}
+	 * 
+	 * @param url
+	 */
+	public ServletWebRequest(HttpServletRequest httpServletRequest, String filterPrefix, Url url)
+	{
+		Checks.argumentNotNull(httpServletRequest, "httpServletRequest");
+		Checks.argumentNotNull(filterPrefix, "filterPrefix");
+
+		if (url != null)
+			this.url = url;
+		else
+			this.url = getUrl(httpServletRequest, filterPrefix);
+		this.httpServletRequest = httpServletRequest;
+		this.filterPrefix = filterPrefix;
+	}
+
