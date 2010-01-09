@@ -1,6 +1,13 @@
 	public IRequestHandler map(Exception e)
 	{
-		// TODO
-		return null;
+		if (e instanceof StalePageException)
+		{
+			// If the page was stale, just rerender it
+			return new RenderPageRequestHandler(new DefaultPageProvider(
+				((StalePageException)e).getPage()));
+		}
+		else
+			// TODO
+			return null;
 	}
 
