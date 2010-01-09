@@ -1,11 +1,11 @@
-	public void respond(Attributes attributes)
+	public final void respond(Attributes attributes)
 	{
 		ResourceData data = newResourceData(attributes);
 
 		WebRequest request = (WebRequest)attributes.getRequest();
 		WebResponse response = (WebResponse)attributes.getResponse();
 
-		if (data.notModified(attributes))
+		if (!data.dataNeedsToBeWritten(attributes))
 		{
 			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return;
@@ -16,6 +16,11 @@
 		}
 		else
 		{
+			if (data.getWriteCallback() == null)
+			{
+				throw new IllegalStateException(
+					"ResourceData#setWriteCallback must be called for AbstractResource.");
+			}
 
 			String fileName = data.getFileName();
 			ContentDisposition disposition = data.getContentDisposition();
@@ -62,14 +67,18 @@
 				response.setLastModifiedTime(lastModified.getTime());
 			}
 
-			// 4. Content Length
+			// 4. Caching
+
+			configureCache(request, response, data, attributes);
+
+			// 5. Content Length
 
 			if (contentLength != -1)
 			{
 				response.setContentLength(contentLength);
 			}
 
-			// 5. Write Data
+			// 6. Write Data
 			data.getWriteCallback().writeData(attributes);
 		}
 	}

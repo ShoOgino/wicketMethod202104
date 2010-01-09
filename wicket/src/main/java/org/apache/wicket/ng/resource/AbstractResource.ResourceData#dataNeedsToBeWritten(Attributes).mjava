@@ -1,0 +1,26 @@
+		/**
+		 * Check to determine if the resource data needs to be written. This method checks the
+		 * <code>If-Modified-Since</code> request header and compares it to lastModified property.
+		 * In order for this method to work {@link #setLastModified(Date)} has to be called first.
+		 * 
+		 * @param attributes
+		 * @return <code>true</code> if the resource data does need to be written,
+		 *         <code>false</code> otherwise.
+		 */
+		public boolean dataNeedsToBeWritten(Attributes attributes)
+		{
+			WebRequest request = (WebRequest)attributes.getRequest();
+			Date ifModifiedSince = request.getIfModifiedSinceHeader();
+			Date lastModifed = getLastModified();
+
+			if (ifModifiedSince != null && lastModifed != null &&
+				lastModifed.before(ifModifiedSince))
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+
