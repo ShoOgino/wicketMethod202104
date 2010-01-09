@@ -3,6 +3,11 @@
 	 */
 	public final void respond(final RequestCycle requestCycle)
 	{
+		Url oldBaseURL = requestCycle.getUrlRenderer().getBaseUrl();
+		Url baseURL = Url.parse(((WebRequest)requestCycle.getRequest()).getHeader("Wicket-Ajax-BaseURL"));
+
+		requestCycle.getUrlRenderer().setBaseUrl(baseURL);
+
 		final WebResponse response = (WebResponse)requestCycle.getResponse();
 
 		if (markupIdToComponent.values().contains(page))
@@ -70,5 +75,7 @@
 		}
 
 		response.write("</ajax-response>");
+
+		requestCycle.getUrlRenderer().setBaseUrl(oldBaseURL);
 	}
 
