@@ -40,44 +40,49 @@
 		{
 			resourceReference = (ResourceReference)modelObject;
 		}
-		else if (modelObject instanceof Resource)
+		else if (modelObject instanceof IResource)
 		{
-			resource = (Resource)modelObject;
+			resource = (IResource)modelObject;
 		}
 
+		// FIXME NG
+		// Not yet supported
+
 		// Need to load image resource for this component?
-		if (resource == null && resourceReference == null)
-		{
-			// Get SRC attribute of tag
-			final CharSequence src = tag.getString("src");
-			if (src != null)
-			{
-				// Try to load static image
-				loadStaticImage(src.toString());
-			}
-			else
-			{
-				// Get VALUE attribute of tag
-				final CharSequence value = tag.getString("value");
-				if (value != null)
-				{
-					// Try to generate an image using an image factory
-					newImage(value);
-				}
-				else
-				{
-					// Load static image using model object as the path
-					loadStaticImage(component.getDefaultModelObjectAsString());
-				}
-			}
-		}
+// if (resource == null && resourceReference == null)
+// {
+// // Get SRC attribute of tag
+// final CharSequence src = tag.getString("src");
+// if (src != null)
+// {
+// // Try to load static image
+// // loadStaticImage(src.toString());
+// }
+// else
+// {
+// // Get VALUE attribute of tag
+// final CharSequence value = tag.getString("value");
+// if (value != null)
+// {
+// // Try to generate an image using an image factory
+// newImage(value);
+// }
+// else
+// {
+// // Load static image using model object as the path
+// loadStaticImage(component.getDefaultModelObjectAsString());
+// }
+// }
+// }
 
 		// Get URL for resource
 		final CharSequence url;
 		if (resourceReference != null)
 		{
 			// Create URL to shared resource
-			url = RequestCycle.get().urlFor(resourceReference, resourceParameters);
+			IRequestHandler handler = new ResourceReferenceRequestHandler(resourceReference,
+				resourceParameters);
+			url = RequestCycle.get().renderUrlFor(handler);
 		}
 		else
 		{

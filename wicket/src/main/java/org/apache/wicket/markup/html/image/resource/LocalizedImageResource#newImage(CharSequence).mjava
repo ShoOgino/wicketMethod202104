@@ -21,22 +21,23 @@
 			if (!Strings.isEmpty(imageReferenceName))
 			{
 				// Is resource already available via the application?
-				if (application.getSharedResources().get(Application.class, imageReferenceName,
-					locale, style, variation, true) == null)
+				if (application.getResourceReferenceRegistry().getResourceReference(
+					Application.class, imageReferenceName, locale, style, variation, false) == null)
 				{
 					// Resource not available yet, so create it with factory and
 					// share via Application
-					final Resource imageResource = getResourceFactory(application, factoryName).newResource(
+					final IResource imageResource = getResourceFactory(application, factoryName).newResource(
 						specification, locale, style, variation);
-					application.getSharedResources().add(Application.class, imageReferenceName,
-						locale, style, variation, imageResource);
+
+					ResourceReference ref = new SimpleStaticResourceReference(Application.class,
+						imageReferenceName, locale, style, variation, imageResource);
+
+					application.getResourceReferenceRegistry().registerResourceReference(ref);
 				}
 
 				// Create resource reference
-				resourceReference = new ResourceReference(Application.class, imageReferenceName);
-				resourceReference.setLocale(locale);
-				resourceReference.setStyle(style);
-				resourceReference.setVariation(variation);
+				resourceReference = new ResourceReference(Application.class, imageReferenceName,
+					locale, style, variation);
 			}
 			else
 			{
