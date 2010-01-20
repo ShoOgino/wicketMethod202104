@@ -11,9 +11,12 @@
 	 *            The Locale to apply
 	 * @param extensions
 	 *            the filname's extensions (comma separated)
+	 * 
+	 * @param strict
+	 *            whether other combinations should be tried
 	 */
 	public ResourceNameIterator(String path, final String style, final String variation,
-		final Locale locale, final String extensions)
+		final Locale locale, final String extensions, boolean strict)
 	{
 		this.locale = locale;
 		if ((extensions == null) && (path.indexOf('.') != -1))
@@ -29,5 +32,6 @@
 		path = getLocaleFromFilename(path);
 
 		styleIterator = new StyleAndVariationResourceNameIterator(path, style, variation);
+		this.strict = strict;
 	}
 

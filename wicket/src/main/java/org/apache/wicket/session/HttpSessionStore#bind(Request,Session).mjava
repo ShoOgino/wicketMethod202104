@@ -3,7 +3,7 @@
 	 */
 	public final void bind(final Request request, final Session newSession)
 	{
-		if (getAttribute(request, SESSION_ATTRIBUTE_NAME) != newSession)
+		if (getAttribute(request, getSessionAttribute()) != newSession)
 		{
 			// call template method
 			onBind(request, newSession);
@@ -16,7 +16,7 @@
 				new SessionBindingListener(applicationKey, httpSession.getId()));
 
 			// register the session object itself
-			setAttribute(request, SESSION_ATTRIBUTE_NAME, newSession);
+			setAttribute(request, getSessionAttribute(), newSession);
 		}
 	}
 
