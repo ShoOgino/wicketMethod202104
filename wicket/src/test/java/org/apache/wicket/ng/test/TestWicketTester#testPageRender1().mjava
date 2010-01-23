@@ -2,7 +2,14 @@
 	{
 		WicketTester tester = new WicketTester();
 
-		tester.startPage(new Page1());
+		// this is not too pretty but new Page1() needs Session.get() to be working for various
+		// reasons
+		ThreadContext old = ThreadContext.get(false);
+		ThreadContext.setSession(tester.getApplication().getSession());
+
+		Page page = new Page1();
+
+		tester.startPage(page);
 
 		System.out.println(tester.getLastResponse().getTextResponse());
 
@@ -11,5 +18,7 @@
 		tester.executeListener(c, ILinkListener.INTERFACE);
 
 		tester.destroy();
+
+		ThreadContext.restore(old);
 	}
 

@@ -1,0 +1,23 @@
+	/**
+	 * 
+	 */
+	public void testEncode5()
+	{
+		MockPage page = new MockPage(15);
+		page.getPageParameters().setIndexedParameter(0, "i1");
+		page.getPageParameters().setIndexedParameter(1, "i2");
+		page.getPageParameters().setNamedParameter("a", "b");
+		page.getPageParameters().setNamedParameter("b", "c");
+
+		page.setCreatedBookmarkable(false);
+
+		IPageProvider provider = new DefaultPageProvider(page);
+		IRequestHandler handler = new RenderPageRequestHandler(provider);
+		Url url = encoder.mapHandler(handler);
+
+		// never allow bookmarkable render url for page that has not been created by bookmarkable
+		// URL
+
+		assertNull(url);
+	}
+

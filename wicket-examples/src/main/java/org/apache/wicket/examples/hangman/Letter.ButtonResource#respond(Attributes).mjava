@@ -1,0 +1,24 @@
+		/**
+		 * @see org.apache.wicket.ng.resource.IResource#respond(org.apache.wicket.ng.resource.IResource.Attributes)
+		 */
+		public void respond(Attributes attributes)
+		{
+			// request parameter for the resource
+			boolean guessed = attributes.getParameters()
+				.getNamedParameter(PARAMETER_GUESSED)
+				.toBoolean(false);
+			String letter = attributes.getParameters()
+				.getNamedParameter(PARAMETER_LETTER)
+				.toString();
+
+			// delegate to another resource
+			DefaultButtonImageResource buttonResource = new DefaultButtonImageResource(30, 30,
+				letter);
+
+			if (guessed)
+			{
+				buttonResource.setColor(Color.GRAY);
+			}
+			buttonResource.respond(attributes);
+		}
+
