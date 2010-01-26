@@ -5,7 +5,7 @@
 		 */
 		private SessionEntry getSessionEntry(boolean create)
 		{
-			SessionEntry entry = (SessionEntry)getSessionAttribute(ATTRIBUTE_NAME);
+			SessionEntry entry = (SessionEntry)getSessionAttribute(getAttributeName());
 			if (entry == null && create)
 			{
 				bind();
@@ -15,8 +15,8 @@
 			{
 				synchronized (entry)
 				{
-					setSessionAttribute(ATTRIBUTE_NAME, null);
-					setSessionAttribute(ATTRIBUTE_NAME, entry);
+					setSessionAttribute(getAttributeName(), null);
+					setSessionAttribute(getAttributeName(), entry);
 				}
 			}
 			return entry;
