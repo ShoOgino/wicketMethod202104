@@ -14,8 +14,11 @@
 		// selection changed?
 		if (wantOnSelectionChangedNotifications())
 		{
-			// url that points to this components IOnChangeListener method
-			CharSequence url = urlFor(IOnChangeListener.INTERFACE);
+			// we do not want relative URL here, because it will be used by
+			// Form#dispatchEvent
+			Url url = getRequestCycle().urlFor(
+				new ListenerInterfaceRequestHandler(new PageAndComponentProvider(getPage(), this),
+					IOnChangeListener.INTERFACE));
 
 			Form<?> form = findParent(Form.class);
 			if (form != null)
@@ -25,9 +28,10 @@
 				{
 					// restore url back to real wicket path as its going to be interpreted by the
 					// form itself
-					url = ((PortletRequestContext)rc).getLastEncodedPath();
+					// TODO NG
+					// url = ((PortletRequestContext)rc).getLastEncodedPath();
 				}
-				tag.put("onchange", form.getJsForInterfaceUrl(url));
+				tag.put("onchange", form.getJsForInterfaceUrl(url.toString()));
 			}
 			else
 			{
