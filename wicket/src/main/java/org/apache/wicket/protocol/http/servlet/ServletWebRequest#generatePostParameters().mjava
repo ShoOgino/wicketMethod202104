@@ -1,6 +1,12 @@
 	@SuppressWarnings("unchecked")
 	protected Map<String, List<StringValue>> generatePostParameters()
 	{
+		// Do not attempt to parse multipart request
+		if (isMultiPart(getHttpServletRequest()))
+		{
+			return Collections.emptyMap();
+		}
+
 		Map<String, List<StringValue>> postParameters = new HashMap<String, List<StringValue>>();
 		try
 		{
