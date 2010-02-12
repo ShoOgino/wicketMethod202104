@@ -3,12 +3,11 @@
 	 */
 	public void testRenderHomePageClassRedirect() throws Exception
 	{
-		application.startPage(HomePageClassRedirect.class);
+		tester.startPage(HomePageClassRedirect.class);
 
-		assertEquals(RedirectPage.class, application.getLastRenderedPage().getClass());
+		assertEquals(RedirectPage.class, tester.getLastRenderedPage().getClass());
 
-		// Validate the document
-		String document = application.getServletResponse().getDocument();
+		String document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(), "RedirectPage.html", true);
 	}
 
