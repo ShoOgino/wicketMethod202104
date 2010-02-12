@@ -4,7 +4,6 @@
 	public void test_5() throws IOException
 	{
 		WicketTester tester = new WicketTester();
-		RequestCycle cycle = tester.createRequestCycle();
 		ICrypt crypt = tester.getApplication().getSecuritySettings().getCryptFactory().newCrypt();
 
 		String input = "wicket-sep-wicket";
@@ -16,5 +15,7 @@
 			String output = crypt.decryptUrlSafe(encrypted);
 			assertEquals(in, output);
 		}
+
+		tester.destroy();
 	}
 

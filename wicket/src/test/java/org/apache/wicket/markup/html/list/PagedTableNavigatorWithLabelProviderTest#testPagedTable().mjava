@@ -5,10 +5,9 @@
 	 */
 	public void testPagedTable() throws Exception
 	{
-		WicketTester application = new WicketTester();
-		application.startPage(PagedTableNavigatorWithLabelProviderPage.class);
-		PagedTableNavigatorWithLabelProviderPage page = (PagedTableNavigatorWithLabelProviderPage)application.getLastRenderedPage();
-		String document = application.getServletResponse().getDocument();
+		tester.startPage(PagedTableNavigatorWithLabelProviderPage.class);
+		PagedTableNavigatorWithLabelProviderPage page = (PagedTableNavigatorWithLabelProviderPage)tester.getLastRenderedPage();
+		String document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_1.html", true);
 
@@ -25,10 +24,8 @@
 		assertTrue(link.isEnabled());
 
 		link = (Link)page.get("navigator:next");
-		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(link);
-		application.processRequestCycle();
-		document = application.getServletResponse().getDocument();
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_2.html", true);
 
@@ -45,10 +42,8 @@
 		assertTrue(link.isEnabled());
 
 		link = (Link)page.get("navigator:prev");
-		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(link);
-		application.processRequestCycle();
-		document = application.getServletResponse().getDocument();
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_3.html", true);
 
@@ -65,10 +60,8 @@
 		assertTrue(link.isEnabled());
 
 		link = (Link)page.get("navigator:last");
-		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(link);
-		application.processRequestCycle();
-		document = application.getServletResponse().getDocument();
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_4.html", true);
 
@@ -85,10 +78,8 @@
 		assertFalse(link.isEnabled());
 
 		link = (Link)page.get("navigator:first");
-		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(link);
-		application.processRequestCycle();
-		document = application.getServletResponse().getDocument();
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_5.html", true);
 
@@ -105,10 +96,8 @@
 		assertTrue(link.isEnabled());
 
 		link = (Link)page.get("navigator:navigation:3:pageLink");
-		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(link);
-		application.processRequestCycle();
-		document = application.getServletResponse().getDocument();
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_6.html", true);
 
@@ -125,10 +114,8 @@
 		assertTrue(link.isEnabled());
 
 		link = (Link)page.get("navigator:prev");
-		application.setupRequestAndResponse();
-		application.getServletRequest().setRequestToComponent(link);
-		application.processRequestCycle();
-		document = application.getServletResponse().getDocument();
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
 		DiffUtil.validatePage(document, this.getClass(),
 			"PagedTableNavigatorWithLabelProviderExpectedResult_7.html", true);
 
@@ -144,6 +131,6 @@
 		link = (Link)page.get("navigator:last");
 		assertTrue(link.isEnabled());
 
-		application.destroy();
+		tester.destroy();
 	}
 

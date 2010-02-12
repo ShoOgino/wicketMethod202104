@@ -5,28 +5,7 @@
 	protected void setUp() throws Exception
 	{
 		person = new Person();
-		app = new MockWebApplication(new WebApplication()
-		{
-
-			@Override
-			public Class<? extends Page> getHomePage()
-			{
-				return null;
-			}
-
-			@Override
-			protected void outputDevelopmentModeWarning()
-			{
-				// Do nothing.
-			}
-
-			@Override
-			protected ISessionStore newSessionStore()
-			{
-				// Don't use a filestore, or we spawn lots of threads, which makes things slow.
-				return new HttpSessionStore();
-			}
-
-		}, "/foo");
+		app = new MockApplication();
+		app.set();
 	}
 
