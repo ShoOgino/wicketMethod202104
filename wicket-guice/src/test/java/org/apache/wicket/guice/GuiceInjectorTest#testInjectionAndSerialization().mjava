@@ -1,35 +1,17 @@
 	public void testInjectionAndSerialization()
 	{
-		MockWebApplication mockApp = new MockWebApplication(new WebApplication()
-		{
-			@Override
-			protected void outputDevelopmentModeWarning()
-			{
-				// Do nothing.
-			}
-
-			@Override
-			public Class< ? extends Page> getHomePage()
-			{
-				return null;
-			}
-
-			@Override
-			protected ISessionStore newSessionStore()
-			{
-				// Don't use a filestore, or we spawn lots of threads, which
-				// makes things slow.
-				return new HttpSessionStore();
-			}
-		}, null);
-
-		// Make a new webapp and injector, and register the injector with the
-		// webapp as a component instantiation listener.
-		Application app = mockApp.getApplication();
-
+		MockApplication app = new MockApplication();
 		try
 		{
-			Application.set(app);
+			ThreadContext.setApplication(app);
+
+			app.setName(getClass().getName());
+			app.initApplication();
+
+			Session session = new WebSession(new MockWebRequest(Url.parse("/")));
+			app.getSessionStore().bind(null, session);
+			ThreadContext.setSession(session);
+
 			GuiceComponentInjector injector = new GuiceComponentInjector(app, new Module()
 			{
 
@@ -70,7 +52,8 @@
 		}
 		finally
 		{
-			Application.unset();
+			app.destroy();
+			ThreadContext.detach();
 		}
 	}
 
