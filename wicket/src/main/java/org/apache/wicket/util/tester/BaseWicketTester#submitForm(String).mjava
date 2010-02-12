@@ -1,0 +1,13 @@
+	/**
+	 * Submits the <code>Form</code> in the last rendered <code>Page</code>.
+	 * 
+	 * @param path
+	 *            path to <code>Form</code> component
+	 */
+	public void submitForm(String path)
+	{
+		Form<?> form = (Form<?>)getComponentFromLastRenderedPage(path);
+		Url url = Url.parse(form.urlFor(IFormSubmitListener.INTERFACE).toString());
+		processRequest(getLastRequest().requestWithUrl(url));
+	}
+

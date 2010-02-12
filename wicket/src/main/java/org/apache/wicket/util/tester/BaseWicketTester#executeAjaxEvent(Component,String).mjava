@@ -1,0 +1,53 @@
+	/**
+	 * Simulates the firing of an Ajax event. You add an Ajax event to a <code>Component</code> by
+	 * using:
+	 * 
+	 * <pre>
+	 *     ...
+	 *     component.add(new AjaxEventBehavior(&quot;ondblclick&quot;) {
+	 *         public void onEvent(AjaxRequestTarget) {}
+	 *     });
+	 *     ...
+	 * </pre>
+	 * 
+	 * You can then test that the code inside <code>onEvent</code> actually does what it's supposed
+	 * to, using the <code>WicketTester</code>:
+	 * 
+	 * <pre>
+	 *     ...
+	 *     tester.executeAjaxEvent(component, &quot;ondblclick&quot;);
+	 *     // Test that the code inside onEvent is correct.
+	 *     ...
+	 * </pre>
+	 * 
+	 * This also works with <code>AjaxFormSubmitBehavior</code>, where it will "submit" the
+	 * <code>Form</code> before executing the command.
+	 * <p>
+	 * PLEASE NOTE! This method doesn't actually insert the <code>Component</code> in the client DOM
+	 * tree, using Javascript.
+	 * 
+	 * 
+	 * @param component
+	 *            the <code>Component</code> that has the <code>AjaxEventBehavior</code> we want to
+	 *            test. If the <code>Component</code> is <code>null</code>, the test will fail.
+	 * @param event
+	 *            the event to simulate being fired. If <code>event</code> is <code>null</code>, the
+	 *            test will fail.
+	 */
+	public void executeAjaxEvent(final Component component, final String event)
+	{
+		String failMessage = "Can't execute event on a component which is null.";
+		notNull(failMessage, component);
+
+		failMessage = "event must not be null";
+		notNull(failMessage, event);
+
+		if (component.isVisibleInHierarchy() == false)
+		{
+			fail("The component is currently not visible in the hierarchy and thus you can not fire events on it." +
+				" Component: " + component + "; Event: " + event);
+		}
+
+		executeBehavior(WicketTesterHelper.findAjaxEventBehavior(component, event));
+	}
+

@@ -1,0 +1,18 @@
+	/**
+	 * Builds and processes a request suitable for invoking a listener. The <code>Component</code>
+	 * must implement any of the known <code>IListener</code> interfaces.
+	 * 
+	 * @param component
+	 *            the listener to invoke
+	 */
+	public void executeListener(Component component)
+	{
+		for (RequestListenerInterface iface : RequestListenerInterface.getRegisteredInterfaces())
+		{
+			if (iface.getListenerInterfaceClass().isAssignableFrom(component.getClass()))
+			{
+				executeListener(component, iface);
+			}
+		}
+	}
+

@@ -1,0 +1,19 @@
+	/**
+	 * Asserts last-rendered <code>Page</code> against an expected HTML document.
+	 * <p>
+	 * Use <code>-Dwicket.replace.expected.results=true</code> to automatically replace the expected
+	 * output file.
+	 * 
+	 * @param clazz
+	 *            <code>Class</code> used to load the file (relative to <code>clazz</code> package)
+	 * @param filename
+	 *            expected output filename <code>String</code>
+	 * @throws Exception
+	 */
+	@Override
+	public void assertResultPage(final Class<?> clazz, final String filename) throws Exception
+	{
+		String document = getLastResponse().getTextResponse().toString();
+		DiffUtil.validatePage(document, clazz, filename, true);
+	}
+

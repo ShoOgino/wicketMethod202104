@@ -1,0 +1,34 @@
+	/**
+	 * Simulates the firing of all ajax timer behaviors on the page
+	 * 
+	 * @param wt
+	 * @param container
+	 */
+	public void executeAllTimerBehaviors(MarkupContainer container)
+	{
+		container.visitChildren(MarkupContainer.class, new IVisitor<MarkupContainer>()
+		{
+			public Object component(MarkupContainer component)
+			{
+				// get the AbstractAjaxBehaviour which is responsible for
+				// getting the contents of the lazy panel
+				List<IBehavior> behaviors = BehaviorsUtil.getBehaviors(component,
+					AbstractAjaxTimerBehavior.class);
+				for (IBehavior b : behaviors)
+				{
+					if (b instanceof AbstractAjaxTimerBehavior)
+					{
+						log.debug("Triggering AjaxSelfUpdatingTimerBehavior: " +
+							component.getClassRelativePath());
+						AbstractAjaxTimerBehavior timer = (AbstractAjaxTimerBehavior)b;
+						if (!timer.isStopped())
+						{
+							executeBehavior(timer);
+						}
+					}
+				}
+				return CONTINUE_TRAVERSAL;
+			}
+		});
+	}
+

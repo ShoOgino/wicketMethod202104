@@ -1,0 +1,39 @@
+	/**
+	 * Adds an additional <code>FormComponent</code>'s value into request parameter -- this method
+	 * retains existing parameters but removes any duplicate parameters.
+	 * 
+	 * @param formComponent
+	 *            a <code>FormComponent</code>
+	 * @param value
+	 *            a value to add
+	 */
+	private void addFormComponentValue(FormComponent<?> formComponent, String value)
+	{
+		if (parameterExist(formComponent))
+		{
+			List<StringValue> values = baseWicketTester.getLastRequest()
+				.getPostRequestParameters()
+				.getParameterValues(formComponent.getInputName());
+			// remove duplicated
+
+			HashSet<String> all = new HashSet<String>();
+			for (StringValue val : values)
+			{
+				all.add(val.toString());
+			}
+			all.add(value);
+
+			values = new ArrayList<StringValue>();
+			for (String val : all)
+			{
+				values.add(StringValue.valueOf(val));
+			}
+			baseWicketTester.getLastRequest().getPostRequestParameters().setParameterValues(
+				formComponent.getInputName(), values);
+		}
+		else
+		{
+			setFormComponentValue(formComponent, value);
+		}
+	}
+
