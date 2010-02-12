@@ -6,6 +6,12 @@
 	@Override
 	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
+		// Skip the components body. It will be replaced by the fragment
+		if (((ComponentTag)markupStream.get(markupStream.getCurrentIndex() - 1)).isOpen())
+		{
+			markupStream.skipRawMarkup();
+		}
+
 		final MarkupStream providerMarkupStream = chooseMarkupStream(markupStream);
 		if (providerMarkupStream == null)
 		{

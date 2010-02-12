@@ -41,10 +41,9 @@
 		try
 		{
 			// Render open tag
-			boolean tagRendered = false;
 			if (getRenderBodyOnly() == false)
 			{
-				tagRendered = renderComponentTag(tag);
+				renderComponentTag(tag);
 			}
 			markupStream.next();
 
@@ -53,17 +52,25 @@
 			{
 				// Render the body
 				onComponentTagBody(markupStream, tag);
-
-				// Render close tag
-				if ((tag.hasNoCloseTag() == false) && tagRendered)
-				{
-					// Close the tag.
-					getResponse().write(tag.syntheticCloseTagString());
-				}
 			}
 
-			// make sure we moved the cursor to the end.
-			markupStream.next();
+			// Render close tag
+			if (tag.isOpen())
+			{
+				if (openTag.isOpen())
+				{
+					renderClosingComponentTag(markupStream, tag, getRenderBodyOnly());
+				}
+				else if (getRenderBodyOnly() == false)
+				{
+					if (needToRenderTag(openTag))
+					{
+						// Close the manually opened tag. And since the user might have changed the
+						// tag name ...
+						getResponse().write(tag.syntheticCloseTagString());
+					}
+				}
+			}
 		}
 		catch (RuntimeException re)
 		{
