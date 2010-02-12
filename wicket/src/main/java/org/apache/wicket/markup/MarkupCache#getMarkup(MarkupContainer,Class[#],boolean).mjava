@@ -36,28 +36,16 @@
 
 			// Who is going to provide the markup resource stream?
 			// And ask the provider to locate the markup resource stream
-			final IResourceStream resourceStream = getMarkupResourceStreamProvider(container).getMarkupResourceStream(
-				container, containerClass);
+			final MarkupResourceStream resourceStream = MarkupFactory.get()
+				.getMarkupResourceStream(container, containerClass);
 
 			// Found markup?
 			if (resourceStream != null)
 			{
-				final MarkupResourceStream markupResourceStream;
-				if (resourceStream instanceof MarkupResourceStream)
-				{
-					markupResourceStream = (MarkupResourceStream)resourceStream;
-				}
-				else
-				{
-					markupResourceStream = new MarkupResourceStream(resourceStream,
-						new ContainerInfo(container), containerClass);
-				}
-
-				markupResourceStream.setCacheKey(cacheKey);
+				resourceStream.setCacheKey(cacheKey);
 
 				// load the markup and watch for changes
-				markup = loadMarkupAndWatchForChanges(container, markupResourceStream,
-					enforceReload);
+				markup = loadMarkupAndWatchForChanges(container, resourceStream, enforceReload);
 			}
 			else
 			{

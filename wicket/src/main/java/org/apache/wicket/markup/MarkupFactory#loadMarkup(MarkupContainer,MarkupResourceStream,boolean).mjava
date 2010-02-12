@@ -1,0 +1,36 @@
+	/**
+	 * Loads markup from a resource stream.
+	 * 
+	 * @param container
+	 *            The original requesting markup container
+	 * @param markupResourceStream
+	 *            The markup resource stream to load. May be null.
+	 * @param enforceReload
+	 *            The cache will be ignored and all, including inherited markup files, will be
+	 *            reloaded. Whatever is in the cache, it will be ignored
+	 * @return The markup
+	 */
+	public final Markup loadMarkup(final MarkupContainer container,
+		MarkupResourceStream markupResourceStream, final boolean enforceReload)
+	{
+		if (markupResourceStream == null)
+		{
+			markupResourceStream = getMarkupResourceStream(container, null);
+		}
+
+		try
+		{
+			return getMarkupLoader().loadMarkup(container, markupResourceStream, null,
+				enforceReload);
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			log.error("Unable to find markup from " + markupResourceStream, e);
+		}
+		catch (IOException e)
+		{
+			log.error("Unable to read markup from " + markupResourceStream, e);
+		}
+		return null;
+	}
+
