@@ -12,29 +12,21 @@
 	{
 		try
 		{
-			if (lastRequest != null)
+			if (request != null)
 			{
-				previousRequests.add(lastRequest);
-			}
-			if (lastResponse != null)
-			{
-				previousResponses.add(lastResponse);
+				setRequest(request);
 			}
 
-			lastRequest = request;
-			lastResponse = new MockWebResponse();
-
-			MockRequestCycle cycle = (MockRequestCycle)application.createRequestCycle(request,
-				lastResponse);
-
-			ThreadContext.setRequestCycle(cycle);
 
 			if (forcedRequestHandler != null)
 			{
-				cycle.forceRequestHandler(forcedRequestHandler);
+				requestCycle.forceRequestHandler(forcedRequestHandler);
 			}
 
-			cycle.processRequestAndDetach();
+			requestCycle.processRequestAndDetach();
+
+			recordRequestResponse();
+			setupNextRequestCycle();
 
 			if (followRedirects && lastResponse.isRedirect())
 			{
@@ -51,10 +43,12 @@
 				}
 
 				// append redirect URL to current URL (what browser would do)
-				Url mergedURL = new Url(request.getUrl().getSegments(), newUrl.getQueryParameters());
+				Url mergedURL = new Url(lastRequest.getUrl().getSegments(),
+					newUrl.getQueryParameters());
 				mergedURL.concatSegments(newUrl.getSegments());
 
-				processRequest(new MockWebRequest(mergedURL), null);
+				this.request.setUrl(mergedURL);
+				processRequest();
 
 				--redirectCount;
 			}
