@@ -1,0 +1,19 @@
+	/**
+	 * Render the application level headers
+	 * 
+	 * @param headerContainer
+	 */
+	protected final void renderApplicationLevelHeaders(final HtmlHeaderContainer headerContainer)
+	{
+		Checks.argumentNotNull(headerContainer, "headerContainer");
+
+		if (renderHeadListeners != null)
+		{
+			for (Iterator<IHeaderContributor> iter = renderHeadListeners.iterator(); iter.hasNext();)
+			{
+				IHeaderContributor listener = iter.next();
+				listener.renderHead(headerContainer.getHeaderResponse());
+			}
+		}
+	}
+

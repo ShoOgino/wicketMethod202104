@@ -1,0 +1,27 @@
+	/**
+	 * Render the child hierarchy headers.
+	 * 
+	 * @param headerContainer
+	 * @param rootComponent
+	 */
+	@Override
+	protected void renderChildHeaders(final HtmlHeaderContainer headerContainer,
+		final Component rootComponent)
+	{
+		Checks.argumentNotNull(headerContainer, "headerContainer");
+		Checks.argumentNotNull(rootComponent, "rootComponent");
+
+		if (rootComponent instanceof MarkupContainer)
+		{
+			new DeepChildFirstVisitor()
+			{
+				@Override
+				public Object component(final Component component)
+				{
+					component.renderHead(headerContainer);
+					return IVisitor.CONTINUE_TRAVERSAL;
+				}
+			}.visit(rootComponent);
+		}
+	}
+

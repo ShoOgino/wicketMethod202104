@@ -1,0 +1,49 @@
+	/**
+	 * @return Gets the strategy registered with the application
+	 */
+	public static IHeaderRenderStrategy get()
+	{
+		if (strategy == null)
+		{
+			// By purpose it is "difficult" to change to another render strategy.
+			// We don't want it to be modifiable by users, but we needed a way to easily test other
+			// strategies.
+			String className = System.getProperty("Wicket_HeaderRenderStrategy");
+			if (className != null)
+			{
+				Class<?> clazz = null;
+				try
+				{
+					clazz = Application.get()
+						.getApplicationSettings()
+						.getClassResolver()
+						.resolveClass(className);
+
+					if (clazz != null)
+					{
+						strategy = (IHeaderRenderStrategy)clazz.newInstance();
+					}
+				}
+				catch (ClassNotFoundException ex)
+				{
+					// ignore
+				}
+				catch (InstantiationException ex)
+				{
+					// ignore
+				}
+				catch (IllegalAccessException ex)
+				{
+					// ignore
+				}
+			}
+		}
+
+		if (strategy == null)
+		{
+			strategy = new ParentFirstHeaderRenderStrategy();
+		}
+
+		return strategy;
+	}
+
