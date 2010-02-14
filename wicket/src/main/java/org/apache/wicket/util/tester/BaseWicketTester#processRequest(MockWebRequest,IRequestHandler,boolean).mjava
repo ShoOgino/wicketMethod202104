@@ -1,0 +1,62 @@
+	private void processRequest(MockWebRequest request, IRequestHandler forcedRequestHandler,
+		boolean redirect)
+	{
+
+		try
+		{
+			if (!redirect)
+			{
+				/*
+				 * we do not reset the session during redirect processing because we want to
+				 * preserve the state before the redirect, eg any error messages reported
+				 */
+				session.reset();
+			}
+
+			if (request != null)
+			{
+				setRequest(request);
+			}
+
+
+			if (forcedRequestHandler != null)
+			{
+				requestCycle.forceRequestHandler(forcedRequestHandler);
+			}
+
+			requestCycle.processRequestAndDetach();
+
+			recordRequestResponse();
+			setupNextRequestCycle();
+
+			if (followRedirects && lastResponse.isRedirect())
+			{
+				if (redirectCount == 100)
+				{
+					throw new IllegalStateException(
+						"Possible infinite redirect detected. Bailing out.");
+				}
+				++redirectCount;
+				Url newUrl = Url.parse(lastResponse.getRedirectUrl());
+				if (newUrl.isAbsolute())
+				{
+					throw new WicketRuntimeException("Can not follow absolute redirect URL.");
+				}
+
+				// append redirect URL to current URL (what browser would do)
+				Url mergedURL = new Url(lastRequest.getUrl().getSegments(),
+					newUrl.getQueryParameters());
+				mergedURL.concatSegments(newUrl.getSegments());
+
+				this.request.setUrl(mergedURL);
+				processRequest(null, null, true);
+
+				--redirectCount;
+			}
+		}
+		finally
+		{
+			redirectCount = 0;
+		}
+	}
+

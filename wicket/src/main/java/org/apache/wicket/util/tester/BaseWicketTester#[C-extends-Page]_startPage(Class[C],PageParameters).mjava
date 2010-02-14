@@ -11,6 +11,9 @@
 	 */
 	public final <C extends Page> Page startPage(Class<C> pageClass, PageParameters parameters)
 	{
-		return startPage(new PageProvider(pageClass, parameters));
+		request.setUrl(RequestCycle.get().urlFor(
+			new BookmarkablePageRequestHandler(new PageProvider(pageClass, parameters))));
+		processRequest();
+		return getLastRenderedPage();
 	}
 
