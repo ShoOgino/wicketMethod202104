@@ -18,6 +18,15 @@
 				setRequest(request);
 			}
 
+			if (getLastResponse() != null)
+			{
+				// transfer cookies from previous response to this request, quirky but how old stuff
+				// worked...
+				for (Cookie cookie : getLastResponse().getCookies())
+				{
+					this.request.addCookie(cookie);
+				}
+			}
 
 			if (forcedRequestHandler != null)
 			{
