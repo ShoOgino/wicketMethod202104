@@ -3,19 +3,14 @@
 	 */
 	public void testResponsePageClass() throws Exception
 	{
-		WicketTester mockWebApp = new WicketTester();
-		mockWebApp.startPage(SimpleResponsePageClass.class);
-		SimpleResponsePageClass manageBook = (SimpleResponsePageClass)mockWebApp.getLastRenderedPage();
+		tester.startPage(SimpleResponsePageClass.class);
+		SimpleResponsePageClass manageBook = (SimpleResponsePageClass)tester.getLastRenderedPage();
 
 		Form form = (Form)manageBook.get("form");
-		mockWebApp.setupRequestAndResponse();
 
-		MockHttpServletRequest mockRequest = mockWebApp.getServletRequest();
-		mockRequest.setRequestToComponent(form);
-		mockWebApp.processRequestCycle();
+		tester.submitForm(form);
 
 		// assertion failed, getLastRenderedPage() return null.
-		assertTrue(mockWebApp.getLastRenderedPage() instanceof SimplePage);
-		mockWebApp.destroy();
+		assertTrue(tester.getLastRenderedPage() instanceof SimplePage);
 	}
 

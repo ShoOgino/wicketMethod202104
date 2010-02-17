@@ -4,11 +4,11 @@
 	public void testRenderHomePageWicketTagRemoved() throws Exception
 	{
 		// Remove wicket tags from output
-		application.getApplication().getMarkupSettings().setStripWicketTags(true);
-		application.startPage(WicketPanelPage.class);
+		tester.getApplication().getMarkupSettings().setStripWicketTags(true);
+		tester.startPage(WicketPanelPage.class);
 
 		// Validate the document
-		String document = application.getServletResponse().getDocument();
+		String document = tester.getLastResponseAsString();
 		log.info(document);
 		assertTrue("Document with Wicket tags stripped did not match", validatePage2(document));
 	}
