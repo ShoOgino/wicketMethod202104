@@ -1,0 +1,11 @@
+	private String getAbsolutePrefix()
+	{
+		String port = "";
+		if (("http".equals(httpServletRequest.getScheme()) && httpServletRequest.getServerPort() != 80) ||
+			("https".equals(httpServletRequest.getScheme()) && httpServletRequest.getServerPort() != 443))
+		{
+			port = ":" + httpServletRequest.getServerPort();
+		}
+		return httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName() + port;
+	}
+

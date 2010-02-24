@@ -8,7 +8,15 @@
 	public final CharSequence urlFor(final RequestListenerInterface listener)
 	{
 		PageAndComponentProvider provider = new PageAndComponentProvider(getPage(), this);
-		IRequestHandler handler = new ListenerInterfaceRequestHandler(provider, listener);
+		IRequestHandler handler;
+		if (getPage().isPageStateless())
+		{
+			handler = new BookmarkableListenerInterfaceRequestHandler(provider, listener);
+		}
+		else
+		{
+			handler = new ListenerInterfaceRequestHandler(provider, listener);
+		}
 		return getRequestCycle().renderUrlFor(handler);
 	}
 
