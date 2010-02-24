@@ -1,4 +1,4 @@
-	private void processRequest(MockWebRequest request, IRequestHandler forcedRequestHandler,
+	private boolean processRequest(MockWebRequest request, IRequestHandler forcedRequestHandler,
 		boolean redirect)
 	{
 
@@ -33,7 +33,10 @@
 				requestCycle.forceRequestHandler(forcedRequestHandler);
 			}
 
-			requestCycle.processRequestAndDetach();
+			if (!requestCycle.processRequestAndDetach())
+			{
+				return false;
+			}
 
 			recordRequestResponse();
 			setupNextRequestCycle();
@@ -62,10 +65,13 @@
 
 				--redirectCount;
 			}
+
+			return true;
 		}
 		finally
 		{
 			redirectCount = 0;
 		}
+
 	}
 
