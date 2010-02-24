@@ -20,7 +20,14 @@
 			protected void onSubmit()
 			{
 				info("Submitted text: " + field.getDefaultModelObject());
+
+				// store the value in page parameters
+				getPage().getPageParameters().setNamedParameter(PARAMETER_NAME, number);
+
+				// force redirect, otherwise the listener interface URL would be kept
+				getRequestCycle().setResponsePage(getPage());
 			}
+
 		};
 		statelessForm.add(field);
 		add(statelessForm);
