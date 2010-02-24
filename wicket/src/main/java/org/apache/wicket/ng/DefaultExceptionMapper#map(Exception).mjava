@@ -3,11 +3,13 @@
 		if (e instanceof StalePageException)
 		{
 			// If the page was stale, just rerender it
-			return new RenderPageRequestHandler(new PageProvider(
-				((StalePageException)e).getPage()));
+			return new RenderPageRequestHandler(new PageProvider(((StalePageException)e).getPage()));
 		}
 		else
-			// TODO
-			return null;
+		{
+			return new RenderPageRequestHandler(new PageProvider(Application.get()
+				.getApplicationSettings()
+				.getInternalErrorPage()));
+		}
 	}
 

@@ -4,7 +4,7 @@
 	public void testExpirePage()
 	{
 		tester.startPage(TestExpirePage.class);
-		String document = tester.getServletResponse().getDocument();
+		String document = tester.getLastResponseAsString();
 		assertTrue(document.contains("Click me to get an error"));
 
 		AjaxLink link = (AjaxLink)tester.getComponentFromLastRenderedPage("link");
@@ -20,22 +20,15 @@
 		// assertTrue(document.contains("-"));
 		// tester.assertAjaxLocation();
 
-		WebRequestCycle cycle = tester.setupRequestAndResponse(true);
-		tester.getWicketSession().invalidateNow();
+		tester.getSession().invalidateNow();
 
 		// Clear the session to remove the pages
-		tester.getWicketSession().invalidateNow();
+		tester.getSession().invalidateNow();
 
 		// Invoke the call back URL of the ajax event behavior
-		String callbackUrl = ((AjaxEventBehavior)link.getBehaviors().get(0)).getCallbackUrl()
-			.toString();
-		tester.getServletRequest().setURL(callbackUrl);
+		tester.clickLink(link);
 
-		// Do not call processRequestCycle() because it throws an
-		// exception when getting an error page
-		cycle.request();
-
-		document = tester.getServletResponse().getDocument();
+		document = tester.getLastResponseAsString();
 		assertTrue(document.equals("-"));
 		tester.assertAjaxLocation();
 	}
