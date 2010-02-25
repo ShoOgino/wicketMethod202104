@@ -8,11 +8,12 @@
 
 		try
 		{
-			Response response = requestCycle.getResponse();
+			BufferedWebResponse response = (BufferedWebResponse)requestCycle.getResponse();
 
 			// Transform the data
-			CharSequence output = transform(component, response.toString());
-			webResponse.write(output);
+			CharSequence output = transform(component, response.getText());
+			response.setText(output);
+			response.writeTo(webResponse);
 		}
 		catch (Exception ex)
 		{

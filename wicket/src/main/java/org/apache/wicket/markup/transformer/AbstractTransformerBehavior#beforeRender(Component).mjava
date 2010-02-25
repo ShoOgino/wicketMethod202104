@@ -9,10 +9,10 @@
 		final RequestCycle requestCycle = RequestCycle.get();
 
 		// Temporarily replace the web response with a String response
-		webResponse = requestCycle.getResponse();
+		webResponse = (WebResponse)requestCycle.getResponse();
 
 		// Create a new response object
-		final Response response = newResponse();
+		final BufferedWebResponse response = newResponse(webResponse);
 		if (response == null)
 		{
 			throw new IllegalStateException("newResponse() must not return null");
