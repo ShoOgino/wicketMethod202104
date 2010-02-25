@@ -6,15 +6,7 @@
 		WicketTester tester = new WicketTester();
 		tester.getApplication().getSecuritySettings().setAuthorizationStrategy(
 			new RoleAuthorizationStrategy(new UserRolesAuthorizer("ADMIN")));
-		tester.startPage(new ITestPageSource()
-		{
-			private static final long serialVersionUID = 1L;
-
-			public Page getTestPage()
-			{
-				return new AdminPage();
-			}
-		});
+		tester.startPage(AdminPage.class);
 		tester.assertRenderedPage(AdminPage.class);
 	}
 

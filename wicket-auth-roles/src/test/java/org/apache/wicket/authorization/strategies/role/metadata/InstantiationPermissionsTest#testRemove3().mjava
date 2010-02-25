@@ -4,8 +4,6 @@
 	 */
 	public void testRemove3()
 	{
-		WicketTester tester = new WicketTester();
-		tester.setupRequestAndResponse();
 		MetaDataRoleAuthorizationStrategy strategy = new MetaDataRoleAuthorizationStrategy(
 			new IRoleCheckingStrategy()
 			{
@@ -21,7 +19,5 @@
 		MetaDataRoleAuthorizationStrategy.authorize(Page.class, "martijn");
 		MetaDataRoleAuthorizationStrategy.unauthorize(Page.class, "martijn");
 		assertFalse(strategy.isInstantiationAuthorized(Page.class));
-		tester.processRequestCycle();
-		tester.destroy();
 	}
 

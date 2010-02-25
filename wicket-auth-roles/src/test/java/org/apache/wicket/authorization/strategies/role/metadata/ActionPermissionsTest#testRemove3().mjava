@@ -4,8 +4,6 @@
 	 */
 	public void testRemove3()
 	{
-		WicketTester tester = new WicketTester();
-		tester.setupRequestAndResponse();
 		Label label = new Label("label", "text");
 		Action mambo = new Action("mambo");
 		MetaDataRoleAuthorizationStrategy strategy = new MetaDataRoleAuthorizationStrategy(
@@ -22,7 +20,5 @@
 		MetaDataRoleAuthorizationStrategy.authorize(label, mambo, "johan");
 		MetaDataRoleAuthorizationStrategy.unauthorize(label, mambo, "johan");
 		assertFalse(strategy.isActionAuthorized(label, mambo));
-		tester.processRequestCycle();
-		tester.destroy();
 	}
 
