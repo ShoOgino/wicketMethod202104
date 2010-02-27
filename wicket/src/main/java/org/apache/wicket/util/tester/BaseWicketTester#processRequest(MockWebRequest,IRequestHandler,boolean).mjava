@@ -1,21 +1,26 @@
-	private boolean processRequest(MockWebRequest request, IRequestHandler forcedRequestHandler,
-		boolean redirect)
+	private boolean processRequest(MockWebRequest forcedRequest,
+		IRequestHandler forcedRequestHandler, boolean redirect)
 	{
+
+		if (forcedRequest != null)
+		{
+			request = forcedRequest;
+		}
+
+		forcedHandler = forcedRequestHandler;
+		requestCycle = application.createRequestCycle(request, response);
+		ThreadContext.setRequestCycle(requestCycle);
 
 		try
 		{
+
 			if (!redirect)
 			{
 				/*
 				 * we do not reset the session during redirect processing because we want to
 				 * preserve the state before the redirect, eg any error messages reported
 				 */
-				session.reset();
-			}
-
-			if (request != null)
-			{
-				setRequest(request);
+				session.cleanupFeedbackMessages();
 			}
 
 			if (getLastResponse() != null)
@@ -24,13 +29,8 @@
 				// worked...
 				for (Cookie cookie : getLastResponse().getCookies())
 				{
-					this.request.addCookie(cookie);
+					request.addCookie(cookie);
 				}
-			}
-
-			if (forcedRequestHandler != null)
-			{
-				requestCycle.forceRequestHandler(forcedRequestHandler);
 			}
 
 			if (!requestCycle.processRequestAndDetach())
@@ -40,6 +40,13 @@
 
 			recordRequestResponse();
 			setupNextRequestCycle();
+
+
+			// reattach request cycle to thread after it removed itself in detach
+			lastRequestCycle = requestCycle;
+			requestCycle = application.createRequestCycle(request, response);
+			ThreadContext.setRequestCycle(requestCycle);
+
 
 			if (followRedirects && lastResponse.isRedirect())
 			{
@@ -60,7 +67,7 @@
 					newUrl.getQueryParameters());
 				mergedURL.concatSegments(newUrl.getSegments());
 
-				this.request.setUrl(mergedURL);
+				request.setUrl(mergedURL);
 				processRequest(null, null, true);
 
 				--redirectCount;

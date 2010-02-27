@@ -4,16 +4,27 @@
 	 * @param application
 	 *            a <code>WicketTester</code> <code>WebApplication</code> object
 	 */
-	public BaseWicketTester(final MockApplication application)
+	public BaseWicketTester(final WebApplication application)
 	{
 		oldThreadContext = ThreadContext.detach();
 
 		this.application = application;
+
 		// FIXME some tests are leaking applications by not calling destroy on them or overriding
 		// teardown() without calling super, for now we work around by making each name unique
 		this.application.setName("WicketTesterApplication-" + UUID.randomUUID());
 		this.application.set();
+
+		application.setServletContext(new MockServletContext(application, ""));
+
+		// initialize the application
 		this.application.initApplication();
+
+		// reconfigure application for the test environment
+		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
+			application.getPageRendererProvider()));
+		application.setRequestCycleProvider(new TestRequestCycleProvider(
+			application.getRequestCycleProvider()));
 
 		// prepare session
 		session = new MockSession(new MockWebRequest(Url.parse("/")));
