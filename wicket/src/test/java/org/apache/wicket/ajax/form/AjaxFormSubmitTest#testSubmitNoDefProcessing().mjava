@@ -11,6 +11,9 @@
 		FormTester form = tester.newFormTester("form");
 		form.setValue("txt1", "txt1");
 		form.setValue("txt2", "txt2");
+		// mark the button as the one being pressed. there is a ':' infront of name because wicket
+		// escapes "submit" input names as they break browsers
+		tester.getRequest().getPostParameters().setParameterValue(":submit", "x");
 		tester.executeAjaxEvent("form:submit", "onclick");
 		AjaxFormSubmitTestPage page = (AjaxFormSubmitTestPage)tester.getLastRenderedPage();
 		assertFalse((page.getFormSubmitted() & AjaxFormSubmitTestPage.FORM) == AjaxFormSubmitTestPage.FORM);
