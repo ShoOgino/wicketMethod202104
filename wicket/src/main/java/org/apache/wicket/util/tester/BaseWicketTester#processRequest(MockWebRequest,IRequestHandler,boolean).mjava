@@ -8,8 +8,6 @@
 		}
 
 		forcedHandler = forcedRequestHandler;
-		requestCycle = application.createRequestCycle(request, response);
-		ThreadContext.setRequestCycle(requestCycle);
 
 		try
 		{
@@ -33,6 +31,8 @@
 				}
 			}
 
+			requestCycle.setRequest(request);
+
 			if (!requestCycle.processRequestAndDetach())
 			{
 				return false;
@@ -40,12 +40,6 @@
 
 			recordRequestResponse();
 			setupNextRequestCycle();
-
-
-			// reattach request cycle to thread after it removed itself in detach
-			lastRequestCycle = requestCycle;
-			requestCycle = application.createRequestCycle(request, response);
-			ThreadContext.setRequestCycle(requestCycle);
 
 
 			if (followRedirects && lastResponse.isRedirect())
