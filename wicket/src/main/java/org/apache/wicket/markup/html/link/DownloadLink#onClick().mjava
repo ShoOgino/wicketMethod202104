@@ -21,12 +21,6 @@
 			new ResourceStreamRequestHandler(resourceStream)
 			{
 				@Override
-				public String getFileName()
-				{
-					return fn;
-				}
-
-				@Override
 				public void respond(RequestCycle requestCycle)
 				{
 					super.respond(requestCycle);
@@ -36,6 +30,6 @@
 						file.delete();
 					}
 				}
-			});
+			}.setFileName(fn).setContentDisposition(ContentDisposition.ATTACHMENT));
 	}
 
