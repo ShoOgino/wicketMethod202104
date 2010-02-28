@@ -3,17 +3,8 @@
 	 */
 	public void testFormSubmit()
 	{
-		application = new WicketTester(new MyMockWebApplication()
-		{
-			@Override
-			protected WebResponse newWebResponse(HttpServletResponse response)
-			{
-				return new BufferedWebResponse(response);
-			}
-		});
 		// same as above but uses different technique to login
-		application.setupRequestAndResponse();
-		application.processRequestCycle();
+		application.startPage(application.getApplication().getHomePage());
 		MockLoginPage loginPage = (MockLoginPage)application.getLastRenderedPage();
 		assertEquals(((MyMockWebApplication)application.getApplication()).getLoginPage(),
 			loginPage.getClass());
