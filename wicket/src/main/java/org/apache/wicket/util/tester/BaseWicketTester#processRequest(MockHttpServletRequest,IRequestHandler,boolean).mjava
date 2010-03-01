@@ -1,4 +1,4 @@
-	private boolean processRequest(MockWebRequest forcedRequest,
+	private boolean processRequest(MockHttpServletRequest forcedRequest,
 		IRequestHandler forcedRequestHandler, boolean redirect)
 	{
 
@@ -37,7 +37,7 @@
 				}
 			}
 
-			requestCycle.setRequest(request);
+			requestCycle.setRequest(new ServletWebRequest(request, request.getFilterPrefix()));
 
 			if (!requestCycle.processRequestAndDetach())
 			{

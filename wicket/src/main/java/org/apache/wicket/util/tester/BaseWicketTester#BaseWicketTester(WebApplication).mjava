@@ -6,6 +6,10 @@
 	 */
 	public BaseWicketTester(final WebApplication application)
 	{
+		servletContext = new org.apache.wicket.protocol.http.mock.MockServletContext(application,
+			"");
+		hsession = new MockHttpSession(servletContext);
+
 		oldThreadContext = ThreadContext.detach();
 
 		this.application = application;

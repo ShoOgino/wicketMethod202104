@@ -11,7 +11,8 @@
 	 */
 	public Page startPage(IPageProvider pageProvider)
 	{
-		request = new MockWebRequest(new Url());
+		request = new MockHttpServletRequest(application, hsession, servletContext);
+		request.setURL(request.getContextPath() + request.getServletPath() + "/");
 		IRequestHandler handler = new RenderPageRequestHandler(pageProvider);
 		processRequest(request, handler);
 		return getLastRenderedPage();

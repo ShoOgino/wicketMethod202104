@@ -5,13 +5,30 @@
 	 */
 	private byte[] buildRequest()
 	{
+		if (uploadedFiles == null)
+		{
+			if (post.getParameterNames().size() == 0)
+			{
+				return "".getBytes();
+			}
+			Url url = new Url();
+			for (Iterator<String> iterator = post.getParameterNames().iterator(); iterator.hasNext();)
+			{
+				final String name = iterator.next();
+				url.setQueryParameter(name, post.getParameterValue(name.toString()));
+			}
+			String body = url.toString().substring(1);
+			return body.getBytes();
+		}
+
+
 		try
 		{
 			// Build up the input stream based on the files and parameters
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			// Add parameters
-			for (Iterator<String> iterator = parameters.keySet().iterator(); iterator.hasNext();)
+			for (Iterator<String> iterator = post.getParameterNames().iterator(); iterator.hasNext();)
 			{
 				final String name = iterator.next();
 				newAttachment(out);
@@ -20,7 +37,7 @@
 				out.write("\"".getBytes());
 				out.write(crlf.getBytes());
 				out.write(crlf.getBytes());
-				out.write(parameters.get(name).toString().getBytes());
+				out.write(post.getParameterValue(name).toString().getBytes());
 				out.write(crlf.getBytes());
 			}
 
