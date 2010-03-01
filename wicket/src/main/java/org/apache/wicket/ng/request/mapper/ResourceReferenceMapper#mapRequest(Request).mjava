@@ -5,12 +5,14 @@
 	{
 		Url url = request.getUrl();
 
-		for (int i = 0; i < url.getSegments().size(); i++)
+		if (relativePathPartEscapeSequence != null)
 		{
-			if (url.getSegments().get(i).equals(
-				Application.get().getResourceSettings().getParentFolderPlaceholder()))
+			for (int i = 0; i < url.getSegments().size(); i++)
 			{
-				url.getSegments().set(i, "..");
+				if (url.getSegments().get(i).equals(relativePathPartEscapeSequence))
+				{
+					url.getSegments().set(i, "..");
+				}
 			}
 		}
 

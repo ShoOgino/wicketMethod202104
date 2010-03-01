@@ -1,13 +1,14 @@
 	/**
 	 * Constructor
 	 */
-	public SystemMapper()
+	public SystemMapper(IResourceSettings settings)
 	{
 		register(RestartResponseAtInterceptPageException.MAPPER);
 		register(new HomePageMapper());
 		register(new PageInstanceMapper());
 		register(new BookmarkableMapper());
-		register(new ResourceReferenceMapper());
+		register(new ResourceReferenceMapper(new SimplePageParametersEncoder(),
+			settings.getParentFolderPlaceholder()));
 		register(new BufferedResponseMapper());
 	}
 

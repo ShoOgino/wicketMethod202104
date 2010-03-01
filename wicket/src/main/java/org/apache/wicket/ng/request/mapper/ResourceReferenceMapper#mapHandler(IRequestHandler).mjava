@@ -26,18 +26,16 @@
 				url = encodePageParameters(url, parameters, pageParametersEncoder);
 			}
 
-			final CharSequence placeholder = Application.get()
-				.getResourceSettings()
-				.getParentFolderPlaceholder();
-
-			for (int i = 0; i < url.getSegments().size(); i++)
+			if (relativePathPartEscapeSequence != null)
 			{
-				if ("..".equals(url.getSegments().get(i)))
+				for (int i = 0; i < url.getSegments().size(); i++)
 				{
-					url.getSegments().set(i, placeholder.toString());
+					if ("..".equals(url.getSegments().get(i)))
+					{
+						url.getSegments().set(i, relativePathPartEscapeSequence);
+					}
 				}
 			}
-
 			return url;
 		}
 		return null;
