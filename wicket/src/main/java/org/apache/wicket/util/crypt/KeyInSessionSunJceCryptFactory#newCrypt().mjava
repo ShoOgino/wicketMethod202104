@@ -1,19 +1,18 @@
 	public ICrypt newCrypt()
 	{
 		RequestCycle rc = RequestCycle.get();
-		HttpServletRequest request = ((ServletWebRequest)rc.getRequest()).getHttpServletRequest();
 
-		// get http session, create if necessary
-		HttpSession session = request.getSession(true);
+		Session session = Session.get();
+		session.bind();
+
 
 		// retrieve or generate encryption key from session
-		final String keyAttr = Application.get().getApplicationKey() + "." + getClass().getName();
-		String key = (String)session.getAttribute(keyAttr);
+		String key = session.getMetaData(KEY);
 		if (key == null)
 		{
 			// generate new key
 			key = session.getId() + "." + UUID.randomUUID().toString();
-			session.setAttribute(keyAttr, key);
+			session.setMetaData(KEY, key);
 		}
 
 		// build the crypt based on session key

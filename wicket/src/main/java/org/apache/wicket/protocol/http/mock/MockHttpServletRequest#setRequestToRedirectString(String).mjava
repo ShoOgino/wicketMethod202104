@@ -1,0 +1,33 @@
+	/**
+	 * Initialize the request parameters from the given redirect string that redirects back to a
+	 * particular component for display.
+	 * 
+	 * @param redirect
+	 *            The redirect string to display from
+	 */
+	public void setRequestToRedirectString(final String redirect)
+	{
+		parameters.clear();
+
+		int queryStringPos = redirect.indexOf('?');
+
+		// Decode the parameters
+		if (queryStringPos != -1)
+		{
+			final String queryString = redirect.substring(queryStringPos + 1);
+			RequestUtils.decodeParameters(queryString, parameters);
+		}
+
+		// We need to absolutize the redirect URL as we are not as smart as a web-browser
+		// (WICKET-702)
+		url = redirect;
+		if ((url.length() == 0) || (url.charAt(0) != '/'))
+		{
+			url = getContextPath() + getServletPath() + "/" + redirect;
+		}
+
+		// Remove occurrences of ".." from the path
+		url = RequestUtils.removeDoubleDots(url);
+		log.info("Redirecting to " + url);
+	}
+

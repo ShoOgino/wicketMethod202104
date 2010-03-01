@@ -5,6 +5,12 @@
 			// If the page was stale, just rerender it
 			return new RenderPageRequestHandler(new PageProvider(((StalePageException)e).getPage()));
 		}
+		else if (e instanceof PageExpiredException)
+		{
+			return new RenderPageRequestHandler(new PageProvider(Application.get()
+				.getApplicationSettings()
+				.getPageExpiredErrorPage()));
+		}
 		else
 		{
 			return new RenderPageRequestHandler(new PageProvider(Application.get()
