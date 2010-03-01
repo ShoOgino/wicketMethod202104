@@ -3,12 +3,14 @@
 	 */
 	public void testSubmitWithoutUploadFile()
 	{
-		tester.startPage(MockFormFileUploadPage.class);
+		tester.startPage(MockFormFileUploadPage.class, new PageParameters("required=true"));
 		MockFormFileUploadPage page = (MockFormFileUploadPage)tester.getLastRenderedPage();
 
 		Session.get().setLocale(Locale.US);
 
 		FormTester formTester = tester.newFormTester("form");
+
+		tester.getRequest().setUseMultiPartContentType(true);
 		// without file upload
 		formTester.submit();
 		assertNull(page.getFileUpload());
