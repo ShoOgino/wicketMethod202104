@@ -37,12 +37,14 @@
 				}
 			}
 
-			requestCycle.setRequest(new ServletWebRequest(request, request.getFilterPrefix()));
+			applyRequest();
+			requestCycle.scheduleRequestHandlerAfterCurrent(null);
 
 			if (!requestCycle.processRequestAndDetach())
 			{
 				return false;
 			}
+
 
 			recordRequestResponse();
 			setupNextRequestCycle();
@@ -56,7 +58,8 @@
 						"Possible infinite redirect detected. Bailing out.");
 				}
 				++redirectCount;
-				Url newUrl = Url.parse(lastResponse.getRedirectUrl());
+				Url newUrl = Url.parse(lastResponse.getRedirectLocation());
+
 				if (newUrl.isAbsolute())
 				{
 					throw new WicketRuntimeException("Can not follow absolute redirect URL.");

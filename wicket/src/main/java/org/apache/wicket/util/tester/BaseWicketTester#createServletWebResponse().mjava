@@ -1,0 +1,23 @@
+	/**
+	 * @return
+	 */
+	private ServletWebResponse createServletWebResponse()
+	{
+		return new ServletWebResponse(request, response)
+		{
+			@Override
+			public void sendRedirect(String url)
+			{
+				super.sendRedirect(url);
+				try
+				{
+					getHttpServletResponse().sendRedirect(url);
+				}
+				catch (IOException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+		};
+	}
+

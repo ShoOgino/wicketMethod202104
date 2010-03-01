@@ -2,11 +2,11 @@
 	{
 		request = new MockHttpServletRequest(application, hsession, servletContext);
 		request.setURL(request.getContextPath() + request.getServletPath() + "/");
-		response = new MockWebResponse();
+		response = new MockHttpServletResponse(request);
 
 
-		requestCycle = application.createRequestCycle(new ServletWebRequest(request,
-			request.getFilterPrefix()), response);
+		requestCycle = application.createRequestCycle(createServletWebRequest(),
+			createServletWebResponse());
 		requestCycle.setCleanupFeedbackMessagesOnDetach(false);
 		ThreadContext.setRequestCycle(requestCycle);
 
