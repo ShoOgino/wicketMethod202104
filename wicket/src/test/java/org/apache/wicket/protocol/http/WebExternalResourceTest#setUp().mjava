@@ -9,9 +9,11 @@
 		Streams.copy(in, out);
 		in.close();
 		out.close();
-		tester = new WicketTester(tempDir.getPath());
+		tester = new WicketTester(new MockApplication(), tempDir.getPath());
 		// We fake the browser URL, otherwise Wicket doesn't know the requested URL and cannot guess
 		// the Content-Type
-		tester.getRequest().setPath("/index.html");
+		tester.getRequest().setURL("index.html");
+
+
 	}
 

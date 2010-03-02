@@ -1,0 +1,43 @@
+	/**
+	 * Creates a <code>WicketTester</code>.
+	 * 
+	 * @param application
+	 *            a <code>WicketTester</code> <code>WebApplication</code> object
+	 * 
+	 * 
+	 * @param servletContextBasePath
+	 *            the absolute path on disk to the web application's contents (e.g. war root) - may
+	 *            be <code>null</code>
+	 */
+	public BaseWicketTester(final WebApplication application, String servletContextBasePath)
+	{
+		servletContext = new org.apache.wicket.protocol.http.mock.MockServletContext(application,
+			servletContextBasePath);
+		hsession = new MockHttpSession(servletContext);
+
+		oldThreadContext = ThreadContext.detach();
+
+		this.application = application;
+
+		// FIXME some tests are leaking applications by not calling destroy on them or overriding
+		// teardown() without calling super, for now we work around by making each name unique
+		this.application.setName("WicketTesterApplication-" + UUID.randomUUID());
+		this.application.set();
+
+		application.setServletContext(servletContext);
+
+		// initialize the application
+		this.application.initApplication();
+
+		// reconfigure application for the test environment
+		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
+			application.getPageRendererProvider()));
+		application.setRequestCycleProvider(new TestRequestCycleProvider(
+			application.getRequestCycleProvider()));
+		application.setSessionStoreProvider(new TestSessionStoreProvider());
+		application.setPageManagerProvider(new TestPageManagerProvider());
+
+		// prepare session
+		setupNextRequestCycle();
+	}
+
