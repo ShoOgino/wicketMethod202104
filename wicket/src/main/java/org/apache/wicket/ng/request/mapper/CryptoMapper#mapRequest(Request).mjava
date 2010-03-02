@@ -1,0 +1,12 @@
+	public IRequestHandler mapRequest(Request request)
+	{
+		Url url = decryptUrl(request.getUrl());
+
+		if (url == null)
+		{
+			return null;
+		}
+
+		return wrappedMapper.mapRequest(request.requestWithUrl(url));
+	}
+
