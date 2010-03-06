@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.ng.request.IRequestMapper#mapRequest(org.apache.wicket.Request)
+	 */
+	public IRequestHandler mapRequest(Request request)
+	{
+		Url url = request.getUrl();
+
+		if (escapeSequence.get() != null)
+		{
+			for (int i = 0; i < url.getSegments().size(); i++)
+			{
+				if (url.getSegments().get(i).equals(escapeSequence.get()))
+				{
+					url.getSegments().set(i, "..");
+				}
+			}
+		}
+
+		return chain.mapRequest(request.requestWithUrl(url));
+	}
+
