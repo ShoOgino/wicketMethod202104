@@ -1,0 +1,16 @@
+	/**
+	 * Converts the root mapper to a {@link ICompoundRequestMapper} if necessary and returns the
+	 * converted instance.
+	 * 
+	 * @return compound instance of the root mapper
+	 */
+	public ICompoundRequestMapper getRootMapperAsCompound()
+	{
+		IRequestMapper root = getRootRequestMapper();
+		if (!(root instanceof ICompoundRequestMapper))
+		{
+			root = new CompoundRequestMapper().add(root);
+		}
+		return (ICompoundRequestMapper)root;
+	}
+
