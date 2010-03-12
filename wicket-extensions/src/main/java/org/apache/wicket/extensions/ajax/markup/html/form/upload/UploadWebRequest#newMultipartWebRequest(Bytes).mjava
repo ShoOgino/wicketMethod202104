@@ -2,13 +2,11 @@
 	 * @see org.apache.wicket.protocol.http.WebRequest#newMultipartWebRequest(org.apache.wicket.util.lang.Bytes)
 	 */
 	@Override
-	public WebRequest newMultipartWebRequest(Bytes maxsize)
+	public MultipartServletWebRequest newMultipartWebRequest(Bytes maxsize)
 	{
 		try
 		{
-			final MultipartRequest multipartRequest = new MultipartRequest(req, maxsize);
-			multipartRequest.setRequestParameters(getRequestParameters());
-			return multipartRequest;
+			return new MultipartRequest(getHttpServletRequest(), getFilterPrefix(), maxsize);
 		}
 		catch (FileUploadException e)
 		{

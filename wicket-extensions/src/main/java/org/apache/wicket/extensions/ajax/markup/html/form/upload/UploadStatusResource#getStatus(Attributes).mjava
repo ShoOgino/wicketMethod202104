@@ -1,0 +1,24 @@
+	/**
+	 * @param attributes
+	 * @return
+	 */
+	private String getStatus(Attributes attributes)
+	{
+		HttpServletRequest req = ((ServletWebRequest)attributes.getRequest()).getHttpServletRequest();
+		UploadInfo info = UploadWebRequest.getUploadInfo(req);
+
+		String status = null;
+		if (info == null || info.getTotalBytes() < 1)
+		{
+			status = "0|0|0|0";
+		}
+		else
+		{
+			status = "" + info.getPercentageComplete() + "|" + info.getBytesUploadedString() + "|" +
+				info.getTotalBytesString() + "|" + info.getTransferRateString() + "|" +
+				info.getRemainingTimeString();
+		}
+		status = "<html>|" + status + "|</html>";
+		return status;
+	}
+
