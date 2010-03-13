@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.markup.html.image.resource.DynamicImageResource#getImageData()
+	 */
+	@Override
+	protected final byte[] getImageData(Attributes attributes)
+	{
+		// get image data is always called in sync block
+		byte[] data = null;
+		if (imageData != null && challengeIdhashCode != null &&
+			challengeIdhashCode.equals(challengeId.getObject().hashCode()))
+		{
+			data = imageData.get();
+		}
+		if (data == null)
+		{
+			data = render();
+			imageData = new SoftReference<byte[]>(data);
+			setLastModifiedTime(Time.now());
+		}
+		return data;
+	}
+

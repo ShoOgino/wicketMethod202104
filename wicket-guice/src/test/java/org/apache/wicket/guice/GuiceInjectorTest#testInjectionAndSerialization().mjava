@@ -1,6 +1,7 @@
 	public void testInjectionAndSerialization()
 	{
 		MockApplication app = new MockApplication();
+		app.setServletContext(new MockServletContext(app, null));
 		try
 		{
 			ThreadContext.setApplication(app);
@@ -52,7 +53,7 @@
 		}
 		finally
 		{
-			app.destroy();
+			app.internalDestroy();
 			ThreadContext.detach();
 		}
 	}

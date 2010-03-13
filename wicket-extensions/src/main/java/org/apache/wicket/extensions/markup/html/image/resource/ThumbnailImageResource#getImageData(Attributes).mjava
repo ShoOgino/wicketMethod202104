@@ -1,0 +1,15 @@
+	/**
+	 * @return The image data for this dynamic image
+	 */
+	@Override
+	protected byte[] getImageData(Attributes attributes)
+	{
+		if (thumbnail == null)
+		{
+			final BufferedImage image = getScaledImageInstance(attributes);
+			thumbnail = toImageData(image);
+			setLastModifiedTime(Time.now());
+		}
+		return thumbnail;
+	}
+

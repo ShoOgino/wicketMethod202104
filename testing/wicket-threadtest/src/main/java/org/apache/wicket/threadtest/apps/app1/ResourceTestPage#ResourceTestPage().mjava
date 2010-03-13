@@ -32,55 +32,15 @@
 				}
 				final byte[] imageData = baos.toByteArray();
 
-				item.add(new Image("image", new WebResource()
+				item.add(new Image("image", new DynamicImageResource("jpeg")
 				{
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public IResourceStream getResourceStream()
+					protected byte[] getImageData(Attributes attributes)
 					{
-						return new IResourceStream()
-						{
-							private static final long serialVersionUID = 1L;
-
-							public Time lastModifiedTime()
-							{
-								return Time.now();
-							}
-
-							public void setLocale(Locale locale)
-							{
-							}
-
-							public long length()
-							{
-								return imageData.length;
-							}
-
-							public Locale getLocale()
-							{
-								return null;
-							}
-
-							// Make a 16x16 randomly background-coloured JPEG.
-							public InputStream getInputStream()
-								throws ResourceStreamNotFoundException
-							{
-								return new ByteArrayInputStream(imageData);
-							}
-
-							public String getContentType()
-							{
-								return "image/jpeg";
-							}
-
-							public void close() throws IOException
-							{
-							}
-
-						};
+						return imageData;
 					}
-
 				}));
 			}
 
