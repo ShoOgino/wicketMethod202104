@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.request.mapper.parameters.IPageParametersEncoder#decodePageParameters(org.apache.wicket.Request)
+	 */
+	public PageParameters decodePageParameters(Request request)
+	{
+		PageParameters parameters = new PageParameters();
+
+		int i = 0;
+		for (String s : request.getUrl().getSegments())
+		{
+			parameters.setIndexedParameter(i, s);
+			++i;
+		}
+
+		for (QueryParameter p : request.getUrl().getQueryParameters())
+		{
+			parameters.addNamedParameter(p.getName(), p.getValue());
+		}
+
+		return parameters.isEmpty() ? null : parameters;
+	}
+

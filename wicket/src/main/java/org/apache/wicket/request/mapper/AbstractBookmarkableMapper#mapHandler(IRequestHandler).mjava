@@ -1,0 +1,95 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.wicket.ng.request.IRequestHandler)
+	 */
+	public Url mapHandler(final IRequestHandler requestHandler)
+	{
+		if (requestHandler instanceof BookmarkablePageRequestHandler)
+		{
+			// simple bookmarkable URL with no page instance information
+			BookmarkablePageRequestHandler handler = (BookmarkablePageRequestHandler)requestHandler;
+
+			if (!checkPageClass(handler.getPageClass()))
+			{
+				return null;
+			}
+
+			PageInfo info = new PageInfo();
+			UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(info, null),
+				handler.getPageClass(), handler.getPageParameters());
+
+			return buildUrl(urlInfo);
+		}
+		else if (requestHandler instanceof RenderPageRequestHandler)
+		{
+			// possibly hybrid URL - bookmarkable URL with page instance information
+			// but only allowed if the page was created by bookamarkable URL
+
+			RenderPageRequestHandler handler = (RenderPageRequestHandler)requestHandler;
+
+			if (!checkPageClass(handler.getPageClass()))
+			{
+				return null;
+			}
+
+			if (handler.getPageProvider().isNewPageInstance())
+			{
+				// no existing page instance available, don't bother creating new page instance
+				PageInfo info = new PageInfo();
+				UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(info, null),
+					handler.getPageClass(), handler.getPageParameters());
+
+				return buildUrl(urlInfo);
+			}
+
+			IRequestablePage page = handler.getPage();
+
+			if (!pageMustHaveBeenCreatedBookmarkable() || page.wasCreatedBookmarkable())
+			{
+				PageInfo info = null;
+				if (!page.isPageStateless())
+				{
+					info = new PageInfo(page);
+				}
+				PageComponentInfo pageComponentInfo = info != null ? new PageComponentInfo(info,
+					null) : null;
+
+				UrlInfo urlInfo = new UrlInfo(pageComponentInfo, page.getClass(),
+					handler.getPageParameters());
+				return buildUrl(urlInfo);
+			}
+			else
+			{
+				return null;
+			}
+
+		}
+		else if (requestHandler instanceof BookmarkableListenerInterfaceRequestHandler)
+		{
+			// listener interface URL with page class information
+			BookmarkableListenerInterfaceRequestHandler handler = (BookmarkableListenerInterfaceRequestHandler)requestHandler;
+			IRequestablePage page = handler.getPage();
+
+			if (!checkPageClass(page.getClass()))
+			{
+				return null;
+			}
+
+			Integer renderCount = null;
+			if (handler.getListenerInterface().isIncludeRenderCount())
+			{
+				renderCount = page.getRenderCount();
+			}
+
+			PageInfo pageInfo = new PageInfo(page);
+			ComponentInfo componentInfo = new ComponentInfo(renderCount,
+				requestListenerInterfaceToString(handler.getListenerInterface()),
+				handler.getComponent().getPageRelativePath(), handler.getBehaviorIndex());
+
+			UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(pageInfo, componentInfo),
+				page.getClass(), handler.getPageParameters());
+			return buildUrl(urlInfo);
+		}
+
+		return null;
+	}
+

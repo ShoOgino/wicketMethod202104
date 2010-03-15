@@ -1,0 +1,43 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestMapper#mapRequest(org.apache.wicket.Request)
+	 */
+	public IRequestHandler mapRequest(Request request)
+	{
+		Url url = request.getUrl();
+
+		if (url.getSegments().size() >= 4 &&
+			urlStartsWith(url, getContext().getNamespace(), getContext().getResourceIdentifier()))
+		{
+			String className = url.getSegments().get(2);
+			StringBuilder name = new StringBuilder();
+			for (int i = 3; i < url.getSegments().size(); ++i)
+			{
+				if (name.length() > 0)
+				{
+					name.append("/");
+				}
+				name.append(url.getSegments().get(i));
+			}
+
+			ResourceReference.UrlAttributes attributes = getResourceReferenceAttributes(url);
+
+			// extract the PageParameters from URL if there are any
+			PageParameters pageParameters = extractPageParameters(request,
+				url.getSegments().size(), pageParametersEncoder);
+
+			Class<?> scope = resolveClass(className);
+			if (scope != null)
+			{
+				ResourceReference res = getContext().getResourceReferenceRegistry()
+					.getResourceReference(scope, name.toString(), attributes.getLocale(),
+						attributes.getStyle(), attributes.getVariation(), true);
+
+				if (res != null)
+				{
+					return new ResourceReferenceRequestHandler(res, pageParameters);
+				}
+			}
+		}
+		return null;
+	}
+

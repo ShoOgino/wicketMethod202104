@@ -1,0 +1,52 @@
+	/**
+	 * @see org.apache.wicket.request.mapper.AbstractBookmarkableMapper#parseRequest(org.apache.wicket.Request)
+	 */
+	@Override
+	protected UrlInfo parseRequest(Request request)
+	{
+		Url url = request.getUrl();
+
+		// when redirect to buffer/render is active and redirectFromHomePage returns true
+		// check mounted class against the home page class. if it matches let wicket redirect
+		// to the mounted URL
+		if (redirectFromHomePage() && checkHomePage(url))
+		{
+			UrlInfo info = new UrlInfo(null, getContext().getHomePageClass(), newPageParameters());
+			return info;
+		}
+		// check if the URL is long enough and starts with the proper segments
+		else if (url.getSegments().size() >= mountSegments.length &&
+			urlStartsWith(url, mountSegments))
+		{
+			// try to extract page and component information from URL
+			PageComponentInfo info = getPageComponentInfo(url);
+
+			Class<? extends IRequestablePage> pageClass = this.pageClass.get();
+
+			// extract the PageParameters from URL if there are any
+			PageParameters pageParameters = extractPageParameters(request, mountSegments.length,
+				pageParametersEncoder);
+
+			// check if there are placeholders in mount segments
+			for (int i = 0; i < mountSegments.length; ++i)
+			{
+				String placeholder = getPlaceholder(mountSegments[i]);
+				if (placeholder != null)
+				{
+					// extract the parameter from URL
+					if (pageParameters == null)
+					{
+						pageParameters = new PageParameters();
+					}
+					pageParameters.addNamedParameter(placeholder, url.getSegments().get(i));
+				}
+			}
+
+			return new UrlInfo(info, pageClass, pageParameters);
+		}
+		else
+		{
+			return null;
+		}
+	}
+

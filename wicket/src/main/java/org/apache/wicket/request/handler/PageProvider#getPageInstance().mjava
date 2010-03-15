@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.request.handler.IPageProvider#getPageInstance()
+	 */
+	public IRequestablePage getPageInstance()
+	{
+		if (pageInstance == null)
+		{
+			pageInstance = getPageInstance(pageId, pageClass, pageParameters, renderCount);
+		}
+		if (pageInstance == null)
+		{
+			throw new PageExpiredException("Page expired.");
+		}
+		touchPageInstance();
+		return pageInstance;
+	}
+
