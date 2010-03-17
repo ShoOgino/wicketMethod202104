@@ -4,7 +4,7 @@
 	public void testConcreteProxy()
 	{
 		ConcreteObject proxy = (ConcreteObject)LazyInitProxyFactory.createProxy(
-				ConcreteObject.class, concreteObjectLocator);
+			ConcreteObject.class, concreteObjectLocator);
 
 		// test proxy implements ILazyInitProxy
 		assertTrue(proxy instanceof ILazyInitProxy);
@@ -17,7 +17,7 @@
 		assertEquals(proxy.getMessage(), "concrete");
 
 		// test serialization
-		ConcreteObject proxy2 = (ConcreteObject)Objects.cloneObject(proxy);
+		ConcreteObject proxy2 = (ConcreteObject)WicketObjects.cloneObject(proxy);
 		assertTrue(proxy != proxy2);
 		assertEquals(proxy2.getMessage(), "concrete");
 
@@ -36,7 +36,7 @@
 		};
 
 		ObjectMethodTester testerProxy = (ObjectMethodTester)LazyInitProxyFactory.createProxy(
-				ObjectMethodTester.class, testerLocator);
+			ObjectMethodTester.class, testerLocator);
 		testerProxy.equals(this);
 		testerProxy.hashCode();
 		testerProxy.toString();

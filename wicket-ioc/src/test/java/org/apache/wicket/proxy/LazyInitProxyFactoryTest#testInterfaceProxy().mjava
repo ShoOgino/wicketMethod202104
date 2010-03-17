@@ -5,7 +5,7 @@
 	{
 		// test proxy creation for an interface class
 		IInterface proxy = (IInterface)LazyInitProxyFactory.createProxy(IInterface.class,
-				interfaceObjectLocator);
+			interfaceObjectLocator);
 
 		// test we have a jdk dynamic proxy
 		assertTrue(Proxy.isProxyClass(proxy.getClass()));
@@ -18,7 +18,7 @@
 		assertEquals(proxy.getMessage(), "interface");
 
 		// test serialization
-		IInterface proxy2 = (IInterface)Objects.cloneObject(proxy);
+		IInterface proxy2 = (IInterface)WicketObjects.cloneObject(proxy);
 		assertTrue(proxy != proxy2);
 		assertEquals(proxy2.getMessage(), "interface");
 
@@ -37,7 +37,7 @@
 		};
 
 		IObjectMethodTester testerProxy = (IObjectMethodTester)LazyInitProxyFactory.createProxy(
-				IObjectMethodTester.class, testerLocator);
+			IObjectMethodTester.class, testerLocator);
 		testerProxy.equals(this);
 		testerProxy.hashCode();
 		testerProxy.toString();

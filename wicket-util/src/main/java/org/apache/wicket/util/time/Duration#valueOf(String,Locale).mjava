@@ -1,0 +1,53 @@
+	/**
+	 * Converts the given <code>String</code> to a new <code>Duration</code> object. The string can
+	 * take the form of a floating point number followed by a number of milliseconds, seconds,
+	 * minutes, hours or days. For example "6 hours" or "3.4 days". Parsing is case-insensitive.
+	 * 
+	 * @param string
+	 *            a <code>String</code> to parse
+	 * @param locale
+	 *            the <code>Locale</code> used for parsing
+	 * @return the <code>Duration</code> value of the given <code>String</code>
+	 * @throws StringValueConversionException
+	 */
+	public static Duration valueOf(final String string, final Locale locale)
+		throws StringValueConversionException
+	{
+		final Matcher matcher = pattern.matcher(string);
+
+		if (matcher.matches())
+		{
+			final double value = StringValue.valueOf(matcher.group(1), locale).toDouble();
+			final String units = matcher.group(3);
+
+			if (units.equalsIgnoreCase("millisecond"))
+			{
+				return milliseconds(value);
+			}
+			else if (units.equalsIgnoreCase("second"))
+			{
+				return seconds(value);
+			}
+			else if (units.equalsIgnoreCase("minute"))
+			{
+				return minutes(value);
+			}
+			else if (units.equalsIgnoreCase("hour"))
+			{
+				return hours(value);
+			}
+			else if (units.equalsIgnoreCase("day"))
+			{
+				return days(value);
+			}
+			else
+			{
+				throw new StringValueConversionException("Unrecognized units: " + string);
+			}
+		}
+		else
+		{
+			throw new StringValueConversionException("Unable to parse duration: " + string);
+		}
+	}
+

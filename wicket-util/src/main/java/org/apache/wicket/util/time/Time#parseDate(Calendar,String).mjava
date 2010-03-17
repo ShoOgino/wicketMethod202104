@@ -1,0 +1,24 @@
+	/**
+	 * Retrieves a <code>Time</code> instance by parsing 'yyyy.MM.dd' format.
+	 * 
+	 * @param calendar
+	 *            the <code>Calendar</code> to use when parsing date <code>String</code>
+	 * @param string
+	 *            the <code>String</code> to parse
+	 * @return the time
+	 * @throws ParseException
+	 */
+	public static Time parseDate(final Calendar calendar, final String string)
+		throws ParseException
+	{
+		synchronized (dateFormat)
+		{
+			synchronized (calendar)
+			{
+				dateFormat.setCalendar(calendar);
+
+				return valueOf(dateFormat.parse(string));
+			}
+		}
+	}
+

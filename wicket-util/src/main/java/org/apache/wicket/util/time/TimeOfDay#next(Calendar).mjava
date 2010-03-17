@@ -1,0 +1,26 @@
+	/**
+	 * Retrieves the next occurrence of this <code>TimeOfDay</code> on the given
+	 * <code>Calendar</code>.
+	 * 
+	 * @param calendar
+	 *            the <code>Calendar</code> to use
+	 * @return the next occurrence of this <code>TimeOfDay</code> on the given <code>Calendar</code>
+	 */
+	public Time next(final Calendar calendar)
+	{
+		// Get this time of day today
+		final Time timeToday = Time.valueOf(calendar, this);
+
+		// If it has already passed
+		if (timeToday.before(Time.now()))
+		{
+			// Return the time tomorrow
+			return Time.valueOf(calendar, this).add(Duration.ONE_DAY);
+		}
+		else
+		{
+			// Time hasn't happened yet today
+			return timeToday;
+		}
+	}
+
