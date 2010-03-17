@@ -12,7 +12,7 @@
 				" failed to retrieve a File object from model");
 		}
 		final String fn = WicketURLEncoder.QUERY_INSTANCE.encode((fileName != null) ? fileName
-			: file.getName());
+			: file.getName(), getRequest().getCharset());
 
 
 		IResourceStream resourceStream = new FileResourceStream(
@@ -21,7 +21,7 @@
 			new ResourceStreamRequestHandler(resourceStream)
 			{
 				@Override
-				public void respond(RequestCycle requestCycle)
+				public void respond(IRequestCycle requestCycle)
 				{
 					super.respond(requestCycle);
 

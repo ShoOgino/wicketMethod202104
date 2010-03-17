@@ -1,0 +1,45 @@
+	/**
+	 * @see org.apache.org.apache.wicket.request.IRequestHandler#respond(org.apache.wicket.request.cycle.RequestCycle)
+	 */
+	public void respond(final IRequestCycle requestCycle)
+	{
+		if (getComponent().getPage() == getPage())
+		{
+			if (((WebRequest)requestCycle.getRequest()).isAjax() == false &&
+				listenerInterface.isRenderPageAfterInvocation())
+			{
+				// schedule page render after current request handler is done. this can be
+				// overridden
+				// during invocation of listener
+				// method (i.e. by calling RequestCycle#setResponsePage)
+				RedirectPolicy policy = getPage().isPageStateless() ? RedirectPolicy.NEVER_REDIRECT
+					: RedirectPolicy.AUTO_REDIRECT;
+				requestCycle.scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(
+					new PageProvider(getPage()), policy));
+			}
+
+			if (getBehaviorIndex() == null)
+			{
+				listenerInterface.invoke(getComponent());
+			}
+			else
+			{
+				try
+				{
+					IBehavior behavior = getComponent().getBehaviors().get(behaviorIndex);
+					listenerInterface.invoke(getComponent(), behavior);
+				}
+				catch (IndexOutOfBoundsException e)
+				{
+					throw new WicketRuntimeException("Couldn't find component behavior.");
+				}
+
+			}
+		}
+		else
+		{
+			throw new WicketRuntimeException("Component " + getComponent() +
+				" has been removed from page.");
+		}
+	}
+

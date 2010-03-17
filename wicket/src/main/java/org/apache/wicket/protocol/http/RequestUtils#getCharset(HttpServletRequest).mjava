@@ -1,0 +1,22 @@
+	public static Charset getCharset(HttpServletRequest request)
+	{
+		String charsetName = null;
+		if (request != null)
+		{
+			charsetName = request.getCharacterEncoding();
+		}
+		if (Strings.isEmpty(charsetName))
+		{
+			Application application = Application.get();
+			if (application != null)
+			{
+				charsetName = application.getRequestCycleSettings().getResponseRequestEncoding();
+			}
+		}
+		if (Strings.isEmpty(charsetName))
+		{
+			charsetName = "UTF-8";
+		}
+		return Charset.forName(charsetName);
+	}
+
