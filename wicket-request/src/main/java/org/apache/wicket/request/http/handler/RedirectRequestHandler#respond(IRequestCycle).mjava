@@ -1,0 +1,40 @@
+	/**
+	 * FIXME javadoc - what's special about this implementation?
+	 * 
+	 * @see org.apache.wicket.request.IRequestHandler#respond(org.apache.wicket.request.cycle.RequestCycle)
+	 */
+	public void respond(IRequestCycle requestCycle)
+	{
+		final String location;
+
+		if (redirectUrl.startsWith("/"))
+		{
+			// context-absolute url
+			location = requestCycle.getUrlRenderer().renderContextPathRelativeUrl(redirectUrl,
+					requestCycle.getRequest());
+		}
+		else if (redirectUrl.contains("://"))
+		{
+			// absolute url
+			location = redirectUrl;
+		}
+		else
+		{
+			// relative url, servlet container will translate to absolute per as
+			// per the servlet spec
+			location = redirectUrl;
+		}
+
+		WebResponse response = (WebResponse)requestCycle.getResponse();
+
+		if (status == 302)
+		{
+			response.sendRedirect(location);
+		}
+		else
+		{
+			response.setStatus(301);
+			response.setHeader("Location", location);
+		}
+	}
+
