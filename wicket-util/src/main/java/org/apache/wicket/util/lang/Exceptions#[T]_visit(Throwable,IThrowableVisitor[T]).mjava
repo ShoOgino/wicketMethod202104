@@ -1,0 +1,16 @@
+	public static <T> T visit(Throwable throwable, IThrowableVisitor<T> visitor)
+	{
+		Traversal<T> traversal = new Traversal<T>();
+		Throwable cursor = throwable;
+		while (cursor != null)
+		{
+			visitor.visit(cursor, traversal);
+			if (traversal.stopped)
+			{
+				return traversal.result;
+			}
+			cursor = cursor.getCause();
+		}
+		return null;
+	}
+

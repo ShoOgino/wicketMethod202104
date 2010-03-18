@@ -1,7 +1,8 @@
 	/**
-	 * Executes the specified {@link IRequestHandler}. When the specified {@link IRequestHandler}
-	 * finishes, the {@link IRequestHandler} that invoked this method continues (unless the new
-	 * {@link IRequestHandler} called {@link #replaceAllRequestHandlers(IRequestHandler)}.
+	 * Executes the specified {@link IRequestHandler}. When the specified
+	 * {@link IRequestHandler} finishes, the {@link IRequestHandler} that
+	 * invoked this method continues (unless the new {@link IRequestHandler}
+	 * called {@link #replaceAllRequestHandlers(IRequestHandler)}.
 	 * 
 	 * @param handler
 	 */
@@ -16,13 +17,21 @@
 		{
 			handler.respond(getRequestCycle());
 		}
-		catch (ReplaceHandlerException exception)
+		catch (RuntimeException exception)
 		{
-			if (exception.removeAll && !first)
+			ReplaceHandlerException replacer = Exceptions.findCause(exception,
+					ReplaceHandlerException.class);
+			
+			if (replacer == null)
 			{
 				throw exception;
 			}
-			replacementHandler = exception.replacementRequestHandler;
+			
+			if (replacer.removeAll && !first)
+			{
+				throw (RuntimeException)exception;
+			}
+			replacementHandler = replacer.replacementRequestHandler;
 		}
 		finally
 		{

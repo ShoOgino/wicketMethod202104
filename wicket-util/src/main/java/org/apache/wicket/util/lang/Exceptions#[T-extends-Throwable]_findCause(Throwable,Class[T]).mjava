@@ -1,0 +1,16 @@
+	public static <T extends Throwable> T findCause(Throwable throwable, final Class<T> causeType)
+	{
+		return visit(throwable, new IThrowableVisitor<T>()
+		{
+			@SuppressWarnings("unchecked")
+			public void visit(Throwable throwable, Traversal<T> traversal)
+			{
+				if (causeType.isAssignableFrom(throwable.getClass()))
+				{
+					traversal.stop((T)throwable);
+				}
+
+			}
+		});
+	}
+
