@@ -1,0 +1,26 @@
+	/**
+	 * Traverses all child components of the given class in this container, calling the visitor's
+	 * visit method at each one.
+	 * 
+	 * Make sure that if you give a type S that the clazz parameter will only resolve to those
+	 * types. Else a class cast exception will occur.
+	 * 
+	 * @param <S>
+	 *            The type that goes into the Visitor.component() method.
+	 * 
+	 * @param clazz
+	 *            The class of child to visit, or null to visit all children
+	 * @param visitor
+	 *            The visitor to call back to
+	 * @return The return value from a visitor which halted the traversal, or null if the entire
+	 *         traversal occurred
+	 */
+
+	public final <S extends Component, R> R visitChildren(final Class<?> clazz,
+		final IVisitor<S, R> visitor)
+	{
+		Visit<R> visit = new Visit<R>();
+		visitChildren(clazz, visitor, visit);
+		return visit.getResult();
+	}
+

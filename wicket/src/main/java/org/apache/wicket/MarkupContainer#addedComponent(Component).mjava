@@ -36,12 +36,11 @@
 			if (child instanceof MarkupContainer)
 			{
 				MarkupContainer container = (MarkupContainer)child;
-				container.visitChildren(new IVisitor<Component>()
+				container.visitChildren(new IVisitor<Component, Void>()
 				{
-					public Object component(final Component component)
+					public void component(final Component component, final IVisit<Void> visit)
 					{
 						component.onConnectedToPage();
-						return CONTINUE_TRAVERSAL;
 					}
 				});
 			}

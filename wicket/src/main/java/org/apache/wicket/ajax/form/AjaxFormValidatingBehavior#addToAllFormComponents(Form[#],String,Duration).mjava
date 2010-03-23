@@ -8,9 +8,9 @@
 	public static void addToAllFormComponents(final Form<?> form, final String event,
 		final Duration throttleDelay)
 	{
-		form.visitChildren(FormComponent.class, new IVisitor<Component>()
+		form.visitChildren(FormComponent.class, new IVisitor<Component, Void>()
 		{
-			public Object component(Component component)
+			public void component(final Component component, final IVisit<Void> visit)
 			{
 				AjaxFormValidatingBehavior behavior = new AjaxFormValidatingBehavior(form, event);
 				if (throttleDelay != null)
@@ -18,7 +18,7 @@
 					behavior.setThrottleDelay(throttleDelay);
 				}
 				component.add(behavior);
-				return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+				visit.dontGoDeeper();
 			}
 		});
 	}

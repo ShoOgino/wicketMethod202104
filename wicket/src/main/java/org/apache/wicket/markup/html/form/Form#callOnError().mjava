@@ -6,20 +6,20 @@
 	{
 		onError();
 		// call onError on nested forms
-		visitChildren(Form.class, new IVisitor<Component>()
+		visitChildren(Form.class, new IVisitor<Component, Void>()
 		{
-			public Object component(Component component)
+			public void component(final Component component, final IVisit<Void> visit)
 			{
 				final Form<?> form = (Form<?>)component;
 				if (!form.isEnabledInHierarchy() || !form.isVisibleInHierarchy())
 				{
-					return IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+					visit.dontGoDeeper();
+					return;
 				}
 				if (form.hasError())
 				{
 					form.onError();
 				}
-				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
 	}

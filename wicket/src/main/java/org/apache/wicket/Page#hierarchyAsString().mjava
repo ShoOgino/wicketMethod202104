@@ -5,9 +5,9 @@
 	{
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append("Page " + getId());
-		visitChildren(new IVisitor<Component>()
+		visitChildren(new IVisitor<Component, Void>()
 		{
-			public Object component(Component component)
+			public void component(final Component component, final IVisit<Void> visit)
 			{
 				int levels = 0;
 				for (Component current = component; current != null; current = current.getParent())
@@ -16,7 +16,6 @@
 				}
 				buffer.append(StringValue.repeat(levels, "	") + component.getPageRelativePath() +
 					":" + Classes.simpleName(component.getClass()));
-				return null;
 			}
 		});
 		return buffer.toString();

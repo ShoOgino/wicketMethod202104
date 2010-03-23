@@ -6,15 +6,14 @@
 	{
 		super.setRenderAllowed();
 
-		visitChildren(new IVisitor<Component>()
+		visitChildren(new IVisitor<Component, Void>()
 		{
-			public Object component(final Component component)
+			public void component(final Component component, final IVisit<Void> visit)
 			{
 				// Find out if this component can be rendered
 				final boolean renderAllowed = component.isActionAuthorized(RENDER);
 				// Authorize rendering
 				component.setRenderAllowed(renderAllowed);
-				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
 	}

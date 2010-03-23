@@ -5,31 +5,29 @@
 			return true;
 		}
 
-		final boolean[] anyEmbeddedMultipart = new boolean[] { false };
-		visitChildren(Component.class, new IVisitor<Component>()
-		{
-			public Object component(Component component)
+		Boolean anyEmbeddedMultipart = visitChildren(Component.class,
+			new IVisitor<Component, Boolean>()
 			{
-				boolean isMultiPart = false;
-				if (component instanceof Form)
+				public void component(final Component component, final IVisit<Boolean> visit)
 				{
-					Form<?> form = (Form<?>)component;
-					isMultiPart = (form.multiPart != 0);
+					boolean isMultiPart = false;
+					if (component instanceof Form<?>)
+					{
+						Form<?> form = (Form<?>)component;
+						isMultiPart = (form.multiPart != 0);
+					}
+					else if (component instanceof FormComponent<?>)
+					{
+						FormComponent<?> form = (FormComponent<?>)component;
+						isMultiPart = form.isMultiPart();
+					}
+					if (isMultiPart == true)
+					{
+						visit.stop(true);
+					}
 				}
-				else if (component instanceof FormComponent)
-				{
-					FormComponent<?> form = (FormComponent<?>)component;
-					isMultiPart = form.isMultiPart();
-				}
-				if (isMultiPart == true)
-				{
-					anyEmbeddedMultipart[0] = true;
-					return STOP_TRAVERSAL;
-				}
-				return CONTINUE_TRAVERSAL;
-			}
 
-		});
-		return anyEmbeddedMultipart[0];
+			});
+		return Boolean.TRUE.equals(anyEmbeddedMultipart);
 	}
 

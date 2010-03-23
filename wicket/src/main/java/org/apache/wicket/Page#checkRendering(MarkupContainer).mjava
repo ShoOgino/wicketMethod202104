@@ -14,9 +14,9 @@
 		{
 			final List<Component> unrenderedComponents = new ArrayList<Component>();
 			final StringBuffer buffer = new StringBuffer();
-			renderedContainer.visitChildren(new IVisitor<Component>()
+			renderedContainer.visitChildren(new IVisitor<Component, Void>()
 			{
-				public Object component(final Component component)
+				public void component(final Component component, final IVisit<Void> visit)
 				{
 					// If component never rendered
 					if (renderedComponents == null || !renderedComponents.contains(component))
@@ -46,10 +46,9 @@
 							// if the component is not visible in hierarchy we
 							// should not visit its children since they are also
 							// not visible
-							return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+							visit.dontGoDeeper();
 						}
 					}
-					return CONTINUE_TRAVERSAL;
 				}
 			});
 

@@ -4,8 +4,8 @@
 	 * @param visitor
 	 * @return Object
 	 */
-	private static final Object visitComponentsPostOrderHelper(Component component,
-		final Component.IVisitor<Component> visitor)
+	private static final <R> void visitFormComponentsPostOrderHelper(Component component,
+		final FormComponent.IVisitor<R> visitor, Visit<R> visit)
 	{
 		if (component instanceof MarkupContainer)
 		{
@@ -19,31 +19,26 @@
 				}
 				if (visitChildren)
 				{
+					Visit<R> childTraversal = new Visit<R>();
 					final Iterator<? extends Component> children = container.iterator();
 					while (children.hasNext())
 					{
 						final Component child = children.next();
-						Object value = visitComponentsPostOrderHelper(child, visitor);
-						if (value == Component.IVisitor.STOP_TRAVERSAL)
+						visitFormComponentsPostOrderHelper(child, visitor, childTraversal);
+						if (childTraversal.isStopped())
 						{
-							return value;
-						}
-						else if (value == Component.IVisitor.CONTINUE_TRAVERSAL)
-						{
-							// noop
-						}
-						else if (value == Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER)
-						{
-							// noop
-						}
-						else
-						{
-							return value;
+							visit.stop(childTraversal.getResult());
+							return;
 						}
 					}
 				}
 			}
 		}
-		return visitor.component(component);
+
+		if (component instanceof FormComponent<?>)
+		{
+			final FormComponent<?> fc = (FormComponent<?>)component;
+			visitor.formComponent(fc, visit);
+		}
 	}
 

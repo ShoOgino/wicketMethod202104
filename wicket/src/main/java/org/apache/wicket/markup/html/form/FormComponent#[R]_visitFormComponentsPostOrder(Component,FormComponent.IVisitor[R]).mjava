@@ -8,14 +8,17 @@
 	 * @param visitor
 	 *            The visitor to call
 	 */
-	public static final void visitComponentsPostOrder(Component component,
-		final Component.IVisitor<Component> visitor)
+	public static final <R> R visitFormComponentsPostOrder(Component component,
+		final FormComponent.IVisitor<R> visitor)
 	{
 		if (visitor == null)
 		{
 			throw new IllegalArgumentException("Argument `visitor` cannot be null");
 		}
 
-		visitComponentsPostOrderHelper(component, visitor);
+		Visit<R> visit = new Visit<R>();
+		visitFormComponentsPostOrderHelper(component, visitor, visit);
+		return visit.getResult();
+
 	}
 

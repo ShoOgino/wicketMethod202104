@@ -1,0 +1,53 @@
+	private final <S extends Component, R> void visitChildren(final Class<?> clazz,
+		final IVisitor<S, R> visitor, Visit<R> visit)
+	{
+		if (visitor == null)
+		{
+			throw new IllegalArgumentException("argument visitor may not be null");
+		}
+
+		// Iterate through children of this container
+		for (int i = 0; i < children_size(); i++)
+		{
+			// Get next child component
+			final Component child = children_get(i);
+
+			// Is the child of the correct class (or was no class specified)?
+			if (clazz == null || clazz.isInstance(child))
+			{
+				Visit<R> childTraversal = new Visit<R>();
+
+				// Call visitor
+				@SuppressWarnings("unchecked")
+				S s = (S)child;
+				visitor.component(s, childTraversal);
+
+				if (childTraversal.isStopped())
+				{
+					visit.stop(childTraversal.getResult());
+					return;
+				}
+				else if (childTraversal.isDontGoDeeper())
+				{
+					continue;
+				}
+			}
+
+			// If child is a container
+			if ((child instanceof MarkupContainer) && !visit.isDontGoDeeper())
+			{
+				Visit<R> childTraversal = new Visit<R>();
+
+				// visit the children in the container
+				((MarkupContainer)child).visitChildren(clazz, visitor, visit);
+
+				if (visit.isStopped())
+				{
+					return;
+				}
+			}
+		}
+
+		return;
+	}
+

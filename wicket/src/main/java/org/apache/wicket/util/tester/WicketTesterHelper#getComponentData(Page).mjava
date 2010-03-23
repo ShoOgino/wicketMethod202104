@@ -12,9 +12,9 @@
 
 		if (page != null)
 		{
-			page.visitChildren(new IVisitor<Component>()
+			page.visitChildren(new IVisitor<Component, Void>()
 			{
-				public Object component(final Component component)
+				public void component(final Component component, final IVisit<Void> visit)
 				{
 					final ComponentData object = new ComponentData();
 
@@ -40,7 +40,6 @@
 					}
 
 					data.add(object);
-					return IVisitor.CONTINUE_TRAVERSAL;
 				}
 			});
 		}

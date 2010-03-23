@@ -6,10 +6,11 @@
 	 */
 	public final IFormSubmittingComponent findSubmittingButton()
 	{
-		IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)getPage().visitChildren(
-			IFormSubmittingComponent.class, new IVisitor<Component>()
+		IFormSubmittingComponent submittingComponent = getPage().visitChildren(
+			IFormSubmittingComponent.class, new IVisitor<Component, IFormSubmittingComponent>()
 			{
-				public Object component(final Component component)
+				public void component(final Component component,
+					final IVisit<IFormSubmittingComponent> visit)
 				{
 					// Get submitting component
 					final IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)component;
@@ -35,10 +36,10 @@
 									submittingComponent.getInputName() + " (path=" +
 									component.getPageRelativePath() + ") is not enabled");
 							}
-							return submittingComponent;
+							visit.stop(submittingComponent);
+							return;
 						}
 					}
-					return CONTINUE_TRAVERSAL;
 				}
 			});
 

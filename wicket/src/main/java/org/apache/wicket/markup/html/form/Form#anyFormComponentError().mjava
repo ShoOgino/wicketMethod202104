@@ -6,17 +6,14 @@
 	private boolean anyFormComponentError()
 	{
 		// Check ALL children for error messages irrespective of FormComponents or not
-		Boolean error = (Boolean)visitChildren(Component.class, new IVisitor<Component>()
+		Boolean error = visitChildren(Component.class, new IVisitor<Component, Boolean>()
 		{
-			public Object component(final Component component)
+			public void component(final Component component, final IVisit<Boolean> visit)
 			{
 				if (component.hasErrorMessage())
 				{
-					return Boolean.TRUE;
+					visit.stop(true);
 				}
-
-				// Traverse all children
-				return Component.IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
 

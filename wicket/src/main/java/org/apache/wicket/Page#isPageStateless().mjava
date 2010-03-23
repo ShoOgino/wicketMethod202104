@@ -33,17 +33,15 @@
 		if (stateless == null)
 		{
 			final Object[] returnArray = new Object[1];
-			Object returnValue = visitChildren(Component.class, new IVisitor<Component>()
+			Boolean returnValue = visitChildren(Component.class, new IVisitor<Component, Boolean>()
 			{
-				public Object component(Component component)
+				public void component(final Component component, final IVisit<Boolean> visit)
 				{
 					if (!component.isStateless())
 					{
 						returnArray[0] = component;
-						return Boolean.FALSE;
+						visit.stop(Boolean.FALSE);
 					}
-
-					return CONTINUE_TRAVERSAL;
 				}
 			});
 			if (returnValue == null)
@@ -52,7 +50,7 @@
 			}
 			else if (returnValue instanceof Boolean)
 			{
-				stateless = (Boolean)returnValue;
+				stateless = returnValue;
 			}
 
 			// TODO (matej_k): The stateless hint semantics has been changed, this warning doesn't

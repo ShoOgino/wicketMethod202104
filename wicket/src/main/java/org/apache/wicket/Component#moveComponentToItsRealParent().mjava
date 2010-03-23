@@ -37,9 +37,10 @@
 									// This tag belong to the real parent
 									final ComponentTag lastTag = stack.pop();
 									parent.visitChildren(MarkupContainer.class,
-										new IVisitor<MarkupContainer>()
+										new IVisitor<MarkupContainer, Void>()
 										{
-											public Object component(final MarkupContainer component)
+											public void component(final MarkupContainer component,
+												final IVisit<Void> visit)
 											{
 												IMarkupFragment m = component.getMarkup();
 												MarkupStream ms = new MarkupStream(m);
@@ -47,9 +48,9 @@
 												if (ms.hasMore() && (lastTag == ms.getTag()))
 												{
 													component.add(Component.this);
-													return IVisitor.STOP_TRAVERSAL;
+													visit.stop();
+													return;
 												}
-												return IVisitor.CONTINUE_TRAVERSAL;
 											}
 										});
 								}

@@ -8,9 +8,9 @@
 		super.setDefaultModel(model);
 		if (previous instanceof IComponentInheritedModel)
 		{
-			visitChildren(new IVisitor<Component>()
+			visitChildren(new IVisitor<Component, Void>()
 			{
-				public Object component(Component component)
+				public void component(final Component component, final IVisit<Void> visit)
 				{
 					IModel<?> compModel = component.getDefaultModel();
 					if (compModel instanceof IWrapModel)
@@ -25,7 +25,6 @@
 					{
 						component.modelChanged();
 					}
-					return IVisitor.CONTINUE_TRAVERSAL;
 				}
 
 			});

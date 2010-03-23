@@ -1,9 +1,6 @@
-		/**
-		 * @see org.apache.wicket.markup.html.form.FormComponent.IVisitor#formComponent(org.apache.wicket.markup.html.form.IFormVisitorParticipant)
-		 */
-		public Object formComponent(IFormVisitorParticipant component)
+		public void formComponent(final IFormVisitorParticipant component, final IVisit<Void> visit)
 		{
-			if (component instanceof FormComponent)
+			if (component instanceof FormComponent<?>)
 			{
 				FormComponent<?> formComponent = (FormComponent<?>)component;
 
@@ -11,7 +8,8 @@
 				if (!form.isVisibleInHierarchy() || !form.isEnabledInHierarchy())
 				{
 					// do not validate formComponent or any of formComponent's children
-					return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+					visit.dontGoDeeper();
+					return;
 				}
 
 				if (formComponent.isVisibleInHierarchy() && formComponent.isValid() &&
@@ -22,11 +20,12 @@
 			}
 			if (component.processChildren())
 			{
-				return Component.IVisitor.CONTINUE_TRAVERSAL;
+				return;
 			}
 			else
 			{
-				return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+				visit.dontGoDeeper();
+				return;
 			}
 		}
 

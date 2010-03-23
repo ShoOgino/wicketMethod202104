@@ -5,12 +5,11 @@
 	 */
 	private void addFeedbackPanels(final AjaxRequestTarget target)
 	{
-		getComponent().getPage().visitChildren(IFeedback.class, new IVisitor<Component>()
+		getComponent().getPage().visitChildren(IFeedback.class, new IVisitor<Component, Void>()
 		{
-			public Object component(Component component)
+			public void component(final Component component, final IVisit<Void> visit)
 			{
 				target.addComponent(component);
-				return IVisitor.CONTINUE_TRAVERSAL;
 			}
 		});
 	}

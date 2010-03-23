@@ -18,13 +18,13 @@
 					Component.class.getName() + ".class` as the value for this argument");
 		}
 
-		parent.visitChildren(childCriteria, new Component.IVisitor<Component>()
+		parent.visitChildren(childCriteria, new Component.IVisitor<Component, Void>()
 		{
 
-			public Object component(Component component)
+			public void component(final Component component, final IVisit<Void> visit)
 			{
 				addComponent(component);
-				return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+				visit.dontGoDeeper();
 			}
 		});
 	}
