@@ -13,9 +13,26 @@
 		}
 		else
 		{
-			return new RenderPageRequestHandler(new PageProvider(Application.get()
-				.getApplicationSettings()
-				.getInternalErrorPage()));
+			final Application application = Application.get();
+			final UnexpectedExceptionDisplay unexpectedExceptionDisplay = application.getExceptionSettings()
+				.getUnexpectedExceptionDisplay();
+
+			if (IExceptionSettings.SHOW_EXCEPTION_PAGE.equals(unexpectedExceptionDisplay))
+			{
+				return new RenderPageRequestHandler(new PageProvider(
+				// TODO WICKET-NG How to provide the page to ExceptionErrorPage ?!
+					new ExceptionErrorPage(e, null)));
+			}
+			else if (IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE.equals(unexpectedExceptionDisplay))
+			{
+				return new RenderPageRequestHandler(new PageProvider(
+					application.getApplicationSettings().getInternalErrorPage()));
+			}
+			else
+			{
+				// IExceptionSettings.SHOW_NO_EXCEPTION_PAGE
+				return new EmptyRequestHandler();
+			}
 		}
 	}
 
