@@ -1,0 +1,23 @@
+	/**
+	 * Visits any form components inside component if it is a container, or
+	 * component itself if it is itself a form component
+	 * 
+	 * @param component
+	 *            starting point of the traversal
+	 * 
+	 * @param visitor
+	 *            The visitor to call
+	 */
+	public static final <S, R> R visitComponentsPostOrder(Object component,
+			final org.apache.wicket.util.visit.IVisitor<S, R> visitor, IVisitFilter filter)
+	{
+		if (visitor == null)
+		{
+			throw new IllegalArgumentException("Argument `visitor` cannot be null");
+		}
+
+		Visit<R> visit = new Visit<R>();
+		visitComponentsPostOrderHelper(component, visitor, filter, visit);
+		return visit.getResult();
+	}
+

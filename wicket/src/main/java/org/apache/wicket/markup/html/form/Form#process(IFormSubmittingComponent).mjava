@@ -32,15 +32,11 @@
 		final PageParameters parameters = page.getPageParameters();
 		if (parameters != null)
 		{
-			visitFormComponents(new FormComponent.IVisitor<Void>()
+			visitFormComponents(new IVisitor<FormComponent<?>, Void>()
 			{
-				public void formComponent(final IFormVisitorParticipant formComponent,
-					final IVisit<Void> visit)
+				public void component(final FormComponent<?> formComponent, final IVisit<Void> visit)
 				{
-					if (formComponent instanceof FormComponent<?>)
-					{
-						parameters.removeNamedParameter(((FormComponent<?>)formComponent).getInputName());
-					}
+					parameters.removeNamedParameter(formComponent.getInputName());
 				}
 			});
 			parameters.removeNamedParameter(getHiddenFieldId());

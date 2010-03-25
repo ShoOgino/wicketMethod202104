@@ -1,0 +1,51 @@
+	private static final <S, R> void visitChildren(Iterable<?> container, final Class<?> clazz,
+			final IVisitor<S, R> visitor, Visit<R> visit)
+	{
+		if (visitor == null)
+		{
+			throw new IllegalArgumentException("argument visitor may not be null");
+		}
+
+		// Iterate through children of this container
+		for (final Iterator<?> children = container.iterator(); children.hasNext();)
+		{
+			// Get next child component
+			final Object child = children.next();
+
+			// Is the child of the correct class (or was no class specified)?
+			if (clazz == null || clazz.isInstance(child))
+			{
+				Visit<R> childTraversal = new Visit<R>();
+
+				// Call visitor
+				@SuppressWarnings("unchecked")
+				S s = (S)child;
+				visitor.component(s, childTraversal);
+
+				if (childTraversal.isStopped())
+				{
+					visit.stop(childTraversal.getResult());
+					return;
+				}
+				else if (childTraversal.isDontGoDeeper())
+				{
+					continue;
+				}
+			}
+
+			// If child is a container
+			if (!visit.isDontGoDeeper() && (child instanceof Iterable<?>))
+			{
+				// visit the children in the container
+				visitChildren((Iterable<?>)child, clazz, visitor, visit);
+
+				if (visit.isStopped())
+				{
+					return;
+				}
+			}
+		}
+
+		return;
+	}
+

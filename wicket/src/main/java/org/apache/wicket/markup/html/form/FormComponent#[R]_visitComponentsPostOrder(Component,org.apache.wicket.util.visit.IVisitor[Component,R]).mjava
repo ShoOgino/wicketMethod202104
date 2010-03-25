@@ -9,15 +9,30 @@
 	 *            The visitor to call
 	 */
 	public static final <R> R visitComponentsPostOrder(Component component,
-		final Component.IVisitor<Component, R> visitor)
+		final org.apache.wicket.util.visit.IVisitor<Component, R> visitor)
 	{
 		if (visitor == null)
 		{
 			throw new IllegalArgumentException("Argument `visitor` cannot be null");
 		}
 
-		Visit<R> visit = new Visit<R>();
-		visitComponentsPostOrderHelper(component, visitor, visit);
-		return visit.getResult();
+		return Visits.visitComponentsPostOrder(component, visitor, new IVisitFilter()
+		{
+
+			public boolean visitObject(Object object)
+			{
+				return true;
+			}
+
+			public boolean visitChildren(Object object)
+			{
+				if (object instanceof IFormVisitorParticipant)
+				{
+					return ((IFormVisitorParticipant)object).processChildren();
+				}
+				return true;
+			}
+
+		});
 	}
 
