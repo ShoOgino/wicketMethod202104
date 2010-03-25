@@ -1,6 +1,24 @@
-	// TODO replace class argument with IVisitFilter
-	public static final <S, R> R visitChildren(Iterable<?> container, 
-			final IVisitor<S, R> visitor, IVisitFilter filter)
+	/**
+	 * Visits children of the specified {@link Iterable} pre-order (parent
+	 * first). Children are determined by calling {@link Iterable#iterator()}.
+	 * 
+	 * @param <S>
+	 *            the type of object that will be visited, notice that {@code
+	 *            container} is not declared as {@code Iterable<S>} because it
+	 *            may return a generalization of {@code S}
+	 * @param <R>
+	 *            the type of object that should be returned from the visitor,
+	 *            use {@link Void} if no return value is needed
+	 * @param container
+	 *            object whose children will be visited
+	 * @param visitor
+	 *            the visitor
+	 * @param filter
+	 *            filter used to limit the types of objects that will be visited
+	 * @return return value from the {@code visitor} or {@code null} if none
+	 */
+	public static final <S, R> R visitChildren(Iterable<?> container, final IVisitor<S, R> visitor,
+			IVisitFilter filter)
 	{
 		Visit<R> visit = new Visit<R>();
 		visitChildren(container, visitor, filter, visit);
