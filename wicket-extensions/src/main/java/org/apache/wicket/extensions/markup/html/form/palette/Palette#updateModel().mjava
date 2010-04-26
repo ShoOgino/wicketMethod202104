@@ -9,6 +9,7 @@
 	protected final void updateModel()
 	{
 		// prepare model
+		modelChanging();
 		Collection<T> model = getModelCollection();
 		model.clear();
 
@@ -20,7 +21,9 @@
 			final T selectedChoice = it.next();
 			model.add(selectedChoice);
 		}
+		modelChanged();
 
-		setDefaultModelObject(model);
+		// call model.setObject()
+		((IModel<Object>) getDefaultModel()).setObject(model);
 	}
 
