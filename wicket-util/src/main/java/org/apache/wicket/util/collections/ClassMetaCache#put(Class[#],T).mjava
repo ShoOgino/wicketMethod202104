@@ -1,0 +1,13 @@
+	/**
+	 * Puts value into cache
+	 * 
+	 * @param key
+	 * @param value
+	 * @return value previously stored in cache for this key, or {@code null} if none
+	 */
+	public T put(Class<?> key, T value)
+	{
+		ConcurrentHashMap<String, T> container = getClassLoaderCache(key.getClassLoader(), true);
+		return container.put(key(key), value);
+	}
+

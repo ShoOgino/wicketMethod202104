@@ -1,0 +1,19 @@
+	/**
+	 * Gets value from cache or returns {@code null} if not in cache
+	 * 
+	 * @param key
+	 * @return value stored in cache or {@code null} if none
+	 */
+	public T get(Class<?> key)
+	{
+		ConcurrentHashMap<String, T> container = getClassLoaderCache(key.getClassLoader(), false);
+		if (container == null)
+		{
+			return null;
+		}
+		else
+		{
+			return container.get(key(key));
+		}
+	}
+
