@@ -1,0 +1,21 @@
+	/**
+	 * If true, choices that were selected in the model but disabled in rendering will be retained
+	 * in the model after a form submit. Example: Choices are [1, 2, 3, 4]. Model collection is [2,
+	 * 4]. In rendering, choices 2 and 3 are disabled ({@link #isDisabled(Object, int, String)}).
+	 * That means that four checkboxes are rendered, checkboxes 2 and 4 are checked, but 2 and 3 are
+	 * not clickable. User checks 1 and unchecks 4. If this flag is off, the model will be updated
+	 * to [1]. This is because the browser does not re-submit a disabled checked checkbox: it only
+	 * submits [1]. Therefore Wicket will only see the [1] and update the model accordingly. If you
+	 * set this flag to true, Wicket will check the model before updating to find choices that were
+	 * selected but disabled. These choices will then be retained, leading to a new model value of
+	 * [1, 2] as (probably) expected by the user. Note that this will lead to additional calls to
+	 * {@link #isDisabled(Object, int, String)}.
+	 * 
+	 * @return flag
+	 */
+	public boolean isRetainDisabledSelected()
+	{
+		Boolean flag = getMetaData(RETAIN_DISABLED_META_KEY);
+		return (flag != null && flag);
+	}
+
