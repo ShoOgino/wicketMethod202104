@@ -15,7 +15,7 @@
 		List<String> names = new ArrayList<String>(Arrays.asList(BeanFactoryUtils
 				.beanNamesForTypeIncludingAncestors(ctx, clazz)));
 
-		// filter out beans that are not condidates for autowiring
+		// filter out beans that are not candidates for autowiring
 		Iterator<String> it = names.iterator();
 		while (it.hasNext())
 		{
@@ -35,6 +35,21 @@
 		}
 		else if (names.size() > 1)
 		{
+			if (ctx instanceof AbstractApplicationContext)
+			{
+				for (String name : names)
+				{
+					BeanDefinition beanDef = ((AbstractApplicationContext)ctx).getBeanFactory()
+							.getBeanDefinition(name);
+					if (beanDef instanceof AbstractBeanDefinition)
+					{
+						if (((AbstractBeanDefinition)beanDef).isPrimary())
+						{
+							return name;
+						}
+					}
+				}
+			}
 			StringBuilder msg = new StringBuilder();
 			msg.append("more then one bean of type [");
 			msg.append(clazz.getName());
