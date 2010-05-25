@@ -20,8 +20,10 @@
 		while (it.hasNext())
 		{
 			final String possibility = it.next();
+			BeanDefinition beanDef = ((AbstractApplicationContext)ctx).getBeanFactory()
+					.getBeanDefinition(possibility);
 			if (BeanFactoryUtils.isFactoryDereference(possibility) ||
-					possibility.startsWith("scopedTarget."))
+					possibility.startsWith("scopedTarget.") || !beanDef.isAutowireCandidate())
 			{
 				it.remove();
 			}
