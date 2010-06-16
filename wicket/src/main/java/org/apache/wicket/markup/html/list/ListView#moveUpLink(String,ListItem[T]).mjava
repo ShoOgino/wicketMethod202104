@@ -18,7 +18,7 @@
 			@Override
 			public void onClick()
 			{
-				final int index = getList().indexOf(item.getModelObject());
+				final int index = item.getIndex();
 				if (index != -1)
 				{
 
@@ -30,18 +30,10 @@
 				}
 			}
 
-			/**
-			 * @see org.apache.wicket.Component#onBeforeRender()
-			 */
 			@Override
-			protected void onBeforeRender()
+			public boolean isEnabled()
 			{
-				super.onBeforeRender();
-				setAutoEnable(false);
-				if (getList().indexOf(item.getModelObject()) == 0)
-				{
-					setEnabled(false);
-				}
+				return item.getIndex() != 0;
 			}
 		};
 	}
