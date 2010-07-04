@@ -21,8 +21,15 @@
 						{
 							if (childId.equals(tag.getId()))
 							{
-								controller = ComponentResolvers.resolveByComponentHierarchy(
-									container, markupStream, tag);
+								controller = ComponentResolvers.resolve(container, markupStream,
+									tag, new ResolverFilter()
+									{
+										public boolean ignoreResolver(
+											final IComponentResolver resolver)
+										{
+											return resolver instanceof EnclosureHandler;
+										}
+									});
 								break;
 							}
 						}
