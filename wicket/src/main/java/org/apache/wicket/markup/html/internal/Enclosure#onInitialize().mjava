@@ -1,0 +1,19 @@
+	/**
+	 * @see org.apache.wicket.Component#onInitialize()
+	 */
+	@Override
+	protected void onInitialize()
+	{
+		super.onInitialize();
+
+		// enclosure's parent container
+		MarkupContainer container = getEnclosureParent();
+
+		// clear the cache
+		childComponent = null;
+
+		// get Child Component. If not "added", ask a resolver to find it.
+		childComponent = getChildComponent(new MarkupStream(getMarkup()), container);
+		checkChildComponent(childComponent);
+	}
+

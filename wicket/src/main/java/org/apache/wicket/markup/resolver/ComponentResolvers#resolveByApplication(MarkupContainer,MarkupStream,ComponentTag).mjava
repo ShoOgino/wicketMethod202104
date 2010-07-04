@@ -1,0 +1,25 @@
+	/**
+	 * Attempts to resolve a component via application registered resolvers.
+	 * 
+	 * @param container
+	 * @param markupStream
+	 * @param tag
+	 * @return Null, if no component was found
+	 */
+	public static Component resolveByApplication(final MarkupContainer container,
+		final MarkupStream markupStream, final ComponentTag tag)
+	{
+		for (final IComponentResolver resolver : Application.get()
+			.getPageSettings()
+			.getComponentResolvers())
+		{
+			Component component = resolver.resolve(container, markupStream, tag);
+			if (component != null)
+			{
+				return component;
+			}
+		}
+
+		return null;
+	}
+

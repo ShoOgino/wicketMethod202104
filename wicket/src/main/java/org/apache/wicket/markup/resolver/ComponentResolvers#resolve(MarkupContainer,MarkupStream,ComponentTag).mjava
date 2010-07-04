@@ -15,35 +15,14 @@
 		final MarkupStream markupStream, final ComponentTag tag)
 	{
 		// try to resolve using component hierarchy
+		Component component = resolveByComponentHierarchy(container, markupStream, tag);
 
-		Component cursor = container;
-		while (cursor != null)
+		if (component == null)
 		{
-			if (cursor instanceof IComponentResolver)
-			{
-				IComponentResolver resolver = (IComponentResolver)cursor;
-				Component component = resolver.resolve(container, markupStream, tag);
-				if (component != null)
-				{
-					return component;
-				}
-			}
-			cursor = cursor.getParent();
+			// fallback to application-level resolvers
+			component = resolveByApplication(container, markupStream, tag);
 		}
 
-		// fallback to application-level resolvers
-
-		for (final IComponentResolver resolver : Application.get()
-			.getPageSettings()
-			.getComponentResolvers())
-		{
-			Component component = resolver.resolve(container, markupStream, tag);
-			if (component != null)
-			{
-				return component;
-			}
-		}
-
-		return null;
+		return component;
 	}
 

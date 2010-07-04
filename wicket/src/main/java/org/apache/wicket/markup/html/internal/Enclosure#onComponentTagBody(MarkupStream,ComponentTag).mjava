@@ -3,16 +3,11 @@
 	 *      org.apache.wicket.markup.ComponentTag)
 	 */
 	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
-		// enclosure's parent container
-		MarkupContainer container = getEnclosureParent();
-
-		Component controller = container.get(childId.toString());
-		checkChildComponent(controller);
-
+		// TODO this is where I wish we had something like "enum(TAG, BODY, NONE, ALL) isVisible()"
 		// set the enclosure visibility
-		boolean visible = controller.determineVisibility();
+		boolean visible = childComponent.determineVisibility();
 
 		// We want to know which components are rendered inside the enclosure
 		final IComponentOnAfterRenderListener listener = new EnclosureListener(this);
