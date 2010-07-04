@@ -1,8 +1,13 @@
+	/**
+	 * 
+	 * @param forcedRequest
+	 * @param forcedRequestHandler
+	 * @param redirect
+	 * @return
+	 */
 	private boolean processRequest(MockHttpServletRequest forcedRequest,
 		IRequestHandler forcedRequestHandler, boolean redirect)
 	{
-
-
 		if (forcedRequest != null)
 		{
 			request = forcedRequest;
@@ -17,7 +22,6 @@
 
 		try
 		{
-
 			if (!redirect)
 			{
 				/*
@@ -45,19 +49,17 @@
 				return false;
 			}
 
-
 			recordRequestResponse();
 			setupNextRequestCycle();
 
-
 			if (followRedirects && lastResponse.isRedirect())
 			{
-				if (redirectCount == 100)
+				if (redirectCount++ >= 100)
 				{
 					throw new IllegalStateException(
 						"Possible infinite redirect detected. Bailing out.");
 				}
-				++redirectCount;
+
 				Url newUrl = Url.parse(lastResponse.getRedirectLocation(),
 					Charset.forName(request.getCharacterEncoding()));
 
@@ -83,6 +85,5 @@
 		{
 			redirectCount = 0;
 		}
-
 	}
 

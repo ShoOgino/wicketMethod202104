@@ -1,15 +1,16 @@
+	/**
+	 * 
+	 */
 	private void setupNextRequestCycle()
 	{
 		request = new MockHttpServletRequest(application, hsession, servletContext);
 		request.setURL(request.getContextPath() + request.getServletPath() + "/");
 		response = new MockHttpServletResponse(request);
 
-
 		requestCycle = application.createRequestCycle(createServletWebRequest(),
 			createServletWebResponse());
 		requestCycle.setCleanupFeedbackMessagesOnDetach(false);
 		ThreadContext.setRequestCycle(requestCycle);
-
 
 		if (session == null)
 		{
