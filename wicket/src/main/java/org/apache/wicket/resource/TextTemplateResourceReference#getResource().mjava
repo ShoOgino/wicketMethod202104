@@ -1,0 +1,24 @@
+	/**
+	 * Creates a new resource which returns the interpolated value of the text template.
+	 * 
+	 * @return a new resource which returns the interpolated value of the text template
+	 */
+	@Override
+	public IResource getResource()
+	{
+		if (resource != null)
+		{
+			return resource;
+		}
+
+		String stringValue = textTemplate.asString(variablesModel.getObject());
+		variablesModel.detach(); // We're done with the model so detach it!
+
+		StringResourceStream resourceStream = new StringResourceStream(stringValue,
+			textTemplate.getContentType());
+		resourceStream.setLastModified(textTemplate.lastModifiedTime());
+
+		resource = new ResourceStreamResource(resourceStream);
+		return resource;
+	}
+

@@ -1,0 +1,23 @@
+	/**
+	 * Creates a resource reference to a {@link PackagedTextTemplate}.
+	 * 
+	 * @param scope
+	 *            the <code>Class</code> to be used for retrieving the classloader for loading the
+	 *            <code>PackagedTextTemplate</code>
+	 * @param fileName
+	 *            the file name
+	 * @param contentType
+	 *            the mime type of this resource, such as "<code>image/jpeg</code>" or "
+	 *            <code>text/html</code>"
+	 * @param variablesModel
+	 *            the template variables as a model
+	 */
+	public TextTemplateResourceReference(final Class<?> scope, final String fileName,
+		final String contentType, IModel<Map<String, Object>> variablesModel)
+	{
+		super(scope, fileName);
+
+		textTemplate = new PackagedTextTemplate(scope, fileName, contentType);
+		this.variablesModel = variablesModel;
+	}
+
