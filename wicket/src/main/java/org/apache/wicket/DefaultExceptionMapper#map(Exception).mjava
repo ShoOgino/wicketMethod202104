@@ -19,9 +19,9 @@
 
 			if (IExceptionSettings.SHOW_EXCEPTION_PAGE.equals(unexpectedExceptionDisplay))
 			{
-				return new RenderPageRequestHandler(new PageProvider(
-				// TODO WICKET-NG How to provide the page to ExceptionErrorPage ?!
-					new ExceptionErrorPage(e, null)));
+				Page currentPage = extractCurrentPage();
+				return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e,
+					currentPage)));
 			}
 			else if (IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE.equals(unexpectedExceptionDisplay))
 			{
