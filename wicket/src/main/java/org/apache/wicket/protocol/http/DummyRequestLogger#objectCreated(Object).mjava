@@ -1,4 +1,20 @@
 	public void objectCreated(Object value)
 	{
+		RequestData rd = getCurrentRequest();
+
+		if (value instanceof Session)
+		{
+			rd.addEntry("Session created");
+		}
+		else if (value instanceof Page)
+		{
+			Page page = (Page)value;
+			rd.addEntry("Page created, id: " + page.getId() + ", class:" + page.getClass());
+		}
+		else
+		{
+			rd.addEntry("Custom object created: " + value);
+		}
+
 	}
 
