@@ -1,0 +1,30 @@
+	/**
+	 * adds a link that adds a non-temporary behavior to a component. should create a new version
+	 * 
+	 * @param targetComponent
+	 */
+	private void addNonTemporaryBehavior(final Component targetComponent)
+	{
+		final Link<Void> addBehaviorLink = new Link<Void>("addBehaviorLink")
+		{
+			@Override
+			public void onClick()
+			{
+				targetComponent.add(new AbstractBehavior()
+				{
+
+					/**
+					 * @see org.apache.wicket.behavior.AbstractBehavior#isTemporary()
+					 */
+					@Override
+					public boolean isTemporary()
+					{
+						return false;
+					}
+
+				});
+			}
+		};
+		add(addBehaviorLink);
+	}
+

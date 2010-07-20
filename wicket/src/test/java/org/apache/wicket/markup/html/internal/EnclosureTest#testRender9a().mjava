@@ -10,8 +10,9 @@
 
 		page.reset();
 		FormTester formTester = tester.newFormTester("form");
-		tester.getRequest().getPostParameters().setParameterValue(
-			((CheckBox)page.get("form:input")).getInputName(), "true");
+		tester.getRequest()
+			.getPostParameters()
+			.setParameterValue(((CheckBox)page.get("form:input")).getInputName(), "true");
 		page.get("form:label").setVisible(true);
 		formTester.submit();
 		tester.assertRenderedPage(clazz);
@@ -21,12 +22,13 @@
 		assertTrue(page.labelOnBeforeRender);
 
 		page.reset();
-		tester.getRequest().getPostParameters().setParameterValue(
-			((CheckBox)page.get("form:input")).getInputName(), "true");
+		tester.getRequest()
+			.getPostParameters()
+			.setParameterValue(((CheckBox)page.get("form:input")).getInputName(), "true");
 		page.get("form:label").setVisible(false);
 		tester.submitForm("form");
 		tester.assertRenderedPage(clazz);
-		assertResultPage("EnclosurePageExpectedResult_9-2.html");
+		assertResultPage("EnclosurePageExpectedResult_9-2-1.html");
 		// It should be FALSE, but because of auto-component etc. it doesn't
 		// assertFalse(page.inputOnBeforeRender);
 		assertTrue(page.inputOnBeforeRender);

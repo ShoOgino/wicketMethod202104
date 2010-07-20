@@ -1,0 +1,18 @@
+	/**
+	 * Asserts that there is a version of the page for each operation that modified the page
+	 * 
+	 * @param pageManager
+	 * @param versioningPage
+	 */
+	private void checkPageVersionsAreStored(Page versioningPage)
+	{
+		IPageManager pageManager = wicketTester.getApplication().getPageManager();
+
+		int lastPageId = versioningPage.getPageId();
+		while (lastPageId >= 0)
+		{
+			assertNotNull(pageManager.getPage(lastPageId));
+			lastPageId--;
+		}
+	}
+

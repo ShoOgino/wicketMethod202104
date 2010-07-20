@@ -1,8 +1,17 @@
 	/**
-	 * Mark this page as dirty in the session
+	 * Mark this page as modified in the session. If versioning is supported then a new version of
+	 * the page will be stored in {@link IPageStore page store}
 	 */
 	public final void dirty()
 	{
-		// TODO: Increment page id here if manager supports versioning
+		checkHierarchyChange(this);
+
+		final IPageManager pageManager = getSession().getPageManager();
+		if (isVersioned() && pageManager.supportsVersioning() && !getFlag(FLAG_IS_DIRTY))
+		{
+			setFlag(FLAG_IS_DIRTY, true);
+			setNextAvailableId();
+			pageManager.touchPage(this);
+		}
 	}
 
