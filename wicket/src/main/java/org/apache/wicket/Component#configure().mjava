@@ -1,0 +1,37 @@
+	/**
+	 * Triggers {@link #onConfigure()} to be invoked on this component if it has not already during
+	 * this request.
+	 * <p>
+	 * This method should be invoked before any calls to {@link #isVisible()} or
+	 * {@link #isEnabled()}. Usually this method will be called by the framework before the
+	 * component is rendered and so users should not need to call it; however, in cases where
+	 * visibility or enabled or other state of one component depends on the state of another this
+	 * method should be manually invoked on the other component by the user. EG to link visiliby of
+	 * two markup containers the following should be done:
+	 * 
+	 * <pre>
+	 * final WebMarkupContainer source=new WebMarkupContainer("a") {
+	 * 	protected void onConfigure() {
+	 *    setVisible(Math.rand()>0.5f);
+	 *  }
+	 * };
+	 * 
+	 * WebMarkupContainer linked=new WebMarkupContainer("b") {
+	 * 	protected void onConfigure() {
+	 * 		source.configure(); // make sure source is configured
+	 * 		setVisible(source.isVisible());
+	 *  }
+	 * }
+	 * </pre>
+	 * 
+	 * </p>
+	 */
+	public final void configure()
+	{
+		if (!getFlag(FLAG_CONFIGURED))
+		{
+			onConfigure();
+			setFlag(FLAG_CONFIGURED, true);
+		}
+	}
+
