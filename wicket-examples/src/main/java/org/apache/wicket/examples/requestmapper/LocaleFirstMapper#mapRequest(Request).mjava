@@ -1,0 +1,28 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestMapper#mapRequest(org.apache.wicket.request.Request)
+	 */
+	public IRequestHandler mapRequest(Request request)
+	{
+		// locale is the first segment in the url
+		List<String> segments = request.getUrl().getSegments();
+		if (segments != null && segments.size() > 1)
+		{
+			String localeAsString = segments.get(0);
+			if (!Strings.isEmpty(localeAsString))
+			{
+				Locale locale = LocaleHelper.parseLocale(localeAsString);
+				Session.get().setLocale(locale);
+
+				// now that we have proccessed the first segment we need to strip from the url
+				Url url = request.getUrl();
+				url.getSegments().remove(0);
+
+				// create a request based on the new url
+				request = request.requestWithUrl(url);
+			}
+		}
+
+		// chain url processing
+		return chain.mapRequest(request);
+	}
+

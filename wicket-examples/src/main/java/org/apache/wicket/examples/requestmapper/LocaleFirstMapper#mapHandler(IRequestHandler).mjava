@@ -1,0 +1,22 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.wicket.request.IRequestHandler)
+	 */
+	public Url mapHandler(IRequestHandler handler)
+	{
+
+		// let the chain create the url
+		Url url = chain.mapHandler(handler);
+
+		if (url != null)
+		{
+			Locale locale = Session.get().getLocale();
+			if (locale == null)
+			{
+				locale = Locale.US;
+			}
+			url.getSegments().add(0, locale.toString());
+		}
+
+		return url;
+	}
+
