@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.Application#sessionUnbound(java.lang.String)
+	 */
+	@Override
+	public void sessionUnbound(final String sessionId)
+	{
+		super.sessionUnbound(sessionId);
+
+		bufferedResponses.remove(sessionId);
+
+		IRequestLogger logger = getRequestLogger();
+		if (logger != null)
+		{
+			logger.sessionDestroyed(sessionId);
+		}
+	}
+
