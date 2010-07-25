@@ -9,8 +9,14 @@
 	 */
 	private String getSessionAttributePrefix(final Request request)
 	{
-		return "wicket";
-		// TODO:
-		// return application.getSessionAttributePrefix(request);
+		String sessionAttributePrefix = "wicket";
+
+		if (request instanceof WebRequest)
+		{
+			sessionAttributePrefix = WebApplication.get().getSessionAttributePrefix(
+				(WebRequest)request, null);
+		}
+
+		return sessionAttributePrefix;
 	}
 
