@@ -1,0 +1,32 @@
+	/**
+	 * Unlocks all pages locked by this thread
+	 */
+	public void unlockAllPages()
+	{
+		final Thread thread = Thread.currentThread();
+		final Iterator<PageLock> locks = this.locks.values().iterator();
+
+		boolean changed = false;
+		while (locks.hasNext())
+		{
+			// remove all locks held by this thread
+			final PageLock lock = locks.next();
+			if (lock.getThread() == thread)
+			{
+				locks.remove();
+				logger.debug("{} released lock to page {}", thread.getName(), lock.getPageId());
+				changed = true;
+			}
+		}
+
+		if (changed)
+		{
+			// if any locks were removed notify threads waiting for a lock
+			synchronized (semaphore)
+			{
+				logger.debug("{} notifying blocked threads", thread.getName());
+				semaphore.notifyAll();
+			}
+		}
+	}
+
