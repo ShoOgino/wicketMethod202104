@@ -7,9 +7,18 @@
 	 */
 	public final Markup parse() throws IOException, ResourceStreamNotFoundException
 	{
-		MarkupResourceStream markupResourceStream = markup.getMarkupResourceStream();
+		// The root of all markup filters is the xml parser
+		markupFilterChain = new RootMarkupFilter(xmlParser);
+
+		// Convert the list of markup filters into a chain
+		for (IMarkupFilter filter : getMarkupFilters())
+		{
+			filter.setNextFilter(markupFilterChain);
+			markupFilterChain = filter;
+		}
 
 		// Initialize the xml parser
+		MarkupResourceStream markupResourceStream = markup.getMarkupResourceStream();
 		xmlParser.parse(markupResourceStream.getResource().getInputStream(),
 			markupSettings.getDefaultMarkupEncoding());
 

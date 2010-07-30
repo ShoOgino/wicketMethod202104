@@ -1,0 +1,60 @@
+	/**
+	 * Initialize Wicket's MarkupParser with all necessary markup filters. You may subclass this
+	 * method, to add your own filters to the list.
+	 * 
+	 * @param markup
+	 * @return The list of markup filter
+	 */
+	@Override
+	protected MarkupFilterList initializeMarkupFilters(final Markup markup)
+	{
+		// MarkupFilterList is a simple extension of ArrayList providing few additional helpers
+		final MarkupFilterList filters = new MarkupFilterList()
+		{
+			private static final long serialVersionUID = 1L;
+
+			/**
+			 * @see org.apache.wicket.markup.MarkupFactory.MarkupFilterList#onAdd(org.apache.wicket.markup.parser.IMarkupFilter)
+			 */
+			@Override
+			protected boolean onAdd(final IMarkupFilter filter)
+			{
+				// a) allow users to configure wicket filters
+				// b) if return value == false, the filter will not be added
+				return onAppendMarkupFilter(filter);
+			}
+		};
+
+		MarkupResourceStream markupResourceStream = markup.getMarkupResourceStream();
+
+		filters.add(new WicketTagIdentifier(markupResourceStream));
+		filters.add(new HtmlHandler());
+		filters.add(new WicketRemoveTagHandler());
+		filters.add(new WicketLinkTagHandler());
+		filters.add(new WicketNamespaceHandler(markupResourceStream));
+
+		// Provided the wicket component requesting the markup is known ...
+		if ((markupResourceStream != null) && (markupResourceStream.getResource() != null))
+		{
+			final ContainerInfo containerInfo = markupResourceStream.getContainerInfo();
+			if (containerInfo != null)
+			{
+				filters.add(new WicketMessageTagHandler());
+
+				// Pages require additional handlers
+				if (Page.class.isAssignableFrom(containerInfo.getContainerClass()))
+				{
+					filters.add(new HtmlHeaderSectionHandler(markup));
+				}
+
+				filters.add(new HeadForceTagIdHandler(containerInfo.getContainerClass()));
+			}
+		}
+
+		filters.add(new OpenCloseTagExpander());
+		filters.add(new RelativePathPrefixHandler());
+		filters.add(new EnclosureHandler());
+
+		return filters;
+	}
+
