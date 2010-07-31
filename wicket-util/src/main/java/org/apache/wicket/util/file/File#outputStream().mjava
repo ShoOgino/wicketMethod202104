@@ -1,20 +1,21 @@
 	/**
-	 * Creates a buffered output stream that writes to this file.
-	 * If the parent folder does not yet exist, creates all necessary
-	 * folders in the path.
+	 * Creates a buffered output stream that writes to this file. If the parent folder does not yet
+	 * exist, creates all necessary folders in the path.
+	 * 
 	 * @return Output stream that writes to this file
-	 * @throws FileNotFoundException Thrown if the file cannot be found
+	 * @throws FileNotFoundException
+	 *             Thrown if the file cannot be found
 	 */
 	public OutputStream outputStream() throws FileNotFoundException
 	{
 		final Folder parent = getParentFolder();
-		if (!parent.exists()) 
+		if (!parent.exists())
 		{
-		    if (!parent.mkdirs()) 
-		    {
-		    	throw new FileNotFoundException("Couldn't create path " + parent);
-		    }
+			if (!parent.mkdirs())
+			{
+				throw new FileNotFoundException("Couldn't create path " + parent);
+			}
 		}
-	    return new BufferedOutputStream(new FileOutputStream(this));
+		return new BufferedOutputStream(new FileOutputStream(this));
 	}
 
