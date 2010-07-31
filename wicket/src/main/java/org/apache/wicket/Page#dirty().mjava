@@ -1,17 +1,8 @@
 	/**
-	 * Mark this page as modified in the session. If versioning is supported then a new version of
-	 * the page will be stored in {@link IPageStore page store}
+	 * @see #dirty(boolean)
 	 */
 	public final void dirty()
 	{
-		checkHierarchyChange(this);
-
-		final IPageManager pageManager = getSession().getPageManager();
-		if (isVersioned() && pageManager.supportsVersioning() && !getFlag(FLAG_IS_DIRTY))
-		{
-			setFlag(FLAG_IS_DIRTY, true);
-			setNextAvailableId();
-			pageManager.touchPage(this);
-		}
+		dirty(false);
 	}
 
