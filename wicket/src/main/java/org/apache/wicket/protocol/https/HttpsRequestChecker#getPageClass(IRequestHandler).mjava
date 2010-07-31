@@ -1,0 +1,22 @@
+	/**
+	 * Gets page class from a request handler
+	 * 
+	 * @param handler
+	 * @return page class if there is one, null otherwise
+	 */
+	private Class<?> getPageClass(IRequestHandler handler)
+	{
+		if (handler instanceof IPageRequestHandler)
+		{
+			return ((IPageRequestHandler)handler).getPage().getClass();
+		}
+		else if (handler instanceof BookmarkablePageRequestHandler)
+		{
+			return ((BookmarkablePageRequestHandler)handler).getPageClass();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
