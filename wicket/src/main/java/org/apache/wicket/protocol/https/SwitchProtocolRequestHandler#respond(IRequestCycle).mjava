@@ -6,8 +6,6 @@
 		WebRequest webRequest = (WebRequest)requestCycle.getRequest();
 		HttpServletRequest request = ((ServletWebRequest)webRequest).getHttpServletRequest();
 
-		final HttpsConfig httpsConfig = Application.get().getSecuritySettings().getHttpsConfig();
-
 		Integer port = null;
 		if (protocol == Protocol.HTTP)
 		{
@@ -35,13 +33,6 @@
 		}
 
 		WebResponse response = (WebResponse)requestCycle.getResponse();
-
-		// an attempt to rewrite a secure jsessionid into nonsecure, doesnt seem to work
-		// Session session = Session.get();
-		// if (!session.isTemporary())
-		// {
-		// response.addCookie(new Cookie("JSESSIONID", session.getId()));
-		// }
 
 		response.sendRedirect(url);
 	}

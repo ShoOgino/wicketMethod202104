@@ -1,0 +1,13 @@
+	/**
+	 * {@inheritDoc}
+	 */
+	public Url mapHandler(IRequestHandler requestHandler)
+	{
+		final IRequestHandler httpsHandler = checker.checkSecureOutgoing(requestHandler,
+			httpsConfig);
+
+		requestHandler = httpsHandler;
+
+		return delegate.mapHandler(requestHandler);
+	}
+

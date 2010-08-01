@@ -1,30 +1,33 @@
 	/**
 	 * 
-	 * @param handler
+	 * @param requestHandler
 	 *            the original request handler
+	 * @param httpsConfig
+	 *            the https configuration
 	 * @return either {@link SwitchProtocolRequestHandler} if the page that is going to be rendered
 	 *         is annotated with @{@link RequireHttps} and the protocol of the current request is
 	 *         http, or will return the original handler if these conditions are not fulfilled
 	 */
-	public IRequestHandler checkSecureIncoming(IRequestHandler handler)
+	IRequestHandler checkSecureIncoming(IRequestHandler requestHandler,
+		final HttpsConfig httpsConfig)
 	{
 
-		if (handler instanceof SwitchProtocolRequestHandler)
+		if (requestHandler instanceof SwitchProtocolRequestHandler)
 		{
-			return handler;
+			return requestHandler;
 		}
 
-		Class<?> pageClass = getPageClass(handler);
+		Class<?> pageClass = getPageClass(requestHandler);
 		if (pageClass != null)
 		{
 			IRequestHandler redirect = null;
 			if (hasSecureAnnotation(pageClass))
 			{
-				redirect = SwitchProtocolRequestHandler.requireProtocol(Protocol.HTTPS);
+				redirect = SwitchProtocolRequestHandler.requireProtocol(Protocol.HTTPS, httpsConfig);
 			}
 			else
 			{
-				redirect = SwitchProtocolRequestHandler.requireProtocol(Protocol.HTTP);
+				redirect = SwitchProtocolRequestHandler.requireProtocol(Protocol.HTTP, httpsConfig);
 			}
 
 			if (redirect != null)
@@ -33,6 +36,6 @@
 			}
 
 		}
-		return handler;
+		return requestHandler;
 	}
 

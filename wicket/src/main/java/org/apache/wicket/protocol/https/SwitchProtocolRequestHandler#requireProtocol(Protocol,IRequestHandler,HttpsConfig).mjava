@@ -6,9 +6,12 @@
 	 *            required protocol
 	 * @param handler
 	 *            request target to redirect to or {@code null} to redirect to current url
+	 * @param httpsConfig
+	 *            the https configuration
 	 * @return request handler or {@code null}
 	 */
-	public static IRequestHandler requireProtocol(Protocol protocol, IRequestHandler handler)
+	public static IRequestHandler requireProtocol(Protocol protocol, IRequestHandler handler,
+		final HttpsConfig httpsConfig)
 	{
 		IRequestCycle requestCycle = RequestCycle.get();
 		WebRequest webRequest = (WebRequest)requestCycle.getRequest();
@@ -20,7 +23,7 @@
 		}
 		else
 		{
-			return new SwitchProtocolRequestHandler(protocol, handler);
+			return new SwitchProtocolRequestHandler(protocol, handler, httpsConfig);
 		}
 	}
 
