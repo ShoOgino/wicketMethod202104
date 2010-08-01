@@ -1,0 +1,42 @@
+	/**
+	 * Iterate through all children of 'node' and search for a node with name "filterName". Return
+	 * the value of node "url-pattern" if "filterName" was found.
+	 * 
+	 * @param filterName
+	 * @param name
+	 * @param node
+	 * @return value of node "url-pattern"
+	 */
+	private String getFilterPath(final String filterName, final String name, final Node node)
+	{
+		String foundUrlPattern = null;
+		String foundFilterName = null;
+
+		for (int i = 0; i < node.getChildNodes().getLength(); ++i)
+		{
+			Node n = node.getChildNodes().item(i);
+			if (name.equals(n.getNodeName()))
+			{
+				foundFilterName = n.getTextContent();
+			}
+			else if ("url-pattern".equals(n.getNodeName()))
+			{
+				foundUrlPattern = n.getTextContent();
+			}
+		}
+
+		if (foundFilterName != null)
+		{
+			foundFilterName = foundFilterName.trim();
+		}
+
+		if (filterName.equals(foundFilterName))
+		{
+			return (foundUrlPattern != null) ? foundUrlPattern.trim() : null;
+		}
+		else
+		{
+			return null;
+		}
+	}
+

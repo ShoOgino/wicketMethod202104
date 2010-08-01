@@ -1,6 +1,17 @@
-	boolean processRequest(ServletRequest request, ServletResponse response, FilterChain chain)
-		throws IOException, ServletException
+	/**
+	 * This is Wicket's main method to execute a request
+	 * 
+	 * @param request
+	 * @param response
+	 * @param chain
+	 * @return false, if the request could not be processed
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	boolean processRequest(final ServletRequest request, final ServletResponse response,
+		final FilterChain chain) throws IOException, ServletException
 	{
+		// Assume we are able to handle the request
 		boolean res = true;
 
 		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
@@ -18,17 +29,17 @@
 
 			String filterPath = getFilterPath(httpServletRequest);
 
-			webApplication.set();
-
-			if (checkForTrailingSlash(httpServletRequest, httpServletResponse, filterPath))
+			String redirectURL = checkIfRedirectRequired(httpServletRequest);
+			if (redirectURL == null)
 			{
-				ServletWebRequest req = new ServletWebRequest(httpServletRequest, filterPath);
+				// No redirect; process the request
+				application.set();
 
-				WebResponse resp = new HeaderBufferingWebResponse(new ServletWebResponse(
+				WebRequest webRequest = new ServletWebRequest(httpServletRequest, filterPath);
+				WebResponse webResponse = new HeaderBufferingWebResponse(new ServletWebResponse(
 					httpServletRequest, httpServletResponse));
 
-				RequestCycle requestCycle = webApplication.createRequestCycle(req, resp);
-
+				RequestCycle requestCycle = application.createRequestCycle(webRequest, webResponse);
 				if (!requestCycle.processRequestAndDetach())
 				{
 					if (chain != null)
@@ -39,7 +50,20 @@
 				}
 				else
 				{
-					resp.flush();
+					webResponse.flush();
+				}
+			}
+			else
+			{
+				try
+				{
+					// send redirect - this will discard POST parameters if the request is POST
+					// - still better than getting an error because of lacking trailing slash
+					httpServletResponse.sendRedirect(httpServletResponse.encodeRedirectURL(redirectURL));
+				}
+				catch (IOException e)
+				{
+					throw new RuntimeException(e);
 				}
 			}
 		}

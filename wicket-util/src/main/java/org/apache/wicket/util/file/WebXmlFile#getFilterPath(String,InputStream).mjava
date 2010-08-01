@@ -1,0 +1,50 @@
+	/**
+	 * Gets Wicket filter path via filter name and InputStream. The InputStream is assumed to be an
+	 * web.xml file.
+	 * <p>
+	 * A typical Wicket web.xml entry looks like:
+	 * 
+	 * <pre>
+	 * <code>
+	 * &lt;filter&gt;
+	 *   &lt;filter-name&gt;HelloWorldApplication&lt;/filter-name&gt;
+	 *   &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
+	 *   &lt;init-param&gt;
+	 *     &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
+	 *     &lt;param-value&gt;org.apache.wicket.examples.helloworld.HelloWorldApplication&lt;/param-value&gt;
+	 *   &lt;/init-param&gt;
+	 * &lt;/filter&gt;
+	 * 
+	 * &lt;filter-mapping&gt;
+	 *   &lt;filter-name&gt;HelloWorldApplication&lt;/filter-name&gt;
+	 *   &lt;url-pattern&gt;/helloworld/*&lt;/url-pattern&gt;
+	 *   &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;
+	 *   &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;
+	 * &lt;/filter-mapping&gt;
+	 * </code>
+	 * </pre>
+	 * 
+	 * @param filterName
+	 * @param is
+	 *            The web.xml file
+	 * @return Filter path retrieved from "url-pattern". Null if not found.
+	 * @throws ParserConfigurationException
+	 * @throws IOException
+	 * @throws SAXException
+	 */
+	public final String getFilterPath(final String filterName, final InputStream is)
+		throws ParserConfigurationException, SAXException, IOException
+	{
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(is);
+
+		String mapping = "filter-mapping";
+		String name = "filter-name";
+
+		String urlPattern = getFilterPath(filterName, mapping, name, document.getChildNodes());
+
+		// remove leading "/" and trailing "*"
+		return urlPattern.substring(1, urlPattern.length() - 1);
+	}
+
