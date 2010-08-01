@@ -33,7 +33,11 @@
 			// or the targetUrl matches current url and the page is not stateless
 			// or the targetUrl matches current url, page is stateless but it's redirect-to-render
 			// just render the page
-			renderPage();
+			BufferedWebResponse response = renderPage(targetUrl, requestCycle);
+			if (response != null)
+			{
+				response.writeTo((WebResponse)requestCycle.getResponse());
+			}
 		}
 		else if (!targetUrl.equals(currentUrl) && //
 			(getRedirectPolicy() == RedirectPolicy.ALWAYS_REDIRECT || isRedirectToRender()))
@@ -62,6 +66,11 @@
 		{
 			// redirect to buffer
 			BufferedWebResponse response = renderPage(targetUrl, requestCycle);
+
+			if (response == null)
+			{
+				return;
+			}
 
 			// check if the url hasn't changed after page has been rendered
 			// (i.e. the stateless flag might have changed which could result in different page url)
