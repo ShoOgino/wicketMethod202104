@@ -2,30 +2,19 @@
 	{
 		try
 		{
-			Method method = WicketFilter.class.getDeclaredMethod("getFilterPath", String.class,
-				InputStream.class);
-			method.setAccessible(true);
-			return method.invoke(new WicketFilter(), string, in).toString();
+			return new WebXmlFile().getFilterPath(string, in);
 		}
-		catch (SecurityException e)
+		catch (ParserConfigurationException ex)
 		{
-			throw new RuntimeException(e);
+			throw new RuntimeException(ex);
 		}
-		catch (NoSuchMethodException e)
+		catch (SAXException ex)
 		{
-			throw new RuntimeException(e);
+			throw new RuntimeException(ex);
 		}
-		catch (IllegalArgumentException e)
+		catch (IOException ex)
 		{
-			throw new RuntimeException(e);
-		}
-		catch (IllegalAccessException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (InvocationTargetException e)
-		{
-			throw new RuntimeException(e);
+			throw new RuntimeException(ex);
 		}
 	}
 
