@@ -1,0 +1,20 @@
+	/**
+	 * Sets the filter path instead of reading it from web.xml.
+	 * 
+	 * Please note that you must subclass WicketFilter.init(FilterConfig) and set your filter path
+	 * before you call super.init(filterConfig).
+	 * 
+	 * @param filterPath
+	 */
+	public final void setFilterPath(final String filterPath)
+	{
+		// see https://issues.apache.org/jira/browse/WICKET-701
+		if (this.filterPath != null)
+		{
+			throw new IllegalStateException(
+				"Filter path is write-once. You can not change it. Current value='" + filterPath +
+					"'");
+		}
+		this.filterPath = filterPath;
+	}
+

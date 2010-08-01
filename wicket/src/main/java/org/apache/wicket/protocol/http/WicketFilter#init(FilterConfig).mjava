@@ -10,12 +10,16 @@
 		application.setName(filterConfig.getFilterName());
 		application.setWicketFilter(this);
 
-		filterPath = new WebXmlFile().getFilterPath(filterConfig);
+		// Allow the filterPath to tbe preset via setFilterPath()
 		if (filterPath == null)
 		{
-			log.info("Unable to parse filter mapping web.xml for " + filterConfig.getFilterName() +
-				". " + "Configure with init-param " + FILTER_MAPPING_PARAM +
-				" if it is not \"/*\".");
+			filterPath = new WebXmlFile().getFilterPath(filterConfig);
+			if (filterPath == null)
+			{
+				log.info("Unable to parse filter mapping web.xml for " +
+					filterConfig.getFilterName() + ". " + "Configure with init-param " +
+					FILTER_MAPPING_PARAM + " if it is not \"/*\".");
+			}
 		}
 
 		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
