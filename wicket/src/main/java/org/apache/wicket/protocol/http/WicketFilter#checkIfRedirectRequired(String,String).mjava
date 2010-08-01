@@ -1,0 +1,57 @@
+	/**
+	 * Try to determine as fast as possible if a redirect is necessary
+	 * 
+	 * @param requestURI
+	 * @param contextPath
+	 * @return null, if no redirect is necessary. Else the redirect URL
+	 */
+	protected final String checkIfRedirectRequired(final String requestURI, final String contextPath)
+	{
+		// length without jesessionid (http://.../abc;jsessionid=...?param)
+		int uriLength = requestURI.indexOf(';');
+		if (uriLength == -1)
+		{
+			uriLength = requestURI.length();
+		}
+
+		// We only need to determine it once. It'll not change.
+		if (filterPathLength == -1)
+		{
+			filterPathLength = filterPath.length();
+			if (filterPath.endsWith("/"))
+			{
+				filterPathLength -= 1;
+			}
+		}
+
+		// request.getContextPath() + "/" + filterPath. But without any trailing "/".
+		int homePathLenth = contextPath.length() + (filterPathLength > 0 ? 1 : 0) +
+			filterPathLength;
+		if (uriLength != homePathLenth)
+		{
+			// requestURI and homePath are different (in length)
+			// => continue with standard request processing. No redirect.
+			return null;
+		}
+
+		// Fail fast failed. Revert to "slow" but exact check
+		String uri = Strings.stripJSessionId(requestURI);
+
+		// home page without trailing slash URI
+		String homePageUri = contextPath + "/" + filterPath;
+		if (homePageUri.endsWith("/"))
+		{
+			homePageUri = homePageUri.substring(0, homePageUri.length() - 1);
+		}
+
+		// If both are equal => redirect
+		if (uri.equals(homePageUri))
+		{
+			uri += "/";
+			return uri;
+		}
+
+		// no match => standard request processing; no redirect
+		return null;
+	}
+
