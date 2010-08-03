@@ -11,5 +11,9 @@
 
 		getRootRequestMapperAsCompound().add(
 			new LocaleFirstMapper(new MountedMapper("/localized", LocalizedPage.class)));
+
+		getRootRequestMapperAsCompound().add(new MountedMapper("secured", HttpsPage.class));
+
+		setRootRequestMapper(new HttpsMapper(getRootRequestMapper(), new HttpsConfig()));
 	}
 
