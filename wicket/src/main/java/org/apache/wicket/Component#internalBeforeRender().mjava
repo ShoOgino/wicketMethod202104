@@ -8,7 +8,7 @@
 		if ((determineVisibility() || callOnBeforeRenderIfNotVisible()) &&
 			!getFlag(FLAG_RENDERING) && !getFlag(FLAG_PREPARED_FOR_RENDER))
 		{
-			setFlag(FLAG_BEFORE_RENDERING_SUPER_CALL_VERIFIED, false);
+			setFlag(FLAG_BEFORE_RENDER_SUPER_CALL_VERIFIED, false);
 
 			getApplication().notifyPreComponentOnBeforeRenderListeners(this);
 
@@ -19,7 +19,7 @@
 			onBeforeRender();
 			getApplication().notifyPostComponentOnBeforeRenderListeners(this);
 
-			if (!getFlag(FLAG_BEFORE_RENDERING_SUPER_CALL_VERIFIED))
+			if (!getFlag(FLAG_BEFORE_RENDER_SUPER_CALL_VERIFIED))
 			{
 				throw new IllegalStateException(Component.class.getName() +
 					" has not been properly rendered. Something in the hierarchy of " +
