@@ -22,24 +22,21 @@
 
 			IHeaderResponse response = container.getHeaderResponse();
 
-			// First check the component itself (implements IHeaderContributor)
-			if (this instanceof IHeaderContributor)
+			// Allow component to contribute
+			if (response.wasRendered(this) == false)
 			{
-				if (response.wasRendered(this) == false)
-				{
-					((IHeaderContributor)this).renderHead(response);
-					response.markRendered(this);
-				}
+				renderHead(response);
+				response.markRendered(this);
 			}
 
 			// Than ask all behaviors
 			for (IBehavior behavior : getBehaviors())
 			{
-				if ((behavior instanceof IHeaderContributor) && isBehaviorAccepted(behavior))
+				if (isBehaviorAccepted(behavior))
 				{
 					if (response.wasRendered(behavior) == false)
 					{
-						((IHeaderContributor)behavior).renderHead(response);
+						behavior.renderHead(response);
 						response.markRendered(behavior);
 					}
 				}

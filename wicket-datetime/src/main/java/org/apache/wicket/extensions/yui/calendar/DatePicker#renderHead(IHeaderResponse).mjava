@@ -1,6 +1,7 @@
 	/**
 	 * @see org.apache.wicket.markup.html.IHeaderContributor#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
 	 */
+	@Override
 	public void renderHead(IHeaderResponse response)
 	{
 		if (includeYUILibraries())
@@ -19,10 +20,12 @@
 		variables.put("hideOnSelect", hideOnSelect());
 		variables.put("showOnFieldClick", showOnFieldClick());
 		// variables for YUILoader
-		variables.put("basePath", Strings.stripJSessionId(RequestCycle.get().renderUrlFor(
-				new ResourceReferenceRequestHandler(YUI))));
-		variables.put("wicketDatePath", RequestCycle.get().renderUrlFor(
-				new ResourceReferenceRequestHandler(WICKET_DATE)));
+		variables.put(
+				"basePath",
+				Strings.stripJSessionId(RequestCycle.get().renderUrlFor(
+						new ResourceReferenceRequestHandler(YUI))));
+		variables.put("wicketDatePath",
+				RequestCycle.get().renderUrlFor(new ResourceReferenceRequestHandler(WICKET_DATE)));
 		if (Application.DEVELOPMENT.equals(Application.get().getConfigurationType()))
 		{
 			variables.put("filter", "filter: \"RAW\",");
@@ -37,8 +40,8 @@
 		String script = getAdditionalJavascript();
 		if (script != null)
 		{
-			variables.put("additionalJavascript", Strings.replaceAll(script, "${calendar}",
-					"YAHOO.wicket." + widgetId + "DpJs"));
+			variables.put("additionalJavascript",
+					Strings.replaceAll(script, "${calendar}", "YAHOO.wicket." + widgetId + "DpJs"));
 		}
 		// print out the initialization properties
 		Map<String, Object> p = new HashMap<String, Object>();

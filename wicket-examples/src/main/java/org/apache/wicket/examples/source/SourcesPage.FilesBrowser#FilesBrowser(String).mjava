@@ -42,13 +42,15 @@
 							return new IAjaxCallDecorator()
 							{
 
-								public CharSequence decorateOnFailureScript(CharSequence script)
+								public CharSequence decorateOnFailureScript(Component c,
+									CharSequence script)
 								{
 									return "window.location=this.href;";
 									// return "alert('It\\'s ok!')";
 								}
 
-								public CharSequence decorateOnSuccessScript(CharSequence script)
+								public CharSequence decorateOnSuccessScript(Component c,
+									CharSequence script)
 								{
 									if (script == null)
 									{
@@ -57,7 +59,7 @@
 									return script;
 								}
 
-								public CharSequence decorateScript(CharSequence script)
+								public CharSequence decorateScript(Component c, CharSequence script)
 								{
 									int index = script.toString().indexOf('?');
 									if (index >= 0)
