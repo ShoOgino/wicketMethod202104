@@ -10,12 +10,14 @@
 	 * @param pageClass
 	 *            Class of page
 	 * @param parameters
-	 *            Parameters to page
+	 *            Parameters to page or {@code null} if none
 	 * @return Bookmarkable URL to page
 	 */
-	public final <C extends Page> CharSequence urlFor(final Class<C> pageClass,
+	public final <C extends Page> Url mapUrlFor(final Class<C> pageClass,
 		final PageParameters parameters)
 	{
-		return getRequestCycle().urlFor(pageClass, parameters);
+		IRequestHandler handler = new BookmarkablePageRequestHandler(new PageProvider(pageClass,
+			parameters));
+		return mapUrlFor(handler);
 	}
 
