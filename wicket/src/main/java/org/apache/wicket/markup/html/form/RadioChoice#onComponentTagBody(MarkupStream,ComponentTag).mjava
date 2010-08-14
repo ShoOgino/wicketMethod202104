@@ -72,15 +72,9 @@
 					Form<?> form = findParent(Form.class);
 					if (form != null)
 					{
-						RequestContext rc = RequestContext.get();
-						if (rc.isPortletRequest())
-						{
-							// restore url back to real wicket path as its going to be interpreted
-							// by the form itself
-							url = ((PortletRequestContext)rc).getLastEncodedPath();
-						}
-						buffer.append(" onclick=\"").append(form.getJsForInterfaceUrl(url)).append(
-							";\"");
+						buffer.append(" onclick=\"")
+							.append(form.getJsForInterfaceUrl(url))
+							.append(";\"");
 					}
 					else
 					{
@@ -114,8 +108,11 @@
 					escaped = Strings.escapeMarkup(display);
 				}
 
-				buffer.append("<label for=\"").append(idAttr).append("\">").append(escaped).append(
-					"</label>");
+				buffer.append("<label for=\"")
+					.append(idAttr)
+					.append("\">")
+					.append(escaped)
+					.append("</label>");
 
 				// Append option suffix
 				buffer.append(getSuffix());
