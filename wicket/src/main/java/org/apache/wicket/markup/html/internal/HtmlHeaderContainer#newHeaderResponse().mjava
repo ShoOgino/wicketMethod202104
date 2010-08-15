@@ -5,19 +5,14 @@
 	 */
 	protected IHeaderResponse newHeaderResponse()
 	{
-		IHeaderResponse headerResponse = RequestContext.get().getHeaderResponse();
-		if (headerResponse == null)
+		IHeaderResponse headerResponse = new HeaderResponse()
 		{
-			// no (portlet) headerResponse override, create a default one
-			headerResponse = new HeaderResponse()
+			@Override
+			protected Response getRealResponse()
 			{
-				@Override
-				protected Response getRealResponse()
-				{
-					return HtmlHeaderContainer.this.getResponse();
-				}
-			};
-		}
+				return HtmlHeaderContainer.this.getResponse();
+			}
+		};
 		return headerResponse;
 	}
 
