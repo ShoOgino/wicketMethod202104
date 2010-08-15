@@ -3,15 +3,19 @@
 	 * output file.
 	 * 
 	 * @param <T>
-	 * 
+	 * @param testClass
 	 * @param pageClass
 	 * @param parameters
 	 * @param filename
 	 * @throws Exception
 	 */
-	protected <T extends Page> void executeTest(final Class<T> pageClass,
+	public <T extends Page> void executeTest(final Class<?> testClass, final Class<T> pageClass,
 		PageParameters parameters, final String filename) throws Exception
 	{
-		tester.executeTest(getClass(), pageClass, parameters, filename);
+		log.info("=== " + pageClass.getName() + " ===");
+
+		startPage(pageClass, parameters);
+		assertRenderedPage(pageClass);
+		assertResultPage(testClass, filename);
 	}
 

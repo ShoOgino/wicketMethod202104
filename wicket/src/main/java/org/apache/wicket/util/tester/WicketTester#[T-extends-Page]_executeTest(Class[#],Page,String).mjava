@@ -1,0 +1,20 @@
+	/**
+	 * Use <code>-Dwicket.replace.expected.results=true</code> to automatically replace the expected
+	 * output file.
+	 * 
+	 * @param <T>
+	 * @param testClass
+	 * @param page
+	 * @param filename
+	 * @throws Exception
+	 */
+	public <T extends Page> void executeTest(final Class<?> testClass, final Page page,
+		final String filename) throws Exception
+	{
+		log.info("=== " + page.getClass().getName() + " ===");
+
+		startPage(page);
+		assertRenderedPage(page.getClass());
+		assertResultPage(testClass, filename);
+	}
+
