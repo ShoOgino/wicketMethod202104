@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.request.mapper.AbstractBookmarkableMapper#buildUrl(org.apache.wicket.request.mapper.AbstractBookmarkableMapper.UrlInfo)
+	 */
+	@Override
+	protected Url buildUrl(UrlInfo info)
+	{
+		Class<? extends IRequestablePage> pageClass = info.getPageClass();
+		if (pageClass.getName().startsWith(packageName.getName()))
+		{
+			Url url = new Url();
+			url.getSegments().add(mountPath);
+			url.getSegments().add(pageClass.getSimpleName());
+
+			encodePageComponentInfo(url, info.getPageComponentInfo());
+
+			return encodePageParameters(url, info.getPageParameters(), pageParametersEncoder);
+		}
+
+		return null;
+	}
+
