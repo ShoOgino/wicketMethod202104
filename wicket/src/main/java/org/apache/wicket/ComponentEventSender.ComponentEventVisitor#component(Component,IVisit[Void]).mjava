@@ -1,0 +1,18 @@
+		/** {@inheritDoc} */
+		public void component(Component object, IVisit<Void> visit)
+		{
+			object.onEvent(e);
+
+			if (e.isStop())
+			{
+				visit.stop();
+			}
+
+			if (e.isShallow())
+			{
+				visit.dontGoDeeper();
+			}
+
+			e.resetShallow(); // reset shallow bit
+		}
+
