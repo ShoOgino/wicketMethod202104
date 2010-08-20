@@ -3,17 +3,18 @@
 		if (e instanceof StalePageException)
 		{
 			// If the page was stale, just rerender it
+			// (the url should always be updated by an redirect in that case)
 			return new RenderPageRequestHandler(new PageProvider(((StalePageException)e).getPage()));
 		}
 		else if (e instanceof PageExpiredException)
 		{
-			return new RenderPageRequestHandler(new PageProvider(Application.get()
+			return createPageRequestHandler(new PageProvider(Application.get()
 				.getApplicationSettings()
 				.getPageExpiredErrorPage()));
 		}
 		else if (e instanceof AuthorizationException)
 		{
-			return new RenderPageRequestHandler(new PageProvider(Application.get()
+			return createPageRequestHandler(new PageProvider(Application.get()
 				.getApplicationSettings()
 				.getAccessDeniedPage()));
 		}
@@ -28,12 +29,11 @@
 			if (IExceptionSettings.SHOW_EXCEPTION_PAGE.equals(unexpectedExceptionDisplay))
 			{
 				Page currentPage = extractCurrentPage();
-				return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e,
-					currentPage)));
+				return createPageRequestHandler(new PageProvider(new ExceptionErrorPage(e,	currentPage)));
 			}
 			else if (IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE.equals(unexpectedExceptionDisplay))
 			{
-				return new RenderPageRequestHandler(new PageProvider(
+				return createPageRequestHandler(new PageProvider(
 					application.getApplicationSettings().getInternalErrorPage()));
 			}
 			else
