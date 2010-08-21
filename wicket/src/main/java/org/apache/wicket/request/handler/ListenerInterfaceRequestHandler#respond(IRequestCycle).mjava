@@ -3,10 +3,11 @@
 	 */
 	public void respond(final IRequestCycle requestCycle)
 	{
-		if (getComponent().getPage() == getPage())
+		final IRequestablePage page = getPage();
+		if (getComponent().getPage() == page)
 		{
-			if (((WebRequest)requestCycle.getRequest()).isAjax() == false &&
-				listenerInterface.isRenderPageAfterInvocation())
+			boolean isAjax = ((WebRequest)requestCycle.getRequest()).isAjax();
+			if (isAjax == false && listenerInterface.isRenderPageAfterInvocation())
 			{
 				// schedule page render after current request handler is done. this can be
 				// overridden
@@ -18,20 +19,20 @@
 					new PageProvider(getPage()), policy));
 			}
 
-			if (getBehaviorIndex() == null)
+			if (isAjax & page instanceof IManageablePage)
 			{
-				listenerInterface.invoke(getComponent());
+				((IManageablePage)page).setFreezePageId(true);
 			}
-			else
+
+			try
 			{
-				try
+				invokeListener();
+			}
+			finally
+			{
+				if (isAjax && page instanceof IManageablePage)
 				{
-					IBehavior behavior = getComponent().getBehaviors().get(behaviorIndex);
-					listenerInterface.invoke(getComponent(), behavior);
-				}
-				catch (IndexOutOfBoundsException e)
-				{
-					throw new WicketRuntimeException("Couldn't find component behavior.");
+					((IManageablePage)page).setFreezePageId(false);
 				}
 
 			}
