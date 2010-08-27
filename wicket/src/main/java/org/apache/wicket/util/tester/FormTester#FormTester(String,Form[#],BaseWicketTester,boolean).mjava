@@ -25,7 +25,8 @@
 			@Override
 			public void onFormComponent(final FormComponent<?> formComponent, IVisit<Void> visit)
 			{
-				// do nothing for invisible or disabled component -- the browser would not send any parameter
+				// do nothing for invisible or disabled component -- the browser would not send any
+// parameter
 				// for a disabled component
 				if (!(formComponent.isVisibleInHierarchy() && formComponent.isEnabledInHierarchy()))
 				{
@@ -36,7 +37,7 @@
 				// blank String if required
 				if (formComponent instanceof AbstractTextComponent)
 				{
-					if (Strings.isEmpty(formComponent.getValue()))
+					if (Strings.isEmpty(getFormComponentValue(formComponent)))
 					{
 						if (fillBlankString)
 						{
@@ -45,17 +46,17 @@
 					}
 					else
 					{
-						setFormComponentValue(formComponent, formComponent.getValue());
+						setFormComponentValue(formComponent, getFormComponentValue(formComponent));
 					}
 				}
 				else if ((formComponent instanceof DropDownChoice) ||
 					(formComponent instanceof RadioChoice) || (formComponent instanceof CheckBox))
 				{
-					setFormComponentValue(formComponent, formComponent.getValue());
+					setFormComponentValue(formComponent, getFormComponentValue(formComponent));
 				}
 				else if (formComponent instanceof ListMultipleChoice)
 				{
-					final String[] modelValues = formComponent.getValue().split(
+					final String[] modelValues = getFormComponentValue(formComponent).split(
 						FormComponent.VALUE_SEPARATOR);
 					for (String modelValue : modelValues)
 					{
@@ -72,7 +73,7 @@
 							if (checkGroupValues.contains(component.getDefaultModelObject()))
 							{
 								addFormComponentValue(formComponent,
-									((Check<?>)component).getValue());
+									getFormComponentValue((Check<?>)component));
 							}
 						}
 					});
@@ -93,7 +94,7 @@
 								if (value.equals(component.getDefaultModelObject()))
 								{
 									addFormComponentValue(formComponent,
-										((Radio<?>)component).getValue());
+										getFormComponentValue((Radio<?>)component));
 									visit.stop();
 								}
 								else
@@ -106,6 +107,32 @@
 				}
 			}
 
+			private String getFormComponentValue(final FormComponent<?> formComponent)
+			{
+				boolean oldEscape = formComponent.getEscapeModelStrings();
+				formComponent.setEscapeModelStrings(false);
+				String val = formComponent.getValue();
+				formComponent.setEscapeModelStrings(oldEscape);
+				return val;
+			}
+
+			private String getFormComponentValue(final Check<?> formComponent)
+			{
+				boolean oldEscape = formComponent.getEscapeModelStrings();
+				formComponent.setEscapeModelStrings(false);
+				String val = formComponent.getValue();
+				formComponent.setEscapeModelStrings(oldEscape);
+				return val;
+			}
+
+			private String getFormComponentValue(final Radio<?> formComponent)
+			{
+				boolean oldEscape = formComponent.getEscapeModelStrings();
+				formComponent.setEscapeModelStrings(false);
+				String val = formComponent.getValue();
+				formComponent.setEscapeModelStrings(oldEscape);
+				return val;
+			}
 		});
 		workingForm.detach();
 	}
