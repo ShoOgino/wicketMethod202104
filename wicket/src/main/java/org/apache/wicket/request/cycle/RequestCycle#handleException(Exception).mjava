@@ -6,15 +6,6 @@
 	 */
 	protected IRequestHandler handleException(final Exception e)
 	{
-		try
-		{
-			return exceptionMapper.map(e);
-		}
-		catch (RuntimeException e2)
-		{
-			// hmmm, we were already handling an exception! give up
-			log.error("unexpected exception when handling another exception: " + e.getMessage(), e);
-			return new ErrorCodeResponseHandler(500);
-		}
+		return exceptionMapper.map(e);
 	}
 

@@ -1,11 +1,10 @@
 	/**
-	 * Processes the request and detaches the {@link RequestCycle}, but does not handle any
-	 * exceptions. Exceptions are not caught and thus are passed through to e.g. WicketTester.
+	 * Processes the request.
 	 * 
 	 * @return <code>true</code> if the request resolved to a Wicket request, <code>false</code>
 	 *         otherwise.
 	 */
-	public boolean processRequestAndDetachWithoutExceptionHandling()
+	public boolean processRequest()
 	{
 		try
 		{
@@ -16,11 +15,24 @@
 				executeRequestHandler(handler);
 				return true;
 			}
+
+		}
+		catch (Exception e)
+		{
+			IRequestHandler handler = handleException(e);
+			if (handler != null)
+			{
+				executeExceptionRequestHandler(handler, getExceptionRetryCount());
+			}
+			else
+			{
+				log.error("Error during request processing", e);
+			}
+			return true;
 		}
 		finally
 		{
 			set(null);
-			detach();
 		}
 		return false;
 	}
