@@ -2,12 +2,15 @@
 	 * 
 	 * @param handler
 	 * @param retryCount
+	 * @return False, in case all retry attempts failed and the request could not be handled
 	 */
-	private void executeExceptionRequestHandler(final IRequestHandler handler, final int retryCount)
+	private boolean executeExceptionRequestHandler(final IRequestHandler handler,
+		final int retryCount)
 	{
 		try
 		{
 			executeRequestHandler(handler);
+			return true;
 		}
 		catch (Exception e)
 		{
@@ -16,11 +19,11 @@
 				IRequestHandler next = handleException(e);
 				if (handler != null)
 				{
-					executeExceptionRequestHandler(next, retryCount - 1);
-					return;
+					return executeExceptionRequestHandler(next, retryCount - 1);
 				}
 			}
 			log.error("Error during processing error message", e);
 		}
+		return false;
 	}
 

@@ -1,20 +1,31 @@
 	/**
-	 * Convenience method that processes the request and detaches the {@link RequestCycle}.
+	 * Processes the request and detaches the {@link RequestCycle}. Exceptions are caught and
+	 * managed.
+	 * 
+	 * @see #handleException(Exception)
+	 * @see #executeExceptionRequestHandler(IRequestHandler, int)
 	 * 
 	 * @return <code>true</code> if the request resolved to a Wicket request, <code>false</code>
 	 *         otherwise.
 	 */
 	public boolean processRequestAndDetach()
 	{
-		boolean result;
 		try
 		{
-			result = processRequest();
+			return processRequestAndDetachWithoutExceptionHandling();
 		}
-		finally
+		catch (Exception e)
 		{
-			detach();
+			IRequestHandler handler = handleException(e);
+			if (handler != null)
+			{
+				return executeExceptionRequestHandler(handler, getExceptionRetryCount());
+			}
+			else
+			{
+				log.error("Error during request processing", e);
+			}
 		}
-		return result;
+		return false;
 	}
 
