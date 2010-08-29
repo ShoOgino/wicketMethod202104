@@ -1,0 +1,29 @@
+	/**
+	 * Registers the given {@link ResourceReference}.
+	 * <p>
+	 * {@link ResourceReference#canBeRegistered()} must return <code>true</code>. Else, the resource
+	 * reference will not be registered.
+	 * 
+	 * @param reference
+	 * @return True, if the resource was registered successfully or has been registered previously
+	 *         already.
+	 */
+	private final Key _registerResourceReference(final ResourceReference reference)
+	{
+		Args.notNull(reference, "reference");
+
+		if (reference.canBeRegistered())
+		{
+			Key key = new Key(reference);
+			if (map.containsKey(key) == false)
+			{
+				map.put(key, reference);
+			}
+
+			return key;
+		}
+
+		log.warn("Resource reference not added to registry. reference.canBeRegistered() == false");
+		return null;
+	}
+

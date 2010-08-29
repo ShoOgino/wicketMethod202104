@@ -1,16 +1,24 @@
-	protected void configureCache(WebRequest request, WebResponse response, ResourceResponse data,
-		Attributes attributes)
+	/**
+	 * Configure the web response header for client cache control.
+	 * 
+	 * @param request
+	 * @param response
+	 * @param data
+	 * @param attributes
+	 */
+	protected void configureCache(final WebRequest request, final WebResponse response,
+		final ResourceResponse data, final Attributes attributes)
 	{
 		if (data.isCacheable())
 		{
 			// If time is set also set cache headers.
 			response.setDateHeader("Expires", System.currentTimeMillis() +
 				(data.getCacheDuration() * 1000L));
-			response.setHeader("Cache-Control", "max-age=" + data.getCacheDuration());
+			response.setHeader(CACHE_CONTROL, "max-age=" + data.getCacheDuration());
 		}
 		else
 		{
-			response.setHeader("Cache-Control", "no-cache, must-revalidate");
+			response.setHeader(CACHE_CONTROL, "no-cache, must-revalidate");
 		}
 	}
 

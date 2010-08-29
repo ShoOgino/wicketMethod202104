@@ -1,5 +1,35 @@
-	public void setAutoAddedCapacity(int autoAddedCapacity)
+	/**
+	 * Set the cache size in number of entries
+	 * 
+	 * @param autoAddedCapacity
+	 *            A value < 0 will disable aging of auto-create resource references. They will be
+	 *            created, added to the registry and live their until manually removed or the
+	 *            application shuts down.
+	 */
+	public final void setAutoAddedCapacity(final int autoAddedCapacity)
 	{
-		this.autoAddedCapacity = autoAddedCapacity;
+		// Disable aging of auto-added references?
+		if (autoAddedCapacity < 0)
+		{
+			// unregister all auto-added references
+			clearAutoAddedEntries();
+
+			// disable aging from now on
+			autoAddedQueue = null;
+		}
+		else
+		{
+			this.autoAddedCapacity = autoAddedCapacity;
+
+			if (autoAddedQueue == null)
+			{
+				autoAddedQueue = new ConcurrentLinkedQueue<Key>();
+			}
+			else
+			{
+				// remove all extra entries if necessary
+				enforceAutoAddedCacheSize(autoAddedCapacity);
+			}
+		}
 	}
 

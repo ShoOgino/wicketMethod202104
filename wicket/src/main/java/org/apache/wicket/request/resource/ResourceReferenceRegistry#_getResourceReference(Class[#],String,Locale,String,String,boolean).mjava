@@ -1,0 +1,58 @@
+	/**
+	 * Get a resource reference matching the parameters from the registry.
+	 * 
+	 * @param scope
+	 *            The scope of resource reference (e.g. the Component's class)
+	 * @param name
+	 *            The name of resource reference (e.g. filename)
+	 * @param locale
+	 *            see Component
+	 * @param style
+	 *            see Component
+	 * @param variation
+	 *            see Component
+	 * @param strict
+	 *            If true, "weaker" combination of scope, name, locale etc. are not tested
+	 * @return Either the resource reference found in the registry or null if not found
+	 */
+	private final ResourceReference _getResourceReference(final Class<?> scope, final String name,
+		final Locale locale, final String style, final String variation, final boolean strict)
+	{
+		// Create a registry key containing all of the relevant attributes
+		Key key = new Key(scope.getName(), name, locale, style, variation);
+
+		// Get resource reference matching exactly the attrs provided
+		ResourceReference res = map.get(key);
+		if ((res != null) || strict)
+		{
+			return res;
+		}
+
+		res = _getResourceReference(scope, name, locale, style, null, true);
+		if (res == null)
+		{
+			res = _getResourceReference(scope, name, locale, null, variation, true);
+		}
+		if (res == null)
+		{
+			res = _getResourceReference(scope, name, locale, null, null, true);
+		}
+		if (res == null)
+		{
+			res = _getResourceReference(scope, name, null, style, variation, true);
+		}
+		if (res == null)
+		{
+			res = _getResourceReference(scope, name, null, style, null, true);
+		}
+		if (res == null)
+		{
+			res = _getResourceReference(scope, name, null, null, variation, true);
+		}
+		if (res == null)
+		{
+			res = _getResourceReference(scope, name, null, null, null, true);
+		}
+		return res;
+	}
+

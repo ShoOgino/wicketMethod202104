@@ -1,20 +1,45 @@
+	/**
+	 * Creates a default resource reference and registers it.
+	 * 
+	 * @param scope
+	 * @param name
+	 * @param locale
+	 * @param style
+	 * @param variation
+	 * @return The default resource created
+	 */
 	private ResourceReference addDefaultResourceReference(Class<?> scope, String name,
 		Locale locale, String style, String variation)
 	{
+		// Can be subclassed to create other than PackagedResourceReference
 		ResourceReference reference = createDefaultResourceReference(scope, name, locale, style,
 			variation);
 
 		if (reference != null)
 		{
-			Key key = new Key(scope.getName(), name, locale, style, variation);
-			if (autoAddedQueue.size() > getAutoAddedCapacity())
-			{
-				Key first = autoAddedQueue.remove();
-				map.remove(first);
-			}
-			autoAddedQueue.add(key);
+			// number of RRs which can be auto-added is restricted (cache size). Remove entries, and
+			// unregister excessive ones, if needed.
+			enforceAutoAddedCacheSize(getAutoAddedCapacity());
 
-			registerResourceReference(reference);
+			// Register the new RR
+			Key key = _registerResourceReference(reference);
+
+			// Add it to the auto-added list
+			if (autoAddedQueue != null)
+			{
+				autoAddedQueue.add(key);
+			}
+		}
+		else
+		{
+			log.warn("Asked to auto-create a ResourceReference, but ResourceReferenceRegistry.createDefaultResourceReference() return null. " +
+				" [scope: " +
+				scope.getName() +
+				"; name: " +
+				name +
+				"; locale: " +
+				locale +
+				"; style: " + style + "; variation: " + variation + "]");
 		}
 		return reference;
 	}

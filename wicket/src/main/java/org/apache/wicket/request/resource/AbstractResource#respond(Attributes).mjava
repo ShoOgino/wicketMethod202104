@@ -1,10 +1,14 @@
-	public final void respond(Attributes attributes)
+	/**
+	 * 
+	 * @see org.apache.wicket.request.resource.IResource#respond(org.apache.wicket.request.resource.IResource.Attributes)
+	 */
+	public final void respond(final Attributes attributes)
 	{
+		// Get a "new" ResourceResponse to write a response
 		ResourceResponse data = newResourceResponse(attributes);
 
 		WebRequest request = (WebRequest)attributes.getRequest();
 		WebResponse response = (WebResponse)attributes.getResponse();
-
 
 		// 1. Last Modified
 		Date lastModified = data.getLastModified();
@@ -14,7 +18,6 @@
 		}
 
 		// 2. Caching
-
 		configureCache(request, response, data, attributes);
 
 		if (!data.dataNeedsToBeWritten(attributes))
@@ -25,6 +28,7 @@
 		else if (data.getErrorCode() != null)
 		{
 			response.sendError(data.getErrorCode(), data.getErrorMessage());
+			return;
 		}
 		else
 		{
@@ -39,7 +43,6 @@
 			String mimeType = data.getContentType();
 			String encoding = null;
 
-
 			if (mimeType != null && mimeType.indexOf("text") != -1)
 			{
 				encoding = data.getTextEncoding();
@@ -48,7 +51,6 @@
 			long contentLength = data.getContentLength();
 
 			// 3. Content Disposition
-
 			if (ContentDisposition.ATTACHMENT == disposition)
 			{
 				response.setAttachmentHeader(fileName);
@@ -59,7 +61,6 @@
 			}
 
 			// 4. Mime Type (+ encoding)
-
 			if (mimeType != null)
 			{
 				if (encoding == null)
@@ -72,9 +73,7 @@
 				}
 			}
 
-
 			// 5. Content Length
-
 			if (contentLength != -1)
 			{
 				response.setContentLength(contentLength);

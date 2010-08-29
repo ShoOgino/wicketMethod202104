@@ -1,0 +1,22 @@
+	/**
+	 * The Number of RRs which can be auto-added is restricted (cache size). Remove entries, and
+	 * unregister excessive ones, if needed.
+	 * 
+	 * @param maxSize
+	 *            Remove all entries, head first, until auto-added cache is smaller than maxSize.
+	 */
+	private void enforceAutoAddedCacheSize(int maxSize)
+	{
+		if (autoAddedQueue != null)
+		{
+			while (autoAddedQueue.size() > maxSize)
+			{
+				// remove entry from auto-added list
+				Key first = autoAddedQueue.remove();
+
+				// remove entry from registry
+				map.remove(first);
+			}
+		}
+	}
+

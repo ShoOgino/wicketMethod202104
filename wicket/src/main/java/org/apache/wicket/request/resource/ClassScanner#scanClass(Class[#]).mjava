@@ -1,5 +1,12 @@
-	public void scanClass(Class<?> klass)
+	public int scanClass(final Class<?> klass)
 	{
+		// scanClass gets recursively called. If klass == null, than recursion stops
+		if (klass == null)
+		{
+			return 0;
+		}
+
+		int count = 0;
 		String className = klass.getName();
 		if (scannedClasses.contains(className) == false)
 		{
@@ -15,7 +22,10 @@
 						Object value = f.get(null);
 						if (value instanceof ResourceReference)
 						{
-							foundResourceReference((ResourceReference)value);
+							if (foundResourceReference((ResourceReference)value) == true)
+							{
+								count += 1;
+							}
 						}
 					}
 					catch (Exception e)
@@ -25,11 +35,8 @@
 				}
 			}
 
-			klass = klass.getSuperclass();
-			if (klass != null)
-			{
-				scanClass(klass);
-			}
+			count += scanClass(klass.getSuperclass());
 		}
+		return count;
 	}
 

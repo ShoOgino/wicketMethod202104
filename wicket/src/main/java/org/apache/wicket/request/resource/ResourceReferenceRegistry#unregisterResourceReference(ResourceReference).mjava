@@ -2,13 +2,23 @@
 	 * Unregisters the given {@link ResourceReference}.
 	 * 
 	 * @param reference
+	 * @return Null, if the registry did not contain an entry for the resource reference.
 	 */
-	public void unregisterResourceReference(ResourceReference reference)
+	public final ResourceReference unregisterResourceReference(final ResourceReference reference)
 	{
 		Args.notNull(reference, "reference");
 
-		Key key = new Key(reference.getScope().getName(), reference.getName(),
-			reference.getLocale(), reference.getStyle(), reference.getVariation());
-		map.remove(key);
+		Key key = new Key(reference);
+
+		// remove from registry
+		ResourceReference removed = map.remove(key);
+
+		// remove from auto-added list, in case the RR was auto-added
+		if (autoAddedQueue != null)
+		{
+			autoAddedQueue.remove(key);
+		}
+
+		return removed;
 	}
 

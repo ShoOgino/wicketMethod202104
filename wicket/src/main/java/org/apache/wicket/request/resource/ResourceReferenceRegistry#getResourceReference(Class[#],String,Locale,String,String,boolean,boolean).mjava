@@ -1,62 +1,59 @@
 	/**
+	 * Get a resource reference matching the parameters from the registry or if not found and
+	 * requested, create an default resource reference and add it to the registry.
+	 * <p>
+	 * Part of the search is scanning the class (scope) and it's superclass for static
+	 * ResourceReference fields. Found fields get registered automatically (but are different from
+	 * auto-generated ResourceReferences).
+	 * 
+	 * @see #createDefaultResourceReference(Class, String, Locale, String, String)
+	 * @see ClassScanner
 	 * 
 	 * @param scope
+	 *            The scope of resource reference (e.g. the Component's class)
 	 * @param name
+	 *            The name of resource reference (e.g. filename)
 	 * @param locale
+	 *            see Component
 	 * @param style
+	 *            see Component
 	 * @param variation
+	 *            see Component
 	 * @param strict
+	 *            If true, "weaker" combination of scope, name, locale etc. are not tested
 	 * @param createIfNotFound
-	 * @return
+	 *            If true a default resource reference is created if no entry can be found in the
+	 *            registry. The newly created resource reference will be added to the registry.
+	 * @return Either the resource reference found in the registry or, if requested, a resource
+	 *         reference automatically created based on the parameters provided. The automatically
+	 *         created resource reference will automatically be added to the registry.
 	 */
-	protected ResourceReference getResourceReference(Class<?> scope, String name, Locale locale,
-		String style, String variation, boolean strict, boolean createIfNotFound)
+	public final ResourceReference getResourceReference(final Class<?> scope, final String name,
+		final Locale locale, final String style, final String variation, final boolean strict,
+		final boolean createIfNotFound)
 	{
-		Key key = new Key(scope.getName(), name, locale, style, variation);
-		ResourceReference res = map.get(key);
-		if (strict)
+		ResourceReference resource = _getResourceReference(scope, name, locale, style, variation,
+			strict);
+
+		// Nothing found so far?
+		if (resource == null)
 		{
-			if (res == null && createIfNotFound)
+			// Scan the class (scope) and it's super classes for static fields containing resource
+			// references. Such resources are registered as normal resource reference (not
+			// auto-added).
+			if (scanner.scanClass(scope) > 0)
 			{
-				res = addDefaultResourceReference(scope, name, locale, style, variation);
+				// At least one new resource reference got registered => Search the registry again
+				resource = _getResourceReference(scope, name, locale, style, variation, strict);
+			}
+
+			// Still nothing found => Shall a new reference be auto-created?
+			if ((resource == null) && createIfNotFound)
+			{
+				resource = addDefaultResourceReference(scope, name, locale, style, variation);
 			}
 		}
-		if (strict || res != null)
-		{
-			return res;
-		}
-		else
-		{
-			res = getResourceReference(scope, name, locale, style, null, true, false);
-			if (res == null)
-			{
-				res = getResourceReference(scope, name, locale, null, variation, true, false);
-			}
-			if (res == null)
-			{
-				res = getResourceReference(scope, name, locale, null, null, true, false);
-			}
-			if (res == null)
-			{
-				res = getResourceReference(scope, name, null, style, variation, true, false);
-			}
-			if (res == null)
-			{
-				res = getResourceReference(scope, name, null, style, null, true, false);
-			}
-			if (res == null)
-			{
-				res = getResourceReference(scope, name, null, null, variation, true, false);
-			}
-			if (res == null)
-			{
-				res = getResourceReference(scope, name, null, null, null, true, false);
-			}
-			if (res == null && createIfNotFound)
-			{
-				res = addDefaultResourceReference(scope, name, locale, style, variation);
-			}
-			return res;
-		}
+
+		return resource;
 	}
 
