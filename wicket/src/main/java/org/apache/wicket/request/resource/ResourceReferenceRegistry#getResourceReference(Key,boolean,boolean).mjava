@@ -9,16 +9,8 @@
 	 * @see #createDefaultResourceReference(Class, String, Locale, String, String)
 	 * @see ClassScanner
 	 * 
-	 * @param scope
-	 *            The scope of resource reference (e.g. the Component's class)
-	 * @param name
-	 *            The name of resource reference (e.g. filename)
-	 * @param locale
-	 *            see Component
-	 * @param style
-	 *            see Component
-	 * @param variation
-	 *            see Component
+	 * @param key
+	 *            The data making up the resource reference
 	 * @param strict
 	 *            If true, "weaker" combination of scope, name, locale etc. are not tested
 	 * @param createIfNotFound
@@ -28,11 +20,32 @@
 	 *         reference automatically created based on the parameters provided. The automatically
 	 *         created resource reference will automatically be added to the registry.
 	 */
-	public final ResourceReference getResourceReference(final Class<?> scope, final String name,
-		final Locale locale, final String style, final String variation, final boolean strict,
+	public final ResourceReference getResourceReference(final Key key, final boolean strict,
 		final boolean createIfNotFound)
 	{
-		return getResourceReference(new Key(scope.getName(), name, locale, style, variation),
-			strict, createIfNotFound);
+		ResourceReference resource = _getResourceReference(key.getScope(), key.getName(),
+			key.getLocale(), key.getStyle(), key.getVariation(), strict);
+
+		// Nothing found so far?
+		if (resource == null)
+		{
+			// Scan the class (scope) and it's super classes for static fields containing resource
+			// references. Such resources are registered as normal resource reference (not
+			// auto-added).
+			if (scanner.scanClass(key.getScopeClass()) > 0)
+			{
+				// At least one new resource reference got registered => Search the registry again
+				resource = _getResourceReference(key.getScope(), key.getName(), key.getLocale(),
+					key.getStyle(), key.getVariation(), strict);
+			}
+
+			// Still nothing found => Shall a new reference be auto-created?
+			if ((resource == null) && createIfNotFound)
+			{
+				resource = addDefaultResourceReference(key);
+			}
+		}
+
+		return resource;
 	}
 

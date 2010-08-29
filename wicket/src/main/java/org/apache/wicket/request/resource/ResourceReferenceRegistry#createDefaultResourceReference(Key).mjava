@@ -1,0 +1,22 @@
+	/**
+	 * Creates a default resource reference in case no registry entry and it was requested to create
+	 * one.
+	 * <p>
+	 * A {@link PackageResourceReference} will be created by default
+	 * 
+	 * @param key
+	 * @return The RR created or null if not successful
+	 */
+	protected ResourceReference createDefaultResourceReference(final Key key)
+	{
+		if (PackageResource.exists(key.getScopeClass(), key.getName(), key.getLocale(),
+			key.getStyle(), key.getVariation()))
+		{
+			return new PackageResourceReference(key);
+		}
+		else
+		{
+			return null;
+		}
+	}
+

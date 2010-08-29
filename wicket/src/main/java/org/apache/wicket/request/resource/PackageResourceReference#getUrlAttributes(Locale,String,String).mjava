@@ -1,12 +1,18 @@
-	private UrlAttributes getUrlAttributes(Locale locale, String style, String variation)
+	/**
+	 * 
+	 * @param locale
+	 * @param style
+	 * @param variation
+	 * @return
+	 */
+	private UrlAttributes getUrlAttributes(final Locale locale, final String style,
+		final String variation)
 	{
-		IResourceStreamLocator locator = Application.get()
+		IResourceStreamLocator locator = ThreadContext.getApplication()
 			.getResourceSettings()
 			.getResourceStreamLocator();
 
-		UrlAttributes res;
-
-		res = testResource(locator, locale, style, variation);
+		UrlAttributes res = testResource(locator, locale, style, variation);
 		if (res == null)
 		{
 			res = testResource(locator, locale, style, null);

@@ -1,19 +1,13 @@
 	/**
 	 * Creates a default resource reference and registers it.
 	 * 
-	 * @param scope
-	 * @param name
-	 * @param locale
-	 * @param style
-	 * @param variation
+	 * @param key
 	 * @return The default resource created
 	 */
-	private ResourceReference addDefaultResourceReference(Class<?> scope, String name,
-		Locale locale, String style, String variation)
+	private ResourceReference addDefaultResourceReference(final Key key)
 	{
 		// Can be subclassed to create other than PackagedResourceReference
-		ResourceReference reference = createDefaultResourceReference(scope, name, locale, style,
-			variation);
+		ResourceReference reference = createDefaultResourceReference(key);
 
 		if (reference != null)
 		{
@@ -22,7 +16,7 @@
 			enforceAutoAddedCacheSize(getAutoAddedCapacity());
 
 			// Register the new RR
-			Key key = _registerResourceReference(reference);
+			_registerResourceReference(reference);
 
 			// Add it to the auto-added list
 			if (autoAddedQueue != null)
@@ -33,13 +27,7 @@
 		else
 		{
 			log.warn("Asked to auto-create a ResourceReference, but ResourceReferenceRegistry.createDefaultResourceReference() return null. " +
-				" [scope: " +
-				scope.getName() +
-				"; name: " +
-				name +
-				"; locale: " +
-				locale +
-				"; style: " + style + "; variation: " + variation + "]");
+				" [" + key.toString() + "]");
 		}
 		return reference;
 	}
