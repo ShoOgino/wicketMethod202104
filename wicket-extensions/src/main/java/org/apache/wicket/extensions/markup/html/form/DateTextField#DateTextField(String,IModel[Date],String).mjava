@@ -24,7 +24,11 @@
 			@Override
 			public DateFormat getDateFormat(Locale locale)
 			{
-				return new SimpleDateFormat(DateTextField.this.datePattern);
+				if (locale == null)
+				{
+					locale = Locale.getDefault();
+				}
+				return new SimpleDateFormat(DateTextField.this.datePattern, locale);
 			}
 		};
 	}
