@@ -1,0 +1,39 @@
+	/**
+	 * strip timestamp information from resource name
+	 *
+	 * @param resourceName
+	 * @return
+	 */
+
+	private String stripTimestampFromResourceName(final String resourceName)
+	{
+		int pos = resourceName.lastIndexOf('.');
+
+		final String fullname = pos == -1 ? resourceName : resourceName.substring(0, pos);
+		final String extension = pos == -1 ? null : resourceName.substring(pos);
+
+		pos = fullname.lastIndexOf(TIMESTAMP_PREFIX);
+
+		if (pos != -1)
+		{
+			final String timestamp = fullname.substring(pos + TIMESTAMP_PREFIX.length());
+			final String basename = fullname.substring(0, pos);
+
+			try
+			{
+				Long.parseLong(timestamp); // just check the timestamp is numeric
+
+				// create filename without timestamp for resource lookup
+				return extension == null ? basename : basename + extension;
+			}
+			catch (NumberFormatException e)
+			{
+				// some strange case of coincidence where the filename contains the timestamp prefix
+				// but the timestamp itself is non-numeric - we interpret this situation as
+				// "file has no timestamp"
+
+			}
+		}
+		return resourceName;
+	}
+

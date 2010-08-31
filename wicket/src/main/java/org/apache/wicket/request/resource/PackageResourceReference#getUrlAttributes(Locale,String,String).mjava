@@ -1,46 +1,10 @@
-	/**
-	 * 
-	 * @param locale
-	 * @param style
-	 * @param variation
-	 * @return
-	 */
-	private UrlAttributes getUrlAttributes(final Locale locale, final String style,
-		final String variation)
+	private UrlAttributes getUrlAttributes(Locale locale, String style, String variation)
 	{
-		IResourceStreamLocator locator = ThreadContext.getApplication()
-			.getResourceSettings()
-			.getResourceStreamLocator();
+		StreamInfo info = lookupStream(locale, style, variation);
 
-		UrlAttributes res = testResource(locator, locale, style, variation);
-		if (res == null)
-		{
-			res = testResource(locator, locale, style, null);
-		}
-		if (res == null)
-		{
-			res = testResource(locator, locale, null, variation);
-		}
-		if (res == null)
-		{
-			res = testResource(locator, null, style, variation);
-		}
-		if (res == null)
-		{
-			res = testResource(locator, locale, null, null);
-		}
-		if (res == null)
-		{
-			res = testResource(locator, null, style, null);
-		}
-		if (res == null)
-		{
-			res = testResource(locator, null, null, variation);
-		}
-		if (res == null)
-		{
-			res = new UrlAttributes(null, null, null);
-		}
-		return res;
+		if (info != null)
+			return new UrlAttributes(info.locale, info.style, info.variation);
+
+		return new UrlAttributes(null, null, null);
 	}
 

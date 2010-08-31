@@ -6,17 +6,30 @@
 		Url url = request.getUrl();
 
 		if (url.getSegments().size() >= 4 &&
-			urlStartsWith(url, getContext().getNamespace(), getContext().getResourceIdentifier()))
+				urlStartsWith(url, getContext().getNamespace(), getContext().getResourceIdentifier()))
 		{
 			String className = url.getSegments().get(2);
 			StringBuilder name = new StringBuilder();
-			for (int i = 3; i < url.getSegments().size(); ++i)
+			int segmentsSize = url.getSegments().size();
+			for (int i = 3; i < segmentsSize; ++i)
 			{
+				String segment = url.getSegments().get(i);
+
+				// if timestamps are enabled the last segment (=resource name)
+				// should be stripped of timestamps
+				if (isTimestampsEnabled() && i + 1 == segmentsSize)
+				{
+					// The last segment eventually contains a timestamp which we have to remove
+					// resource lookup will not care about timestamp but always deliver the
+					// most current version of the resource. After all this whole timestamp
+					// thing is about caching on proxies and browsers but does not affect wicket.
+					segment = stripTimestampFromResourceName(segment);
+				}
 				if (name.length() > 0)
 				{
 					name.append("/");
 				}
-				name.append(url.getSegments().get(i));
+				name.append(segment);
 			}
 
 			ResourceReference.UrlAttributes attributes = getResourceReferenceAttributes(url);
