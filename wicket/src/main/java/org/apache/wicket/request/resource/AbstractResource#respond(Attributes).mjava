@@ -25,67 +25,66 @@
 			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return;
 		}
-		else if (data.getErrorCode() != null)
+
+		if (data.getErrorCode() != null)
 		{
 			response.sendError(data.getErrorCode(), data.getErrorMessage());
 			return;
 		}
-		else
+
+		if (data.getWriteCallback() == null)
 		{
-			if (data.getWriteCallback() == null)
-			{
-				throw new IllegalStateException(
-					"ResourceData#setWriteCallback must be called for AbstractResource.");
-			}
-
-			String fileName = data.getFileName();
-			ContentDisposition disposition = data.getContentDisposition();
-			String mimeType = data.getContentType();
-			String encoding = null;
-
-			if (mimeType != null && mimeType.indexOf("text") != -1)
-			{
-				encoding = data.getTextEncoding();
-			}
-
-			long contentLength = data.getContentLength();
-
-			// 3. Content Disposition
-			if (ContentDisposition.ATTACHMENT == disposition)
-			{
-				response.setAttachmentHeader(fileName);
-			}
-			else if (ContentDisposition.INLINE == disposition)
-			{
-				response.setInlineHeader(fileName);
-			}
-
-			// 4. Mime Type (+ encoding)
-			if (mimeType != null)
-			{
-				if (encoding == null)
-				{
-					response.setContentType(mimeType);
-				}
-				else
-				{
-					response.setContentType(mimeType + "; charset=" + encoding);
-				}
-			}
-
-			// 5. Content Length
-			if (contentLength != -1)
-			{
-				response.setContentLength(contentLength);
-			}
-
-			// 6. Flush the response
-			// This is necessary for firefox if this resource is an image, otherwise it messes up
-			// other images on page
-			response.flush();
-
-			// 7. Write Data
-			data.getWriteCallback().writeData(attributes);
+			throw new IllegalStateException(
+				"ResourceData#setWriteCallback must be called for AbstractResource.");
 		}
+
+		String fileName = data.getFileName();
+		ContentDisposition disposition = data.getContentDisposition();
+		String mimeType = data.getContentType();
+		String encoding = null;
+
+		if (mimeType != null && mimeType.indexOf("text") != -1)
+		{
+			encoding = data.getTextEncoding();
+		}
+
+		long contentLength = data.getContentLength();
+
+		// 3. Content Disposition
+		if (ContentDisposition.ATTACHMENT == disposition)
+		{
+			response.setAttachmentHeader(fileName);
+		}
+		else if (ContentDisposition.INLINE == disposition)
+		{
+			response.setInlineHeader(fileName);
+		}
+
+		// 4. Mime Type (+ encoding)
+		if (mimeType != null)
+		{
+			if (encoding == null)
+			{
+				response.setContentType(mimeType);
+			}
+			else
+			{
+				response.setContentType(mimeType + "; charset=" + encoding);
+			}
+		}
+
+		// 5. Content Length
+		if (contentLength != -1)
+		{
+			response.setContentLength(contentLength);
+		}
+
+		// 6. Flush the response
+		// This is necessary for firefox if this resource is an image, otherwise it messes up
+		// other images on page
+		response.flush();
+
+		// 7. Write Data
+		data.getWriteCallback().writeData(attributes);
 	}
 

@@ -1,20 +1,30 @@
 	/**
 	 * Configure the web response header for client cache control.
 	 * 
-	 * @param request
-	 * @param response
-	 * @param data
-	 * @param attributes
+	 * @param request web request
+	 * @param response web response
+	 * @param data resource data
+	 * @param attributes request attributes
 	 */
 	protected void configureCache(final WebRequest request, final WebResponse response,
 		final ResourceResponse data, final Attributes attributes)
 	{
+		long now = System.currentTimeMillis();
+
+		// Time of message generation
+		response.setDateHeader("Date", now);
+
 		if (data.isCacheable())
 		{
-			// If time is set also set cache headers.
-			response.setDateHeader("Expires", System.currentTimeMillis() +
-				(data.getCacheDuration() * 1000L));
-			response.setHeader(CACHE_CONTROL, "max-age=" + data.getCacheDuration());
+			// Time for cache expiry
+			response.setDateHeader("Expires", now + (data.getCacheDuration() * 1000L));
+
+			// Allow caching even for public proxies or CDN providers
+			response.setHeader(CACHE_CONTROL, "public, max-age=" + data.getCacheDuration());
+
+			// Let caches distinguish between compressed and uncompressed
+			// versions of the resource so they can serve them properly
+			response.setHeader("Vary", "Accept-Encoding");
 		}
 		else
 		{
