@@ -1,0 +1,19 @@
+	/**
+	 * send resource specific error message and write log entry
+	 *
+	 * @param resourceResponse resource response for method chaining
+	 * @param errorCode error code (=http status)
+	 * @param errorMessage error message (=http error message)
+	 * @return
+	 */
+	private ResourceResponse sendResourceError(ResourceResponse resourceResponse, int errorCode, String errorMessage)
+	{
+		String msg = String.format("resource [path = %s, style = %s, variation = %s, locale = %s]: %s (status=%d)",
+		                           absolutePath, style, variation, locale, errorMessage, errorCode);
+
+		log.warn(msg);
+
+		resourceResponse.setError(errorCode, errorMessage);
+		return resourceResponse;
+	}
+
