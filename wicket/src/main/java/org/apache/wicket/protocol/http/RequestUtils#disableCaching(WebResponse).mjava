@@ -1,0 +1,18 @@
+	/**
+	 * set all required headers to disable caching
+	 *
+	 * "Pragma" is required for older browsers only supporting HTTP 1.0.
+	 * "Cache" is recommended for HTTP 1.1.
+	 * "Expires" additionally sets the content expiry in the past which effectively prohibits caching.
+	 * "Date" is recommended in general
+	 *
+	 * @param response web response
+	 */
+	public static void disableCaching(WebResponse response)
+	{
+		response.setDateHeader("Date", System.currentTimeMillis());
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache");
+	}
+

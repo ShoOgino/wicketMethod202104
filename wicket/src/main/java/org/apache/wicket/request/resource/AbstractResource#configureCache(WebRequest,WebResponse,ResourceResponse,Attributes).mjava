@@ -9,13 +9,13 @@
 	protected void configureCache(final WebRequest request, final WebResponse response,
 		final ResourceResponse data, final Attributes attributes)
 	{
-		long now = System.currentTimeMillis();
-
-		// Time of message generation
-		response.setDateHeader("Date", now);
-
 		if (data.isCacheable())
 		{
+			long now = System.currentTimeMillis();
+
+			// Time of message generation
+			response.setDateHeader("Date", now);
+
 			// Time for cache expiry
 			response.setDateHeader("Expires", now + (data.getCacheDuration() * 1000L));
 
@@ -28,7 +28,7 @@
 		}
 		else
 		{
-			response.setHeader(CACHE_CONTROL, "no-cache, must-revalidate");
+			RequestUtils.disableCaching(response);
 		}
 	}
 
