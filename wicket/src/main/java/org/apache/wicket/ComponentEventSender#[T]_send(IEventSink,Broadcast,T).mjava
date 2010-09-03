@@ -1,7 +1,7 @@
 	/** {@inheritDoc} */
-	public void send(IEventSink sink, Broadcast type, Object payload)
+	public <T> void send(IEventSink sink, Broadcast type, T payload)
 	{
-		ComponentEvent event = new ComponentEvent(sink, source, type, payload);
+		ComponentEvent<?> event = new ComponentEvent<T>(sink, source, type, payload);
 		Args.notNull(type, "type");
 		switch (type)
 		{
