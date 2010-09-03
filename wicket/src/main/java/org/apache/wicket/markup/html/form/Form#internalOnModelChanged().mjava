@@ -5,10 +5,9 @@
 	protected void internalOnModelChanged()
 	{
 		// Visit all the form components and validate each
-		visitFormComponentsPostOrder(new FormComponent.AbstractVisitor<Void>()
+		visitFormComponentsPostOrder(new IVisitor<FormComponent<?>, Void>()
 		{
-			@Override
-			public void onFormComponent(final FormComponent<?> formComponent, IVisit<Void> visit)
+			public void component(final FormComponent<?> formComponent, IVisit<Void> visit)
 			{
 				// If form component is using form model
 				if (formComponent.sameInnermostModel(Form.this))
