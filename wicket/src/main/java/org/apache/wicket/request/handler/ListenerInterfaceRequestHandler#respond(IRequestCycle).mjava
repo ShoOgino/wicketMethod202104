@@ -25,9 +25,11 @@
 			 * into the invoke method so we can access the request and figure out if it is ajax or
 			 * not.
 			 */
-			if (isAjax & page instanceof IManageablePage)
+			Boolean frozen = null;
+			
+			if (isAjax)
 			{
-				page.setFreezePageId(true);
+				frozen = page.setFreezePageId(true);
 			}
 
 			try
@@ -36,11 +38,8 @@
 			}
 			finally
 			{
-				if (isAjax && page instanceof IManageablePage)
-				{
-					page.setFreezePageId(false);
-				}
-
+				if(frozen != null)
+					page.setFreezePageId(frozen);
 			}
 		}
 		else
