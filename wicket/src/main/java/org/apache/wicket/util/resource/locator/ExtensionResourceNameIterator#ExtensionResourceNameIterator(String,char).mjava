@@ -1,0 +1,20 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param extension
+	 * @param separatorChar
+	 */
+	public ExtensionResourceNameIterator(final String extension, final char separatorChar)
+	{
+		// Extension can be a comma separated list
+		String[] extensions = Strings.split(extension, separatorChar);
+		if (extensions.length == 0)
+		{
+			// Fail safe: hasNext() needs to return at least once with true.
+			extensions = new String[] { "" };
+		}
+		this.extensions = extensions;
+
+		index = 0;
+	}
+

@@ -1,5 +1,4 @@
 	/**
-	 * 
 	 * @see java.util.Iterator#next()
 	 */
 	public String next()
@@ -7,16 +6,14 @@
 		if (locale == null)
 		{
 			state = 999;
-			return path;
+			return "";
 		}
 
 		// 1. Apply Locale default toString() implementation. See Locale.
 		if (state == 0)
 		{
 			state++;
-			currentLocale = locale;
-			currentPath = path + '_' + locale.toString();
-			return currentPath;
+			return '_' + locale.toString();
 		}
 
 		// Get language and country, either of which may be the empty string
@@ -30,9 +27,8 @@
 
 			if (!Strings.isEmpty(language) && !Strings.isEmpty(country))
 			{
-				currentLocale = new Locale(language, country);
-				String newPath = path + '_' + language + '_' + country;
-				if (currentPath.equals(newPath) == false)
+				String newPath = '_' + language + '_' + country;
+				if (locale.toString().equals(newPath) == false)
 				{
 					return newPath;
 				}
@@ -46,15 +42,12 @@
 
 			if (!Strings.isEmpty(language))
 			{
-				currentLocale = new Locale(language);
-				return path + '_' + language;
+				return '_' + language;
 			}
 		}
 
 		// 4. The path only; without locale
 		state++;
-
-		currentLocale = null;
-		return path;
+		return "";
 	}
 
