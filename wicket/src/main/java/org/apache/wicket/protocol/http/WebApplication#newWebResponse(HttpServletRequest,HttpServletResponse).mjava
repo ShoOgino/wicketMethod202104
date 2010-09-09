@@ -1,0 +1,16 @@
+	/**
+	 * Creates a WebResponse. Subclasses of WebRequest could e.g. encode wicket's default URL and
+	 * hide the details from the user. A appropriate WebRequest must be implemented and configured
+	 * to decode the encoded URL.
+	 * 
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return a WebResponse object
+	 */
+	protected WebResponse newWebResponse(final HttpServletRequest httpServletRequest,
+		final HttpServletResponse httpServletResponse)
+	{
+		return new HeaderBufferingWebResponse(new ServletWebResponse(httpServletRequest,
+			httpServletResponse));
+	}
+
