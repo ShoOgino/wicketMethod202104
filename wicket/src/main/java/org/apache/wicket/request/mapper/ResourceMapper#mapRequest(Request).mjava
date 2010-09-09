@@ -1,0 +1,34 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestMapper#mapRequest(org.apache.wicket.request.Request)
+	 */
+	public IRequestHandler mapRequest(final Request request)
+	{
+		Url url = request.getUrl();
+		Iterator<String> segments = url.getSegments().iterator();
+
+		// see if url matches the path we are mounted at
+		for (String mountSegment : mountSegments)
+		{
+			if (segments.hasNext() == false)
+				return null; // given url is too short
+
+			if (mountSegment.equals(segments.next()) == false)
+				return null; // url does not fully match
+		}
+
+		// now extract the page parameters from the request url
+
+		PageParameters parameters = new PageParameters();
+
+		// extract indexed parameters
+		int index = 0;
+		while (segments.hasNext())
+			parameters.set(index++, segments.next());
+
+		// extract named parameters
+		for (Url.QueryParameter queryParameter : url.getQueryParameters())
+			parameters.add(queryParameter.getName(), queryParameter.getValue());
+
+		return new ResourceReferenceRequestHandler(resourceReference, parameters);
+	}
+

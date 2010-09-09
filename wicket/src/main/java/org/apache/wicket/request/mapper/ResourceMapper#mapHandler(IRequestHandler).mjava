@@ -1,0 +1,38 @@
+	/**
+	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.wicket.request.IRequestHandler)
+	 */
+	public Url mapHandler(IRequestHandler requestHandler)
+	{
+		if ((requestHandler instanceof ResourceReferenceRequestHandler) == false)
+			return null;
+
+		ResourceReferenceRequestHandler handler = (ResourceReferenceRequestHandler)requestHandler;
+
+		// see if request handler addresses the resource we serve
+		if (resourceReference.getResource().equals(handler.getResource()) == false)
+			return null;
+
+		// create path to resource
+		List<String> path = new ArrayList<String>();
+
+		// add mount segments
+		path.addAll(Arrays.asList(mountSegments));
+
+		// next we add the page parameters to the resulting path
+		PageParameters parameters = handler.getPageParameters();
+
+		// append indexed parameters as path segments
+		for (int index = 0; index < parameters.getIndexedCount(); index++)
+			path.add(parameters.get(index).toString());
+
+		// append named parameters as query strings
+		List<PageParameters.NamedPair> namedParameters = parameters.getAllNamed();
+		List<Url.QueryParameter> queryParams = new ArrayList<Url.QueryParameter>(namedParameters.size());
+
+		for (PageParameters.NamedPair namedParameter : namedParameters)
+			queryParams.add(new Url.QueryParameter(namedParameter.getKey(), namedParameter.getValue()));
+
+		// create and return url
+		return new Url(path, queryParams);
+	}
+
