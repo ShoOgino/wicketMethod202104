@@ -2,7 +2,7 @@
 		 * Check to determine if the resource data needs to be written. This method checks the
 		 * <code>If-Modified-Since</code> request header and compares it to lastModified property.
 		 * In order for this method to work {@link #setLastModified(Date)} has to be called first.
-		 * 
+		 *
 		 * @param attributes request attributes
 		 * @return <code>true</code> if the resource data does need to be written,
 		 *         <code>false</code> otherwise.
@@ -15,7 +15,11 @@
 
 			if (ifModifiedSince != null && lastModified != null)
 			{
-				// Round down to the nearest second for a proper compare
+				// [Last-Modified] headers have a maximum precision of one second
+				// so we have to truncate the milliseconds part for a proper compare.
+				// that's stupid, since changes within one second will not be reliably
+				// detected by the client ... any hint or clarification to improve this
+				// situation will be appreciated...
 				long modified = this.lastModified.getTime() / 1000 * 1000;
 
 				return ifModifiedSince.getTime() < modified;
