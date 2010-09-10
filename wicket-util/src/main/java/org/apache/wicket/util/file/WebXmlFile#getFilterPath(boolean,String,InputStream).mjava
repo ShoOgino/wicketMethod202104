@@ -24,6 +24,8 @@
 	 * </code>
 	 * </pre>
 	 * 
+	 * @param isServlet
+	 *            true if Servlet, false if Filter
 	 * @param filterName
 	 * @param is
 	 *            The web.xml file
@@ -32,17 +34,31 @@
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public final String getFilterPath(final String filterName, final InputStream is)
-		throws ParserConfigurationException, SAXException, IOException
+	public final String getFilterPath(final boolean isServlet, final String filterName,
+		final InputStream is) throws ParserConfigurationException, SAXException, IOException
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(is);
 
-		String mapping = "filter-mapping";
-		String name = "filter-name";
+		String tag = (isServlet ? "servlet" : "filter");
+		String mapping = tag + "-mapping";
+		String name = tag + "-name";
 
 		String urlPattern = getFilterPath(filterName, mapping, name, document.getChildNodes());
+		if (urlPattern == null)
+		{
+			if (log.isWarnEnabled())
+			{
+				log.warn("web.xml: No url-pattern found for " + tag + " with name " + filterName);
+			}
+			return null;
+		}
+		else if (log.isInfoEnabled())
+		{
+			log.info("web.xml: found " + tag + " with name " + filterName + ". url-pattern=" +
+				urlPattern);
+		}
 
 		// remove leading "/" and trailing "*"
 		return urlPattern.substring(1, urlPattern.length() - 1);

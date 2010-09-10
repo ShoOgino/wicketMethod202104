@@ -1,0 +1,60 @@
+	/**
+	 * Servlets and Filters are treated essentially the same with Wicket. This is the entry point
+	 * for both of them.
+	 * 
+	 * @see #init(FilterConfig)
+	 * 
+	 * @param isServlet
+	 *            True if Servlet, false of Filter
+	 * @param filterConfig
+	 * @throws ServletException
+	 */
+	public void init(final boolean isServlet, final FilterConfig filterConfig)
+		throws ServletException
+	{
+		this.filterConfig = filterConfig;
+
+		IWebApplicationFactory factory = getApplicationFactory();
+		application = factory.createApplication(this);
+		application.setName(filterConfig.getFilterName());
+		application.setWicketFilter(this);
+
+		// Allow the filterPath to tbe preset via setFilterPath()
+		if (filterPath == null)
+		{
+			filterPath = new WebXmlFile().getFilterPath(isServlet, filterConfig);
+			if ((filterPath == null) && log.isInfoEnabled())
+			{
+				log.info("Unable to parse filter mapping web.xml for " +
+					filterConfig.getFilterName() + ". " + "Configure with init-param " +
+					FILTER_MAPPING_PARAM + " if it is not \"/*\".");
+			}
+		}
+
+		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
+		final ClassLoader newClassLoader = getClassLoader();
+
+		application.set();
+		try
+		{
+			if (previousClassLoader != newClassLoader)
+			{
+				Thread.currentThread().setContextClassLoader(newClassLoader);
+			}
+
+			application.initApplication();
+
+			// Give the application the option to log that it is started
+			application.logStarted();
+		}
+		finally
+		{
+			ThreadContext.detach();
+
+			if (newClassLoader != previousClassLoader)
+			{
+				Thread.currentThread().setContextClassLoader(previousClassLoader);
+			}
+		}
+	}
+

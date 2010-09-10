@@ -1,51 +1,10 @@
 	/**
+	 * If you do have a need to subclass, you may subclass {@link #init(boolean, FilterConfig)}
+	 * 
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
-	public void init(final FilterConfig filterConfig) throws ServletException
+	public final void init(final FilterConfig filterConfig) throws ServletException
 	{
-		this.filterConfig = filterConfig;
-
-		IWebApplicationFactory factory = getApplicationFactory();
-		application = factory.createApplication(this);
-		application.setName(filterConfig.getFilterName());
-		application.setWicketFilter(this);
-
-		// Allow the filterPath to tbe preset via setFilterPath()
-		if (filterPath == null)
-		{
-			filterPath = new WebXmlFile().getFilterPath(filterConfig);
-			if (filterPath == null)
-			{
-				log.info("Unable to parse filter mapping web.xml for " +
-					filterConfig.getFilterName() + ". " + "Configure with init-param " +
-					FILTER_MAPPING_PARAM + " if it is not \"/*\".");
-			}
-		}
-
-		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
-		final ClassLoader newClassLoader = getClassLoader();
-
-		application.set();
-		try
-		{
-			if (previousClassLoader != newClassLoader)
-			{
-				Thread.currentThread().setContextClassLoader(newClassLoader);
-			}
-
-			application.initApplication();
-
-			// Give the application the option to log that it is started
-			application.logStarted();
-		}
-		finally
-		{
-			ThreadContext.detach();
-
-			if (newClassLoader != previousClassLoader)
-			{
-				Thread.currentThread().setContextClassLoader(previousClassLoader);
-			}
-		}
+		init(false, filterConfig);
 	}
 

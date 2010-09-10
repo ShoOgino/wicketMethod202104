@@ -5,7 +5,7 @@
 	public void init() throws ServletException
 	{
 		wicketFilter = newWicketFilter();
-		wicketFilter.init(new FilterConfig()
+		wicketFilter.init(true, new FilterConfig()
 		{
 			/**
 			 * @see javax.servlet.FilterConfig#getServletContext()
@@ -27,12 +27,8 @@
 			/**
 			 * @see javax.servlet.FilterConfig#getInitParameter(java.lang.String)
 			 */
-			public String getInitParameter(String name)
+			public String getInitParameter(final String name)
 			{
-				if (WicketFilter.FILTER_MAPPING_PARAM.equals(name))
-				{
-					return WicketFilter.SERVLET_PATH_HOLDER;
-				}
 				return WicketServlet.this.getInitParameter(name);
 			}
 
