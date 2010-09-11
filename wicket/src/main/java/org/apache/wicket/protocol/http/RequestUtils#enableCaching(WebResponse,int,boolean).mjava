@@ -31,6 +31,7 @@
 	 *            response that should be cacheable
 	 * @param duration
 	 *            duration in seconds that the response may be cached
+	 *            (Integer.MAX_VALUE will select maximum duration based on RFC-2616)
 	 * @param cachePublic
 	 *            If <code>true</code> all caches are allowed to cache the response.
 	 *            If <code>false</code> only the client may cache the response (if at all).
@@ -43,6 +44,10 @@
 
 		if(duration < 0)
 			throw new IllegalArgumentException("duration must be a positive value");
+
+		// do not exceed the maximum recommended value from RFC-2616
+		if(duration > MAX_CACHE_DURATION)
+			duration = MAX_CACHE_DURATION;
 
 		// Get current time
 		long now = System.currentTimeMillis();
