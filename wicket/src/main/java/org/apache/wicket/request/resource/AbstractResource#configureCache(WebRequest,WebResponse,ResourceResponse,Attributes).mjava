@@ -13,9 +13,9 @@
 	protected void configureCache(final WebRequest request, final WebResponse response,
 		final ResourceResponse data, final Attributes attributes)
 	{
-		final int duration = data.getCacheDuration();
+	    Duration duration = data.getCacheDuration();
 
-		if(duration > 0)
+		if(duration.compareTo(Duration.NONE) > 0)
 		{
 			RequestUtils.enableCaching(response, duration, data.isCachePublic());
 		}
