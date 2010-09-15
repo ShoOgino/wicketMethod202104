@@ -7,9 +7,9 @@
 	 * @param parameters
 	 */
 	public void assertBookmarkablePageLink(final String id,
-		final Class<? extends WebPage> pageClass, final String parameters)
+		final Class<? extends WebPage> pageClass, final PageParameters parameters)
 	{
-		BookmarkablePageLink<?> pageLink = null;
+		BookmarkablePageLink<?> pageLink;
 		try
 		{
 			pageLink = (BookmarkablePageLink<?>)getComponentFromLastRenderedPage(id);
@@ -25,6 +25,6 @@
 
 		Assert.assertEquals(
 			"One or more of the parameters associated with the BookmarkablePageLink: " + id +
-				" do not match", new PageParameters(parameters), pageLink.getPageParameters());
+				" do not match", parameters, pageLink.getPageParameters());
 	}
 
