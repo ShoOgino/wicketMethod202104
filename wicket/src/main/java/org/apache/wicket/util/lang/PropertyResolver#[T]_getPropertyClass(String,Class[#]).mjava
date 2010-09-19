@@ -1,0 +1,17 @@
+	/**
+	 * @param <T>
+	 * @param expression
+	 * @param clz
+	 * @return class of the target Class property expression
+	 */
+	public static <T> Class<T> getPropertyClass(String expression, Class<?> clz)
+	{
+		ObjectAndGetSetter setter = getObjectAndGetSetter(expression, null, RESOLVE_CLASS, clz);
+		if (setter == null)
+		{
+			throw new WicketRuntimeException("No Class returned for expression: " + expression +
+				" for getting the target classs of: " + clz);
+		}
+		return (Class<T>)setter.getTargetClass();
+	}
+
