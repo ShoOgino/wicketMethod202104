@@ -2,11 +2,10 @@
 	 * Iterate initializers list, calling any {@link org.apache.wicket.IDestroyer} instances found
 	 * in it.
 	 */
-	private final void callDestroyers()
+	private void callDestroyers()
 	{
-		for (Iterator<IInitializer> iter = initializers.iterator(); iter.hasNext();)
+		for (IInitializer initializer : initializers)
 		{
-			IInitializer initializer = iter.next();
 			if (initializer instanceof IDestroyer)
 			{
 				log.info("[" + getName() + "] destroy: " + initializer);
