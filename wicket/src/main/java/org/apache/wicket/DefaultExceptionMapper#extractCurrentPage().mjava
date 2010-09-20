@@ -5,16 +5,17 @@
 	private Page extractCurrentPage()
 	{
 		final RequestCycle requestCycle = RequestCycle.get();
-		final IRequestHandler activeRequestHandler = requestCycle.getActiveRequestHandler();
 
-		Page currentPage = null;
+		IRequestHandler handler = requestCycle.getActiveRequestHandler();
 
-		if (activeRequestHandler instanceof IPageRequestHandler)
+		if(handler == null)
+			handler = requestCycle.getRequestHandlerScheduledAfterCurrent();
+
+		if (handler instanceof IPageRequestHandler)
 		{
-			IPageRequestHandler pageRequestHandler = (IPageRequestHandler)activeRequestHandler;
-			currentPage = (Page)pageRequestHandler.getPage();
+			IPageRequestHandler pageRequestHandler = (IPageRequestHandler)handler;
+			return (Page)pageRequestHandler.getPage();
 		}
-
-		return currentPage;
+		return null;
 	}
 
