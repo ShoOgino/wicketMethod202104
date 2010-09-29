@@ -1,6 +1,6 @@
 	/**
-	 * Visits children of the specified {@link Iterable} pre-order (parent first). Children are
-	 * determined by calling {@link Iterable#iterator()}.
+	 * Visits container and its children pre-order (parent first). Children are determined by
+	 * calling {@link Iterable#iterator()}.
 	 * 
 	 * @param <S>
 	 *            the type of object that will be visited, notice that {@code container} is not
@@ -17,11 +17,9 @@
 	 *            filter used to limit the types of objects that will be visited
 	 * @return return value from the {@code visitor} or {@code null} if none
 	 */
-	public static final <S, R> R visitChildren(Iterable<?> container, final IVisitor<S, R> visitor,
+	public static final <S, R> R visit(Iterable<? super S> container, final IVisitor<S, R> visitor,
 		IVisitFilter filter)
 	{
-		Visit<R> visit = new Visit<R>();
-		visitChildren(container, visitor, filter, visit);
-		return visit.getResult();
+		return (R)visitChildren(new SingletonIterable(container), visitor, filter);
 	}
 

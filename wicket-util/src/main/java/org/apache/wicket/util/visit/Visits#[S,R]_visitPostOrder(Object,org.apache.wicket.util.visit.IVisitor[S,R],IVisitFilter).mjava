@@ -14,11 +14,20 @@
 	 *            root object that will be visited
 	 * @param visitor
 	 *            the visitor
+	 * @param filter
+	 *            filter used to limit the types of objects that will be visited
 	 * @return return value from the {@code visitor} or {@code null} if none
 	 */
-	public static final <S, R> R visitComponentsPostOrder(S root,
-		final org.apache.wicket.util.visit.IVisitor<S, R> visitor)
+	public static final <S, R> R visitPostOrder(Object root,
+		final org.apache.wicket.util.visit.IVisitor<S, R> visitor, IVisitFilter filter)
 	{
-		return visitComponentsPostOrder(root, visitor, IVisitFilter.ANY);
+		if (visitor == null)
+		{
+			throw new IllegalArgumentException("Argument `visitor` cannot be null");
+		}
+
+		Visit<R> visit = new Visit<R>();
+		visitPostOrderHelper(root, visitor, filter, visit);
+		return visit.getResult();
 	}
 

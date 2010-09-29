@@ -1,6 +1,7 @@
 	/**
-	 * Visits children of the specified {@link Iterable} pre-order (parent first). Children are
-	 * determined by calling {@link Iterable#iterator()}.
+	 * Visits the specified object and any of its children using a post-order (child first)
+	 * traversal. Children are determined by calling {@link Iterable#iterator()} if the object
+	 * implements {@link Iterable}.
 	 * 
 	 * @param <S>
 	 *            the type of object that will be visited, notice that {@code container} is not
@@ -9,14 +10,15 @@
 	 * @param <R>
 	 *            the type of object that should be returned from the visitor, use {@link Void} if
 	 *            no return value is needed
-	 * @param container
-	 *            object whose children will be visited
+	 * @param root
+	 *            root object that will be visited
 	 * @param visitor
 	 *            the visitor
 	 * @return return value from the {@code visitor} or {@code null} if none
 	 */
-	public static final <S, R> R visitChildren(Iterable<?> container, final IVisitor<S, R> visitor)
+	public static final <S, R> R visitPostOrder(S root,
+		final org.apache.wicket.util.visit.IVisitor<S, R> visitor)
 	{
-		return visitChildren(container, visitor, IVisitFilter.ANY);
+		return visitPostOrder(root, visitor, IVisitFilter.ANY);
 	}
 

@@ -1,4 +1,4 @@
-	private static final <S, R> void visitChildren(Iterable<?> container,
+	private static final <S, R> void visitChildren(Iterable<? super S> container,
 		final IVisitor<S, R> visitor, IVisitFilter filter, Visit<R> visit)
 	{
 		if (visitor == null)
@@ -38,7 +38,7 @@
 				filter.visitChildren(child))
 			{
 				// visit the children in the container
-				visitChildren((Iterable<?>)child, visitor, filter, visit);
+				visitChildren((Iterable<? super S>)child, visitor, filter, visit);
 
 				if (visit.isStopped())
 				{
