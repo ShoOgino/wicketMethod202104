@@ -5,7 +5,7 @@
 	 *            Url instance
 	 * @return request with specified URL.
 	 */
-	public Request requestWithUrl(final Url url)
+	public Request cloneWithUrl(final Url url)
 	{
 		return new Request()
 		{
@@ -37,6 +37,12 @@
 			public Charset getCharset()
 			{
 				return Request.this.getCharset();
+			}
+
+			@Override
+			public Url getBaseUrl()
+			{
+				return getUrl();
 			}
 		};
 	}

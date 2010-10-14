@@ -11,6 +11,18 @@
 	 */
 	public final CharSequence getJsForInterfaceUrl(CharSequence url)
 	{
+		/*
+		 * since the passed in url is handled when the current url is form's action url and not the
+		 * current request's url we rerender the passed in url to be relative to the form's action
+		 * url
+		 */
+		UrlRenderer renderer = getRequestCycle().getUrlRenderer();
+		Url oldBase = renderer.getBaseUrl();
+		Url action = Url.parse(getActionUrl().toString());
+		renderer.setBaseUrl(action);
+		url = renderer.renderUrl(Url.parse(url.toString()));
+		renderer.setBaseUrl(oldBase);
+
 		Form<?> root = getRootForm();
 		return new AppendingStringBuffer("document.getElementById('").append(
 			root.getHiddenFieldId())
