@@ -1,0 +1,21 @@
+	/**
+	 * @see org.apache.wicket.util.license.XmlLicenseHeaderHandler#checkLicenseHeader(java.io.File)
+	 */
+	@Override
+	public boolean checkLicenseHeader(final File file)
+	{
+		Revision revision = null;
+
+		try
+		{
+			String header = extractLicenseHeader(file, 0, 1);
+			return header.startsWith("<?xml") == true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+		return true;
+	}
+
