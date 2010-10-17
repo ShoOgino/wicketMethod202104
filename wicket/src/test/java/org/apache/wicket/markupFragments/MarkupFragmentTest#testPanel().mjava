@@ -10,7 +10,7 @@
 
 		// Get the associated markup file
 		IMarkupFragment markup = panel.getAssociatedMarkup();
-		compareWithFile(markup, "MyPanel_ExpectedResult.html");
+		compareMarkupWithFile(markup, "MyPanel_ExpectedResult.html");
 
 		// The Page is missing the tag to "call" the panel
 		assertNull(panel.getMarkup());
@@ -21,10 +21,13 @@
 
 		// getMarkup() returns the "calling" tags
 		markup = panel.getMarkup();
-		compare(markup, "<span wicket:id=\"panel\">test</span>");
+		compareMarkupWithString(markup, "<span wicket:id=\"panel\">test</span>");
 
-		// getMarkup(null) returns the markup which is used to find a child component
+		// getMarkup(null) returns the markup which is used to find a child component, which in case
+		// of Panel is the <wicket:panel> tag and is thus may not be equal to the associated markup
+		// file.
 		markup = panel.getMarkup(null);
-		compare(markup, "<wicket:panel>  <span wicket:id=\"label\">text</span></wicket:panel>");
+		compareMarkupWithString(markup,
+			"<wicket:panel>  <span wicket:id=\"label\">text</span></wicket:panel>");
 	}
 

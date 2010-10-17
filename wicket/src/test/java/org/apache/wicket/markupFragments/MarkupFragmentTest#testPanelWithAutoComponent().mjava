@@ -3,7 +3,6 @@
 	 * 
 	 * @throws Exception
 	 */
-	@Ignore("Ignored until WICKET-3111 is fixed")
 	public void testPanelWithAutoComponent() throws Exception
 	{
 		Page page = new MyPage();
@@ -12,7 +11,7 @@
 
 		// Get the associated markup file
 		IMarkupFragment markup = panel.getAssociatedMarkup();
-		compareWithFile(markup, "MyPanelWithAutoComponent_ExpectedResult.html");
+		compareMarkupWithFile(markup, "MyPanelWithAutoComponent_ExpectedResult.html");
 
 		// The Page is missing the tag to "call" the panel
 		assertNull(panel.getMarkup());
@@ -23,11 +22,11 @@
 
 		// getMarkup() returns the "calling" tags
 		markup = panel.getMarkup();
-		compare(markup, "<span wicket:id=\"panel\">test</span>");
+		compareMarkupWithString(markup, "<span wicket:id=\"panel\">test</span>");
 
 		// getMarkup(null) returns the markup which is used to find a child component
 		markup = panel.getMarkup(null);
-		compare(markup,
+		compareMarkupWithString(markup,
 			"<wicket:panel><a href=\"something\"><span wicket:id=\"label\">text</span></a></wicket:panel>");
 	}
 
