@@ -4,29 +4,6 @@
 	@Override
 	public IMarkupFragment getMarkup(final Component child)
 	{
-		IMarkupFragment markup = getAssociatedMarkup();
-		if (markup == null)
-		{
-			throw new MarkupException("Failed to find associated markup file. Component: " +
-				toString());
-		}
-
-		// Find <wicket:panel>
-		IMarkupFragment panelMarkup = findPanelTag(markup);
-		if (panelMarkup == null)
-		{
-			throw new MarkupException(
-				"Expected to find <wicket:panel> in associated markup file. Markup: " +
-					markup.toString());
-		}
-
-		// If child == null, return the markup starting with <wicket:panel>
-		if (child == null)
-		{
-			return panelMarkup;
-		}
-
-		// else, find the markup fragment for the child component
-		return panelMarkup.find(child.getId());
+		return PanelMarkupHelper.getMarkup(this, child);
 	}
 
