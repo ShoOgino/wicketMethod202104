@@ -9,17 +9,11 @@
 		}
 
 		// get the parent node of deleted nodes
-		TreeNode parentNode = (TreeNode)removalEvent.getTreePath().getLastPathComponent();
+		Object parentNode = removalEvent.getTreePath().getLastPathComponent();
 		TreeItem parentItem = nodeToItemMap.get(parentNode);
 
 		if (parentItem != null && isNodeVisible(parentNode))
 		{
-			if (parentNode.getChildCount() == 0)
-			{
-				// rebuild parent's icon to show it no longer has children
-				invalidateNode(parentNode, true);
-			}
-
 			if (isNodeExpanded(parentNode))
 			{
 				// deleted nodes were visible; we need to delete their TreeItems
@@ -45,6 +39,12 @@
 						getTreeState().selectNode(itemToDelete.getModelObject(), false);
 					}
 				}
+			}
+
+			if (!parentItem.hasChildTreeItems())
+			{
+				// rebuild parent's icon to show it no longer has children
+				invalidateNode(parentNode, true);
 			}
 		}
 	}
