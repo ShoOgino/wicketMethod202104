@@ -1,0 +1,48 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testBasicOperations() throws Exception
+	{
+		Application.get().addRequestCycleListener(newIncrementingListener());
+		assertValues(0, 0, 0, 0, 0, 0);
+		/*
+		 * begins, ends, responses and detaches should increment by one because we have one listener
+		 * 
+		 * exceptions should not increment because none are thrown
+		 */
+		cycle.processRequestAndDetach();
+		assertValues(1, 1, 0, 0, 1, 1);
+
+		// TEST WITH TWO LISTENERS
+		setupNewRequestCycle(false);
+		cycle.register(newIncrementingListener());
+		/*
+		 * we now have two listeners (app and cycle)
+		 * 
+		 * begins and ends should increment by two (once for each listener)
+		 * 
+		 * exceptions should not increment because none are thrown
+		 * 
+		 * responses and detaches should increment by one
+		 */
+		cycle.processRequestAndDetach();
+		assertValues(3, 3, 0, 0, 2, 2);
+
+		// TEST WITH TWO LISTENERS AND AN EXCEPTION DURING RESPONSE
+		setupNewRequestCycle(true);
+		cycle.register(newIncrementingListener());
+		/*
+		 * begins and ends should increment by two (once for each listener)
+		 * 
+		 * exceptions should increment by two (once for each listener)
+		 * 
+		 * exceptionsMapped should increment by one
+		 * 
+		 * responses should not increment because of the error
+		 * 
+		 * detaches should increment by one
+		 */
+		cycle.processRequestAndDetach();
+		assertValues(5, 5, 2, 1, 2, 3);
+	}
+
