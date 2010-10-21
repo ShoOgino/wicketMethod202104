@@ -8,9 +8,10 @@
 	{
 		if (sessionInvalidated == false)
 		{
-			RequestCycle.get().register(new RequestCycle.DetachCallback()
+			RequestCycle.get().getListeners().add(new AbstractRequestCycleListener()
 			{
-				public void onDetach(final RequestCycle requestCycle)
+				@Override
+				public void onDetach(final RequestCycle cycle)
 				{
 					destroy();
 				}

@@ -3,19 +3,22 @@
 	 */
 	public void testBasicOperations() throws Exception
 	{
-		Application.get().addRequestCycleListener(newIncrementingListener());
-		assertValues(0, 0, 0, 0, 0, 0);
+		Application.get().addRequestCycleListener(new IncrementingListener());
+
+		RequestCycle cycle = newRequestCycle(false);
+
+		assertValues(0, 0, 0, 0, 0, 0, 0);
 		/*
 		 * begins, ends, responses and detaches should increment by one because we have one listener
 		 * 
 		 * exceptions should not increment because none are thrown
 		 */
 		cycle.processRequestAndDetach();
-		assertValues(1, 1, 0, 0, 1, 1);
+		assertValues(1, 1, 0, 0, 1, 1, 1);
 
 		// TEST WITH TWO LISTENERS
-		setupNewRequestCycle(false);
-		cycle.register(newIncrementingListener());
+		cycle = newRequestCycle(false);
+		cycle.getListeners().add(new IncrementingListener());
 		/*
 		 * we now have two listeners (app and cycle)
 		 * 
@@ -26,11 +29,11 @@
 		 * responses and detaches should increment by one
 		 */
 		cycle.processRequestAndDetach();
-		assertValues(3, 3, 0, 0, 2, 2);
+		assertValues(3, 3, 0, 0, 2, 2, 3);
 
 		// TEST WITH TWO LISTENERS AND AN EXCEPTION DURING RESPONSE
-		setupNewRequestCycle(true);
-		cycle.register(newIncrementingListener());
+		cycle = newRequestCycle(true);
+		cycle.getListeners().add(new IncrementingListener());
 		/*
 		 * begins and ends should increment by two (once for each listener)
 		 * 
@@ -43,6 +46,6 @@
 		 * detaches should increment by one
 		 */
 		cycle.processRequestAndDetach();
-		assertValues(5, 5, 2, 1, 2, 3);
+		assertValues(5, 5, 2, 1, 2, 3, 5);
 	}
 

@@ -1,4 +1,4 @@
-	private void setupNewRequestCycle(final boolean throwExceptionInRespond)
+	private RequestCycle newRequestCycle(final boolean throwExceptionInRespond)
 	{
 		final Response originalResponse = newResponse();
 		Request request = new MockWebRequest(Url.parse("http://wicket.apache.org"));
@@ -45,6 +45,14 @@
 		};
 		RequestCycleContext context = new RequestCycleContext(request, originalResponse,
 			requestMapper, exceptionMapper);
-		cycle = new RequestCycle(context);
+
+		RequestCycle cycle = new RequestCycle(context);
+
+		if (Application.exists())
+		{
+			cycle.getListeners().add(Application.get().getRequestCycleListeners());
+		}
+
+		return cycle;
 	}
 

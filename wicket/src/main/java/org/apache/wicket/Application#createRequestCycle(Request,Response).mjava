@@ -4,7 +4,8 @@
 			getRootRequestMapper(), newExceptionMapper());
 
 		RequestCycle requestCycle = getRequestCycleProvider().get(context);
-		requestCycle.register(new RequestCycle.DetachCallback()
+		requestCycle.getListeners().add(requestCycleListeners);
+		requestCycle.getListeners().add(new AbstractRequestCycleListener()
 		{
 			public void onDetach(RequestCycle requestCycle)
 			{

@@ -1,0 +1,21 @@
+	/**
+	 * Notifies each listener in this set ignoring exceptions. Exceptions will be logged.
+	 * 
+	 * @param notifier
+	 *            notifier used to notify each listener
+	 */
+	protected void notifyIgnoringExceptions(INotifier<T> notifier)
+	{
+		for (T listener : listeners)
+		{
+			try
+			{
+				notifier.notify(listener);
+			}
+			catch (Exception e)
+			{
+				logger.error("Error invoking listener: " + listener, e);
+			}
+		}
+	}
+

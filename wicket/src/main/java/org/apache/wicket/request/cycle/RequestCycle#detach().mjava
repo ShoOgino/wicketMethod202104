@@ -16,14 +16,8 @@
 
 		try
 		{
-			callRequestCycleListeners(new IExecutor<IRequestCycleListener>()
-			{
-				public void execute(IRequestCycleListener rcl)
-				{
-					rcl.onEndRequest();
-				}
-			}, "onEndRequest");
 			onEndRequest();
+			listeners.onEndRequest(this);
 		}
 		catch (RuntimeException e)
 		{
@@ -36,17 +30,7 @@
 		}
 		finally
 		{
-			for (DetachCallback c : detachCallbacks)
-			{
-				try
-				{
-					c.onDetach(this);
-				}
-				catch (Exception e)
-				{
-					log.error("Error detaching DetachCallback", e);
-				}
-			}
+			listeners.onDetach(this);
 			set(null);
 		}
 	}
