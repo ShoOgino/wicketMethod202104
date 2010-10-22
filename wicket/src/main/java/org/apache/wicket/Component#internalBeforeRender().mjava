@@ -10,14 +10,14 @@
 		{
 			setFlag(FLAG_BEFORE_RENDER_SUPER_CALL_VERIFIED, false);
 
-			getApplication().notifyPreComponentOnBeforeRenderListeners(this);
+			getApplication().getComponentPreOnBeforeRenderListeners().onBeforeRender(this);
 
 			// clear the enabled in hierarchy cache as it may change as a result of form processing
 			// or other logic executed in onbeforerender (WICKET-2063)
 			clearEnabledInHierarchyCache();
 
 			onBeforeRender();
-			getApplication().notifyPostComponentOnBeforeRenderListeners(this);
+			getApplication().getComponentPostOnBeforeRenderListeners().onBeforeRender(this);
 
 			if (!getFlag(FLAG_BEFORE_RENDER_SUPER_CALL_VERIFIED))
 			{
