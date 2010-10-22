@@ -1,7 +1,8 @@
 		/**
 		 * @see org.apache.wicket.authorization.IAuthorizationStrategy#isInstantiationAuthorized(java.lang.Class)
 		 */
-		public boolean isInstantiationAuthorized(Class componentClass)
+		public <T extends IRequestableComponent> boolean isInstantiationAuthorized(
+			Class<T> componentClass)
 		{
 			if (MockHomePage.class.equals(componentClass) &&
 				!((MySession)Session.get()).isLoggedIn())

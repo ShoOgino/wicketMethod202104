@@ -7,10 +7,11 @@
 	 *            the action
 	 * @return the roles for the action as defined with the given component
 	 */
-	private static Roles rolesAuthorizedToPerformAction(final Component component,
+	private static Roles rolesAuthorizedToPerformAction(final IRequestableComponent component,
 		final Action action)
 	{
-		final ActionPermissions permissions = component.getMetaData(ACTION_PERMISSIONS);
+		// XXX WICKET-NG this cast doesn't look nice
+		final ActionPermissions permissions = ((Component)component).getMetaData(ACTION_PERMISSIONS);
 		if (permissions != null)
 		{
 			return permissions.rolesFor(action);
