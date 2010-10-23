@@ -9,9 +9,8 @@
 			return null;
 		}
 
-		// TODO
-		// Check.notNull(mount.getUrl());
-		// Check.notNull(mount.getMountParameters());
+		Checks.notNull(mount.getUrl(), "Mount's Url should not be null");
+		Checks.notNull(mount.getMountParameters(), "Mount's parameters should not be null");
 
 		for (int i = mountSegments.length; i > 0; i--)
 		{
@@ -24,7 +23,8 @@
 				replacement = mount.getMountParameters().getValue(placeholder).toString();
 				if (replacement == null)
 				{
-					throw new IllegalStateException();// TODO message
+					throw new IllegalStateException(String.format(
+						"Cannot find a value for placeholder '%s'.", placeholder));
 				}
 			}
 
