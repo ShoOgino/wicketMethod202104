@@ -90,6 +90,34 @@
 					}
 				}
 
+				// Allows user to add attributes to the <input..> tag
+				{
+					IValueMap attrs = getAdditionalAttributes(index, choice);
+					if (attrs != null)
+					{
+						for (Map.Entry<String, Object> attr : attrs.entrySet())
+						{
+							buffer.append(" ")
+								.append(attr.getKey())
+								.append("=\"")
+								.append(attr.getValue())
+								.append("\"");
+						}
+					}
+				}
+
+				if (getApplication().getDebugSettings().isOutputComponentPath())
+				{
+					String path = getPageRelativePath();
+					path = path.replace("_", "__");
+					path = path.replace(":", "_");
+					buffer.append(" wicketpath=\"")
+						.append(path)
+						.append("_input_")
+						.append(index)
+						.append("\"");
+				}
+
 				buffer.append("/>");
 
 				// Add label for radio button
