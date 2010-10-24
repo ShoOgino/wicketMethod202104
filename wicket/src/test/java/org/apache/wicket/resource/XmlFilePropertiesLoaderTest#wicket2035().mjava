@@ -1,0 +1,19 @@
+	/**
+	 * Tests that the localizations for {@link PageWithXmlProperties} are successfully loaded from
+	 * (PageWithXmlProperties_locale).properties.xml
+	 */
+	@Test
+	public void wicket2035()
+	{
+
+		WicketTester tester = new WicketTester();
+
+		Iterator<Locale> iterator = EXPECTED_LOCALIZATIONS.keySet().iterator();
+		while (iterator.hasNext())
+		{
+			Locale locale = iterator.next();
+			tester.getSession().setLocale(locale);
+			tester.startPage(PageWithXmlProperties.class);
+		}
+	}
+
