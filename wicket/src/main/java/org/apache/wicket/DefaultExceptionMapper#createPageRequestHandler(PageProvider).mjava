@@ -3,18 +3,15 @@
 		RequestCycle requestCycle = RequestCycle.get();
 
 		if (requestCycle == null)
-			throw new IllegalStateException("there is no current request cycle attached to this thread");
+			throw new IllegalStateException(
+				"there is no current request cycle attached to this thread");
 
+		/*
+		 * Use NEVER_REDIRECT policy to preserve the original page's URL for non-Ajax requests and
+		 * to indicate the error for Ajax requests so that their onFailure() is being called
+		 */
 		RenderPageRequestHandler.RedirectPolicy redirect = RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT;
 
-		// in case of ajax we must redirect to show the error page
-		if (requestCycle.getRequest() instanceof WebRequest)
-		{
-			WebRequest webRequest = (WebRequest)requestCycle.getRequest();
-
-			if(webRequest.isAjax())
-				redirect = RenderPageRequestHandler.RedirectPolicy.ALWAYS_REDIRECT;
-		}
 		return new RenderPageRequestHandler(pageProvider, redirect);
 	}
 
