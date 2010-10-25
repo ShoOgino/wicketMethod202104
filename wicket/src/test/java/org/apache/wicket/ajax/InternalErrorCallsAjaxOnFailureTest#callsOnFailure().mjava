@@ -1,0 +1,17 @@
+	@Test
+	public void callsOnFailure()
+	{
+
+		WicketTester tester = new WicketTester();
+		tester.setExposeExceptions(false);
+		tester.startPage(InternalErrorCallsAjaxOnFailurePage.class);
+
+		tester.clickLink("failure-link", true);
+
+		// the response before current should holds the error page markup
+		List<MockHttpServletResponse> previousResponses = tester.getPreviousResponses();
+		MockHttpServletResponse errorPageResponse = previousResponses.get(previousResponses.size() - 1);
+		assertTrue(errorPageResponse.getDocument().contains(
+			InternalErrorCallsAjaxOnFailurePage.ERROR_MESSAGE));
+	}
+
