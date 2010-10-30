@@ -1,5 +1,17 @@
 	private IRequestHandler internalMap(Exception e)
 	{
+		final Application application = Application.get();
+
+		// check if we are processing an Ajax request and if we want to invoke the failure handler
+		if (isProcessingAjaxRequest())
+		{
+			switch (application.getExceptionSettings().getAjaxErrorHandlingStrategy())
+			{
+				case INVOKE_FAILURE_HANDLER :
+					return new ErrorCodeResponseHandler(500);
+			}
+		}
+
 		if (e instanceof StalePageException)
 		{
 			// If the page was stale, just rerender it
@@ -20,7 +32,7 @@
 		}
 		else
 		{
-			final Application application = Application.get();
+
 			final UnexpectedExceptionDisplay unexpectedExceptionDisplay = application.getExceptionSettings()
 				.getUnexpectedExceptionDisplay();
 

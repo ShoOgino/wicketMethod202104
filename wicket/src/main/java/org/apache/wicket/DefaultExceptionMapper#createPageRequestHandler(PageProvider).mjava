@@ -10,9 +10,14 @@
 
 		/*
 		 * Use NEVER_REDIRECT policy to preserve the original page's URL for non-Ajax requests and
-		 * to indicate the error for Ajax requests so that their onFailure() is being called
+		 * always redirect for ajax requests
 		 */
 		RenderPageRequestHandler.RedirectPolicy redirect = RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT;
+
+		if (isProcessingAjaxRequest())
+		{
+			redirect = RenderPageRequestHandler.RedirectPolicy.ALWAYS_REDIRECT;
+		}
 
 		return new RenderPageRequestHandler(pageProvider, redirect);
 	}
