@@ -1,16 +1,15 @@
 	private void invokeListener()
 	{
-		IRequestableComponent component = getComponent();
 		if (getBehaviorIndex() == null)
 		{
-			listenerInterface.invoke(component);
+			listenerInterface.invoke(getComponent());
 		}
 		else
 		{
 			try
 			{
-				IBehavior behavior = component.getBehaviorsRawList().get(behaviorIndex);
-				listenerInterface.invoke(component, behavior);
+				IBehavior behavior = getComponent().getBehaviorById(behaviorId);
+				listenerInterface.invoke(getComponent(), behavior);
 			}
 			catch (IndexOutOfBoundsException e)
 			{

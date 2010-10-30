@@ -7,9 +7,11 @@
 		MetaDataEntry<?>[] metaData = null;
 
 		// index where we should expect the entry
-		int index = getMetaDataIndex();
+		int index = getFlag(FLAG_MODEL_SET) ? 1 : 0;
 
-		if (index >= 0)
+		int length = data_length();
+
+		if (index < length)
 		{
 			Object object = data_get(index);
 			if (object instanceof MetaDataEntry<?>[])
