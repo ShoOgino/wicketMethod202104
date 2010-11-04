@@ -30,6 +30,11 @@
 			// Make sure getFilterPath() gets called before checkIfRedirectRequired()
 			String filterPath = getFilterPath(httpServletRequest);
 
+			if (Strings.isEmpty(filterPath))
+			{
+				throw new IllegalStateException("filter path was not configured");
+			}
+
 			String redirectURL = checkIfRedirectRequired(httpServletRequest);
 			if (redirectURL == null)
 			{
