@@ -10,18 +10,9 @@
 	{
 		if (inputStreamsToClose != null)
 		{
-			for (Iterator<InputStream> inputStreamsIterator = inputStreamsToClose.iterator(); inputStreamsIterator.hasNext();)
+			for (InputStream inputStream : inputStreamsToClose)
 			{
-				InputStream inputStream = inputStreamsIterator.next();
-
-				try
-				{
-					inputStream.close();
-				}
-				catch (IOException e)
-				{
-					// We don't care aobut the exceptions thrown here.
-				}
+				IOUtils.closeQuietly(inputStream);
 			}
 
 			// Reset the list
