@@ -6,10 +6,10 @@
 	{
 		super.onComponentTag(tag);
 
-		String url = tag.getAttributes().getString("src");
-		url = url + ((url.indexOf("?") >= 0) ? "&amp;" : "?");
-		url = url + "wicket:antiCache=" + System.currentTimeMillis();
-
-		tag.put("src", url);
+		// the parameter is already added for Ajax requests by the super call
+		if (AjaxRequestTarget.get() == null)
+		{
+			addAntiCacheParameter(tag);
+		}
 	}
 

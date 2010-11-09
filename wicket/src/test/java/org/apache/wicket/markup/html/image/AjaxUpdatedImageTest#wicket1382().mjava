@@ -1,0 +1,26 @@
+	/**
+	 * Tests that Image re-rendered in Ajax request have 'wicket:antiCache' parameter in its 'src'
+	 * attribute value
+	 */
+	@Test
+	public void wicket1382()
+	{
+		WicketTester tester = new WicketTester();
+		AjaxyImagesPage page = (AjaxyImagesPage)tester.startPage(AjaxyImagesPage.class);
+
+		TagTester tagTester = tester.getTagById(page.image.getMarkupId());
+		final String srcAttr = tagTester.getAttribute("src");
+		assertFalse(
+			"Image has not be rendered in Ajax request so it has no wicket:antiCache' parameter",
+			srcAttr.contains("wicket:antiCache"));
+
+		// make an ajax call
+		tester.clickLink("link", true);
+		page = (AjaxyImagesPage)tester.getLastRenderedPage();
+		tagTester = tester.getTagById(page.image.getMarkupId());
+		final String imageAjaxComponent = tagTester.getValue();
+		assertTrue(
+			"Image has not be rendered in Ajax request so it has no wicket:antiCache' parameter",
+			imageAjaxComponent.contains("wicket:antiCache"));
+	}
+
