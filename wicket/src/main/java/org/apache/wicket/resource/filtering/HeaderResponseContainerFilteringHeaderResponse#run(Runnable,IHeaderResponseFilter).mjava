@@ -1,0 +1,23 @@
+	private void run(Runnable runnable, IHeaderResponseFilter filter)
+	{
+		if (AjaxRequestTarget.get() != null)
+		{
+			// we're in an ajax request, so we don't filter and separate stuff....
+			runnable.run();
+			return;
+		}
+		Response original = RequestCycle.get().setResponse(responseFilterMap.get(filter.getName()));
+		try
+		{
+			runnable.run();
+		}
+		catch (RuntimeException ex)
+		{
+			throw ex;
+		}
+		finally
+		{
+			RequestCycle.get().setResponse(original);
+		}
+	}
+

@@ -1,0 +1,40 @@
+	/**
+	 * Helper that calls the proper IHeaderResponse.render*Reference method based on the input.
+	 * 
+	 * @param resp
+	 *            the response to call render*Reference methods on
+	 * @param ref
+	 *            the reference to render
+	 * @param css
+	 *            true if this is a css reference
+	 * @param string
+	 *            the string argument to pass to those methods that accept it (js = id / css =
+	 *            media)
+	 */
+	public static void renderTo(IHeaderResponse resp, ResourceReference ref, boolean css,
+		String string)
+	{
+		if (css)
+		{
+			if (Strings.isEmpty(string))
+			{
+				resp.renderCSSReference(ref);
+			}
+			else
+			{
+				resp.renderCSSReference(ref, string);
+			}
+		}
+		else
+		{
+			if (Strings.isEmpty(string))
+			{
+				resp.renderJavascriptReference(ref);
+			}
+			else
+			{
+				resp.renderJavascriptReference(ref, string);
+			}
+		}
+	}
+
