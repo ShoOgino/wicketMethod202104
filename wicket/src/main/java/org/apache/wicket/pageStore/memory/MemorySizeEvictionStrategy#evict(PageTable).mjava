@@ -1,0 +1,19 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.pageStore.memory.DataStoreEvictionStrategy#evict(org.apache.wicket.pageStore.memory.PageTable)
+	 */
+	public void evict(PageTable pageTable)
+	{
+
+		long storeCurrentSize = WicketObjects.sizeof(pageTable);
+
+		if (storeCurrentSize > maxBytes.bytes())
+		{
+			PageTableCleaner cleaner = new PageTableCleaner();
+			cleaner.drop(pageTable, 1);
+
+			// recurse until enough space is cleaned
+			evict(pageTable);
+		}
+	}
+
