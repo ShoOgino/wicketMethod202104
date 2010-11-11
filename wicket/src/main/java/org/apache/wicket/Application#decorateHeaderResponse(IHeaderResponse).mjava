@@ -1,0 +1,20 @@
+	/**
+	 * INTERNAL METHOD - You shouldn't need to call this. This is called every time Wicket creates
+	 * an IHeaderResponse. It gives you the ability to incrementally add features to an
+	 * IHeaderResponse implementation by wrapping it in another implementation.
+	 * 
+	 * To decorate an IHeaderResponse in your application, set the {@link IHeaderResponseDecorator}
+	 * on the application.
+	 * 
+	 * @see IHeaderResponseDecorator
+	 * @param response
+	 *            the response Wicket created
+	 * @return the response Wicket should use in IHeaderContributor traversal
+	 */
+	public final IHeaderResponse decorateHeaderResponse(IHeaderResponse response)
+	{
+		IHeaderResponse hr = headerResponseDecorator == null ? response
+			: headerResponseDecorator.decorate(response);
+		return hr;
+	}
+
