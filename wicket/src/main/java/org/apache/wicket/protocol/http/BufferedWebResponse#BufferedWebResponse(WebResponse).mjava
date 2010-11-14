@@ -5,11 +5,12 @@
 	 */
 	public BufferedWebResponse(WebResponse originalResponse)
 	{
-		// if original response eventually had some cookies set
-		// we should transfer them to the current response
-		if(originalResponse instanceof ICookieSavingResponse)
-			((ICookieSavingResponse) originalResponse).transferCookies(this);
-
+		// if original response had some metadata set
+		// we should transfer it to the current response
+		if (originalResponse instanceof IMetaDataBufferingWebResponse)
+		{
+			((IMetaDataBufferingWebResponse)originalResponse).writeMetaData(this);
+		}
 		this.originalResponse = originalResponse;
 	}
 
