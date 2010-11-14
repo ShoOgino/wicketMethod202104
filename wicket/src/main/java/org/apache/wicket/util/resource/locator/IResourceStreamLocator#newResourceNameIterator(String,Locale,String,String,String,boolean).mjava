@@ -1,9 +1,8 @@
 	/**
-	 * Locate a resource by combining the given path, style, variation, locale and extension
-	 * parameters. The exact search order depends on the implementation.
+	 * Markup resources and Properties files both need to iterate over different combinations of
+	 * locale, style, etc.. And though no single locate(..) method exists which is used by both,
+	 * they both use ResourceNameIterators.
 	 * 
-	 * @param clazz
-	 *            The class loader for delegating the loading of the resource
 	 * @param path
 	 *            The path of the resource
 	 * @param style
@@ -16,8 +15,8 @@
 	 *            A comma separate list of extensions
 	 * @param strict
 	 *            whether the specified attributes must match exactly
-	 * @return The resource or null
+	 * @return resource name iterator
 	 */
-	IResourceStream locate(Class<?> clazz, String path, String style, String variation,
-		Locale locale, String extension, boolean strict);
+	ResourceNameIterator newResourceNameIterator(String path, Locale locale, String style,
+		String variation, String extension, boolean strict);
 

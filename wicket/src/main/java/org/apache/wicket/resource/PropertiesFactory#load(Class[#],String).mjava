@@ -5,7 +5,12 @@
 	public Properties load(final Class<?> clazz, final String path)
 	{
 		// Check the cache
-		Properties properties = propertiesCache.get(path);
+		Properties properties = null;
+		if (propertiesCache != null)
+		{
+			properties = propertiesCache.get(path);
+		}
+
 		if (properties == null)
 		{
 			IResourceSettings resourceSettings = Application.get().getResourceSettings();
@@ -17,9 +22,8 @@
 				String fullPath = path + loader.getFileExtension();
 
 				// If not in the cache than try to load properties
-				final IResourceStream resourceStream = resourceSettings.getResourceStreamLocator()
+				IResourceStream resourceStream = resourceSettings.getResourceStreamLocator()
 					.locate(clazz, fullPath);
-
 				if (resourceStream == null)
 				{
 					continue;
@@ -40,14 +44,17 @@
 			}
 
 			// Cache the lookup
-			if (properties == null)
+			if (propertiesCache != null)
 			{
-				// Could not locate properties, store a placeholder
-				propertiesCache.put(path, Properties.EMPTY_PROPERTIES);
-			}
-			else
-			{
-				propertiesCache.put(path, properties);
+				if (properties == null)
+				{
+					// Could not locate properties, store a placeholder
+					propertiesCache.put(path, Properties.EMPTY_PROPERTIES);
+				}
+				else
+				{
+					propertiesCache.put(path, properties);
+				}
 			}
 		}
 
