@@ -28,6 +28,12 @@
 	{
 		Component linkComponent = getComponentFromLastRenderedPage(path);
 
+		if (linkComponent.isEnabledInHierarchy() == false)
+		{
+			fail("The component is currently not enabled in the hierarchy and thus you can not be clicked." +
+				" Component: " + linkComponent);
+		}
+
 		// if the link is an AjaxLink, we process it differently
 		// than a normal link
 		if (linkComponent instanceof AjaxLink)
