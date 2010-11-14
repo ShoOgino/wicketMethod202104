@@ -99,6 +99,12 @@
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
+				// Set the proper setting to execute ajax failure handler
+				// note: will be set until the "exception" link is clicked or the application is
+				// restarted
+				getApplication().getExceptionSettings().setAjaxErrorHandlingStrategy(
+					AjaxErrorStrategy.INVOKE_FAILURE_HANDLER);
+
 				throw new WicketRuntimeException("Failure link clicked");
 			}
 
@@ -142,6 +148,12 @@
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
+				// Set the proper setting to show the error page
+				// note: will be set until the "failure" link is clicked or the application is
+				// restarted
+				getApplication().getExceptionSettings().setAjaxErrorHandlingStrategy(
+					AjaxErrorStrategy.REDIRECT_TO_ERROR_PAGE);
+
 				throw new RuntimeException("test whether the exception handling works");
 			}
 		});
