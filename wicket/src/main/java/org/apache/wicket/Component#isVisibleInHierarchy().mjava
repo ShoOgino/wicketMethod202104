@@ -5,18 +5,11 @@
 	 */
 	public final boolean isVisibleInHierarchy()
 	{
-		Component component = this;
-		while (component != null)
+		Component parent = getParent();
+		if (parent != null && !parent.isVisibleInHierarchy())
 		{
-			if (component.determineVisibility())
-			{
-				component = component.getParent();
-			}
-			else
-			{
-				return false;
-			}
+			return false;
 		}
-		return true;
+		return determineVisibility();
 	}
 
