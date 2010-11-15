@@ -5,11 +5,20 @@
 	 */
 	public final boolean isVisibleInHierarchy()
 	{
-		Component parent = getParent();
-		if (parent != null && !parent.isVisibleInHierarchy())
+		Boolean state = getMetaData(VISIBLE_IN_HIERARCHY_CACHE_KEY);
+		if (state == null)
 		{
-			return false;
+			Component parent = getParent();
+			if (parent != null && !parent.isVisibleInHierarchy())
+			{
+				state = false;
+			}
+			else
+			{
+				state = determineVisibility();
+			}
+			setMetaData(VISIBLE_IN_HIERARCHY_CACHE_KEY, state);
 		}
-		return determineVisibility();
+		return state;
 	}
 
