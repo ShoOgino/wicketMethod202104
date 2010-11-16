@@ -3,6 +3,7 @@
 	 */
 	protected Charset getCharset()
 	{
-		return charset;
+		// java.nio.Charset is not serializable so we can only store the name
+		return (charsetName != null) ? Charset.forName(charsetName) : null;
 	}
 
