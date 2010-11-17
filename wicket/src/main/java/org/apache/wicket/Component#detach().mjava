@@ -15,7 +15,6 @@
 				getClass().getName() +
 				" has not called super.onDetach() in the override of onDetach() method");
 		}
-		setFlag(FLAG_CONFIGURED, false);
 
 		// always detach models because they can be attached without the
 		// component. eg component has a compoundpropertymodel and one of its
@@ -38,8 +37,10 @@
 			setFlag(FLAG_INHERITABLE_MODEL, false);
 		}
 
-		// clear out enabled state metadata
 		clearEnabledInHierarchyCache();
+		clearVisibleInHierarchyCache();
+
+		requestFlags = 0;
 
 		// notify any detach listener
 		IDetachListener detachListener = getApplication().getFrameworkSettings()
