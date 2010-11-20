@@ -1,10 +1,13 @@
 	/**
 	 * @return Application's exception handling settings
-	 * @see IExceptionSettings
-	 * @since 1.2
 	 */
-	public IExceptionSettings getExceptionSettings()
+	public final IExceptionSettings getExceptionSettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (exceptionSettings == null)
+		{
+			exceptionSettings = new DefaultExceptionSettings();
+		}
+		return exceptionSettings;
 	}
 

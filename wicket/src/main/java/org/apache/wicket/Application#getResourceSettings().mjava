@@ -1,10 +1,13 @@
 	/**
 	 * @return Application's resources related settings
-	 * @see IResourceSettings
-	 * @since 1.2
 	 */
-	public IResourceSettings getResourceSettings()
+	public final IResourceSettings getResourceSettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (resourceSettings == null)
+		{
+			resourceSettings = new DefaultResourceSettings(this);
+		}
+		return resourceSettings;
 	}
 

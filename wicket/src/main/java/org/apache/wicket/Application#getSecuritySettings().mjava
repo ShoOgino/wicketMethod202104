@@ -1,10 +1,13 @@
 	/**
 	 * @return Application's security related settings
-	 * @see ISecuritySettings
-	 * @since 1.2
 	 */
-	public ISecuritySettings getSecuritySettings()
+	public final ISecuritySettings getSecuritySettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (securitySettings == null)
+		{
+			securitySettings = new DefaultSecuritySettings();
+		}
+		return securitySettings;
 	}
 

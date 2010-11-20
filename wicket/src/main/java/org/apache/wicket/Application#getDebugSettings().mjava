@@ -1,10 +1,13 @@
 	/**
 	 * @return Application's debug related settings
-	 * @see IDebugSettings
-	 * @since 1.2
 	 */
-	public IDebugSettings getDebugSettings()
+	public final IDebugSettings getDebugSettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (debugSettings == null)
+		{
+			debugSettings = new DefaultDebugSettings();
+		}
+		return debugSettings;
 	}
 

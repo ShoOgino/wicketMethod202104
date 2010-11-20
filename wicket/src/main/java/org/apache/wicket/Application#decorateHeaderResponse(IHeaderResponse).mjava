@@ -11,10 +11,12 @@
 	 *            the response Wicket created
 	 * @return the response Wicket should use in IHeaderContributor traversal
 	 */
-	public final IHeaderResponse decorateHeaderResponse(IHeaderResponse response)
+	public final IHeaderResponse decorateHeaderResponse(final IHeaderResponse response)
 	{
-		IHeaderResponse hr = headerResponseDecorator == null ? response
-			: headerResponseDecorator.decorate(response);
-		return hr;
+		if (headerResponseDecorator == null)
+		{
+			return response;
+		}
+		return headerResponseDecorator.decorate(response);
 	}
 

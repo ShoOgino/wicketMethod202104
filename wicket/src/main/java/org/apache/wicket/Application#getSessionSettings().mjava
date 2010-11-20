@@ -1,10 +1,13 @@
 	/**
 	 * @return Application's session related settings
-	 * @see ISessionSettings
-	 * @since 1.2
 	 */
-	public ISessionSettings getSessionSettings()
+	public final ISessionSettings getSessionSettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (sessionSettings == null)
+		{
+			sessionSettings = new DefaultSessionSettings();
+		}
+		return sessionSettings;
 	}
 

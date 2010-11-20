@@ -1,10 +1,14 @@
 	/**
 	 * @return Application's application-wide settings
-	 * @see IApplicationSettings
 	 * @since 1.2
 	 */
-	public IApplicationSettings getApplicationSettings()
+	public final IApplicationSettings getApplicationSettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (applicationSettings == null)
+		{
+			applicationSettings = new DefaultApplicationSettings();
+		}
+		return applicationSettings;
 	}
 

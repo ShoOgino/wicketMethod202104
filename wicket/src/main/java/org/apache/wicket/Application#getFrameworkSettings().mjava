@@ -1,10 +1,13 @@
 	/**
 	 * @return Wicket framework settings
-	 * @see IFrameworkSettings
-	 * @since 1.2
 	 */
-	public IFrameworkSettings getFrameworkSettings()
+	public final IFrameworkSettings getFrameworkSettings()
 	{
-		return getSettings();
+		checkSettingsAvailable();
+		if (frameworkSettings == null)
+		{
+			frameworkSettings = new DefaultFrameworkSettings();
+		}
+		return frameworkSettings;
 	}
 
