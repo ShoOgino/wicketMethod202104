@@ -21,9 +21,9 @@
 		variables.put("showOnFieldClick", showOnFieldClick());
 		// variables for YUILoader
 		variables.put("basePath",
-				Strings.stripJSessionId(RequestCycle.get().urlFor(YUI, null).toString()) + "/");
+			Strings.stripJSessionId(RequestCycle.get().urlFor(YUI, null).toString()) + "/");
 		variables.put("wicketDatePath", RequestCycle.get().urlFor(WICKET_DATE, null));
-		if (Application.DEVELOPMENT.equals(Application.get().getConfigurationType()))
+		if (Application.get().usesDevelopmentConfig())
 		{
 			variables.put("filter", "filter: \"RAW\",");
 			variables.put("allowRollup", false);
@@ -38,7 +38,7 @@
 		if (script != null)
 		{
 			variables.put("additionalJavascript",
-					Strings.replaceAll(script, "${calendar}", "YAHOO.wicket." + widgetId + "DpJs"));
+				Strings.replaceAll(script, "${calendar}", "YAHOO.wicket." + widgetId + "DpJs"));
 		}
 		// print out the initialization properties
 		Map<String, Object> p = new HashMap<String, Object>();
@@ -49,10 +49,10 @@
 		}
 
 		if (enableMonthYearSelection() && p.containsKey("pages") &&
-				Objects.longValue(p.get("pages")) > 1)
+			Objects.longValue(p.get("pages")) > 1)
 		{
 			throw new IllegalStateException(
-					"You cannot use a CalendarGroup with month/year selection!");
+				"You cannot use a CalendarGroup with month/year selection!");
 		}
 
 		// ${calendarInit}
@@ -118,11 +118,11 @@
 		{
 			final String escapedComponentMarkupId = getEscapedComponentMarkupId();
 			final String javascript = "var e = Wicket.$('" + escapedComponentMarkupId + "Dp" +
-					"'); if (e != null && typeof(e.parentNode) != 'undefined' && " +
-					"typeof(e.parentNode.parentNode != 'undefined')) " +
-					"e.parentNode.parentNode.removeChild(e.parentNode);" + "YAHOO.wicket." +
-					escapedComponentMarkupId + "DpJs.destroy(); delete YAHOO.wicket." +
-					escapedComponentMarkupId + "DpJs;";
+				"'); if (e != null && typeof(e.parentNode) != 'undefined' && " +
+				"typeof(e.parentNode.parentNode != 'undefined')) " +
+				"e.parentNode.parentNode.removeChild(e.parentNode);" + "YAHOO.wicket." +
+				escapedComponentMarkupId + "DpJs.destroy(); delete YAHOO.wicket." +
+				escapedComponentMarkupId + "DpJs;";
 
 			response.renderJavascript(javascript, null);
 		}
