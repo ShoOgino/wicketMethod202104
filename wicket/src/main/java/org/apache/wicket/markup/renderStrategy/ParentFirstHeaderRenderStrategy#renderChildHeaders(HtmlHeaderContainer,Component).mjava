@@ -1,8 +1,6 @@
 	/**
-	 * Render the child hierarchy headers.
-	 * 
-	 * @param headerContainer
-	 * @param rootComponent
+	 * @see org.apache.wicket.markup.renderStrategy.AbstractHeaderRenderStrategy#renderChildHeaders(org.apache.wicket.markup.html.internal.HtmlHeaderContainer,
+	 *      org.apache.wicket.Component)
 	 */
 	@Override
 	protected void renderChildHeaders(final HtmlHeaderContainer headerContainer,
@@ -11,8 +9,10 @@
 		Args.notNull(headerContainer, "headerContainer");
 		Args.notNull(rootComponent, "rootComponent");
 
+		// Only MarkupContainer can have children. Component's don't
 		if (rootComponent instanceof MarkupContainer)
 		{
+			// Visit the children with parent first, than children
 			((MarkupContainer)rootComponent).visitChildren(new IVisitor<Component, Void>()
 			{
 				public void component(final Component component, final IVisit<Void> visit)

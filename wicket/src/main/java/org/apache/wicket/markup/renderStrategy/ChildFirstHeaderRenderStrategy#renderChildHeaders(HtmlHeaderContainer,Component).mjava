@@ -16,9 +16,15 @@
 			new DeepChildFirstVisitor()
 			{
 				@Override
-				public void component(final Component component, final IVisit<Component> visit)
+				public void component(final Component component, final IVisit<Void> visit)
 				{
 					component.renderHead(headerContainer);
+				}
+
+				@Override
+				public boolean preCheck(Component component)
+				{
+					return component.isVisibleInHierarchy();
 				}
 			}.visit(rootComponent);
 		}

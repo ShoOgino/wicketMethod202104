@@ -1,3 +1,10 @@
+	/**
+	 * 
+	 * @param <T>
+	 * @param pageClass
+	 * @param filename
+	 * @throws Exception
+	 */
 	private <T extends Page> void executeCombinedTest(final Class<T> pageClass,
 		final String filename) throws Exception
 	{
@@ -12,8 +19,7 @@
 		log.error("=== CHILD first header render strategy ===");
 		System.setProperty("Wicket_HeaderRenderStrategy",
 			ChildFirstHeaderRenderStrategy.class.getName());
-		// tester.getApplication().getApplicationSettings().setHeaderRenderStrategy(
-		// new ChildFirstHeaderRenderStrategy());
+		tester = new WicketTester();
 		tester.startPage(pageClass);
 		tester.assertRenderedPage(pageClass);
 		tester.assertResultPage(getClass(), filename + "_2");

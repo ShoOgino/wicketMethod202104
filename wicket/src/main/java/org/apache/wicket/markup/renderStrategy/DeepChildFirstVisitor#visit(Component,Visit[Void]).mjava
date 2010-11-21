@@ -1,0 +1,46 @@
+	/**
+	 * Render the child hierarchy headers.
+	 * 
+	 * @param rootComponent
+	 * @param visit
+	 * @return The object return by component()
+	 */
+	public final Visit<Void> visit(final Component rootComponent, final Visit<Void> visit)
+	{
+		Args.notNull(rootComponent, "rootComponent");
+		Args.notNull(visit, "visit");
+
+		// Component's don't have children; only MarkupContainers do
+		if (!(rootComponent instanceof MarkupContainer))
+		{
+			// Call the visitor's callback method
+			component(rootComponent, visit);
+			return visit;
+		}
+
+		// while walking down, towards the deep child, we validate if the component is visible. If
+		// not, there is no need to go any deeper
+		if (preCheck(rootComponent) == false)
+		{
+			return visit;
+		}
+
+		if (visit.isContinue())
+		{
+			// Iterate over all children
+			for (Component child : (MarkupContainer)rootComponent)
+			{
+				// visit the child
+				visit(child, visit);
+				if (visit.isStopped())
+				{
+					return visit;
+				}
+			}
+		}
+
+		// visit "this"
+		component(rootComponent, visit);
+		return visit;
+	}
+

@@ -3,47 +3,45 @@
 	 */
 	public static IHeaderRenderStrategy get()
 	{
-		if (strategy == null)
+		// NOT OFFICIALLY SUPPORTED BY WICKET
+		// By purpose it is "difficult" to change to another render strategy.
+		// We don't want it to be modifiable by users, but we needed a way to easily test other
+		// strategies.
+		String className = System.getProperty("Wicket_HeaderRenderStrategy");
+		if (className != null)
 		{
-			// By purpose it is "difficult" to change to another render strategy.
-			// We don't want it to be modifiable by users, but we needed a way to easily test other
-			// strategies.
-			String className = System.getProperty("Wicket_HeaderRenderStrategy");
-			if (className != null)
+			Class<?> clazz = null;
+			try
 			{
-				Class<?> clazz = null;
-				try
-				{
-					clazz = Application.get()
-						.getApplicationSettings()
-						.getClassResolver()
-						.resolveClass(className);
+				clazz = Application.get()
+					.getApplicationSettings()
+					.getClassResolver()
+					.resolveClass(className);
 
-					if (clazz != null)
-					{
-						strategy = (IHeaderRenderStrategy)clazz.newInstance();
-					}
-				}
-				catch (ClassNotFoundException ex)
+				if (clazz != null)
 				{
-					// ignore
+					return (IHeaderRenderStrategy)clazz.newInstance();
 				}
-				catch (InstantiationException ex)
-				{
-					// ignore
-				}
-				catch (IllegalAccessException ex)
-				{
-					// ignore
-				}
+			}
+			catch (ClassNotFoundException ex)
+			{
+				// ignore
+			}
+			catch (InstantiationException ex)
+			{
+				// ignore
+			}
+			catch (IllegalAccessException ex)
+			{
+				// ignore
 			}
 		}
 
-		if (strategy == null)
-		{
-			strategy = new ParentFirstHeaderRenderStrategy();
-		}
+		// Our default header render strategy
+		// Pre 1.5
+		return new ParentFirstHeaderRenderStrategy();
 
-		return strategy;
+		// Since 1.5
+		// return new ChildFirstHeaderRenderStrategy();
 	}
 

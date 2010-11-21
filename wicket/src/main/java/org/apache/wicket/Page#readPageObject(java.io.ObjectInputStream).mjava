@@ -1,22 +1,23 @@
 	/**
 	 * 
-	 * @param s
+	 * @param stream
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	void readPageObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException
+	void readPageObject(java.io.ObjectInputStream stream) throws IOException,
+		ClassNotFoundException
 	{
-		int id = s.readShort();
-		String name = (String)s.readObject();
+		int id = stream.readShort();
+		String name = (String)stream.readObject();
 
 		IPageSerializer ps = serializer.get();
 		if (ps != null)
 		{
-			ps.deserializePage(id, name, this, s);
+			ps.deserializePage(id, name, this, stream);
 		}
 		else
 		{
-			s.defaultReadObject();
+			stream.defaultReadObject();
 		}
 	}
 
