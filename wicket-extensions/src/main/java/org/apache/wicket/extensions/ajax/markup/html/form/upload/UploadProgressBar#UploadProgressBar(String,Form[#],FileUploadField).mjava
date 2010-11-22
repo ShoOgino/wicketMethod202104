@@ -14,6 +14,7 @@
 	public UploadProgressBar(String id, final Form<?> form, FileUploadField fileUploadField)
 	{
 		super(id);
+		uploadField = fileUploadField;
 		this.form = form;
 		form.setOutputMarkupId(true);
 		if (fileUploadField != null)
@@ -22,11 +23,11 @@
 		}
 		setRenderBodyOnly(true);
 
-		final WebMarkupContainer barDiv = new WebMarkupContainer("bar");
+		barDiv = new WebMarkupContainer("bar");
 		barDiv.setOutputMarkupId(true);
 		add(barDiv);
 
-		final WebMarkupContainer statusDiv = new WebMarkupContainer("status");
+		statusDiv = new WebMarkupContainer("status");
 		statusDiv.setOutputMarkupId(true);
 		add(statusDiv);
 
@@ -35,7 +36,5 @@
 		{
 			log.warn("UploadProgressBar will not work without an UploadWebRequest. See the javadoc for details.");
 		}
-
-		form.add(new FormEnabler(this, statusDiv, barDiv, fileUploadField));
 	}
 
