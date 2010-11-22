@@ -1,0 +1,21 @@
+	/**
+	 * Encodes value into the specified alphabet
+	 * 
+	 * @param value
+	 * @param alphabet
+	 * @return encoded value
+	 */
+	public static String encode(long value, String alphabet)
+	{
+		final int len = alphabet.length();
+		PrependingStringBuffer buff = new PrependingStringBuffer();
+		do
+		{
+			int mod = (int)(value % len);
+			buff.prepend(alphabet.charAt(mod));
+			value = value / len;
+		}
+		while (value > 0);
+		return buff.toString();
+	}
+
