@@ -12,14 +12,13 @@
 	{
 		final TimeFrame timeframe = source.getTimeFrame();
 
-		for (final Iterator<ITimeFrameSource> iterator = sources.keySet().iterator(); iterator.hasNext();)
+		for (ITimeFrameSource tfs : sources.keySet())
 		{
-			final TimeFrame current = iterator.next().getTimeFrame();
+			final TimeFrame current = tfs.getTimeFrame();
 
 			if (timeframe.overlaps(current))
 			{
-				throw new IllegalArgumentException("Timeframe " + timeframe +
-					" overlaps timeframe " + current);
+				throw new IllegalArgumentException("Timeframe " + timeframe + " overlaps timeframe " + current);
 			}
 		}
 
