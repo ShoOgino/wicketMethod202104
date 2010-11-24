@@ -1,14 +1,16 @@
 	/**
-	 * In case an unexpected exception happened anywhere between onComponentTag() and rendered(),
-	 * onException() will be called for any behavior.
-	 * 
-	 * @param component
-	 *            the component that has a reference to this behavior and during which processing
-	 *            the exception occurred
-	 * @param exception
-	 *            the unexpected exception
+	 * @see org.apache.wicket.behavior.IBehavior#onException(org.apache.wicket.Component,
+	 *      java.lang.RuntimeException)
 	 */
-	public void onException(Component component, RuntimeException exception)
+	public final void onException(Component component, RuntimeException exception)
 	{
+		try
+		{
+			onHandleException(component, exception);
+		}
+		finally
+		{
+			cleanup();
+		}
 	}
 
