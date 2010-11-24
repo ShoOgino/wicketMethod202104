@@ -1,0 +1,11 @@
+		@Override
+		public void onComponentTag(Component component, ComponentTag tag)
+		{
+			super.onComponentTag(component, tag);
+			int index = component.getBehaviorId(this);
+			IRequestHandler handler = new ListenerInterfaceRequestHandler(
+				new PageAndComponentProvider(component.getPage(), component),
+				IBehaviorListener.INTERFACE, index);
+			statefullUrl = component.getRequestCycle().mapUrlFor(handler).toString();
+		}
+

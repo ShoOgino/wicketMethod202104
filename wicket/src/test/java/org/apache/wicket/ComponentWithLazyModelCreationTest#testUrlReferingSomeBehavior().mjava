@@ -1,0 +1,15 @@
+	/**
+	 * Simulates the reported problem at the ticket: an behavior at the position 0 on the component
+	 * data has its position incremented after its ULR get encoded.
+	 */
+	public void testUrlReferingSomeBehavior()
+	{
+		TestPage page = new TestPage(new CompoundPropertyModel(this));
+		tester.startPage(page);
+
+		tester.executeUrl(page.mainCallbackBehavior.statefullUrl);
+
+		tester.assertLabel("label", LABEL_VALUE);
+		assertTrue("mainCallbackBehavior was called", page.mainCallbackBehavior.requested);
+	}
+

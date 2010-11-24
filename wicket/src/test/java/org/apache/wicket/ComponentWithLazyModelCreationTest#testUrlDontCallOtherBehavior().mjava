@@ -1,0 +1,16 @@
+	/**
+	 * If the index used to encode the behavior URL is no longer valid, an possible problem is this
+	 * URL invoking the wrong component behavior
+	 */
+	public void testUrlDontCallOtherBehavior()
+	{
+		TestPage page = new TestPage(new CompoundPropertyModel(this));
+		tester.startPage(page);
+
+		tester.executeUrl(page.brotherCallbackBehavior.statefullUrl);
+
+		tester.assertLabel("label", LABEL_VALUE);
+		assertTrue("brotherCallbackBehavior was requested", page.brotherCallbackBehavior.requested);
+		assertFalse("mainCallbackBehavior was not requested", page.mainCallbackBehavior.requested);
+	}
+
