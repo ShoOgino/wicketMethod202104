@@ -1,5 +1,5 @@
 	/**
-	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.org.apache.wicket.request.IRequestHandler)
+	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.wicket.request.IRequestHandler)
 	 */
 	public Url mapHandler(IRequestHandler requestHandler)
 	{
@@ -24,8 +24,8 @@
 				// on the last component of the resource path add the timestamp 
 				if (isTimestampsEnabled() && tokens.hasMoreTokens() == false)
 				{
-					// get last modification of resource
-					Time lastModified = reference.getLastModified();
+					// get last modification of resource (cached during the current request cycle)
+					Time lastModified = getLastModifiedTimestampUsingCache(reference);
 
 					// if resource provides a timestamp we include it in resource name
 					if (lastModified != null)

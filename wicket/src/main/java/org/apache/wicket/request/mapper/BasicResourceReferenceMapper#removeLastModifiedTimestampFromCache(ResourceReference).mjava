@@ -1,0 +1,26 @@
+	/**
+	 * Remove a timestamp cache entry for a resource reference from the <b>current</b> request cycle
+	 * <p/>
+	 * Can't even imagine a valid situation but in case someone really needs it the method is there!
+	 */
+	public static void removeLastModifiedTimestampFromCache(ResourceReference resourceReference)
+	{
+		Args.notNull(resourceReference, "resourceReference");
+
+		// lookup current request cycle
+		RequestCycle cycle = RequestCycle.get();
+
+		if(cycle != null)
+		{
+			// retrieve cache
+			Map<ResourceReference, Time> cache = cycle.getMetaData(TIMESTAMP_KEY);
+
+			// if there is a cache
+			if (cache != null)
+			{
+				// remove the resource entry
+				cache.remove(resourceReference);
+			}
+		}
+	}
+
