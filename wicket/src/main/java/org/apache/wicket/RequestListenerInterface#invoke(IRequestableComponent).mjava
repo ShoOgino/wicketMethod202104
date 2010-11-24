@@ -3,19 +3,25 @@
 	 * 
 	 * @param page
 	 *            The Page that contains the component
-	 * @param component
+	 * @param rcomponent
 	 *            The component
+	 * 
+	 * @throws ListenerInvocationNotAllowedException
+	 *             when listener invocation attempted on a component that does not allow it
 	 */
-	public final void invoke(final IRequestableComponent component)
+	public final void invoke(final IRequestableComponent rcomponent)
 	{
+		// we are in Wicket core land
+		final Component component = (Component)rcomponent;
+
 		if (!component.canCallListenerInterface())
 		{
 			// just return so that we have a silent fail and just re-render the
 			// page
 			log.info("component not enabled or visible; ignoring call. Component: " + component);
-			return;
+			throw new ListenerInvocationNotAllowedException(this, component, null,
+				"Component rejected interface invocation");
 		}
-
 
 		try
 		{
