@@ -21,9 +21,8 @@
 				}
 
 				// iterator over model objects for SelectOption components
-				Iterator<? extends T> it = modelObject.iterator();
 
-				while (it.hasNext())
+				for (T value : modelObject)
 				{
 					// we need a container to represent a row in repeater
 					WebMarkupContainer row = new WebMarkupContainer(newChildId());
@@ -31,7 +30,6 @@
 					add(row);
 
 					// we add our actual SelectOption component to the row
-					T value = it.next();
 					String text = renderer.getDisplayValue(value);
 					IModel<T> model = renderer.getModel(value);
 					row.add(newOption(text, model));
