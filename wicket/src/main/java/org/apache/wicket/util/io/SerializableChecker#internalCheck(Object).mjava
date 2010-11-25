@@ -99,15 +99,7 @@
 		else
 		{
 			Method writeObjectMethod = null;
-			Object o = writeObjectMethodCache.get(cls);
-			if (o != null)
-			{
-				if (o instanceof Method)
-				{
-					writeObjectMethod = (Method)o;
-				}
-			}
-			else
+			if (writeObjectMethodMissing.contains(cls) == false)
 			{
 				try
 				{
@@ -116,13 +108,13 @@
 				}
 				catch (SecurityException e)
 				{
-					// we can't access/ set accessible to true
-					writeObjectMethodCache.put(cls, Boolean.FALSE);
+					// we can't access / set accessible to true
+					writeObjectMethodMissing.add(cls);
 				}
 				catch (NoSuchMethodException e)
 				{
 					// cls doesn't have that method
-					writeObjectMethodCache.put(cls, Boolean.FALSE);
+					writeObjectMethodMissing.add(cls);
 				}
 			}
 
