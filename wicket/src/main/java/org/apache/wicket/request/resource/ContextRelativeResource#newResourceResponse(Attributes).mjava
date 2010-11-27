@@ -34,33 +34,8 @@
 					}
 					finally
 					{
-						try
-						{
-							Streams.close(inputStream);
-						}
-						catch (IOException iox)
-						{
-							if (log.isDebugEnabled())
-							{
-								log.debug(
-									"An error occurred while closing the input stream to the external resource",
-									iox);
-							}
-						}
-
-						try
-						{
-							Streams.close(baos);
-						}
-						catch (IOException iox)
-						{
-							if (log.isDebugEnabled())
-							{
-								log.debug(
-									"An error occurred while closing the temporary output stream",
-									iox);
-							}
-						}
+						IOUtils.closeQuietly(inputStream);
+						IOUtils.closeQuietly(baos);
 					}
 				}
 			});
