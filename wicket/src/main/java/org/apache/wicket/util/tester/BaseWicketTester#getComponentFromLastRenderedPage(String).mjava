@@ -10,13 +10,11 @@
 	 */
 	public Component getComponentFromLastRenderedPage(String path)
 	{
-		MarkupContainer root = getLastRenderedPage();
-		if (root instanceof DummyPanelPage)
+		if (startComponent != null)
 		{
-			root = (MarkupContainer)root.get(DummyPanelPage.TEST_PANEL_ID);
+			path = startComponent.getId() + ":" + path;
 		}
-
-		Component component = root.get(path);
+		Component component = getLastRenderedPage().get(path);
 		if (component == null)
 		{
 			fail("path: '" + path + "' does not exist for page: " +
