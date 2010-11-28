@@ -1,12 +1,13 @@
 	/**
-	 * @see org.apache.wicket.protocol.http.servlet.IRequestWrapperFactory#getWrapper(javax.servlet.HttpServletRequest)
+	 * @param request
+	 * @return Either return the request itself, or if needed a wrapper for the request
 	 */
-	public HttpServletRequest getWrapper(final HttpServletRequest servletRequest)
+	public HttpServletRequest getWrapper(final HttpServletRequest request)
 	{
-		HttpServletRequest xRequest = servletRequest;
-		if (isEnabled() && needsWrapper(servletRequest))
+		HttpServletRequest xRequest = request;
+		if (isEnabled() && needsWrapper(request))
 		{
-			return newRequestWrapper(servletRequest);
+			return newRequestWrapper(request);
 		}
 		return xRequest;
 	}
