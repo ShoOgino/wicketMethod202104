@@ -1,0 +1,17 @@
+	/**
+	 * @see javax.servlet.http.HttpServletRequestWrapper#getHeaders(java.lang.String)
+	 */
+	@Override
+	public Enumeration<?> getHeaders(final String name)
+	{
+		Map.Entry<String, List<String>> header = getHeaderEntry(name);
+		if (header == null || header.getValue() == null)
+		{
+			return Collections.enumeration(Collections.emptyList());
+		}
+		else
+		{
+			return Collections.enumeration(header.getValue());
+		}
+	}
+

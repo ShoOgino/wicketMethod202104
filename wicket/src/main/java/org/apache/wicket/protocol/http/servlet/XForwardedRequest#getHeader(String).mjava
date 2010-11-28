@@ -1,0 +1,17 @@
+	/**
+	 * @see javax.servlet.http.HttpServletRequestWrapper#getHeader(java.lang.String)
+	 */
+	@Override
+	public String getHeader(final String name)
+	{
+		Map.Entry<String, List<String>> header = getHeaderEntry(name);
+		if (header == null || header.getValue() == null || header.getValue().isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return header.getValue().get(0);
+		}
+	}
+

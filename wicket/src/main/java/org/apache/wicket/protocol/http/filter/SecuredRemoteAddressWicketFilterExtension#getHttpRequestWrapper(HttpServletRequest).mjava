@@ -1,0 +1,32 @@
+	/**
+	 * If incoming remote address matches one of the declared IP pattern, wraps the incoming
+	 * {@link HttpServletRequest} to override {@link HttpServletRequest#isSecure()} to set it to
+	 * <code>true</code>.
+	 */
+	@Override
+	public HttpServletRequest getHttpRequestWrapper(final HttpServletRequest request)
+	{
+		HttpServletRequest xRequest = request;
+		if (needsWrapper(request))
+		{
+			xRequest = new HttpServletRequestWrapper(request)
+			{
+				@Override
+				public boolean isSecure()
+				{
+					return true;
+				}
+			};
+		}
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Incoming request uri=" + (request).getRequestURI() +
+				" with originalSecure='" + request.isSecure() + "', remoteAddr='" +
+				request.getRemoteAddr() + "' will be seen with newSecure='" + xRequest.isSecure() +
+				"'");
+		}
+
+		return xRequest;
+	}
+

@@ -1,0 +1,26 @@
+	/**
+	 * Convert a given comma delimited list of regular expressions into an array of compiled
+	 * {@link Pattern}
+	 * 
+	 * @param commaDelimitedPatterns
+	 * @return array of patterns (not <code>null</code>)
+	 */
+	public static final Pattern[] commaDelimitedListToPatternArray(
+		final String commaDelimitedPatterns)
+	{
+		String[] patterns = commaDelimitedListToStringArray(commaDelimitedPatterns);
+		List<Pattern> patternsList = Generics.newArrayList();
+		for (String pattern : patterns)
+		{
+			try
+			{
+				patternsList.add(Pattern.compile(pattern));
+			}
+			catch (PatternSyntaxException e)
+			{
+				throw new IllegalArgumentException("Illegal pattern syntax '" + pattern + "'", e);
+			}
+		}
+		return patternsList.toArray(new Pattern[0]);
+	}
+
