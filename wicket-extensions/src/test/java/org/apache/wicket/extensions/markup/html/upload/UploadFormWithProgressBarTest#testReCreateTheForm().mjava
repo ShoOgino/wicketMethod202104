@@ -1,0 +1,15 @@
+	/**
+	 * @see https://issues.apache.org/jira/browse/WICKET-3200
+	 */
+	public void testReCreateTheForm()
+	{
+		WicketTester tester = new WicketTester();
+		UploadFormWithProgressBarTestPage testPage = null;
+		tester.startPage(UploadFormWithProgressBarTestPage.class);
+		testPage = (UploadFormWithProgressBarTestPage)tester.getLastRenderedPage();
+		int oldFormInstanceId = testPage.form.getFormInstance();
+		tester.clickLink("re-create");
+		testPage = (UploadFormWithProgressBarTestPage)tester.getLastRenderedPage();
+		assertNotSame(oldFormInstanceId, testPage.form.getFormInstance());
+	}
+
