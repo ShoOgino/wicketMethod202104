@@ -1,0 +1,18 @@
+	/**
+	 * If incoming remote address matches one of the declared IP pattern, wraps the incoming
+	 * {@link HttpServletRequest} to override {@link HttpServletRequest#isSecure()} to set it to
+	 * <code>true</code>.
+	 */
+	@Override
+	public HttpServletRequest newRequestWrapper(final HttpServletRequest request)
+	{
+		return new HttpServletRequestWrapper(request)
+		{
+			@Override
+			public boolean isSecure()
+			{
+				return true;
+			}
+		};
+	}
+

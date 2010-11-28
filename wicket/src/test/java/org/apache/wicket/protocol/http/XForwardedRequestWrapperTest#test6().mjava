@@ -11,7 +11,7 @@
 		request.setRemoteAddr("192.168.0.10");
 		request.addHeader("x-forwarded-for", "140.211.11.130, untrusted-proxy, proxy1");
 
-		HttpServletRequest resp = (HttpServletRequest)filter.getRequestWrapper(request);
+		HttpServletRequest resp = filter.getWrapper(request);
 		assertEquals("untrusted-proxy", resp.getRemoteAddr());
 		assertEquals("140.211.11.130", resp.getHeader("x-forwarded-for"));
 		assertEquals("proxy1", resp.getHeader("x-forwarded-by"));

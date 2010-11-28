@@ -1,7 +1,9 @@
 	/** */
-	public void test1()
+	public void test2()
 	{
-		HttpServletRequest resp = (HttpServletRequest)filter.getRequestWrapper(request);
+		filter.getConfig().setProtocolHeader("x-forwarded-proto");
+
+		HttpServletRequest resp = filter.getWrapper(request);
 		assertEquals("127.0.0.1", resp.getRemoteAddr());
 		assertEquals(null, resp.getHeader("x-forwarded-for"));
 		assertEquals(null, resp.getHeader("x-forwarded-by"));

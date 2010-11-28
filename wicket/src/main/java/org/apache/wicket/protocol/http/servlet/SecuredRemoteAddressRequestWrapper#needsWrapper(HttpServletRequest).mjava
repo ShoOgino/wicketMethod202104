@@ -3,8 +3,10 @@
 	 * @param request
 	 * @return True, if a wrapper is needed
 	 */
+	@Override
 	public boolean needsWrapper(final HttpServletRequest request)
 	{
-		return matchesOne(request.getRemoteAddr(), config.allowedInternalProxies);
+		return !request.isSecure() &&
+			matchesOne(request.getRemoteAddr(), config.securedRemoteAddresses) == false;
 	}
 

@@ -4,19 +4,8 @@
 	 * @return Either the original request or the wrapper
 	 */
 	@Override
-	public HttpServletRequest getHttpRequestWrapper(final HttpServletRequest request)
+	public HttpServletRequest newRequestWrapper(final HttpServletRequest request)
 	{
-		if (needsWrapper(request) == false)
-		{
-			if (log.isDebugEnabled())
-			{
-				log.debug("Skip XForwardedFilter for request " + request.getRequestURI() +
-					" with remote address " + request.getRemoteAddr());
-			}
-
-			return request;
-		}
-
 		String remoteIp = null;
 		// In java 6, proxiesHeaderValue should be declared as a java.util.Deque
 		LinkedList<String> proxiesHeaderValue = new LinkedList<String>();
@@ -51,7 +40,7 @@
 			newRemoteIpHeaderValue.addFirst(currentRemoteIp);
 		}
 
-		XForwardedRequest xRequest = new XForwardedRequest(request);
+		XForwardedRequestWrapper xRequest = new XForwardedRequestWrapper(request);
 		if (remoteIp != null)
 		{
 			xRequest.setRemoteAddr(remoteIp);

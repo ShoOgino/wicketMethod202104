@@ -1,7 +1,7 @@
 	/**
-	 * Sample with trusted proxies
+	 * Sample with internal and trusted proxies
 	 */
-	public void test4()
+	public void test5()
 	{
 		filter.getConfig().setAllowedInternalProxies("192\\.168\\.0\\.10, 192\\.168\\.0\\.11");
 		filter.getConfig().setRemoteIPHeader("x-forwarded-for");
@@ -9,9 +9,9 @@
 		filter.getConfig().setTrustedProxies("proxy1, proxy2");
 
 		request.setRemoteAddr("192.168.0.10");
-		request.addHeader("x-forwarded-for", "140.211.11.130, proxy1, proxy2");
+		request.addHeader("x-forwarded-for", "140.211.11.130, proxy1, proxy2, 192.168.0.10");
 
-		HttpServletRequest resp = (HttpServletRequest)filter.getRequestWrapper(request);
+		HttpServletRequest resp = filter.getWrapper(request);
 		assertEquals("140.211.11.130", resp.getRemoteAddr());
 		assertEquals(null, resp.getHeader("x-forwarded-for"));
 		assertEquals("proxy1, proxy2", resp.getHeader("x-forwarded-by"));
