@@ -19,9 +19,16 @@
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public IConverter getConverter(Class type)
+			public <C> IConverter<C> getConverter(Class<C> type)
 			{
-				return MINUTES_CONVERTER;
+				if (Integer.class.isAssignableFrom(type))
+				{
+					return (IConverter<C>)MINUTES_CONVERTER;
+				}
+				else
+				{
+					return super.getConverter(type);
+				}
 			}
 		});
 		minutesField.add(new RangeValidator<Integer>(0, 59));
