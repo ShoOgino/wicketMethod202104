@@ -46,26 +46,8 @@
 		}
 		finally
 		{
-			if (in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch (IOException ex)
-				{
-					// ignore
-				}
-			}
-
-			try
-			{
-				resourceStream.close();
-			}
-			catch (IOException ex)
-			{
-				// ignore
-			}
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(resourceStream);
 		}
 
 		return null;

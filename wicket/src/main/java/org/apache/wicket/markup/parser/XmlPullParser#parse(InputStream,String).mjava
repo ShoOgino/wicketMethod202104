@@ -18,10 +18,13 @@
 		}
 		finally
 		{
-			inputStream.close();
-			if (xmlReader != null)
+			try
 			{
-				xmlReader.close();
+				inputStream.close();
+			}
+			finally
+			{
+				IOUtils.close(xmlReader);
 			}
 		}
 	}

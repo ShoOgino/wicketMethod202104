@@ -20,16 +20,13 @@
 		}
 		finally
 		{
-			if (lineNumberReader != null)
+			try
 			{
-				try
-				{
-					lineNumberReader.close();
-				}
-				catch (IOException e)
-				{
-					Assert.fail(e.getMessage());
-				}
+				IOUtils.close(lineNumberReader);
+			}
+			catch (IOException e)
+			{
+				Assert.fail(e.getMessage());
 			}
 		}
 

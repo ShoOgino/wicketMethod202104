@@ -1,7 +1,7 @@
 	/**
 	 * get resized image instance.
 	 * 
-	 * @param attributes2
+	 * @param attributes
 	 * 
 	 * @return BufferedImage
 	 */
@@ -28,16 +28,13 @@
 		}
 		finally
 		{
-			if (is != null)
+			try
 			{
-				try
-				{
-					is.close();
-				}
-				catch (IOException e)
-				{
-					log.error(e.getMessage(), e);
-				}
+				IOUtils.close(is);
+			}
+			catch (IOException e)
+			{
+				log.error(e.getMessage(), e);
 			}
 		}
 
