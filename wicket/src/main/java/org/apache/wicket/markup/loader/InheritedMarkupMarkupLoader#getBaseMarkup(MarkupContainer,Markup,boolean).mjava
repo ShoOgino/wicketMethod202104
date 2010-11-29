@@ -7,10 +7,10 @@
 	private Markup getBaseMarkup(final MarkupContainer container, final Markup markup,
 		final boolean enforceReload)
 	{
-		// get the base markup
-		Markup baseMarkup = MarkupFactory.get().getMarkup(container,
-			markup.getMarkupResourceStream().getMarkupClass().getSuperclass(), enforceReload);
 
-		return baseMarkup;
+		final Class<?> location = markup.getMarkupResourceStream().getMarkupClass().getSuperclass();
+
+		// get the base markup
+		return MarkupFactory.get().getMarkup(container, location, enforceReload);
 	}
 
