@@ -1,11 +1,17 @@
 	/**
-	 * a) Allow subclasses to configure individual Wicket filters
+	 * A callback method that is invoked prior to any {@link IMarkupFilter} being registered with
+	 * {@link MarkupParser}. Hence it allows to:
+	 * <ul>
+	 * <li>tweak the default configuration of a filter</li>
+	 * <li>replace a filter with another one</li>
+	 * <li>avoid filters being used by returning null</li>
+	 * </ul>
+	 * Note that a new {@link MarkupParser} instance is created for each markup resources being
+	 * loaded.
 	 * <p>
-	 * b) Allow to replace default filter with extended one
-	 * <p>
-	 * c) Allows to disable Wicket filters via returning false
 	 * 
 	 * @param filter
+	 *            The filter to be registered with the MarkupParser
 	 * @return The filter to be added. Null to ignore.
 	 */
 	protected IMarkupFilter onAppendMarkupFilter(final IMarkupFilter filter)

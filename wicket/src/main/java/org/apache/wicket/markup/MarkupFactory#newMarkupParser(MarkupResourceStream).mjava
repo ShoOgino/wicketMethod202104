@@ -1,12 +1,26 @@
 	/**
-	 * Create a new markup parser.
+	 * Create a new markup parser. Markup parsers read the markup and dissect it in Wicket relevant
+	 * pieces {@link MarkupElement}'s (kind of Wicket's DOM).
 	 * <p>
-	 * In case you want to add you own markup filters, than subclass the method and call
-	 * {@link WicketMarkupParser#add(IMarkupFilter)} for your own filter on the markup parser
-	 * returned.
+	 * MarkupParser's can be extended by means of {@link IMarkupFilter}. You can add your own filter
+	 * as follows:
+	 * 
+	 * <pre>
+	 *    public MyMarkupFactory {
+	 *      ...
+	 *      public MarkupParser newMarkupParser(final MarkupResourceStream resource) {
+	 *         MarkupParser parser = super.newMarkupParser(resource);
+	 *         parser.add(new MyFilter());
+	 *         return parser;
+	 *      }
+	 *    }
+	 * </pre>
+	 * 
+	 * @see #onAppendMarkupFilter(IMarkupFilter)
 	 * 
 	 * @param resource
-	 * @return A new markup parser
+	 *            The resource containing the markup
+	 * @return A fresh instance of {@link MarkupParser}
 	 */
 	public MarkupParser newMarkupParser(final MarkupResourceStream resource)
 	{
@@ -14,7 +28,7 @@
 		return new MarkupParser(new XmlPullParser(), resource)
 		{
 			/**
-			 * @see org.apache.wicket.markup.WicketMarkupParser#onAppendMarkupFilter(org.apache.wicket.markup.parser.IMarkupFilter)
+			 * @see org.apache.wicket.markup.MarkupParser#onAppendMarkupFilter(org.apache.wicket.markup.parser.IMarkupFilter)
 			 */
 			@Override
 			protected IMarkupFilter onAppendMarkupFilter(final IMarkupFilter filter)

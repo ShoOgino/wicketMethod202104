@@ -1,14 +1,13 @@
 	/**
-	 * In case there is a need to extend the default chain of MarkupLoaders
+	 * MarkupLoaders are responsible to find and load the markup for a component. That may be a
+	 * single file, but e.g. like in markup inheritance it could also be that the markup from
+	 * different sources must be merged.
 	 * 
-	 * @return MarkupLoader
+	 * @return By default an instance of {@link DefaultMarkupLoader} will be returned. Via
+	 *         subclassing you may return your markup loader..
 	 */
 	public IMarkupLoader getMarkupLoader()
 	{
-		if (markupLoader == null)
-		{
-			markupLoader = new DefaultMarkupLoader();
-		}
-		return markupLoader;
+		return new DefaultMarkupLoader();
 	}
 

@@ -1,0 +1,17 @@
+	/**
+	 * @param key
+	 * @return True, if base markup for entry with cache 'key' is available in the cache as well.
+	 */
+	private boolean isBaseMarkupCached(final CharSequence key)
+	{
+		// Get the markup associated with key
+		Markup markup = markupCache.get(key);
+
+		// Get the base markup resource stream from the markup
+		MarkupResourceStream resourceStream = markup.getMarkupResourceStream()
+			.getBaseMarkupResourceStream();
+
+		// Is the base markup available in the cache?
+		return isMarkupCached(resourceStream);
+	}
+
