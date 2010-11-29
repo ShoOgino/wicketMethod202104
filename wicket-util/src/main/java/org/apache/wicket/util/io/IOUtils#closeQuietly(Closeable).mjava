@@ -11,16 +11,13 @@
 	 */
 	public static void closeQuietly(Closeable closeable)
 	{
-		if (closeable != null)
+		try
 		{
-			try
-			{
-				closeable.close();
-			}
-			catch (Exception e)
-			{
-				// ignore
-			}
+			close(closeable);
+		}
+		catch (IOException e)
+		{
+			log.debug("closing resource failed: " + e.getMessage(), e);
 		}
 	}
 
