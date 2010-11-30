@@ -11,22 +11,51 @@
 	 *            the form has been submitted via the enter key or javascript calling
 	 *            form.onsubmit())
 	 * 
-	 * @see #delegateSubmit(IFormSubmittingComponent) for an easy way to process submitting
-	 *      component in the default manner
+	 * @see #delegateSubmit(IFormSubmitter) for an easy way to process submitting component in the
+	 *      default manner
 	 */
-	public void process(IFormSubmittingComponent submittingComponent)
+	public void process(IFormSubmitter submittingComponent)
 	{
 		// save the page in case the component is removed during submit
 		final Page page = getPage();
 
-		// process the form for this request
-		if (process())
+
+		if (!isEnabledInHierarchy() || !isVisibleInHierarchy())
 		{
-			// let clients handle further processing
+			// since process() can be called outside of the default form workflow, an additional
+			// check is needed
+
+			// FIXME throw listener exception
+			return;
+		}
+
+		// run validation
+		validate();
+
+		// If a validation error occurred
+		if (hasError())
+		{
+			// mark all children as invalid
+			markFormComponentsInvalid();
+
+			// let subclass handle error
+			callOnError(submittingComponent);
+		}
+		else
+		{
+			// mark all children as valid
+			markFormComponentsValid();
+
+			// before updating, call the interception method for clients
+			beforeUpdateFormComponentModels();
+
+			// Update model using form data
+			updateFormComponentModels();
+
+			// Form has no error
 			delegateSubmit(submittingComponent);
 		}
 
-		// WICKET-1912
 		// If the form is stateless page parameters contain all form component
 		// values. We need to remove those otherwise they get appended to action URL
 		final PageParameters parameters = page.getPageParameters();

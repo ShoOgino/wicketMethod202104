@@ -1,0 +1,66 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET API. DO NOT ATTEMPT TO OVERRIDE OR CALL IT.
+	 * 
+	 * Handles form submissions.
+	 * 
+	 * @param submitter
+	 *            listener that will receive form processing events, if {@code null} the form will
+	 *            attempt to locate one
+	 * 
+	 * @see Form#validate()
+	 */
+	public final void onFormSubmitted(IFormSubmitter submitter)
+	{
+		markFormsSubmitted();
+
+		if (handleMultiPart())
+		{
+			// Tells FormComponents that a new user input has come
+			inputChanged();
+
+			String url = getRequest().getRequestParameters()
+				.getParameterValue(getHiddenFieldId())
+				.toString();
+			if (!Strings.isEmpty(url))
+			{
+				dispatchEvent(getPage(), url);
+			}
+			else
+			{
+				// First, see if the processing was triggered by a Wicket IFormSubmittingComponent
+				if (submitter == null)
+				{
+					submitter = findSubmittingButton();
+				}
+
+				// When processing was triggered by a Wicket IFormSubmittingComponent and that
+				// component indicates it wants to be called immediately
+				// (without processing), call IFormSubmittingComponent.onSubmit() right away.
+				if (submitter != null && !submitter.getDefaultFormProcessing())
+				{
+					submitter.onSubmit();
+				}
+				else
+				{
+					// this is the root form
+					Form<?> formToProcess = this;
+
+					// find out whether it was a nested form that was submitted
+					if (submitter != null)
+					{
+						formToProcess = submitter.getForm();
+					}
+
+					// process the form for this request
+					formToProcess.process(submitter);
+				}
+			}
+		}
+		// If multi part did fail check if an error is registered and call
+		// onError
+		else if (hasError())
+		{
+			callOnError(submitter);
+		}
+	}
+

@@ -2,8 +2,12 @@
 	 * Calls onError on this {@link Form} and any enabled and visible nested form, if the respective
 	 * {@link Form} actually has errors.
 	 */
-	private void callOnError()
+	private void callOnError(IFormSubmitter submitter)
 	{
+		if (submitter != null)
+		{
+			submitter.onError();
+		}
 		onError();
 		// call onError on nested forms
 		visitChildren(Form.class, new IVisitor<Component, Void>()
