@@ -1,0 +1,25 @@
+	@Override
+	public void afterRender(Component component)
+	{
+		final RequestCycle requestCycle = RequestCycle.get();
+
+		try
+		{
+			BufferedWebResponse response = (BufferedWebResponse)requestCycle.getResponse();
+
+			// Transform the data
+			CharSequence output = transform(component, response.getText());
+			response.setText(output);
+			response.writeTo(webResponse);
+		}
+		catch (Exception ex)
+		{
+			throw new WicketRuntimeException("Error while transforming the output: " + this, ex);
+		}
+		finally
+		{
+			// Restore the original response object
+			requestCycle.setResponse(webResponse);
+		}
+	}
+

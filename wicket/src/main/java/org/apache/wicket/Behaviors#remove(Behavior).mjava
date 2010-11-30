@@ -1,0 +1,23 @@
+	public void remove(Behavior behavior)
+	{
+		if (behavior == null)
+		{
+			throw new IllegalArgumentException("Argument `behavior` cannot be null");
+		}
+
+		if (internalRemove(behavior))
+		{
+			if (!behavior.isTemporary(component))
+			{
+				component.addStateChange();
+			}
+			behavior.detach(component);
+		}
+		else
+		{
+			throw new IllegalStateException(
+				"Tried to remove a behavior that was not added to the component. Behavior: " +
+					behavior.toString());
+		}
+	}
+
