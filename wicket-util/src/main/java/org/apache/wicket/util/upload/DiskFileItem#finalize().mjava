@@ -2,13 +2,16 @@
 	 * Removes the file contents from the temporary storage.
 	 */
 	@Override
-	protected void finalize()
+	protected void finalize() throws Throwable
 	{
+		super.finalize(); // currently empty but there for safer refactoring
+
 		File outputFile = dfos.getFile();
 
 		if (outputFile != null && outputFile.exists())
 		{
-			outputFile.delete();
+			if(outputFile.delete() == false)
+				log.debug("failed to delete file: " + outputFile.getAbsolutePath());
 		}
 	}
 
