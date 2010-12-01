@@ -1,0 +1,16 @@
+	/**
+	 * @see org.apache.wicket.RequestCycle#onRuntimeException(org.apache.wicket.Page,
+	 *      java.lang.RuntimeException)
+	 */
+	@Override
+	public IRequestHandler handleException(final Exception e)
+	{
+		PageExpiredException pageExpiredException = Exceptions.findCause(e,
+			PageExpiredException.class);
+		if (pageExpiredException != null)
+		{
+			handlePageExpiredException(pageExpiredException);
+		}
+		return super.handleException(e);
+	}
+
