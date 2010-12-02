@@ -1,0 +1,22 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-3212
+	 */
+	@Test
+	public void sessionInvalidate()
+	{
+		WicketTester tester = new WicketTester();
+
+		tester.startPage(MyPage.class);
+
+		assertNull(tester.getSession().getStyle());
+
+		tester.getSession().setStyle("style1");
+
+		assertEquals("style1", tester.getSession().getStyle());
+
+		// invalidate the session
+		tester.clickLink("link");
+
+		assertNull(tester.getSession().getStyle());
+	}
+
