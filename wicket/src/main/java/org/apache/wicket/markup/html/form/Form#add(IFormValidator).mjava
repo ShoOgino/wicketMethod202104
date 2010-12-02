@@ -15,13 +15,13 @@
 			throw new IllegalArgumentException("Argument `validator` cannot be null");
 		}
 
-		// add the validator
-		formValidators_add(validator);
-
-		// see whether the validator listens for add events
-		if (validator instanceof IValidatorAddListener)
+		if (validator instanceof Behavior)
 		{
-			((IValidatorAddListener)validator).onAdded(this);
+			add((Behavior)validator);
+		}
+		else
+		{
+			add(new FormValidatorAdapter(validator));
 		}
 	}
 

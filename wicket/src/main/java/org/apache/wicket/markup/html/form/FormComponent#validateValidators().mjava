@@ -1,30 +1,30 @@
 	/**
 	 * Validates this component using the component's validators.
 	 */
+	@SuppressWarnings("unchecked")
 	protected final void validateValidators()
 	{
-		final int size = validators_size();
-
 		final IValidatable<T> validatable = newValidatable();
-
-		int i = 0;
-		IValidator<T> validator = null;
 
 		boolean isNull = getConvertedInput() == null;
 
+		IValidator<T> validator = null;
+
 		try
 		{
-			for (i = 0; i < size; i++)
+			for (Behavior behavior : getBehaviors())
 			{
-				validator = validators_get(i);
-
-				if (isNull == false || validator instanceof INullAcceptingValidator<?>)
+				if (behavior instanceof IValidator)
 				{
-					validator.validate(validatable);
-				}
-				if (!isValid())
-				{
-					break;
+					validator = (IValidator<T>)behavior;
+					if (isNull == false || validator instanceof INullAcceptingValidator<?>)
+					{
+						validator.validate(validatable);
+					}
+					if (!isValid())
+					{
+						break;
+					}
 				}
 			}
 		}

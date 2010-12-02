@@ -3,21 +3,19 @@
 	 * 
 	 * @return List of validators
 	 */
+	@SuppressWarnings("unchecked")
 	public final List<IValidator<? super T>> getValidators()
 	{
-		final int size = validators_size();
-		if (size == 0)
+		final List<IValidator<? super T>> list = new ArrayList<IValidator<? super T>>();
+
+		for (Behavior behavior : getBehaviors())
 		{
-			return Collections.emptyList();
-		}
-		else
-		{
-			final List<IValidator<? super T>> list = new ArrayList<IValidator<? super T>>(size);
-			for (int i = 0; i < size; i++)
+			if (behavior instanceof IValidator)
 			{
-				list.add(validators_get(i));
+				list.add((IValidator<? super T>)behavior);
 			}
-			return Collections.unmodifiableList(list);
 		}
+
+		return Collections.unmodifiableList(list);
 	}
 

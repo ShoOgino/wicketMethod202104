@@ -3,10 +3,12 @@
 	 */
 	protected final void validateFormValidators()
 	{
-		final int count = formValidators_size();
-		for (int i = 0; i < count; i++)
+		for (Behavior behavior : getBehaviors())
 		{
-			validateFormValidator(formValidators_get(i));
+			if (behavior instanceof IFormValidator)
+			{
+				validateFormValidator((IFormValidator)behavior);
+			}
 		}
 	}
 

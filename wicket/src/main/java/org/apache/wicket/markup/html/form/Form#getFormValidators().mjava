@@ -5,24 +5,16 @@
 	 */
 	public final Collection<IFormValidator> getFormValidators()
 	{
-		final int size = formValidators_size();
+		List<IFormValidator> validators = new ArrayList<IFormValidator>();
 
-		List<IFormValidator> validators = null;
-
-		if (size == 0)
+		for (Behavior behavior : getBehaviors())
 		{
-			// form has no validators, use empty collection
-			validators = Collections.emptyList();
-		}
-		else
-		{
-			// form has validators, copy all into collection
-			validators = new ArrayList<IFormValidator>(size);
-			for (int i = 0; i < size; i++)
+			if (behavior instanceof IFormValidator)
 			{
-				validators.add(formValidators_get(i));
+				validators.add((IFormValidator)behavior);
 			}
 		}
+
 		return Collections.unmodifiableCollection(validators);
 	}
 
