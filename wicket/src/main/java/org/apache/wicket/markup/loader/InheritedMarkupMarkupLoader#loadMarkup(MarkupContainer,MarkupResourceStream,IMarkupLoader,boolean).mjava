@@ -1,4 +1,6 @@
 	/**
+	 * Load the markup from the resource stream with the base MarkupLoader provided, than check if
+	 * markup inheritance must be applied. If yes, than load the base markup and merge them.
 	 * 
 	 * @see org.apache.wicket.markup.loader.IMarkupLoader#loadMarkup(org.apache.wicket.MarkupContainer,
 	 *      org.apache.wicket.markup.MarkupResourceStream,
@@ -10,7 +12,30 @@
 	{
 		// read and parse the markup
 		Markup markup = baseLoader.loadMarkup(container, markupResourceStream, null, enforceReload);
-		markup = checkForMarkupInheritance(container, markup, enforceReload);
-		return markup;
+
+		// Check if markup contains <wicket:extend> which tells us that
+		// we need to read the inherited markup as well.
+		int extendIndex = requiresBaseMarkup(markup);
+		if (extendIndex == -1)
+		{
+			// return a MarkupStream for the markup
+			return markup;
+		}
+
+		// Load the base markup
+		final Markup baseMarkup = getBaseMarkup(container, markup, enforceReload);
+		if (baseMarkup == Markup.NO_MARKUP)
+		{
+			throw new MarkupNotFoundException(
+				"Base markup of inherited markup not found. Component class: " +
+					markup.getMarkupResourceStream()
+						.getContainerInfo()
+						.getContainerClass()
+						.getName() +
+					" Enable debug messages for org.apache.wicket.util.resource.Resource to get a list of all filenames tried.");
+		}
+
+		// Merge base and derived markup
+		return new MergedMarkup(markup, baseMarkup, extendIndex);
 	}
 

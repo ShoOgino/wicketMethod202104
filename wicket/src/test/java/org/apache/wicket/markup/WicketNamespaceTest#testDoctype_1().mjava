@@ -1,0 +1,13 @@
+	/**
+	 * @throws Exception
+	 */
+	public void testDoctype_1() throws Exception
+	{
+		executeTest(Doctype_1.class, "DoctypeExpectedResult_1.html");
+		MarkupResourceStream rs = MarkupFactory.get()
+			.getMarkup(tester.getLastRenderedPage(), true)
+			.getMarkupResourceStream();
+		assertEquals("html", rs.getDoctype());
+		assertEquals(true, rs.isHtml5());
+	}
+

@@ -1,0 +1,34 @@
+	/**
+	 * 
+	 * @param container
+	 * @return True if the Page and all it's Panels, Borders etc. have HTML5 compliant markup. HTML5
+	 *         markup is identified by &lt;DOCTYPE html&gt;
+	 */
+	public final static boolean isMarkupHtml5Compliant(final MarkupContainer container)
+	{
+		Args.notNull(container, "container");
+
+		Page page = container.getPage();
+		if (page == null)
+		{
+			throw new WicketRuntimeException("Component not attached to Page. Component: " +
+				container.toString());
+		}
+
+		final boolean rtn[] = new boolean[] { true };
+		page.visitChildren(MarkupContainer.class, new IVisitor<MarkupContainer, Void>()
+		{
+			public void component(final MarkupContainer comp, final IVisit<Void> visit)
+			{
+				MarkupResourceStream rs = comp.getAssociatedMarkup().getMarkupResourceStream();
+				if (rs.isHtml5() == false)
+				{
+					rtn[0] = false;
+					visit.stop();
+				}
+			}
+		});
+
+		return rtn[0];
+	}
+
