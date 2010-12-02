@@ -5,10 +5,12 @@
 	 */
 	public void close() throws IOException
 	{
-		if (inputStream != null)
+		StreamData data = getData(false);
+
+		if (data != null)
 		{
-			inputStream.close();
-			inputStream = null;
+			Connections.closeQuietly(data.connection);
+			data.connection = null;
 		}
 	}
 

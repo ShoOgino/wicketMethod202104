@@ -7,6 +7,8 @@
 	{
 		try
 		{
+			StreamData data = getData(true);
+
 			if (file != null)
 			{
 				// in case the file has been removed by now
@@ -18,9 +20,9 @@
 				long lastModified = file.lastModified();
 
 				// if last modified changed update content length and last modified date
-				if (lastModified != this.lastModified)
+				if (lastModified != data.lastModified)
 				{
-					this.lastModified = lastModified;
+					data.lastModified = lastModified;
 					setContentLength();
 				}
 			}
@@ -29,14 +31,14 @@
 				long lastModified = Connections.getLastModified(url);
 
 				// if last modified changed update content length and last modified date
-				if (lastModified != this.lastModified)
+				if (lastModified != data.lastModified)
 				{
-					this.lastModified = lastModified;
+					data.lastModified = lastModified;
 
 					setContentLength();
 				}
 			}
-			return Time.milliseconds(lastModified);
+			return Time.milliseconds(data.lastModified);
 		}
 		catch (IOException e)
 		{

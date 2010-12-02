@@ -1,0 +1,51 @@
+	/**
+	 * Lazy loads the stream settings on demand
+	 * 
+	 * @param initialize
+	 *            a flag indicating whether to load the settings
+	 * @return the meta data with the stream settings
+	 */
+	private StreamData getData(boolean initialize)
+	{
+		if (streamData == null && initialize)
+		{
+			streamData = new StreamData();
+
+			try
+			{
+				streamData.connection = url.openConnection();
+				streamData.contentLength = streamData.connection.getContentLength();
+				streamData.contentType = streamData.connection.getContentType();
+
+				if (streamData.contentType == null ||
+					streamData.contentType.indexOf("unknown") != -1)
+				{
+					if (Application.exists() && Application.get() instanceof WebApplication)
+					{
+						// TODO Post 1.2: General: For non webapplication another method
+						// should be implemented (getMimeType on application?)
+						streamData.contentType = WebApplication.get()
+							.getServletContext()
+							.getMimeType(url.getFile());
+						if (streamData.contentType == null)
+						{
+							streamData.contentType = URLConnection.getFileNameMap()
+								.getContentTypeFor(url.getFile());
+						}
+					}
+					else
+					{
+						streamData.contentType = URLConnection.getFileNameMap().getContentTypeFor(
+							url.getFile());
+					}
+				}
+			}
+			catch (IOException ex)
+			{
+				throw new IllegalArgumentException("Invalid URL parameter " + url, ex);
+			}
+		}
+
+		return streamData;
+	}
+

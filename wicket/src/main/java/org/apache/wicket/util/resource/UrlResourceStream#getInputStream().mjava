@@ -4,19 +4,15 @@
 	 */
 	public InputStream getInputStream() throws ResourceStreamNotFoundException
 	{
-		if (inputStream == null)
+		InputStream inputStream;
+		try
 		{
-			try
-			{
-				inputStream = url.openStream();
-			}
-			catch (IOException e)
-			{
-				throw new ResourceStreamNotFoundException("Resource " + url +
-					" could not be opened", e);
-			}
+			inputStream = getData(true).connection.getInputStream();
 		}
-
+		catch (IOException e)
+		{
+			throw new ResourceStreamNotFoundException("Resource " + url + " could not be opened", e);
+		}
 		return inputStream;
 	}
 
