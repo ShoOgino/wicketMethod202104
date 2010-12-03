@@ -1,6 +1,6 @@
 	/**
-	 * Renders the entire associated markup stream for a container such as a Border or Panel. Any
-	 * leading or trailing raw markup in the associated markup is skipped.
+	 * Renders the entire associated markup for a container such as a Border or Panel. Any leading
+	 * or trailing raw markup in the associated markup is skipped.
 	 * 
 	 * @param openTagName
 	 *            the tag to render the associated markup for
@@ -10,10 +10,7 @@
 	public final void renderAssociatedMarkup(final String openTagName, final String exceptionMessage)
 	{
 		// Get markup associated with Border or Panel component
-		final MarkupStream originalMarkupStream = getMarkupStream();
 		final MarkupStream associatedMarkupStream = new MarkupStream(getMarkup(null));
-
-		setMarkupStream(associatedMarkupStream);
 
 		// Get open tag in associated markup of border component
 		MarkupElement elem = associatedMarkupStream.get();
@@ -61,7 +58,6 @@
 			}
 
 			renderClosingComponentTag(associatedMarkupStream, associatedMarkupOpenTag, false);
-			setMarkupStream(originalMarkupStream);
 		}
 		finally
 		{

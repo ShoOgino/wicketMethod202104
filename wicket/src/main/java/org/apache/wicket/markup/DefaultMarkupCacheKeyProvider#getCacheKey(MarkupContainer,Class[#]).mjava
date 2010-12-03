@@ -1,6 +1,6 @@
 	/**
 	 * Construct a proper key value for the cache
-	 *
+	 * 
 	 * @param container
 	 *            The container requesting the markup
 	 * @param clazz
@@ -11,7 +11,7 @@
 	public String getCacheKey(final MarkupContainer container, final Class<?> clazz)
 	{
 		final String classname = clazz.getName();
-		final AppendingStringBuffer buffer = new AppendingStringBuffer(classname.length() + 64);
+		final StringBuilder buffer = new StringBuilder(classname.length() + 64);
 		buffer.append(classname);
 
 		final Locale locale = container.getLocale();
@@ -23,7 +23,7 @@
 			final boolean hasLocale = locale.getLanguage().length() != 0;
 			final boolean hasCountry = locale.getCountry().length() != 0;
 			final boolean hasVariant = locale.getVariant().length() != 0;
-			
+
 			if (hasCountry || (hasLocale && hasVariant))
 			{
 				buffer.append('_').append(locale.getCountry());
@@ -34,13 +34,16 @@
 			}
 		}
 		if (container.getStyle() != null)
+		{
 			buffer.append('_').append(container.getStyle());
+		}
 
 		if (container.getVariation() != null)
+		{
 			buffer.append('_').append(container.getVariation());
+		}
 
 		buffer.append('.').append(container.getMarkupType().getExtension());
-
 		return buffer.toString();
 	}
 

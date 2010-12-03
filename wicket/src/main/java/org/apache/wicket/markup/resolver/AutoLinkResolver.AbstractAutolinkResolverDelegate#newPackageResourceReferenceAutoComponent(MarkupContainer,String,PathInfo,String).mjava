@@ -17,22 +17,22 @@
 		{
 			if (!pathInfo.absolute && (pathInfo.path != null) && (pathInfo.path.length() > 0))
 			{
-				// Href is relative. Create a resource reference pointing at
-				// this file
+				// Href is relative. Create a resource reference pointing at this file
 
 				// <wicket:head> components are handled differently. We can
 				// not use the container, because it is the container the
 				// header has been added to (e.g. the Page). What we need
 				// however, is the component (e.g. a Panel) which
 				// contributed it.
-				Class<? extends Component> clazz = container.getMarkupStream().getContainerClass();
+				MarkupStream markupStream = new MarkupStream(container.getMarkup());
+				Class<? extends Component> clazz = markupStream.getContainerClass();
 
 				// However if the markup stream is a merged markup stream (inheritance), than we
 				// need the class of the markup file which contained the tag.
-				if ((container.getMarkupStream().get() instanceof ComponentTag) &&
-					(container.getMarkupStream().getTag().getMarkupClass() != null))
+				if ((markupStream.get() instanceof ComponentTag) &&
+					(markupStream.getTag().getMarkupClass() != null))
 				{
-					clazz = container.getMarkupStream().getTag().getMarkupClass();
+					clazz = markupStream.getTag().getMarkupClass();
 				}
 
 				// Create the component implementing the link

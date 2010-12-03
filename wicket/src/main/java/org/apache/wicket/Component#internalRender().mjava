@@ -1,20 +1,19 @@
 	/**
 	 * Performs a render of this component as part of a Page level render process.
 	 */
-	private final void render_()
+	private final void internalRender()
 	{
-		// Step 1: Make sure there is a markup available for the Component
+		// Make sure there is a markup available for the Component
 		IMarkupFragment markup = getMarkup();
 		if (markup == null)
 		{
 			throw new MarkupNotFoundException("Markup not found for Component: " + toString());
 		}
 
-		// Step 2: A markup stream based on the markup should yield the same result.
-		// We want to use the new markup stream
+		// MarkupStream is an Iterator for the markup
 		MarkupStream markupStream = new MarkupStream(markup);
-		setMarkupStream(markupStream);
 
+		// Flag: we stated the render process
 		markRendering(true);
 
 		MarkupElement elem = markup.get(0);

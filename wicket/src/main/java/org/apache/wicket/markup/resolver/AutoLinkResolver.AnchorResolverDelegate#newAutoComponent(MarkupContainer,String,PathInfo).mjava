@@ -43,11 +43,10 @@
 					parentWithContainer = container.findParentWithAssociatedMarkup();
 				}
 				if ((parentWithContainer instanceof Page) && !pathInfo.path.startsWith("/") &&
-					page.getMarkupStream().isMergedMarkup())
+					new MarkupStream(page.getMarkup()).isMergedMarkup())
 				{
-					Class<? extends Page> clazz = (Class<? extends Page>)container.getMarkupStream()
-						.getTag()
-						.getMarkupClass();
+					Class<? extends Page> clazz = (Class<? extends Page>)new MarkupStream(
+						container.getMarkup()).getTag().getMarkupClass();
 					if (clazz != null)
 					{
 						// Href is relative. Resolve the url given relative to
