@@ -1,14 +1,16 @@
 	public void testLastModifiedTimestampIsPartOfUrl()
 	{
 		long millis = 12345678L;
-		final ResourceReferenceWithTimestamp reference = new ResourceReferenceWithTimestamp(Time.milliseconds(millis));
+		final ResourceReferenceWithTimestamp reference = new ResourceReferenceWithTimestamp(
+			Time.milliseconds(millis));
 		final IRequestHandler handler = new ResourceReferenceRequestHandler(reference, null);
 
 		// request url with timestamp
 		Url url = encoderWithTimestamps.mapHandler(handler);
 
 		// check that url contains timestamp
-		String timestampPart = BasicResourceReferenceMapper.TIMESTAMP_PREFIX + Long.toString(millis) + "?";
+		String timestampPart = BasicResourceReferenceMapper.TIMESTAMP_PREFIX +
+			Long.toString(millis) + "?";
 		assertTrue(url.toString().contains(timestampPart));
 	}
 
