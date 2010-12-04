@@ -6,28 +6,30 @@
 	 */
 	public IMarkupFragment findMarkupInAssociatedFileHeader(final Component child)
 	{
+		// Get the associated markup
 		IMarkupFragment markup = getAssociatedMarkup();
 		IMarkupFragment childMarkup = null;
+
+		// MarkupStream is good at searching markup
 		MarkupStream stream = new MarkupStream(markup);
 		while (stream.skipUntil(ComponentTag.class) && (childMarkup == null))
 		{
 			ComponentTag tag = stream.getTag();
-			if (tag instanceof WicketTag)
+			if (TagUtils.isWicketHeadTag(tag))
 			{
-				WicketTag wtag = (WicketTag)tag;
-				if (wtag.isHeadTag())
+				if (tag.getMarkupClass() == null)
 				{
-					if (tag.getMarkupClass() == null)
-					{
-						childMarkup = stream.getMarkupFragment().find(child.getId());
-					}
+					// find() can still fail an return null => continue the search
+					childMarkup = stream.getMarkupFragment().find(child.getId());
 				}
 			}
 			else if (TagUtils.isHeadTag(tag))
 			{
+				// find() can still fail an return null => continue the search
 				childMarkup = stream.getMarkupFragment().find(child.getId());
 			}
 
+			// Must be a direct child. We are not interested in grand children
 			if (tag.isOpen() && !tag.hasNoCloseTag())
 			{
 				stream.skipToMatchingCloseTag(tag);

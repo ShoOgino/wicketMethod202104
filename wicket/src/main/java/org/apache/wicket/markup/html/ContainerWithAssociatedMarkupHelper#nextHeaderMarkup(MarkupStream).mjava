@@ -29,6 +29,7 @@
 					return associatedMarkupStream.getCurrentIndex();
 				}
 				// wicket:head must be before border, panel or extend
+				// @TODO why is that? Why can't it be anywhere? (except insight wicket:fragment
 				else if (tag.isOpen() &&
 					(tag.isPanelTag() || tag.isBorderTag() || tag.isExtendTag()))
 				{
@@ -39,11 +40,13 @@
 			{
 				ComponentTag tag = (ComponentTag)elem;
 				// wicket:head must be before </head>
+				// @TODO why??
 				if (tag.isClose() && TagUtils.isHeadTag(tag))
 				{
 					noMoreWicketHeadTagsAllowed = true;
 				}
 				// wicket:head must be before <body>
+				// @TODO why??
 				else if (tag.isOpen() && TagUtils.isBodyTag(tag))
 				{
 					noMoreWicketHeadTagsAllowed = true;

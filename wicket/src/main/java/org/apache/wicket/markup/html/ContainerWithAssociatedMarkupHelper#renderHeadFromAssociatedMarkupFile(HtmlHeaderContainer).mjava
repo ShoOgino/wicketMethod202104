@@ -3,7 +3,7 @@
 	 * &lt;wicket:head&gt; tag.
 	 * <p>
 	 * Whereas 'this' might be a Panel or Border, the HtmlHeaderContainer parameter has been added
-	 * to the Page as a container for all headers any of its components might wish to contribute.
+	 * to the Page as a container for all headers any of its components might wish to contribute to.
 	 * <p>
 	 * The headers contributed are rendered in the standard way.
 	 * 
@@ -24,14 +24,12 @@
 		noMoreWicketHeadTagsAllowed = false;
 		while (nextHeaderMarkup(markupStream) != -1)
 		{
-			Class<?> markupClass = markupStream.getTag().getMarkupClass();
-			if (markupClass == null)
-			{
-				markupClass = markupStream.getContainerClass();
-			}
+			// found <wicket:head>
+			String headerId = getHeaderId(container, markupStream);
+
 			// Create a HeaderPartContainer and associate the markup
-			final HeaderPartContainer headerPart = getHeaderPart(markupClass,
-				markupStream.getCurrentIndex());
+			HeaderPartContainer headerPart = getHeaderPart(headerId,
+				markupStream.getMarkupFragment());
 			if (headerPart != null)
 			{
 				// A component's header section must only be added once,
@@ -39,25 +37,9 @@
 				// to the page or any other container in the hierarchy.
 				if (htmlContainer.okToRenderComponent(headerPart.getScope(), headerPart.getId()))
 				{
-					htmlContainer.autoAdd(headerPart, null);
+					// make sure the Page is accessible
+					headerPart.setParent(htmlContainer);
 					headerPart.render();
-				}
-				else
-				{
-					// TODO Performance: I haven't found a more efficient solution yet.
-					// Already added but all the components in this header part
-					// must be touched (that they are rendered)
-					Response response = container.getRequestCycle().getResponse();
-					try
-					{
-						container.getRequestCycle().setResponse(NullResponse.getInstance());
-						htmlContainer.autoAdd(headerPart, null);
-						headerPart.render();
-					}
-					finally
-					{
-						container.getRequestCycle().setResponse(response);
-					}
 				}
 			}
 

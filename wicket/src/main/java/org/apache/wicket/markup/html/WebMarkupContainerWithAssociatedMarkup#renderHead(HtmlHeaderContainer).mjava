@@ -1,10 +1,16 @@
 	/**
-	 * @see org.apache.wicket.Component#renderHead(org.apache.wicket.markup.html.internal.HtmlHeaderContainer)
+	 * Render the header from the associated markup file
 	 */
 	@Override
-	public void renderHead(HtmlHeaderContainer container)
+	public void renderHead(final HtmlHeaderContainer container)
 	{
-		renderHeadFromAssociatedMarkupFile(container);
+		if (markupHelper == null)
+		{
+			markupHelper = new ContainerWithAssociatedMarkupHelper(this);
+		}
+
+		markupHelper.renderHeadFromAssociatedMarkupFile(container);
+
 		super.renderHead(container);
 	}
 
