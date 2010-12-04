@@ -1,6 +1,3 @@
-	/**
-	 * @see org.apache.wicket.behavior.AbstractBehavior#afterRender(org.apache.wicket.Component)
-	 */
 	@Override
 	public void afterRender(final Component component)
 	{
@@ -9,12 +6,12 @@
 
 		while (stream.hasMore())
 		{
-			MarkupElement e = stream.get();
+			MarkupElement elem = stream.get();
 			stream.next();
-			if (e instanceof WicketTag)
+			if (elem instanceof WicketTag)
 			{
-				WicketTag wt = (WicketTag)e;
-				if (wt.isBorderTag() && wt.isClose())
+				WicketTag wTag = (WicketTag)elem;
+				if (wTag.isBorderTag() && wTag.isClose())
 				{
 					break;
 				}
@@ -22,11 +19,11 @@
 				{
 					throw new WicketRuntimeException(
 						"Unexpected tag encountered in markup of component border " +
-							getClass().getName() + ". Tag: " + wt.toString() +
+							getClass().getName() + ". Tag: " + wTag.toString() +
 							", expected tag: </wicket:border>");
 				}
 			}
-			response.write(e.toCharSequence());
+			response.write(elem.toCharSequence());
 		}
 	}
 

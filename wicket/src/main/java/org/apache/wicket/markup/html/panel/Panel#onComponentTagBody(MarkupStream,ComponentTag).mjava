@@ -1,8 +1,3 @@
-	/**
-	 * 
-	 * @see org.apache.wicket.Component#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
-	 *      org.apache.wicket.markup.ComponentTag)
-	 */
 	@Override
 	protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
@@ -10,7 +5,7 @@
 		renderAssociatedMarkup(PANEL,
 			"Markup for a panel component has to contain part '<wicket:panel>'");
 
-		if (wasOpenCloseTag == false)
+		if (markupStream.getPreviousTag().isOpen())
 		{
 			// Skip any raw markup in the body
 			markupStream.skipRawMarkup();
