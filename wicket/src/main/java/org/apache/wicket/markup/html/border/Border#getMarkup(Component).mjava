@@ -1,5 +1,6 @@
 	/**
-	 * @see org.apache.wicket.MarkupContainer#getMarkup(org.apache.wicket.Component)
+	 * Search for the child markup in the file associated with the Border. The child markup must in
+	 * between the &lt;wicket:border&gt; tags.
 	 */
 	@Override
 	public IMarkupFragment getMarkup(final Component child)
@@ -13,35 +14,39 @@
 		}
 
 		// Find <wicket:border>
-		IMarkupFragment childMarkup = null;
+		IMarkupFragment borderMarkup = null;
 		for (int i = 0; i < markup.size(); i++)
 		{
 			MarkupElement elem = markup.get(i);
-			if (elem instanceof WicketTag)
+			if (TagUtils.isWicketBorderTag(elem))
 			{
-				WicketTag tag = (WicketTag)elem;
-				if (tag.isBorderTag())
-				{
-					childMarkup = new MarkupFragment(markup, i);
-					break;
-				}
+				borderMarkup = new MarkupFragment(markup, i);
+				break;
 			}
+		}
+
+		if (borderMarkup == null)
+		{
+			throw new MarkupException(markup.getMarkupResourceStream(),
+				"Unable to find <wicket:border> tag in associated markup file for Border: " +
+					this.toString());
 		}
 
 		// If child == null, return the markup fragment starting with the <wicket:border> tag
 		if (child == null)
 		{
-			return childMarkup;
+			return borderMarkup;
 		}
 
-		// Since we created the body component instance, identifying that we found it is easy.
+		// Is child == BorderBody?
 		if (child == body)
 		{
+			// Get the <wicket:body> markup
 			return body.getMarkup();
 		}
 
 		// Find the markup for the child component
-		childMarkup = childMarkup.find(child.getId());
+		IMarkupFragment childMarkup = borderMarkup.find(child.getId());
 		if (childMarkup != null)
 		{
 			return childMarkup;

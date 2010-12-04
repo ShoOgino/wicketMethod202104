@@ -1,24 +1,21 @@
-		/**
-		 * @see org.apache.wicket.MarkupContainer#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
-		 *      org.apache.wicket.markup.ComponentTag)
-		 */
 		@Override
 		protected void onComponentTagBody(final MarkupStream markupStream,
 			final ComponentTag openTag)
 		{
-			if (wasOpenCloseTag == false)
+			// skip the <wicket:body> body
+			if (markupStream.getPreviousTag().isOpen())
 			{
-				// It is open-preview-close. Only RawMarkup is allowed within
-				// the preview region, which gets stripped from output
+				// Only RawMarkup is allowed within the preview region,
+				// which gets stripped from output
 				markupStream.skipRawMarkup();
 			}
 
-			// This check always results in false for normal requests.
-			// In case of ajax requests, the markupstream is not reset after the first render, thus
-			// the current index of the markup stream points to the element after the body.
-			// As a result, no elements are detected and always omitted.
-			originalMarkupStream.setCurrentIndex(beginOfBodyIndex);
+			// Get the <span wicket:id="myBorder"> markup and render that instead
+			IMarkupFragment markup = Border.this.getMarkup();
+			MarkupStream stream = new MarkupStream(markup);
+			ComponentTag tag = stream.getTag();
+			stream.next();
 
-			super.onComponentTagBody(originalMarkupStream, Border.this.openTag);
+			super.onComponentTagBody(stream, tag);
 		}
 
