@@ -1,6 +1,6 @@
-	private static final <S, R> void visitPostOrderHelper(Object component,
-		final org.apache.wicket.util.visit.IVisitor<S, R> visitor, IVisitFilter filter,
-		Visit<R> visit)
+	private static final <S, R> void visitPostOrderHelper(final Object component,
+		final org.apache.wicket.util.visit.IVisitor<S, R> visitor, final IVisitFilter filter,
+		final Visit<R> visit)
 	{
 
 		if (component instanceof Iterable<?>)
@@ -9,7 +9,7 @@
 			if (filter.visitChildren(container))
 			{
 				Visit<R> childTraversal = new Visit<R>();
-				for (final Object child : ((Iterable<?>) component))
+				for (final Object child : ((Iterable<?>)component))
 				{
 					visitPostOrderHelper(child, visitor, filter, childTraversal);
 					if (childTraversal.isStopped())

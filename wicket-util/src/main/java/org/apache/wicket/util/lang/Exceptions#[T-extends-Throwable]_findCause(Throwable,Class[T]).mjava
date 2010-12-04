@@ -6,12 +6,13 @@
 	 * @param causeType
 	 * @return matched {@link Throwable} in the chain or {@code null} if none
 	 */
-	public static <T extends Throwable> T findCause(Throwable throwable, final Class<T> causeType)
+	public static <T extends Throwable> T findCause(final Throwable throwable,
+		final Class<T> causeType)
 	{
 		return visit(throwable, new IThrowableVisitor<T>()
 		{
 			@SuppressWarnings("unchecked")
-			public void visit(Throwable throwable, Visit<T> visit)
+			public void visit(final Throwable throwable, final Visit<T> visit)
 			{
 				if (causeType.isAssignableFrom(throwable.getClass()))
 				{

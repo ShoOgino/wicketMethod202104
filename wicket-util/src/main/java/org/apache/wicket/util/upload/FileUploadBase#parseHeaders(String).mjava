@@ -11,7 +11,7 @@
 	 * 
 	 * @return A <code>Map</code> containing the parsed HTTP request headers.
 	 */
-	protected Map<String, String> parseHeaders(String headerPart)
+	protected Map<String, String> parseHeaders(final String headerPart)
 	{
 		Map<String, String> headers = new HashMap<String, String>();
 		char[] buffer = new char[MAX_HEADER_SIZE];
@@ -26,7 +26,7 @@
 				i = 0;
 				// Copy a single line of characters into the buffer,
 				// omitting trailing CRLF.
-				while (i < 2 || buffer[i - 2] != '\r' || buffer[i - 1] != '\n')
+				while ((i < 2) || (buffer[i - 2] != '\r') || (buffer[i - 1] != '\n'))
 				{
 					buffer[i++] = headerPart.charAt(j++);
 				}

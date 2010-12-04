@@ -10,7 +10,7 @@
 	 * @throws DifferentiationFailedException
 	 *             if a diff path could not be found.
 	 */
-	public static PathNode buildPath(Object[] orig, Object[] rev)
+	public static PathNode buildPath(final Object[] orig, final Object[] rev)
 		throws DifferentiationFailedException
 	{
 		if (orig == null)
@@ -42,7 +42,7 @@
 				PathNode prev = null;
 
 				int i;
-				if ((k == -d) || (k != d && diagonal[kminus].i < diagonal[kplus].i))
+				if ((k == -d) || ((k != d) && (diagonal[kminus].i < diagonal[kplus].i)))
 				{
 					i = diagonal[kplus].i;
 					prev = diagonal[kplus];
@@ -62,7 +62,7 @@
 				// orig and rev are zero-based
 				// but the algorithm is one-based
 				// that's why there's no +1 when indexing the sequences
-				while (i < N && j < M && orig[i].equals(rev[j]))
+				while ((i < N) && (j < M) && orig[i].equals(rev[j]))
 				{
 					i++;
 					j++;
@@ -74,7 +74,7 @@
 
 				diagonal[kmiddle] = node;
 
-				if (i >= N && j >= M)
+				if ((i >= N) && (j >= M))
 				{
 					return diagonal[kmiddle];
 				}

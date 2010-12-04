@@ -17,7 +17,7 @@
 	 * @exception Exception
 	 *                if an error occurs.
 	 */
-	public void write(File file) throws IOException
+	public void write(final File file) throws IOException
 	{
 		if (isInMemory())
 		{
@@ -37,7 +37,10 @@
 			File outputFile = getStoreLocation();
 
 			if (outputFile == null)
-				throw new IllegalStateException("for a non-memory upload the file location must not be empty");
+			{
+				throw new IllegalStateException(
+					"for a non-memory upload the file location must not be empty");
+			}
 
 			// The uploaded file is being stored on disk in a temporary location so move it to
 			// the desired file.

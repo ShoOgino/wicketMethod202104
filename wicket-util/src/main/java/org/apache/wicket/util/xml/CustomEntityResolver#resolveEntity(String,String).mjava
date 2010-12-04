@@ -1,8 +1,13 @@
-	public InputSource resolveEntity(String id, String url) throws SAXException, IOException
+	public InputSource resolveEntity(final String id, final String url) throws SAXException,
+		IOException
 	{
 		for (Map.Entry<EntityKey, EntityLocator> entry : entities.entrySet())
+		{
 			if (entry.getKey().id.equals(id) || entry.getKey().url.equals(url))
+			{
 				return entry.getValue().locateInputSource();
+			}
+		}
 
 		return null;
 	}
