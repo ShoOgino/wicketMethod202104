@@ -10,58 +10,24 @@
 	 *            The <code>header-part</code> of the current <code>encapsulation</code>.
 	 * 
 	 * @return A <code>Map</code> containing the parsed HTTP request headers.
+	 * @deprecated Use {@link #getParsedHeaders(String)}
 	 */
-	protected Map<String, String> parseHeaders(final String headerPart)
+	@Deprecated
+	protected Map /* String, String */parseHeaders(String headerPart)
 	{
-		Map<String, String> headers = new HashMap<String, String>();
-		char[] buffer = new char[MAX_HEADER_SIZE];
-		boolean done = false;
-		int j = 0;
-		int i;
-		String header, headerName, headerValue;
-		try
+		FileItemHeaders headers = getParsedHeaders(headerPart);
+		Map result = new HashMap();
+		for (Iterator iter = headers.getHeaderNames(); iter.hasNext();)
 		{
-			while (!done)
+			String headerName = (String)iter.next();
+			Iterator iter2 = headers.getHeaders(headerName);
+			String headerValue = (String)iter2.next();
+			while (iter2.hasNext())
 			{
-				i = 0;
-				// Copy a single line of characters into the buffer,
-				// omitting trailing CRLF.
-				while ((i < 2) || (buffer[i - 2] != '\r') || (buffer[i - 1] != '\n'))
-				{
-					buffer[i++] = headerPart.charAt(j++);
-				}
-				header = new String(buffer, 0, i - 2);
-				if (header.equals(""))
-				{
-					done = true;
-				}
-				else
-				{
-					if (header.indexOf(':') == -1)
-					{
-						// This header line is malformed, skip it.
-						continue;
-					}
-					headerName = header.substring(0, header.indexOf(':')).trim().toLowerCase();
-					headerValue = header.substring(header.indexOf(':') + 1).trim();
-					if (getHeader(headers, headerName) != null)
-					{
-						// More that one header of that name exists,
-						// append to the list.
-						headers.put(headerName, getHeader(headers, headerName) + ',' + headerValue);
-					}
-					else
-					{
-						headers.put(headerName, headerValue);
-					}
-				}
+				headerValue += "," + iter2.next();
 			}
+			result.put(headerName, headerValue);
 		}
-		catch (IndexOutOfBoundsException e)
-		{
-			// Headers were malformed. continue with all that was
-			// parsed.
-		}
-		return headers;
+		return result;
 	}
 

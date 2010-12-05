@@ -3,8 +3,8 @@
 	 * 
 	 * @return The next byte from the input stream.
 	 * 
-	 * @exception IOException
-	 *                if there is no more data available.
+	 * @throws IOException
+	 *             if there is no more data available.
 	 */
 	public byte readByte() throws IOException
 	{
@@ -18,6 +18,10 @@
 			{
 				// No more data available.
 				throw new IOException("No more data is available");
+			}
+			if (notifier != null)
+			{
+				notifier.noteBytesRead(tail);
 			}
 		}
 		return buffer[head++];

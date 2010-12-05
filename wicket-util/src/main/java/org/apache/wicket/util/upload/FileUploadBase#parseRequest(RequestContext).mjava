@@ -8,131 +8,54 @@
 	 * @return A list of <code>FileItem</code> instances parsed from the request, in the order that
 	 *         they were transmitted.
 	 * 
-	 * @exception FileUploadException
-	 *                if there are problems reading/parsing the request or storing files.
+	 * @throws FileUploadException
+	 *             if there are problems reading/parsing the request or storing files.
 	 */
 	public List<FileItem> parseRequest(final RequestContext ctx) throws FileUploadException
 	{
-		if (ctx == null)
-		{
-			throw new IllegalArgumentException("ctx parameter cannot be null");
-		}
-
-		List<FileItem> items = new ArrayList<FileItem>();
-		String contentType = ctx.getContentType();
-
-		if ((null == contentType) || (!contentType.toLowerCase().startsWith(MULTIPART)))
-		{
-			throw new InvalidContentTypeException("the request doesn't contain a " +
-				MULTIPART_FORM_DATA + " or " + MULTIPART_MIXED +
-				" stream, content type header is " + contentType);
-		}
-		int requestSize = ctx.getContentLength();
-
-		if ((requestSize == -1) && (getSizeMax() != Long.MAX_VALUE))
-		{
-			throw new UnknownSizeException("the request was rejected because its size is unknown");
-		}
-
-		if ((sizeMax >= 0) && (requestSize > sizeMax))
-		{
-			throw new SizeLimitExceededException("the request was rejected because "
-				+ "its size exceeds allowed range");
-		}
-
 		try
 		{
-			byte[] boundary = getBoundary(contentType);
-			if (boundary == null)
+			FileItemIterator iter = getItemIterator(ctx);
+			List<FileItem> items = new ArrayList<FileItem>();
+			FileItemFactory fac = getFileItemFactory();
+			if (fac == null)
 			{
-				throw new FileUploadException("the request was rejected because "
-					+ "no multipart boundary was found");
+				throw new NullPointerException("No FileItemFactory has been set.");
 			}
-
-			InputStream input = ctx.getInputStream();
-
-			MultipartFormInputStream multi = new MultipartFormInputStream(input, boundary);
-			multi.setHeaderEncoding(headerEncoding);
-
-			boolean nextPart = multi.skipPreamble();
-
-			// Don't allow a header larger than this size (to prevent DOS
-			// attacks)
-			final int maxHeaderBytes = 65536;
-			while (nextPart)
+			while (iter.hasNext())
 			{
-				Map<String, String> headers = parseHeaders(multi.readHeaders(maxHeaderBytes));
-				String fieldName = getFieldName(headers);
-				if (fieldName != null)
+				FileItemStream item = iter.next();
+				FileItem fileItem = fac.createItem(item.getFieldName(), item.getContentType(),
+					item.isFormField(), item.getName());
+				try
 				{
-					String subContentType = getHeader(headers, CONTENT_TYPE);
-					if ((subContentType != null) &&
-						subContentType.toLowerCase().startsWith(MULTIPART_MIXED))
-					{
-						// Multiple files.
-						byte[] subBoundary = getBoundary(subContentType);
-						multi.setBoundary(subBoundary);
-						boolean nextSubPart = multi.skipPreamble();
-						while (nextSubPart)
-						{
-							headers = parseHeaders(multi.readHeaders(maxHeaderBytes));
-							if (getFileName(headers) != null)
-							{
-								FileItem item = createItem(headers, false);
-								items.add(item);
-								OutputStream os = item.getOutputStream();
-								try
-								{
-									multi.readBodyData(os);
-								}
-								finally
-								{
-									os.close();
-								}
-							}
-							else
-							{
-								// Ignore anything but files inside
-								// multipart/mixed.
-								multi.discardBodyData();
-							}
-							nextSubPart = multi.readBoundary();
-						}
-						multi.setBoundary(boundary);
-					}
-					else
-					{
-						FileItem item = createItem(headers, getFileName(headers) == null);
-						items.add(item);
-						OutputStream os = item.getOutputStream();
-						try
-						{
-							multi.readBodyData(os);
-						}
-						finally
-						{
-							os.close();
-						}
-					}
+					Streams.copyAndClose(item.openStream(), fileItem.getOutputStream());
 				}
-				else
+				catch (FileUploadIOException e)
 				{
-					// Skip this part.
-					multi.discardBodyData();
+					throw (FileUploadException)e.getCause();
 				}
-				nextPart = multi.readBoundary();
+				catch (IOException e)
+				{
+					throw new IOFileUploadException("Processing of " + MULTIPART_FORM_DATA +
+						" request failed. " + e.getMessage(), e);
+				}
+				if (fileItem instanceof FileItemHeadersSupport)
+				{
+					final FileItemHeaders fih = item.getHeaders();
+					((FileItemHeadersSupport)fileItem).setHeaders(fih);
+				}
+				items.add(fileItem);
 			}
+			return items;
+		}
+		catch (FileUploadIOException e)
+		{
+			throw (FileUploadException)e.getCause();
 		}
 		catch (IOException e)
 		{
-			for (FileItem item : items)
-			{
-				item.delete();
-			}
-			throw new FileUploadException("Processing of " + MULTIPART_FORM_DATA +
-				" request failed. " + e.getMessage(), e);
+			throw new FileUploadException(e.getMessage(), e);
 		}
-
-		return items;
 	}
 
