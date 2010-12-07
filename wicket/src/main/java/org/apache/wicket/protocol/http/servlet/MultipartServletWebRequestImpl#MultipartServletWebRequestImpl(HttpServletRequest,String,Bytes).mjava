@@ -15,6 +15,8 @@
 	public MultipartServletWebRequestImpl(HttpServletRequest request, String filterPrefix,
 		Bytes maxSize) throws FileUploadException
 	{
-		this(request, filterPrefix, maxSize, new DiskFileItemFactory());
+		this(request, filterPrefix, maxSize, new DiskFileItemFactory(Application.get()
+			.getResourceSettings()
+			.getFileUploadCleaner()));
 	}
 

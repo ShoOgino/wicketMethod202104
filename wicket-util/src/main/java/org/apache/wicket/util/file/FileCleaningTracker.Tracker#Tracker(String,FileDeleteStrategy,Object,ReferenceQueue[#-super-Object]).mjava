@@ -1,0 +1,21 @@
+		/**
+		 * Constructs an instance of this class from the supplied parameters.
+		 * 
+		 * @param path
+		 *            the full path to the file to be tracked, not null
+		 * @param deleteStrategy
+		 *            the strategy to delete the file, null means normal
+		 * @param marker
+		 *            the marker object used to track the file, not null
+		 * @param queue
+		 *            the queue on to which the tracker will be pushed, not null
+		 */
+		Tracker(String path, FileDeleteStrategy deleteStrategy, Object marker,
+			ReferenceQueue<? super Object> queue)
+		{
+			super(marker, queue);
+			this.path = path;
+			this.deleteStrategy = (deleteStrategy == null ? FileDeleteStrategy.NORMAL
+				: deleteStrategy);
+		}
+
