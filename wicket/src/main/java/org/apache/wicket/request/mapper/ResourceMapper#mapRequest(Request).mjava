@@ -3,31 +3,30 @@
 	 */
 	public IRequestHandler mapRequest(final Request request)
 	{
-		Url url = request.getUrl();
-		Iterator<String> segments = url.getSegments().iterator();
+		final Url url = request.getUrl();
 
-		// see if url matches the path we are mounted at
-		for (String mountSegment : mountSegments)
-		{
-			if (segments.hasNext() == false)
-				return null; // given url is too short
-
-			if (mountSegment.equals(segments.next()) == false)
-				return null; // url does not fully match
-		}
+		// check if url matches mount path
+		if (urlStartsWith(url, mountSegments) == false)
+			return null;
 
 		// now extract the page parameters from the request url
-		PageParameters parameters = new PageParameters();
+		PageParameters parameters = extractPageParameters(request, mountSegments.length, parametersEncoder);
 
-		// extract indexed parameters
-		int index = 0;
-		while (segments.hasNext())
-			parameters.set(index++, segments.next());
+		// check if there are placeholders in mount segments
+		for (int i = 0; i < mountSegments.length; ++i)
+		{
+			String placeholder = getPlaceholder(mountSegments[i]);
 
-		// extract named parameters
-		for (Url.QueryParameter queryParameter : url.getQueryParameters())
-			parameters.add(queryParameter.getName(), queryParameter.getValue());
-
+			if (placeholder != null)
+			{
+				// extract the parameter from URL
+				if (parameters == null)
+				{
+					parameters = new PageParameters();
+				}
+				parameters.add(placeholder, url.getSegments().get(i));
+			}
+		}
 		return new ResourceReferenceRequestHandler(resourceReference, parameters);
 	}
 

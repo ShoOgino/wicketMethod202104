@@ -12,29 +12,29 @@
 		if (resourceReference.getResource().equals(handler.getResource()) == false)
 			return null;
 
-		// create path to resource
-		List<String> path = new ArrayList<String>();
+		Url url = new Url();
 
-		// add mount segments
-		path.addAll(Arrays.asList(mountSegments));
+		// add mount path segments
+		for (String segment : mountSegments)
+		{
+			url.getSegments().add(segment);
+		}
 
-		// next we add the page parameters to the resulting path
-		PageParameters parameters = handler.getPageParameters();
+		// replace placeholder parameters
+		PageParameters parameters = new PageParameters(handler.getPageParameters());
 
-		// append indexed parameters as path segments
-		for (int index = 0; index < parameters.getIndexedCount(); index++)
-			path.add(parameters.get(index).toString());
+		for (int i = 0; i < mountSegments.length; ++i)
+		{
+			String placeholder = getPlaceholder(mountSegments[i]);
 
-		// append named parameters as query strings
-		List<PageParameters.NamedPair> namedParameters = parameters.getAllNamed();
-		List<Url.QueryParameter> queryParams = new ArrayList<Url.QueryParameter>(
-			namedParameters.size());
+			if (placeholder != null)
+			{
+				url.getSegments().set(i, parameters.get(placeholder).toString(""));
+				parameters.remove(placeholder);
+			}
+		}
 
-		for (PageParameters.NamedPair namedParameter : namedParameters)
-			queryParams.add(new Url.QueryParameter(namedParameter.getKey(),
-				namedParameter.getValue()));
-
-		// create and return url
-		return new Url(path, queryParams);
+		// create url
+		return encodePageParameters(url, parameters, parametersEncoder);
 	}
 
