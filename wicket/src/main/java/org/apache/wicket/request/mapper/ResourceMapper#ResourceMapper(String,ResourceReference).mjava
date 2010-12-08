@@ -5,13 +5,11 @@
 	 *            mount path for the resource
 	 * @param resourceReference
 	 *            resource reference that should be linked to the mount path
+	 *
+	 * @see #ResourceMapper(String, org.apache.wicket.request.resource.ResourceReference, org.apache.wicket.request.mapper.parameter.IPageParametersEncoder)
 	 */
 	public ResourceMapper(String path, ResourceReference resourceReference)
 	{
-		Args.notEmpty(path, "path");
-		Args.notNull(resourceReference, "resourceReference");
-		this.resourceReference = resourceReference;
-		this.mountSegments = getMountSegments(path);
-		this.parametersEncoder = new PageParametersEncoder();
+		this(path, resourceReference, new PageParametersEncoder());
 	}
 

@@ -1,16 +1,17 @@
-	/**
-	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.wicket.request.IRequestHandler)
-	 */
 	public Url mapHandler(IRequestHandler requestHandler)
 	{
 		if ((requestHandler instanceof ResourceReferenceRequestHandler) == false)
+		{
 			return null;
+		}
 
 		ResourceReferenceRequestHandler handler = (ResourceReferenceRequestHandler)requestHandler;
 
 		// see if request handler addresses the resource we serve
 		if (resourceReference.getResource().equals(handler.getResource()) == false)
+		{
 			return null;
+		}
 
 		Url url = new Url();
 
@@ -23,13 +24,13 @@
 		// replace placeholder parameters
 		PageParameters parameters = new PageParameters(handler.getPageParameters());
 
-		for (int i = 0; i < mountSegments.length; ++i)
+		for (int index = 0; index < mountSegments.length; ++index)
 		{
-			String placeholder = getPlaceholder(mountSegments[i]);
+			String placeholder = getPlaceholder(mountSegments[index]);
 
 			if (placeholder != null)
 			{
-				url.getSegments().set(i, parameters.get(placeholder).toString(""));
+				url.getSegments().set(index, parameters.get(placeholder).toString(""));
 				parameters.remove(placeholder);
 			}
 		}
