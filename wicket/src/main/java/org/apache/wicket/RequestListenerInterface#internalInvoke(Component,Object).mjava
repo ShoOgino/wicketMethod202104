@@ -1,0 +1,45 @@
+	private void internalInvoke(final Component component, final Object target)
+	{
+		Boolean frozen = null;
+
+		// save a reference to the page because the component can be removed
+		// during the invocation of the listener and thus lose its parent
+		Page page = component.getPage();
+
+		if (isAjax(component))
+		{
+			// do not increment page id for ajax requests
+			frozen = page.setFreezePageId(true);
+		}
+
+		try
+		{
+			method.invoke(target);
+		}
+		catch (InvocationTargetException e)
+		{
+			if (e.getTargetException() instanceof ReplaceHandlerException ||
+				e.getTargetException() instanceof AuthorizationException ||
+				e.getTargetException() instanceof WicketRuntimeException)
+			{
+				throw (RuntimeException)e.getTargetException();
+			}
+			throw new WicketRuntimeException("Method " + method.getName() + " of " +
+				method.getDeclaringClass() + " targeted at " + target + " on component " +
+				component + " threw an exception", e);
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException("Method " + method.getName() + " of " +
+				method.getDeclaringClass() + " targeted at " + target + " on component " +
+				component + " threw an exception", e);
+		}
+		finally
+		{
+			if (frozen != null)
+			{
+				page.setFreezePageId(frozen);
+			}
+		}
+	}
+
