@@ -1,7 +1,7 @@
 	@Override
 	protected void convertInput()
 	{
-		boolean supportsMultiple = getDefaultModelObject() instanceof Collection;
+		boolean supportsMultiple = getModelObject() instanceof Collection;
 
 		/*
 		 * the input contains an array of full path of the selected option components unless nothing
@@ -23,7 +23,7 @@
 					"] is not of type java.util.Collection, but more then one SelectOption component has been selected. Either remove the multiple attribute from the select tag or make the model of the Select component a collection");
 		}
 
-		List converted = new ArrayList(paths.length);
+		List<Object> converted = new ArrayList<Object>(paths.length);
 
 		/*
 		 * if the input is null we do not need to do anything since the model collection has already
@@ -40,7 +40,7 @@
 				path = path.substring(getPath().length() + 1);
 
 				// retrieve the selected option component
-				SelectOption option = (SelectOption) get(path);
+				SelectOption<?> option = (SelectOption<?>)get(path);
 
 				if (option == null)
 				{
@@ -63,11 +63,11 @@
 		}
 		else if (!supportsMultiple)
 		{
-			setConvertedInput(converted.get(0));
+			setConvertedInput((T)converted.get(0));
 		}
 		else
 		{
-			setConvertedInput(converted);
+			setConvertedInput((T)converted);
 		}
 	}
 
