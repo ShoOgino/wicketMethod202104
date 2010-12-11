@@ -1,0 +1,20 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.markup.html.IHeaderResponse#renderOnEventJavaScript(java.lang.String,
+	 *      java.lang.String, java.lang.String)
+	 */
+	public void renderOnEventJavaScript(String target, String event, String javascript)
+	{
+		if (!closed)
+		{
+			List<String> token = Arrays.asList("javascript-event", target, event, javascript);
+			if (wasRendered(token) == false)
+			{
+				renderJavaScriptReference(WicketEventReference.INSTANCE);
+				JavaScriptUtils.writeJavaScript(getResponse(), "Wicket.Event.add(" + target +
+					", \"" + event + "\", function(event) { " + javascript + ";});");
+				markRendered(token);
+			}
+		}
+	}
+
