@@ -1,18 +1,18 @@
 	/**
 	 * @return bean class this locator is configured with
 	 */
-	public Class< ? > getBeanType()
+	public Class<?> getBeanType()
 	{
-		Class< ? > clazz = beanTypeCache == null ? null : beanTypeCache.get();
+		Class<?> clazz = beanTypeCache == null ? null : beanTypeCache.get();
 		if (clazz == null)
 		{
-			beanTypeCache = new WeakReference<Class< ? >>(clazz = WicketObjects
-					.resolveClass(beanTypeName));
+			beanTypeCache = new WeakReference<Class<?>>(
+				clazz = WicketObjects.resolveClass(beanTypeName));
 			if (clazz == null)
 			{
 				throw new RuntimeException("SpringBeanLocator could not find class [" +
-						beanTypeName + "] needed to locate the [" +
-						((beanName != null) ? (beanName) : ("bean name not specified")) + "] bean");
+					beanTypeName + "] needed to locate the [" +
+					((beanName != null) ? (beanName) : ("bean name not specified")) + "] bean");
 			}
 		}
 		return clazz;

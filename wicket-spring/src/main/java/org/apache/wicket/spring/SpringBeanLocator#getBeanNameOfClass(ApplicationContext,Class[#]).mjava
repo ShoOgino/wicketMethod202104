@@ -9,23 +9,23 @@
 	 * @throws IllegalStateException
 	 * @return spring name of the bean
 	 */
-	private final String getBeanNameOfClass(final ApplicationContext ctx, final Class< ? > clazz)
+	private final String getBeanNameOfClass(final ApplicationContext ctx, final Class<?> clazz)
 	{
 		// get the list of all possible matching beans
-		List<String> names = new ArrayList<String>(Arrays.asList(BeanFactoryUtils
-				.beanNamesForTypeIncludingAncestors(ctx, clazz)));
-		Iterator<String> it = names.iterator();
+		List<String> names = new ArrayList<String>(
+			Arrays.asList(BeanFactoryUtils.beanNamesForTypeIncludingAncestors(ctx, clazz)));
 
 		// filter out beans that are not candidates for autowiring
-		while (it.hasNext())
+		if (ctx instanceof AbstractApplicationContext)
 		{
-			final String possibility = it.next();
-			if (ctx instanceof AbstractApplicationContext)
+			Iterator<String> it = names.iterator();
+			while (it.hasNext())
 			{
-				BeanDefinition beanDef = getBeanDefinition(((AbstractApplicationContext)ctx)
-						.getBeanFactory(), possibility);
+				String possibility = it.next();
+				BeanDefinition beanDef = getBeanDefinition(
+					((AbstractApplicationContext)ctx).getBeanFactory(), possibility);
 				if (BeanFactoryUtils.isFactoryDereference(possibility) ||
-						possibility.startsWith("scopedTarget.") || !beanDef.isAutowireCandidate())
+					possibility.startsWith("scopedTarget.") || !beanDef.isAutowireCandidate())
 				{
 					it.remove();
 				}
@@ -43,8 +43,8 @@
 				List<String> primaries = new ArrayList<String>();
 				for (String name : names)
 				{
-					BeanDefinition beanDef = getBeanDefinition(((AbstractApplicationContext)ctx)
-							.getBeanFactory(), name);
+					BeanDefinition beanDef = getBeanDefinition(
+						((AbstractApplicationContext)ctx).getBeanFactory(), name);
 					if (beanDef instanceof AbstractBeanDefinition)
 					{
 						if (((AbstractBeanDefinition)beanDef).isPrimary())
