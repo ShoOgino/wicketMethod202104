@@ -4,6 +4,11 @@
 	 */
 	protected String getSessionId()
 	{
-		return Session.get().getId();
+		String sessionId = Session.get().getId();
+		if (sessionId == null)
+		{
+			sessionId = IManageablePage.STATELESS_SESSION_ID;
+		}
+		return sessionId;
 	}
 
