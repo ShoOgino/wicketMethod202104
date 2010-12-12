@@ -2,14 +2,18 @@
 	 * Visits any form components inside component if it is a container, or component itself if it
 	 * is itself a form component
 	 * 
+	 * @param <R>
+	 *            the type of the visitor's result
+	 * 
 	 * @param component
 	 *            starting point of the traversal
 	 * 
 	 * @param visitor
 	 *            The visitor to call
+	 * @return the visitor's result
 	 */
 	public static final <R> R visitFormComponentsPostOrder(Component component,
-		final IVisitor<? extends FormComponent, R> visitor)
+		final IVisitor<? extends FormComponent<?>, R> visitor)
 	{
 		return Visits.visitPostOrder(component, visitor, new IVisitFilter()
 		{
