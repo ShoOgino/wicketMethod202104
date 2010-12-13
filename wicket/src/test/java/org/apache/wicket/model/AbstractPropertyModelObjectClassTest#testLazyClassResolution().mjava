@@ -1,0 +1,18 @@
+	/**
+	 * Asserting that there is no problem in working with an AbstractPropertyModel targeting an
+	 * IObjectClassAwareModel not initialized with an known class.
+	 * 
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-3253">WICKET-3253</a>
+	 */
+	public void testLazyClassResolution()
+	{
+		Model<CustomBean> modelCustomBean = new Model<CustomBean>(null);
+		PropertyModel<CustomType> customTypeModel = new PropertyModel<CustomType>(modelCustomBean,
+			"customType");
+		PropertyModel<Integer> somePropertyModel = new PropertyModel<Integer>(customTypeModel,
+			"someProperty");
+		assertNull(somePropertyModel.getObjectClass());
+		modelCustomBean.setObject(new CustomBean());
+		assertEquals(Integer.class, somePropertyModel.getObjectClass());
+	}
+
