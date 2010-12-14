@@ -1,0 +1,21 @@
+	@Override
+	public BufferedWebResponse get(Object key)
+	{
+		BufferedWebResponse result = null;
+		Value value = (Value)super.get(key);
+		if (value != null)
+		{
+			Duration elapsedTime = Time.now().subtract(value.creationTime);
+			if (lifetime.greaterThan(elapsedTime))
+			{
+				result = value.response;
+			}
+			else
+			{
+				// expired, remove it
+				remove(key);
+			}
+		}
+		return result;
+	}
+
