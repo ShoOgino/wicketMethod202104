@@ -14,13 +14,13 @@
 
 		if (!targetsComponent && !targetsCycle)
 		{
-			sink.onEvent(event);
+			dispatcher.dispatchEvent(sink, event);
 			return;
 		}
 
 		if (targetsApplication)
 		{
-			source.getApplication().onEvent(event);
+			dispatcher.dispatchEvent(source.getApplication(), event);
 		}
 		if (event.isStop())
 		{
@@ -28,7 +28,7 @@
 		}
 		if (targetsSession)
 		{
-			source.getSession().onEvent(event);
+			dispatcher.dispatchEvent(source.getSession(), event);
 		}
 		if (event.isStop())
 		{
@@ -36,7 +36,7 @@
 		}
 		if (targetsCycle)
 		{
-			source.getRequestCycle().onEvent(event);
+			dispatcher.dispatchEvent(source.getRequestCycle(), event);
 		}
 		if (event.isStop())
 		{
@@ -45,7 +45,7 @@
 
 		Component cursor = (targetsCycle) ? cursor = source.getPage() : (Component)sink;
 
-		cursor.onEvent(event);
+		dispatcher.dispatchEvent(cursor, event);
 
 		if (event.isStop())
 		{
@@ -56,7 +56,7 @@
 
 		if (cursor instanceof MarkupContainer)
 		{
-			((MarkupContainer)cursor).visitChildren(new ComponentEventVisitor(event));
+			((MarkupContainer)cursor).visitChildren(new ComponentEventVisitor(event, dispatcher));
 		}
 	}
 
