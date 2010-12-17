@@ -1,0 +1,27 @@
+	/**
+	 * Request an old URL in an AJAX request and assert that we have an AJAX response.
+	 * 
+	 */
+	public void testStalePageExceptionOnAjaxRequest() throws IOException,
+		ResourceStreamNotFoundException, ParseException
+	{
+		tester.startPage(TestPage.class);
+
+		TestPage testPage = (TestPage)tester.getLastRenderedPage();
+		// cache the old URL
+		Url firstAjaxLinkUrl = tester.urlFor(testPage.ajaxLink);
+
+		// request a new page
+		tester.clickLink("link");
+
+		tester.setExposeExceptions(false);
+		tester.setFollowRedirects(false);
+		tester.setUseRequestUrlAsBase(false);
+
+		// execute the old URL
+		executeAjaxUrlWithLastBaseUrl(firstAjaxLinkUrl);
+
+		assertTrue(tester.getLastResponseAsString().startsWith("<ajax-response>"));
+		assertTrue(tester.getLastResponse().isRedirect());
+	}
+

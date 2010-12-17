@@ -1,0 +1,26 @@
+	@Test
+	public void testStalePageException()
+	{
+		tester.startPage(TestPage.class);
+		TestPage testPage = (TestPage)tester.getLastRenderedPage();
+
+		// cache the link to the first page version
+		String firstHRef = tester.urlFor(testPage.link);
+		// request a new page
+		tester.clickLink("link");
+
+		try
+		{
+			// just making clear that we are in the tester land
+			tester.setExposeExceptions(true);
+			// try to get the old one
+			tester.getRequest().setURL(firstHRef);
+			tester.processRequest();
+			fail("Stale page request process should throw StalePageException");
+		}
+		catch (StalePageException e)
+		{
+			assertTrue(true);
+		}
+	}
+

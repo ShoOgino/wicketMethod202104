@@ -8,12 +8,14 @@
 		Url targetUrl = requestCycle.mapUrlFor(getRenderPageRequestHandler());
 
 		//
-		// the code below is little hairy but we have to handle 3 redirect policies
-		// and 3 rendering strategies
+		// the code below is little hairy but we have to handle 3 redirect policies,
+		// 3 rendering strategies and two kind of requests (ajax and normal)
 		//
 
 		// try to get an already rendered buffered response for current URL
 		BufferedWebResponse bufferedResponse = getAndRemoveBufferedResponse(currentUrl);
+
+		boolean isAjax = isAjax(requestCycle);
 
 		if (bufferedResponse != null)
 		{
@@ -23,8 +25,12 @@
 		}
 		else if (getRedirectPolicy() == RedirectPolicy.NEVER_REDIRECT || isOnePassRender() //
 			||
-			(targetUrl.equals(currentUrl) && !getPageProvider().isNewPageInstance() && !getPage().isPageStateless()) //
-			|| (targetUrl.equals(currentUrl) && isRedirectToRender()))
+			(!isAjax //
+				&&
+				(targetUrl.equals(currentUrl) && !getPageProvider().isNewPageInstance() && !getPage().isPageStateless()) //
+			|| (targetUrl.equals(currentUrl) && isRedirectToRender()) //
+			) //
+		) //
 		{
 			// if the policy is never to redirect
 			// or one pass render mode is on
@@ -37,8 +43,10 @@
 				response.writeTo((WebResponse)requestCycle.getResponse());
 			}
 		}
-		else if (!targetUrl.equals(currentUrl) && //
-			(getRedirectPolicy() == RedirectPolicy.ALWAYS_REDIRECT || isRedirectToRender()))
+		else if ((!targetUrl.equals(currentUrl) && getRedirectPolicy() == RedirectPolicy.ALWAYS_REDIRECT) //
+			||
+			isRedirectToRender() //
+			|| (isAjax && targetUrl.equals(currentUrl)))
 		{
 			// if target URL is different
 			// and render policy is always-redirect or it's redirect-to-render
