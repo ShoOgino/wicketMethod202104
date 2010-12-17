@@ -1,0 +1,9 @@
+		public IRequestHandler map(Exception e)
+		{
+			if (Exceptions.findCause(e, TestException.class) != null)
+			{
+				return new RenderPageRequestHandler(new PageProvider(TestExceptionPage.class));
+			}
+			return wrapped.map(e);
+		}
+
