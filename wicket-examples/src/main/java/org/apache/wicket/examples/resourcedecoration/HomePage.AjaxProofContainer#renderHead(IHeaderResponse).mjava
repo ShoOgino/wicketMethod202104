@@ -1,0 +1,12 @@
+		@Override
+		public void renderHead(IHeaderResponse response)
+		{
+			if (AjaxRequestTarget.get() != null)
+			{
+				response.renderCSSReference(new PackageResourceReference(HomePage.class, "ajax.css"));
+				response.renderJavaScriptReference(new PackageResourceReference(HomePage.class,
+					"ajax.js"));
+				response.renderOnDomReadyJavaScript("updatePending();");
+			}
+		}
+

@@ -1,0 +1,13 @@
+	@Override
+	protected BasicGroupingKey newGroupingKey(ResourceReferenceAndStringData ref)
+	{
+		// THIS IS JUST A SIMPLE EXAMPLE. IN REALITY, YOU'LL ALMOST SURELY WANT TO ALSO GROUP BY
+// MEDIA TYPE FOR CSS.
+		if (ref.getReference() instanceof GroupedAndOrderedResourceReference)
+		{
+			GroupedAndOrderedResourceReference ourRef = (GroupedAndOrderedResourceReference)ref.getReference();
+			return new BasicGroupingKey(ourRef.getGroup(), ourRef.getLoadOrder(), ref.isCss());
+		}
+		return ref.isCss() ? UNKNOWN_CSS_GROUPING_KEY : UNKNOWN_JS_GROUPING_KEY;
+	}
+

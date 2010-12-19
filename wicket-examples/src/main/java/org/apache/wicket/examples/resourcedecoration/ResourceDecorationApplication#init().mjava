@@ -1,0 +1,21 @@
+	@Override
+	protected void init()
+	{
+		super.init();
+
+		getSharedResources().add("merged-resources", new MergedResourcesResource());
+
+		setHeaderResponseDecorator(new IHeaderResponseDecorator()
+		{
+
+			public IHeaderResponse decorate(IHeaderResponse response)
+			{
+				// add one that aggregates http requests,
+				// but delegates writing of the scripts (or aggregated URL script and link tags) to
+// the real response
+
+				return new HttpAggregatingHeaderResponse(response);
+			}
+		});
+	}
+
