@@ -3,7 +3,7 @@
 	 * 
 	 * Beware that only renderOnDomReadyJavaScript and renderOnLoadJavaScript can be called outside
 	 * the renderHeader(IHeaderResponse response) method. Calls to other render** methods will
-	 * result in an exception being thrown.
+	 * result in the call failing with a debug-level log statement to help you see why it failed.
 	 * 
 	 * @return header response
 	 */
@@ -11,7 +11,9 @@
 	{
 		if (headerResponse == null)
 		{
-			headerResponse = Application.get().decorateHeaderResponse(new AjaxHeaderResponse());
+			// we don't need to decorate the header response here because this is called from
+			// within AjaxHtmlHeaderContainer, which decorates the response
+			headerResponse = new AjaxHeaderResponse();
 		}
 		return headerResponse;
 	}
