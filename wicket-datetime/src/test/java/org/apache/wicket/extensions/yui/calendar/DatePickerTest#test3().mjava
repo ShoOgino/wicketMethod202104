@@ -1,10 +1,22 @@
 	/**
+	 * 
 	 * @throws Exception
 	 */
-	public void test2() throws Exception
+	public void test3() throws Exception
 	{
+		TimeZone tzClient = TimeZone.getTimeZone("America/Los_Angeles");
+		TimeZone tzServer = TimeZone.getTimeZone("Europe/Berlin");
+
+		System.setProperty("user.timezone", tzServer.getDisplayName());
+
 		Class<? extends Page> pageClass = DatesPage2.class;
-		Date date = new GregorianCalendar(2010, 10, 06, 0, 0).getTime();
+		GregorianCalendar gc = new GregorianCalendar(tzClient);
+		gc.set(2010, 10, 06, 0, 0, 0);
+		Date date = gc.getTime();
+
+		WebClientInfo clientInfo = (WebClientInfo)tester.getSession().getClientInfo();
+		clientInfo.getProperties().setTimeZone(tzClient);
+
 		tester.getSession().setLocale(Locale.GERMAN);
 		tester.startPage(pageClass);
 		tester.assertRenderedPage(pageClass);
@@ -13,7 +25,10 @@
 		formTester.setValue("dateTimeField:hours", "00");
 		formTester.setValue("dateTimeField:minutes", "00");
 		formTester.setValue("dateField:date", "06.11.2010");
+		formTester.setValue("dateField:hours", "00");
+		formTester.setValue("dateField:minutes", "00");
 		formTester.submit();
+
 		DatesPage2 page = (DatesPage2)tester.getLastRenderedPage();
 
 		log.error("orig: " + date + "; date: " + page.date + "; dateTime: " + page.dateTime);
