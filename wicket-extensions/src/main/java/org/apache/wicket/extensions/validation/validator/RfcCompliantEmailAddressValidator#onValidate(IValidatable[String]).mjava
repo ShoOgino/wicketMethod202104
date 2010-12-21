@@ -1,14 +1,14 @@
 	@Override
-	protected void onValidate(IValidatable validatable)
+	protected void onValidate(IValidatable<String> validatable)
 	{
 		String email = validatable.getValue().toString();
 		if (email.length() != email.trim().length())
 		{
 			error(validatable);
 		}
-		else
+		else if (!PATTERN.matcher(validatable.getValue()).matches())
 		{
-			super.onValidate(validatable);
+			error(validatable);
 		}
 	}
 
