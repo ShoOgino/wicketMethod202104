@@ -1,0 +1,11 @@
+	@Override
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	{
+		super.onComponentTagBody(markupStream, openTag);
+		String id = Strings.escapeMarkup(getFocusTrackerFieldCssId()).toString();
+		String value = getRequest().getPostParameters().getParameterValue(id).toString("");
+		getResponse().write(
+			String.format("<input type=\"hidden\" name=\"%s\" id=\"%s\" value=\"%s\"/>", id, id,
+				value));
+	}
+
