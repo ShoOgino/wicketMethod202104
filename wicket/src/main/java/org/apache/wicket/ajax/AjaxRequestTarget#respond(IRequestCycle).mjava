@@ -40,43 +40,18 @@
 			// Make sure it is not cached by a client
 			response.disableCaching();
 
-			response.write("<?xml version=\"1.0\" encoding=\"");
-			response.write(encoding);
-			response.write("\"?>");
-			response.write("<ajax-response>");
-
-			// invoke onbeforerespond event on listeners
-			fireOnBeforeRespondListeners();
-
-			// normal behavior
-			Iterator<CharSequence> it = prependJavaScripts.iterator();
-			while (it.hasNext())
+			try
 			{
-				CharSequence js = it.next();
-				respondInvocation(response, js);
+				final StringResponse bodyResponse = new StringResponse();
+				contructResponseBody(bodyResponse, encoding);
+				invokeResponseFilters(bodyResponse);
+				response.write(bodyResponse.getBuffer());
 			}
-
-			// process added components
-			respondComponents(response);
-
-			fireOnAfterRespondListeners(response);
-
-			// execute the dom ready javascripts as first javascripts
-			// after component replacement
-			it = domReadyJavaScripts.iterator();
-			while (it.hasNext())
+			finally
 			{
-				CharSequence js = it.next();
-				respondInvocation(response, js);
+				// restore the original response
+				RequestCycle.get().setResponse(response);
 			}
-			it = appendJavaScripts.iterator();
-			while (it.hasNext())
-			{
-				CharSequence js = it.next();
-				respondInvocation(response, js);
-			}
-
-			response.write("</ajax-response>");
 		}
 		finally
 		{
