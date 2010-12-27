@@ -1,32 +1,12 @@
 	/**
-	 * Sets date.
+	 * Sets the date model object associated with the date TextField. It does not affect hours or
+	 * minutes.
 	 * 
 	 * @param date
 	 *            date
 	 */
-	public void setDate(final Date date)
+	public final void setDate(final Date date)
 	{
-		if (date == null)
-		{
-			this.date = null;
-			setDefaultModelObject(null);
-			setHours(null);
-			setMinutes(null);
-			return;
-		}
-
-		this.date = new MutableDateTime(date);
-
-		Integer hours = getHours();
-		if (hours != null)
-		{
-			boolean use12HourFormat = use12HourFormat();
-			this.date.set(DateTimeFieldType.hourOfDay(), hours % (use12HourFormat ? 12 : 24));
-
-			Integer minutes = getMinutes();
-			this.date.setMinuteOfHour((minutes != null) ? minutes : 0);
-		}
-
-		setDefaultModelObject(this.date.toDate());
+		this.date = date;
 	}
 

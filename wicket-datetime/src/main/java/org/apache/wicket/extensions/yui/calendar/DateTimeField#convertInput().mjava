@@ -7,57 +7,73 @@
 	 * used by form validators without having to depend on the actual model being updated, and this
 	 * method is called by the default implementation of {@link #updateModel()} anyway (so we don't
 	 * have to override that anymore).
-	 * </p>
-	 * 
-	 * @see org.apache.wicket.markup.html.form.FormComponent#convertInput()
 	 */
 	@Override
 	protected void convertInput()
 	{
-		Object dateFieldInput = dateField.getConvertedInput();
-		if (dateFieldInput != null)
+		try
 		{
-			MutableDateTime date = new MutableDateTime(dateFieldInput);
+			// Get the converted input values
+			Date dateFieldInput = dateField.getConvertedInput();
 			Integer hours = hoursField.getConvertedInput();
 			Integer minutes = minutesField.getConvertedInput();
 			AM_PM amOrPm = amOrPmChoice.getConvertedInput();
 
-			try
+			// Default to today, if date entry was invisible
+			final MutableDateTime date;
+			if (dateFieldInput != null)
 			{
-				boolean use12HourFormat = use12HourFormat();
-				if (hoursField.isVisibleInHierarchy() == false)
-				{
-					hours = 0;
-				}
-				if (hours != null)
-				{
-					date.set(DateTimeFieldType.hourOfDay(), hours %
-						getMaximumHours(use12HourFormat));
-					date.setMinuteOfHour((minutes != null) ? minutes : 0);
-				}
-				if (use12HourFormat)
-				{
-					date.set(DateTimeFieldType.halfdayOfDay(), amOrPm == AM_PM.PM ? 1 : 0);
-				}
-
-				TimeZone zone = getClientTimeZone();
-				if (zone != null)
-				{
-					date.setMillis(getMillis(zone, TimeZone.getDefault(), date.getMillis()));
-				}
-
-				// the date will be in the server's timezone
-				setConvertedInput(date.toDate());
+				date = new MutableDateTime(dateFieldInput);
 			}
-			catch (RuntimeException e)
+			else
 			{
-				DateTimeField.this.error(e.getMessage());
-				invalid();
+				// Current date
+				date = new MutableDateTime();
 			}
+
+			// "Calculate" the date with the different input parameters
+
+			// The AM/PM field
+			boolean use12HourFormat = use12HourFormat();
+			if (use12HourFormat)
+			{
+				date.set(DateTimeFieldType.halfdayOfDay(), amOrPm == AM_PM.PM ? 1 : 0);
+			}
+
+			// The hours
+			if ((hoursField.isVisibleInHierarchy() == false) || (hours == null))
+			{
+				date.setHourOfDay(0);
+			}
+			else
+			{
+				date.set(DateTimeFieldType.hourOfDay(), hours % getMaximumHours(use12HourFormat));
+			}
+
+			// The minutes
+			if ((minutesField.isVisibleInHierarchy() == false) || (minutes == null))
+			{
+				date.setMinuteOfHour(0);
+			}
+			else
+			{
+				date.setMinuteOfHour(minutes);
+			}
+
+			// Use the client timezone to properly calculate the millisecs
+			TimeZone zone = getClientTimeZone();
+			if (zone != null)
+			{
+				date.setZoneRetainFields(DateTimeZone.forTimeZone(zone));
+			}
+
+			// The date will be in the server's timezone
+			setConvertedInput(new Date(date.getMillis()));
 		}
-		else
+		catch (RuntimeException e)
 		{
-			setConvertedInput(null);
+			DateTimeField.this.error(e.getMessage());
+			invalid();
 		}
 	}
 
