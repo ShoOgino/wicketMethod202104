@@ -1,15 +1,17 @@
 	/**
-	 * @see org.apache.wicket.behavior.AbstractBehavior#afterRender(org.apache.wicket.Component)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void afterRender(Component component)
+	public void afterRender(final Component component)
 	{
 		super.afterRender(component);
+
 		// Append the span and img icon right after the rendering of the
 		// component. Not as pretty as working with a panel etc, but works
 		// for behaviors and is more efficient
 		Response response = component.getResponse();
 		response.write("\n<span class=\"yui-skin-sam\">&nbsp;<span style=\"");
+
 		if (renderOnLoad())
 		{
 			response.write("display:block;");
@@ -19,6 +21,7 @@
 			response.write("display:none;");
 			response.write("position:absolute;");
 		}
+
 		response.write("z-index: 99999;\" id=\"");
 		response.write(getEscapedComponentMarkupId());
 		response.write("Dp\"></span><img style=\"");
@@ -35,7 +38,6 @@
 		CharSequence title = getIconTitle();
 		response.write(Strings.escapeMarkup((title != null) ? title.toString() : ""));
 		response.write("\"/>");
-
 
 		if (renderOnLoad())
 		{

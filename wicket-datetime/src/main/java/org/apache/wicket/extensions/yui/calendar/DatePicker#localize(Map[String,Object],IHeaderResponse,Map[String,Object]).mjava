@@ -18,16 +18,30 @@
 	 * 
 	 * @param widgetProperties
 	 *            the current widget properties
+	 * @param response
+	 *            the header response
+	 * @param initVariables
+	 *            variables passed to the Wicket.DateTime.init() js method
 	 */
-	protected void localize(Map<String, Object> widgetProperties)
+	protected void localize(Map<String, Object> widgetProperties, IHeaderResponse response,
+		Map<String, Object> initVariables)
 	{
+		Locale locale = getLocale();
+		String key = "wicketCalendarI18n[\"" + locale.toString() + "\"]";
+		initVariables.put("i18n", key);
+
+		if (response.wasRendered(key))
+		{
+			return;
+		}
+
 		DateFormatSymbols dfSymbols = null;
 		if (GETINSTANCEMETHOD != null)
 		{
 			// try to use JDK 6 DateFormatSymbols.getInstance(Locale)
 			try
 			{
-				dfSymbols = (DateFormatSymbols)GETINSTANCEMETHOD.invoke(null, getLocale());
+				dfSymbols = (DateFormatSymbols)GETINSTANCEMETHOD.invoke(null, locale);
 			}
 			catch (Exception e)
 			{
@@ -36,32 +50,40 @@
 		}
 		if (dfSymbols == null)
 		{
-			dfSymbols = new DateFormatSymbols(getLocale());
+			dfSymbols = new DateFormatSymbols(locale);
 		}
 
-		setWidgetProperty(widgetProperties, "MONTHS_SHORT", filterEmpty(dfSymbols.getShortMonths()));
-		setWidgetProperty(widgetProperties, "MONTHS_LONG", filterEmpty(dfSymbols.getMonths()));
-		setWidgetProperty(widgetProperties, "WEEKDAYS_MEDIUM",
+		Map<String, Object> i18nVariables = new HashMap<String, Object>();
+		setWidgetProperty(i18nVariables, "MONTHS_SHORT", filterEmpty(dfSymbols.getShortMonths()));
+		setWidgetProperty(i18nVariables, "MONTHS_LONG", filterEmpty(dfSymbols.getMonths()));
+		setWidgetProperty(i18nVariables, "WEEKDAYS_MEDIUM",
 			filterEmpty(dfSymbols.getShortWeekdays()));
-		setWidgetProperty(widgetProperties, "WEEKDAYS_LONG", filterEmpty(dfSymbols.getWeekdays()));
+		setWidgetProperty(i18nVariables, "WEEKDAYS_LONG", filterEmpty(dfSymbols.getWeekdays()));
 
-		widgetProperties.put("START_WEEKDAY",
-			Calendar.getInstance(getLocale()).getFirstDayOfWeek() - 1);
+		i18nVariables.put("START_WEEKDAY", Calendar.getInstance(locale).getFirstDayOfWeek() - 1);
 
-		if (Locale.SIMPLIFIED_CHINESE.equals(getLocale()) ||
-			Locale.TRADITIONAL_CHINESE.equals(getLocale()))
+		if (Locale.SIMPLIFIED_CHINESE.equals(locale) || Locale.TRADITIONAL_CHINESE.equals(locale))
 		{
-			setWidgetProperty(widgetProperties, "WEEKDAYS_1CHAR",
+			setWidgetProperty(i18nVariables, "WEEKDAYS_1CHAR",
 				filterEmpty(substring(dfSymbols.getShortWeekdays(), 2, 1)));
-			widgetProperties.put("WEEKDAYS_SHORT",
+			i18nVariables.put("WEEKDAYS_SHORT",
 				filterEmpty(substring(dfSymbols.getShortWeekdays(), 2, 1)));
 		}
 		else
 		{
-			setWidgetProperty(widgetProperties, "WEEKDAYS_1CHAR",
+			setWidgetProperty(i18nVariables, "WEEKDAYS_1CHAR",
 				filterEmpty(substring(dfSymbols.getShortWeekdays(), 0, 1)));
-			setWidgetProperty(widgetProperties, "WEEKDAYS_SHORT",
+			setWidgetProperty(i18nVariables, "WEEKDAYS_SHORT",
 				filterEmpty(substring(dfSymbols.getShortWeekdays(), 0, 2)));
 		}
+
+		StringBuilder i18n = new StringBuilder(key);
+		i18n.append('=');
+		appendMapping(i18nVariables, i18n);
+		i18n.append(';');
+
+		response.renderOnDomReadyJavaScript(i18n.toString());
+
+		response.wasRendered(key);
 	}
 

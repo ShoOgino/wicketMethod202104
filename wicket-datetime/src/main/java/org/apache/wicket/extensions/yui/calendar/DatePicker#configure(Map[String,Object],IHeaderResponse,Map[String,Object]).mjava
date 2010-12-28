@@ -8,13 +8,18 @@
 	 * 
 	 * @param widgetProperties
 	 *            the current widget properties
+	 * @param response
+	 *            the header response
+	 * @param initVariables
+	 *            variables passed to the Wicket.DateTime.init() js method
 	 */
-	protected void configure(Map<String, Object> widgetProperties)
+	protected void configure(final Map<String, Object> widgetProperties,
+		final IHeaderResponse response, final Map<String, Object> initVariables)
 	{
 		widgetProperties.put("close", true);
 
 		// localize date fields
-		localize(widgetProperties);
+		localize(widgetProperties, response, initVariables);
 
 		Object modelObject = component.getDefaultModelObject();
 		// null and cast check

@@ -1,0 +1,37 @@
+	/**
+	 * Renders yui & wicket calendar js module loading. It is done only once per page.
+	 * 
+	 * @param response
+	 *            header response
+	 */
+	protected void renderHeadInit(IHeaderResponse response)
+	{
+		String key = "DatePickerInit.js";
+		if (response.wasRendered(key))
+		{
+			return;
+		}
+
+		// variables for YUILoader
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put("basePath",
+			Strings.stripJSessionId(RequestCycle.get().urlFor(YUI, null).toString()) + "/");
+		variables.put("wicketDatePath", RequestCycle.get().urlFor(WICKET_DATE, null));
+
+		if (Application.get().usesDevelopmentConfig())
+		{
+			variables.put("filter", "filter: \"RAW\",");
+			variables.put("allowRollup", false);
+		}
+		else
+		{
+			variables.put("filter", "");
+			variables.put("allowRollup", true);
+		}
+
+		TextTemplate template = new PackagedTextTemplate(DatePicker.class, key);
+		response.renderOnDomReadyJavaScript(template.asString(variables));
+
+		response.markRendered(key);
+	}
+
