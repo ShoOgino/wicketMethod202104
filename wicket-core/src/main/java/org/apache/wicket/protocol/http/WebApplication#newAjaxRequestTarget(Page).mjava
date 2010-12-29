@@ -5,8 +5,13 @@
 	 *            page on which ajax response is made
 	 * @return non-null ajax request target instance
 	 */
-	public AjaxRequestTarget newAjaxRequestTarget(final Page page)
+	public final AjaxRequestTarget newAjaxRequestTarget(final Page page)
 	{
-		return new AjaxRequestTarget(page);
+		AjaxRequestTarget target = getAjaxRequestTargetProvider().get(page);
+		for (AjaxRequestTarget.IListener listener : ajaxRequestTargetListeners)
+		{
+			target.addListener(listener);
+		}
+		return target;
 	}
 
