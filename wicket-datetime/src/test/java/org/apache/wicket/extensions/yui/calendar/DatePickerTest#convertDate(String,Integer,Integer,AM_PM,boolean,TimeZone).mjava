@@ -1,0 +1,68 @@
+	/**
+	 * Simulate what DateTimeField does
+	 * 
+	 * @param dateStr
+	 * @param hours
+	 * @param minutes
+	 * @param amOrPm
+	 * @param use12HourFormat
+	 * @param tzClient
+	 * @return Date
+	 * @throws ParseException
+	 */
+	public Date convertDate(final String dateStr, final Integer hours, final Integer minutes,
+		final AM_PM amOrPm, final boolean use12HourFormat, final TimeZone tzClient)
+		throws ParseException
+	{
+		Date dateFieldInput = (dateStr != null ? DateFormat.getDateInstance().parse(dateStr) : null);
+
+		// Default to today, if date entry was invisible
+		final MutableDateTime date;
+		if (dateFieldInput != null)
+		{
+			date = new MutableDateTime(dateFieldInput);
+		}
+		else
+		{
+			// Current date
+			date = new MutableDateTime();
+		}
+
+		// always set secs to 0
+		date.setSecondOfMinute(0);
+
+		// The AM/PM field
+		if (use12HourFormat)
+		{
+			date.set(DateTimeFieldType.halfdayOfDay(), amOrPm == AM_PM.PM ? 1 : 0);
+		}
+
+		// The hours
+		if (hours == null)
+		{
+			date.setHourOfDay(0);
+		}
+		else
+		{
+			date.set(DateTimeFieldType.hourOfDay(), hours % (use12HourFormat ? 12 : 24));
+		}
+
+		// The minutes
+		if (minutes == null)
+		{
+			date.setMinuteOfHour(0);
+		}
+		else
+		{
+			date.setMinuteOfHour(minutes);
+		}
+
+		// Use the client timezone to properly calculate the millisecs
+		if (tzClient != null)
+		{
+			date.setZoneRetainFields(DateTimeZone.forTimeZone(tzClient));
+		}
+
+		return new Date(date.getMillis());
+	}
+
