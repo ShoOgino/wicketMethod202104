@@ -15,8 +15,9 @@
 			response.renderJavaScript("wicketAjaxDebugEnable=true;", "wicket-ajax-debug-enable");
 		}
 
-		// TODO NG Escape
-		response.renderJavaScript("Wicket.Ajax.baseUrl=\"" +
-			RequestCycle.get().getUrlRenderer().getBaseUrl() + "\";", "wicket-ajax-base-url");
+		Url baseUrl = RequestCycle.get().getUrlRenderer().getBaseUrl();
+		CharSequence ajaxBaseUrl = Strings.escapeMarkup(baseUrl.toString());
+		response.renderJavaScript("Wicket.Ajax.baseUrl=\"" + ajaxBaseUrl + "\";",
+			"wicket-ajax-base-url");
 	}
 
