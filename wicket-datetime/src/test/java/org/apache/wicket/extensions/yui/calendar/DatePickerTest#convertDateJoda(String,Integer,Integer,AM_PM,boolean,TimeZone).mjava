@@ -10,38 +10,29 @@
 	 * @return Date
 	 * @throws ParseException
 	 */
-	public Date convertDate(final String dateStr, final Integer hours, final Integer minutes,
+	public Date convertDateJoda(final String dateStr, final Integer hours, final Integer minutes,
 		final AM_PM amOrPm, final boolean use12HourFormat, final TimeZone tzClient)
 		throws ParseException
 	{
-		log.error(">>> convertDate()");
-		Date dateFieldInput = (dateStr != null ? DateFormat.getDateInstance().parse(dateStr) : null);
+		log.error(">>> convertDateJoda()");
 
-		// Default to today, if date entry was invisible
-		final MutableDateTime date;
-		if (dateFieldInput != null)
-		{
-			log.error("1. dateFieldInput: " + dateFieldInput.getTime() + "  " + dateFieldInput);
-			date = new MutableDateTime(dateFieldInput);
-		}
-		else
-		{
-			log.error("1. dateFieldInput: null");
-			// Current date
-			date = new MutableDateTime();
-		}
-		log.error("2. mutable date: " + date.getMillis() + "  " + date);
+		DateTimeFormatter fmt = DateTimeFormat.shortDate();
+		// fmt.withZone(timeZone).parseDateTime("10/1/06 5:00 AM");
+		MutableDateTime date = (dateStr != null ? fmt.parseMutableDateTime(dateStr)
+			: new MutableDateTime());
+
+		log.error("1. mutable date: " + date.getMillis() + "  " + date);
 
 		// always set secs to 0
 		date.setSecondOfMinute(0);
-		log.error("3. secs = 0: " + date.getMillis() + "  " + date);
+		log.error("2. secs = 0: " + date.getMillis() + "  " + date);
 
 		// The AM/PM field
 		if (use12HourFormat)
 		{
 			date.set(DateTimeFieldType.halfdayOfDay(), amOrPm == AM_PM.PM ? 1 : 0);
 		}
-		log.error("4. AM/PM: " + date.getMillis() + "  " + date);
+		log.error("3. AM/PM: " + date.getMillis() + "  " + date);
 
 		// The hours
 		if (hours == null)
@@ -69,8 +60,8 @@
 		if (tzClient != null)
 		{
 			date.setZoneRetainFields(DateTimeZone.forTimeZone(tzClient));
-			log.error("6. zone: " + date.getMillis() + "  " + date);
 		}
+		log.error("6. timezone: " + date.getMillis() + "  " + date);
 
 		Date rtn = new Date(date.getMillis());
 		log.error("7. final date: " + rtn.getTime() + "  " + rtn);
