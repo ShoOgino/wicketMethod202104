@@ -1,0 +1,33 @@
+	/**
+	 * Checks if the credit card number can be determined as a valid number.
+	 * 
+	 * @param creditCardNumber
+	 *            the credit card number as a string
+	 * @return <code>TRUE</code> if the credit card number could be determined as a valid number,
+	 *         else <code>FALSE</code> is returned
+	 */
+	protected boolean isLengthAndPrefixCorrect(String creditCardNumber)
+	{
+		if (creditCardNumber == null)
+		{
+			return false;
+		}
+
+		// strip spaces and dashes
+		creditCardNumber = creditCardNumber.replaceAll("[ -]", "");
+
+		// the length of the credit card number has to be between 12 and 19.
+		// else the number is invalid.
+		if ((creditCardNumber.length() >= 12) && (creditCardNumber.length() <= 19) &&
+			isChecksumCorrect(creditCardNumber))
+		{
+			if ((failOnUnknown == false) ||
+				(determineCardId(creditCardNumber) != CreditCard.INVALID))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+

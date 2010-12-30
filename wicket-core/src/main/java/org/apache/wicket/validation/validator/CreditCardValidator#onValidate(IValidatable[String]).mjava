@@ -1,0 +1,21 @@
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onValidate(final IValidatable<String> validatable)
+	{
+		final String value = validatable.getValue();
+
+		try
+		{
+			if (!isLengthAndPrefixCorrect(value))
+			{
+				error(validatable);
+			}
+		}
+		catch (final NumberFormatException ex)
+		{
+			error(validatable);
+		}
+	}
+
