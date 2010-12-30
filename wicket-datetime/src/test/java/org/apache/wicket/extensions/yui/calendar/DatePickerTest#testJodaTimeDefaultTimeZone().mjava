@@ -1,0 +1,37 @@
+	/**
+	 * Tests joda & jvm default time zone handling
+	 */
+	public void testJodaTimeDefaultTimeZone()
+	{
+		TimeZone origJvmDef = TimeZone.getDefault();
+		DateTimeZone origJodaDef = DateTimeZone.getDefault();
+
+		// lets find a timezone different from current default
+		String newId = null;
+		for (String id : TimeZone.getAvailableIDs())
+		{
+			if (!id.equals(origJvmDef.getID()))
+			{
+				newId = id;
+				break;
+			}
+		}
+
+		assertNotNull(newId);
+
+		TimeZone.setDefault(TimeZone.getTimeZone(newId));
+
+		TimeZone newJvmDef = TimeZone.getDefault();
+		DateTimeZone newJodaDef = DateTimeZone.getDefault();
+
+		// if this fails we are under security manager
+		// and we have no right to set default timezone
+		assertNotSame(origJvmDef, newJvmDef);
+
+		// this should be true because joda caches the
+		// default timezone and even for the first
+		// lookup it uses a System property if possible
+		// for more info see org.joda.time.DateTimeZone.getDefault()
+		assertSame(origJodaDef, newJodaDef);
+	}
+
