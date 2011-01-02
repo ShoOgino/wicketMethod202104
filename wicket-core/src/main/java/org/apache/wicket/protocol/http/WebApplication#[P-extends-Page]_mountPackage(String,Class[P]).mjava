@@ -1,0 +1,18 @@
+	/**
+	 * Mounts mounts all bookmarkable pages in a the pageClass's package to the given path.
+	 * 
+	 * @param <P>
+	 *            type of page
+	 * 
+	 * @param path
+	 *            the path to mount the page class on
+	 * @param pageClass
+	 *            the page class to be mounted
+	 */
+	public final <P extends Page> void mountPackage(final String path, final Class<P> pageClass)
+	{
+		PackageMapper packageMapper = new PackageMapper(PackageName.forClass(pageClass));
+		MountMapper mountMapper = new MountMapper(path, packageMapper);
+		mount(mountMapper);
+	}
+
