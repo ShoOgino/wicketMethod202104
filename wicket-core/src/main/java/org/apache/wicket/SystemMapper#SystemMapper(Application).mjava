@@ -1,16 +1,17 @@
 	/**
 	 * Constructor
+	 * 
+	 * @param application
 	 */
-	public SystemMapper(Application application)
+	public SystemMapper(final Application application)
 	{
 		this.application = application;
 		add(RestartResponseAtInterceptPageException.MAPPER);
-		add(new HomePageMapper());
 		add(new PageInstanceMapper());
 		add(new BookmarkableMapper());
+		add(new HomePageMapper(new HomePageProvider(application)));
 		add(new ResourceReferenceMapper(new PageParametersEncoder(),
-			                              new ParentFolderPlaceholderProvider(application),
-			                              useTimestampsProvider()));
+			new ParentFolderPlaceholderProvider(application), useTimestampsProvider()));
 		add(new BufferedResponseMapper());
 	}
 
