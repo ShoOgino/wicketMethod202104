@@ -15,17 +15,24 @@
 			for (Iterator<String> iterator = parameters.keySet().iterator(); iterator.hasNext();)
 			{
 				final String name = iterator.next();
-				final String value = getParameter(name);
-				if (name != null)
+				final String[] values = getParameterValues(name);
+				for (int i = 0; i < values.length; i++)
 				{
-					buf.append(UrlEncoder.QUERY_INSTANCE.encode(name,
-						Charset.forName(getCharacterEncoding())));
-				}
-				buf.append('=');
-				if (value != null)
-				{
-					buf.append(UrlEncoder.QUERY_INSTANCE.encode(value,
-						Charset.forName(getCharacterEncoding())));
+					if (name != null)
+					{
+						buf.append(UrlEncoder.QUERY_INSTANCE.encode(name,
+							Charset.forName(getCharacterEncoding())));
+					}
+					buf.append('=');
+					if (values[i] != null)
+					{
+						buf.append(UrlEncoder.QUERY_INSTANCE.encode(values[i],
+							Charset.forName(getCharacterEncoding())));
+					}
+					if (i + 1 < values.length)
+					{
+						buf.append('&');
+					}
 				}
 				if (iterator.hasNext())
 				{

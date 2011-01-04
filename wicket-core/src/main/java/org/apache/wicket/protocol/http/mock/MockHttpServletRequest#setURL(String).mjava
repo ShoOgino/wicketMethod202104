@@ -34,8 +34,11 @@
 			setPath(url.substring(0, index));
 
 			String queryString = url.substring(index + 1);
-
-			parameters.clear();
+/*
+ * We can't clear the parameters here because users may have set custom parameters in request. An
+ * better place to clear they is when tester setups the next request cycle
+ */
+// parameters.clear();
 			for (QueryParameter parameter : Url.parse("?" + queryString,
 				Charset.forName(getCharacterEncoding())).getQueryParameters())
 			{
