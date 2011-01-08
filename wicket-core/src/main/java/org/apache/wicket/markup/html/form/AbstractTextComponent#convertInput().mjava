@@ -1,4 +1,6 @@
 	/**
+	 * Convert the input respecting the flag convertEmptyInputStringToNull. Subclasses that override
+	 * this method should test this flag also.
 	 * 
 	 * @see org.apache.wicket.markup.html.form.FormComponent#convertInput()
 	 */
@@ -8,6 +10,15 @@
 		// Stateless forms don't have to be rendered first, convertInput could be called before
 		// onBeforeRender calling resolve type here again to check if the type is correctly set.
 		resolveType();
-		super.convertInput();
+		String[] value = getInputAsArray();
+		String tmp = value != null && value.length > 0 ? value[0] : null;
+		if (getConvertEmptyInputStringToNull() && Strings.isEmpty(tmp))
+		{
+			setConvertedInput(null);
+		}
+		else
+		{
+			super.convertInput();
+		}
 	}
 
