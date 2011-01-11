@@ -10,11 +10,12 @@
 	 * @param rowsPerPage
 	 *            number of rows per page
 	 */
-	public DataTable(String id, IColumn<T>[] columns, IDataProvider<T> dataProvider, int rowsPerPage)
+	public DataTable(String id, List<IColumn<T>> columns, IDataProvider<T> dataProvider,
+		int rowsPerPage)
 	{
 		super(id);
 
-		if (columns == null || columns.length < 1)
+		if (columns == null || columns.size() < 1)
 		{
 			throw new IllegalArgumentException("Argument `columns` cannot be null or empty");
 		}
@@ -29,7 +30,7 @@
 			protected Item newCellItem(String id, int index, IModel model)
 			{
 				Item item = DataTable.this.newCellItem(id, index, model);
-				final IColumn<?> column = DataTable.this.columns[index];
+				final IColumn<T> column = DataTable.this.columns.get(index);
 				if (column instanceof IStyledColumn)
 				{
 					item.add(new DataTable.CssAttributeBehavior()
