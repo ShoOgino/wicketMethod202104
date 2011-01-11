@@ -1,0 +1,25 @@
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onComponentTagBody(final Component component, final MarkupStream markupStream,
+		final ComponentTag openTag)
+	{
+		super.onComponentTagBody(component, markupStream, openTag);
+
+		// Get the fragments open tag
+		MarkupStream stream = new MarkupStream(getMarkup((MarkupContainer)component, null));
+		ComponentTag fragmentOpenTag = stream.getTag();
+
+		// if it is an open close tag, skip this fragment.
+		if (!fragmentOpenTag.isOpenClose())
+		{
+			// We'll completely ignore the fragments open tag. It'll not be
+			// rendered
+			stream.next();
+
+			// Render the body of the fragment
+			component.onComponentTagBody(stream, fragmentOpenTag);
+		}
+	}
+

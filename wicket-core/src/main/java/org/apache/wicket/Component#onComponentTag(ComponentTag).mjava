@@ -1,6 +1,6 @@
 	/**
 	 * Processes the component tag.
-	 * <p/>
+	 * 
 	 * Overrides of this method most likely should call the super implementation.
 	 * 
 	 * @param tag
@@ -23,6 +23,12 @@
 			path = path.replace("_", "__");
 			path = path.replace(":", "_");
 			tag.put("wicketpath", path);
+		}
+
+		IMarkupSourcingStrategy provider = getMarkupSourcingStrategy();
+		if (provider != null)
+		{
+			provider.onComponentTag(this, tag);
 		}
 	}
 

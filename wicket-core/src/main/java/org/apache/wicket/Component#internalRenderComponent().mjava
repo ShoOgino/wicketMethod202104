@@ -48,7 +48,15 @@
 			if (tag.isOpen())
 			{
 				// Render the body
-				onComponentTagBody(markupStream, tag);
+				IMarkupSourcingStrategy provider = getMarkupSourcingStrategy();
+				if (provider != null)
+				{
+					provider.onComponentTagBody(this, markupStream, tag);
+				}
+				else
+				{
+					onComponentTagBody(markupStream, tag);
+				}
 			}
 
 			// Render close tag

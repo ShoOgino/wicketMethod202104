@@ -1,8 +1,11 @@
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public IMarkupFragment getMarkup(final Component child)
+	public IMarkupFragment getMarkup(final MarkupContainer container, final Component child)
 	{
 		// Get the markup to search for the fragment markup
-		IMarkupFragment markup = chooseMarkup();
+		IMarkupFragment markup = chooseMarkup(container);
 		if (markup == null)
 		{
 			throw new MarkupException("The fragments markup provider has no associated markup. " +
@@ -14,7 +17,7 @@
 		if (childMarkup == null)
 		{
 			// There is one more option if the markup provider has associated markup
-			MarkupContainer markupProvider = getMarkupProvider();
+			MarkupContainer markupProvider = getMarkupProvider(container);
 			if (markupProvider.hasAssociatedMarkup())
 			{
 				markup = markupProvider.getAssociatedMarkup();

@@ -1,19 +1,16 @@
 	/**
-	 * 
-	 * @see org.apache.wicket.MarkupContainer#onComponentTagBody(org.apache.wicket.markup.MarkupStream,
-	 *      org.apache.wicket.markup.ComponentTag)
+	 * {@inheritDoc}
 	 */
 	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 	{
-		final AppendingStringBuffer buffer = new AppendingStringBuffer(128);
+		StringBuilder buffer = new StringBuilder(128);
 		Iterator<T> options = getOptionsIterator();
 		IChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
 
 		while (options.hasNext())
 		{
 			final T choice = options.next();
-
 
 			final CharSequence id;
 			{
@@ -60,7 +57,6 @@
 			}
 
 			buffer.append(">").append(value).append("</option>");
-
 		}
 
 		buffer.append("\n");

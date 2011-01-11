@@ -1,6 +1,5 @@
 	/**
-	 * @see org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel#newLabel(org.apache.wicket.MarkupContainer,
-	 *      java.lang.String, org.apache.wicket.model.IModel)
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected WebComponent newLabel(MarkupContainer parent, String componentId, IModel<T> model)
@@ -9,6 +8,9 @@
 		{
 			private static final long serialVersionUID = 1L;
 
+			/**
+			 * {@inheritDoc}
+			 */
 			@Override
 			public <C> IConverter<C> getConverter(Class<C> type)
 			{
@@ -16,9 +18,12 @@
 				return c != null ? c : super.getConverter(type);
 			}
 
+			/**
+			 * {@inheritDoc}
+			 */
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 			{
 				String displayValue = getDefaultModelObjectAsString();
 				if (renderer != null)

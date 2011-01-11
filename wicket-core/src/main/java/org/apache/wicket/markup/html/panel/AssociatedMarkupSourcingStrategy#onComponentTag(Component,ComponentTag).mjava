@@ -1,8 +1,13 @@
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	protected void onComponentTag(final ComponentTag tag)
+	public void onComponentTag(final Component component, final ComponentTag tag)
 	{
-		// Copy attributes from <wicket:panel> to the "calling" tag
-		IMarkupFragment markup = getMarkup(null);
+		super.onComponentTag(component, tag);
+
+		// Copy attributes from <wicket:XXX> to the "calling" tag
+		IMarkupFragment markup = ((MarkupContainer)component).getMarkup(null);
 		String namespace = markup.getMarkupResourceStream().getWicketNamespace() + ":";
 
 		MarkupElement elem = markup.get(0);
@@ -23,7 +28,5 @@
 			throw new MarkupException(markup.getMarkupResourceStream(),
 				"Expected a Tag but found raw markup: " + elem.toString());
 		}
-
-		super.onComponentTag(tag);
 	}
 

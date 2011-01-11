@@ -10,6 +10,16 @@
 	 */
 	public IMarkupFragment getMarkup(final Component child)
 	{
+		IMarkupSourcingStrategy provider = getMarkupSourcingStrategy();
+		if (provider != null)
+		{
+			IMarkupFragment markup = provider.getMarkup(this, child);
+			if (markup != null)
+			{
+				return markup;
+			}
+		}
+
 		// Get the markup for the container
 		IMarkupFragment markup = getMarkup();
 		if (markup == null)

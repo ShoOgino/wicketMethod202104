@@ -7,11 +7,16 @@
 	 * <p>
 	 * The headers contributed are rendered in the standard way.
 	 * 
+	 * @param container
 	 * @param htmlContainer
 	 *            The HtmlHeaderContainer added to the Page
 	 */
-	public final void renderHeadFromAssociatedMarkupFile(final HtmlHeaderContainer htmlContainer)
+	public final void renderHeadFromAssociatedMarkupFile(final WebMarkupContainer container,
+		final HtmlHeaderContainer htmlContainer)
 	{
+		// reset for each render in case the strategy is re-used
+		noMoreWicketHeadTagsAllowed = false;
+
 		// Gracefully getAssociateMarkupStream. Throws no exception in case
 		// markup is not found
 		final MarkupStream markupStream = container.getAssociatedMarkupStream(false);
@@ -28,7 +33,7 @@
 			String headerId = getHeaderId(container, markupStream);
 
 			// Create a HeaderPartContainer and associate the markup
-			HeaderPartContainer headerPart = getHeaderPart(headerId,
+			HeaderPartContainer headerPart = getHeaderPart(container, headerId,
 				markupStream.getMarkupFragment());
 			if (headerPart != null)
 			{
