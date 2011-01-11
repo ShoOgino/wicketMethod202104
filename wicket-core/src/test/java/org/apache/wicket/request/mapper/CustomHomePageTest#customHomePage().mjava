@@ -1,0 +1,28 @@
+	/**
+	 * Tests mounting of a custom home page via {@link WebApplication#mountPage(String, Class)}
+	 */
+	@Test
+	public void customHomePage()
+	{
+		final WebApplication dummyApplication = new DummyApplication()
+		{
+			/**
+			 * @see org.apache.wicket.protocol.http.WebApplication#init()
+			 */
+			@Override
+			protected void init()
+			{
+				super.init();
+
+				// the following two lines do identical things
+				// getRootRequestMapperAsCompound().add(new HomePageMapper(CustomHomePage.class));
+				mountPage("/", CustomHomePage.class);
+			}
+		};
+		final WicketTester tester = new WicketTester(dummyApplication);
+
+		requestHomePage(tester);
+
+		tester.assertRenderedPage(CustomHomePage.class);
+	}
+
