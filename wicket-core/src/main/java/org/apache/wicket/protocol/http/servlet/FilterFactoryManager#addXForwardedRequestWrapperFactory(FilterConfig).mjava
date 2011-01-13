@@ -1,0 +1,21 @@
+	/**
+	 * Add a X-Forwarded web filter factory
+	 * 
+	 * @param config
+	 *            If null, <code>WebApplication.get().getWicketFilter().getFilterConfig()</code>
+	 *            will be called to retrieve the config.
+	 * @return this
+	 */
+	public final FilterFactoryManager addXForwardedRequestWrapperFactory(FilterConfig config)
+	{
+		if (config == null)
+		{
+			config = WebApplication.get().getWicketFilter().getFilterConfig();
+		}
+
+		XForwardedRequestWrapperFactory factory = new XForwardedRequestWrapperFactory();
+		factory.init(config);
+
+		return add(factory);
+	}
+

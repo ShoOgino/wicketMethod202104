@@ -1,0 +1,22 @@
+	/**
+	 * Add a Secure remote address web filter factory
+	 * 
+	 * @param config
+	 *            If null, <code>WebApplication.get().getWicketFilter().getFilterConfig()</code>
+	 *            will be called to retrieve the config.
+	 * @return this
+	 */
+	public final FilterFactoryManager addSecuredRemoteAddressRequestWrapperFactory(
+		FilterConfig config)
+	{
+		if (config == null)
+		{
+			config = WebApplication.get().getWicketFilter().getFilterConfig();
+		}
+
+		SecuredRemoteAddressRequestWrapperFactory factory = new SecuredRemoteAddressRequestWrapperFactory();
+		factory.init(config);
+
+		return add(factory);
+	}
+

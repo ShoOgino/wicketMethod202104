@@ -12,9 +12,10 @@
 		LinkedList<String> proxiesHeaderValue = new LinkedList<String>();
 
 		String[] remoteIPHeaderValue = commaDelimitedListToStringArray(request.getHeader(config.remoteIPHeader));
-		int idx;
+
 		// loop on remoteIPHeaderValue to find the first trusted remote ip and to build the
 		// proxies chain
+		int idx;
 		for (idx = remoteIPHeaderValue.length - 1; idx >= 0; idx--)
 		{
 			String currentRemoteIp = remoteIPHeaderValue[idx];
@@ -33,6 +34,7 @@
 				break;
 			}
 		}
+
 		// continue to loop on remoteIPHeaderValue to build the new value of the remoteIPHeader
 		LinkedList<String> newRemoteIpHeaderValue = new LinkedList<String>();
 		for (; idx >= 0; idx--)

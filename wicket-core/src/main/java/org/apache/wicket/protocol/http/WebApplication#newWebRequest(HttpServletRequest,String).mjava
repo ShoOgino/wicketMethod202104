@@ -7,9 +7,16 @@
 	 *            the filter mapping read from web.xml
 	 * @return a WebRequest object
 	 */
-	protected WebRequest newWebRequest(final HttpServletRequest servletRequest,
-		final String filterPath)
+	protected WebRequest newWebRequest(HttpServletRequest servletRequest, final String filterPath)
 	{
+		if (hasFilterFactoryManager())
+		{
+			for (AbstractRequestWrapperFactory factory : getFilterFactoryManager())
+			{
+				servletRequest = factory.getWrapper(servletRequest);
+			}
+		}
+
 		return new ServletWebRequest(servletRequest, filterPath);
 	}
 
