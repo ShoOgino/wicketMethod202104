@@ -29,7 +29,7 @@
 				tag.getName().equalsIgnoreCase("area"))
 			{
 				// generate the href attribute
-				tag.put("href", Strings.replaceAll(url, "&", "&amp;"));
+				tag.put("href", url);
 
 				// Add any popup script
 				if (popupSettings != null)
@@ -42,7 +42,7 @@
 			else if (tag.getName().equalsIgnoreCase("script") ||
 				tag.getName().equalsIgnoreCase("style"))
 			{
-				tag.put("src", Strings.replaceAll(url, "&", "&amp;"));
+				tag.put("src", url);
 			}
 			else
 			{
@@ -62,7 +62,8 @@
 						"onclick",
 						"var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; " +
 							"if (win == window) { window.location.href='" +
-							Strings.replaceAll(url, "&", "&amp;") + "'; } ;return false");
+							url +
+							"'; } ;return false");
 				}
 			}
 
