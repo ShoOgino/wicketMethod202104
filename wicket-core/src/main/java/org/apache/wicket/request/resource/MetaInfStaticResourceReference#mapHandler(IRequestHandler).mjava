@@ -1,0 +1,35 @@
+	/**
+	 * Returns the {@link Url} for given {@link IRequestHandler} if "/META-INF/resources" Servlet
+	 * 3.0 feature is supported or <code>null</code> if not (so standard url mapping can take
+	 * place).
+	 * 
+	 * @param requestHandler
+	 *            mandatory parameter
+	 * @return Url instance or <code>null</code>.
+	 */
+	public Url mapHandler(IRequestHandler requestHandler)
+	{
+		if (!isMetaInfResourcesSupported())
+		{
+			return null;
+		}
+
+		Url url = new Url();
+
+		List<String> segments = url.getSegments();
+
+		String[] parts = Packages.extractPackageName(getScope()).split("\\.");
+		for (String p : parts)
+		{
+			segments.add(p);
+		}
+
+		parts = getName().split("/");
+		for (String p : parts)
+		{
+			segments.add(p);
+		}
+
+		return url;
+	}
+
