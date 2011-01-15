@@ -1,0 +1,55 @@
+	/**
+	 * {@inheritDoc}
+	 */
+	public IMarkupFragment getMarkup(final MarkupContainer container, final Component child)
+	{
+		// If the sourcing strategy did not provide one, than ask the component.
+		// Get the markup for the container
+		IMarkupFragment markup = container.getMarkup();
+		if (markup == null)
+		{
+			return null;
+		}
+
+		if (child == null)
+		{
+			return markup;
+		}
+
+		// Find the child's markup
+		markup = markup.find(child.getId());
+		if (markup != null)
+		{
+			return markup;
+		}
+
+		// This is to make migration for Items from 1.4 to 1.5 more easy
+		if (Character.isDigit(child.getId().charAt(0)))
+		{
+			String id = child.getId();
+			boolean miss = false;
+			for (int i = 1; i < id.length(); i++)
+			{
+				if (Character.isDigit(id.charAt(i)) == false)
+				{
+					miss = true;
+					break;
+				}
+			}
+
+			if (miss == false)
+			{
+				// The LoopItems markup is equal to the Loops markup
+				markup = container.getMarkup();
+
+				if (log.isWarnEnabled())
+				{
+					log.warn("1.4 to 1.5 migration issue: your item component should be derived from AbstractItem. Item=" +
+						child.toString());
+				}
+			}
+		}
+
+		return markup;
+	}
+

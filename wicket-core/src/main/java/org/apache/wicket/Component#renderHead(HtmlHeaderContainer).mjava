@@ -25,13 +25,11 @@
 			// Allow component to contribute
 			if (response.wasRendered(this) == false)
 			{
+				// Let the component contribute something to the header
 				renderHead(response);
 
-				IMarkupSourcingStrategy provider = getMarkupSourcingStrategy();
-				if (provider != null)
-				{
-					provider.renderHead(this, container);
-				}
+				// Make sure the markup source strategy has been considered as well.
+				getMarkupSourcingStrategy().renderHead(this, container);
 
 				response.markRendered(this);
 			}

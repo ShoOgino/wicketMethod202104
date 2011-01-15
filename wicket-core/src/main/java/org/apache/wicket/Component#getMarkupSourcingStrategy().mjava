@@ -1,15 +1,20 @@
 	/**
 	 * Get the markup sourcing strategy for the component. If null,
-	 * {@link #newMarkupSourcingStrategy()} will be called. A return value of null indicates that no
-	 * specific strategy is attached to the Component, which is perfectly ok.
+	 * {@link #newMarkupSourcingStrategy()} will be called.
 	 * 
-	 * @return Markup sourcing strategy or null if no strategy is registered
+	 * @return Markup sourcing strategy
 	 */
 	protected final IMarkupSourcingStrategy getMarkupSourcingStrategy()
 	{
 		if (markupSourcingStrategy == null)
 		{
 			markupSourcingStrategy = newMarkupSourcingStrategy();
+
+			// If not strategy by provided, than we use a default one.
+			if (markupSourcingStrategy == null)
+			{
+				markupSourcingStrategy = DefaultMarkupSourcingStrategy.get();
+			}
 		}
 		return markupSourcingStrategy;
 	}
