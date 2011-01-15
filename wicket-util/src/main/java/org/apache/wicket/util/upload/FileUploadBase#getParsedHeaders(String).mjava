@@ -23,7 +23,7 @@
 			{
 				break;
 			}
-			String header = headerPart.substring(start, end);
+			StringBuilder header = new StringBuilder(headerPart.substring(start, end));
 			start = end + 2;
 			while (start < len)
 			{
@@ -43,10 +43,10 @@
 				}
 				// Continuation line found
 				end = parseEndOfLine(headerPart, nonWs);
-				header += " " + headerPart.substring(nonWs, end);
+				header.append(' ').append(headerPart.substring(nonWs, end));
 				start = end + 2;
 			}
-			parseHeaderLine(headers, header);
+			parseHeaderLine(headers, header.toString());
 		}
 		return headers;
 	}

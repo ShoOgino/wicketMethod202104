@@ -21,12 +21,12 @@
 		{
 			String headerName = (String)iter.next();
 			Iterator iter2 = headers.getHeaders(headerName);
-			String headerValue = (String)iter2.next();
+			StringBuilder headerValue = new StringBuilder((String)iter2.next());
 			while (iter2.hasNext())
 			{
-				headerValue += "," + iter2.next();
+				headerValue.append(',').append(iter2.next());
 			}
-			result.put(headerName, headerValue);
+			result.put(headerName, headerValue.toString());
 		}
 		return result;
 	}

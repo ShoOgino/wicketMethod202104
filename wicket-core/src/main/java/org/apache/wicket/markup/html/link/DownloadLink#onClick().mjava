@@ -11,8 +11,8 @@
 			throw new IllegalStateException(getClass().getName() +
 				" failed to retrieve a File object from model");
 		}
-		final String fn = UrlEncoder.QUERY_INSTANCE.encode((fileName != null) ? fileName
-			: file.getName(), getRequest().getCharset());
+		final String fn = UrlEncoder.QUERY_INSTANCE.encode(
+			(fileName != null) ? fileName : file.getName(), getRequest().getCharset());
 
 
 		IResourceStream resourceStream = new FileResourceStream(
@@ -27,7 +27,7 @@
 
 					if (deleteAfter)
 					{
-						file.delete();
+						Files.remove(file);
 					}
 				}
 			}.setFileName(fn).setContentDisposition(ContentDisposition.ATTACHMENT));

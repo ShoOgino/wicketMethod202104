@@ -23,7 +23,7 @@
 
 				RequestCycle requestCycle = getRequestCycle();
 				WebSession session = (WebSession)getSession();
-				ClientInfo clientInfo = session.getClientInfo();
+				WebClientInfo clientInfo = session.getClientInfo();
 
 				if (clientInfo == null)
 				{
@@ -31,16 +31,8 @@
 					getSession().setClientInfo(clientInfo);
 				}
 
-				if (clientInfo instanceof WebClientInfo)
-				{
-					WebClientInfo info = (WebClientInfo)clientInfo;
-					ClientProperties properties = info.getProperties();
-					propertiesBean.merge(properties);
-				}
-				else
-				{
-					warnNotUsingWebClientInfo(clientInfo);
-				}
+				ClientProperties properties = clientInfo.getProperties();
+				propertiesBean.merge(properties);
 
 				afterSubmit();
 			}
