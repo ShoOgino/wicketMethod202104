@@ -1,0 +1,27 @@
+	/**
+	 * Form on where will be installed the JavaScript callback to present the progress bar.
+	 * {@link ModalWindow} is designed to hold nested forms and the progress bar callback JavaScript
+	 * needs to be add at the form inside the {@link ModalWindow} if one is used.
+	 * 
+	 * @return form
+	 */
+	private Form<?> getCallbackForm()
+	{
+		Boolean insideModal = form.visitParents(ModalWindow.class,
+			new IVisitor<Component, Boolean>()
+			{
+				public void component(Component object, IVisit<Boolean> visit)
+				{
+					visit.stop(true);
+				}
+			});
+		if (insideModal != null && insideModal)
+		{
+			return form;
+		}
+		else
+		{
+			return form.getRootForm();
+		}
+	}
+
