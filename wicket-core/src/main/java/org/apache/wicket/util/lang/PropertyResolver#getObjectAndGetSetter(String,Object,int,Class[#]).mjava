@@ -9,10 +9,9 @@
 	 * @return {@link ObjectAndGetSetter}
 	 */
 	private static ObjectAndGetSetter getObjectAndGetSetter(final String expression,
-		final Object object, int tryToCreateNull, Class<?> clz)
+		final Object object, final int tryToCreateNull, Class<?> clz)
 	{
-		final String expressionBracketsSeperated = Strings.replaceAll(expression, "[", ".[")
-			.toString();
+		String expressionBracketsSeperated = Strings.replaceAll(expression, "[", ".[").toString();
 		int index = getNextDotIndex(expressionBracketsSeperated, 0);
 		int lastIndex = 0;
 		Object value = object;
@@ -33,7 +32,6 @@
 			}
 			catch (WicketRuntimeException ex)
 			{
-
 				// expression by it self can't be found. try to find a
 				// setPropertyByIndex(int,value) method
 				index = getNextDotIndex(expressionBracketsSeperated, index + 1);

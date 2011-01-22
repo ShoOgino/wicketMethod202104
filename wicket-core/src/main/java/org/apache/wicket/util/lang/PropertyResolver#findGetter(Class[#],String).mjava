@@ -3,13 +3,13 @@
 	 * @param expression
 	 * @return The method for the expression null if not found
 	 */
-	private final static Method findGetter(Class<?> clz, String expression)
+	private final static Method findGetter(final Class<?> clz, final String expression)
 	{
 		String name = Character.toUpperCase(expression.charAt(0)) + expression.substring(1);
 		Method method = null;
 		try
 		{
-			method = clz.getMethod("get" + name, (Class[])null);
+			method = clz.getMethod(GET + name, (Class[])null);
 		}
 		catch (Exception ignored)
 		{
@@ -18,7 +18,7 @@
 		{
 			try
 			{
-				method = clz.getMethod("is" + name, (Class[])null);
+				method = clz.getMethod(IS + name, (Class[])null);
 			}
 			catch (Exception e)
 			{
