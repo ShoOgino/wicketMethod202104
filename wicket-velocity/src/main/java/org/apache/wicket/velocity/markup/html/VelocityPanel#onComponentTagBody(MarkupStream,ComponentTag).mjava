@@ -2,20 +2,18 @@
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+	public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
 		if (!Strings.isEmpty(stackTraceAsString))
 		{
-			// TODO: only display the velocity error/stacktrace in development
-			// mode?
+			// TODO: only display the velocity error/stacktrace in development mode?
 			replaceComponentTagBody(markupStream, openTag,
 				Strings.toMultilineMarkup(stackTraceAsString));
 		}
 		else if (!parseGeneratedMarkup())
 		{
 			// check that no components have been added in case the generated
-			// markup should not be
-			// parsed
+			// markup should not be parsed
 			if (size() > 0)
 			{
 				throw new WicketRuntimeException(
