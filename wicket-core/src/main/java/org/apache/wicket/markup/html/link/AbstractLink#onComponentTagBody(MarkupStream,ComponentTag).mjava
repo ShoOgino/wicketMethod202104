@@ -16,9 +16,16 @@
 			getResponse().write(getBeforeDisabledLink());
 		}
 
-		// Render the body of the link
-		super.onComponentTagBody(markupStream, openTag);
-
+		if ((label != null) && (label.getObject() != null))
+		{
+			replaceComponentTagBody(markupStream, openTag,
+				getDefaultModelObjectAsString(label.getObject()));
+		}
+		else
+		{
+			// Render the body of the link
+			super.onComponentTagBody(markupStream, openTag);
+		}
 		// Draw anything after the body?
 		if (!isLinkEnabled() && getAfterDisabledLink() != null)
 		{
