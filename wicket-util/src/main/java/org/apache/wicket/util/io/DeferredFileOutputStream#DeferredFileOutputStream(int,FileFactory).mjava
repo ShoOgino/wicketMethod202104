@@ -7,12 +7,10 @@
 	 * @param fileFactory
 	 *            The FileFactory to create the file.
 	 */
-	public DeferredFileOutputStream(int threshold, FileFactory fileFactory)
+	public DeferredFileOutputStream(final int threshold, final FileFactory fileFactory)
 	{
 		super(threshold);
-		if (fileFactory == null)
-			throw new IllegalArgumentException("FileFactory must be specified");
-		this.fileFactory = fileFactory;
+		this.fileFactory = Args.notNull(fileFactory, "fileFactory");
 
 		memoryOutputStream = new ByteArrayOutputStream();
 		currentOutputStream = memoryOutputStream;

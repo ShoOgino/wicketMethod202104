@@ -14,8 +14,9 @@
 			 * @throws IOException
 			 *             Creating the file item failed.
 			 */
-			FileItemStreamImpl(String pName, String pFieldName, String pContentType,
-				boolean pFormField, long pContentLength) throws IOException
+			FileItemStreamImpl(final String pName, final String pFieldName,
+				final String pContentType, final boolean pFormField, final long pContentLength)
+				throws IOException
 			{
 				name = pName;
 				fieldName = pFieldName;
@@ -25,7 +26,7 @@
 				InputStream istream = itemStream;
 				if (fileSizeMax != -1)
 				{
-					if (pContentLength != -1 && pContentLength > fileSizeMax)
+					if ((pContentLength != -1) && (pContentLength > fileSizeMax))
 					{
 						FileUploadException e = new FileSizeLimitExceededException("The field " +
 							fieldName + " exceeds its maximum permitted " + " size of " +
@@ -35,7 +36,8 @@
 					istream = new LimitedInputStream(istream, fileSizeMax)
 					{
 						@Override
-						protected void raiseError(long pSizeMax, long pCount) throws IOException
+						protected void raiseError(final long pSizeMax, final long pCount)
+							throws IOException
 						{
 							itemStream.close(true);
 							FileUploadException e = new FileSizeLimitExceededException(

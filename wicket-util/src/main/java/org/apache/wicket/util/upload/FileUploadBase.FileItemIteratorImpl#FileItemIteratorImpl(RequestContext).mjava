@@ -8,7 +8,7 @@
 		 * @throws IOException
 		 *             An I/O error occurred.
 		 */
-		FileItemIteratorImpl(RequestContext ctx) throws FileUploadException, IOException
+		FileItemIteratorImpl(final RequestContext ctx) throws FileUploadException, IOException
 		{
 			if (ctx == null)
 			{
@@ -33,7 +33,8 @@
 					input = new LimitedInputStream(input, sizeMax)
 					{
 						@Override
-						protected void raiseError(long pSizeMax, long pCount) throws IOException
+						protected void raiseError(final long pSizeMax, final long pCount)
+							throws IOException
 						{
 							FileUploadException ex = new SizeLimitExceededException(
 								"the request was rejected because" + " its size (" + pCount +
@@ -45,7 +46,7 @@
 				}
 				else
 				{
-					if (sizeMax >= 0 && requestSize > sizeMax)
+					if ((sizeMax >= 0) && (requestSize > sizeMax))
 					{
 						throw new SizeLimitExceededException(
 							"the request was rejected because its size (" + requestSize +
