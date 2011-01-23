@@ -15,13 +15,17 @@
 		// The xml parser does not have a parent filter
 		super();
 
-		this.inputStream = inputStream;
-		encoding = defaultEncoding;
+		Args.notNull(inputStream, "inputStream");
 
-		if (inputStream == null)
+		if (!inputStream.markSupported())
 		{
-			throw new IllegalArgumentException("Parameter 'inputStream' must not be null");
+			this.inputStream = new BufferedInputStream(inputStream);
 		}
+		else
+		{
+			this.inputStream = inputStream;
+		}
+		encoding = defaultEncoding;
 
 		init();
 	}
