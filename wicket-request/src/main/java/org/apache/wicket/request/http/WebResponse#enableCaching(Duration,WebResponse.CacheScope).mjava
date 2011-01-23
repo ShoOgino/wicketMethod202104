@@ -10,14 +10,16 @@
 	 * 
 	 * @see WebResponse#MAX_CACHE_DURATION
 	 */
-	public void enableCaching(Duration duration, WebResponse.CacheScope scope)
+	public void enableCaching(Duration duration, final WebResponse.CacheScope scope)
 	{
 		Args.notNull(duration, "duration");
 		Args.notNull(scope, "scope");
 
 		// do not exceed the maximum recommended value from RFC-2616
 		if (duration.compareTo(MAX_CACHE_DURATION) > 0)
+		{
 			duration = MAX_CACHE_DURATION;
+		}
 
 		// Get current time
 		long now = System.currentTimeMillis();

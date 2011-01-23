@@ -8,15 +8,15 @@
 	 * @param encoder
 	 * @return PageParameters instance
 	 */
-	protected PageParameters extractPageParameters(Request request, int segmentsToSkip,
-		IPageParametersEncoder encoder)
+	protected PageParameters extractPageParameters(final Request request, int segmentsToSkip,
+		final IPageParametersEncoder encoder)
 	{
 		Args.notNull(request, "request");
 		Args.notNull(encoder, "encoder");
 
 		// strip the segments and first query parameter from URL
 		Url urlCopy = new Url(request.getUrl());
-		while (segmentsToSkip > 0 && urlCopy.getSegments().isEmpty() == false)
+		while ((segmentsToSkip > 0) && (urlCopy.getSegments().isEmpty() == false))
 		{
 			urlCopy.getSegments().remove(0);
 			--segmentsToSkip;
