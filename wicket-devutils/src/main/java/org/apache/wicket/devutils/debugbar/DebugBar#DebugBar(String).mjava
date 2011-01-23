@@ -1,44 +1,49 @@
-    public DebugBar(String id)
-    {
-        super(id);
-        setMarkupId("wicketDebugBar");
-        setOutputMarkupId(true);
-        add(new AttributeModifier("class", true, new AbstractReadOnlyModel<String>()
-        {
-            private static final long serialVersionUID = 1L;
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 */
+	public DebugBar(final String id)
+	{
+		super(id);
+		setMarkupId("wicketDebugBar");
+		setOutputMarkupId(true);
+		add(new AttributeModifier("class", true, new AbstractReadOnlyModel<String>()
+		{
+			private static final long serialVersionUID = 1L;
 
-            @Override
-            public String getObject()
-            {
-                return "wicketDebugBar" + (DebugBar.this.hasErrorMessage() ? "Error" : "");
-            }
+			@Override
+			public String getObject()
+			{
+				return "wicketDebugBar" + (DebugBar.this.hasErrorMessage() ? "Error" : "");
+			}
 
-        }));
+		}));
 
-        add(new Image("logo", new PackageResourceReference(DebugBar.class, "wicket.png")));
-        add(new Image("removeImg", new PackageResourceReference(DebugBar.class, "remove.png")));
-        List<IDebugBarContributor> contributors = getContributors();
-        
-        add(new ListView<IDebugBarContributor>("contributors", contributors)
-        {
-            private static final long serialVersionUID = 1L;
+		add(new Image("logo", new PackageResourceReference(DebugBar.class, "wicket.png")));
+		add(new Image("removeImg", new PackageResourceReference(DebugBar.class, "remove.png")));
+		List<IDebugBarContributor> contributors = getContributors();
 
-            @Override
-            protected void populateItem(ListItem<IDebugBarContributor> item)
-            {
-                IDebugBarContributor contrib = item.getModelObject();
-                Component comp = contrib.createComponent("contrib", DebugBar.this);
-                if (comp == null)
-                {
-                    // some contributors only add information to the debug bar
-                    // and don't actually create a contributed component
-                    item.setVisibilityAllowed(false);
-                }
-                else
-                {
-                    item.add(comp);
-                }
-            }
-        });
-    }
+		add(new ListView<IDebugBarContributor>("contributors", contributors)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(final ListItem<IDebugBarContributor> item)
+			{
+				IDebugBarContributor contrib = item.getModelObject();
+				Component comp = contrib.createComponent("contrib", DebugBar.this);
+				if (comp == null)
+				{
+					// some contributors only add information to the debug bar
+					// and don't actually create a contributed component
+					item.setVisibilityAllowed(false);
+				}
+				else
+				{
+					item.add(comp);
+				}
+			}
+		});
+	}
 
