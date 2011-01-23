@@ -9,14 +9,15 @@
 	 *            The model
 	 * @return The editor
 	 */
-	protected Component newLabel(MarkupContainer parent, String componentId, IModel<T> model)
+	protected Component newLabel(final MarkupContainer parent, final String componentId,
+		final IModel<T> model)
 	{
 		Label label = new Label(componentId, model)
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public <C> IConverter<C> getConverter(Class<C> type)
+			public <C> IConverter<C> getConverter(final Class<C> type)
 			{
 				IConverter<C> c = AjaxEditableLabel.this.getConverter(type);
 				return c != null ? c : super.getConverter(type);
@@ -26,10 +27,11 @@
 			 * {@inheritDoc}
 			 */
 			@Override
-			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			public void onComponentTagBody(final MarkupStream markupStream,
+				final ComponentTag openTag)
 			{
 				Object modelObject = getDefaultModelObject();
-				if (modelObject == null || "".equals(modelObject))
+				if ((modelObject == null) || "".equals(modelObject))
 				{
 					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
 				}

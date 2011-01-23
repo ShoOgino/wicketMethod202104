@@ -7,7 +7,7 @@
 	 *            the current level
 	 */
 	@Override
-	protected void populateTreeItem(WebMarkupContainer item, int level)
+	protected void populateTreeItem(final WebMarkupContainer item, final int level)
 	{
 		final TreeNode node = (TreeNode)item.getDefaultModelObject();
 
@@ -15,11 +15,12 @@
 		SideColumnsView sideColumns = new SideColumnsView("sideColumns", node);
 		item.add(sideColumns);
 		if (columns != null)
+		{
 			for (int i = 0; i < columns.length; i++)
 			{
 				IColumn column = columns[i];
-				if (column.getLocation().getAlignment() == Alignment.LEFT ||
-					column.getLocation().getAlignment() == Alignment.RIGHT)
+				if ((column.getLocation().getAlignment() == Alignment.LEFT) ||
+					(column.getLocation().getAlignment() == Alignment.RIGHT))
 				{
 					Component component;
 					// first try to create a renderable
@@ -40,11 +41,13 @@
 					sideColumns.addColumn(column, component, renderable);
 				}
 			}
+		}
 
 		// add middle columns
 		MiddleColumnsView middleColumns = new MiddleColumnsView("middleColumns", node,
 			hasLeftColumn());
 		if (columns != null)
+		{
 			for (int i = 0; i < columns.length; i++)
 			{
 				IColumn column = columns[i];
@@ -69,6 +72,7 @@
 					middleColumns.addColumn(column, component, renderable);
 				}
 			}
+		}
 		item.add(middleColumns);
 
 		// do distinguish between selected and unselected rows we add an
@@ -79,7 +83,7 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onComponentTag(Component component, ComponentTag tag)
+			public void onComponentTag(final Component component, final ComponentTag tag)
 			{
 				super.onComponentTag(component, tag);
 				if (getTreeState().isNodeSelected(node))

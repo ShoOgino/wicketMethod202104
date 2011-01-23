@@ -4,7 +4,7 @@
 	 * 
 	 * @see org.apache.wicket.extensions.breadcrumb.IBreadCrumbParticipant#onActivate(org.apache.wicket.extensions.breadcrumb.IBreadCrumbParticipant)
 	 */
-	public void onActivate(IBreadCrumbParticipant previous)
+	public void onActivate(final IBreadCrumbParticipant previous)
 	{
 		if (previous != null)
 		{
@@ -22,7 +22,8 @@
 					// NOTE unfortunately, we can't rely on the path pre 2.0
 					Component c = parent.visitChildren(new IVisitor<Component, Component>()
 					{
-						public void component(Component component, final IVisit<Component> visit)
+						public void component(final Component component,
+							final IVisit<Component> visit)
 						{
 							if (component.getId().equals(thisId))
 							{
@@ -36,7 +37,7 @@
 						c = parent.visitParents(Component.class,
 							new IVisitor<Component, Component>()
 							{
-								public void component(Component component,
+								public void component(final Component component,
 									final IVisit<Component> visit)
 								{
 									if (component.getId().equals(thisId))

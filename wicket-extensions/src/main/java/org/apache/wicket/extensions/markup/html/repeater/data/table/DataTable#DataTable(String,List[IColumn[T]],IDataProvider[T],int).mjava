@@ -10,12 +10,12 @@
 	 * @param rowsPerPage
 	 *            number of rows per page
 	 */
-	public DataTable(String id, List<IColumn<T>> columns, IDataProvider<T> dataProvider,
-		int rowsPerPage)
+	public DataTable(final String id, final List<IColumn<T>> columns,
+		final IDataProvider<T> dataProvider, final int rowsPerPage)
 	{
 		super(id);
 
-		if (columns == null || columns.size() < 1)
+		if ((columns == null) || (columns.size() < 1))
 		{
 			throw new IllegalArgumentException("Argument `columns` cannot be null or empty");
 		}
@@ -27,7 +27,7 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected Item newCellItem(String id, int index, IModel model)
+			protected Item newCellItem(final String id, final int index, final IModel model)
 			{
 				Item item = DataTable.this.newCellItem(id, index, model);
 				final IColumn<T> column = DataTable.this.columns.get(index);
@@ -48,7 +48,7 @@
 			}
 
 			@Override
-			protected Item<T> newRowItem(String id, int index, IModel<T> model)
+			protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
 			{
 				return DataTable.this.newRowItem(id, index, model);
 			}
