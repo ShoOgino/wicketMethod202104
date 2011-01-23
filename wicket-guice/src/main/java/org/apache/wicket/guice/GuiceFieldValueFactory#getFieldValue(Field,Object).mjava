@@ -1,17 +1,20 @@
-	public Object getFieldValue(Field field, Object fieldOwner)
+	/**
+	 * {@inheritDoc}
+	 */
+	public Object getFieldValue(final Field field, final Object fieldOwner)
 	{
 		Object target = null;
 
 		if (supportsField(field))
 		{
 			Inject injectAnnotation = field.getAnnotation(Inject.class);
-			if (!Modifier.isStatic(field.getModifiers()) && injectAnnotation != null)
+			if (!Modifier.isStatic(field.getModifiers()) && (injectAnnotation != null))
 			{
 				try
 				{
 					Annotation bindingAnnotation = findBindingAnnotation(field.getAnnotations());
 					final IProxyTargetLocator locator = new GuiceProxyTargetLocator(field,
-							bindingAnnotation, injectAnnotation.optional());
+						bindingAnnotation, injectAnnotation.optional());
 
 					if (wrapInProxies)
 					{
@@ -28,19 +31,17 @@
 					}
 
 					field.set(fieldOwner, target);
-
 				}
 				catch (IllegalAccessException e)
 				{
 					throw new WicketRuntimeException("Error Guice-injecting field " +
-							field.getName() + " in " + fieldOwner, e);
+						field.getName() + " in " + fieldOwner, e);
 				}
 				catch (MoreThanOneBindingException e)
 				{
 					throw new RuntimeException(
-							"Can't have more than one BindingAnnotation on field " +
-									field.getName() + " of class " +
-									fieldOwner.getClass().getName());
+						"Can't have more than one BindingAnnotation on field " + field.getName() +
+							" of class " + fieldOwner.getClass().getName());
 				}
 			}
 		}
