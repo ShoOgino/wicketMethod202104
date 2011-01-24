@@ -1,8 +1,13 @@
 	/**
-	 * @see org.apache.wicket.request.IRequestMapper#mapHandler(org.apache.org.apache.wicket.request.IRequestHandler)
+	 * {@inheritDoc}
 	 */
-	public Url mapHandler(final IRequestHandler requestHandler)
+	public Url mapHandler(IRequestHandler requestHandler)
 	{
+		if (requestHandler instanceof IRequestHandlerDelegate)
+		{
+			requestHandler = ((IRequestHandlerDelegate)requestHandler).getDelegateHandler();
+		}
+
 		if (requestHandler instanceof BookmarkablePageRequestHandler)
 		{
 			// simple bookmarkable URL with no page instance information
