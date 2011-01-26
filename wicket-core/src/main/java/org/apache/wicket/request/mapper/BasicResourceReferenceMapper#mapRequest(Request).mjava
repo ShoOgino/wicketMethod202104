@@ -2,6 +2,10 @@
 	{
 		Url url = request.getUrl();
 
+		// extract the PageParameters from URL if there are any
+		PageParameters pageParameters = extractPageParameters(request,
+			url.getSegments().size(), pageParametersEncoder);
+
 		if (url.getSegments().size() >= 4 &&
 			urlStartsWith(url, getContext().getNamespace(), getContext().getResourceIdentifier()))
 		{
@@ -14,13 +18,14 @@
 
 				// if timestamps are enabled the last segment (=resource name)
 				// should be stripped of timestamps
-				if (isTimestampsEnabled() && i + 1 == segmentsSize)
+				if (i + 1 == segmentsSize)
 				{
-					// The last segment eventually contains a timestamp which we have to remove
-					// resource lookup will not care about timestamp but always deliver the
-					// most current version of the resource. After all this whole timestamp
-					// thing is about caching on proxies and browsers but does not affect wicket.
-					segment = stripTimestampFromResourceName(segment);
+					// The filename + parameters eventually contain caching
+					// related information which needs to be removed
+					segment = getCachingStrategy().sanitizeRequest(segment, pageParameters);
+
+					if (segment == null)
+						throw new NullPointerException("caching strategy must not return null for filename");
 				}
 				if (name.length() > 0)
 				{
@@ -30,10 +35,6 @@
 			}
 
 			ResourceReference.UrlAttributes attributes = getResourceReferenceAttributes(url);
-
-			// extract the PageParameters from URL if there are any
-			PageParameters pageParameters = extractPageParameters(request,
-				url.getSegments().size(), pageParametersEncoder);
 
 			Class<?> scope = resolveClass(className);
 			if (scope != null)

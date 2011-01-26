@@ -68,12 +68,8 @@
 			}
 		}
 
-		// if timestamps are enabled on resource we can maximize caching with no pain
-		if (Application.get().getResourceSettings().getUseTimestampOnResources())
-		{
-			resourceResponse.setCacheDurationToMaximum();
-			resourceResponse.setCacheScope(WebResponse.CacheScope.PUBLIC);
-		}
+		// modify the resource response depending on the current caching strategy needs
+		Application.get().getResourceSettings().getResourceCachingStrategy().processResponse(resourceResponse);
 
 		return resourceResponse;
 	}

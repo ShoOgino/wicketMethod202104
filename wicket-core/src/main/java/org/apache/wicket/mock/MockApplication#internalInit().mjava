@@ -2,8 +2,12 @@
 	protected void internalInit()
 	{
 		super.internalInit();
+
+		// set page and session store providers
 		setSessionStoreProvider(new MockSessionStoreProvider());
 		setPageManagerProvider(new MockPageManagerProvider());
-		getResourceSettings().setUseTimestampOnResources(false);
+
+		// for test cases we usually want stable resource names
+		getResourceSettings().setResourceCachingStrategy(NoOpResourceCachingStrategy.INSTANCE);
 	}
 

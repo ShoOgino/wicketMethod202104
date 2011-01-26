@@ -25,6 +25,18 @@
 			segments.add(getContext().getResourceIdentifier());
 			segments.add(getClassName(reference.getScope()));
 
+			// setup resource parameters
+			PageParameters parameters = referenceRequestHandler.getPageParameters();
+
+			if (parameters != null)
+			{
+				parameters = new PageParameters(parameters);
+
+				// need to remove indexed parameters otherwise the URL won't be able to decode
+				parameters.clearIndexed();
+			}
+			encodeResourceReferenceAttributes(url, reference);
+
 			StringTokenizer tokens = new StringTokenizer(reference.getName(), "/");
 
 			while (tokens.hasMoreTokens())
@@ -32,43 +44,21 @@
 				String token = tokens.nextToken();
 
 				// on the last component of the resource path add the timestamp
-				if (isTimestampsEnabled() && tokens.hasMoreTokens() == false)
+				if (tokens.hasMoreTokens() == false)
 				{
-					// get last modification of resource (cached during the current request cycle)
-					Time lastModified = getLastModifiedTimestampUsingCache(reference);
+					token = getCachingStrategy().decorateRequest(token, parameters, reference);
 
-					// if resource provides a timestamp we include it in resource name
-					if (lastModified != null)
-					{
-						// check if resource name has extension
-						int extensionAt = token.lastIndexOf('.');
+					if (token == null)
+						throw new NullPointerException("caching strategy must not return an empty filename");
 
-						// create timestamped version of filename:
-						//
-						// filename :=
-						// [basename][timestamp-prefix][last-modified-milliseconds](.extension)
-						//
-						StringBuilder filename = new StringBuilder();
-						filename.append(extensionAt == -1 ? token : token.substring(0, extensionAt));
-						filename.append(TIMESTAMP_PREFIX);
-						filename.append(lastModified.getMilliseconds());
-
-						if (extensionAt != -1)
-							filename.append(token.substring(extensionAt));
-
-						token = filename.toString();
-					}
+					if (parameters.getIndexedCount() > 0)
+						throw new IllegalStateException("caching strategy must not add indexed parameters");
 				}
 				segments.add(token);
 			}
 
-			encodeResourceReferenceAttributes(url, reference);
-			PageParameters parameters = referenceRequestHandler.getPageParameters();
 			if (parameters != null)
 			{
-				parameters = new PageParameters(parameters);
-				// need to remove indexed parameters otherwise the URL won't be able to decode
-				parameters.clearIndexed();
 				url = encodePageParameters(url, parameters, pageParametersEncoder);
 			}
 

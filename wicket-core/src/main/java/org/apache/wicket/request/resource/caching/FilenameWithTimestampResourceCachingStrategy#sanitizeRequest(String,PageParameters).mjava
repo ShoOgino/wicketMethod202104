@@ -1,21 +1,15 @@
-	/**
-	 * strip timestamp information from resource name
-	 * 
-	 * @param resourceName
-	 * @return
-	 */
-	private String stripTimestampFromResourceName(final String resourceName)
+	public String sanitizeRequest(String filename, PageParameters parameters)
 	{
-		int pos = resourceName.lastIndexOf('.');
+		int pos = filename.lastIndexOf('.');
 
-		final String fullname = pos == -1 ? resourceName : resourceName.substring(0, pos);
-		final String extension = pos == -1 ? null : resourceName.substring(pos);
+		final String fullname = pos == -1 ? filename : filename.substring(0, pos);
+		final String extension = pos == -1 ? null : filename.substring(pos);
 
-		pos = fullname.lastIndexOf(TIMESTAMP_PREFIX);
+		pos = fullname.lastIndexOf(timestampPrefix);
 
 		if (pos != -1)
 		{
-			final String timestamp = fullname.substring(pos + TIMESTAMP_PREFIX.length());
+			final String timestamp = fullname.substring(pos + timestampPrefix.length());
 			final String basename = fullname.substring(0, pos);
 
 			try
@@ -30,9 +24,8 @@
 				// some strange case of coincidence where the filename contains the timestamp prefix
 				// but the timestamp itself is non-numeric - we interpret this situation as
 				// "file has no timestamp"
-
 			}
 		}
-		return resourceName;
+		return filename;
 	}
 
