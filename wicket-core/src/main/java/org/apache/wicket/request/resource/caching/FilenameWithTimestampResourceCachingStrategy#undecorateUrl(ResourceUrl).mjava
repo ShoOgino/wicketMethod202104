@@ -1,5 +1,6 @@
-	public String sanitizeRequest(String filename, PageParameters parameters)
+	public void undecorateUrl(ResourceUrl url)
 	{
+		final String filename = url.getFileName();
 		int pos = filename.lastIndexOf('.');
 
 		final String fullname = pos == -1 ? filename : filename.substring(0, pos);
@@ -17,7 +18,8 @@
 				Long.parseLong(timestamp); // just check the timestamp is numeric
 
 				// create filename without timestamp for resource lookup
-				return extension == null ? basename : basename + extension;
+				url.setFileName(extension == null ? basename : basename + extension);
+				return;
 			}
 			catch (NumberFormatException e)
 			{
@@ -26,6 +28,5 @@
 				// "file has no timestamp"
 			}
 		}
-		return filename;
 	}
 

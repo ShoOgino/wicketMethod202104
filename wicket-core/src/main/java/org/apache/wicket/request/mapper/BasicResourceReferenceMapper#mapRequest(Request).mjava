@@ -3,8 +3,8 @@
 		Url url = request.getUrl();
 
 		// extract the PageParameters from URL if there are any
-		PageParameters pageParameters = extractPageParameters(request,
-			url.getSegments().size(), pageParametersEncoder);
+		PageParameters pageParameters = extractPageParameters(request, url.getSegments().size(),
+			pageParametersEncoder);
 
 		if (url.getSegments().size() >= 4 &&
 			urlStartsWith(url, getContext().getNamespace(), getContext().getResourceIdentifier()))
@@ -22,10 +22,13 @@
 				{
 					// The filename + parameters eventually contain caching
 					// related information which needs to be removed
-					segment = getCachingStrategy().sanitizeRequest(segment, pageParameters);
+					ResourceUrl resourceUrl = new ResourceUrl(segment, pageParameters);
+					getCachingStrategy().undecorateUrl(resourceUrl);
+					segment = resourceUrl.getFileName();
 
 					if (Strings.isEmpty(segment))
-						throw new NullPointerException("caching strategy must not return an empty filename");
+						throw new NullPointerException(
+							"caching strategy must not return an empty filename");
 				}
 				if (name.length() > 0)
 				{

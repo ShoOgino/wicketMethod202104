@@ -1,9 +1,11 @@
-	public String decorateRequest(String filename, PageParameters parameters, ResourceReference reference)
+	public void decorateUrl(ResourceUrl url, ResourceReference reference)
 	{
 		Time lastModified = getLastModified(reference);
 
+		final String filename = url.getFileName();
+
 		if (lastModified == null)
-			return filename;
+			return;
 
 		// check if resource name has extension
 		int extensionAt = filename.lastIndexOf('.');
@@ -14,13 +16,14 @@
 		// [basename][timestamp-prefix][last-modified-milliseconds](.extension)
 		//
 		StringBuilder timestampedFilename = new StringBuilder();
-		timestampedFilename.append(extensionAt == -1 ? filename : filename.substring(0, extensionAt));
+		timestampedFilename.append(extensionAt == -1 ? filename
+			: filename.substring(0, extensionAt));
 		timestampedFilename.append(timestampPrefix);
 		timestampedFilename.append(lastModified.getMilliseconds());
 
 		if (extensionAt != -1)
 			timestampedFilename.append(filename.substring(extensionAt));
 
-		return timestampedFilename.toString();
+		url.setFileName(timestampedFilename.toString());
 	}
 
