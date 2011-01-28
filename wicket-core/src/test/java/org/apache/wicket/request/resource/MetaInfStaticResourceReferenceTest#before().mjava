@@ -1,0 +1,16 @@
+	/**
+	 * Needs to clear META_INF_RESOURCES_SUPPORTED field in {@link MetaInfStaticResourceReference}
+	 * class between tests because classes do not get reloaded between junit tests. This is not a
+	 * problem in production where the servlet container is not changing versions.
+	 * 
+	 * @throws Exception
+	 *             if the reflection magic failed
+	 */
+	@Before
+	public void before() throws Exception
+	{
+		Field field = MetaInfStaticResourceReference.class.getDeclaredField("META_INF_RESOURCES_SUPPORTED");
+		field.setAccessible(true);
+		field.set(null, null);
+	}
+
