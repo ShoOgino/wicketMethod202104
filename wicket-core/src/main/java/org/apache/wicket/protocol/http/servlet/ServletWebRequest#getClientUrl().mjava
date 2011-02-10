@@ -18,7 +18,7 @@
 	{
 		if (!isAjax())
 		{
-			return Url.parse(getUrl(httpServletRequest, filterPrefix).toString(), getCharset());
+			return getUrl(httpServletRequest, filterPrefix);
 		}
 		else
 		{
@@ -33,8 +33,7 @@
 
 			Checks.notNull(base, "Current ajax request is missing the base url header or parameter");
 
-			return Url.parse(base, getCharset());
+			return setParameters(Url.parse(base, getCharset()));
 		}
-
 	}
 
