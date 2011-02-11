@@ -1,15 +1,24 @@
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj instanceof ResourceStreamRequestHandler)
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ResourceStreamRequestHandler other = (ResourceStreamRequestHandler)obj;
+		if (contentDisposition != other.contentDisposition)
+			return false;
+		if (fileName == null)
 		{
-			ResourceStreamRequestHandler that = (ResourceStreamRequestHandler)obj;
-			return resourceStream.equals(that.resourceStream) &&
-				((fileName == null) || fileName.equals(that.fileName));
+			if (other.fileName != null)
+				return false;
 		}
-		return false;
+		else if (!fileName.equals(other.fileName))
+			return false;
+		if (!resourceStream.equals(other.resourceStream))
+			return false;
+		return true;
 	}
 
