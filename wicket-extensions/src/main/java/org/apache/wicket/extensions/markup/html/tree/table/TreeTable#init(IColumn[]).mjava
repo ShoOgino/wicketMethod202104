@@ -33,15 +33,16 @@
 		// scroll together with body. The body contains vertical scrollbar. The
 		// header width must be same as body content width, so that the columns
 		// are properly aligned.
-		add(new Label("attachJavascript", new Model<String>()
+		add(new Behavior()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public String getObject()
+			public void renderHead(final Component component, final IHeaderResponse response)
 			{
-				return "Wicket.TreeTable.attachUpdate(\"" + getMarkupId() + "\");";
+				response.renderOnDomReadyJavaScript("Wicket.TreeTable.attachUpdate(\"" +
+					getMarkupId() + "\")");
 			}
-		}).setEscapeModelStrings(false));
+		});
 	}
 
