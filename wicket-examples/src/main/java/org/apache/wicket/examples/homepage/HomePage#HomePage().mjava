@@ -1,0 +1,38 @@
+	/**
+	 * Construct.
+	 */
+	public HomePage()
+	{
+		super();
+
+		add(new Label("version", new AbstractReadOnlyModel<String>()
+		{
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getObject()
+			{
+
+				/*
+				 * Read the specification version from the wicket-core MANIFEST.MF file.
+				 */
+				Package p = Application.class.getPackage();
+
+				String version = p.getSpecificationVersion();
+
+				if (version == null || version.length() == 0)
+				{
+					return "Missing Version";
+				}
+				else
+				{
+					return version;
+				}
+			}
+		}));
+	}
+
