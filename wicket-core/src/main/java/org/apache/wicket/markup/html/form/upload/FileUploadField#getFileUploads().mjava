@@ -1,0 +1,44 @@
+	/**
+	 * @return a list of all uploaded files. It will return more than one files if:
+	 *         <ul>
+	 *         <li>HTML5 &lt;input type="file" <strong>multiple</strong> /&gt; is used</li>
+	 *         <li>the browser supports <em>multiple</em> attribute</li>
+	 *         <li>the user has selected more than one files from the <em>Select file</em> dialog</li>
+	 *         </ul>
+	 */
+	public List<FileUpload> getFileUploads()
+	{
+		if (fileUploads != null)
+		{
+			return fileUploads;
+		}
+
+		// Get request
+		final Request request = getRequest();
+
+		// If we successfully installed a multipart request
+		if (request instanceof IMultipartWebRequest)
+		{
+			// Get the item for the path
+			final List<FileItem> fileItems = ((IMultipartWebRequest)request).getFile(getInputName());
+
+			if (fileItems != null)
+			{
+				for (FileItem item : fileItems)
+				{
+					// Only update the model when there is a file (larger than zero
+					// bytes)
+					if (item != null && item.getSize() > 0)
+					{
+						if (fileUploads == null)
+						{
+							fileUploads = new ArrayList<FileUpload>();
+						}
+						fileUploads.add(new FileUpload(item));
+					}
+				}
+			}
+		}
+		return fileUploads;
+	}
+

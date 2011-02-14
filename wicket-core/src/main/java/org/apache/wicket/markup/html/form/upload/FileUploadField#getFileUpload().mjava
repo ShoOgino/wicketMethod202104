@@ -1,29 +1,13 @@
 	/**
-	 * @return The uploaded file
+	 * @return the first uploaded file if HTML5 &lt;input type="file" <strong>multiple</strong>
+	 *         /&gt; is used and the browser supports <em>multiple</em>, otherwise returns the
+	 *         single uploaded file.
+	 * @see #getFileUploads()
 	 */
 	public FileUpload getFileUpload()
 	{
-		// Get request
-		final Request request = getRequest();
+		List<FileUpload> fileUploads = getFileUploads();
 
-		// If we successfully installed a multipart request
-		if (request instanceof IMultipartWebRequest)
-		{
-			// Get the item for the path
-			final FileItem item = ((IMultipartWebRequest)request).getFile(getInputName());
-
-			// Only update the model when there is a file (larger than zero
-			// bytes)
-			if (item != null && item.getSize() > 0)
-			{
-				if (fileUpload == null)
-				{
-					fileUpload = new FileUpload(item);
-				}
-
-				return fileUpload;
-			}
-		}
-		return null;
+		return (fileUploads != null && !fileUploads.isEmpty()) ? fileUploads.get(0) : null;
 	}
 
