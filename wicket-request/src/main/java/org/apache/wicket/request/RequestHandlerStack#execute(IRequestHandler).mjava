@@ -1,20 +1,15 @@
 	/**
-	 * Executes the specified {@link IRequestHandler}. When the specified {@link IRequestHandler}
-	 * finishes, the {@link IRequestHandler} that invoked this method continues (unless the new
-	 * {@link IRequestHandler} called {@link #replaceAllRequestHandlers(IRequestHandler)}.
-	 * 
-	 * @param handler
+	 * {@inheritDoc}
 	 */
-	public void executeRequestHandler(final IRequestHandler handler)
+	public void execute(final IRequestHandler handler)
 	{
 		final boolean first = requestHandlers.isEmpty();
 		requestHandlers.add(handler);
 
 		IRequestHandler replacementHandler = null;
-		Response originalResponse = response;
 		try
 		{
-			handler.respond(getRequestCycle());
+			respond(handler);
 		}
 		catch (RuntimeException exception)
 		{
@@ -34,7 +29,6 @@
 		}
 		finally
 		{
-			response = originalResponse;
 			requestHandlers.poll();
 			inactiveRequestHandlers.add(handler);
 		}
@@ -44,11 +38,11 @@
 
 		if (replacementHandler != null)
 		{
-			executeRequestHandler(replacementHandler);
+			execute(replacementHandler);
 		}
 		else if (scheduled != null)
 		{
-			executeRequestHandler(scheduled);
+			execute(scheduled);
 		}
 	}
 

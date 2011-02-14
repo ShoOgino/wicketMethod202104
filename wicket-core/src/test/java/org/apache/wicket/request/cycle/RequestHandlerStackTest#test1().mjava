@@ -6,8 +6,8 @@
 		initFlags();
 
 		final Response originalResponse = newResponse();
-
-		final RequestHandlerStack stack = newStack(originalResponse);
+		final IRequestCycle requestCycle = newRequestCycle(originalResponse);
+		final IRequestHandlerExecutor stack = newStack(requestCycle);
 
 		final IRequestHandler handler3 = new IRequestHandler()
 		{
@@ -28,7 +28,7 @@
 			{
 				testFlag2 = false;
 
-				stack.replaceAllRequestHandlers(handler3);
+				stack.replaceAll(handler3);
 
 				// this code must not be executed
 				testFlag2 = true;
@@ -47,9 +47,9 @@
 				testFlag1 = false;
 
 				Response resp = newResponse();
-				stack.setResponse(resp);
-				stack.executeRequestHandler(handler2);
-				assertEquals(stack.getResponse(), resp);
+				requestCycle.setResponse(resp);
+				stack.execute(handler2);
+				assertEquals(requestCycle.getResponse(), resp);
 
 				// this code must be executed
 				testFlag1 = true;
@@ -61,9 +61,9 @@
 			}
 		};
 
-		stack.executeRequestHandler(handler1);
+		stack.execute(handler1);
 
-		assertEquals(stack.getResponse(), originalResponse);
+		assertEquals(requestCycle.getResponse(), originalResponse);
 
 		stack.detach();
 

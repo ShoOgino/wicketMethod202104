@@ -3,12 +3,16 @@
 	 */
 	public void testExceptionRequestHandlers() throws Exception
 	{
+		IncrementingListener incrementingListener = new IncrementingListener();
+		Application.get().getRequestCycleListeners().add(incrementingListener);
 		Application.get().getRequestCycleListeners().add(new ErrorCodeListener(401));
 
 		RequestCycle cycle = newRequestCycle(true);
 		cycle.processRequestAndDetach();
 
 		assertEquals(401, errorCode);
+		assertEquals(1, incrementingListener.exceptionResolutions);
+		assertEquals(1, incrementingListener.schedules);
 
 		// two listeners that return a request handler should cause an exception
 		Application.get().getRequestCycleListeners().add(new ErrorCodeListener(401));
@@ -20,7 +24,11 @@
 		}
 		catch (WicketRuntimeException e)
 		{
-			// expected
+			/*
+			 * expected, the second handler was resolved but thrown an exception handling the
+			 * request
+			 */
+			assertEquals(2, incrementingListener.resolutions);
 		}
 	}
 
