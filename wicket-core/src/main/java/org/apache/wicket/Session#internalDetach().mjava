@@ -1,0 +1,15 @@
+	/**
+	 * NOT PART OF PUBLIC API, DO NOT CALL
+	 * 
+	 * Detaches internal state of {@link Session}
+	 */
+	public void internalDetach()
+	{
+		if (dirty)
+		{
+			Request request = RequestCycle.get().getRequest();
+			getSessionStore().flushSession(request, this);
+		}
+		dirty = false;
+	}
+

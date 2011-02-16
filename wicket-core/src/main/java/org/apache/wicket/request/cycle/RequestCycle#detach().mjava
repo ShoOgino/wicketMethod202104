@@ -1,36 +1,23 @@
 	/**
-	 * @see org.apache.wicket.request.RequestHandlerStack#detach()
+	 * Detaches {@link RequestCycle} state. Called after request processing is complete
 	 */
-	public void detach()
+	public final void detach()
 	{
 		set(this);
-
-		if (cleanupFeedbackMessagesOnDetach)
-		{
-			if (Session.exists())
-			{
-				Session.get().cleanupFeedbackMessages();
-			}
-		}
-
 		try
 		{
-			onEndRequest();
-			listeners.onEndRequest(this);
-		}
-		catch (RuntimeException e)
-		{
-			log.error("Exception occurred during onAfterRequest", e);
-		}
-
-		try
-		{
-			requestHandlerExecutor.detach();
+			onDetach();
 		}
 		finally
 		{
-			listeners.onDetach(this);
-			set(null);
+			try
+			{
+				onInternalDetach();
+			}
+			finally
+			{
+				set(null);
+			}
 		}
 	}
 
