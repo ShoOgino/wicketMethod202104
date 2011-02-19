@@ -1,0 +1,14 @@
+	/**
+	 * Redirects to the specified intercept page, this will result in a bookmarkable redirect.
+	 * 
+	 * @param interceptPageClass
+	 * @param parameters
+	 */
+	public RestartResponseAtInterceptPageException(Class<? extends Page> interceptPageClass,
+		PageParameters parameters)
+	{
+		super(new RenderPageRequestHandler(new PageProvider(interceptPageClass, parameters),
+			RedirectPolicy.ALWAYS_REDIRECT));
+		InterceptData.set();
+	}
+
