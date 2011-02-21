@@ -1,0 +1,28 @@
+	/**
+	 * This method tries to parse the last response to return the encoded base URL and will throw an
+	 * exception if there none was encoded.
+	 * 
+	 * @return Wicket-Ajax-BaseURL set on last response by {@link AbstractDefaultAjaxBehavior}
+	 * @throws IOException
+	 * @throws ResourceStreamNotFoundException
+	 * @throws ParseException
+	 */
+	public String getWicketAjaxBaseUrlEncodedInLastResponse() throws IOException,
+		ResourceStreamNotFoundException, ParseException
+	{
+		XmlPullParser parser = new XmlPullParser();
+		parser.parse(getLastResponseAsString());
+		XmlTag tag;
+		while ((tag = (XmlTag)parser.nextTag()) != null)
+		{
+			if (tag.isOpen() && tag.getName().equals("script") &&
+				"wicket-ajax-base-url".equals(tag.getString("id")))
+			{
+				parser.next();
+				return parser.getString().toString().split("\\\"")[1];
+			}
+		}
+		throw new WicketRuntimeException(
+			"Last response has no AJAX base URL set by AbstractDefaultAjaxBehavior.");
+	}
+
