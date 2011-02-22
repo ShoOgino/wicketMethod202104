@@ -7,13 +7,20 @@
 	 */
 	public Result isVisible(String path)
 	{
-		Component component = getLastRenderedPage().get(path);
+		Component component = getComponentFromLastRenderedPage(path, false);
+
+		final Result result;
 		if (component == null)
 		{
-			fail("path: '" + path + "' does no exist for page: " +
+			result = Result.fail("path: '" + path + "' does no exist for page: " +
 				Classes.simpleName(getLastRenderedPage().getClass()));
 		}
+		else
+		{
+			result = isTrue("component '" + path + "' is not visible",
+				component.isVisibleInHierarchy());
+		}
 
-		return isTrue("component '" + path + "' is not visible", component.isVisibleInHierarchy());
+		return result;
 	}
 
