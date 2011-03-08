@@ -1,0 +1,19 @@
+	@Test
+	public void normalizePath()
+	{
+		// test basic normalization
+		assertEquals("/foo/bar", UrlUtils.normalizePath("foo/bar"));
+		assertEquals("/foo/bar", UrlUtils.normalizePath("foo/bar/"));
+		assertEquals("/foo/bar", UrlUtils.normalizePath("/foo/bar"));
+		assertEquals("/foo/bar", UrlUtils.normalizePath("/foo/bar/"));
+
+		// test empty string normalization
+		assertEquals("", UrlUtils.normalizePath(null));
+		assertEquals("", UrlUtils.normalizePath(""));
+		assertEquals("", UrlUtils.normalizePath("/"));
+
+		// test trimming
+		assertEquals("", UrlUtils.normalizePath(" / "));
+		assertEquals("/foo/bar", UrlUtils.normalizePath("  foo/bar/  "));
+	}
+
