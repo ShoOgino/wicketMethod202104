@@ -6,26 +6,28 @@
 	 */
 	public String renderFullUrl(Url url)
 	{
-		StringBuilder render = new StringBuilder();
-
 		final String protocol = resolveProtocol(url);
 		final String host = resolveHost(url);
 		final Integer port = resolvePort(url);
 		final String path = url.toString();
 
-		render.append(protocol).append("://").append(host);
+		String render = protocol + "://" + host;
 
 		if (port != null && !port.equals(PROTO_TO_PORT.get(protocol)))
 		{
-			render.append(":").append(port);
+			render += ":" + port;
 		}
 
-		if (!path.startsWith("/"))
+		if (!Strings.isEmpty(request.getContextPath()))
 		{
-			render.append("/");
+			render += request.getContextPath();
+		}
+		if (!Strings.isEmpty(request.getFilterPath()))
+		{
+			render = Strings.join("/", render, request.getFilterPath());
 		}
 
-		render.append(path);
+		render = Strings.join("/", render, path);
 
 		return render.toString();
 	}
