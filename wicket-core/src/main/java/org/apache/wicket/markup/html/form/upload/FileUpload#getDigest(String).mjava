@@ -1,8 +1,9 @@
 	/**
 	 * Get the MD5 checksum.
 	 * 
-	 * @param algorithm the digest algorithm, e.g. MD5, SHA-1, SHA-256, SHA-512
-	 *
+	 * @param algorithm
+	 *            the digest algorithm, e.g. MD5, SHA-1, SHA-256, SHA-512
+	 * 
 	 * @return The cryptographic digest of the file
 	 */
 	public byte[] getDigest(String algorithm)
@@ -23,7 +24,7 @@
 			try
 			{
 				in = item.getInputStream();
-				byte[] buf = new byte[Math.min((int) item.getSize(), 4096 * 10)];
+				byte[] buf = new byte[Math.min((int)item.getSize(), 4096 * 10)];
 				int len;
 				while (-1 != (len = in.read(buf)))
 				{
@@ -33,7 +34,8 @@
 			}
 			catch (IOException ex)
 			{
-				throw new WicketRuntimeException("Error while reading input data for " + algorithm + " checksum", ex);
+				throw new WicketRuntimeException("Error while reading input data for " + algorithm +
+					" checksum", ex);
 			}
 			finally
 			{
@@ -42,8 +44,10 @@
 		}
 		catch (NoSuchAlgorithmException ex)
 		{
-			String error = String.format("Your java runtime does not support digest algorithm [%s]. " +
-					"Please see java.security.MessageDigest.getInstance(\"%s\")", algorithm, algorithm);
+			String error = String.format(
+				"Your java runtime does not support digest algorithm [%s]. "
+					+ "Please see java.security.MessageDigest.getInstance(\"%s\")", algorithm,
+				algorithm);
 
 			throw new WicketRuntimeException(error, ex);
 		}
