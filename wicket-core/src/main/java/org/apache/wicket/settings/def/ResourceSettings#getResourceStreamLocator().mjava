@@ -8,6 +8,10 @@
 			// Create compound resource locator using source path from
 			// application settings
 			resourceStreamLocator = new ResourceStreamLocator(getResourceFinder());
+			if (Application.get().getConfigurationType() == RuntimeConfigurationType.DEPLOYMENT)
+			{
+				resourceStreamLocator = new CachingResourceStreamLocator(resourceStreamLocator);
+			}
 		}
 		return resourceStreamLocator;
 	}

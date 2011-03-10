@@ -1,0 +1,23 @@
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Checks for {@link IResourceStreamReference} in the cache and returns <code>null</code> if the
+	 * result is {@link NullResourceStreamReference#INSTANCE}, or {@link FileResourceStream} /
+	 * {@link UrlResourceStream} if there is an entry in the cache. Otherwise asks the delegate to
+	 * find one and puts it in the cache.
+	 */
+	public IResourceStream locate(Class<?> clazz, String path)
+	{
+		Key key = new Key(clazz.getName(), path, null, null, null);
+		IResourceStream resourceStream = getCopyFromCache(key);
+
+		if (resourceStream == null)
+		{
+			resourceStream = delegate.locate(clazz, path);
+
+			updateCache(key, resourceStream);
+		}
+
+		return resourceStream;
+	}
+

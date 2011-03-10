@@ -1,0 +1,19 @@
+	/**
+	 * Tests NullResourceStreamReference
+	 */
+	@Test
+	public void testNotExistingResource()
+	{
+
+		IResourceStreamLocator resourceStreamLocator = mock(IResourceStreamLocator.class);
+
+		CachingResourceStreamLocator cachingLocator = new CachingResourceStreamLocator(
+			resourceStreamLocator);
+
+		cachingLocator.locate(String.class, "path");
+		cachingLocator.locate(String.class, "path");
+
+		// there is no resource with that Key so expect two calls to the delegate
+		verify(resourceStreamLocator, times(2)).locate(String.class, "path");
+	}
+
