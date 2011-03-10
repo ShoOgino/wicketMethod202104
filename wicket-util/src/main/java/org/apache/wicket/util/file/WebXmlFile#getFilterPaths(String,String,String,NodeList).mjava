@@ -1,29 +1,32 @@
 	/**
 	 * Find a node with name 'mapping' within 'nodeList' and if found continue to search amongst its
 	 * children for a node with 'filterName' and "url-pattern'
-	 * 
+	 *
+	 *
 	 * @param filterName
 	 * @param mapping
 	 * @param name
 	 * @param nodeList
 	 * @return The value assigned to node "url-pattern"
 	 */
-	private String getFilterPath(final String filterName, final String mapping, final String name,
+	private Set<String> getFilterPaths(final String filterName, final String mapping, final String name,
 		final NodeList nodeList)
 	{
-		String path = null;
-		for (int i = 0; (i < nodeList.getLength()) && (path == null); ++i)
+		Set<String> paths = new HashSet<String>(1);
+
+		for (int i = 0; i < nodeList.getLength(); ++i)
 		{
 			Node node = nodeList.item(i);
+
 			if (mapping.equals(node.getNodeName()))
 			{
-				path = getFilterPath(filterName, name, node);
+				paths.addAll(getFilterPaths(filterName, name, node));
 			}
 			else
 			{
-				path = getFilterPath(filterName, mapping, name, node.getChildNodes());
+				paths.addAll(getFilterPaths(filterName, mapping, name, node.getChildNodes()));
 			}
 		}
-		return path;
+		return paths;
 	}
 

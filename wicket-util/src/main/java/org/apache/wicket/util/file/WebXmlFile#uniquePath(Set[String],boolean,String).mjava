@@ -1,0 +1,33 @@
+	/**
+	 * return unique path from set of paths
+	 *
+	 *
+	 * @param paths <code>null</code> if set was empty, unique path if set was of length == 1
+	 * @param isServlet
+	 *@param filterName  @return
+	 * @throws RuntimeException in case length > 1
+	 */
+	private String uniquePath(Set<String> paths, boolean isServlet, String filterName)
+	{
+		if(paths.size() > 1)
+		{
+			StringBuilder err = new StringBuilder();
+			err.append("web.xml: expected one ");
+			err.append(isServlet ? "servlet" : "filter");
+			err.append(" path for [");
+			err.append(filterName);
+			err.append("] but found multiple:");
+
+			for (String path : paths)
+			{
+				err.append(" [" + path + "]");
+			}
+			throw new RuntimeException(err.toString());
+		}
+		if(paths.size() == 1)
+		{
+			return paths.iterator().next();
+		}
+		return null;
+	}
+

@@ -3,7 +3,7 @@
 	 * web.xml file.
 	 * <p>
 	 * A typical Wicket web.xml entry looks like:
-	 * 
+	 *
 	 * <pre>
 	 * <code>
 	 * &lt;filter&gt;
@@ -14,7 +14,7 @@
 	 *     &lt;param-value&gt;org.apache.wicket.examples.helloworld.HelloWorldApplication&lt;/param-value&gt;
 	 *   &lt;/init-param&gt;
 	 * &lt;/filter&gt;
-	 * 
+	 *
 	 * &lt;filter-mapping&gt;
 	 *   &lt;filter-name&gt;HelloWorldApplication&lt;/filter-name&gt;
 	 *   &lt;url-pattern&gt;/helloworld/*&lt;/url-pattern&gt;
@@ -23,7 +23,7 @@
 	 * &lt;/filter-mapping&gt;
 	 * </code>
 	 * </pre>
-	 * 
+	 *
 	 * @param isServlet
 	 *            true if Servlet, false if Filter
 	 * @param filterName
@@ -34,7 +34,7 @@
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public final String getFilterPath(final boolean isServlet, final String filterName,
+	public final Set<String> getFilterPath(final boolean isServlet, final String filterName,
 		final InputStream is) throws ParserConfigurationException, SAXException, IOException
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -47,22 +47,31 @@
 		String mapping = tag + "-mapping";
 		String name = tag + "-name";
 
-		String urlPattern = getFilterPath(filterName, mapping, name, document.getChildNodes());
-		if (urlPattern == null)
+		Set<String> urlPatterns = getFilterPaths(filterName, mapping, name, document.getChildNodes());
+
+		if (urlPatterns.size() == 0)
 		{
-			if (log.isWarnEnabled())
-			{
-				log.warn("web.xml: No url-pattern found for " + tag + " with name " + filterName);
-			}
-			return null;
-		}
-		else if (log.isInfoEnabled())
-		{
-			log.info("web.xml: found " + tag + " with name " + filterName + ". url-pattern=" +
-				urlPattern);
+			log.warn("web.xml: No url-pattern found for " + tag + " with name " + filterName);
 		}
 
-		// remove leading "/" and trailing "*"
-		return urlPattern.substring(1, urlPattern.length() - 1);
+		if(log.isInfoEnabled())
+		{
+			StringBuilder msg = new StringBuilder();
+			msg.append("web.xml: url mapping found for " + tag + " with name " + filterName + ':');
+			for (String urlPattern : urlPatterns)
+			{
+				msg.append(" [");
+				msg.append(urlPattern);
+				msg.append(']');
+			}
+			log.info(msg.toString());
+		}
+		Set<String> stripped = new HashSet<String>(urlPatterns.size());
+
+		for (String urlPattern : urlPatterns)
+		{
+			stripped.add(urlPattern.substring(1, urlPattern.length() - 1));
+		}
+		return stripped;
 	}
 

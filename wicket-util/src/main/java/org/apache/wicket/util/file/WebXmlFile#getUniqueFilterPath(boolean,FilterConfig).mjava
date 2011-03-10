@@ -1,0 +1,15 @@
+	/**
+	 * Gets unique Wicket filter path via FilterConfig
+	 *
+	 * @param isServlet
+	 *            true if Servlet, false if Filter
+	 * @param filterConfig
+	 * @return Filter path retrieved from "url-pattern". Null if not found or error occured
+	 */
+	public final String getUniqueFilterPath(final boolean isServlet, final FilterConfig filterConfig)
+	{
+		String filterName = filterConfig.getFilterName();
+		Set<String> paths = getFilterPath(isServlet, filterConfig.getServletContext(), filterName);
+		return uniquePath(paths, isServlet, filterName);
+	}
+
