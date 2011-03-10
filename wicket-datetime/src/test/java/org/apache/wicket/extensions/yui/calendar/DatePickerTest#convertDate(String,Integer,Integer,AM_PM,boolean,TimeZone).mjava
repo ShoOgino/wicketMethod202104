@@ -1,6 +1,6 @@
 	/**
 	 * Simulate what DateTimeField does
-	 * 
+	 *
 	 * @param dateStr
 	 * @param hours
 	 * @param minutes
@@ -14,34 +14,34 @@
 		final AM_PM amOrPm, final boolean use12HourFormat, final TimeZone tzClient)
 		throws ParseException
 	{
-		log.error(">>> convertDate()");
+		log.debug(">>> convertDate()");
 		Date dateFieldInput = (dateStr != null ? DateFormat.getDateInstance().parse(dateStr) : null);
 
 		// Default to today, if date entry was invisible
 		final MutableDateTime date;
 		if (dateFieldInput != null)
 		{
-			log.error("1. dateFieldInput: " + dateFieldInput.getTime() + "  " + dateFieldInput);
+			log.debug("1. dateFieldInput: " + dateFieldInput.getTime() + "  " + dateFieldInput);
 			date = new MutableDateTime(dateFieldInput);
 		}
 		else
 		{
-			log.error("1. dateFieldInput: null");
+			log.debug("1. dateFieldInput: null");
 			// Current date
 			date = new MutableDateTime();
 		}
-		log.error("2. mutable date: " + date.getMillis() + "  " + date);
+		log.debug("2. mutable date: " + date.getMillis() + "  " + date);
 
 		// always set secs to 0
 		date.setSecondOfMinute(0);
-		log.error("3. secs = 0: " + date.getMillis() + "  " + date);
+		log.debug("3. secs = 0: " + date.getMillis() + "  " + date);
 
 		// The AM/PM field
 		if (use12HourFormat)
 		{
 			date.set(DateTimeFieldType.halfdayOfDay(), amOrPm == AM_PM.PM ? 1 : 0);
 		}
-		log.error("4. AM/PM: " + date.getMillis() + "  " + date);
+		log.debug("4. AM/PM: " + date.getMillis() + "  " + date);
 
 		// The hours
 		if (hours == null)
@@ -52,7 +52,7 @@
 		{
 			date.set(DateTimeFieldType.hourOfDay(), hours % (use12HourFormat ? 12 : 24));
 		}
-		log.error("5. hours: " + date.getMillis() + "  " + date);
+		log.debug("5. hours: " + date.getMillis() + "  " + date);
 
 		// The minutes
 		if (minutes == null)
@@ -63,17 +63,17 @@
 		{
 			date.setMinuteOfHour(minutes);
 		}
-		log.error("6. minutes: " + date.getMillis() + "  " + date);
+		log.debug("6. minutes: " + date.getMillis() + "  " + date);
 
 		// Use the client timezone to properly calculate the millisecs
 		if (tzClient != null)
 		{
 			date.setZoneRetainFields(DateTimeZone.forTimeZone(tzClient));
-			log.error("7. zone: " + date.getMillis() + "  " + date);
+			log.debug("7. zone: " + date.getMillis() + "  " + date);
 		}
 
 		Date rtn = new Date(date.getMillis());
-		log.error("8. final date: " + rtn.getTime() + "  " + rtn);
+		log.debug("8. final date: " + rtn.getTime() + "  " + rtn);
 		return rtn;
 	}
 

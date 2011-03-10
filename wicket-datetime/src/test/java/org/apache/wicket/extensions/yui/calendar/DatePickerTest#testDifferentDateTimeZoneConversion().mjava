@@ -1,12 +1,12 @@
 	/**
 	 * Test date conversion with the server having a different current date than the client time
 	 * zone.
-	 * 
+	 *
 	 * @throws ParseException
 	 */
 	public void testDifferentDateTimeZoneConversion() throws ParseException
 	{
-		log.error("=========== testDifferentDateTimeZoneConversion() =================");
+		log.debug("=========== testDifferentDateTimeZoneConversion() =================");
 		TimeZone origJvmDef = TimeZone.getDefault();
 		DateTimeZone origJodaDef = DateTimeZone.getDefault();
 		TimeZone tzClient = TimeZone.getTimeZone("Australia/South");
@@ -18,13 +18,13 @@
 
 		Class<? extends Page> pageClass = DatesPage2.class;
 		MutableDateTime dt = new MutableDateTime(DateTimeZone.forTimeZone(tzClient));
-		dt.setDateTime(2010, 11, 06, 0, 0, 0, 0);
+		dt.setDateTime(2010, 11, 6, 0, 0, 0, 0);
 		Date date = new Date(dt.getMillis());
 
 		WebClientInfo clientInfo = (WebClientInfo)tester.getSession().getClientInfo();
 		clientInfo.getProperties().setTimeZone(tzClient);
 
-		tester.getSession().setLocale(Locale.GERMAN);
+		tester.getSession().setLocale(Locale.GERMANY);
 		tester.startPage(pageClass);
 		tester.assertRenderedPage(pageClass);
 		FormTester formTester = tester.newFormTester("form");
@@ -36,9 +36,9 @@
 
 		DatesPage2 page = (DatesPage2)tester.getLastRenderedPage();
 
-		log.error("orig: " + date.getTime() + "; date: " + page.date.getTime() + "; dateTime: " +
+		log.debug("orig: " + date.getTime() + "; date: " + page.date.getTime() + "; dateTime: " +
 			page.dateTime.getTime());
-		log.error("orig: " + date + "; date: " + page.date + "; dateTime: " + page.dateTime);
+		log.debug("orig: " + date + "; date: " + page.date + "; dateTime: " + page.dateTime);
 		assertEquals(0, date.compareTo(page.dateTime));
 		assertEquals(0, date.compareTo(page.date));
 

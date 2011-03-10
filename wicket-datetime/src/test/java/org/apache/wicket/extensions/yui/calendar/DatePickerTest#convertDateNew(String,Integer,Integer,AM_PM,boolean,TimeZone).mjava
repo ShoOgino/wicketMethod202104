@@ -1,6 +1,6 @@
 	/**
 	 * Simulate what DateTimeField does
-	 * 
+	 *
 	 * @param dateStr
 	 * @param hours
 	 * @param minutes
@@ -14,7 +14,7 @@
 		final AM_PM amOrPm, final boolean use12HourFormat, final TimeZone tzClient)
 		throws ParseException
 	{
-		log.error(">>> convertDateNew()");
+		log.debug(">>> convertDateNew()");
 		// This is what I get from field.getConvertedInput()
 		Date dateFieldInput = (dateStr != null ? DateFormat.getDateInstance().parse(dateStr) : null);
 
@@ -41,20 +41,20 @@
 		// use tzClient instead. No re-calculation will happen. It should be the same as above.
 // MutableDateTime date = new MutableDateTime(dateFieldInput,
 // DateTimeZone.forTimeZone(tzClient));
-		log.error("1. date: " + date.getMillis() + "  " + date);
+		log.debug("1. date: " + date.getMillis() + "  " + date);
 
 		// Adjust for halfday if needed
-		int halfday = 0;
+		int halfday;
 		if (use12HourFormat)
 		{
 			halfday = (amOrPm == AM_PM.PM ? 1 : 0);
 			date.set(DateTimeFieldType.halfdayOfDay(), halfday);
 			date.set(DateTimeFieldType.hourOfDay(), iHours % 12);
 		}
-		log.error("2. halfday adjustments: " + date.getMillis() + "  " + date);
+		log.debug("2. halfday adjustments: " + date.getMillis() + "  " + date);
 
 		Date rtn = new Date(date.getMillis());
-		log.error("3. final date: " + rtn.getTime() + "  " + rtn);
+		log.debug("3. final date: " + rtn.getTime() + "  " + rtn);
 		return rtn;
 	}
 
