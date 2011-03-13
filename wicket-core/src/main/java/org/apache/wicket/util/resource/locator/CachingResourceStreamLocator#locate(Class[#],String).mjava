@@ -9,15 +9,20 @@
 	public IResourceStream locate(Class<?> clazz, String path)
 	{
 		Key key = new Key(clazz.getName(), path, null, null, null);
-		IResourceStream resourceStream = getCopyFromCache(key);
+		IResourceStreamReference resourceStreamReference = cache.get(key);
 
-		if (resourceStream == null)
+		final IResourceStream result;
+		if (resourceStreamReference == null)
 		{
-			resourceStream = delegate.locate(clazz, path);
+			result = delegate.locate(clazz, path);
 
-			updateCache(key, resourceStream);
+			updateCache(key, result);
+		}
+		else
+		{
+			result = resourceStreamReference.getReference();
 		}
 
-		return resourceStream;
+		return result;
 	}
 

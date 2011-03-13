@@ -2,16 +2,20 @@
 		Locale locale, String extension, boolean strict)
 	{
 		Key key = new Key(scope.getName(), path, locale, style, variation);
-		IResourceStream resourceStream = getCopyFromCache(key);
+		IResourceStreamReference resourceStreamReference = cache.get(key);
 
-		if (resourceStream == null)
+		final IResourceStream result;
+		if (resourceStreamReference == null)
 		{
-			resourceStream = delegate.locate(scope, path, style, variation, locale, extension,
-				strict);
+			result = delegate.locate(scope, path, style, variation, locale, extension, strict);
 
-			updateCache(key, resourceStream);
+			updateCache(key, result);
+		}
+		else
+		{
+			result = resourceStreamReference.getReference();
 		}
 
-		return resourceStream;
+		return result;
 	}
 

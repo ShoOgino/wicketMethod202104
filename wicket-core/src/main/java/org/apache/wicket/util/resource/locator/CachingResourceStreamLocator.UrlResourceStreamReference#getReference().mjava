@@ -1,5 +1,14 @@
-		public String getReference()
+		public UrlResourceStream getReference()
 		{
-			return url;
+			try
+			{
+				return new UrlResourceStream(new URL(url));
+			}
+			catch (MalformedURLException e)
+			{
+				// should not ever happen. The cached url is created by previously existing URL
+				// instance
+				throw new WicketRuntimeException(e);
+			}
 		}
 
