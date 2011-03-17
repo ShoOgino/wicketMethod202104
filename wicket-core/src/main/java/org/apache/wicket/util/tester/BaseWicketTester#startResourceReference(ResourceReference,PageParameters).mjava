@@ -1,0 +1,19 @@
+	/**
+	 * Simulates a request to a mounted {@link ResourceReference}
+	 * 
+	 * @param reference
+	 *            the resource reference to test
+	 * @param pageParameters
+	 *            the parameters passed to the resource reference
+	 * @return the tested resource reference
+	 */
+	public ResourceReference startResourceReference(final ResourceReference reference,
+		final PageParameters pageParameters)
+	{
+		request = new MockHttpServletRequest(application, hsession, servletContext);
+		request.setURL(request.getContextPath() + request.getServletPath() + "/");
+		IRequestHandler handler = new ResourceReferenceRequestHandler(reference, pageParameters);
+		processRequest(request, handler);
+		return reference;
+	}
+
