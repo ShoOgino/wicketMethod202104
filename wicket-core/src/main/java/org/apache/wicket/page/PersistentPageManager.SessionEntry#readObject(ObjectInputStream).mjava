@@ -16,9 +16,19 @@
 
 			// convert to temporary state after deserialization (will need to be processed
 			// by convertAfterReadObject before the pages can be accessed)
+			IPageStore pageStore = getPageStore();
 			for (Serializable ser : l)
 			{
-				afterReadObject.add(getPageStore().restoreAfterSerialization(ser));
+				Object page;
+				if (pageStore != null)
+				{
+					page = pageStore.restoreAfterSerialization(ser);
+				}
+				else
+				{
+					page = ser;
+				}
+				afterReadObject.add(page);
 			}
 		}
 
