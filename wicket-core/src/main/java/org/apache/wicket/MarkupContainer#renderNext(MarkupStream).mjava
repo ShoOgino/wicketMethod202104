@@ -5,8 +5,9 @@
 	 * 
 	 * @param markupStream
 	 *            The markup stream
+	 * @return true, if element was rendered as RawMarkup
 	 */
-	protected final void renderNext(final MarkupStream markupStream)
+	protected final boolean renderNext(final MarkupStream markupStream)
 	{
 		// Get the current markup element
 		final MarkupElement element = markupStream.get();
@@ -35,6 +36,12 @@
 			if (component != null)
 			{
 				component.render();
+			}
+			else if (tag.getFlag(ComponentTag.RENDER_RAW))
+			{
+				// No component found, but "render as raw markup" flag found
+				getResponse().write(element.toCharSequence());
+				return true;
 			}
 			else
 			{
@@ -66,11 +73,10 @@
 		else
 		{
 			// Render as raw markup
-			if (log.isDebugEnabled())
-			{
-				log.debug("Rendering raw markup");
-			}
 			getResponse().write(element.toCharSequence());
+			return true;
 		}
+
+		return false;
 	}
 

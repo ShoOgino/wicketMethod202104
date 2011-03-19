@@ -12,7 +12,7 @@
 			ComponentTag tag;
 			while (null != (tag = getNextTag()))
 			{
-				boolean add = (tag.getId() != null);
+				boolean add = (tag.getId() != null) || tag.getFlag(ComponentTag.ADD);
 				if (!add && tag.getXmlTag().isClose())
 				{
 					add = ((tag.getOpenTag() != null) && (tag.getOpenTag().getId() != null));
@@ -85,6 +85,8 @@
 			// IMarkupFilters might have added elements as well.
 			markup.addMarkupElement(new RawMarkup(text));
 		}
+
+		postProcess(markup);
 
 		// Make all tags immutable and the list of elements unmodifiable
 		markup.makeImmutable();
