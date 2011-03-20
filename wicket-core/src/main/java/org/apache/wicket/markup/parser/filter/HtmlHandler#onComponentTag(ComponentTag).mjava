@@ -1,33 +1,6 @@
-	public MarkupElement nextTag() throws ParseException
+	@Override
+	protected MarkupElement onComponentTag(final ComponentTag tag) throws ParseException
 	{
-		// Get the next tag. If null, no more tags are available
-		final ComponentTag tag = (ComponentTag)getNextFilter().nextTag();
-		if (tag == null)
-		{
-			// No more tags from the markup.
-			// If there's still a non-simple tag left, it's an error
-			while (stack.size() > 0)
-			{
-				final ComponentTag top = stack.peek();
-
-				if (!requiresCloseTag(top.getName()))
-				{
-					stack.pop();
-				}
-				else
-				{
-					throw new WicketParseException("Tag does not have a close tag:", top);
-				}
-			}
-
-			return tag;
-		}
-
-		if (log.isDebugEnabled())
-		{
-			log.debug("tag: " + tag.toUserDebugString() + ", stack: " + stack);
-		}
-
 		// Check tag type
 		if (tag.isOpen())
 		{
@@ -44,7 +17,7 @@
 
 				// If the name of the current close tag does not match the
 				// tag on the stack then we may have a mismatched close tag
-				boolean mismatch = !top.hasEqualTagName(tag);
+				boolean mismatch = !hasEqualTagName(top, tag);
 
 				if (mismatch)
 				{
@@ -63,7 +36,7 @@
 						top = stack.pop();
 
 						// Does new top of stack mismatch too?
-						mismatch = !top.hasEqualTagName(tag);
+						mismatch = !hasEqualTagName(top, tag);
 					}
 
 					// If adjusting for simple tags did not fix the problem,

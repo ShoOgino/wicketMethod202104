@@ -1,0 +1,14 @@
+	/**
+	 * Get the next xml element from the markup. If eof, than retun null. Ignore raw markup. Invoke
+	 * nextTag(tag) if a tag was found.
+	 */
+	public MarkupElement nextElement() throws ParseException
+	{
+		MarkupElement elem = getNextFilter().nextElement();
+		if ((elem != null) && (elem instanceof ComponentTag))
+		{
+			elem = onComponentTag((ComponentTag)elem);
+		}
+		return elem;
+	}
+

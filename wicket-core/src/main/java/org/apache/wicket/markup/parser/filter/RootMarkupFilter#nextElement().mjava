@@ -1,0 +1,18 @@
+	/**
+	 * Skip all xml elements until the next tag.
+	 */
+	@Override
+	public final MarkupElement nextElement() throws ParseException
+	{
+		ELEMENT_TYPE type;
+		while ((type = parser.next()) != ELEMENT_TYPE.TAG)
+		{
+			if (type == ELEMENT_TYPE.NOT_INITIALIZED)
+			{
+				return null;
+			}
+		}
+
+		return new ComponentTag(parser.getElement());
+	}
+

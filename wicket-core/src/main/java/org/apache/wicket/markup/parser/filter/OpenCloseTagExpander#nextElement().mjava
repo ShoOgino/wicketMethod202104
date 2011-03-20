@@ -1,18 +1,27 @@
-	public MarkupElement nextTag() throws ParseException
+	@Override
+	public MarkupElement nextElement() throws ParseException
 	{
+		// Did we hold back an elem? Than return that first
 		if (next != null)
 		{
-			MarkupElement tmp = next;
+			MarkupElement rtn = next;
 			next = null;
-			return tmp;
+			return rtn;
 		}
 
-		ComponentTag tag = nextComponentTag();
-		if (tag == null)
+		// Find the next tag
+		MarkupElement elem;
+		do
 		{
-			return tag;
+			elem = getNextFilter().nextElement();
+			if (elem == null)
+			{
+				return null;
+			}
 		}
+		while (elem instanceof RawMarkup);
 
+		ComponentTag tag = (ComponentTag)elem;
 		if (tag.isOpenClose())
 		{
 			String name = tag.getName();

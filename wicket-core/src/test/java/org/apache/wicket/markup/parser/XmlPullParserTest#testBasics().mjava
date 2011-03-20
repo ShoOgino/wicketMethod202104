@@ -6,11 +6,11 @@
 	{
 		final XmlPullParser parser = new XmlPullParser();
 		parser.parse("This is a text");
-		MarkupElement elem = parser.nextTag();
+		XmlTag elem = parser.nextTag();
 		assertNull(elem);
 
 		parser.parse("<tag/>");
-		XmlTag tag = (XmlTag)parser.nextTag();
+		XmlTag tag = parser.nextTag();
 		assertFalse(tag.isOpen());
 		// assertFalse(tag.isOpen("tag"));
 		// assertFalse(tag.isOpen("xxx"));
@@ -23,7 +23,7 @@
 
 		// extra spaces
 		parser.parse("<tag ></tag >");
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		assertTrue(tag.isOpen());
 		// assertTrue(tag.isOpen("tag"));
 		// assertFalse(tag.isOpen("xxx"));
@@ -34,7 +34,7 @@
 		assertNull(tag.getNamespace());
 		assertEquals(0, tag.getAttributes().size());
 
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		assertFalse(tag.isOpen());
 		// assertFalse(tag.isOpen("tag"));
 		// assertFalse(tag.isOpen("xxx"));
@@ -46,44 +46,44 @@
 		assertEquals(0, tag.getAttributes().size());
 
 		parser.parse("<tag>  </tag>");
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		// assertTrue(tag.isOpen("tag"));
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		assertTrue(tag.isClose());
 
 		parser.parse("xx <tag> yy </tag> zz");
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		// assertTrue(tag.isOpen("tag"));
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		assertTrue(tag.isClose());
 
 		// XmlPullParser does NOT check that tags get properly closed
 		parser.parse("<tag>");
-		tag = (XmlTag)parser.nextTag();
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
+		tag = parser.nextTag();
 		assertNull(elem);
 
 		parser.parse("<tag> <tag> <tag>");
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 		// assertTrue(tag.isOpen("tag"));
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 // assertTrue(tag.isOpen("tag"));
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 // assertTrue(tag.isOpen("tag"));
 
 		parser.parse("<ns:tag/>");
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 // assertTrue(tag.isOpenClose("tag"));
 		assertEquals("ns", tag.getNamespace());
 		assertEquals("tag", tag.getName());
 
 		parser.parse("<ns:tag></ns:tag>");
-		tag = (XmlTag)parser.nextTag();
+		tag = parser.nextTag();
 // assertTrue(tag.isOpen("tag"));
 		assertEquals("ns", tag.getNamespace());
 		assertEquals("tag", tag.getName());
 
-		XmlTag closeTag = (XmlTag)parser.nextTag();
+		XmlTag closeTag = parser.nextTag();
 		assertTrue(closeTag.isClose());
 		assertEquals("ns", closeTag.getNamespace());
 		assertEquals("tag", closeTag.getName());
