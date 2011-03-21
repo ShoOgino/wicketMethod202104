@@ -28,8 +28,12 @@
 			@Override
 			protected String getOnClickScript(CharSequence url)
 			{
+				IRequestHandler handler = new ListenerInterfaceRequestHandler(
+					new PageAndComponentProvider(getPage(), this), ILinkListener.INTERFACE);
+				Url componentUrl = RequestCycle.get().mapUrlFor(handler);
+				componentUrl.addQueryParameter("anticache", Math.random());
 				return new AppendingStringBuffer("new Ajax.Updater('counter', '").append(
-					urlFor(ILinkListener.INTERFACE))
+					componentUrl)
 					.append("', {method:'get'}); return false;")
 					.toString();
 			}

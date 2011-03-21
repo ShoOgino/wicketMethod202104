@@ -1,5 +1,11 @@
 	public void respond(IRequestCycle requestCycle)
 	{
+		// preventing the response to component from being cached
+		if (requestCycle.getResponse() instanceof WebResponse)
+		{
+			WebResponse response = (WebResponse)requestCycle.getResponse();
+			response.disableCaching();
+		}
 		component.render();
 	}
 
