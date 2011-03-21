@@ -1,12 +1,13 @@
 	/**
 	 * Parses the text between tags. For example, "a href=foo.html".
 	 * 
+	 * @param tag
 	 * @param tagText
 	 *            The text between tags
-	 * @return A new Tag object or null if the tag is invalid
+	 * @return false in case of an error
 	 * @throws ParseException
 	 */
-	private XmlTag parseTagText(final String tagText) throws ParseException
+	private boolean parseTagText(final XmlTag tag, final String tagText) throws ParseException
 	{
 		// Get the length of the tagtext
 		final int tagTextLength = tagText.length();
@@ -15,8 +16,6 @@
 		final TagNameParser tagnameParser = new TagNameParser(tagText);
 		if (tagnameParser.matcher().lookingAt())
 		{
-			final XmlTag tag = new XmlTag();
-
 			// Extract the tag from the pattern matcher
 			tag.name = tagnameParser.getName();
 			tag.namespace = tagnameParser.getNamespace();
@@ -26,7 +25,7 @@
 			int pos = tagnameParser.matcher().end(0);
 			if (pos == tagTextLength)
 			{
-				return tag;
+				return true;
 			}
 
 			// Extract attributes
@@ -68,13 +67,13 @@
 				// attributes)
 				if (pos == tagTextLength)
 				{
-					return tag;
+					return true;
 				}
 			}
 
-			return tag;
+			return true;
 		}
 
-		return null;
+		return false;
 	}
 

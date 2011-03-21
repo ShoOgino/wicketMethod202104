@@ -4,6 +4,11 @@
 	 */
 	protected void postProcess(final Markup markup)
 	{
-		markupFilterChain.postProcess(markup);
+		IMarkupFilter filter = markupFilterChain;
+		while (filter != null)
+		{
+			filter.postProcess(markup);
+			filter = filter.getNextFilter();
+		}
 	}
 

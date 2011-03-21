@@ -1,0 +1,38 @@
+	/**
+	 * Assert that tag has no mismatch error. If the parameter is an open tag, just push it on stack
+	 * to be tested latter.
+	 * 
+	 * @param tag
+	 * @throws ParseException
+	 */
+	public void assertValidInStack(ComponentTag tag) throws ParseException
+	{
+		// Get the next tag. If null, no more tags are available
+		if (tag == null)
+		{
+			validate();
+			return;
+		}
+
+		if (log.isDebugEnabled() && debug)
+		{
+			log.debug("tag: " + tag.toUserDebugString() + ", stack: " + stack);
+		}
+
+		// Check tag type
+		if (tag.isOpen())
+		{
+			// Push onto stack
+			stack.push(tag);
+		}
+		else if (tag.isClose())
+		{
+			assertOpenTagFor(tag);
+		}
+		else if (tag.isOpenClose())
+		{
+			// Tag closes itself
+			tag.setOpenTag(tag);
+		}
+	}
+

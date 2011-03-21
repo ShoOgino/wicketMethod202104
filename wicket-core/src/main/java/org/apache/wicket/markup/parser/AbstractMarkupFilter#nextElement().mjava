@@ -5,9 +5,16 @@
 	public MarkupElement nextElement() throws ParseException
 	{
 		MarkupElement elem = getNextFilter().nextElement();
-		if ((elem != null) && (elem instanceof ComponentTag))
+		if (elem != null)
 		{
-			elem = onComponentTag((ComponentTag)elem);
+			if (elem instanceof ComponentTag)
+			{
+				elem = onComponentTag((ComponentTag)elem);
+			}
+			else if (elem instanceof HtmlSpecialTag)
+			{
+				elem = onSpecialTag((HtmlSpecialTag)elem);
+			}
 		}
 		return elem;
 	}

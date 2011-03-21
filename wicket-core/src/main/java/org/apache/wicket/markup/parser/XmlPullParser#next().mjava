@@ -2,12 +2,12 @@
 	 * @return XXX
 	 * @throws ParseException
 	 */
-	public final ELEMENT_TYPE next() throws ParseException
+	public final HttpTagType next() throws ParseException
 	{
 		// Reached end of markup file?
 		if (input.getPosition() >= input.size())
 		{
-			return ELEMENT_TYPE.NOT_INITIALIZED;
+			return HttpTagType.NOT_INITIALIZED;
 		}
 
 		if (skipUntilText != null)
@@ -22,18 +22,19 @@
 		// Tag or Body?
 		if (input.charAt(input.getPosition()) != '<')
 		{
+			// It's a BODY
 			if (openBracketIndex == -1)
 			{
 				// There is no next matching tag.
 				lastText = input.getSubstring(-1);
 				input.setPosition(input.size());
-				lastType = ELEMENT_TYPE.BODY;
+				lastType = HttpTagType.BODY;
 				return lastType;
 			}
 
 			lastText = input.getSubstring(openBracketIndex);
 			input.setPosition(openBracketIndex);
-			lastType = ELEMENT_TYPE.BODY;
+			lastType = HttpTagType.BODY;
 			return lastType;
 		}
 
@@ -57,14 +58,6 @@
 		{
 			throw new ParseException("Found empty tag: '<>' at" + getLineAndColumnText(),
 				input.getPosition());
-		}
-
-		// Handle special tags like <!-- and <![CDATA ...
-		final char firstChar = tagText.charAt(0);
-		if ((firstChar == '!') || (firstChar == '?'))
-		{
-			specialTagHandling(tagText, openBracketIndex, closeBracketIndex);
-			return lastType;
 		}
 
 		// Type of the tag, to be determined next
@@ -105,19 +98,31 @@
 			}
 		}
 
-		// Parse remaining tag text, obtaining a tag object or null
-		// if it's invalid
-		lastTag = parseTagText(tagText);
-		if (lastTag != null)
+		// Handle special tags like <!-- and <![CDATA ...
+		final char firstChar = tagText.charAt(0);
+		if ((firstChar == '!') || (firstChar == '?'))
 		{
-			// Populate tag fields
-			lastTag.type = type;
-			lastTag.text = new TextSegment(lastText, openBracketIndex, input.getLineNumber(),
-				input.getColumnNumber());
+			specialTagHandling(tagText, openBracketIndex, closeBracketIndex);
 
+			input.countLinesTo(openBracketIndex);
+			TextSegment text = new TextSegment(lastText, openBracketIndex, input.getLineNumber(),
+				input.getColumnNumber());
+			lastTag = new XmlTag(text, type);
+
+			return lastType;
+		}
+
+		TextSegment text = new TextSegment(lastText, openBracketIndex, input.getLineNumber(),
+			input.getColumnNumber());
+		XmlTag tag = new XmlTag(text, type);
+		lastTag = tag;
+
+		// Parse the tag text and populate tag attributes
+		if (parseTagText(tag, tagText))
+		{
 			// Move to position after the tag
 			input.setPosition(closeBracketIndex + 1);
-			lastType = ELEMENT_TYPE.TAG;
+			lastType = HttpTagType.TAG;
 			return lastType;
 		}
 		else
