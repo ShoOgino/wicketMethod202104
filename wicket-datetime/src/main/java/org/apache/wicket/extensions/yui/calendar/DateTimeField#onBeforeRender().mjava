@@ -20,14 +20,14 @@
 		}
 		else
 		{
-			MutableDateTime mDate = new MutableDateTime(modelObject);
-
 			// convert date to the client's time zone if we have that info
 			TimeZone zone = getClientTimeZone();
 			if (zone != null)
 			{
-				mDate.setZone(DateTimeZone.forTimeZone(zone));
+				modelObject = changeTimeZone(modelObject, zone);
 			}
+
+			MutableDateTime mDate = new MutableDateTime(modelObject);
 
 			date = mDate.toDate();
 
