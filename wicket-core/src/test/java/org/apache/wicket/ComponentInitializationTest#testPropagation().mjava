@@ -7,8 +7,15 @@
 		TestComponent t3 = new TestComponent("t3");
 		TestComponent t4 = new TestComponent("t4");
 
-		// as soon as we add to page child should be initialized
+		// component is not initialized until the page has been
 		page.add(t1);
+		assertEquals(0, page.getCount());
+		assertEquals(0, t1.getCount());
+
+		// initialize the page which will initialize t1 and make subsequent component
+		// initializations immediate on add
+		page.internalInitialize();
+		assertEquals(1, page.getCount());
 		assertEquals(1, t1.getCount());
 
 		// unless the page is available no initialization takes place
