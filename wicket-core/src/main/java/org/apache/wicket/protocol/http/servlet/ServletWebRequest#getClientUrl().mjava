@@ -10,13 +10,17 @@
 	 * the base url is wicket/bookmarkable/com.foo.Page
 	 * 
 	 * <pre>
-	 * wicket / bookmarkab
+	 * 
 	 * @see org.apache.wicket.request.Request#getClientUrl()
 	 */
 	@Override
 	public Url getClientUrl()
 	{
-		if (!isAjax())
+		if (errorAttributes != null && !Strings.isEmpty(errorAttributes.getRequestUri()))
+		{
+			return setParameters(Url.parse(errorAttributes.getRequestUri(), getCharset()));
+		}
+		else if (!isAjax())
 		{
 			return getUrl(httpServletRequest, filterPrefix);
 		}
