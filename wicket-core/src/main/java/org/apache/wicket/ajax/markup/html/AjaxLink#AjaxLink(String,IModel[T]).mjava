@@ -7,32 +7,5 @@
 	public AjaxLink(final String id, final IModel<T> model)
 	{
 		super(id, model);
-
-		add(new AjaxEventBehavior("onclick")
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target)
-			{
-				onClick(target);
-			}
-
-			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator()
-			{
-				return new CancelEventIfNoAjaxDecorator(AjaxLink.this.getAjaxCallDecorator());
-			}
-
-			@Override
-			protected void onComponentTag(ComponentTag tag)
-			{
-				// add the onclick handler only if link is enabled
-				if (isLinkEnabled())
-				{
-					super.onComponentTag(tag);
-				}
-			}
-		});
 	}
 
