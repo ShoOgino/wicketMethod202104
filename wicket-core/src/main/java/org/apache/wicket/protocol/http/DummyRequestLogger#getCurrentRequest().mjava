@@ -6,7 +6,12 @@
 		{
 			rd = new RequestData();
 			requestCycle.setMetaData(REQUEST_DATA, rd);
-			activeRequests.incrementAndGet();
+			int activeCount = activeRequests.incrementAndGet();
+
+			if (activeCount > peakActiveRequests.get())
+			{
+				peakActiveRequests.set(activeCount);
+			}
 		}
 		return rd;
 	}
