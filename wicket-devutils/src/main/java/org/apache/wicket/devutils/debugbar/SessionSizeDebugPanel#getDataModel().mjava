@@ -6,7 +6,6 @@
 			private static final long serialVersionUID = 1L;
 
 			private final IModel<Bytes> size = new SessionSizeModel(Session.get());
-			private final IModel<Bytes> totalSize = new SessionTotalSizeModel(Session.get());
 
 			@Override
 			public String getObject()
@@ -15,11 +14,7 @@
 				String sessionSizeAsString = sessionSizeInBytes != null
 					? sessionSizeInBytes.toString() : "unknown";
 
-				Bytes totalSizeInBytes = totalSize.getObject();
-				String totalSizeAsString = totalSizeInBytes != null ? totalSizeInBytes.toString()
-					: "unknown";
-
-				return sessionSizeAsString + " / " + totalSizeAsString;
+				return "Session: " + sessionSizeAsString;
 			}
 
 			@Override
@@ -27,7 +22,6 @@
 			{
 				super.detach();
 				size.detach();
-				totalSize.detach();
 			}
 		};
 	}
