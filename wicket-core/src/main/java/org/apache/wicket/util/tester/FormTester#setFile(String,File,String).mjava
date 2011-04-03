@@ -9,8 +9,10 @@
 	 *            the <code>File</code> to upload.
 	 * @param contentType
 	 *            the content type of the file. Must be a valid mime type.
+	 * @return This
 	 */
-	public void setFile(final String formComponentId, final File file, final String contentType)
+	public FormTester setFile(final String formComponentId, final File file,
+		final String contentType)
 	{
 		checkClosed();
 
@@ -25,5 +27,7 @@
 
 		MockHttpServletRequest servletRequest = tester.getRequest();
 		servletRequest.addFile(formComponent.getInputName(), file, contentType);
+
+		return this;
 	}
 

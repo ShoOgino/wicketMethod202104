@@ -5,17 +5,19 @@
 	 * <code>setValue</code> method instead:
 	 * 
 	 * <pre>
-	 * formTester.setValue(&quot;to:my:button&quot;, &quot;value on the button&quot;);
+	 * formTester.setValue(myButton, &quot;value on the button&quot;);
 	 * formTester.submit();
 	 * </pre>
 	 * 
-	 * @param buttonComponentId
+	 * @param buttonComponent
 	 *            relative path (from <code>Form</code>) to the button
 	 * @return This
 	 */
-	public FormTester submit(final String buttonComponentId)
+	public FormTester submit(final Component buttonComponent)
 	{
-		setValue(buttonComponentId, "marked");
+		Args.notNull(buttonComponent, "buttonComponent");
+
+		setValue(buttonComponent, "marked");
 		return submit();
 	}
 
