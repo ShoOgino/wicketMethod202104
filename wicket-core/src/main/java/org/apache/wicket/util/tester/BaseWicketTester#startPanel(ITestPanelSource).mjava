@@ -20,19 +20,12 @@
 	 * @param testPanelSource
 	 *            a <code>Panel</code> factory that creates test <code>Panel</code> instances
 	 * @return a rendered <code>Panel</code>
+	 * @deprecated since 1.5 use startPanel(panel) instead
 	 */
+	@Deprecated
 	public final Panel startPanel(final ITestPanelSource testPanelSource)
 	{
-		Panel panel = (Panel)startPage(new ITestPageSource()
-		{
-			private static final long serialVersionUID = 1L;
-
-			public Page getTestPage()
-			{
-				return new DummyPanelPage(testPanelSource);
-			}
-		}).get(DummyPanelPage.TEST_PANEL_ID);
-		startComponent = panel;
-		return panel;
+		return (Panel)startComponent(testPanelSource.getTestPanel(DummyPanelPage.TEST_PANEL_ID),
+			null);
 	}
 

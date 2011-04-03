@@ -1,9 +1,19 @@
 	/**
 	 * 
-	 * @return last response as String
+	 * @return last response as String. In case the component processed was not a Page, than the
+	 *         automatically created page markup gets removed.
 	 */
 	public String getLastResponseAsString()
 	{
-		return lastResponse.getDocument();
+		String response = lastResponse.getDocument();
+		if (startComponent == null)
+		{
+			return response;
+		}
+
+		// Remove first and last tag
+		int pos1 = response.indexOf('>');
+		int pos2 = response.lastIndexOf('<');
+		return response.substring(pos1 + 1, pos2);
 	}
 

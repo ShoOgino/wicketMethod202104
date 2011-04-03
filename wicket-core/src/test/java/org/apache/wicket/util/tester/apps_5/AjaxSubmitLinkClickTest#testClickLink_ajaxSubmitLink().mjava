@@ -25,21 +25,13 @@
 		};
 		page.add(link);
 
-		tester.startPage(new ITestPageSource()
-		{
-			private static final long serialVersionUID = 1L;
-
-			public Page getTestPage()
-			{
-				return page;
-			}
-		});
-
+		tester.startPage(page);
 		tester.assertRenderedPage(MockPageWithFormAndLink.class);
 
 		// Change the name in the textfield
-		tester.getRequest().getPostParameters().setParameterValue(
-			page.getNameField().getInputName(), "new mock value");
+		tester.getRequest()
+			.getPostParameters()
+			.setParameterValue(page.getNameField().getInputName(), "new mock value");
 
 		// Click the submit link
 		tester.clickLink("link");
