@@ -10,10 +10,15 @@
 	public ResourceReference startResourceReference(final ResourceReference reference,
 		final PageParameters pageParameters)
 	{
-		request = new MockHttpServletRequest(application, hsession, servletContext);
+		// prepare request
+		request = new MockHttpServletRequest(application, httpSession, servletContext);
 		request.setURL(request.getContextPath() + request.getServletPath() + "/");
 		IRequestHandler handler = new ResourceReferenceRequestHandler(reference, pageParameters);
+
+		// execute request
 		processRequest(request, handler);
+
+		// the reference processed
 		return reference;
 	}
 

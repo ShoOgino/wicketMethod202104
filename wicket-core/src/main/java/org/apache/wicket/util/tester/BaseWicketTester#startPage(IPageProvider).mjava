@@ -9,13 +9,20 @@
 	 * @param pageProvider
 	 * @return last rendered page
 	 */
-	public Page startPage(IPageProvider pageProvider)
+	public Page startPage(final IPageProvider pageProvider)
 	{
+		// should be null for Pages
 		startComponent = null;
-		request = new MockHttpServletRequest(application, hsession, servletContext);
+
+		// prepare request
+		request = new MockHttpServletRequest(application, httpSession, servletContext);
 		request.setURL(request.getContextPath() + request.getServletPath() + "/");
 		IRequestHandler handler = new RenderPageRequestHandler(pageProvider);
+
+		// process request
 		processRequest(request, handler);
+
+		// The page rendered
 		return getLastRenderedPage();
 	}
 

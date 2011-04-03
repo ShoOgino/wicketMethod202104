@@ -6,12 +6,14 @@
 	public String getLastResponseAsString()
 	{
 		String response = lastResponse.getDocument();
+
+		// null, if a Page was rendered last
 		if (startComponent == null)
 		{
 			return response;
 		}
 
-		// Remove first and last tag
+		// Remove first and last tag of surrounding page
 		int pos1 = response.indexOf('>');
 		int pos2 = response.lastIndexOf('<');
 		return response.substring(pos1 + 1, pos2);

@@ -9,12 +9,14 @@
 	 * @return The component at the path
 	 * @see org.apache.wicket.MarkupContainer#get(String)
 	 */
-	public Component getComponentFromLastRenderedPage(String path, boolean wantVisibleInHierarchy)
+	public Component getComponentFromLastRenderedPage(String path,
+		final boolean wantVisibleInHierarchy)
 	{
 		if (startComponent != null)
 		{
 			path = startComponent.getId() + ":" + path;
 		}
+
 		Component component = getLastRenderedPage().get(path);
 		if (component == null)
 		{
@@ -22,10 +24,13 @@
 				Classes.simpleName(getLastRenderedPage().getClass()));
 			return component;
 		}
+
 		if (!wantVisibleInHierarchy || component.isVisibleInHierarchy())
 		{
 			return component;
 		}
+
+		// Not found or not visible
 		return null;
 	}
 

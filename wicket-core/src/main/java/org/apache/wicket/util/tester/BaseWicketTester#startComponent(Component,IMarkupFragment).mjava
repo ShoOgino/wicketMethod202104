@@ -11,21 +11,27 @@
 	{
 		Args.notNull(component, "component");
 
+		// Automatically create the page markup if not provided
 		if (pageMarkup == null)
 		{
 			pageMarkup = Markup.of("<span wicket:id='" + component.getId() + "'></span>");
 		}
 
+		// Create a page object and assign the markup
 		Page page = new WebPage()
 		{
 			private static final long serialVersionUID = 1L;
 		};
 
 		page.setMarkup(pageMarkup);
+
+		// Add the child component
 		page.add(component);
 
+		// Process the page
 		startPage(page);
 
+		// Remember the "root" component processes and return it
 		return startComponent = component;
 	}
 

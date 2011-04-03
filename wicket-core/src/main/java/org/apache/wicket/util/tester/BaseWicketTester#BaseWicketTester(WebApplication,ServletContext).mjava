@@ -3,11 +3,10 @@
 	 * 
 	 * @param application
 	 *            a <code>WicketTester</code> <code>WebApplication</code> object
-	 * 
 	 * @param servletCtx
 	 *            the servlet context used as backend
 	 */
-	public BaseWicketTester(final WebApplication application, ServletContext servletCtx)
+	public BaseWicketTester(final WebApplication application, final ServletContext servletCtx)
 	{
 		servletContext = servletCtx != null ? servletCtx
 			: new MockServletContext(application, null);
@@ -21,9 +20,10 @@
 				return filterConfig;
 			}
 		};
+
 		application.setWicketFilter(filter);
 
-		hsession = new MockHttpSession(servletContext);
+		httpSession = new MockHttpSession(servletContext);
 
 		ThreadContext.detach();
 
@@ -31,13 +31,13 @@
 
 		// FIXME some tests are leaking applications by not calling destroy on them or overriding
 		// teardown() without calling super, for now we work around by making each name unique
-		this.application.setName("WicketTesterApplication-" + UUID.randomUUID());
+		application.setName("WicketTesterApplication-" + UUID.randomUUID());
 		ThreadContext.setApplication(application);
 
 		application.setServletContext(servletContext);
 
 		// initialize the application
-		this.application.initApplication();
+		application.initApplication();
 
 		// reconfigure application for the test environment
 		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
@@ -49,11 +49,5 @@
 
 		// prepare session
 		setupNextRequestCycle();
-
-		// Remove comments to run all tests with filter extensions added
-// IWicketFilterExtension filter1 = new XForwardedWicketFilterExtension();
-// IWicketFilterExtension filter2 = new SecuredRemoteAddressWicketFilterExtension();
-// getApplication().getWicketFilter().addFilter(filter1);
-// getApplication().getWicketFilter().addFilter(filter2);
 	}
 
