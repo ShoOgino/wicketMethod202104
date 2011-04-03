@@ -1,0 +1,21 @@
+	/**
+	 * Tests the <code>toString</code> method.
+	 */
+	public void testToString()
+	{
+		assertNull(Strings.toString((Object)null));
+		assertEquals("", Strings.toString(""));
+
+		assertEquals("<Null Throwable>", Strings.toString(null));
+		try
+		{
+			throw new IllegalArgumentException("Foo");
+		}
+		catch (IllegalArgumentException e)
+		{
+			final String toString = Strings.toString((Object)e);
+			String before = Strings.beforeFirst(toString, '\n').trim();
+			assertEquals("Message: Foo", before);
+		}
+	}
+
