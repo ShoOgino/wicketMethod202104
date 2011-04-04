@@ -1,0 +1,27 @@
+	/**
+	 * @param event
+	 *            the name of the default event on which this link will listen to
+	 * @return the ajax behavior which will be executed when the user clicks the link
+	 */
+	protected AjaxEventBehavior newAjaxEventBehavior(final String event)
+	{
+		return new AjaxEventBehavior(event)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(final AjaxRequestTarget target)
+			{
+				onClick();
+				onClick(target);
+			}
+
+			@Override
+			protected IAjaxCallDecorator getAjaxCallDecorator()
+			{
+				return new CancelEventIfNoAjaxDecorator(decorator);
+			}
+		};
+
+	}
+
