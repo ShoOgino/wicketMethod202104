@@ -5,7 +5,7 @@
 	 */
 	private Component getChildComponent(final MarkupStream markupStream, MarkupContainer container)
 	{
-		Component controller = container.get(childId.toString());
+		Component controller = getEnclosureParent().get(getChildId());
 		if (controller == null)
 		{
 			int orgIndex = markupStream.getCurrentIndex();
@@ -41,6 +41,8 @@
 				markupStream.setCurrentIndex(orgIndex);
 			}
 		}
+
+		checkChildComponent(controller);
 		return controller;
 	}
 

@@ -1,0 +1,29 @@
+	/**
+	 * Try to find Enclosures that have their controllers added already, and add them to the target.
+	 */
+	public void onBeforeRespond(final Map<String, Component> map, final AjaxRequestTarget target)
+	{
+		// We need to iterate over the map, but the map changes if we add an
+		// InlineEnclosure to the target. --> make a copy of the map and iterate that instead.
+		final List<Component> originalComponents = Collections.unmodifiableList(new ArrayList<Component>(
+			map.values()));
+
+		target.getPage().visitChildren(InlineEnclosure.class, new IVisitor<InlineEnclosure, Void>()
+		{
+			public void component(final InlineEnclosure enclosure, final IVisit<Void> visit)
+			{
+				for (Component component : originalComponents)
+				{
+					if (isControllerOfEnclosure(component, enclosure))
+					{
+						// update the visibility of the enclosure
+						enclosure.updateVisibility();
+
+						// add enclosure to Ajax target
+						target.add(enclosure);
+					}
+				}
+			}
+		});
+	}
+

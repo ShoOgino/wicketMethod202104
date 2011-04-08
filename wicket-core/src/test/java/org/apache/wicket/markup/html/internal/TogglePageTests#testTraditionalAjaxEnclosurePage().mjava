@@ -1,0 +1,33 @@
+	/**
+	 * 
+	 */
+	public void testTraditionalAjaxEnclosurePage()
+	{
+		{
+			// On
+			TraditionalEnclosureAjaxPage ajaxPage = (TraditionalEnclosureAjaxPage)tester.startPage(TraditionalEnclosureAjaxPage.class);
+			assertVisible(ajaxPage.getToggleable());
+			tester.clickLink(ajaxPage.getLink().getPageRelativePath(), true);
+		}
+		{
+			// Off
+			TraditionalEnclosureAjaxPage ajaxPage = (TraditionalEnclosureAjaxPage)tester.getLastRenderedPage();
+			tester.assertComponentOnAjaxResponse(ajaxPage.getTraditionalAjaxVisibilityToggleRequiresPlaceholder());
+			assertInvisible(ajaxPage.getToggleable());
+			tester.clickLink(ajaxPage.getLink().getPageRelativePath(), true);
+		}
+		{
+			// On
+			TraditionalEnclosureAjaxPage ajaxPage = (TraditionalEnclosureAjaxPage)tester.getLastRenderedPage();
+			tester.assertComponentOnAjaxResponse(ajaxPage.getTraditionalAjaxVisibilityToggleRequiresPlaceholder());
+			assertVisible(ajaxPage.getToggleable());
+			tester.clickLink(ajaxPage.getLink().getPageRelativePath(), true);
+		}
+		{
+			// Off
+			TraditionalEnclosureAjaxPage ajaxPage = (TraditionalEnclosureAjaxPage)tester.getLastRenderedPage();
+			tester.assertComponentOnAjaxResponse(ajaxPage.getTraditionalAjaxVisibilityToggleRequiresPlaceholder());
+			assertInvisible(ajaxPage.getToggleable());
+		}
+	}
+
