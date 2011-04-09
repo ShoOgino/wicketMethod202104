@@ -1,0 +1,22 @@
+	/**
+	 * Construct.
+	 */
+	public SetCookieAndRedirectStatefullTestPage()
+	{
+		inputModel = new Model<String>();
+		Form<Void> form = new Form<Void>("form")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit()
+			{
+				CookieUtils utils = new CookieUtils();
+				utils.save(cookieName, inputModel.getObject());
+				setResponsePage(getApplication().getHomePage());
+			}
+		};
+		add(form);
+		form.add(new TextField<String>("input", inputModel));
+	}
+
