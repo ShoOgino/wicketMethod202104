@@ -1,18 +1,19 @@
 	/**
-	 * Tests that when {@link IRequestCycleSettings.RenderStrategy#ONE_PASS_RENDER} is configured
-	 * there wont be a redirect issued
+	 * Tests that when {@link RenderPageRequestHandler#getRedirectPolicy()} is
+	 * {@link RedirectPolicy#NEVER_REDIRECT} there wont be a redirect issued
 	 */
 	@Test
-	public void testOnePassRender()
+	public void testRedirectPolicyNever()
 	{
 
 		PageRenderer renderer = new TestPageRenderer(handler)
 		{
 			@Override
-			protected boolean isOnePassRender()
+			protected RedirectPolicy getRedirectPolicy()
 			{
-				return true;
+				return RedirectPolicy.NEVER_REDIRECT;
 			}
+
 		};
 
 		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("base"));
