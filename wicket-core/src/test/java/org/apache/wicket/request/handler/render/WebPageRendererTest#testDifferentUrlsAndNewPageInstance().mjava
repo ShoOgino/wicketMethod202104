@@ -1,0 +1,28 @@
+	/**
+	 * Tests that when URLs are different and we have a page class and not an instance we can
+	 * redirect to the url which will instantiate the instance of us
+	 */
+	@Test
+	public void testDifferentUrlsAndNewPageInstance()
+	{
+		when(provider.isNewPageInstance()).thenReturn(true);
+
+		PageRenderer renderer = new TestPageRenderer(handler)
+		{
+			@Override
+			protected boolean isRedirectToBuffer()
+			{
+				return true;
+			}
+		};
+
+		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("a"));
+
+		when(requestCycle.mapUrlFor(eq(handler))).thenReturn(Url.parse("b"));
+
+		renderer.respond(requestCycle);
+
+		verify(response, never()).write(any(byte[].class));
+		verify(response).sendRedirect(anyString());
+	}
+
