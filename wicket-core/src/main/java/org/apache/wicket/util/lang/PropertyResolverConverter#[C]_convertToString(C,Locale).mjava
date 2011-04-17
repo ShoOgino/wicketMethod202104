@@ -1,0 +1,9 @@
+	protected <C> String convertToString(C object, Locale locale)
+	{
+		@SuppressWarnings("unchecked")
+		Class<C> type = (Class<C>)object.getClass();
+
+		IConverter<C> converterForObj = converterSupplier.getConverter(type);
+		return converterForObj.convertToString(object, locale);
+	}
+
