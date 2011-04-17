@@ -3,7 +3,7 @@
 	 * web.xml file.
 	 * <p>
 	 * A typical Wicket web.xml entry looks like:
-	 *
+	 * 
 	 * <pre>
 	 * <code>
 	 * &lt;filter&gt;
@@ -14,7 +14,7 @@
 	 *     &lt;param-value&gt;org.apache.wicket.examples.helloworld.HelloWorldApplication&lt;/param-value&gt;
 	 *   &lt;/init-param&gt;
 	 * &lt;/filter&gt;
-	 *
+	 * 
 	 * &lt;filter-mapping&gt;
 	 *   &lt;filter-name&gt;HelloWorldApplication&lt;/filter-name&gt;
 	 *   &lt;url-pattern&gt;/helloworld/*&lt;/url-pattern&gt;
@@ -23,7 +23,7 @@
 	 * &lt;/filter-mapping&gt;
 	 * </code>
 	 * </pre>
-	 *
+	 * 
 	 * @param isServlet
 	 *            true if Servlet, false if Filter
 	 * @param filterName
@@ -39,25 +39,32 @@
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		builder.setEntityResolver(CustomEntityResolver.getPreloaded()); // try to pull DTD from
-// local set of entities
+
+		// try to pull DTD from local set of entities
+		builder.setEntityResolver(CustomEntityResolver.getPreloaded());
 		Document document = builder.parse(is);
 
 		String tag = (isServlet ? "servlet" : "filter");
 		String mapping = tag + "-mapping";
 		String name = tag + "-name";
 
-		Set<String> urlPatterns = getFilterPaths(filterName, mapping, name, document.getChildNodes());
+		Set<String> urlPatterns = getFilterPaths(filterName, mapping, name,
+			document.getChildNodes());
 
 		if (urlPatterns.size() == 0)
 		{
-			log.warn("web.xml: No url-pattern found for " + tag + " with name " + filterName);
+			log.warn("web.xml: No url-pattern found for '{}' with name '{}'", tag, filterName);
 		}
 
-		if(log.isInfoEnabled())
+		if (log.isInfoEnabled())
 		{
 			StringBuilder msg = new StringBuilder();
-			msg.append("web.xml: url mapping found for " + tag + " with name " + filterName + ':');
+			msg.append("web.xml: url mapping found for ")
+				.append(tag)
+				.append(" with name ")
+				.append(filterName)
+				.append(':');
+
 			for (String urlPattern : urlPatterns)
 			{
 				msg.append(" [");
