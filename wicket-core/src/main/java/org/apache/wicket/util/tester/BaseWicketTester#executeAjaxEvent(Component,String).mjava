@@ -35,13 +35,10 @@
 	 */
 	public void executeAjaxEvent(final Component component, final String event)
 	{
-		String failMessage = "Can't execute event on a component which is null.";
-		notNull(failMessage, component);
+		Args.notNull(component, "component");
+		Args.notNull(event, "event");
 
-		failMessage = "event must not be null";
-		notNull(failMessage, event);
-
-		checkUsability(component);
+		checkUsability(component, true);
 
 		AjaxEventBehavior ajaxEventBehavior = WicketTesterHelper.findAjaxEventBehavior(component,
 			event);

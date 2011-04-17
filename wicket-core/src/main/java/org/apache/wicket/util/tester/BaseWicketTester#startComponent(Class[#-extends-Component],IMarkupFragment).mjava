@@ -13,7 +13,7 @@
 		Args.notNull(componentClass, "componentClass");
 
 		// Create the component instance from the class
-		Component comp;
+		Component comp = null;
 		try
 		{
 			Constructor<? extends Component> c = componentClass.getConstructor(String.class);
@@ -21,7 +21,7 @@
 		}
 		catch (Exception e)
 		{
-			throw convertoUnexpect(e);
+			fail(e.getMessage());
 		}
 
 		// process the component

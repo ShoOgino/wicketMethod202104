@@ -11,11 +11,8 @@
 	public FormTester setValue(final String formComponentId, final String value)
 	{
 		Component component = workingForm.get(formComponentId);
-		if (component == null)
-		{
-			throw new IllegalArgumentException(
-				"Unable to set value. Couldn't find component with name: " + formComponentId);
-		}
+		Assert.assertNotNull("Unable to set value. Couldn't find component with name: " +
+			formComponentId, component);
 		return setValue(component, value);
 	}
 

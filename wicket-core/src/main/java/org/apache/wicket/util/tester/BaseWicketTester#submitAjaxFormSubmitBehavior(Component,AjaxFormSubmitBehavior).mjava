@@ -12,14 +12,10 @@
 	{
 		// The form that needs to be "submitted".
 		Form<?> form = behavior.getForm();
+		assertNotNull("No form attached to the submitlink.", form);
 
-		String failMessage = "No form attached to the submitlink.";
-		notNull(failMessage, form);
-
-		checkUsability(form);
-
+		checkUsability(form, true);
 		serializeFormToRequest(form);
-
 		executeBehavior(behavior);
 	}
 
