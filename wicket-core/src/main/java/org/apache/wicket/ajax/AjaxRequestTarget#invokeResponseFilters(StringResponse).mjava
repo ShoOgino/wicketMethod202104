@@ -3,8 +3,9 @@
 	 * 
 	 * @param contentResponse
 	 *            the Ajax {@link Response} body
+	 * @return filtered response
 	 */
-	private void invokeResponseFilters(final StringResponse contentResponse)
+	private AppendingStringBuffer invokeResponseFilters(final StringResponse contentResponse)
 	{
 		AppendingStringBuffer responseBuffer = new AppendingStringBuffer(
 			contentResponse.getBuffer());
@@ -17,8 +18,9 @@
 		{
 			for (IResponseFilter filter : responseFilters)
 			{
-				filter.filter(responseBuffer);
+				responseBuffer = filter.filter(responseBuffer);
 			}
 		}
+		return responseBuffer;
 	}
 
