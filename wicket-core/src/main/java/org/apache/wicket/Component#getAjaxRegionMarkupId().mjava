@@ -1,0 +1,31 @@
+	/**
+	 * Returns the id of the markup region that will be updated via ajax. This can be different to
+	 * the markup id of the component if a {@link IAjaxRegionMarkupIdProvider} behavior has been
+	 * added.
+	 * 
+	 * @return the markup id of the region to be updated via ajax.
+	 */
+	public final String getAjaxRegionMarkupId()
+	{
+		String markupId = null;
+		for (Behavior behavior : getBehaviors())
+		{
+			if (behavior instanceof IAjaxRegionMarkupIdProvider)
+			{
+				markupId = ((IAjaxRegionMarkupIdProvider)behavior).getAjaxRegionMarkupId(this);
+			}
+		}
+		if (markupId == null)
+		{
+			if (this instanceof IAjaxRegionMarkupIdProvider)
+			{
+				markupId = ((IAjaxRegionMarkupIdProvider)this).getAjaxRegionMarkupId(this);
+			}
+		}
+		if (markupId == null)
+		{
+			markupId = getMarkupId();
+		}
+		return markupId;
+	}
+
