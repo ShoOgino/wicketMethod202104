@@ -31,6 +31,11 @@
 				.getApplicationSettings()
 				.getAccessDeniedPage()));
 		}
+		else if (e instanceof ResponseIOException)
+		{
+			logger.error("Connection lost, give up responding.", e);
+			return new EmptyRequestHandler();
+		}
 		else
 		{
 
