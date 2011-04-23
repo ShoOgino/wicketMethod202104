@@ -6,6 +6,15 @@
 	 */
 	protected void onUploadUpdate(int bytesUploaded, int total)
 	{
+		HttpServletRequest request = getContainerRequest();
+		UploadInfo info = getUploadInfo(request);
+		if (info == null)
+		{
+			throw new IllegalStateException(
+				"could not find UploadInfo object in session which should have been set when uploaded started");
+		}
+		info.setBytesUploaded(bytesUploaded);
 
+		setUploadInfo(request, info);
 	}
 
