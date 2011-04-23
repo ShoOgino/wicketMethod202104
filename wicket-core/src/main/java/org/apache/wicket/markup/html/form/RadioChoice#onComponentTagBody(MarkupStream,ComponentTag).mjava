@@ -1,6 +1,7 @@
 	/**
 	 * @see org.apache.wicket.Component#onComponentTagBody(MarkupStream, ComponentTag)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public final void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
@@ -27,6 +28,7 @@
 
 			if (objectClass != null && objectClass != String.class)
 			{
+				@SuppressWarnings("rawtypes")
 				final IConverter converter = getConverter(objectClass);
 				label = converter.convertToString(displayValue, getLocale());
 			}

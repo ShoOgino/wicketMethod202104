@@ -13,7 +13,9 @@
 		// Null is always converted to null
 		if (type == null)
 		{
-			return (IConverter<C>)new DefaultConverter<String>(String.class);
+			@SuppressWarnings("unchecked")
+			IConverter<C> converter = (IConverter<C>)new DefaultConverter<String>(String.class);
+			return converter;
 		}
 
 		// Get type converter for class

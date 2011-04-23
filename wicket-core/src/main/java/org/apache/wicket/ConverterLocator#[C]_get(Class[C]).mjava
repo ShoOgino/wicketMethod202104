@@ -1,6 +1,8 @@
 	/**
 	 * Gets the type converter that is registered for class c.
 	 * 
+	 * @param <C>
+	 *            The object to convert from and to String
 	 * @param c
 	 *            The class to get the type converter for
 	 * @return The type converter that is registered for class c or null if no type converter was
@@ -8,6 +10,8 @@
 	 */
 	public final <C> IConverter<C> get(Class<C> c)
 	{
-		return (IConverter<C>)classToConverter.get(c.getName());
+		@SuppressWarnings("unchecked")
+		IConverter<C> converter = (IConverter<C>)classToConverter.get(c.getName());
+		return converter;
 	}
 
