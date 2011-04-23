@@ -2,9 +2,9 @@
 	 * @see org.springframework.beans.factory.ListableBeanFactory#
 	 *      getBeanNamesForType(java.lang.Class)
 	 */
-	public String[] getBeanNamesForType(final Class type)
+	public String[] getBeanNamesForType(@SuppressWarnings("rawtypes") final Class type)
 	{
-		ArrayList names = new ArrayList();
+		ArrayList<String> names = new ArrayList<String>();
 		for (Entry<String, Object> entry : beans.entrySet())
 		{
 			Object bean = entry.getValue();
@@ -14,6 +14,6 @@
 				names.add(entry.getKey());
 			}
 		}
-		return (String[])names.toArray(new String[names.size()]);
+		return names.toArray(new String[names.size()]);
 	}
 

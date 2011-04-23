@@ -3,7 +3,7 @@
 	 */
 	public void testInValidEmailAddresses()
 	{
-		IValidator validator = RfcCompliantEmailAddressValidator.getInstance();
+		IValidator<String> validator = RfcCompliantEmailAddressValidator.getInstance();
 
 		String[] inValidEmails = new String[] { "whatever", "dont.end.in.a.dot.@gmail.com",
 				".dot.in.the.beginning.is.not.good@wicketframework.org", " space@front.com",
@@ -11,7 +11,7 @@
 
 		for (String emailAddress : inValidEmails)
 		{
-			Validatable validatable = new Validatable(emailAddress);
+			Validatable<String> validatable = new Validatable<String>(emailAddress);
 			validator.validate(validatable);
 			assertFalse(emailAddress + " was valid but shouldn't be", validatable.isValid());
 		}
