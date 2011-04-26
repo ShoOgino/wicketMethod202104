@@ -1,0 +1,17 @@
+	/** */
+	@Test
+	public void idGeneratedWhenPanelNotAddedToPage()
+	{
+		WicketTester tester = new WicketTester();
+
+		// In wicket 1.4 the following sequence would not cause an exception
+		Panel panel = new EmptyPanel("bla");
+
+		// however in 1.5 the following statement generated a WicketRuntimeException
+		// that the markup type could not be determined
+		String markupId = panel.getMarkupId();
+
+		// instead 1.4 would just generate the missing markup identifier
+		Assert.assertEquals("bla1", markupId);
+	}
+

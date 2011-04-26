@@ -1,0 +1,16 @@
+	/**
+	 * Tests that a generated ID is kept, even if an identifier in the markup was set.
+	 */
+	@Test
+	public void generatedIdOverridesIdFromMarkup()
+	{
+		WicketTester tester = new WicketTester();
+
+		ComponentMarkupIdTestPage page = new ComponentMarkupIdTestPage();
+		tester.startPage(page);
+		tester.assertRenderedPage(ComponentMarkupIdTestPage.class);
+
+		Assert.assertEquals("generatedPanel2", page.generatedPanelMarkupId);
+		Assert.assertEquals("generatedPanel2", page.generatedPanel.getMarkupId());
+	}
+
