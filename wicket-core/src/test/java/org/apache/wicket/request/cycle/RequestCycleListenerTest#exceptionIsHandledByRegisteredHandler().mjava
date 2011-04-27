@@ -1,0 +1,16 @@
+	/** */
+	@Test
+	public void exceptionIsHandledByRegisteredHandler()
+	{
+		IncrementingListener incrementingListener = new IncrementingListener();
+		Application.get().getRequestCycleListeners().add(incrementingListener);
+		Application.get().getRequestCycleListeners().add(new ErrorCodeListener(401));
+
+		RequestCycle cycle = newRequestCycle(true);
+		cycle.processRequestAndDetach();
+
+		assertEquals(401, errorCode);
+		assertEquals(1, incrementingListener.exceptionResolutions);
+		assertEquals(0, incrementingListener.schedules);
+	}
+
