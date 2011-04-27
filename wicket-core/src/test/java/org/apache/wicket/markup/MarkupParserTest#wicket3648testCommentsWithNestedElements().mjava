@@ -1,0 +1,23 @@
+	/**
+	 * <a href="https://issues.apache.org/jira/browse/WICKET-3648">WICKET-3648</a>
+	 * 
+	 * @throws IOException
+	 * @throws ResourceStreamNotFoundException
+	 */
+	public final void wicket3648testCommentsWithNestedElements() throws IOException,
+		ResourceStreamNotFoundException
+	{
+		tester.getApplication().getMarkupSettings().setStripComments(true);
+		final MarkupParser parser = new MarkupParser(
+// @formatter:off
+			"<span><!--[if lt IE 8 ]>\n"
+			+ "<script src='js/ie7.js'></script>\n" + 
+			"<![endif]--></span>"
+			// @formatter:on
+		);
+		IMarkupFragment markup = parser.parse();
+
+		RawMarkup raw = (RawMarkup)markup.get(0);
+		assertEquals("<span></span>", raw.toString());
+	}
+
