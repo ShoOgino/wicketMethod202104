@@ -1,4 +1,5 @@
-	private void internalRenderCSSReference(String url, String media)
+	private void internalRenderCSSReference(final String url, final String media,
+		final String condition)
 	{
 		if (Strings.isEmpty(url))
 		{
@@ -9,6 +10,12 @@
 			List<String> token = Arrays.asList("css", url, media);
 			if (wasRendered(token) == false)
 			{
+				if (Strings.isEmpty(condition) == false)
+				{
+					getResponse().write("<!--[if ");
+					getResponse().write(condition);
+					getResponse().write("]>");
+				}
 				getResponse().write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
 				getResponse().write(url);
 				getResponse().write("\"");
@@ -19,6 +26,10 @@
 					getResponse().write("\"");
 				}
 				getResponse().write(" />");
+				if (Strings.isEmpty(condition) == false)
+				{
+					getResponse().write("<![endif]-->");
+				}
 				getResponse().write("\n");
 				markRendered(token);
 			}
