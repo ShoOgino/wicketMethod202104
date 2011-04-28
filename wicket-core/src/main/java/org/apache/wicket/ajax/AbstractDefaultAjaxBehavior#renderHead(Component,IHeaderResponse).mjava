@@ -4,6 +4,16 @@
 	@Override
 	public void renderHead(Component component, IHeaderResponse response)
 	{
+		super.renderHead(component, response);
+
+		IAjaxCallDecorator ajaxCallDecorator = getAjaxCallDecorator();
+
+		if (ajaxCallDecorator instanceof IHeaderContributor)
+		{
+			IHeaderContributor contributor = (IHeaderContributor)ajaxCallDecorator;
+			contributor.renderHead(component, response);
+		}
+
 		final IDebugSettings debugSettings = Application.get().getDebugSettings();
 
 		response.renderJavaScriptReference(WicketEventReference.INSTANCE);
