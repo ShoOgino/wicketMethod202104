@@ -18,27 +18,8 @@
 		{
 			// try to extract page and component information from URL
 			PageComponentInfo info = getPageComponentInfo(url);
-
 			Class<? extends IRequestablePage> pageClass = getPageClass();
-
-			// extract the PageParameters from URL if there are any
-			PageParameters pageParameters = extractPageParameters(request, mountSegments.length,
-				pageParametersEncoder);
-
-			// check if there are placeholders in mount segments
-			for (int i = 0; i < mountSegments.length; ++i)
-			{
-				String placeholder = getPlaceholder(mountSegments[i]);
-				if (placeholder != null)
-				{
-					// extract the parameter from URL
-					if (pageParameters == null)
-					{
-						pageParameters = new PageParameters();
-					}
-					pageParameters.add(placeholder, url.getSegments().get(i));
-				}
-			}
+			PageParameters pageParameters = extractPageParameters(request, url);
 
 			return new UrlInfo(info, pageClass, pageParameters);
 		}
