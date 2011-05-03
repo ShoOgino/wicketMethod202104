@@ -1,0 +1,17 @@
+	/**
+	 * @see org.apache.wicket.util.convert.IConverter#convertToObject(java.lang.String,
+	 *      java.util.Locale)
+	 */
+	public Calendar convertToObject(final String value, final Locale locale)
+	{
+		Date date = dateConverter.convertToObject(value, locale);
+		if (date == null)
+		{
+			return null;
+		}
+
+		Calendar calendar = locale != null ? Calendar.getInstance(locale) : Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar;
+	}
+
