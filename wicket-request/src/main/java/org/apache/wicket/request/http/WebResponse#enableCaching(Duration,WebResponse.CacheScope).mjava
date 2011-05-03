@@ -22,13 +22,13 @@
 		}
 
 		// Get current time
-		long now = System.currentTimeMillis();
+		Time now = Time.now();
 
 		// Time of message generation
 		setDateHeader("Date", now);
 
 		// Time for cache expiry = now + duration
-		setDateHeader("Expires", now + duration.getMilliseconds());
+		setDateHeader("Expires", now.add(duration));
 
 		// Enable caching and set max age
 		setHeader("Cache-Control", scope.cacheControl + ", max-age=" + duration.getMilliseconds());

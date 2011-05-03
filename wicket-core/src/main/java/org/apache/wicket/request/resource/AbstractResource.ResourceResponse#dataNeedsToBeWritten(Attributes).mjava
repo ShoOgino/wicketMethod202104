@@ -1,7 +1,7 @@
 		/**
 		 * Check to determine if the resource data needs to be written. This method checks the
 		 * <code>If-Modified-Since</code> request header and compares it to lastModified property.
-		 * In order for this method to work {@link #setLastModified(Date)} has to be called first.
+		 * In order for this method to work {@link #setLastModified(Time)} has to be called first.
 		 * 
 		 * @param attributes
 		 *            request attributes
@@ -11,19 +11,18 @@
 		public boolean dataNeedsToBeWritten(Attributes attributes)
 		{
 			WebRequest request = (WebRequest)attributes.getRequest();
-			Date ifModifiedSince = request.getIfModifiedSinceHeader();
-			Date lastModified = getLastModified();
+			Time ifModifiedSince = request.getIfModifiedSinceHeader();
 
-			if (ifModifiedSince != null && lastModified != null)
+			if (ifModifiedSince != null && this.lastModified != null)
 			{
 				// [Last-Modified] headers have a maximum precision of one second
 				// so we have to truncate the milliseconds part for a proper compare.
 				// that's stupid, since changes within one second will not be reliably
 				// detected by the client ... any hint or clarification to improve this
 				// situation will be appreciated...
-				long modified = this.lastModified.getTime() / 1000 * 1000;
+				Time roundedLastModified = Time.valueOf(this.lastModified.getMilliseconds() / 1000 * 1000);
 
-				return ifModifiedSince.getTime() < modified;
+				return ifModifiedSince.before(roundedLastModified);
 			}
 			else
 			{
