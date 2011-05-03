@@ -10,7 +10,6 @@
 			getRootRequestMapper(), getExceptionMapperProvider().get());
 
 		RequestCycle requestCycle = getRequestCycleProvider().get(context);
-		requestCycle.getListeners().add(requestCycleListeners);
 		requestCycle.getListeners().add(new AbstractRequestCycleListener()
 		{
 			@Override
@@ -19,6 +18,7 @@
 				getPageManager().commitRequest();
 			}
 		});
+		requestCycle.getListeners().add(requestCycleListeners);
 		return requestCycle;
 	}
 
