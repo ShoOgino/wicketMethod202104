@@ -1,0 +1,28 @@
+	/**
+	 * get last modification timestamp for file
+	 * 
+	 * @param file
+	 * 
+	 * @return timestamp
+	 */
+	public static Time getLastModified(File file)
+	{
+		// in case the file has been removed by now
+		if (file.exists() == false)
+		{
+			return null;
+		}
+
+		// get file modification timestamp
+		long millis = file.lastModified();
+
+		// zero indicates the timestamp could not be retrieved
+		if (millis == 0)
+		{
+			return null;
+		}
+
+		// last file modification timestamp
+		return Time.milliseconds(millis);
+	}
+

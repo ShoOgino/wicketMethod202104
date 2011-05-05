@@ -9,36 +9,26 @@
 		{
 			StreamData data = getData(true);
 
+			final Time lastModified;
+
 			if (file != null)
 			{
-				// in case the file has been removed by now
-				if (file.exists() == false)
-				{
-					return null;
-				}
-
-				long lastModified = file.lastModified();
-
-				// if last modified changed update content length and last modified date
-				if (lastModified != data.lastModified)
-				{
-					data.lastModified = lastModified;
-					setContentLength();
-				}
+				// get file modification timestamp
+				lastModified = IOUtils.getLastModified(file);
 			}
 			else
 			{
-				long lastModified = Connections.getLastModified(url);
-
-				// if last modified changed update content length and last modified date
-				if (lastModified != data.lastModified)
-				{
-					data.lastModified = lastModified;
-
-					setContentLength();
-				}
+				// get url modification timestamp
+				lastModified = Connections.getLastModified(url);
 			}
-			return Time.milliseconds(data.lastModified);
+
+			// if timestamp changed: update content length and last modified date
+			if (Objects.equal(lastModified, data.lastModified) == false)
+			{
+				data.lastModified = lastModified;
+				setContentLength();
+			}
+			return data.lastModified;
 		}
 		catch (IOException e)
 		{
