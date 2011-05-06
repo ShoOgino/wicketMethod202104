@@ -1,0 +1,19 @@
+	/**
+	 * Asserting that page don't get touched in an AJAX request that is only repaint its children. <br />
+	 * In this case no new page id is being generated and none new page needs to be touched to be
+	 * stored again.<br />
+	 * By asserting this requirement we improve memory usage and avoid problems of exhaust it.
+	 * 
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-3667">WICKET-3667</a>
+	 */
+	public void testPageNotTouchedInAjaxRequest()
+	{
+		TestPage testPage = new TestPage();
+		Url ajaxUrl = Url.parse(testPage.eventBehavior.getCallbackUrl().toString(),
+			Charset.forName(tester.getRequest().getCharacterEncoding()));
+		tester.startPage(TestPage.class);
+		int referenceStoreCount = storeCount;
+		tester.executeAjaxUrl(ajaxUrl);
+		assertEquals(referenceStoreCount, storeCount);
+	}
+
