@@ -12,16 +12,16 @@
 	protected String getCacheKey(final String key, final Component component, final Locale locale,
 		final String style, final String variation)
 	{
-		String cacheKey = key;
 		if (component != null)
 		{
-			AppendingStringBuffer buffer = new AppendingStringBuffer(200);
+			StringBuilder buffer = new StringBuilder(200);
 			buffer.append(key);
 
 			Component cursor = component;
+			
 			while (cursor != null)
 			{
-				buffer.append("-").append(metaDatabase.id(cursor.getClass()));
+				buffer.append('-').append(metaDatabase.id(cursor.getClass()));
 
 				if (cursor instanceof Page)
 				{
@@ -29,30 +29,30 @@
 				}
 
 				/*
-				 * only append component id if parent is not a repeater because (a) these ids are
+				 * only append component id if component is not a loop item because (a) these ids are
 				 * irrelevant when generating resource cache keys (b) they cause a lot of redundant
 				 * keys to be generated
 				 */
-				if (cursor.getParent() != null && !(cursor.getParent() instanceof AbstractRepeater))
+				final boolean skip = cursor instanceof LoopItem;
+
+				if (skip == false)
 				{
-					buffer.append(":").append(cursor.getId());
+					buffer.append(':').append(cursor.getId());
 				}
 
 				cursor = cursor.getParent();
 			}
 
-			buffer.append("-").append(locale);
-			buffer.append("-").append(style);
-			buffer.append("-").append(variation);
-			cacheKey = buffer.toString();
+			buffer.append('-').append(locale);
+			buffer.append('-').append(style);
+			buffer.append('-').append(variation);
+			
+			return buffer.toString();
 		}
 		else
 		{
 			// locale is guaranteed to be != null
-			cacheKey += "-" + locale.toString();
-			cacheKey += "-" + style;
+			return key + '-' + locale.toString() + '-' + style;
 		}
-
-		return cacheKey;
 	}
 

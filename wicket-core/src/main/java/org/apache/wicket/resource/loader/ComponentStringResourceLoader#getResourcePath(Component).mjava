@@ -1,0 +1,29 @@
+	/**
+	 * get path for resource lookup
+	 * 
+	 * @param component
+	 * @return path
+	 */
+	protected String getResourcePath(final Component component)
+	{
+		Component current = Args.notNull(component, "component");
+
+		final StringBuilder buffer = new StringBuilder();
+		
+		while (current.getParent() != null)
+		{
+			final boolean skip = current instanceof LoopItem;
+
+			if (skip == false)
+			{
+				if (buffer.length() > 0)
+				{
+					buffer.insert(0, '.');
+				}
+				buffer.insert(0, current.getId());
+			}
+			current = current.getParent();
+		}
+		return buffer.toString();
+	}
+
