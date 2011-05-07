@@ -1,0 +1,32 @@
+	/**
+	 * Dispatches event to registered dispatchers
+	 * 
+	 * @see IEventDispatcher#dispatchEvent(Object, IEvent, Component)
+	 * 
+	 * @param sink
+	 * @param event
+	 * @param component
+	 */
+	public void dispatchEvent(Object sink, IEvent<?> event, Component component)
+	{
+		// direct delivery
+		if (component != null && sink instanceof IComponentAwareEventSink)
+		{
+			((IComponentAwareEventSink)sink).onEvent(component, event);
+		}
+		else if (sink instanceof IEventSink)
+		{
+			((IEventSink)sink).onEvent(event);
+		}
+
+		// additional dispatchers delivery
+		if (eventDispatchers == null)
+		{
+			return;
+		}
+		for (IEventDispatcher dispatcher : eventDispatchers)
+		{
+			dispatcher.dispatchEvent(sink, event, component);
+		}
+	}
+

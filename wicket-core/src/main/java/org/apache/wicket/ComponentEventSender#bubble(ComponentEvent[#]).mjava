@@ -15,14 +15,14 @@
 
 		if (!targetsApplication && !targetsComponent)
 		{
-			dispatcher.dispatchEvent(sink, event);
+			dispatcher.dispatchEvent(sink, event, null);
 			return;
 		}
 
 		if (targetsComponent)
 		{
 			Component cursor = (Component)sink;
-			dispatcher.dispatchEvent(cursor, event);
+			dispatchToComponent(dispatcher, cursor, event);
 			if (event.isStop())
 			{
 				return;
@@ -36,7 +36,7 @@
 		}
 		if (targetsCycle)
 		{
-			dispatcher.dispatchEvent(source.getRequestCycle(), event);
+			dispatcher.dispatchEvent(source.getRequestCycle(), event, null);
 		}
 		if (event.isStop())
 		{
@@ -44,7 +44,7 @@
 		}
 		if (targetsSession)
 		{
-			dispatcher.dispatchEvent(source.getSession(), event);
+			dispatcher.dispatchEvent(source.getSession(), event, null);
 		}
 		if (event.isStop())
 		{
@@ -52,7 +52,7 @@
 		}
 		if (targetsApplication)
 		{
-			dispatcher.dispatchEvent(source.getApplication(), event);
+			dispatcher.dispatchEvent(source.getApplication(), event, null);
 		}
 	}
 

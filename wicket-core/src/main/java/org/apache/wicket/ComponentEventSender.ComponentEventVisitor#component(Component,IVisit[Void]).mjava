@@ -1,25 +1,12 @@
 		/** {@inheritDoc} */
 		public void component(Component object, IVisit<Void> visit)
 		{
-			dispatcher.dispatchEvent(object, e);
+			dispatchToComponent(dispatcher, object, e);
 
 			if (e.isStop())
 			{
 				visit.stop();
 			}
-
-			List<? extends Behavior> behaviors = object.getBehaviors();
-			for (Behavior behavior : behaviors)
-			{
-				IEventSink behaviorSink = behavior;
-				dispatcher.dispatchEvent(behaviorSink, e);
-				if (e.isStop())
-				{
-					visit.stop();
-					break;
-				}
-			}
-
 
 			if (e.isShallow())
 			{
