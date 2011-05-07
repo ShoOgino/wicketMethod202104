@@ -1,0 +1,29 @@
+	/**
+	 * sets the opera specific properties
+	 */
+	private void setOperaProperties()
+	{
+		properties.setBrowserOpera(UserAgent.OPERA.matches(getUserAgent()));
+
+		if (properties.isBrowserOpera())
+		{
+			String userAgent = getUserAgentStringLc();
+
+			if (userAgent.startsWith("opera/") && userAgent.contains("version/"))
+			{
+				// e.g.: Opera/9.80 (Windows NT 6.0; U; nl) Presto/2.6.30 Version/10.60
+				setMajorMinorVersionByPattern("version/(\\d+)\\.(\\d+)");
+			}
+			else if (userAgent.startsWith("opera/") && !userAgent.contains("version/"))
+			{
+				// e.g.: Opera/9.80 (Windows NT 6.0; U; nl) Presto/2.6.30
+				setMajorMinorVersionByPattern("opera/(\\d+)\\.(\\d+)");
+			}
+			else
+			{
+				// e.g.: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 6.0; tr) Opera 10.10
+				setMajorMinorVersionByPattern("opera (\\d+)\\.(\\d+)");
+			}
+		}
+	}
+

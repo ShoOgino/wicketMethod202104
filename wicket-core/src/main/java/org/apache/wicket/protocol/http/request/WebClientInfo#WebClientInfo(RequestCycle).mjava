@@ -6,11 +6,7 @@
 	 */
 	public WebClientInfo(RequestCycle requestCycle)
 	{
-		super();
-		ServletWebRequest request = (ServletWebRequest)requestCycle.getRequest();
-		HttpServletRequest httpServletRequest = request.getContainerRequest();
-		userAgent = httpServletRequest.getHeader("User-Agent");
-		properties.setRemoteAddress(getRemoteAddr(requestCycle));
-		init();
+		this(requestCycle, ((ServletWebRequest)requestCycle.getRequest()).getContainerRequest()
+			.getHeader("User-Agent"));
 	}
 

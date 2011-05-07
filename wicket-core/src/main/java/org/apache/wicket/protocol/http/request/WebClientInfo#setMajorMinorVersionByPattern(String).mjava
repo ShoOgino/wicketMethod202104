@@ -1,0 +1,18 @@
+	/**
+	 * extracts the major and minor version out of the userAgentString string.
+	 * 
+	 * @param patternString
+	 *            The pattern must contain two matching groups
+	 */
+	private void setMajorMinorVersionByPattern(String patternString)
+	{
+		String userAgent = getUserAgentStringLc();
+		Matcher matcher = Pattern.compile(patternString).matcher(userAgent);
+
+		if (matcher.find())
+		{
+			properties.setBrowserVersionMajor(Integer.parseInt(matcher.group(1)));
+			properties.setBrowserVersionMinor(Integer.parseInt(matcher.group(2)));
+		}
+	}
+

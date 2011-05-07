@@ -1,0 +1,35 @@
+	/**
+	 * @param userAgent
+	 *            The user agent string
+	 * @return Whether the user agent matches this enum or not
+	 */
+	public boolean matches(String userAgent)
+	{
+		if (Strings.isEmpty(notAllowed) == false)
+		{
+			String[] notAllowedList = Strings.split(notAllowed, ',');
+			for (String value : notAllowedList)
+			{
+				if (userAgent.contains(value))
+				{
+					return false;
+				}
+			}
+		}
+
+		for (List<String> detectionGroup : detectionStrings)
+		{
+			for (String detectionString : detectionGroup)
+			{
+				if (!userAgent.contains(detectionString))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+

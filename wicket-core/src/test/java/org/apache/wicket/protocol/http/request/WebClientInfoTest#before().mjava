@@ -1,0 +1,15 @@
+	/**
+	 * Prepare RequestCycle to be able to extract the remote address of the client
+	 */
+	@Before
+	public void before()
+	{
+		requestCycleMock = mock(RequestCycle.class);
+
+		ServletWebRequest webRequest = mock(ServletWebRequest.class);
+		when(requestCycleMock.getRequest()).thenReturn(webRequest);
+
+		HttpServletRequest servletRequest = mock(HttpServletRequest.class);
+		when(webRequest.getContainerRequest()).thenReturn(servletRequest);
+	}
+
