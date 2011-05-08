@@ -1,0 +1,18 @@
+	/**
+	 * Asserting that page get touched in an AJAX request that is only repaint its children. <br />
+	 * In this case no new page id is being generated and the old page is touched and stored again.<br />
+	 * 
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-3667">WICKET-3667</a>
+	 */
+	public void testPageNotTouchedInAjaxRequest()
+	{
+		TestPage testPage = new TestPage();
+		Url ajaxUrl = Url.parse(testPage.eventBehavior.getCallbackUrl().toString(),
+			Charset.forName(tester.getRequest().getCharacterEncoding()));
+		tester.startPage(TestPage.class);
+		int referenceStoreCount = storeCount;
+		tester.executeAjaxUrl(ajaxUrl);
+		// the page should be stored even for ajax requests
+		assertEquals(referenceStoreCount + 1, storeCount);
+	}
+
