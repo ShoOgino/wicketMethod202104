@@ -7,11 +7,12 @@
 	{
 		Args.notNull(headerContainer, "headerContainer");
 
-		if (renderHeadListeners != null)
+		if (Application.exists())
 		{
-			for (IHeaderContributor listener : renderHeadListeners)
+			for (IHeaderContributor listener : Application.get()
+				.getHeaderContributorListenerCollection())
 			{
-				listener.renderHead(headerContainer, headerContainer.getHeaderResponse());
+				listener.renderHead(headerContainer.getHeaderResponse());
 			}
 		}
 	}
