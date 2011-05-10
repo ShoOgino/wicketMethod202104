@@ -13,14 +13,14 @@
 			WebRequest request = (WebRequest)attributes.getRequest();
 			Time ifModifiedSince = request.getIfModifiedSinceHeader();
 
-			if (ifModifiedSince != null && this.lastModified != null)
+			if (ifModifiedSince != null && lastModified != null)
 			{
 				// [Last-Modified] headers have a maximum precision of one second
 				// so we have to truncate the milliseconds part for a proper compare.
 				// that's stupid, since changes within one second will not be reliably
 				// detected by the client ... any hint or clarification to improve this
 				// situation will be appreciated...
-				Time roundedLastModified = Time.millis(this.lastModified.getMilliseconds() / 1000 * 1000);
+				Time roundedLastModified = Time.millis(lastModified.getMilliseconds() / 1000 * 1000);
 
 				return ifModifiedSince.before(roundedLastModified);
 			}
