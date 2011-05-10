@@ -3,19 +3,12 @@
 	 */
 	public void onDetach()
 	{
-
-
 		if (cleanupFeedbackMessagesOnDetach)
 		{
 			if (Session.exists())
 			{
 				Session.get().cleanupFeedbackMessages();
 			}
-		}
-
-		if (Session.exists())
-		{
-			Session.get().detach();
 		}
 
 		try
@@ -36,5 +29,11 @@
 		{
 			listeners.onDetach(this);
 		}
+
+		if (Session.exists())
+		{
+			Session.get().detach();
+		}
+
 	}
 
