@@ -3,18 +3,6 @@
 	 */
 	protected void commitRequest()
 	{
-		for (IManageablePage page : pages)
-		{
-			try
-			{
-				page.detach();
-			}
-			catch (Exception e)
-			{
-				log.error("Error detaching page", e);
-			}
-		}
-
 		// store pages that are not stateless
 		if (touchedPages.isEmpty() == false)
 		{
@@ -22,6 +10,15 @@
 				touchedPages.size());
 			for (IManageablePage page : touchedPages)
 			{
+				try
+				{
+					page.detach();
+				}
+				catch (Exception e)
+				{
+					log.error("Error detaching page", e);
+				}
+
 				if (!page.isPageStateless())
 				{
 					statefulPages.add(page);
