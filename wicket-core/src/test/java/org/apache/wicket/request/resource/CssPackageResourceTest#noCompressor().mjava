@@ -1,0 +1,15 @@
+	/**
+	 * Tests that a {@link CssPackageResource} wont be compressed when there is no configured
+	 * {@link ICssCompressor}
+	 */
+	@Test
+	public void noCompressor()
+	{
+		CssPackageResource resource = new CssPackageResource(PackageResourceTest.class,
+			"packaged1.txt", null, null, null);
+
+		tester.getApplication().getResourceSettings().setCssCompressor(null);
+		tester.startResource(resource);
+		assertEquals("TEST", tester.getLastResponseAsString());
+	}
+

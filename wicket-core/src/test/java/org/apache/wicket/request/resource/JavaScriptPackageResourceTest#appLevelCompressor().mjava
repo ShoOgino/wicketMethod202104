@@ -1,0 +1,14 @@
+	/**
+	 * Tests that a {@link JavaScriptPackageResource} can use the application level
+	 * {@link IJavaScriptCompressor} when there is no custom
+	 */
+	@Test
+	public void appLevelCompressor()
+	{
+		JavaScriptPackageResource resource = new JavaScriptPackageResource(
+			PackageResourceTest.class, "packaged1.txt", null, null, null);
+
+		tester.startResource(resource);
+		assertEquals(APP_COMPRESSED, tester.getLastResponseAsString());
+	}
+
