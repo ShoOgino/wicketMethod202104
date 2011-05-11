@@ -1,7 +1,12 @@
 	/**
+	 * The last response as a string when a page is tested via {@code startPage()} methods.
+	 * <p>
+	 * In case the processed component was not a {@link Page} then the automatically created page
+	 * markup gets removed. If you need the whole returned markup in this case use
+	 * {@link #getLastResponse()}{@link MockHttpServletResponse#getDocument() .getDocument()}
+	 * </p>
 	 * 
-	 * @return last response as String. In case the component processed was not a Page, than the
-	 *         automatically created page markup gets removed.
+	 * @return last response as String.
 	 */
 	public String getLastResponseAsString()
 	{
@@ -13,9 +18,17 @@
 			return response;
 		}
 
-		// Remove first and last tag of surrounding page
-		int pos1 = response.indexOf('>');
-		int pos2 = response.lastIndexOf('<');
-		return response.substring(pos1 + 1, pos2);
+		// remove the markup for the auto-generated page. leave just component's markup body
+		String componentId = startComponent.getId();
+		String before = "wicket:id=\"" + componentId + "\">";
+		Matcher matcher = pattern.matcher(response);
+		if (matcher.matches())
+		{
+			int start = response.indexOf(before) + before.length();
+			int end = matcher.start(1);
+			response = response.substring(start, end);
+		}
+
+		return response;
 	}
 
