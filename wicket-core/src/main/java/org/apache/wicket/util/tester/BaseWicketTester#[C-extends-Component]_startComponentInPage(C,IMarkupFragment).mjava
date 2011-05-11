@@ -1,0 +1,50 @@
+	/**
+	 * Process a component. A web page will be automatically created with the {@code pageMarkup}
+	 * provided. In case {@code pageMarkup} is null, the markup will be automatically created with
+	 * {@link #createPageMarkup(String)}.
+	 * 
+	 * @param <C>
+	 *            the type of the component
+	 * @param component
+	 *            the component to be tested
+	 * @param pageMarkup
+	 *            the markup for the Page that will be automatically created. May be {@code null}.
+	 * @return The component processed
+	 */
+	public final <C extends Component> C startComponentInPage(final C component,
+		IMarkupFragment pageMarkup)
+	{
+		Args.notNull(component, "component");
+
+		// Automatically create the page markup if not provided
+		if (pageMarkup == null)
+		{
+			String markup = createPageMarkup(component.getId());
+			if (markup == null)
+			{
+				fail("The markup for the automatically created page should not be null.");
+			}
+			pageMarkup = Markup.of(markup);
+		}
+
+		// Create a page object and assign the markup
+		Page page = createPage();
+		if (page == null)
+		{
+			fail("The automatically created page should not be null.");
+		}
+
+		page.setMarkup(pageMarkup);
+
+		// Add the child component
+		page.add(component);
+
+		// Process the page
+		startPage(page);
+
+		// Remember the "root" component processes and return it
+		startComponent = component;
+
+		return component;
+	}
+

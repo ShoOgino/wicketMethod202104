@@ -1,0 +1,35 @@
+	/**
+	 * Process a component. A web page will be automatically created with the {@code pageMarkup}
+	 * provided. In case pageMarkup is null, the markup will be automatically created with
+	 * {@link #createPageMarkup(String)}.
+	 * 
+	 * @param <C>
+	 *            the type of the component
+	 * 
+	 * @param componentClass
+	 *            the class of the component to be tested
+	 * @param pageMarkup
+	 *            the markup for the Page that will be automatically created. May be {@code null}.
+	 * @return The component processed
+	 */
+	public final <C extends Component> C startComponentInPage(final Class<C> componentClass,
+		final IMarkupFragment pageMarkup)
+	{
+		Args.notNull(componentClass, "componentClass");
+
+		// Create the component instance from the class
+		C comp = null;
+		try
+		{
+			Constructor<C> c = componentClass.getConstructor(String.class);
+			comp = c.newInstance("testObject");
+		}
+		catch (Exception e)
+		{
+			fail(e.getMessage());
+		}
+
+		// process the component
+		return startComponentInPage(comp, pageMarkup);
+	}
+
