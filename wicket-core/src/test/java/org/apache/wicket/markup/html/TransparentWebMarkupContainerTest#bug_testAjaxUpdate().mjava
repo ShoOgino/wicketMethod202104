@@ -1,0 +1,22 @@
+	/**
+	 * Test case for <a href="https://issues.apache.org/jira/browse/WICKET-3719">WICKET-3719</a>
+	 */
+	public void bug_testAjaxUpdate()
+	{
+		WicketTester wicketTester = new WicketTester()
+		{
+			@Override
+			public Page getLastRenderedPage()
+			{
+				// emulate serialization of the page so the components
+				// loose their "private transient Markup markup" and Component.getMarkup() use
+				// the respective MarkupSourcingStrategy
+				Page lastRenderedPage = super.getLastRenderedPage();
+				return (Page)WicketObjects.cloneObject(lastRenderedPage);
+			}
+		};
+
+		wicketTester.startPage(TransparentWithAjaxUpdatePage.class);
+		wicketTester.clickLink("link", true);
+	}
+
