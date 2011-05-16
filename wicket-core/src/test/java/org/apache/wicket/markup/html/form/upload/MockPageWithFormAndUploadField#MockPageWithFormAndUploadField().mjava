@@ -5,7 +5,7 @@
 	{
 		final ListModel<FileUpload> model = new ListModel<FileUpload>();
 
-		form = new Form<Void>("form")
+		form = new StatelessForm<Void>("form")
 		{
 			/**
 			 * 
@@ -15,7 +15,14 @@
 			@Override
 			protected void onSubmit()
 			{
-				fileUpload = model.getObject().get(0);
+				try
+				{
+					handleFormSubmit();
+				}
+				catch (Exception e)
+				{
+					throw new RuntimeException(e);
+				}
 			}
 		};
 		fileUploadField = new FileUploadField("upload", model);

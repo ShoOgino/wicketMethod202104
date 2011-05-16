@@ -1,13 +1,12 @@
 	/**
 	 * Test that detach closes the streams
 	 * 
-	 * @throws Exception
+	 * @throws IOException
+	 *             '
 	 */
-	public void testInternalDetach() throws Exception
+	public void testInternalDetach() throws IOException
 	{
-		final MockPageWithFormAndUploadField page = new MockPageWithFormAndUploadField();
-
-		tester.startPage(page);
+		tester.startPage(MockPageWithFormAndUploadField.class);
 
 		File tmp = null;
 		try
@@ -28,6 +27,7 @@
 			formtester.submit();
 
 			// Get the file upload
+			MockPageWithFormAndUploadField page = (MockPageWithFormAndUploadField)tester.getLastRenderedPage();
 			FileUpload fileUpload = page.getFileUpload();
 
 			assertNotNull(fileUpload);
