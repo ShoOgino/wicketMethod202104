@@ -1,0 +1,14 @@
+	/**
+	 * Tests for {@link UserAgent#matches(String)} based on the blacklisted entries
+	 */
+	@Test
+	public void notAllowedList()
+	{
+		// check single blacklisted entry - Opera
+		assertFalse(UserAgent.INTERNET_EXPLORER.matches("Something that contains Opera"));
+
+		// check comma separated list of entries - Konqueror,Opera
+		assertFalse(UserAgent.MOZILLA.matches("Something that contains Konqueror"));
+		assertFalse(UserAgent.MOZILLA.matches("Something that contains Opera"));
+	}
+
