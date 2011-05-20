@@ -1,34 +1,15 @@
 	/**
 	 * for urls that point to local files (e.g. 'file:' or 'jar:file:') this
 	 * methods returns a reference to the local file
+	 *
+	 * @param url url of the resource
 	 * 
 	 * @return reference to a local file if url contains one, <code>null</code> otherwise
+	 * 
+	 * @see #getLocalFileFromUrl(String) 
 	 */
 	public static File getLocalFileFromUrl(URL url)
 	{
-		final String location = Args.notNull(url.toExternalForm(), "url");
-
-		// check for 'file:'
-		if (location.startsWith(URL_FILE_PREFIX))
-		{
-			return new File(location.substring(URL_FILE_PREFIX.length()));
-		}
-		// check for 'jar:file:'
-		else if (location.startsWith(URL_LOCAL_JAR_FILE_PREFIX))
-		{
-			final String path = location.substring(URL_LOCAL_JAR_FILE_PREFIX.length());
-			final int resourceAt = path.indexOf('!');
-
-			// for jar:file: the '!' is mandatory
-			if (resourceAt == -1)
-			{
-				return null;
-			}
-			return new File(path.substring(0, resourceAt));
-		}
-		else
-		{
-			return null;
-		}
+		return getLocalFileFromUrl(Args.notNull(url, "url").toExternalForm());
 	}
 
