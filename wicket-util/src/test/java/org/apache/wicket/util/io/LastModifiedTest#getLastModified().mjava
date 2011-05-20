@@ -1,0 +1,24 @@
+	@Test
+	public void getLastModified() throws IOException
+	{
+		File file = File.createTempFile("wicket-io-utils-test", "lastmodified");
+		assertTrue(file.exists());
+
+		try
+		{
+			long lm = file.lastModified();
+
+			// it could be the case that the current system does not support last-modified at all
+			if (lm != 0)
+			{
+				final Time expected = Time.millis(lm);
+				assertEquals(expected, IOUtils.getLastModified(file));
+				assertEquals(expected, Connections.getLastModified(new URL("file:" + file.getAbsolutePath())));
+			}
+		}
+		finally
+		{
+			Files.remove(file);
+		}
+	}
+
