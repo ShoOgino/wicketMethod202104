@@ -7,24 +7,6 @@
 	public UrlResourceStream(final URL url)
 	{
 		// save the url
-		this.url = url;
-
-		// try to retrieve local file from url
-		this.fileForLastModified = Files.getLocalFileFromUrl(url);
-
-		// try to retrieve file location otherwise
-		if (this.fileForLastModified == null)
-		{
-
-			try
-			{
-				fileForLastModified = new File(new URI(url.toExternalForm()));
-			}
-			catch (Exception e)
-			{
-				log.debug("cannot convert url: " + url + " to file (" + e.getMessage() +
-				          "), falling back to the inputstream for polling");
-			}
-		}
+		this.url = Args.notNull(url, "url");
 	}
 

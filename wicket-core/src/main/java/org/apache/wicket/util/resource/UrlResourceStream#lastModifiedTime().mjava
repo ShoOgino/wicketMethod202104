@@ -7,42 +7,20 @@
 	{
 		try
 		{
-			StreamData data = getData(true);
-
-			final Time lastModified;
-
-			if (fileForLastModified != null)
-			{
-				// get file modification timestamp
-				lastModified = Files.getLastModified(fileForLastModified);
-			}
-			else
-			{
-				// get url modification timestamp
-				lastModified = Connections.getLastModified(url);
-			}
+			// get url modification timestamp
+			final Time time = Connections.getLastModified(url);
 
 			// if timestamp changed: update content length and last modified date
-			if (Objects.equal(lastModified, data.lastModified) == false)
+			if (Objects.equal(time, lastModified) == false)
 			{
-				data.lastModified = lastModified;
-				setContentLength();
+				lastModified = time;
+				this.updateContentLength();
 			}
-			return data.lastModified;
+			return lastModified;
 		}
 		catch (IOException e)
 		{
-			if (url.toString().contains(".jar!"))
-			{
-				if (log.isDebugEnabled())
-				{
-					log.debug("getLastModified for " + url + " failed: " + e.getMessage());
-				}
-			}
-			else
-			{
-				log.warn("getLastModified for " + url + " failed: " + e.getMessage());
-			}
+			log.warn("getLastModified for " + url + " failed: " + e.getMessage());
 
 			// allow modification watcher to detect the problem
 			return null;
