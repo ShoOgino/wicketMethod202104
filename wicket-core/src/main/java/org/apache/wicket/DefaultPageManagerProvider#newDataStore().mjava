@@ -1,6 +1,11 @@
 	protected IDataStore newDataStore()
 	{
-		return new DiskDataStore(application.getName(), getMaxSizePerSession(),
-			getFileChannelPoolCapacity());
+		IStoreSettings storeSettings = getStoreSettings();
+		int maxSizePerSession = storeSettings.getMaxSizePerSession();
+		int fileChannelPoolCapacity = storeSettings.getFileChannelPoolCapacity();
+		File fileStoreFolder = storeSettings.getFileStoreFolder();
+
+		return new DiskDataStore(application.getName(), fileStoreFolder, maxSizePerSession,
+			fileChannelPoolCapacity);
 	}
 
