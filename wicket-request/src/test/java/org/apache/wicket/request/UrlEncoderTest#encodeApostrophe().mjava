@@ -1,0 +1,12 @@
+	/**
+	 * <a href="https://issues.apache.org/jira/browse/WICKET-3721">WICKET-3721</a> Encode
+	 * apostrophes because otherwise they get XML encoded by ComponentTag#writeOutput() to
+	 * &amp;#039; and eventually break links with javascript:
+	 */
+	@Test
+	public void encodeApostrophe()
+	{
+		Assert.assertEquals("someone%27s%20bad%20url",
+			UrlEncoder.FULL_PATH_INSTANCE.encode("someone's bad url", CharEncoding.UTF_8));
+	}
+
