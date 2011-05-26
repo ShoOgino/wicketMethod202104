@@ -5,8 +5,9 @@
 	 * 
 	 * @return {@link IPageManager} instance.
 	 */
-	public IPageManager getPageManager()
+	public final IPageManager getPageManager()
 	{
-		return getApplication().getPageManager();
+		IPageManager pageManager = Application.get().getPageManager();
+		return pageAccessSynchronizer.get().adapt(pageManager);
 	}
 
