@@ -1,0 +1,81 @@
+	/**
+	 * @param data
+	 * @param attributes
+	 */
+	protected void setResponseHeaders(final ResourceResponse data, final Attributes attributes)
+	{
+		Response response = attributes.getResponse();
+		if (response instanceof WebResponse)
+		{
+			WebResponse webResponse = (WebResponse)response;
+
+			// 1. Last Modified
+			Time lastModified = data.getLastModified();
+			if (lastModified != null)
+			{
+				webResponse.setLastModifiedTime(lastModified);
+			}
+
+			// 2. Caching
+			configureCache(data, attributes);
+
+			if (!data.dataNeedsToBeWritten(attributes))
+			{
+				webResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				return;
+			}
+
+			if (data.getErrorCode() != null)
+			{
+				webResponse.sendError(data.getErrorCode(), data.getErrorMessage());
+				return;
+			}
+
+			String fileName = data.getFileName();
+			ContentDisposition disposition = data.getContentDisposition();
+			String mimeType = data.getContentType();
+			String encoding = null;
+
+			if (mimeType != null && mimeType.contains("text"))
+			{
+				encoding = data.getTextEncoding();
+			}
+
+			long contentLength = data.getContentLength();
+
+			// 3. Content Disposition
+			if (ContentDisposition.ATTACHMENT == disposition)
+			{
+				webResponse.setAttachmentHeader(fileName);
+			}
+			else if (ContentDisposition.INLINE == disposition)
+			{
+				webResponse.setInlineHeader(fileName);
+			}
+
+			// 4. Mime Type (+ encoding)
+			if (mimeType != null)
+			{
+				if (encoding == null)
+				{
+					webResponse.setContentType(mimeType);
+				}
+				else
+				{
+					webResponse.setContentType(mimeType + "; charset=" + encoding);
+				}
+			}
+
+			// 5. Content Length
+			if (contentLength != -1)
+			{
+				webResponse.setContentLength(contentLength);
+			}
+
+			// 6. Flush the response
+			// This is necessary for firefox if this resource is an image, otherwise it messes up
+			// other images on page
+			webResponse.flush();
+		}
+	}
+

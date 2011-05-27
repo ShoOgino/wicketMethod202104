@@ -1,0 +1,20 @@
+	/**
+	 * <a href="https://issues.apache.org/jira/browse/WICKET-3649">WICKET-3649</a>
+	 * 
+	 * @throws IOException
+	 */
+	public void testThumbnailImageResource() throws IOException
+	{
+		DefaultButtonImageResource unscaled = new DefaultButtonImageResource(60, 60, "");
+		ThumbnailImageResource scaledImageResource = new ThumbnailImageResource(unscaled, 30);
+
+		tester.startResource(scaledImageResource);
+
+		byte[] response = tester.getLastResponse().getBinaryContent();
+		InputStream in = new ByteArrayInputStream(response);
+		BufferedImage scaledImage = ImageIO.read(in);
+
+		assertEquals(30, scaledImage.getWidth());
+		assertEquals(30, scaledImage.getHeight());
+	}
+
