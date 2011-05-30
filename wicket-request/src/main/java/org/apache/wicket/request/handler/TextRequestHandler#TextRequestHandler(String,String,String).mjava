@@ -2,7 +2,7 @@
 	 * Constructor
 	 * 
 	 * @param contentType
-	 *            content type of the data the string represents eg
+	 *            content type of the data the string represents, e.g.
 	 *            <code>text/html; charset=utf-8</code>
 	 * @param encoding
 	 *            charset to use
@@ -11,17 +11,8 @@
 	 */
 	public TextRequestHandler(final String contentType, final String encoding, final String string)
 	{
-		if (string == null)
-		{
-			throw new IllegalArgumentException("Argument string must be not null");
-		}
-		if (Strings.isEmpty(contentType))
-		{
-			throw new IllegalArgumentException("Argument contentType must not be null or empty");
-		}
-
-		this.contentType = contentType;
-		this.string = string;
+		this.contentType = Args.notEmpty(contentType, "contentType");
+		this.string = Args.notNull(string, "string");
 		this.encoding = encoding;
 	}
 
