@@ -5,7 +5,7 @@
 	 * @see #init(FilterConfig)
 	 * 
 	 * @param isServlet
-	 *            True if Servlet, false of Filter
+	 *            True if Servlet, false if Filter
 	 * @param filterConfig
 	 * @throws ServletException
 	 */
@@ -13,6 +13,8 @@
 		throws ServletException
 	{
 		this.filterConfig = filterConfig;
+		this.isServlet = isServlet;
+		initIgnorePaths(filterConfig);
 
 		applicationFactory = getApplicationFactory();
 		application = applicationFactory.createApplication(this);

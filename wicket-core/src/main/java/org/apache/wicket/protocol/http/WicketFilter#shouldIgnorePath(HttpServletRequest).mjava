@@ -1,0 +1,29 @@
+	/**
+	 * Checks whether this is a request to an ignored path
+	 * 
+	 * @param request
+	 *            the current http request
+	 * @return {@code true} when the request should be ignored, {@code false} - otherwise
+	 */
+	private boolean shouldIgnorePath(final HttpServletRequest request)
+	{
+		boolean ignore = false;
+		if (ignorePaths.size() > 0)
+		{
+			String relativePath = getRelativePath(request);
+			if (Strings.isEmpty(relativePath) == false)
+			{
+				for (String path : ignorePaths)
+				{
+					if (relativePath.startsWith(path))
+					{
+						ignore = true;
+						break;
+					}
+				}
+			}
+		}
+
+		return ignore;
+	}
+
