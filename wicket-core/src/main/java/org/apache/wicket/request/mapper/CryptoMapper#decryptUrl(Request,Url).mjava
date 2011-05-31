@@ -1,4 +1,4 @@
-	private Url decryptUrl(Request request, Url encryptedUrl)
+	private Url decryptUrl(final Request request, final Url encryptedUrl)
 	{
 		if (encryptedUrl.getSegments().isEmpty() && encryptedUrl.getQueryParameters().isEmpty())
 		{
@@ -44,7 +44,7 @@
 				segment += String.format("%02x", Math.abs(hash % 256));
 				hash = hashString(segment);
 
-				if (segment.equals(encryptedUrl.getSegments().get(segNo)))
+				if (segment.equals(segments.get(segNo)))
 				{
 					url.getSegments().add(originalUrl.getSegments().get(segNo - 1));
 				}
@@ -56,7 +56,7 @@
 
 			if (segNo < numberOfSegments)
 			{
-				url.getQueryParameters().addAll(encryptedUrl.getQueryParameters());
+				url.getQueryParameters().addAll(originalUrl.getQueryParameters());
 
 				for (; segNo < numberOfSegments; segNo++)
 				{
