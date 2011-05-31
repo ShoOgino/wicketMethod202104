@@ -1,16 +1,11 @@
 	IRequestLogger getRequestLogger()
 	{
 		WebApplication webApplication = (WebApplication)Application.get();
-		final IRequestLogger requestLogger;
+
+		IRequestLogger requestLogger = webApplication.getRequestLogger();
+
 		if (webApplication.getRequestLogger() == null)
-		{
-			// make default one.
-			requestLogger = new DummyRequestLogger();
-		}
-		else
-		{
-			requestLogger = webApplication.getRequestLogger();
-		}
+			requestLogger = new RequestLogger();
 		return requestLogger;
 	}
 
