@@ -1,0 +1,32 @@
+		public TestSessionFilter(final WicketTester tester) throws ServletException
+		{
+			init(new FilterConfig()
+			{
+				public ServletContext getServletContext()
+				{
+					return tester.getServletContext();
+				}
+
+				@SuppressWarnings("rawtypes")
+				public Enumeration getInitParameterNames()
+				{
+					return null;
+				}
+
+				public String getInitParameter(String name)
+				{
+					if ("filterName".equals(name))
+					{
+						return tester.getApplication().getName();
+					}
+
+					return null;
+				}
+
+				public String getFilterName()
+				{
+					return "session-filter";
+				}
+			});
+		}
+
