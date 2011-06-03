@@ -1,9 +1,6 @@
 	public final IMarkupFragment find(final String id)
 	{
-		if (Strings.isEmpty(id))
-		{
-			throw new IllegalArgumentException("Parameter 'id' must not be null or empty");
-		}
+		Args.notEmpty(id, "id");
 
 		MarkupStream stream = new MarkupStream(this);
 		stream.setCurrentIndex(1);
@@ -19,8 +16,7 @@
 					{
 						return stream.getMarkupFragment();
 					}
-					if (tag.isOpen() && !tag.hasNoCloseTag() && !(tag instanceof WicketTag) &&
-						(tag.isAutoComponentTag() == false))
+					if (tag.isOpen() && !tag.hasNoCloseTag() && !tag.isAutoComponentTag())
 					{
 						stream.skipToMatchingCloseTag(tag);
 					}
