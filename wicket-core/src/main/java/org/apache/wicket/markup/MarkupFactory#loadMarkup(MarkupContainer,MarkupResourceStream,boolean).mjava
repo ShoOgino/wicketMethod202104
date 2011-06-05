@@ -1,36 +1,90 @@
 	/**
-	 * Loads markup from a resource stream.
+	 * Loads markup from a resource stream. It'll call the registered markup loader to load the
+	 * markup.
+	 * <p>
+	 * Though the 'enforceReload' attribute seem to imply that the cache is consulted to retrieve
+	 * the markup, the cache in fact is only checked for retrieving the base (inherited) markup.
+	 * Please see {@link #getMarkup(MarkupContainer, boolean)} as well.
 	 * 
 	 * @param container
 	 *            The original requesting markup container
 	 * @param markupResourceStream
-	 *            The markup resource stream to load. May be null.
+	 *            The markup resource stream to load, if already known.
 	 * @param enforceReload
 	 *            The cache will be ignored and all, including inherited markup files, will be
 	 *            reloaded. Whatever is in the cache, it will be ignored
-	 * @return The markup
+	 * @return The markup. Null, if the markup was not found. Wicket Exception in case of errors.
 	 */
 	public final Markup loadMarkup(final MarkupContainer container,
-		MarkupResourceStream markupResourceStream, final boolean enforceReload)
+		final MarkupResourceStream markupResourceStream, final boolean enforceReload)
 	{
-		if (markupResourceStream == null)
+		// @TODO can markupResourceStream be replace with clazz???
+		Args.notNull(container, "container");
+		Args.notNull(markupResourceStream, "markupResourceStream");
+
+		if (checkMarkupType(container) == false)
 		{
-			markupResourceStream = getMarkupResourceStream(container, null);
+			return null;
 		}
 
 		try
 		{
+			// The InheritedMarkupMarkupLoader needs to load the base markup. It'll do it via
+			// MarkupFactory.getMarkup() as main entry point, which in tern allows to choose between
+			// use or ignore the cache. That's via we need to propagate enforceReload to the markup
+			// loader as well.
+
+			// Markup loader is responsible to load the full markup for the container. In case of
+			// markup inheritance, the markup must be merged from different markup files. It is the
+			// merged markup which eventually will be cached, thus avoiding repetitive merge
+			// operations, which always result in the same outcome.
+			// The base markup will still be cached though, in order to avoid any unnecessary
+			// reloads. The base markup itself might be merged as it might inherit from its base
+			// class.
+
 			return getMarkupLoader().loadMarkup(container, markupResourceStream, null,
 				enforceReload);
 		}
+		catch (MarkupNotFoundException e)
+		{
+			// InheritedMarkupMarkupLoader will throw a MarkupNotFoundException in case the
+			// <b>base</b> markup can not be found.
+
+			log.error("Markup not found: " + e.getMessage(), e);
+
+			// Catch exception and ignore => return null (markup not found)
+		}
 		catch (ResourceStreamNotFoundException e)
 		{
-			log.error("Unable to find markup from " + markupResourceStream, e);
+			log.error("Markup not found: " + markupResourceStream, e);
+
+			// Catch exception and ignore => return null (markup not found)
 		}
 		catch (IOException e)
 		{
-			log.error("Unable to read markup from " + markupResourceStream, e);
+			log.error("Error while reading the markup " + markupResourceStream, e);
+
+			// Wrap with wicket exception and re-throw
+			throw new MarkupException(markupResourceStream, "IO error while readin markup: " +
+				e.getMessage(), e);
 		}
+		catch (WicketRuntimeException e)
+		{
+			log.error("Error while reading the markup " + markupResourceStream, e);
+
+			// re-throw
+			throw e;
+		}
+		catch (RuntimeException e)
+		{
+			log.error("Error while reading the markup " + markupResourceStream, e);
+
+			// Wrap with wicket exception and re-throw
+			throw new MarkupException(markupResourceStream, "Error while reading the markup: " +
+				e.getMessage(), e);
+		}
+
+		// Markup not found. Errors should throw a Wicket exception
 		return null;
 	}
 

@@ -1,32 +1,21 @@
-	/**
-	 * THIS IS NOT PART OF WICKET'S PUBLIC API. DO NOT USE IT.
-	 * 
-	 * I still don't like this method being part of the API but I didn't find a suitable other
-	 * solution.
-	 * 
-	 * @see org.apache.wicket.markup.IMarkupCache#getMarkup(org.apache.wicket.MarkupContainer,
-	 *      Class, boolean)
-	 */
 	public final Markup getMarkup(final MarkupContainer container, final Class<?> clazz,
 		final boolean enforceReload)
 	{
-		Class<?> containerClass = clazz;
-		if (clazz == null)
-		{
-			containerClass = container.getClass();
-		}
-		else if (!clazz.isAssignableFrom(container.getClass()))
-		{
-			throw new WicketRuntimeException("Parameter clazz must be an instance of " +
-				container.getClass().getName() + ", but is a " + clazz.getName());
-		}
+		Class<?> containerClass = MarkupFactory.get().getContainerClass(container, clazz);
 
-		// Get the cache key to be associated with the markup resource stream
+		// Get the cache key to be associated with the markup resource stream.
+		// If the cacheKey returned == null, than caching is disabled for the resource stream.
 		final String cacheKey = getMarkupCacheKeyProvider(container).getCacheKey(container,
 			containerClass);
 
 		// Is the markup already in the cache?
-		Markup markup = (enforceReload == false ? getMarkupFromCache(cacheKey, container) : null);
+		Markup markup = null;
+		if ((enforceReload == false) && (cacheKey != null))
+		{
+			markup = getMarkupFromCache(cacheKey, container);
+		}
+
+		// If markup not found in cache or cache disabled, than ...
 		if (markup == null)
 		{
 			if (log.isDebugEnabled())
@@ -34,8 +23,7 @@
 				log.debug("Load markup: cacheKey=" + cacheKey);
 			}
 
-			// Who is going to provide the markup resource stream?
-			// And ask the provider to locate the markup resource stream
+			// Get the markup resource stream for the container
 			final MarkupResourceStream resourceStream = MarkupFactory.get()
 				.getMarkupResourceStream(container, containerClass);
 
@@ -49,9 +37,16 @@
 			}
 			else
 			{
-				markup = onMarkupNotFound(cacheKey, container);
+				markup = onMarkupNotFound(cacheKey, container, Markup.NO_MARKUP);
 			}
 		}
+
+		// NO_MARKUP should only be used insight the Cache.
+		if (markup == Markup.NO_MARKUP)
+		{
+			markup = null;
+		}
+
 		return markup;
 	}
 

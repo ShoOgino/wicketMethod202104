@@ -1,29 +1,47 @@
 	/**
-	 * Get the markup associated with the container.
+	 * Get the markup associated with the container. Check the cache first. If not found, than load
+	 * the markup and update the cache.
+	 * <p>
+	 * The clazz parameter usually can be null, except for base (inherited) markup.
+	 * <p>
+	 * There several means to disable markup caching. Caching can be disabled alltogether -
+	 * getMarkupCache() return null -, or individually (cacheKey == null).
 	 * 
 	 * @param container
 	 *            The container to find the markup for
 	 * @param clazz
-	 *            Must be the container class or any of its super classes.
+	 *            Must be the container class or any of its super classes. May be null.
 	 * @param enforceReload
 	 *            The cache will be ignored and all, including inherited markup files, will be
 	 *            reloaded. Whatever is in the cache, it will be ignored
-	 * @return The markup associated with the container
+	 * @return The markup associated with the container. Null, if the markup was not found or could
+	 *         not yet be loaded (e.g. getMarkupType() == null). Wicket Exception in case of errors.
 	 */
 	public final Markup getMarkup(final MarkupContainer container, final Class<?> clazz,
 		final boolean enforceReload)
 	{
 		Args.notNull(container, "container");
-		Args.notNull(clazz, "clazz");
+
+		if (checkMarkupType(container) == false)
+		{
+			return null;
+		}
+
+		Class<?> containerClass = getContainerClass(container, clazz);
 
 		IMarkupCache cache = getMarkupCache();
 		if (cache != null)
 		{
 			// MarkupCache acts as pull-through cache. It'll call the same loadMarkup() method as
 			// below, if needed.
-			return cache.getMarkup(container, clazz, enforceReload);
+			// @TODO may that can be changed. I don't like it too much.
+			return cache.getMarkup(container, containerClass, enforceReload);
 		}
 
-		return loadMarkup(container, null, enforceReload);
+		// Get the markup resource stream for the container (and super class)
+		MarkupResourceStream markupResourceStream = getMarkupResourceStream(container,
+			containerClass);
+
+		return loadMarkup(container, markupResourceStream, enforceReload);
 	}
 

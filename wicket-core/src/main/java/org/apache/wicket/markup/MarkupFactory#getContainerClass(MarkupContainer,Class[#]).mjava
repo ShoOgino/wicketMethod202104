@@ -1,0 +1,25 @@
+	/**
+	 * Gets and checks the container class
+	 * 
+	 * @param container
+	 * @param clazz
+	 *            Either null, or a super class of container
+	 * @return The container class to be used
+	 */
+	public final Class<?> getContainerClass(final MarkupContainer container, final Class<?> clazz)
+	{
+		Args.notNull(container, "container");
+
+		Class<?> containerClass = clazz;
+		if (clazz == null)
+		{
+			containerClass = container.getClass();
+		}
+		else if (!clazz.isAssignableFrom(container.getClass()))
+		{
+			throw new IllegalArgumentException("Parameter clazz must be an instance of " +
+				container.getClass().getName() + ", but is a " + clazz.getName());
+		}
+		return containerClass;
+	}
+

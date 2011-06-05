@@ -2,11 +2,18 @@
 	 * @param key
 	 * @return True, if base markup for entry with cache 'key' is available in the cache as well.
 	 */
-	private boolean isBaseMarkupCached(final CharSequence key)
+	private boolean isBaseMarkupCached(final String key)
 	{
-		// Get the markup associated with key
+		// Get the markup associated with key. Null in case the key has no associated value. A null
+		// value is not possible because of ConcurrentHashMap.
 		Markup markup = markupCache.get(key);
 		if (markup == null)
+		{
+			return false;
+		}
+
+		// NO_MARKUP does not have an associated resource stream
+		if (markup == Markup.NO_MARKUP)
 		{
 			return false;
 		}

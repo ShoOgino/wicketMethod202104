@@ -8,7 +8,7 @@
 	 * @param enforceReload
 	 *            The cache will be ignored and all, including inherited markup files, will be
 	 *            reloaded. Whatever is in the cache, it will be ignored
-	 * @return The markup
+	 * @return The markup. Markup.NO_MARKUP, if not found.
 	 */
 	private final Markup loadMarkup(final MarkupContainer container,
 		final MarkupResourceStream markupResourceStream, final boolean enforceReload)
@@ -41,7 +41,7 @@
 			return markup;
 		}
 
-		// In case of an error, remove the cache entry
+		// In case the markup could not be loaded (without exception), than ..
 		if (cacheKey != null)
 		{
 			removeMarkup(cacheKey);

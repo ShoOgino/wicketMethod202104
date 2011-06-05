@@ -13,13 +13,20 @@
 	 * @return markup The markup provided, except if the cacheKey already existed in the cache, than
 	 *         the markup from the cache is provided.
 	 */
-	protected Markup putIntoCache(final String locationString, MarkupContainer container,
+	protected Markup putIntoCache(final String locationString, final MarkupContainer container,
 		Markup markup)
 	{
 		if (locationString != null)
 		{
 			if (markupCache.containsKey(locationString) == false)
 			{
+				// The default cache implementation is a ConcurrentHashMap. Thus neither the key nor
+				// the value can be null.
+				if (markup == null)
+				{
+					markup = Markup.NO_MARKUP;
+				}
+
 				markupCache.put(locationString, markup);
 			}
 			else

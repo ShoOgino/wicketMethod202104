@@ -15,6 +15,8 @@
 	private final Markup loadMarkupAndWatchForChanges(final MarkupContainer container,
 		final MarkupResourceStream markupResourceStream, final boolean enforceReload)
 	{
+		// @TODO the following code sequence looks very much like in loadMarkup. Can it be
+		// optimized?
 		final String cacheKey = markupResourceStream.getCacheKey();
 		if (cacheKey != null)
 		{
@@ -34,8 +36,7 @@
 			}
 
 			// Watch file in the future
-			final IModificationWatcher watcher = Application.get()
-				.getResourceSettings()
+			final IModificationWatcher watcher = application.getResourceSettings()
 				.getResourceWatcher(true);
 			if (watcher != null)
 			{

@@ -1,0 +1,25 @@
+	/**
+	 * Without a markup type we can not search for a file and we can not construct the cacheKey. We
+	 * can not even load associated markup as required for Panels. Though every MarkupContainer can
+	 * provide it's own type, by default they refer to the Page. Hence, no markup type is an
+	 * indicator, that the component or any of its parents, has not yet been added.
+	 * 
+	 * @param container
+	 * @return true, if container.getMarkupType() != null
+	 */
+	protected final boolean checkMarkupType(final MarkupContainer container)
+	{
+		if (container.getMarkupType() == null)
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("Markup file not loaded, since the markup type is not yet available: " +
+					container.toString());
+			}
+
+			return false;
+		}
+
+		return true;
+	}
+
