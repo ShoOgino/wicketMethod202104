@@ -11,10 +11,7 @@
 	{
 		for (Component child : childs)
 		{
-			if (child == null)
-			{
-				throw new IllegalArgumentException("argument child may not be null");
-			}
+			Args.notNull(child, "child");
 
 			MarkupContainer parent = getParent();
 			while (parent != null)
@@ -23,14 +20,17 @@
 				{
 					String msg = "You can not add a component's parent as child to the component (loop): Component: " +
 						this.toString(false) + "; parent == child: " + parent.toString(false);
+
 					if (child instanceof Border.BorderBodyContainer)
 					{
 						msg += ". Please consider using Border.addToBorder(new " +
 							this.getClass().getSimpleName() + "(\"" + this.getId() +
 							"\", ...) instead of add(...)";
 					}
+
 					throw new WicketRuntimeException(msg);
 				}
+
 				parent = parent.getParent();
 			}
 
