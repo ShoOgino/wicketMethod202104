@@ -4,7 +4,7 @@
 	 * <p>
 	 * The clazz parameter usually can be null, except for base (inherited) markup.
 	 * <p>
-	 * There several means to disable markup caching. Caching can be disabled alltogether -
+	 * There are several means to disable markup caching. Caching can be disabled alltogether -
 	 * getMarkupCache() return null -, or individually (cacheKey == null).
 	 * 
 	 * @param container
@@ -24,6 +24,8 @@
 
 		if (checkMarkupType(container) == false)
 		{
+			// TODO improve: Result { boolean success, enum FailureReason {not found, not yet
+			// available}, Markup markup }
 			return null;
 		}
 
@@ -34,7 +36,7 @@
 		{
 			// MarkupCache acts as pull-through cache. It'll call the same loadMarkup() method as
 			// below, if needed.
-			// @TODO may that can be changed. I don't like it too much.
+			// @TODO may be that can be changed. I don't like it too much.
 			return cache.getMarkup(container, containerClass, enforceReload);
 		}
 
