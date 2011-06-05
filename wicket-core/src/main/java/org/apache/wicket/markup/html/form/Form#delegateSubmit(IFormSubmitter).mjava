@@ -26,12 +26,13 @@
 		{
 			// use form of submitting component for processing
 			processingForm = submittingComponent.getForm();
-			
-			if(processingForm == null)
+
+			if (processingForm == null)
 			{
-				throw new IllegalStateException("submitting component must not return 'null' on getForm()");
+				throw new IllegalStateException(
+					"submitting component must not return 'null' on getForm()");
 			}
-			
+
 			// invoke submit on component
 			submittingComponent.onSubmit();
 		}
@@ -39,7 +40,7 @@
 		{
 			processingForm = this;
 		}
-		
+
 		// invoke Form#onSubmit(..) going from innermost to outermost
 		Visits.visitPostOrder(processingForm, new IVisitor<Form<?>, Void>()
 		{
