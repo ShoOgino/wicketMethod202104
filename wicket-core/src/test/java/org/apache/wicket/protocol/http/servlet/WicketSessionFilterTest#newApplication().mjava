@@ -1,0 +1,22 @@
+	@Override
+	protected WebApplication newApplication()
+	{
+		return new MockApplication()
+		{
+			@Override
+			protected void init()
+			{
+				super.init();
+
+				// use HttpSessionStore because we need to test it
+				setSessionStoreProvider(new IProvider<ISessionStore>()
+				{
+					public ISessionStore get()
+					{
+						return new HttpSessionStore();
+					}
+				});
+			}
+		};
+	}
+

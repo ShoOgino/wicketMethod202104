@@ -6,23 +6,6 @@
 	@Test
 	public void applicationAndSessionAreExported() throws Exception
 	{
-		final WicketTester tester = new WicketTester(new MockApplication()
-		{
-			@Override
-			protected void init()
-			{
-				super.init();
-
-				// use HttpSessionStore because we need to test it
-				setSessionStoreProvider(new IProvider<ISessionStore>()
-				{
-					public ISessionStore get()
-					{
-						return new HttpSessionStore();
-					}
-				});
-			}
-		});
 		// bind the session so it can be found in TestSessionFilter
 		tester.getSession().bind();
 

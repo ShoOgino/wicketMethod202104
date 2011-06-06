@@ -1,0 +1,25 @@
+	@Override
+	protected WebApplication newApplication()
+	{
+		return new MockApplication()
+		{
+			@Override
+			protected void init()
+			{
+				super.init();
+
+				// we don't care about FormComponentFeedbackBorder's 'errorindicator'
+				getDebugSettings().setComponentUseCheck(false);
+			}
+
+			/**
+			 * @see org.apache.wicket.Application#getHomePage()
+			 */
+			@Override
+			public Class<HomePage> getHomePage()
+			{
+				return HomePage.class;
+			}
+		};
+	}
+

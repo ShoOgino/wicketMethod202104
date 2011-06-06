@@ -4,19 +4,18 @@
 	public void testClickLink2()
 	{
 		// same as above but uses different technique to login
-		application.startPage(application.getApplication().getHomePage());
-		MockLoginPage loginPage = (MockLoginPage)application.getLastRenderedPage();
-		assertEquals(((MyMockWebApplication)application.getApplication()).getLoginPage(),
+		tester.startPage(tester.getApplication().getHomePage());
+		MockLoginPage loginPage = (MockLoginPage)tester.getLastRenderedPage();
+		assertEquals(((MyMockWebApplication)tester.getApplication()).getLoginPage(),
 			loginPage.getClass());
 
 		// bypass form completely to login but continue to intercept page
-		assertTrue(((MockLoginPage)application.getLastRenderedPage()).login("admin"));
-		application.startPage(application.getApplication().getHomePage());
+		assertTrue(((MockLoginPage)tester.getLastRenderedPage()).login("admin"));
+		tester.startPage(tester.getApplication().getHomePage());
 
-		assertEquals(application.getApplication().getHomePage(), application.getLastRenderedPage()
-			.getClass());
+		assertEquals(tester.getApplication().getHomePage(), tester.getLastRenderedPage().getClass());
 
-		application.clickLink(application.getLastRenderedPage().get("link"));
-		assertEquals(PageA.class, application.getLastRenderedPage().getClass());
+		tester.clickLink(tester.getLastRenderedPage().get("link"));
+		assertEquals(PageA.class, tester.getLastRenderedPage().getClass());
 	}
 
