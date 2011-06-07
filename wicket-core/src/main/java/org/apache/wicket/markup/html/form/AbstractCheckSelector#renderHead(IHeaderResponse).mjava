@@ -1,0 +1,20 @@
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		// make sure we have all the javascript we need
+		response.renderJavaScriptReference(WicketEventReference.INSTANCE);
+		response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
+		response.renderJavaScriptReference(JS);
+		String findCheckboxes = getFindCheckboxesFunction().toString();
+
+		// initialize the selector
+		response.renderOnLoadJavaScript("Wicket.CheckboxSelector.initializeSelector('" +
+			this.getMarkupId() + "', " + findCheckboxes + ");");
+		if (wantAutomaticUpdate())
+		{
+			// initialize the handlers for automatic updating of the selector state
+			response.renderOnLoadJavaScript("Wicket.CheckboxSelector.attachUpdateHandlers('" +
+				this.getMarkupId() + "', " + findCheckboxes + ");");
+		}
+	}
+
