@@ -25,11 +25,12 @@
 			// Allow component to contribute
 			if (response.wasRendered(this) == false)
 			{
-				// Let the component contribute something to the header
-				renderHead(this, response);
-
-				// Make sure the markup source strategy has been considered as well.
+				// Make sure the markup source strategy contributes to the header first
+				// to be backward compatible. WICKET-3761
 				getMarkupSourcingStrategy().renderHead(this, container);
+
+				// Then let the component itself to contribute to the header
+				renderHead(this, response);
 
 				response.markRendered(this);
 			}
