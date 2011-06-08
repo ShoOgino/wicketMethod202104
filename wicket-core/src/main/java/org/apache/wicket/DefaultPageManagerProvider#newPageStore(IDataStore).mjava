@@ -1,6 +1,7 @@
 	protected IPageStore newPageStore(IDataStore dataStore)
 	{
 		int inmemoryCacheSize = getStoreSettings().getInmemoryCacheSize();
-		return new DefaultPageStore(application.getName(), dataStore, inmemoryCacheSize);
+		ISerializer pageSerializer = application.getFrameworkSettings().getSerializer();
+		return new DefaultPageStore(pageSerializer, dataStore, inmemoryCacheSize);
 	}
 
