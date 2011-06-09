@@ -1,6 +1,7 @@
 	/**
 	 * Create a new attribute modifier with the given attribute name and model to replace with. The
-	 * attribute will not be added if it is not present.
+	 * attribute will be added with the model value or the value will be replaced with the model
+	 * value if the attribute is already present.
 	 * 
 	 * @param attribute
 	 *            The attribute name to replace the value for
@@ -9,6 +10,9 @@
 	 */
 	public AttributeModifier(final String attribute, final IModel<?> replaceModel)
 	{
-		this(attribute, null, false, replaceModel);
+		Args.notNull(attribute, "attribute");
+
+		this.attribute = attribute;
+		this.replaceModel = replaceModel;
 	}
 

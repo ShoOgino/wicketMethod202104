@@ -25,25 +25,11 @@
 			}
 			else
 			{
-				if (attributes.containsKey(attribute))
+				final String value = toStringOrNull(attributes.get(attribute));
+				final String newValue = newValue(value, toStringOrNull(replacementValue));
+				if (newValue != null)
 				{
-					final String value = toStringOrNull(attributes.get(attribute));
-					if (pattern == null || value.matches(pattern))
-					{
-						final String newValue = newValue(value, toStringOrNull(replacementValue));
-						if (newValue != null)
-						{
-							attributes.put(attribute, newValue);
-						}
-					}
-				}
-				else if (addAttributeIfNotPresent)
-				{
-					final String newValue = newValue(null, toStringOrNull(replacementValue));
-					if (newValue != null)
-					{
-						attributes.put(attribute, newValue);
-					}
+					attributes.put(attribute, newValue);
 				}
 			}
 		}

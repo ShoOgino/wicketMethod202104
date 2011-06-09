@@ -7,13 +7,17 @@
 
 		final DataView<Contact> dataView = new DataView<Contact>("oir", dp)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(final Item<Contact> item)
 			{
 				Contact contact = item.getModelObject();
 				item.add(new ActionPanel("actions", item.getModel()));
-				item.add(new Link("toggleHighlite")
+				item.add(new Link<Void>("toggleHighlite")
 				{
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick()
 					{
@@ -27,8 +31,10 @@
 				item.add(new Label("homephone", contact.getHomePhone()));
 				item.add(new Label("cellphone", contact.getCellPhone()));
 
-				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<String>()
+				item.add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>()
 				{
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public String getObject()
 					{
@@ -49,6 +55,8 @@
 
 		add(new OrderByBorder("orderByFirstName", "firstName", dp)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSortChanged()
 			{
@@ -58,6 +66,8 @@
 
 		add(new OrderByBorder("orderByLastName", "lastName", dp)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSortChanged()
 			{
