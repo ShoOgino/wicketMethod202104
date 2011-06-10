@@ -1,0 +1,35 @@
+	/** */
+	@Test
+	public void insertWithRules()
+	{
+		insertXmlDecl = 0;
+
+		tester.startPage(new SimplePage(MarkupType.HTML_MIME));
+		String doc = tester.getLastResponseAsString();
+		assertEquals(markupWithout, doc);
+
+		tester.startPage(new SimplePage(MarkupType.XML_MIME));
+		doc = tester.getLastResponseAsString();
+		assertEquals(markupWith, doc);
+
+		((MyWicketTester)tester).acceptHeader = acceptString;
+		tester.startPage(new SimplePage(MarkupType.HTML_MIME));
+		doc = tester.getLastResponseAsString();
+		assertEquals(markupWithout, doc);
+
+		((MyWicketTester)tester).acceptHeader = acceptString;
+		tester.startPage(new SimplePage(MarkupType.XML_MIME));
+		doc = tester.getLastResponseAsString();
+		assertEquals(markupWith, doc);
+
+		((MyWicketTester)tester).acceptHeader = "xx";
+		tester.startPage(new SimplePage(MarkupType.HTML_MIME));
+		doc = tester.getLastResponseAsString();
+		assertEquals(markupWithout, doc);
+
+		((MyWicketTester)tester).acceptHeader = "xx";
+		tester.startPage(new SimplePage(MarkupType.XML_MIME));
+		doc = tester.getLastResponseAsString();
+		assertEquals(markupWithout, doc);
+	}
+

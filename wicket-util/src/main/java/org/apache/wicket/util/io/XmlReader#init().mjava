@@ -10,10 +10,11 @@
 		inputStream.mark(readAheadSize);
 
 		// read-ahead the input stream and check if it starts with <?xml..?>.
-		if (getXmlDeclaration(inputStream, readAheadSize))
+		String xmlDeclaration = getXmlDeclaration(inputStream, readAheadSize);
+		if (!Strings.isEmpty(xmlDeclaration))
 		{
 			// If yes than determine the encoding from the xml decl
-			encoding = determineEncoding(xmlDeclarationString);
+			encoding = determineEncoding(xmlDeclaration);
 		}
 		else
 		{

@@ -11,7 +11,7 @@
 	 * @return true, if &lt;?xml ..?&gt; has been found
 	 * @throws IOException
 	 */
-	private final boolean getXmlDeclaration(final InputStream in, final int readAheadSize)
+	private final String getXmlDeclaration(final InputStream in, final int readAheadSize)
 		throws IOException
 	{
 		// Max one line
@@ -37,11 +37,10 @@
 		if (!matcher.matches())
 		{
 			// No
-			return false;
+			return null;
 		}
 
 		// Save the whole <?xml ..> string for later
-		xmlDeclarationString = pushBack.toString().trim();
-		return true;
+		return pushBack.toString().trim();
 	}
 
