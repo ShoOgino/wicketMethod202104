@@ -9,7 +9,7 @@
 	{
 		if (throwable != null)
 		{
-			AppendingStringBuffer sb = new AppendingStringBuffer(256);
+			StringBuilder sb = new StringBuilder(256);
 
 			// first print the last cause
 			List<Throwable> al = convertToList(throwable);
@@ -19,22 +19,25 @@
 			if (throwable instanceof WicketRuntimeException)
 			{
 				String msg = throwable.getMessage();
-				if (throwable instanceof MarkupException)
+				if ((msg != null) && (msg.equals(cause.getMessage()) == false))
 				{
-					MarkupStream stream = ((MarkupException)throwable).getMarkupStream();
-					if (stream != null)
+					if (throwable instanceof MarkupException)
 					{
-						String text = "\n" + stream.toString();
-						if (msg.endsWith(text))
+						MarkupStream stream = ((MarkupException)throwable).getMarkupStream();
+						if (stream != null)
 						{
-							msg = msg.substring(0, msg.length() - text.length());
+							String text = "\n" + stream.toString();
+							if (msg.endsWith(text))
+							{
+								msg = msg.substring(0, msg.length() - text.length());
+							}
 						}
 					}
-				}
 
-				sb.append("WicketMessage: ");
-				sb.append(msg);
-				sb.append("\n\n");
+					sb.append("WicketMessage: ");
+					sb.append(msg);
+					sb.append("\n\n");
+				}
 			}
 			return sb.toString();
 		}
