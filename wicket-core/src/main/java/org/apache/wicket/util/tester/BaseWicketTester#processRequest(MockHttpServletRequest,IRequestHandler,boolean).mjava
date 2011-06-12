@@ -1,11 +1,18 @@
 	/**
+	 * Process the request. This is a fairly central function and is almost always invoked for
+	 * executing the request.
+	 * <p>
+	 * You may subclass processRequest it, to monitor or change any pre-configured value. Request
+	 * headers can be configured more easily by calling {@link #addRequestHeader(String, String)}.
 	 * 
 	 * @param forcedRequest
+	 *            Can be null.
 	 * @param forcedRequestHandler
+	 *            Can be null.
 	 * @param redirect
 	 * @return true, if process was executed successfully
 	 */
-	private boolean processRequest(final MockHttpServletRequest forcedRequest,
+	protected boolean processRequest(final MockHttpServletRequest forcedRequest,
 		final IRequestHandler forcedRequestHandler, final boolean redirect)
 	{
 		if (forcedRequest != null)
@@ -18,6 +25,21 @@
 		if (!redirect && getRequest().getHeader("Wicket-Ajax") == null)
 		{
 			lastRenderedPage = null;
+		}
+
+		// Add or replace any system provided header entry with the user provided.
+		if ((request != null) && (preHeader != null))
+		{
+			for (Map.Entry<String, String> entry : preHeader.entrySet())
+			{
+				if (Strings.isEmpty(entry.getKey()) == false)
+				{
+					request.addHeader(entry.getKey(), entry.getValue());
+				}
+			}
+
+			// Reset the user provided headers
+			preHeader = null;
 		}
 
 		try

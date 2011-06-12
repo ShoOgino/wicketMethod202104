@@ -1,0 +1,24 @@
+	/**
+	 * Allows to set Request header value any time. They'll be applied (add/modify) on process
+	 * execution {@link #processRequest(MockHttpServletRequest, IRequestHandler, boolean)}. They are
+	 * reset immediately after and thus are not re-used for a sequence of requests.
+	 * <p>
+	 * Deletion (not replace) of pre-configured header value can be achieved by subclassing
+	 * {@link #processRequest(MockHttpServletRequest, IRequestHandler, boolean)} and modifying the
+	 * request header directly.
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public final void addRequestHeader(final String key, final String value)
+	{
+		Args.notEmpty(key, "key");
+
+		if (preHeader == null)
+		{
+			preHeader = Generics.newHashMap();
+		}
+
+		preHeader.put(key, value);
+	}
+
