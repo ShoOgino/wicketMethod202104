@@ -1,13 +1,13 @@
 	public Object deserialize(final byte[] data)
 	{
 		ThreadContext old = ThreadContext.get(false);
+		final ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream ois = null;
 		try
 		{
-			final ByteArrayInputStream in = new ByteArrayInputStream(data);
-			ObjectInputStream ois = null;
 			try
 			{
-				ois = new ClassResolverObjectInputStream(in);
+				ois = newObjectInputStream(in);
 				String applicationName = (String)ois.readObject();
 				if (applicationName != null && !Application.exists())
 				{
@@ -33,11 +33,11 @@
 		}
 		catch (ClassNotFoundException e)
 		{
-			throw new RuntimeException("Could not deserialize object using JavaSerializer", e);
+			throw new RuntimeException("Could not deserialize object using: " + ois.getClass(), e);
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Could not deserialize object using JavaSerializer", e);
+			throw new RuntimeException("Could not deserialize object using: " + ois.getClass(), e);
 		}
 		finally
 		{
