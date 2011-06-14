@@ -4,16 +4,33 @@
 	private final void initComps()
 	{
 		WebComponent meta = new WebComponent("meta");
-		PageParameters parameters = new PageParameters();
-		parameters.set("cto", continueTo);
 
-		CharSequence url = urlFor(new BookmarkablePageRequestHandler(new PageProvider(
-			BrowserInfoPage.class, parameters)));
+		final IModel<String> urlModel = new LoadableDetachableModel<String>()
+		{
+			private static final long serialVersionUID = 1L;
 
-		meta.add(AttributeModifier.replace("content", Model.of("0; url=" + url)));
+			@Override
+			protected String load()
+			{
+				CharSequence url = urlFor(BrowserInfoPage.class, null);
+				return url.toString();
+			}
+		};
+
+		meta.add(AttributeModifier.replace("content", new AbstractReadOnlyModel<String>()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getObject()
+			{
+				return "0; url=" + urlModel.getObject();
+			}
+
+		}));
 		add(meta);
 		WebMarkupContainer link = new WebMarkupContainer("link");
-		link.add(AttributeModifier.replace("href", Model.of((Serializable)url)));
+		link.add(AttributeModifier.replace("href", urlModel));
 		add(link);
 		add(new BrowserInfoForm("postback")
 		{
@@ -25,7 +42,7 @@
 			@Override
 			protected void afterSubmit()
 			{
-				continueToPrevious();
+				continueToOriginalDestination();
 			}
 		});
 	}
