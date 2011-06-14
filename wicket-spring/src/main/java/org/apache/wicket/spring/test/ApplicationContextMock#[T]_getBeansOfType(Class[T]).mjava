@@ -1,16 +1,16 @@
 	/**
 	 * @see org.springframework.beans.factory.ListableBeanFactory#getBeansOfType(java.lang.Class)
 	 */
-	@SuppressWarnings("rawtypes")
-	public Map getBeansOfType(final Class type) throws BeansException
+	@SuppressWarnings({"unchecked"})
+	public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException
 	{
-		Map found = new HashMap();
+		final Map<String, T> found = new HashMap<String, T>();
 
 		for (Entry<String, Object> entry : beans.entrySet())
 		{
 			if (type.isAssignableFrom(entry.getValue().getClass()))
 			{
-				found.put(entry.getKey(), entry.getValue());
+				found.put(entry.getKey(), (T)entry.getValue());
 			}
 		}
 

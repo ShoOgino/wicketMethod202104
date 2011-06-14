@@ -1,0 +1,28 @@
+	private <A extends Annotation> A findAnnotationOnClass(Class<?> cls, Class<A> annotationType)
+	{
+		// lookup annotation type on class
+		A annotation = cls.getAnnotation(annotationType);
+		
+		// lookup annotation type on superclass
+		if(annotation == null && cls.getSuperclass() != null)
+		{
+		    annotation = findAnnotationOnClass(cls.getSuperclass(), annotationType);
+		}
+
+		// lookup annotation type on interfaces
+		if(annotation == null)
+		{
+			for (Class<?> intfClass : cls.getInterfaces())
+			{
+				annotation = findAnnotationOnClass(intfClass, annotationType);
+			
+				if(annotation != null)
+				{
+					break;
+				}
+			}
+		}
+		
+		return annotation;
+	}
+

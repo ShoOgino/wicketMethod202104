@@ -1,14 +1,14 @@
 	/**
 	 * @see org.springframework.beans.factory.BeanFactory#getBean(java.lang.String, java.lang.Class)
 	 */
-	public Object getBean(final String name, @SuppressWarnings("rawtypes") final Class requiredType)
-		throws BeansException
+	@SuppressWarnings({"unchecked"})
+	public <T> T getBean(String name, Class<T> requiredType) throws BeansException
 	{
 		Object bean = getBean(name);
 		if (!(requiredType.isAssignableFrom(bean.getClass())))
 		{
 			throw new BeanNotOfRequiredTypeException(name, requiredType, bean.getClass());
 		}
-		return bean;
+		return (T)bean;
 	}
 
