@@ -1,0 +1,32 @@
+	/**
+	 * This is for all components which have been added to the markup like this:
+	 * 
+	 * <pre>
+	 * 	&lt;span wicket:id="myBorder"&gt;
+	 * 		&lt;input wicket:id="text1" .. /&gt;
+	 * 		...
+	 * 	&lt;/span&gt;
+	 * 
+	 * </pre>
+	 * 
+	 * Whereas {@link #addToBorder(Component...)} will add a component associated with the following
+	 * markup:
+	 * 
+	 * <pre>
+	 * 	&lt;wicket:border&gt;
+	 * 		&lt;form wicket:id="myForm" .. &gt;
+	 * 			&lt;wicket:body/&gt;
+	 * 		&lt;/form&gt;
+	 * 	&lt;/wicket:border&gt;
+	 * 
+	 * </pre>
+	 * 
+	 * @see org.apache.wicket.MarkupContainer#add(org.apache.wicket.Component[])
+	 */
+	@Override
+	public Border add(final Component... children)
+	{
+		getBodyContainer().add(children);
+		return this;
+	}
+

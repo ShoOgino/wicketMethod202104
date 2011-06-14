@@ -33,7 +33,7 @@
 
 			if (column instanceof IStyledColumn)
 			{
-				header.add(new DataTable.CssAttributeBehavior()
+				CssAttributeBehavior cssAttributeBehavior = new DataTable.CssAttributeBehavior()
 				{
 					private static final long serialVersionUID = 1L;
 
@@ -42,20 +42,14 @@
 					{
 						return ((IStyledColumn<?>)column).getCssClass();
 					}
-				});
+				};
+
+				header.add(cssAttributeBehavior);
 			}
 
 			item.add(header);
 			item.setRenderBodyOnly(true);
-			if (header instanceof Border)
-			{
-				((Border)header).addToBody(column.getHeader("label"));
-			}
-			else
-			{
-				header.add(column.getHeader("label"));
-			}
-
+			header.add(column.getHeader("label"));
 		}
 	}
 
