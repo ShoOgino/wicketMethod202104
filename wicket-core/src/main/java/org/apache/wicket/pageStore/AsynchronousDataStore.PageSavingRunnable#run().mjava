@@ -1,41 +1,23 @@
 		public void run()
 		{
-			while (destroy.get() == false || !entries.isEmpty())
+			while (destroy.get() == false)
 			{
-				if (entries.isEmpty())
+				Entry entry = null;
+				try
 				{
-					try
-					{
-						synchronized (entries)
-						{
-							entries.wait();
-						}
-					}
-					catch (InterruptedException e)
-					{
-						log.error(e.getMessage(), e);
-					}
+					entry = entries.poll(POLL_WAIT.getMilliseconds(), TimeUnit.MILLISECONDS);
+				}
+				catch (InterruptedException e)
+				{
+					log.error(e.getMessage(), e);
 				}
 
-				synchronized (WRITE_LOCK)
+				if (entry != null)
 				{
-					Entry entry = entries.poll();
-					if (entry != null)
-					{
-						dataStore.storeData(entry.getSessionId(), entry.getPageId(),
-							entry.getData());
-						entryMap.remove(getKey(entry));
-					}
+					log.debug("Saving asynchronously: {}...", entry);
+					dataStore.storeData(entry.getSessionId(), entry.getPageId(), entry.getData());
+					entryMap.remove(getKey(entry));
 				}
-			}
-
-			try
-			{
-				Thread.sleep(10);
-			}
-			catch (InterruptedException e)
-			{
-				log.error(e.getMessage(), e);
 			}
 
 			synchronized (destroy)

@@ -3,16 +3,14 @@
 	 */
 	public void removeData(final String sessionId)
 	{
-		synchronized (WRITE_LOCK)
+		// make a copy to iterate to avoid ConcurrentModificationException
+		Entry[] entriesCopy = entries.toArray(new Entry[entries.size()]);
+		for (Entry entry : entriesCopy)
 		{
-			for (Iterator<Entry> iter = entries.iterator(); iter.hasNext();)
+			if (entry.getSessionId().equals(sessionId))
 			{
-				Entry e = iter.next();
-				if (e.getSessionId().equals(sessionId))
-				{
-					iter.remove();
-					entryMap.remove(getKey(e));
-				}
+				entryMap.remove(getKey(entry));
+				entries.remove(entry);
 			}
 		}
 

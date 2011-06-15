@@ -1,0 +1,20 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param dataStore
+	 *            the wrapped {@link IDataStore} that actually saved the data
+	 * @param capacity
+	 *            the capacity of the queue that delays the saving
+	 */
+	public AsynchronousDataStore(final IDataStore dataStore, final int capacity)
+	{
+		this.dataStore = dataStore;
+		destroy = new AtomicBoolean(false);
+		entries = new ArrayBlockingQueue<Entry>(capacity);
+		entryMap = new ConcurrentHashMap<String, Entry>();
+
+		PageSavingRunnable savingRunnable = new PageSavingRunnable(dataStore, entries, entryMap,
+			destroy);
+		new Thread(savingRunnable, "Wicket-PageSavingThread").start();
+	}
+
