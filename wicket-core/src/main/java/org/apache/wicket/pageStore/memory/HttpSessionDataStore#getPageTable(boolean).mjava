@@ -1,12 +1,15 @@
 	private PageTable getPageTable(boolean create)
 	{
-		PageTable pageTable = (PageTable)pageManagerContext.getSessionAttribute(PAGE_TABLE_KEY);
-		if (pageTable == null && create)
+		PageTable pageTable = null;
+		if (Session.exists())
 		{
-			pageTable = new PageTable();
-			pageManagerContext.setSessionAttribute(PAGE_TABLE_KEY, pageTable);
+			pageTable = (PageTable)pageManagerContext.getSessionAttribute(PAGE_TABLE_KEY);
+			if (pageTable == null && create)
+			{
+				pageTable = new PageTable();
+				pageManagerContext.setSessionAttribute(PAGE_TABLE_KEY, pageTable);
+			}
 		}
-
 		return pageTable;
 	}
 

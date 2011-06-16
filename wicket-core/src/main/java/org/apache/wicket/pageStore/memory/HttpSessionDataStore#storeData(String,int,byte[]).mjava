@@ -1,8 +1,15 @@
 	public void storeData(String sessionId, int pageId, byte[] pageAsBytes)
 	{
 		PageTable pageTable = getPageTable(true);
-		pageTable.storePage(pageId, pageAsBytes);
-
-		evictionStrategy.evict(pageTable);
+		if (pageTable != null)
+		{
+			pageTable.storePage(pageId, pageAsBytes);
+			evictionStrategy.evict(pageTable);
+		}
+		else
+		{
+			log.error("Cannot store the data for page with id '{}' in session with id '{}'",
+				pageId, sessionId);
+		}
 	}
 
