@@ -2,17 +2,19 @@
 	 * Adds a listener to this target
 	 * 
 	 * @param listener
+	 * @throws IllegalStateException
+	 *             if {@link IListener}'s events are currently being fired or have both been fired
+	 *             already
 	 */
-	public void addListener(IListener listener)
+	public void addListener(IListener listener) throws IllegalStateException
 	{
 		Args.notNull(listener, "listener");
+		assertListenersNotFrozen();
 
 		if (listeners == null)
 		{
 			listeners = new LinkedList<IListener>();
 		}
-
-		assertListenersNotFrozen();
 
 		if (!listeners.contains(listener))
 		{
