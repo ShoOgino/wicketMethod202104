@@ -16,9 +16,7 @@
 				// allocate window for page
 				PageWindow window = getManager().createPageWindow(pageId, data.length);
 
-				// take the filechannel from the pool
-				FileChannel channel = diskDataStore.fileChannelPool.getFileChannel(getFileName(),
-					true);
+				FileChannel channel = getFileChannel(true);
 				try
 				{
 					// write the content
@@ -30,8 +28,7 @@
 				}
 				finally
 				{
-					// return the "borrowed" file channel
-					diskDataStore.fileChannelPool.returnFileChannel(channel);
+					IOUtils.closeQuietly(channel);
 				}
 			}
 		}

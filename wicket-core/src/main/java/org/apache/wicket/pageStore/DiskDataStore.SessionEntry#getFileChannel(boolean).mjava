@@ -1,0 +1,21 @@
+		private FileChannel getFileChannel(boolean create)
+		{
+			FileChannel channel = null;
+			File file = new File(getFileName());
+			if (create || file.exists())
+			{
+				String mode = create ? "rw" : "r";
+				try
+				{
+					RandomAccessFile randomAccessFile = new RandomAccessFile(file, mode);
+					channel = randomAccessFile.getChannel();
+				}
+				catch (FileNotFoundException fnfx)
+				{
+					// should not happen. we check explicitly earlier
+					log.error(fnfx.getMessage(), fnfx);
+				}
+			}
+			return channel;
+		}
+
