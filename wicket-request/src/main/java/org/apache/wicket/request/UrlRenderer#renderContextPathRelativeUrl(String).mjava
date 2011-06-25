@@ -3,24 +3,12 @@
 	 * 
 	 * @param url
 	 * @return relative URL
+	 * @deprecated
+	 * @see #renderContextRelativeUrl(String)
 	 */
+	@Deprecated
 	public String renderContextPathRelativeUrl(String url)
 	{
-		Args.notNull(url, "url");
-
-		if (url.startsWith("/"))
-		{
-			url = url.substring(1);
-		}
-
-		PrependingStringBuffer buffer = new PrependingStringBuffer(url);
-		for (int i = 0; i < getBaseUrl().getSegments().size() - 1; ++i)
-		{
-			buffer.prepend("../");
-		}
-
-		buffer.prepend(request.getPrefixToContextPath());
-
-		return buffer.toString();
+		return renderContextRelativeUrl(url);
 	}
 
