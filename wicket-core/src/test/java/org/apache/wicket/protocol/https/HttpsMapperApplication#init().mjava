@@ -1,0 +1,11 @@
+	@Override
+	protected void init()
+	{
+		super.init();
+
+		mountPage("/secure", HttpsPage.class);
+		mountPage("/insecure", HttpPage.class);
+
+		setRootRequestMapper(new HttpsMapper(getRootRequestMapper(), config));
+	}
+
