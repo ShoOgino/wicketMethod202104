@@ -1,0 +1,32 @@
+	/**
+	 * render full representation of url (including protocol, host and port) 
+	 * into string representation
+	 * 
+	 * @param charset
+	 * 
+	 * @return see toStringRepresentation
+	 */
+	public String toAbsoluteString(final Charset charset)
+	{
+		StringBuilder result = new StringBuilder();
+
+		// output scheme://host:port if specified
+		if(protocol != null && Strings.isEmpty(host) == false)
+		{
+			result.append(protocol);
+			result.append("://");
+			result.append(host);
+			
+			if(port != null && port.equals(getDefaultPortForProtocol(protocol)) == false)
+			{
+				result.append(':');
+				result.append(port);
+			}
+		}
+		// append relative part
+		result.append(this.toString());
+	
+		// return url string
+		return result.toString();
+	}
+
