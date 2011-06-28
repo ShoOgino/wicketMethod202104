@@ -1,0 +1,19 @@
+	/**
+	 * Finds form that will be submitted
+	 * 
+	 * @return form to submit or {@code null} if none found
+	 */
+	protected Form<?> findForm()
+	{
+		// try to find form in the hierarchy of owning component
+		Component component = getComponent();
+		if (component instanceof Form<?>)
+		{
+			return (Form<?>)component;
+		}
+		else
+		{
+			return component.findParent(Form.class);
+		}
+	}
+
