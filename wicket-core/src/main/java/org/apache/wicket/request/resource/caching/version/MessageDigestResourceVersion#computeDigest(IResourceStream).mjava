@@ -1,0 +1,34 @@
+	/**
+	 * compute digest for resource stream
+	 * 
+	 * @param resourceStream
+	 *           resource stream to compute message digest for
+	 * 
+	 * @return binary message digest
+	 * 
+	 * @throws ResourceStreamNotFoundException
+	 * @throws IOException
+	 */
+	protected byte[] computeDigest(IResourceStream resourceStream)
+		throws ResourceStreamNotFoundException, IOException
+	{
+		final MessageDigest digest = getMessageDigest();
+		final InputStream inputStream = resourceStream.getInputStream();
+
+		try
+		{
+			final byte[] buf = new byte[bufferSize];
+			int len;
+
+			while ((len = inputStream.read(buf)) != -1)
+			{
+				digest.update(buf, 0, len);
+			}
+			return digest.digest();
+		}
+		finally
+		{
+			IOUtils.closeQuietly(inputStream);
+		}
+	}
+

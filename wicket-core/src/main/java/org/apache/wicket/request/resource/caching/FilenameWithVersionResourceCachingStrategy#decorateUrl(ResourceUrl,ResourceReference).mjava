@@ -1,8 +1,8 @@
 	public void decorateUrl(ResourceUrl url, ResourceReference reference)
 	{
 		// get version string for requested resource
-		final String version = getVersionStringForResource(reference);
-		
+		final String version = this.resourceVersion.getVersion(reference);
+
 		// ignore resource if no version information is available
 		if (version == null)
 		{
@@ -18,7 +18,7 @@
 		// create filename with version:
 		//
 		// filename :=
-		// [basename][version-suffix][version](.extension)
+		// [basename][version-prefix][version](.extension)
 		//
 		final StringBuilder versionedFilename = new StringBuilder();
 		
@@ -32,7 +32,7 @@
 			versionedFilename.append(filename.substring(0, extensionAt));
 		}
 		// add version suffix
-		versionedFilename.append(versionSuffix);
+		versionedFilename.append(versionPrefix);
 		
 		// add version
 		versionedFilename.append(version);

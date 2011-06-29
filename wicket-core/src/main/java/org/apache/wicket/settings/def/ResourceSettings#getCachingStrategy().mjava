@@ -3,6 +3,23 @@
 	 */
 	public IResourceCachingStrategy getCachingStrategy()
 	{
+		if (resourceCachingStrategy == null)
+		{
+			final IResourceVersion resourceVersion;
+
+			if (application.usesDevelopmentConfig())
+			{
+				// use file last modified for resource cache keys
+				resourceVersion = new RequestCycleCachedResourceVersion(new LastModifiedResourceVersion());
+			}
+			else
+			{
+				// use md5 message digest for resource cache keys
+				resourceVersion = new CachingResourceVersion(new MessageDigestResourceVersion());
+			}
+			resourceCachingStrategy =
+				new FilenameWithVersionResourceCachingStrategy(resourceVersion);
+		}
 		return resourceCachingStrategy;
 	}
 

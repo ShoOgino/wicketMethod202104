@@ -1,0 +1,23 @@
+	public String getVersion(ResourceReference resourceReference)
+	{
+		String version = cache.get(resourceReference);
+
+		if (version == null)
+		{
+			version = delegate.getVersion(resourceReference);
+
+			if (version == null)
+			{
+				version = NULL_VALUE;
+			}
+			cache.put(resourceReference, version);
+		}
+
+		//noinspection StringEquality
+		if (version == NULL_VALUE)
+		{
+			return null;
+		}
+		return version;
+	}
+

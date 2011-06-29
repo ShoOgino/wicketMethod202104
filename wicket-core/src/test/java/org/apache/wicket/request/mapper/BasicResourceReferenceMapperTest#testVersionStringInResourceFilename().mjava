@@ -17,8 +17,8 @@
 				}
 			};
 
-		FilenameWithStaticVersionResourceCachingStrategy strategy =
-			new FilenameWithStaticVersionResourceCachingStrategy("-version-", "foobar");
+		IResourceCachingStrategy strategy =
+			new FilenameWithVersionResourceCachingStrategy("-version-", new StaticResourceVersion("foobar"));
 
 		INamedParameters params = new PageParameters();
 		ResourceUrl url = new ResourceUrl("test.js", params);
@@ -58,7 +58,7 @@
 		assertEquals("test.txt", url.getFileName());
 
 		// check a version that contains a dot which also marks the filename extension
-		strategy = new FilenameWithStaticVersionResourceCachingStrategy("-version-", "1.0.4-beta");
+		strategy = new FilenameWithVersionResourceCachingStrategy("-version-", new StaticResourceVersion("1.0.4-beta"));
 		url = new ResourceUrl("test.txt", params);
 		strategy.decorateUrl(url, reference);
 		assertEquals("test-version-1.0.4-beta.txt", url.getFileName());

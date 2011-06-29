@@ -1,0 +1,38 @@
+	public String getVersion(ResourceReference resourceReference)
+	{
+		// get current request cycle
+		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
+
+		Map<ResourceReference, String> cache = null;
+
+		// is request cycle available?
+		if (requestCycle != null)
+		{
+			// retrieve cache from current request cycle
+			cache = requestCycle.getMetaData(CACHE_KEY);
+
+			// create it on first call
+			if (cache == null)
+			{
+				requestCycle.setMetaData(CACHE_KEY, cache = Generics.newHashMap());
+			}
+			
+			// lookup timestamp from cache (may contain NULL values which are valid)
+			if (cache.containsKey(resourceReference))
+			{
+				return cache.get(resourceReference);
+			}
+		}
+		
+		// no cache entry found, query version from delegate
+		final String version = delegate.getVersion(resourceReference);
+
+		// store value in cache (if it is available)
+		if (cache != null)
+		{
+			cache.put(resourceReference, version);
+		}
+		
+		return version;
+	}
+
