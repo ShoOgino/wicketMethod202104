@@ -1,0 +1,48 @@
+	public void decorateUrl(ResourceUrl url, ResourceReference reference)
+	{
+		// get version string for requested resource
+		final String version = getVersionStringForResource(reference);
+		
+		// ignore resource if no version information is available
+		if (version == null)
+		{
+			return;
+		}
+
+		// get undecorated filename
+		final String filename = url.getFileName();
+
+		// check if resource name has extension
+		final int extensionAt = filename.lastIndexOf('.');
+
+		// create filename with version:
+		//
+		// filename :=
+		// [basename][version-suffix][version](.extension)
+		//
+		final StringBuilder versionedFilename = new StringBuilder();
+		
+		// add filename
+		if (extensionAt == -1)
+		{
+			versionedFilename.append(filename);
+		}
+		else
+		{
+			versionedFilename.append(filename.substring(0, extensionAt));
+		}
+		// add version suffix
+		versionedFilename.append(versionSuffix);
+		
+		// add version
+		versionedFilename.append(version);
+
+		// add extension if present
+		if (extensionAt != -1)
+		{
+			versionedFilename.append(filename.substring(extensionAt));
+		}
+		// set versioned filename
+		url.setFileName(versionedFilename.toString());
+	}
+
