@@ -34,9 +34,9 @@
 		{
 			IPageRequestHandler pageRequestHandler = (IPageRequestHandler)requestHandler;
 			sb.append("PageRequest[");
-			sb.append(pageRequestHandler.getPage().getClass().getName());
+			sb.append(pageRequestHandler.getPageClass().getName());
 			sb.append("(");
-			sb.append(pageRequestHandler.getPage().getId());
+			sb.append(pageRequestHandler.getPageId());
 			sb.append(")]");
 		}
 		else if (requestHandler instanceof ResourceReferenceRequestHandler)
@@ -52,6 +52,11 @@
 				.append(".")
 				.append(
 					getRequestHandlerString(((IRequestHandlerDelegate)requestHandler).getDelegateHandler()));
+		}
+		else if (requestHandler instanceof BufferedResponseRequestHandler)
+		{
+			BufferedResponseRequestHandler bufferedResponseHandler = (BufferedResponseRequestHandler)requestHandler;
+			sb.append(bufferedResponseHandler.getClass().getSimpleName());
 		}
 		else
 		{

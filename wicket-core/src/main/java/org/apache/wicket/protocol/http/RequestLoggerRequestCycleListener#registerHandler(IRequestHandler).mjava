@@ -1,0 +1,18 @@
+	/**
+	 * Registers the handler with the request logger. The first handler is used as the incoming
+	 * request handler, and the last registered handler as the outgoing response handler.
+	 * 
+	 * @param handler
+	 */
+	private void registerHandler(IRequestHandler handler)
+	{
+		IRequestLogger requestLogger = Application.get().getRequestLogger();
+
+		if (first.get() == null)
+		{
+			first.set(handler);
+			requestLogger.logEventTarget(handler);
+		}
+		requestLogger.logResponseTarget(handler);
+	}
+
