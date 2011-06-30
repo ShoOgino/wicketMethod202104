@@ -2,7 +2,7 @@
 	 * compute digest for resource stream
 	 * 
 	 * @param resourceStream
-	 *           resource stream to compute message digest for
+	 *            resource stream to compute message digest for
 	 * 
 	 * @return binary message digest
 	 * 
@@ -17,7 +17,8 @@
 
 		try
 		{
-			final byte[] buf = new byte[bufferSize];
+			int bufferLen = (int)Math.min(Integer.MAX_VALUE, bufferSize.bytes());
+			final byte[] buf = new byte[bufferLen];
 			int len;
 
 			while ((len = inputStream.read(buf)) != -1)
