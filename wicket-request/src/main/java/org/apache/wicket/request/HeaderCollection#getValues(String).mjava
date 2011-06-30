@@ -1,23 +1,25 @@
 	/**
-	 * get header value
+	 * get header values
+	 *
+	 *
 	 *
 	 * @param name
 	 *          header name
 	 *
 	 * @return header value or <code>null</code> if not found
 	 */
-	public String getValue(String name)
+	public String[] getValues(String name)
 	{
 		Args.notEmpty(name, "name");
 
 		// get the header value (case might differ)
-		for (Map.Entry<String, String> header : headers.entrySet())
+		for (Map.Entry<String, List<String>> header : headers.entrySet())
 		{
 			if (header.getKey().equalsIgnoreCase(name))
 			{
-				return header.getValue();
+				return header.getValue().toArray(new String[header.getValue().size()]);
 			}
 		}
-		return null;
+		return NO_VALUES;
 	}
 

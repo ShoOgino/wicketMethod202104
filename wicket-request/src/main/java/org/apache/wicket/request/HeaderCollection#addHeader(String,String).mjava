@@ -1,0 +1,24 @@
+	/**
+	 * add header value
+	 *
+	 * @param name
+	 *          header name
+	 * @param value
+	 *          header value
+	 */
+	public void addHeader(String name, String value)
+	{
+		// be lenient and strip leading / trailing blanks
+		name = Args.notEmpty(name, "name").trim();
+		value = Args.notEmpty(value, "value").trim();
+
+		List<String> values = headers.get(name);
+
+		if (values == null)
+		{
+			values = new ArrayList<String>();
+			headers.put(name, values);
+		}
+		values.add(value);
+	}
+
