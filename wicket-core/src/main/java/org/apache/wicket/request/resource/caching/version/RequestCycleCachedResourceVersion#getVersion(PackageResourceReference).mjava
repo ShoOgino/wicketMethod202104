@@ -3,16 +3,20 @@
 		// get current request cycle
 		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
 
-		Map<CacheResourceVersionKey, String> cache = null;
-
-		PackageResourceReference.StreamInfo streamInfo = resourceReference.getCurrentStreamInfo();
+		// get current stream information for package resource
+		final PackageResourceReference.StreamInfo streamInfo = resourceReference.getCurrentStreamInfo();
 		
+		// if no stream info is available we can not provide a version
 		if(streamInfo == null)
 		{
 			return null;
 		}
 		
-		final CacheResourceVersionKey key = new CacheResourceVersionKey(resourceReference, streamInfo);
+		// cache instance
+		Map<CacheResourceVersionKey, String> cache = null;
+
+		// cache key
+		CacheResourceVersionKey key = null;
 
 		// is request cycle available?
 		if (requestCycle != null)
@@ -31,13 +35,15 @@
 				// lookup timestamp from cache (may contain NULL values which are valid)
 				return cache.get(key);
 			}
+			// create caching key
+			key = new CacheResourceVersionKey(resourceReference, streamInfo);
 		}
 		
 		// no cache entry found, query version from delegate
 		final String version = delegate.getVersion(resourceReference);
 
 		// store value in cache (if it is available)
-		if (cache != null)
+		if (cache != null && key != null)
 		{
 			cache.put(key, version);
 		}

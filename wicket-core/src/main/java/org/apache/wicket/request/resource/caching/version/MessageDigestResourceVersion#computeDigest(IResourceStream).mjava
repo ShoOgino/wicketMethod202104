@@ -17,19 +17,24 @@
 
 		try
 		{
-			int bufferLen = (int)Math.min(Integer.MAX_VALUE, bufferSize.bytes());
+			// get actual buffer size
+			final int bufferLen = (int)Math.min(Integer.MAX_VALUE, bufferSize.bytes());
+
+			// allocate read buffer
 			final byte[] buf = new byte[bufferLen];
 			int len;
 
+			// read stream and update message digest
 			while ((len = inputStream.read(buf)) != -1)
 			{
 				digest.update(buf, 0, len);
 			}
+			// finish message digest and return hash
 			return digest.digest();
 		}
 		finally
 		{
-			IOUtils.closeQuietly(inputStream);
+			IOUtils.close(inputStream);
 		}
 	}
 

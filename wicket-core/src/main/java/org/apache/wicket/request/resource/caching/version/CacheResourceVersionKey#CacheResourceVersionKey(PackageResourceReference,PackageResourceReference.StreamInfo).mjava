@@ -1,10 +1,19 @@
+	/**
+	 * create cache key from localized resource information 
+	 * 
+	 * @param resourceReference
+	 *           base package resource reference
+	 * @param streamInfo
+	 *           current localized stream information     
+	 */
 	public CacheResourceVersionKey(PackageResourceReference resourceReference,
 	                               PackageResourceReference.StreamInfo streamInfo)
 	{
 		Args.notNull(resourceReference, "resourceReference");
 		Args.notNull(streamInfo, "streamInfo");
-		this.scope = resourceReference.getScope();
-		this.name = resourceReference.getName();
+		
+		this.scope = Args.notNull(resourceReference.getScope(), "resource scope");
+		this.name = Args.notEmpty(resourceReference.getName(), "resource name");
 		this.locale = streamInfo.locale;
 		this.style = streamInfo.style;
 		this.variation = streamInfo.variation;
