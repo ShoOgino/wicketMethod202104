@@ -1,0 +1,22 @@
+	/**
+	 * set header value
+	 *
+	 * @param name
+	 *          header name
+	 * @param value
+	 *          header value
+	 */
+	public void setHeader(String name, String value)
+	{
+		// be lenient and strip leading / trailing blanks
+		name = Args.notEmpty(name, "name").trim();
+		value = Args.notEmpty(value, "value").trim();
+
+		// remove previous value (required since headers are handled case-sensitive)
+		// for example adding 'Content-Type' will overwrite 'content-type' 
+		removeHeader(name);
+
+		// add new value
+		headers.put(name, value);
+	}
+
