@@ -13,8 +13,6 @@
 
 		if (properties == null)
 		{
-			IResourceSettings resourceSettings = application.getResourceSettings();
-
 			Iterator<IPropertiesLoader> iter = propertiesLoader.iterator();
 			while ((properties == null) && iter.hasNext())
 			{
@@ -22,7 +20,7 @@
 				String fullPath = path + loader.getFileExtension();
 
 				// If not in the cache than try to load properties
-				IResourceStream resourceStream = resourceSettings.getResourceStreamLocator()
+				IResourceStream resourceStream = context.getResourceStreamLocator()
 					.locate(clazz, fullPath);
 				if (resourceStream == null)
 				{
@@ -30,7 +28,7 @@
 				}
 
 				// Watch file modifications
-				final IModificationWatcher watcher = resourceSettings.getResourceWatcher(true);
+				final IModificationWatcher watcher = context.getResourceWatcher(true);
 				if (watcher != null)
 				{
 					addToWatcher(path, resourceStream, watcher);
