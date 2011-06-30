@@ -1,0 +1,30 @@
+	public String getVersion(PackageResourceReference resourceReference)
+	{
+		final PackageResourceReference.StreamInfo streamInfo = resourceReference.getCurrentStreamInfo();
+
+		if (streamInfo == null)
+		{
+			log.debug("could not get stream info for " + resourceReference);
+			return null;
+		}
+
+		try
+		{
+			// get binary hash
+			final byte[] hash = computeDigest(streamInfo.stream);
+
+			// convert to hexadecimal
+			return Strings.toHexString(hash);
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			log.warn("resource stream not found for " + resourceReference);
+			return null;
+		}
+		catch (IOException e)
+		{
+			log.warn("resource stream not be read for " + resourceReference, e);
+			return null;
+		}
+	}
+
