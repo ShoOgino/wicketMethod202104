@@ -1,0 +1,23 @@
+	/**
+	 * Allows to filter out component from the search.
+	 * 
+	 * @param node
+	 * @return false to skip traversing its children
+	 */
+	@Override
+	protected boolean onTraversalFilter(final S node)
+	{
+		if (traverseFilter != null)
+		{
+			for (IteratorFilter<S> filter : traverseFilter)
+			{
+				if (filter.onFilter(node) == false)
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+

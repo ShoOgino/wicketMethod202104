@@ -1,0 +1,24 @@
+	/**
+	 * Replace the current set of filters
+	 * 
+	 * @param filters
+	 *            New filter set
+	 * @return Old filter set
+	 */
+	public Collection<IteratorFilter<S>> replaceFilterSet(
+		final Collection<IteratorFilter<S>> filters)
+	{
+		List<IteratorFilter<S>> old = this.filters;
+
+		this.filters = null;
+		if ((filters != null) && !filters.isEmpty())
+		{
+			for (IteratorFilter<S> filter : filters)
+			{
+				addFilter(filter);
+			}
+		}
+
+		return old;
+	}
+

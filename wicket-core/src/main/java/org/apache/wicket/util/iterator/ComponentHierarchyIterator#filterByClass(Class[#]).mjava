@@ -1,0 +1,25 @@
+	/**
+	 * Part of the fluent API: Filter Components by Class.
+	 * <p>
+	 * Must only be used before hasNext() has been called.
+	 * 
+	 * @param clazz
+	 * @return A new iterator with the added filter
+	 */
+	public ComponentHierarchyIterator filterByClass(final Class<?> clazz)
+	{
+		if (clazz != null)
+		{
+			getFilters().add(new IteratorFilter<Component>()
+			{
+				@Override
+				boolean onFilter(Component component)
+				{
+					return clazz.isInstance(component);
+				}
+			});
+		}
+
+		return this;
+	}
+
