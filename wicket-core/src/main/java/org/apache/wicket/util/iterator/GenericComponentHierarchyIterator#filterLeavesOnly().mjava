@@ -1,0 +1,23 @@
+	/**
+	 * Add a filter which returns only leaf components.
+	 * 
+	 * @return this
+	 */
+	public final GenericComponentHierarchyIterator<I> filterLeavesOnly()
+	{
+		getFilters().add(new IteratorFilter<Component>()
+		{
+			@Override
+			boolean onFilter(final Component component)
+			{
+				if (component instanceof MarkupContainer)
+				{
+					return ((MarkupContainer)component).size() == 0;
+				}
+				return true;
+			}
+		});
+
+		return this;
+	}
+
