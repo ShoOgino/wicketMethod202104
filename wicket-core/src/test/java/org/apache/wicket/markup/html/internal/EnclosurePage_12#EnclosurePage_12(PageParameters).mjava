@@ -1,0 +1,32 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param parameters
+	 */
+	public EnclosurePage_12(final PageParameters parameters)
+	{
+		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
+		// TODO Add your page's components here
+
+		// Here are two components.
+
+		// Both are contained within <wicket:enclosure child="invisible">.
+		// Since the "invisible" component is explicitly hidden, the expecation is
+		// that the whole enclosure will be hidden as well. Furthermore this implies
+		// that none of the components within the enclosure will be rendered.
+
+		// However this is not the case. Even though the "shouldntrendereither"
+		// component is in the same enclosure and therefore should not be rendered,
+		// Wicket attempts to render it. This is evidenced by the fact that we've
+		// purposely included a Label that will blow up when its model is loaded.
+
+		// When this page is loaded we get the exception:
+		// WicketRuntimeException: ... nonexistentprop
+
+		// Wicket 1.4.x does not have this problem.
+
+		add(new WebMarkupContainer("invisible").setVisible(false));
+		add(new WebMarkupContainer("shouldntrendereither").add(new Label("label",
+			new PropertyModel<String>(this, "nonexistentprop"))));
+	}
+

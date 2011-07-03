@@ -57,10 +57,9 @@
 			// Throw exception if any errors were found
 			if (unrenderedComponents.size() > 0)
 			{
-				// Get rid of set
 				renderedComponents = null;
 
-				List<Component> transparentContainerChildren = new ArrayList<Component>();
+				List<Component> transparentContainerChildren = Generics.newArrayList();
 
 				Iterator<Component> iterator = unrenderedComponents.iterator();
 				outerWhile : while (iterator.hasNext())
@@ -83,29 +82,23 @@
 						}
 					}
 
-					// Now first test if the component has a sibling that is a transparent resolver.
-					for (Object o : component.getParent())
+					if (hasInvisibleTransparentChild(component.getParent(), component))
 					{
-						Component sibling = (Component)o;
-						if (!sibling.isVisible())
+						// If we found a transparent container that isn't visible then ignore this
+						// component and only do a debug statement here.
+						if (log.isDebugEnabled())
 						{
-							if (sibling instanceof IComponentResolver)
-							{
-								// we found a transparent container that isn't visible
-								// then ignore this component and only do a debug statement here.
-								if (log.isDebugEnabled())
-								{
-									log.debug(
-										"Component {} wasn't rendered but most likely it has a transparent parent: {}",
-										component, sibling);
-								}
-								transparentContainerChildren.add(component);
-								iterator.remove();
-								continue outerWhile;
-							}
+							log.debug(
+								"Component {} wasn't rendered but might have a transparent parent.",
+								component);
 						}
+
+						transparentContainerChildren.add(component);
+						iterator.remove();
+						continue outerWhile;
 					}
 				}
+
 				// if still > 0
 				if (unrenderedComponents.size() > 0)
 				{
