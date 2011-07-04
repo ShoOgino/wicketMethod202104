@@ -7,21 +7,23 @@
 	 *            component id (not null)
 	 * @param form
 	 *            form that is submitted (not null)
-	 * @param fileUploadField
+	 * @param uploadField
 	 *            the file upload field to check for a file upload, or null to display the upload
 	 *            field for every submit of the given form
 	 */
-	public UploadProgressBar(final String id, final Form<?> form,
-		final FileUploadField fileUploadField)
+	public UploadProgressBar(final String id, final Form<?> form, final FileUploadField uploadField)
 	{
 		super(id);
-		uploadField = fileUploadField;
+
+		this.uploadField = uploadField;
+		if (uploadField != null)
+		{
+			uploadField.setOutputMarkupId(true);
+		}
+
 		this.form = form;
 		form.setOutputMarkupId(true);
-		if (fileUploadField != null)
-		{
-			fileUploadField.setOutputMarkupId(true);
-		}
+
 		setRenderBodyOnly(true);
 
 		barDiv = new WebMarkupContainer("bar");

@@ -18,13 +18,13 @@
 
 		final String uploadFieldId = (uploadField == null) ? "" : uploadField.getMarkupId();
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		PrintStream js = new PrintStream(out);
+		final String status = UploadStatusResource.getStatus("statusStarting", getLocale());
 
-		js.printf("  var def=new Wicket.WUPB.Def('%s', '%s', '%s', '%s','%s');", getMarkupId(),
-			statusDiv.getMarkupId(), barDiv.getMarkupId(), urlFor(ref, null), uploadFieldId);
-		js.printf(" new Wicket.WUPB(def).bind('%s');", getCallbackForm().getMarkupId());
-
-		response.renderOnDomReadyJavaScript(new String(out.toByteArray()));
+		StringBuilder builder = new StringBuilder(128);
+		Formatter formatter = new Formatter(builder);
+		formatter.format("new Wicket.WUPB('%s', '%s', '%s', '%s', '%s', '%s').bind('%s')",
+			getMarkupId(), statusDiv.getMarkupId(), barDiv.getMarkupId(), urlFor(ref, null),
+			uploadFieldId, status, getCallbackForm().getMarkupId());
+		response.renderOnDomReadyJavaScript(builder.toString());
 	}
 

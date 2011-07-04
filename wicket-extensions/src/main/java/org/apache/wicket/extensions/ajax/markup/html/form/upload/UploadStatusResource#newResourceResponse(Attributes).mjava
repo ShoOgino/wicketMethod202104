@@ -1,23 +1,26 @@
 	@Override
 	protected ResourceResponse newResourceResponse(final Attributes attributes)
 	{
-		ResourceResponse response = new ResourceResponse();
-		response.setContentType("text/html");
+		// Determine encoding
+		final String encoding = Application.get()
+			.getRequestCycleSettings()
+			.getResponseRequestEncoding();
 
-		final String content = getStatus(attributes);
+		ResourceResponse response = new ResourceResponse();
+		response.setContentType("text/html; charset=" + encoding);
+
+		final String status = getStatus(attributes);
 		response.setWriteCallback(new WriteCallback()
 		{
 			@Override
 			public void writeData(final Attributes attributes)
 			{
-				attributes.getResponse().write(content);
+				attributes.getResponse().write("<html><body>|");
+				attributes.getResponse().write(status);
+				attributes.getResponse().write("|</body></html>");
 			}
 		});
 
-		response.setContentLength(content.getBytes().length);
-
 		return response;
-
-
 	}
 
