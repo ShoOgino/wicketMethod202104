@@ -4,14 +4,12 @@
 	 * 
 	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-3667">WICKET-3667</a>
 	 */
-	public void testPageNotTouchedInAjaxRequest()
+	public void testPageGetsTouchedInAjaxRequest()
 	{
 		TestPage testPage = new TestPage();
-		Url ajaxUrl = Url.parse(testPage.eventBehavior.getCallbackUrl().toString(),
-			Charset.forName(tester.getRequest().getCharacterEncoding()));
 		tester.startPage(TestPage.class);
 		int referenceStoreCount = storeCount;
-		tester.executeAjaxUrl(ajaxUrl);
+		tester.executeAjaxUrl(testPage.getAjaxUrl(tester.getRequest().getCharacterEncoding()));
 		// the page should be stored even for ajax requests
 		assertEquals(referenceStoreCount + 1, storeCount);
 	}
