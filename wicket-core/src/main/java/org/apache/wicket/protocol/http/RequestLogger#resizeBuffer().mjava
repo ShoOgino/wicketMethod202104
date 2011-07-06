@@ -1,0 +1,54 @@
+	/**
+	 * Resizes the request buffer to match the
+	 * {@link IRequestLoggerSettings#getRequestsWindowSize() configured window size}
+	 */
+	private void resizeBuffer()
+	{
+		int newCapacity = Application.get().getRequestLoggerSettings().getRequestsWindowSize();
+
+		// do nothing if the capacity requirement hasn't changed
+		if (newCapacity == requestWindow.length)
+			return;
+
+		RequestData[] newRequestWindow = new RequestData[newCapacity];
+		synchronized (requestWindow)
+		{
+			int oldCapacity = requestWindow.length;
+			int oldNumberOfElements = hasBufferRolledOver() ? oldCapacity : indexInWindow;
+
+			if (newCapacity > oldCapacity)
+			{
+				// increase the capacity of the buffer when more requests need to be stored
+				// and preserve the order of the requests while copying them into the new buffer.
+				copyRequestsInOrder(newRequestWindow);
+
+				// the next writable position is at the first non-copied element in the buffer
+				indexInWindow = oldNumberOfElements;
+				requestWindow = newRequestWindow;
+			}
+			else if (newCapacity < oldCapacity)
+			{
+				// sort the requests in the current buffer such that the oldest request is in slot 0
+				RequestData[] sortedRequestWindow = new RequestData[oldCapacity];
+				copyRequestsInOrder(sortedRequestWindow);
+
+				// determine the number of elements that need to be copied into the smaller target
+				int numberOfElementsToCopy = Math.min(newCapacity, oldNumberOfElements);
+
+				// determine the position from where the copying must start
+				int numberOfElementsToSkip = Math.max(0, oldNumberOfElements -
+					numberOfElementsToCopy);
+
+				// fill the new buffer with the leftovers of the old buffer, skipping the oldest
+				// requests
+				arraycopy(sortedRequestWindow, numberOfElementsToSkip, newRequestWindow, 0,
+					numberOfElementsToCopy);
+
+				// the next writable position is 0 when the buffer is filled to capacity, or the
+				// number of copied elements when the buffer isn't filled to capacity.
+				indexInWindow = numberOfElementsToCopy >= newCapacity ? 0 : numberOfElementsToCopy;
+				requestWindow = newRequestWindow;
+			}
+		}
+	}
+

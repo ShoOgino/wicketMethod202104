@@ -1,0 +1,27 @@
+	/**
+	 * Copies all request data into {@code copy} such that the oldest request is in slot 0 and the
+	 * most recent request is in slot {@code copy.length}
+	 * 
+	 * @param copy
+	 *            the target, has to have a capacity of at least {@code requestWindow.length}
+	 */
+	private void copyRequestsInOrder(RequestData[] copy)
+	{
+		Args.isTrue(copy.length >= requestWindow.length, "copy.length must be at least {}",
+			requestWindow.length);
+		if (hasBufferRolledOver())
+		{
+			// first copy the oldest requests stored behind the cursor into the copy
+			int oldestPos = indexInWindow + 1;
+			if (oldestPos < requestWindow.length)
+				arraycopy(requestWindow, oldestPos, copy, 0, requestWindow.length - oldestPos);
+
+			// then append the newer requests stored from index 0 til the cursor position.
+			arraycopy(requestWindow, 0, copy, requestWindow.length - oldestPos, indexInWindow);
+		}
+		else
+		{
+			arraycopy(requestWindow, 0, copy, 0, indexInWindow);
+		}
+	}
+

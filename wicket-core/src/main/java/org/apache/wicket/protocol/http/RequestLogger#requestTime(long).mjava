@@ -34,12 +34,18 @@
 			requestdata.setSessionSize(sizeInBytes);
 			requestdata.setTimeTaken(timeTaken);
 
-			requests.add(0, requestdata);
+			addRequest(requestdata);
 
 			SessionData sessiondata = null;
 			if (sessionId != null)
 			{
 				sessiondata = liveSessions.get(sessionId);
+				if (sessiondata == null)
+				{
+					// if the session has been destroyed during the request by
+					// Session#invalidateNow, retrieve the old session data from the RequestCycle.
+					sessiondata = RequestCycle.get().getMetaData(SESSION_DATA);
+				}
 				if (sessiondata == null)
 				{
 					// passivated session or logger only started after it.

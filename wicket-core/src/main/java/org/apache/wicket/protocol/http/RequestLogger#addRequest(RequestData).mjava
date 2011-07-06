@@ -1,0 +1,34 @@
+	protected void addRequest(RequestData rd)
+	{
+		// ensure the buffer has the proper installed length
+		resizeBuffer();
+
+		synchronized (requestWindow)
+		{
+			// if the requestWindow is a zero-length array, nothing gets stored
+			if (requestWindow.length == 0)
+				return;
+
+			// use the oldest request data to recalculate the average request time
+			RequestData old = requestWindow[indexInWindow];
+
+			// replace the oldest request with the nweset request
+			requestWindow[indexInWindow] = rd;
+
+			// move the cursor to the next writable position containing the oldest request or if the
+			// buffer hasn't been filled completely the first empty slot
+			indexInWindow = (indexInWindow + 1) % requestWindow.length;
+			if (old != null)
+			{
+				startTimeOfOldestRequest = requestWindow[indexInWindow].getStartDate();
+				totalRequestTime -= old.getTimeTaken();
+			}
+			else
+			{
+				if (startTimeOfOldestRequest == null)
+					startTimeOfOldestRequest = rd.getStartDate();
+			}
+			totalRequestTime += rd.getTimeTaken();
+		}
+	}
+

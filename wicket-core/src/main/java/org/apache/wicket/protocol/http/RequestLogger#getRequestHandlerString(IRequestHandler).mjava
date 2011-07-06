@@ -1,67 +1,42 @@
-	/**
-	 * @param requestHandler
-	 * @return The request target nice display string
-	 */
-	private String getRequestHandlerString(final IRequestHandler requestHandler)
+	private String getRequestHandlerString(IRequestHandler handler)
 	{
 		AppendingStringBuffer sb = new AppendingStringBuffer(128);
-		if (requestHandler instanceof ListenerInterfaceRequestHandler)
+		sb.append(handler.getClass().getSimpleName());
+		sb.append("[");
+		if (handler instanceof ListenerInterfaceRequestHandler)
 		{
-			ListenerInterfaceRequestHandler listener = (ListenerInterfaceRequestHandler)requestHandler;
-			sb.append("Interface[component: ");
-			sb.append(Classes.simpleName(listener.getComponent().getClass()));
-			sb.append("(");
-			sb.append(listener.getComponent().getPageRelativePath());
-			sb.append("), page: ");
-			sb.append(listener.getPage().getClass().getName());
-			sb.append("(");
-			sb.append(listener.getPage().getId());
-			sb.append("), interface: ");
-			sb.append(listener.getListenerInterface().getName());
-			sb.append(".");
-			sb.append(listener.getListenerInterface().getMethod().getName());
-			sb.append("]");
+			getListenerString(sb, (ListenerInterfaceRequestHandler)handler);
 		}
-		else if (requestHandler instanceof BookmarkablePageRequestHandler)
+		else if (handler instanceof BookmarkablePageRequestHandler)
 		{
-			BookmarkablePageRequestHandler pageRequestHandler = (BookmarkablePageRequestHandler)requestHandler;
-			sb.append("BookmarkablePage[");
-			sb.append(pageRequestHandler.getPageClass().getName());
-			sb.append("(").append(pageRequestHandler.getPageParameters()).append(")");
-			sb.append("]");
+			getBookmarkableString(sb, (BookmarkablePageRequestHandler)handler);
 		}
-		else if (requestHandler instanceof IPageRequestHandler)
+		else if (handler instanceof RenderPageRequestHandler)
 		{
-			IPageRequestHandler pageRequestHandler = (IPageRequestHandler)requestHandler;
-			sb.append("PageRequest[");
-			sb.append(pageRequestHandler.getPageClass().getName());
-			sb.append("(");
-			sb.append(pageRequestHandler.getPageId());
-			sb.append(")]");
+			getRendererString(sb, (RenderPageRequestHandler)handler);
 		}
-		else if (requestHandler instanceof ResourceReferenceRequestHandler)
+		else if (handler instanceof AjaxRequestTarget)
 		{
-			ResourceReferenceRequestHandler resourceRefenceHandler = (ResourceReferenceRequestHandler)requestHandler;
-			sb.append("ResourceReference[");
-			sb.append(resourceRefenceHandler.getResourceReference());
-			sb.append("]");
+			getAjaxString(sb, (AjaxRequestTarget)handler);
 		}
-		else if (requestHandler instanceof IRequestHandlerDelegate)
+		else if (handler instanceof ResourceReferenceRequestHandler)
 		{
-			sb.append(requestHandler.getClass().getSimpleName())
-				.append(".")
-				.append(
-					getRequestHandlerString(((IRequestHandlerDelegate)requestHandler).getDelegateHandler()));
+			getResourceString(sb, (ResourceReferenceRequestHandler)handler);
 		}
-		else if (requestHandler instanceof BufferedResponseRequestHandler)
+		else if (handler instanceof IRequestHandlerDelegate)
 		{
-			BufferedResponseRequestHandler bufferedResponseHandler = (BufferedResponseRequestHandler)requestHandler;
-			sb.append(bufferedResponseHandler.getClass().getSimpleName());
+			getDelegateString(sb, (IRequestHandlerDelegate)handler);
+		}
+		else if (handler instanceof BufferedResponseRequestHandler)
+		{
+			// nothing extra to log... BufferedResponse doesn't have identifiable information about
+			// which request was buffered
 		}
 		else
 		{
-			sb.append(requestHandler.toString());
+			sb.append(handler.toString());
 		}
+		sb.append("]");
 		return sb.toString();
 	}
 
