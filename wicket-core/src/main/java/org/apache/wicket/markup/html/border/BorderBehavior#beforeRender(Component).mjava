@@ -1,0 +1,58 @@
+	@Override
+	public void beforeRender(final Component component)
+	{
+		final MarkupStream stream = getMarkupStream(component);
+		final Response response = component.getResponse();
+		stream.setCurrentIndex(0);
+
+		boolean insideBorderMarkup = false;
+		while (stream.hasMore())
+		{
+			MarkupElement elem = stream.get();
+			stream.next();
+			if (elem instanceof WicketTag)
+			{
+				WicketTag wTag = (WicketTag)elem;
+				if (!insideBorderMarkup)
+				{
+					if (wTag.isBorderTag() && wTag.isOpen())
+					{
+						insideBorderMarkup = true;
+						continue;
+					}
+					else
+					{
+						throw new WicketRuntimeException(
+							"Unexpected tag encountered in markup of component border " +
+								getClass().getName() + ". Tag: " + wTag.toString() +
+								", expected tag: <wicket:border>");
+					}
+				}
+				else
+				{
+					if (wTag.isBodyTag())
+					{
+						break;
+					}
+					else
+					{
+						throw new WicketRuntimeException(
+							"Unexpected tag encountered in markup of component border " +
+								getClass().getName() + ". Tag: " + wTag.toString() +
+								", expected tag: <wicket:body> or </wicket:body>");
+					}
+				}
+			}
+			if (insideBorderMarkup)
+			{
+				response.write(elem.toCharSequence());
+			}
+		}
+
+		if (!stream.hasMore())
+		{
+			throw new WicketRuntimeException("Markup for component border " + getClass().getName() +
+				" ended prematurely, was expecting </wicket:border>");
+		}
+	}
+

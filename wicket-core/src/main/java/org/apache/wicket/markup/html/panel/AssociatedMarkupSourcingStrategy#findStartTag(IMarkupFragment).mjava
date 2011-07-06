@@ -4,7 +4,7 @@
 	 * @param markup
 	 * @return null, if not found
 	 */
-	private final static IMarkupFragment findPanelTag(final IMarkupFragment markup)
+	private final IMarkupFragment findStartTag(final IMarkupFragment markup)
 	{
 		MarkupStream stream = new MarkupStream(markup);
 
@@ -16,11 +16,12 @@
 				if (tag instanceof WicketTag)
 				{
 					WicketTag wtag = (WicketTag)tag;
-					if (wtag.isPanelTag())
+					if (tagName.equalsIgnoreCase(wtag.getName()))
 					{
 						return stream.getMarkupFragment();
 					}
 				}
+
 				stream.skipToMatchingCloseTag(tag);
 			}
 

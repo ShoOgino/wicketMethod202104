@@ -1,14 +1,41 @@
 	/**
-	 * {@inheritDoc}
+	 * Skip the panel's body markup which is expected to contain raw markup only (no wicket
+	 * components) and which will be ignored / removed. It'll be replaced with the content of the
+	 * associated markup file.
 	 */
 	@Override
 	public void onComponentTagBody(final Component component, final MarkupStream markupStream,
 		final ComponentTag openTag)
 	{
-		super.onComponentTagBody(component, markupStream, openTag);
+		if (allowWicketComponentsInBodyMarkup)
+		{
+			// Skip the body markup. Will be picked up by the Body component.
+			markupStream.skipToMatchingCloseTag(openTag);
+		}
+		else
+		{
+			// Skip the components body. Like with Panels or Fragments, it'll be replaced with the
+			// associated markup
+			if (markupStream.getPreviousTag().isOpen())
+			{
+				markupStream.skipRawMarkup();
+				if (markupStream.get().closes(openTag) == false)
+				{
+					StringBuilder msg = new StringBuilder();
 
-		// Render the associated markup
-		((MarkupContainer)component).renderAssociatedMarkup(Panel.PANEL,
-			"Markup for a panel component has to contain part '<wicket:panel>'");
+					msg.append("Close tag not found for tag: ")
+						.append(openTag.toString())
+						.append(". For ")
+						.append(component.getClass().getSimpleName())
+						.append(" Components only raw markup is allow in between the tags but not ")
+						.append("other Wicket Component. Component: ")
+						.append(component.toString());
+
+					throw new MarkupException(markupStream, msg.toString());
+				}
+			}
+		}
+
+		renderAssociatedMarkup(component);
 	}
 
