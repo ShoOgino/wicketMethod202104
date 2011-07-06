@@ -72,12 +72,19 @@
 					}
 				}
 
+				// Escape all single quotes outside {..}
+				if (value.indexOf('\'') != -1)
+				{
+					value = escapeQuotes(value);
+				}
+
 				if (model != null)
 				{
 					// First escape all substitute properties so that message format doesn't try to
 					// parse that.
 					value = Strings.replaceAll(value, "${", "$'{'").toString();
 				}
+
 				// Apply the parameters
 				final MessageFormat format = new MessageFormat(value, component != null
 					? component.getLocale() : locale);
