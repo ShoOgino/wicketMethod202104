@@ -1,0 +1,28 @@
+	/**
+	 * Utility method for creating a directory
+	 * 
+	 * @param file
+	 */
+	public static void mkdirs(File file)
+	{
+		// for some reason, simple file.mkdirs sometimes fails under heavy load
+		for (int j = 0; j < 5; ++j)
+		{
+			for (int i = 0; i < 10; ++i)
+			{
+				if (file.mkdirs())
+				{
+					return;
+				}
+			}
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch (InterruptedException ignore)
+			{
+			}
+		}
+		logger.error("Failed to make directory " + file);
+	}
+

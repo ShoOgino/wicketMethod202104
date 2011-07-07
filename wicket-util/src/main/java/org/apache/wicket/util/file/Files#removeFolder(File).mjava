@@ -1,0 +1,38 @@
+	/**
+	 * Deletes a folder by recursively removing the files and folders inside it. Delegates the work
+	 * to {@link #remove(File)} for plain files.
+	 * 
+	 * @param folder
+	 *            the folder to delete
+	 * @return {@code true} if the folder is deleted successfully.
+	 */
+	public static final boolean removeFolder(final File folder)
+	{
+		if (folder == null)
+		{
+			return false;
+		}
+
+		if (folder.isDirectory())
+		{
+			File[] files = folder.listFiles();
+			if (files != null)
+			{
+				for (File file : files)
+				{
+					if (file.isDirectory())
+					{
+						removeFolder(file);
+					}
+					else
+					{
+						remove(file);
+					}
+				}
+			}
+		}
+
+		// delete the empty folder
+		return folder.delete();
+	}
+
