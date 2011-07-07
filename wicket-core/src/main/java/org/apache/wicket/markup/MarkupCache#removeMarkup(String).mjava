@@ -8,67 +8,52 @@
 
 		if (log.isDebugEnabled())
 		{
-			log.debug("Remove from cache: cacheKey=" + cacheKey);
+			log.debug("Remove from cache: " + cacheKey);
 		}
 
 		// Remove the markup from the cache
 		String locationString = markupKeyCache.get(cacheKey);
 		IMarkupFragment markup = (locationString != null ? markupCache.get(locationString) : null);
-		if (markup != null)
+		if (markup == null)
 		{
-			// Found an entry: actual markup or Markup.NO_MARKUP. Null values are not possible
-			// because of ConcurrentHashMap.
-			markupCache.remove(locationString);
+			return null;
+		}
 
-			// If a base markup file has been removed from the cache, than
-			// the derived markup should be removed as well.
+		// Found an entry: actual markup or Markup.NO_MARKUP. Null values are not possible
+		// because of ConcurrentHashMap.
+		markupCache.remove(locationString);
 
-			// Repeat until all dependent resources have been removed (count == 0)
-			int count = 1;
-			while (count > 0)
+		if (log.isDebugEnabled())
+		{
+			log.debug("Removed from cache: " + locationString);
+		}
+
+		// If a base markup file has been removed from the cache, than
+		// the derived markup should be removed as well.
+		removeMarkupWhereBaseMarkupIsNoLongerInTheCache();
+
+		// And now remove all watcher entries associated with markup
+		// resources no longer in the cache.
+
+		// Note that you can not use Application.get() since removeMarkup() will be called from a
+		// ModificationWatcher thread which has no associated Application.
+
+		IModificationWatcher watcher = application.getResourceSettings().getResourceWatcher(false);
+		if (watcher != null)
+		{
+			Iterator<IModifiable> iter = watcher.getEntries().iterator();
+			while (iter.hasNext())
 			{
-				// Reset prior to next round
-				count = 0;
-
-				// Iterate though all entries of the cache
-				Iterator<String> iter = markupCache.getKeys().iterator();
-				while (iter.hasNext())
+				IModifiable modifiable = iter.next();
+				if (modifiable instanceof MarkupResourceStream)
 				{
-					String key = iter.next();
-
-					// Check if the markup associated with key has a base markup. And if yes, test
-					// if that is cached.
-					if (isBaseMarkupCached(key))
+					if (!isMarkupCached((MarkupResourceStream)modifiable))
 					{
+						iter.remove();
+
 						if (log.isDebugEnabled())
 						{
-							log.debug("Remove from cache: cacheKey=" + key);
-						}
-
-						iter.remove();
-						count++;
-					}
-				}
-			}
-
-			// And now remove all watcher entries associated with markup
-			// resources no longer in the cache. Note that you can not use
-			// Application.get() since removeMarkup() will be called from a
-			// ModificationWatcher thread which has no associated Application.
-
-			IModificationWatcher watcher = application.getResourceSettings().getResourceWatcher(
-				false);
-			if (watcher != null)
-			{
-				Iterator<IModifiable> iter = watcher.getEntries().iterator();
-				while (iter.hasNext())
-				{
-					IModifiable modifiable = iter.next();
-					if (modifiable instanceof MarkupResourceStream)
-					{
-						if (isMarkupCached((MarkupResourceStream)modifiable))
-						{
-							iter.remove();
+							log.debug("Removed from watcher: " + modifiable);
 						}
 					}
 				}

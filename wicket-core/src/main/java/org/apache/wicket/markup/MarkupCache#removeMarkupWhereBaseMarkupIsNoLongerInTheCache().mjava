@@ -1,0 +1,38 @@
+	private void removeMarkupWhereBaseMarkupIsNoLongerInTheCache()
+	{
+		// Repeat until all dependent resources have been removed (count == 0)
+		int count = 1;
+		while (count > 0)
+		{
+			// Reset prior to next round
+			count = 0;
+
+			// Iterate though all entries of the cache
+			Iterator<Markup> iter = markupCache.getValues().iterator();
+			while (iter.hasNext())
+			{
+				Markup markup = iter.next();
+
+				// Check if the markup associated with key has a base markup. And if yes, test
+				// if that is cached. If the base markup has been removed, than remove the derived
+				// markup as well.
+
+				MarkupResourceStream resourceStream = markup.getMarkupResourceStream()
+					.getBaseMarkupResourceStream();
+
+				// Is the base markup available in the cache?
+				if ((resourceStream != null) && !isMarkupCached(resourceStream))
+				{
+					iter.remove();
+					count++;
+
+					if (log.isDebugEnabled())
+					{
+						log.debug("Removed derived markup from cache: " +
+							markup.getMarkupResourceStream());
+					}
+				}
+			}
+		}
+	}
+
