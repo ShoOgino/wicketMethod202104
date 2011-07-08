@@ -1,11 +1,13 @@
 	/**
-	 * Test long conversions.
+	 * Test integer conversions.
 	 */
-	public void testLongConversions()
+	public void testIntegerConversions()
 	{
-		LongConverter converter = new LongConverter();
-		assertEquals(new Long(10), converter.convertToObject("10", Locale.US));
-		assertEquals("10", converter.convertToString((long)10, Locale.US));
+		IntegerConverter converter = new IntegerConverter();
+		assertEquals("7", converter.convertToString(7, Locale.US));
+		assertNull(converter.convertToObject("", Locale.US));
+		assertEquals(new Integer(10), converter.convertToObject("10", Locale.US));
+		assertEquals("10", converter.convertToString(10, Locale.US));
 		try
 		{
 			converter.convertToObject("whatever", Locale.US);
@@ -26,7 +28,7 @@
 		}
 		try
 		{
-			converter.convertToObject("" + Long.MAX_VALUE + "0", Locale.US);
+			converter.convertToObject("" + ((long)Integer.MAX_VALUE + 1), Locale.US);
 			fail("Conversion should have thrown an exception");
 		}
 		catch (ConversionException e)

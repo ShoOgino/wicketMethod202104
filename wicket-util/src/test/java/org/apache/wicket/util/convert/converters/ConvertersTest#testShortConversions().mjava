@@ -1,11 +1,12 @@
 	/**
-	 * Test byte conversions.
+	 * Test short conversions
 	 */
-	public void testByteConversions()
+	public void testShortConversions()
 	{
-		ByteConverter converter = new ByteConverter();
-		assertEquals(new Byte((byte)10), converter.convertToObject("10", Locale.US));
-		assertEquals("10", converter.convertToString((byte)10, Locale.US));
+		ShortConverter converter = new ShortConverter();
+		assertNull(converter.convertToObject("", Locale.US));
+		assertEquals(new Short((short)10), converter.convertToObject("10", Locale.US));
+		assertEquals("10", converter.convertToString((short)10, Locale.US));
 		try
 		{
 			converter.convertToObject("whatever", Locale.US);
@@ -26,7 +27,7 @@
 		}
 		try
 		{
-			converter.convertToObject("256", Locale.US);
+			converter.convertToObject("" + (Short.MAX_VALUE + 1), Locale.US);
 			fail("Conversion should have thrown an exception");
 		}
 		catch (ConversionException e)
