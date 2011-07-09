@@ -1,0 +1,48 @@
+		@Override
+		public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+		{
+			if (!(markupStream.get() instanceof RawMarkup))
+			{
+				// no raw markup found inside the label, do not modify the contents
+				return;
+			}
+
+			// read all raw markup in the body and find the range of the label text inside it. the
+			// range is specified as the body of the <span class='text'></span> tag.
+
+			AppendingStringBuffer markup = readBodyMarkup(markupStream);
+			int[] range = findLabelTextRange(markup);
+			final int start = range[0];
+			final int end = range[1];
+
+			if (start < 0)
+			{
+				// if we could not find the range of the label text in the markup we have nothing
+				// further to do
+
+				super.onComponentTagBody(markupStream, openTag);
+				return;
+			}
+
+			// based on whether or not the form component has a label set read or write it into the
+			// markup
+
+			String label = getFormComponentLabelText(fc);
+
+			if (label != null)
+			{
+				// if label is set write it into the markup
+
+				markup = markup.replace(start, end, label);
+				replaceComponentTagBody(markupStream, openTag, markup);
+			}
+			else
+			{
+				// if label is not set, read it from the markup into the form component
+
+				String markupLabel = markup.substring(start, end);
+				fc.setLabel(Model.of(markupLabel));
+				super.onComponentTagBody(markupStream, openTag);
+			}
+		}
+

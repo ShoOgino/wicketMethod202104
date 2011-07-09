@@ -1,0 +1,9 @@
+	private void assertRendered(Page page, String markupFragment)
+	{
+		tester.startPage(page);
+		String markup = tester.getLastResponse().getDocument();
+		markup = markup.replace("'", "\"");
+		assertTrue("fragment: [" + markupFragment + "] not found in generated markup: [" + markup +
+			"]", markup.contains(markupFragment.replace("'", "\"")));
+	}
+

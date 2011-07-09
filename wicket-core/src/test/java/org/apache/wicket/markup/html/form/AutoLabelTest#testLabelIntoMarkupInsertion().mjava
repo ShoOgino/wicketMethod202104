@@ -1,0 +1,47 @@
+	public void testLabelIntoMarkupInsertion()
+	{
+		class MyTestPage extends TestPage
+		{
+			public MyTestPage(String labelMarkup)
+			{
+				super("<label wicket:for='t'>" + labelMarkup + "</label>");
+				field.setLabel(Model.of("t"));
+			}
+		}
+
+		// simple insertion
+		assertRendered(new MyTestPage("<span class='text'>text</span>"),
+			"<span class='text'>t</span>");
+
+
+		// preserves markup before and after
+		assertRendered(new MyTestPage(" <div> a </div> <span class='text'>text</span> b "),
+			" <div> a </div> <span class='text'>t</span> b ");
+
+
+		// embedded span tags
+		assertRendered(new MyTestPage(" a <div> b <span class='text'>text</span> c </div> d"),
+			" a <div> b <span class='text'>t</span> c </div> d");
+
+		// double text span tags - only the first one is touched
+		assertRendered(new MyTestPage(
+			"<span class='text'>text</span><span class='text'>text</span>"),
+			"<span class='text'>t</span><span class='text'>text</span>");
+
+		// no span - no insertion
+		assertRendered(new MyTestPage(" text "), " text ");
+
+		// empty label tag
+		assertRendered(new MyTestPage(""), "></label>");
+
+		// empty span tag
+		assertRendered(new MyTestPage("<span class='text'></span>"), "<span class='text'>t</span>");
+
+		// open/close span tag
+		assertRendered(new MyTestPage("<span class='text'/>"), "<span class='text'>t</span>");
+
+		// test additional classes on the span are preserved
+		assertRendered(new MyTestPage("<span class='foo text bar'/>"),
+			"<span class='foo text bar'>t</span>");
+	}
+

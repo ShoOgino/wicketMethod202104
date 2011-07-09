@@ -1,0 +1,47 @@
+	protected FormComponent<?> findRelatedComponent(MarkupContainer container, final String id)
+	{
+		// try the quick and easy route first
+
+		Component component = container.get(id);
+		if (component != null && (component instanceof FormComponent<?>))
+		{
+			return (FormComponent<?>)component;
+		}
+
+		// try the long way, search the hierarchy from the closest container up to the page
+
+		final Component[] searched = new Component[] { null };
+		while (container != null)
+		{
+			component = container.visitChildren(Component.class,
+				new IVisitor<Component, Component>()
+				{
+					public void component(Component child, IVisit<Component> visit)
+					{
+						if (child == searched[0])
+						{
+							// this container was already searched
+							visit.dontGoDeeper();
+							return;
+						}
+						if (id.equals(child.getId()) && (child instanceof FormComponent))
+						{
+							visit.stop(child);
+							return;
+						}
+					}
+				});
+
+			if (component != null && (component instanceof FormComponent))
+			{
+				return (FormComponent<?>)component;
+			}
+
+			// remember the container so we dont search it again, and search the parent
+			searched[0] = container;
+			container = container.getParent();
+		}
+
+		return null;
+	}
+
