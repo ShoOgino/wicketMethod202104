@@ -1,7 +1,10 @@
+	/** */
 	public void testLabelIntoMarkupInsertion()
 	{
 		class MyTestPage extends TestPage
 		{
+			private static final long serialVersionUID = 1L;
+
 			public MyTestPage(String labelMarkup)
 			{
 				super("<label wicket:for='t'>" + labelMarkup + "</label>");
@@ -13,11 +16,9 @@
 		assertRendered(new MyTestPage("<span class='text'>text</span>"),
 			"<span class='text'>t</span>");
 
-
 		// preserves markup before and after
 		assertRendered(new MyTestPage(" <div> a </div> <span class='text'>text</span> b "),
 			" <div> a </div> <span class='text'>t</span> b ");
-
 
 		// embedded span tags
 		assertRendered(new MyTestPage(" a <div> b <span class='text'>text</span> c </div> d"),
