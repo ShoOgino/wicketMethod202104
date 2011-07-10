@@ -1,17 +1,20 @@
 		@Override
-		protected void onComponentTag(final ComponentTag tag)
+		protected void onComponentTag(ComponentTag tag)
 		{
 			super.onComponentTag(tag);
+			tag.put("for", component.getMarkupId());
 
-			tag.put("for", fc.getMarkupId());
-			if (fc.isRequired())
+			if (component instanceof FormComponent)
 			{
-				tag.append(CLASS, "required", " ");
-			}
-
-			if (!fc.isValid())
-			{
-				tag.append(CLASS, "error", " ");
+				FormComponent<?> fc = (FormComponent<?>)component;
+				if (fc.isRequired())
+				{
+					tag.append("class", "required", " ");
+				}
+				if (!fc.isValid())
+				{
+					tag.append("class", "error", " ");
+				}
 			}
 		}
 

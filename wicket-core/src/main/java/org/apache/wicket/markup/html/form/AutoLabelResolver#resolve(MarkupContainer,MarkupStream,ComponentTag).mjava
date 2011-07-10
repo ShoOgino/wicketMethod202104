@@ -8,17 +8,17 @@
 
 		final String id = tag.getAttribute(WICKET_FOR).trim();
 
-		FormComponent<?> component = findRelatedComponent(container, id);
+		Component component = findRelatedComponent(container, id);
 		if (component == null)
 		{
 			throw new WicketRuntimeException("Could not find form component with id '" + id +
 				"' while trying to resolve wicket:for attribute");
 		}
 
-		if (!(component instanceof FormComponent<?>))
+		if (!(component instanceof ILabelProvider))
 		{
 			throw new WicketRuntimeException("Component pointed to by wicket:for attribute '" + id +
-				"' is not a form component");
+				"' does not implement " + ILabelProvider.class.getName());
 		}
 
 		if (!component.getOutputMarkupId())
@@ -27,12 +27,11 @@
 			if (!component.hasBeenRendered())
 			{
 				logger.warn(
-					"Form component: {} is referenced via a wicket:for attribute but does not have its outputMarkupId property set to true",
+					"Component: {} is referenced via a wicket:for attribute but does not have its outputMarkupId property set to true",
 					component.toString(false));
 			}
 		}
 
-		FormComponent<?> fc = component;
-		return new AutoLabel("label" + container.getPage().getAutoIndex(), fc);
+		return new AutoLabel("label" + container.getPage().getAutoIndex(), component);
 	}
 

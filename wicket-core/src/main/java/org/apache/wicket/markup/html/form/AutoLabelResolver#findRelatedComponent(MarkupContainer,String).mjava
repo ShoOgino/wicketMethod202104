@@ -2,16 +2,16 @@
 	 * 
 	 * @param container
 	 * @param id
-	 * @return FormComponent
+	 * @return Component
 	 */
-	protected FormComponent<?> findRelatedComponent(MarkupContainer container, final String id)
+	protected Component findRelatedComponent(MarkupContainer container, final String id)
 	{
 		// try the quick and easy route first
 
 		Component component = container.get(id);
-		if (component != null && (component instanceof FormComponent<?>))
+		if (component != null)
 		{
-			return (FormComponent<?>)component;
+			return component;
 		}
 
 		// try the long way, search the hierarchy from the closest container up to the page
@@ -30,7 +30,7 @@
 							visit.dontGoDeeper();
 							return;
 						}
-						if (id.equals(child.getId()) && (child instanceof FormComponent))
+						if (id.equals(child.getId()))
 						{
 							visit.stop(child);
 							return;
@@ -38,9 +38,9 @@
 					}
 				});
 
-			if (component != null && (component instanceof FormComponent))
+			if (component != null)
 			{
-				return (FormComponent<?>)component;
+				return component;
 			}
 
 			// remember the container so we dont search it again, and search the parent

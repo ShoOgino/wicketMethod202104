@@ -1,5 +1,5 @@
 		@Override
-		public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
+		public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 		{
 			if (!(markupStream.get() instanceof RawMarkup))
 			{
@@ -27,7 +27,8 @@
 			// based on whether or not the form component has a label set read or write it into the
 			// markup
 
-			String label = getFormComponentLabelText(fc);
+			String label = getLabelText();
+
 			if (label != null)
 			{
 				// if label is set write it into the markup
@@ -39,9 +40,13 @@
 			{
 				// if label is not set, read it from the markup into the form component
 
-				String markupLabel = markup.substring(start, end);
-				fc.setLabel(Model.of(markupLabel));
-				super.onComponentTagBody(markupStream, openTag);
+				if (component instanceof FormComponent)
+				{
+					FormComponent<?> fc = (FormComponent<?>)component;
+					String markupLabel = markup.substring(start, end);
+					fc.setLabel(Model.of(markupLabel));
+					super.onComponentTagBody(markupStream, openTag);
+				}
 			}
 		}
 
