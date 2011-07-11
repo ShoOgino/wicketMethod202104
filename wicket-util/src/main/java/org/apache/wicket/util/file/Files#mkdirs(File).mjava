@@ -1,28 +1,33 @@
 	/**
-	 * Utility method for creating a directory
+	 * Utility method for creating a directory. If the creation didn't succeed for some reason then
+	 * at most 50 attempts are made with delay of 100ms at every 10th attempt.
 	 * 
-	 * @param file
+	 * @param folder
+	 *            the folder to create
+	 * @return {@code true} if the creation is successful, {@code false} - otherwise
 	 */
-	public static void mkdirs(File file)
+	public static boolean mkdirs(File folder)
 	{
 		// for some reason, simple file.mkdirs sometimes fails under heavy load
 		for (int j = 0; j < 5; ++j)
 		{
 			for (int i = 0; i < 10; ++i)
 			{
-				if (file.mkdirs())
+				if (folder.mkdirs())
 				{
-					return;
+					return true;
 				}
 			}
 			try
 			{
 				Thread.sleep(100);
 			}
-			catch (InterruptedException ignore)
+			catch (InterruptedException ix)
 			{
+				Thread.currentThread().interrupt();
 			}
 		}
-		logger.error("Failed to make directory " + file);
+		logger.error("Failed to create directory: " + folder);
+		return false;
 	}
 

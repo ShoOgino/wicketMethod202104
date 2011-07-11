@@ -1,0 +1,24 @@
+	/**
+	 * Schedules a file for removal asynchronously.
+	 * 
+	 * @param file
+	 *            the file to be removed
+	 * @param fileCleaner
+	 *            the file cleaner that will be used to remove the file
+	 * @return {@code false} if the {@code file} is <em>null</em> or a folder, {@code true} -
+	 *         otherwise (i.e. if it is scheduled)
+	 */
+	public static final boolean removeAsync(final File file, final IFileCleaner fileCleaner)
+	{
+		if (file == null || file.isDirectory())
+		{
+			return false;
+		}
+
+		Args.notNull(fileCleaner, "fileCleaner");
+
+		fileCleaner.track(file, new Object());
+
+		return true;
+	}
+
