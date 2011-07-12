@@ -4,27 +4,11 @@
 	 * 
 	 * @see org.apache.wicket.pageStore.IDataStore#storeData(java.lang.String, int, byte[])
 	 */
-	public void storeData(final String sessionId, final int id, final byte[] data)
+	public void storeData(final String sessionId, final int pageId, final byte[] data)
 	{
-		Entry entry = new Entry(sessionId, id, data);
-		try
-		{
-			boolean added = entries.offer(entry, OFFER_WAIT, TimeUnit.MILLISECONDS);
+		Entry entry = new Entry(sessionId, pageId, data);
+		StoreEntryRunnable storeEntryRunnable = new StoreEntryRunnable(entry, dataStore);
 
-			if (added == false)
-			{
-				log.debug("Storing synchronously page with id '{}' in session '{}'", id, sessionId);
-				dataStore.storeData(sessionId, id, data);
-			}
-			else
-			{
-				entryMap.put(getKey(entry), entry);
-			}
-		}
-		catch (InterruptedException e)
-		{
-			log.error(e.getMessage(), e);
-			dataStore.storeData(sessionId, id, data);
-		}
+		savePagesExecutor.execute(storeEntryRunnable);
 	}
 

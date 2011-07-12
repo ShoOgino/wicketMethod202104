@@ -9,14 +9,9 @@
 	public AsynchronousDataStore(final IDataStore dataStore, final int capacity)
 	{
 		this.dataStore = dataStore;
-		destroy = new AtomicBoolean(false);
-		entries = new LinkedBlockingQueue<Entry>(capacity);
-		entryMap = new ConcurrentHashMap<String, Entry>();
+		entries = new LinkedBlockingQueue<Runnable>(capacity);
+		savePagesExecutor = new ThreadPoolExecutor(MAX_THREADS, MAX_THREADS, 1l, TimeUnit.SECONDS,
+			entries, new RejectStoringTask());
 
-		PageSavingRunnable savingRunnable = new PageSavingRunnable(dataStore, entries, entryMap,
-			destroy);
-		Thread thread = new Thread(savingRunnable, "Wicket-PageSavingThread");
-		thread.setDaemon(true);
-		thread.start();
 	}
 
