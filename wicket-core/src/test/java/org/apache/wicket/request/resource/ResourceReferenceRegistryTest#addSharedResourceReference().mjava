@@ -1,0 +1,17 @@
+	/**
+	 * {@link SharedResourceReference} cannot be added in {@link ResourceReferenceRegistry}. It is
+	 * just a shortcut to find already registered {@link IResource} or to create a new
+	 * {@link PackageResource} and register it
+	 */
+	@Test
+	public void addSharedResourceReference()
+	{
+		ResourceReferenceRegistry registry = new ResourceReferenceRegistry();
+		assertEquals(0, registry.getSize());
+
+		ResourceReference reference = new SharedResourceReference(
+			ResourceReferenceRegistryTest.class, "test");
+		registry.registerResourceReference(reference);
+		assertEquals(0, registry.getSize());
+	}
+
