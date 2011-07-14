@@ -1,6 +1,14 @@
 	public int getCompatibilityScore(Request request)
 	{
-		// always return 0 here so that the mounts have higher priority
-		return 0;
+		Url url = request.getUrl();
+
+		int score = -1;
+		if (url.getSegments().size() >= 4 &&
+			urlStartsWith(url, getContext().getNamespace(), getContext().getResourceIdentifier()))
+		{
+			score = 1;
+		}
+
+		return score;
 	}
 
