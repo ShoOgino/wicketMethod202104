@@ -1,0 +1,17 @@
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return the current {@link Thread}s context {@link ClassLoader} if it is set, or the
+	 *         {@link ClassLoader} that was used to load this class.
+	 */
+	@Override
+	protected ClassLoader getClassLoader()
+	{
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		if (loader == null)
+		{
+			loader = DefaultClassResolver.class.getClassLoader();
+		}
+		return loader;
+	}
+

@@ -1,8 +1,4 @@
-	/**
-	 * 
-	 * @see org.apache.wicket.application.IClassResolver#getResources(java.lang.String)
-	 */
-	public Iterator<URL> getResources(String name)
+	public Iterator<URL> getResources(final String name)
 	{
 		List<URL> resultList = new ArrayList<URL>();
 
@@ -19,7 +15,7 @@
 			loadResources(resources, loadedFiles);
 
 			// Try the context class loader
-			resources = Thread.currentThread().getContextClassLoader().getResources(name);
+			resources = getClassLoader().getResources(name);
 			loadResources(resources, loadedFiles);
 
 			for (URI uri : loadedFiles)

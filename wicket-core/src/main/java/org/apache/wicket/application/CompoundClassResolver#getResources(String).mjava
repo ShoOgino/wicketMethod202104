@@ -1,0 +1,32 @@
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation iterates through all {@link IClassResolver}s added, and combines the
+	 * results into one {@link Set} of {@link URL}s, and returns an {@link Iterator} for the set.
+	 * {@link URL}s are unique in the set.
+	 * 
+	 * @param name
+	 *            The name of the resource to find.
+	 * @return An {@link Iterator} of all the {@link URL}s matching the resource name.
+	 */
+	public Iterator<URL> getResources(final String name)
+	{
+		Args.notNull(name, "name");
+
+		Set<URL> urls = new TreeSet<URL>();
+		for (IClassResolver resolver : resolvers)
+		{
+			Iterator<URL> it = resolver.getResources(name);
+			while (it.hasNext())
+			{
+				URL url = it.next();
+				if (urls.contains(url) == false)
+				{
+					urls.add(url);
+				}
+			}
+		}
+
+		return urls.iterator();
+	}
+
