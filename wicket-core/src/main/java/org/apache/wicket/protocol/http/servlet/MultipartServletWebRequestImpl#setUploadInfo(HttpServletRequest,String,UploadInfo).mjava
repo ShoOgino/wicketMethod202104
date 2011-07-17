@@ -3,13 +3,17 @@
 	 * 
 	 * @param req
 	 *            http servlet request, not null
+	 * @param upload
+	 *            upload identifier
 	 * @param uploadInfo
 	 *            {@link UploadInfo} object to be put into session, not null
 	 */
-	public static void setUploadInfo(final HttpServletRequest req, final UploadInfo uploadInfo)
+	public static void setUploadInfo(final HttpServletRequest req, String upload,
+		final UploadInfo uploadInfo)
 	{
 		Args.notNull(req, "req");
+		Args.notNull(upload, "upload");
 		Args.notNull(uploadInfo, "uploadInfo");
-		req.getSession().setAttribute(SESSION_KEY, uploadInfo);
+		req.getSession().setAttribute(getSessionKey(upload), uploadInfo);
 	}
 

@@ -7,7 +7,7 @@
 	protected void onUploadUpdate(int bytesUploaded, int total)
 	{
 		HttpServletRequest request = getContainerRequest();
-		UploadInfo info = getUploadInfo(request);
+		UploadInfo info = getUploadInfo(request, upload);
 		if (info == null)
 		{
 			throw new IllegalStateException(
@@ -15,6 +15,6 @@
 		}
 		info.setBytesUploaded(bytesUploaded);
 
-		setUploadInfo(request, info);
+		setUploadInfo(request, upload, info);
 	}
 

@@ -5,6 +5,8 @@
 	 * 
 	 * @param maxSize
 	 *            the maximum size allowed for this request
+	 * @param upload
+	 *            upload identifier for {@link UploadInfo}
 	 * @param request
 	 *            the servlet request
 	 * @param filterPrefix
@@ -13,9 +15,9 @@
 	 *             Thrown if something goes wrong with upload
 	 */
 	public MultipartServletWebRequestImpl(HttpServletRequest request, String filterPrefix,
-		Bytes maxSize) throws FileUploadException
+		Bytes maxSize, String upload) throws FileUploadException
 	{
-		this(request, filterPrefix, maxSize, new DiskFileItemFactory(Application.get()
+		this(request, filterPrefix, maxSize, upload, new DiskFileItemFactory(Application.get()
 			.getResourceSettings()
 			.getFileCleaner()));
 	}

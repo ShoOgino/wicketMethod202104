@@ -3,11 +3,13 @@
 	 * 
 	 * @param req
 	 *            http servlet request, not null
+	 * @param upload
+	 *            upload identifier
 	 * @return {@link UploadInfo} object from session, or null if not found
 	 */
-	public static UploadInfo getUploadInfo(final HttpServletRequest req)
+	public static UploadInfo getUploadInfo(final HttpServletRequest req, String upload)
 	{
 		Args.notNull(req, "req");
-		return (UploadInfo)req.getSession().getAttribute(SESSION_KEY);
+		return (UploadInfo)req.getSession().getAttribute(getSessionKey(upload));
 	}
 

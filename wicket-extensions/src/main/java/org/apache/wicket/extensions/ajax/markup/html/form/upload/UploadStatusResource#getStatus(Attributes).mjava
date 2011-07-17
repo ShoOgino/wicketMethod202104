@@ -1,6 +1,6 @@
 	/**
 	 * @param attributes
-	 * @return Status string with progress data that will feed the progressbar.js variables on
+	 * @return status string with progress data that will feed the progressbar.js variables on
 	 *         browser to update the progress bar
 	 */
 	private String getStatus(final Attributes attributes)
@@ -8,7 +8,9 @@
 		final HttpServletRequest req = (HttpServletRequest)attributes.getRequest()
 			.getContainerRequest();
 
-		UploadInfo info = MultipartServletWebRequestImpl.getUploadInfo(req);
+		final String upload = req.getParameter(UPLOAD_PARAMETER);
+
+		UploadInfo info = MultipartServletWebRequestImpl.getUploadInfo(req, upload);
 
 		String status = null;
 		if ((info == null) || (info.getTotalBytes() < 1))
