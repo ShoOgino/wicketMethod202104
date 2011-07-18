@@ -1,0 +1,19 @@
+	/**
+	 * Pre- and post- configures the {@link WebResponse} returned from
+	 * {@link #newWebResponse(WebRequest, HttpServletResponse)}
+	 * 
+	 * @param webRequest
+	 *            the {@link WebRequest} that will handle the current HTTP Servlet request
+	 * @param httpServletResponse
+	 *            the current HTTP Servlet response
+	 * @return the configured WebResponse object
+	 */
+	WebResponse createWebResponse(final WebRequest webRequest,
+		final HttpServletResponse httpServletResponse)
+	{
+		WebResponse webResponse = newWebResponse(webRequest, httpServletResponse);
+
+		boolean shouldBufferResponse = getRequestCycleSettings().getBufferResponse();
+		return shouldBufferResponse ? new HeaderBufferingWebResponse(webResponse) : webResponse;
+	}
+

@@ -1,0 +1,43 @@
+	/**
+	 * Pre- and post- configures the {@link WebRequest} created by user override-able
+	 * {@link #newWebRequest(HttpServletRequest, String)}
+	 * 
+	 * @param servletRequest
+	 *            the current HTTP Sservlet request
+	 * @param filterPath
+	 *            the filter mapping read from web.xml
+	 * @return a WebRequest object
+	 */
+	WebRequest createWebRequest(HttpServletRequest servletRequest, final String filterPath)
+	{
+		if (hasFilterFactoryManager())
+		{
+			for (AbstractRequestWrapperFactory factory : getFilterFactoryManager())
+			{
+				servletRequest = factory.getWrapper(servletRequest);
+			}
+		}
+
+		WebRequest webRequest = newWebRequest(servletRequest, filterPath);
+
+		try
+		{
+			if (webRequest.isAjax())
+			{
+				// WICKET-3908: Forms submitted with Ajax are always UTF-8 encoded
+				servletRequest.setCharacterEncoding(CharEncoding.UTF_8);
+			}
+			else
+			{
+				String requestEncoding = getRequestCycleSettings().getResponseRequestEncoding();
+				servletRequest.setCharacterEncoding(requestEncoding);
+			}
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			throw new RuntimeException(e);
+		}
+
+		return webRequest;
+	}
+

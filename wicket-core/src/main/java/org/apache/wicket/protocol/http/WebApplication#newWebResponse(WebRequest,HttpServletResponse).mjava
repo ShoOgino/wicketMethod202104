@@ -4,16 +4,14 @@
 	 * to decode the encoded URL.
 	 * 
 	 * @param webRequest
+	 *            the {@link WebRequest} that will handle the current HTTP Servlet request
 	 * @param httpServletResponse
+	 *            the current HTTP Servlet response
 	 * @return a WebResponse object
 	 */
 	protected WebResponse newWebResponse(final WebRequest webRequest,
 		final HttpServletResponse httpServletResponse)
 	{
-		ServletWebResponse webResponse = new ServletWebResponse((ServletWebRequest)webRequest,
-			httpServletResponse);
-
-		boolean shouldBufferResponse = getRequestCycleSettings().getBufferResponse();
-		return shouldBufferResponse ? new HeaderBufferingWebResponse(webResponse) : webResponse;
+		return new ServletWebResponse((ServletWebRequest)webRequest, httpServletResponse);
 	}
 
