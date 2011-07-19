@@ -1,20 +1,20 @@
 	/**
-	 * Searches the registered {@link IRequestMapper}s to find one that can encode the
-	 * {@link IRequestHandler}. Each registered {@link IRequestMapper} is asked to encode the
-	 * {@link IRequestHandler} until an encoder that can encode the {@link IRequestHandler} is found
-	 * or no more encoders are left.
+	 * Searches the registered {@link IRequestMapper}s to find one that can map the
+	 * {@link IRequestHandler}. Each registered {@link IRequestMapper} is asked to map the
+	 * {@link IRequestHandler} until a mapper which can map the {@link IRequestHandler} is found or
+	 * no more mappers are left.
 	 * <p>
-	 * The handlers are searched in reverse order as they have been registered. More recently
-	 * registered handlers have bigger priority.
+	 * The mappers are searched in reverse order as they have been registered. More recently
+	 * registered mappers have bigger priority.
 	 * 
 	 * @param handler
-	 * @return Url for the handler or <code>null</code> if no encoder for the handler is found.
+	 * @return Url for the handler or <code>null</code> if no mapper for the handler is found.
 	 */
 	public Url mapHandler(final IRequestHandler handler)
 	{
-		for (IRequestMapper encoder : mappers)
+		for (IRequestMapper mapper : mappers)
 		{
-			Url url = encoder.mapHandler(handler);
+			Url url = mapper.mapHandler(handler);
 			if (url != null)
 			{
 				return url;
