@@ -1,0 +1,24 @@
+	/**
+	 * Tests that a {@link DataTable} with non-empty {@link DataTable#getCaptionModel()} will render
+	 * &lt;caption&gt; element.
+	 */
+	public void testWicket3886()
+	{
+		DataTablePage page = new DataTablePage()
+		{
+			@Override
+			protected IModel<String> getCaptionModel()
+			{
+				return Model.of("Caption");
+			}
+		};
+
+		tester.startPage(page);
+		tester.assertRenderedPage(DataTablePage.class);
+
+		String document = tester.getLastResponseAsString();
+		int index = document.indexOf("<caption wicket:id=\"caption\">Caption</caption>");
+		assertTrue("Caption must be rendered!", index > -1);
+
+	}
+
