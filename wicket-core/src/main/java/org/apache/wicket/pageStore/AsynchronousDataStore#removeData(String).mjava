@@ -3,16 +3,17 @@
 	 */
 	public void removeData(final String sessionId)
 	{
-		for (Runnable runnable : savePagesExecutor.getQueue())
+		for (Iterator<Entry> itor = entries.iterator(); itor.hasNext();)
 		{
-			StoreEntryRunnable storeEntryRunnable = (StoreEntryRunnable)runnable;
-			if (storeEntryRunnable != null)
+			Entry entry = itor.next();
+			if (entry != null) // this check is not needed in JDK6
 			{
-				Entry cursorEntry = storeEntryRunnable.getEntry();
+				String entrySessionId = entry.sessionId;
 
-				if (cursorEntry.getSessionId().equals(sessionId))
+				if (sessionId.equals(entrySessionId))
 				{
-					savePagesExecutor.remove(runnable);
+					entryMap.remove(getKey(entry));
+					itor.remove();
 				}
 			}
 		}

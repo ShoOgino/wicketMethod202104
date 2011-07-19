@@ -5,17 +5,17 @@
 
 		for (int i = 0; i < THREAD_COUNT; ++i)
 		{
-			new Thread(new SaveRunnable()).start();
-		}
-
-		for (int i = 0; i < THREAD_COUNT; ++i)
-		{
 			new Thread(new Read1Runnable()).start();
 		}
 
 		for (int i = 0; i < THREAD_COUNT; ++i)
 		{
 			new Thread(new Read2Runnable()).start();
+		}
+
+		for (int i = 0; i < THREAD_COUNT; ++i)
+		{
+			new Thread(new SaveRunnable()).start();
 		}
 
 		while (!(read1Done.get() && read2Done.get() && saveDone.get()))
@@ -28,6 +28,11 @@
 			{
 				log.error(e.getMessage(), e);
 			}
+		}
+
+		if (exceptionThrownByThread != null)
+		{
+			throw new RuntimeException("One of the worker threads failed.", exceptionThrownByThread);
 		}
 
 		long duration = System.currentTimeMillis() - start;

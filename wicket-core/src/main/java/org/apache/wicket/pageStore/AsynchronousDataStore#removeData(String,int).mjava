@@ -1,23 +1,18 @@
 	/**
 	 * @see org.apache.wicket.pageStore.IDataStore#removeData(java.lang.String, int)
 	 */
-	public void removeData(final String sessionId, final int pageId)
+	public void removeData(final String sessionId, final int id)
 	{
-		for (Runnable runnable : savePagesExecutor.getQueue())
+		String key = getKey(sessionId, id);
+		if (key != null)
 		{
-			StoreEntryRunnable storeEntryRunnable = (StoreEntryRunnable)runnable;
-			if (storeEntryRunnable != null)
+			Entry entry = entryMap.remove(key);
+			if (entry != null)
 			{
-				Entry cursorEntry = storeEntryRunnable.getEntry();
-
-				if (cursorEntry.getPageId() == pageId &&
-					cursorEntry.getSessionId().equals(sessionId))
-				{
-					savePagesExecutor.remove(runnable);
-				}
+				entries.remove(entry);
 			}
 		}
 
-		dataStore.removeData(sessionId, pageId);
+		dataStore.removeData(sessionId, id);
 	}
 

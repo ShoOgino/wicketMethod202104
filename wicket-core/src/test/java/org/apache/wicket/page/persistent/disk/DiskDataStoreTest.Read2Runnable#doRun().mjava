@@ -1,7 +1,8 @@
-		public void run()
+		@Override
+		protected void doRun()
 		{
 			File file;
-			while ((file = filesToRead1.poll()) != null || !saveDone.get())
+			while ((file = filesToRead2.poll()) != null || !read1Done.get())
 			{
 				if (file != null)
 				{
@@ -11,8 +12,7 @@
 						failures.incrementAndGet();
 						log.error("Detected error number: " + failures.get());
 					}
-					filesToRead2.add(file);
-					read1Count.incrementAndGet();
+					read2Count.incrementAndGet();
 					bytesRead.addAndGet(bytes.length);
 				}
 
@@ -26,6 +26,6 @@
 				}
 			}
 
-			read1Done.set(true);
+			read2Done.set(true);
 		}
 
