@@ -27,8 +27,11 @@
 					segment = resourceUrl.getFileName();
 
 					if (Strings.isEmpty(segment))
-						throw new NullPointerException(
-							"caching strategy must not return an empty filename");
+					{
+						log.debug("Caching strategy {} returned an empty name, not mapping {}",
+							getCachingStrategy().getClass(), url);
+						return null;
+					}
 				}
 				if (name.length() > 0)
 				{
