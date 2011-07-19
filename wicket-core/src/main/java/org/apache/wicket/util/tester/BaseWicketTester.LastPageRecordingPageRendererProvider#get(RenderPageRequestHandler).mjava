@@ -1,6 +1,13 @@
 		public PageRenderer get(RenderPageRequestHandler handler)
 		{
-			lastRenderedPage = (Page)handler.getPageProvider().getPageInstance();
+			Page newPage = (Page)handler.getPageProvider().getPageInstance();
+			if (startComponent != null && lastPage != null &&
+				lastPage.getPageClass() != newPage.getPageClass())
+			{
+				// WICKET-3913: reset startComponent if a new page type is rendered
+				startComponent = null;
+			}
+			lastRenderedPage = lastPage = newPage;
 			return delegate.get(handler);
 		}
 
