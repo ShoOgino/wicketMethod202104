@@ -1,0 +1,44 @@
+	public Component resolve(MarkupContainer container, MarkupStream markupStream, ComponentTag tag)
+	{
+		if (tag instanceof WicketTag && "label".equals(((WicketTag)tag).getName()))
+		{
+			// We need to find a FormComponent...
+			Component related = null;
+			// ...which could be explicitly specified...
+			if (tag.getAttribute("for") != null)
+			{
+				Component component = AutoLabelResolver.findRelatedComponent(container,
+					tag.getAttribute("for"));
+				related = component;
+			}
+			if (related == null)
+			{
+				// ...or available through an AutoLabel, either directly above us...
+				if (container instanceof AutoLabel)
+				{
+					related = ((AutoLabel)container).getRelatedComponent();
+				}
+				if (related == null)
+				{
+					// ...or perhaps further up...
+					AutoLabel autoLabel = container.findParent(AutoLabel.class);
+					if (autoLabel != null)
+					{
+						related = autoLabel.getRelatedComponent();
+					}
+				}
+			}
+			if (related == null)
+			{
+				// ...or it might just not be available.
+				throw new IllegalStateException("no related component found for <wicket:label>");
+			}
+			else
+			{
+				// ...found the form component, so we can return our label.
+				return new TextLabel("label" + container.getPage().getAutoIndex(), related);
+			}
+		}
+		return null;
+	}
+
