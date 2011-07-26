@@ -1,0 +1,23 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void beanExists() throws Exception
+	{
+		// add dependency bean
+		ctx.putBean("bean", new Bean());
+		AnnotatedBeanRequired page;
+
+		// first test with standard behavior (required = true)
+		tester.startPage(page = new AnnotatedBeanRequired());
+		assertNotNull(page.getBean());
+
+		// now test with required = false
+		AnnotatedBeanNotRequired notRequiredpage;
+		tester.startPage(notRequiredpage = new AnnotatedBeanNotRequired());
+		assertNotNull(notRequiredpage.getBean());
+
+		// both page must have the same bean instance
+		assertTrue(page.getBean() == notRequiredpage.getBean());
+	}
+

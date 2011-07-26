@@ -1,0 +1,22 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void beanNotExists() throws Exception
+	{
+		// with required = true we get IllegalStateException
+		try
+		{
+			tester.startPage(new AnnotatedBeanRequired());
+			fail();
+		}
+		catch (IllegalStateException e)
+		{
+		}
+
+		// with required = false everything is fine
+		AnnotatedBeanNotRequired page;
+		tester.startPage(page = new AnnotatedBeanNotRequired());
+		assertNull(page.getBean());
+	}
+

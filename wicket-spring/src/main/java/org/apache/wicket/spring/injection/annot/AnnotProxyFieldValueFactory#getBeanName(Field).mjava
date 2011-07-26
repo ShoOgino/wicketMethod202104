@@ -13,8 +13,12 @@
 			name = beanNameCache.get(field.getType());
 			if (name == null)
 			{
-				name = getBeanNameOfClass(contextLocator.getSpringContext(), field.getType());
-				beanNameCache.put(field.getType(), name);
+				name = getBeanNameOfClass(contextLocator.getSpringContext(), field.getType(), annot);
+
+				if (name != null)
+				{
+					beanNameCache.put(field.getType(), name);
+				}
 			}
 		}
 		return name;

@@ -2,7 +2,14 @@
 	{
 		if (supportsField(field))
 		{
-			SpringBeanLocator locator = new SpringBeanLocator(getBeanName(field), field.getType(),
+			String beanName = getBeanName(field);
+
+			if (beanName == null)
+			{
+				return null;
+			}
+
+			SpringBeanLocator locator = new SpringBeanLocator(beanName, field.getType(),
 				contextLocator);
 
 			// only check the cache if the bean is a singleton

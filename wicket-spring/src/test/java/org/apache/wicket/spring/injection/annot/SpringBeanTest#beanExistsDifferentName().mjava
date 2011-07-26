@@ -1,0 +1,28 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void beanExistsDifferentName() throws Exception
+	{
+		// add dependency beans of the same type
+		ctx.putBean("mrBean", new Bean());
+		ctx.putBean("theBean", new Bean());
+
+		// with no name specified we get IllegalStateException
+		try
+		{
+			tester.startPage(new AnnotatedBeanRequired());
+			fail();
+		}
+		catch (IllegalStateException e)
+		{
+		}
+
+		// we must inject bean with name "mrBean"
+		AnnotatedBeanNotRequiredDifferentName page;
+		tester.startPage(page = new AnnotatedBeanNotRequiredDifferentName());
+		SpringBeanLocator locator = (SpringBeanLocator)((ILazyInitProxy)page.getBean()).getObjectLocator();
+
+		assertTrue(locator.getBeanName().equals("mrBean"));
+	}
+
