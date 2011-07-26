@@ -1,15 +1,15 @@
 	/**
-	 * Creates a attribute modifier that prepends the current value with the given {@code value}
-	 * using a default space character (' ') separator.
+	 * Creates a attribute modifier that removes an attribute with the specified name
 	 * 
-	 * @param attribute
-	 * @param value
+	 * @param attributeName
+	 *            the name of the attribute to be removed
 	 * @return the attribute modifier
 	 * @since 1.5
-	 * @see AttributeAppender
 	 */
-	public static AttributeModifier remove(String attribute)
+	public static AttributeModifier remove(String attributeName)
 	{
-		return prepend(attribute, Model.of(VALUELESS_ATTRIBUTE_REMOVE));
+		Args.notEmpty(attributeName, "attributeName");
+
+		return replace(attributeName, Model.of(VALUELESS_ATTRIBUTE_REMOVE));
 	}
 
