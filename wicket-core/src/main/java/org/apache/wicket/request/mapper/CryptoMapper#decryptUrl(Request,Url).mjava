@@ -6,7 +6,7 @@
 		}
 
 		List<String> segments = encryptedUrl.getSegments();
-		if (segments.size() < 2)
+		if (segments.size() < 1)
 		{
 			return null;
 		}
@@ -24,11 +24,6 @@
 			Url originalUrl = Url.parse(decryptedUrl, request.getCharset());
 
 			int originalNumberOfSegments = originalUrl.getSegments().size();
-			if (originalNumberOfSegments == 0 &&
-				originalUrl.getQueryParameters().isEmpty() == false)
-			{
-				originalNumberOfSegments = 1;
-			}
 			int numberOfSegments = encryptedUrl.getSegments().size();
 
 			char[] encryptedChars = encryptedUrlString.toCharArray();
@@ -56,6 +51,12 @@
 				}
 				else
 				{
+					// append new segments from browser
+					while (segNo < numberOfSegments)
+					{
+						url.getSegments().add(encryptedUrl.getSegments().get(segNo));
+						segNo++;
+					}
 					break;
 				}
 			}
