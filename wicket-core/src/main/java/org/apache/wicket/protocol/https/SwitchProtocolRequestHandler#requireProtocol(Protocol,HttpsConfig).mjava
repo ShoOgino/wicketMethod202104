@@ -6,10 +6,21 @@
 	 *            required protocol
 	 * @param httpsConfig
 	 *            the https configuration
-	 * @return request target or {@code null}
+	 * @return request handler or {@code null}
 	 */
 	public static IRequestHandler requireProtocol(Protocol protocol, final HttpsConfig httpsConfig)
 	{
-		return requireProtocol(protocol, null, httpsConfig);
+		IRequestCycle requestCycle = RequestCycle.get();
+		WebRequest webRequest = (WebRequest)requestCycle.getRequest();
+		HttpServletRequest request = (HttpServletRequest)webRequest.getContainerRequest();
+		if (protocol == null || protocol == Protocol.PRESERVE_CURRENT ||
+			request.getScheme().equals(protocol.toString().toLowerCase()))
+		{
+			return null;
+		}
+		else
+		{
+			return new SwitchProtocolRequestHandler(protocol, httpsConfig);
+		}
 	}
 
