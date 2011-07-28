@@ -1,0 +1,30 @@
+		/**
+		 * Construct.
+		 */
+		private Wicket3921()
+		{
+			setOutputMarkupId(true);
+
+			add(new AjaxLink<Void>("updatePage")
+			{
+				@Override
+				public void onClick(AjaxRequestTarget target)
+				{
+					// adding the page to the target will produce a wicket ajax redirect
+					// without any cache headers
+					target.add(getPage());
+				}
+			});
+
+			add(new AjaxLink<Void>("updateComponent")
+			{
+				@Override
+				public void onClick(AjaxRequestTarget target)
+				{
+					// this produces an ajax response with cache headers set properly
+					target.add(this);
+				}
+			}.setOutputMarkupId(true));
+
+		}
+
