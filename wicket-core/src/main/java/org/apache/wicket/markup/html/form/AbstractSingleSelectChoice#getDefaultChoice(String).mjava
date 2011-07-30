@@ -1,23 +1,22 @@
 	/**
-	 * The localizer will be ask for the property to display Depending on if null is allowed or not
-	 * it will ask for:
+	 * Asks the {@link Localizer} for the property to display for an additional default choice
+	 * depending on {@link #isNullValid()}:
 	 * 
 	 * <ul>
-	 * <li>nullValid: when null is valid and by default it will show an empty string as a choice.</li>
-	 * <li>null: when null is not a valid choice and it will make a choice with "Choose One"</li>
+	 * <li>
+	 * "nullValid" if {@code null} is valid, defaulting to an empty string.</li>
+	 * <li>
+	 * "null" if {@code null} is not valid but no choice is selected (i.e. {@code selectedValue} is
+	 * empty), defaulting to "Choose one".</li>
 	 * </ul>
 	 * 
-	 * The choice for null is valid will always be returned. The choice when null is not valid will
-	 * only be returned if the selected object is null.
+	 * Otherwise no additional default choice will be returned.
 	 * 
-	 * @see org.apache.wicket.markup.html.form.AbstractChoice#getDefaultChoice(Object)
+	 * @see org.apache.wicket.markup.html.form.AbstractChoice#getDefaultChoice(String)
 	 */
 	@Override
-	protected CharSequence getDefaultChoice(final Object selected)
+	protected CharSequence getDefaultChoice(final String selectedValue)
 	{
-
-		final Object noSelectionValue = getNoSelectionValue();
-
 		// Is null a valid selection value?
 		if (isNullValid())
 		{
@@ -36,22 +35,19 @@
 			buffer.append("\n<option");
 
 			// If null is selected, indicate that
-			if (selected == noSelectionValue)
+			if ("".equals(selectedValue))
 			{
 				buffer.append(" selected=\"selected\"");
 			}
 
 			// Add body of option tag
-			buffer.append(" value=\"" + noSelectionValue + "\">")
-				.append(option)
-				.append("</option>");
+			buffer.append(" value=\"\">").append(option).append("</option>");
 			return buffer;
 		}
 		else
 		{
 			// Null is not valid. Is it selected anyway?
-			if ((selected == null) || selected.equals(noSelectionValue) ||
-				selected.equals(EMPTY_STRING))
+			if ("".equals(selectedValue))
 			{
 				// Force the user to pick a non-null value
 				String option = getLocalizer().getStringIgnoreSettings(getNullKey(), this, null,
@@ -62,8 +58,7 @@
 					option = getLocalizer().getString("null", this, CHOOSE_ONE);
 				}
 
-				return "\n<option selected=\"selected\" value=\"" + noSelectionValue + "\">" +
-					option + "</option>";
+				return "\n<option selected=\"selected\" value=\"\">" + option + "</option>";
 			}
 		}
 		return "";
