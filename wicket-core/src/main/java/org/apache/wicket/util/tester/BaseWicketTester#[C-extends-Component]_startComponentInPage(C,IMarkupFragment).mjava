@@ -23,7 +23,6 @@
 			fail("The automatically created page should not be null.");
 		}
 
-
 		// Automatically create the page markup if not provided
 		if (pageMarkup == null)
 		{
@@ -32,16 +31,19 @@
 			{
 				fail("The markup for the automatically created page should not be null.");
 			}
-			markup = "<html><head></head><body>" + markup + "</body></html>";
 
-			// set a ContainerInfo to be able to use HtmlHeaderContainer so header contribution
-			// still work. WICKET-3700
-			ContainerInfo containerInfo = new ContainerInfo(page);
-			MarkupResourceStream markupResourceStream = new MarkupResourceStream(
-				new StringResourceStream(markup), containerInfo, page.getClass());
 			try
 			{
-				pageMarkup = new MarkupParser(markupResourceStream).parse();
+				// set a ContainerInfo to be able to use HtmlHeaderContainer so header contribution
+				// still work. WICKET-3700
+				ContainerInfo containerInfo = new ContainerInfo(page);
+				MarkupResourceStream markupResourceStream = new MarkupResourceStream(
+					new StringResourceStream(markup), containerInfo, page.getClass());
+
+				MarkupParser markupParser = getApplication().getMarkupSettings()
+					.getMarkupFactory()
+					.newMarkupParser(markupResourceStream);
+				pageMarkup = markupParser.parse();
 			}
 			catch (Exception e)
 			{
