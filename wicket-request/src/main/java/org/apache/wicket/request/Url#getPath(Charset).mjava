@@ -1,0 +1,27 @@
+	/**
+	 * return path for current url in given encoding 
+	 * 
+	 * @param charset
+	 *           character set for encoding
+	 *           
+	 * @return path string
+	 */
+	public String getPath(Charset charset)
+	{
+		Args.notNull(charset, "charset");
+
+		StringBuilder path = new StringBuilder();
+		boolean slash = false;
+
+		for (String segment : getSegments())
+		{
+			if (slash)
+			{
+				path.append('/');
+			}
+			path.append(encodeSegment(segment, charset));
+			slash = true;
+		}
+		return path.toString();
+	}
+

@@ -1,0 +1,22 @@
+	/**
+	 * return query string part of url in given encoding
+	 * 
+	 * @param charset
+	 *          character set for encoding
+	 * 
+	 * @return query string
+	 */
+	public String getQueryString(Charset charset)
+	{
+		Args.notNull(charset, "charset");
+
+		StringBuilder query = new StringBuilder();
+
+		for (QueryParameter parameter : getQueryParameters())
+		{
+			query.append(query.length() == 0 ? '?' : '&');
+			query.append(parameter.toString(charset));
+		}
+		return query.toString();
+	}
+

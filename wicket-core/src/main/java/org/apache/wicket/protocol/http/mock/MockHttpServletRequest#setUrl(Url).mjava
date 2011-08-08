@@ -3,6 +3,47 @@
 	 */
 	public void setUrl(Url url)
 	{
-		setURL(url.toString());
+		if (url.getProtocol() != null)
+		{
+			setScheme(url.getProtocol());
+		}
+		if (url.getHost() != null)
+		{
+			serverName = url.getHost();
+		}
+		if (url.getPort() != null)
+		{
+			serverPort = url.getPort();
+		}
+		String path = url.getPath(getCharset());
+
+		if (path.startsWith("/") == false)
+		{
+			path = getContextPath() + getServletPath() + '/' + path;
+		}
+		this.url = path;
+		
+		if (path.startsWith(getContextPath()))
+		{
+			path = path.substring(getContextPath().length());
+		}
+		if (path.startsWith(getServletPath()))
+		{
+			path = path.substring(getServletPath().length());
+		}
+
+		setPath(path);
+
+		//
+		// We can't clear the parameters here because users may have set custom 
+		// parameters in request. An better place to clear they is when tester 
+		// setups the next request cycle
+		//
+		// parameters.clear();
+		
+		for (QueryParameter parameter : url.getQueryParameters())
+		{
+			addParameter(parameter.getName(), parameter.getValue());
+		}
 	}
 
