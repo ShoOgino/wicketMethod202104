@@ -1,5 +1,14 @@
 	public Serializable getCacheKey()
 	{
-		return new CacheKey(scopeName, absolutePath, getCurrentLocale(), getCurrentStyle(), variation);
+		IResourceStream stream = getCacheableResourceStream();
+
+		// if resource stream can not be found do not cache
+		if (stream == null)
+		{
+			return null;
+		}
+
+		return new CacheKey(scopeName, absolutePath, 
+		                    stream.getLocale(), stream.getStyle(), stream.getVariation());
 	}
 

@@ -1,0 +1,14 @@
+	public IResourceStream getCacheableResourceStream()
+	{
+		// get resource locator
+		IResourceStreamLocator locator = ThreadContext.getApplication()
+			.getResourceSettings()
+			.getResourceStreamLocator();
+
+		// determine current resource stream 
+		// taking client locale and style into account
+		return locator.locate(getScope(), absolutePath,
+		                      getCurrentStyle(), variation, getCurrentLocale(),
+		                      null, false);
+	}
+
