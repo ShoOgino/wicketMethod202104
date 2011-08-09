@@ -6,6 +6,13 @@
 	{
 		// Get a "new" ResourceResponse to write a response
 		ResourceResponse data = newResourceResponse(attributes);
+
+		// let caching strategy decorate response if resource is intended to be cached
+		if (this instanceof IStaticCacheableResource)
+		{
+			getCachingStrategy().decorateResponse(data, (IStaticCacheableResource)this);
+		}
+		// set response header
 		setResponseHeaders(data, attributes);
 
 		if (!data.dataNeedsToBeWritten(attributes) || data.getErrorCode() != null)

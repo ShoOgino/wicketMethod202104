@@ -1,16 +1,19 @@
 	public IRequestHandler mapRequest(final Request request)
 	{
-		final Url url = request.getUrl();
+		final Url url = new Url(request.getUrl());
+
+		// now extract the page parameters from the request url
+		PageParameters parameters = extractPageParameters(request, mountSegments.length,
+			parametersEncoder);
+
+		// remove caching information from current request
+		removeCachingDecoration(url, parameters);
 
 		// check if url matches mount path
 		if (urlStartsWith(url, mountSegments) == false)
 		{
 			return null;
 		}
-
-		// now extract the page parameters from the request url
-		PageParameters parameters = extractPageParameters(request, mountSegments.length,
-			parametersEncoder);
 
 		// check if there are placeholders in mount segments
 		for (int index = 0; index < mountSegments.length; ++index)

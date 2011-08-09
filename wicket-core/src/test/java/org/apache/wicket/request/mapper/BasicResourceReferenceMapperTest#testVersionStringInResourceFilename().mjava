@@ -3,9 +3,17 @@
 	 */
 	public void testVersionStringInResourceFilename()
 	{
-		final IResource resource = new IResource()
+		final IStaticCacheableResource resource = new IStaticCacheableResource()
 		{
-			private static final long serialVersionUID = 1L;
+			public Serializable getCacheKey()
+			{
+				return null;
+			}
+
+			public IResourceStream getResourceStream()
+			{
+				return new StringResourceStream("foo-bar");
+			}
 
 			public void respond(Attributes attributes)
 			{
@@ -29,13 +37,13 @@
 
 		INamedParameters params = new PageParameters();
 		ResourceUrl url = new ResourceUrl("test.js", params);
-		strategy.decorateUrl(url, reference);
+		strategy.decorateUrl(url, resource);
 		assertEquals("test-version-foobar.js", url.getFileName());
 		strategy.undecorateUrl(url);
 		assertEquals("test.js", url.getFileName());
 
 		url = new ResourceUrl("test", params);
-		strategy.decorateUrl(url, reference);
+		strategy.decorateUrl(url, resource);
 		assertEquals("test-version-foobar", url.getFileName());
 		strategy.undecorateUrl(url);
 		assertEquals("test", url.getFileName());
@@ -68,7 +76,7 @@
 		strategy = new FilenameWithVersionResourceCachingStrategy("-version-",
 			new StaticResourceVersion("1.0.4-beta"));
 		url = new ResourceUrl("test.txt", params);
-		strategy.decorateUrl(url, reference);
+		strategy.decorateUrl(url, resource);
 		assertEquals("test-version-1.0.4-beta.txt", url.getFileName());
 	}
 

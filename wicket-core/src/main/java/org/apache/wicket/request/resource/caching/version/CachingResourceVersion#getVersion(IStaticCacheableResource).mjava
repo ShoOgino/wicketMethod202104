@@ -1,0 +1,34 @@
+	public String getVersion(IStaticCacheableResource resource)
+	{
+		// get unique cache key for resource reference
+		final Serializable key = resource.getCacheKey();
+
+		// lookup version in cache
+		String version = cache.get(key);
+
+		// if not found
+		if (version == null)
+		{
+			// get version from delegate
+			version = delegate.getVersion(resource);
+
+			// replace null values with holder
+			if (version == null)
+			{
+				version = NULL_VALUE;
+			}
+			// update cache
+			cache.put(key, version);
+		}
+
+		//noinspection StringEquality
+		if (version == NULL_VALUE)
+		{
+			// replace holder with null value
+			return null;
+		}
+		
+		// return version string
+		return version;
+	}
+

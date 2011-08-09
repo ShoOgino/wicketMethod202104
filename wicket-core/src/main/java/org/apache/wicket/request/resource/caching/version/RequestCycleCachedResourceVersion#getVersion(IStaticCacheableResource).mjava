@@ -1,22 +1,13 @@
-	public String getVersion(PackageResourceReference resourceReference)
+	public String getVersion(IStaticCacheableResource resource)
 	{
 		// get current request cycle
 		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
 
-		// get current stream information for package resource
-		final PackageResourceReference.StreamInfo streamInfo = resourceReference.getCurrentStreamInfo();
-		
-		// if no stream info is available we can not provide a version
-		if(streamInfo == null)
-		{
-			return null;
-		}
-		
 		// cache instance
-		Map<CacheResourceVersionKey, String> cache = null;
+		Map<Serializable, String> cache = null;
 
 		// cache key
-		CacheResourceVersionKey key = null;
+		Serializable key = null;
 
 		// is request cycle available?
 		if (requestCycle != null)
@@ -25,7 +16,7 @@
 			cache = requestCycle.getMetaData(CACHE_KEY);
 
 			// create caching key
-			key = new CacheResourceVersionKey(resourceReference, streamInfo);
+			key = resource.getCacheKey();
 
 			// does cache exist within current request cycle?
 			if (cache == null)
@@ -41,7 +32,7 @@
 		}
 		
 		// no cache entry found, query version from delegate
-		final String version = delegate.getVersion(resourceReference);
+		final String version = delegate.getVersion(resource);
 
 		// store value in cache (if it is available)
 		if (cache != null && key != null)

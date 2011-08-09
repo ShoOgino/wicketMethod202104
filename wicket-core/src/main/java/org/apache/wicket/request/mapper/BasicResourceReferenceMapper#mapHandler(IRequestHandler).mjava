@@ -47,27 +47,24 @@
 			{
 				String token = tokens.nextToken();
 
-				// on the last component of the resource path add a version string ...
-				if (tokens.hasMoreTokens() == false)
+				// on the last component of the resource path
+				if (tokens.hasMoreTokens() == false && Strings.isEmpty(token) == false)
 				{
-					// ... but only for package resources
-					if (reference instanceof PackageResourceReference)
+					final IResource resource = reference.getResource();
+
+					// apply caching if required
+					if (resource instanceof IStaticCacheableResource)
 					{
-						final PackageResourceReference pkgref = (PackageResourceReference)reference;
+						// add caching related information to filename + query parameters
+						final IStaticCacheableResource cacheable = (IStaticCacheableResource)resource;
 						final ResourceUrl resourceUrl = new ResourceUrl(token, parameters);
-						getCachingStrategy().decorateUrl(resourceUrl, pkgref);
+						getCachingStrategy().decorateUrl(resourceUrl, cacheable);
 						token = resourceUrl.getFileName();
 
 						if (Strings.isEmpty(token))
 						{
-							log.debug("Caching strategy {} returned an empty name, not mapping {}",
-								getCachingStrategy().getClass().getName(), url);
-							return null;
+							throw new IllegalStateException("caching strategy returned empty name for " + resource);
 						}
-
-						if (parameters.getIndexedCount() > 0)
-							throw new IllegalStateException(
-								"caching strategy must not add indexed parameters");
 					}
 				}
 				segments.add(token);
