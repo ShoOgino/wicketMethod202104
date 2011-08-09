@@ -1,10 +1,17 @@
 	private UrlAttributes getUrlAttributes(Locale locale, String style, String variation)
 	{
-		StreamInfo info = lookupStream(locale, style, variation);
+		IResourceStreamLocator locator = Application.get()
+			.getResourceSettings()
+			.getResourceStreamLocator();
 
-		if (info != null)
-			return new UrlAttributes(info.locale, info.style, info.variation);
+		String absolutePath = Packages.absolutePath(getScope(), getName());
 
-		return new UrlAttributes(null, null, null);
+		IResourceStream stream = locator.locate(getScope(), absolutePath, style, variation, locale,
+			null, false);
+
+		if (stream == null)
+			return new UrlAttributes(null, null, null);
+
+		return new UrlAttributes(stream.getLocale(), stream.getStyle(), stream.getVariation());
 	}
 
