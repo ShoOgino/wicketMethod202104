@@ -1,42 +1,51 @@
 	private String getRequestHandlerString(IRequestHandler handler)
 	{
 		AppendingStringBuffer sb = new AppendingStringBuffer(128);
-		sb.append(handler.getClass().getSimpleName());
-		sb.append("[");
-		if (handler instanceof ListenerInterfaceRequestHandler)
+		if (handler != null)
 		{
-			getListenerString(sb, (ListenerInterfaceRequestHandler)handler);
-		}
-		else if (handler instanceof BookmarkablePageRequestHandler)
-		{
-			getBookmarkableString(sb, (BookmarkablePageRequestHandler)handler);
-		}
-		else if (handler instanceof RenderPageRequestHandler)
-		{
-			getRendererString(sb, (RenderPageRequestHandler)handler);
-		}
-		else if (handler instanceof AjaxRequestTarget)
-		{
-			getAjaxString(sb, (AjaxRequestTarget)handler);
-		}
-		else if (handler instanceof ResourceReferenceRequestHandler)
-		{
-			getResourceString(sb, (ResourceReferenceRequestHandler)handler);
-		}
-		else if (handler instanceof IRequestHandlerDelegate)
-		{
-			getDelegateString(sb, (IRequestHandlerDelegate)handler);
-		}
-		else if (handler instanceof BufferedResponseRequestHandler)
-		{
-			// nothing extra to log... BufferedResponse doesn't have identifiable information about
-			// which request was buffered
+			sb.append("handler=");
+			sb.append(handler.getClass().isAnonymousClass() ? handler.getClass().getName()
+				: handler.getClass().getSimpleName());
+			sb.append(",");
+			if (handler instanceof AjaxRequestTarget)
+			{
+				getAjaxString(sb, (AjaxRequestTarget)handler);
+			}
+			else if (handler instanceof BookmarkablePageRequestHandler)
+			{
+				getBookmarkableString(sb, (BookmarkablePageRequestHandler)handler);
+			}
+			else if (handler instanceof BufferedResponseRequestHandler)
+			{
+				// nothing extra to log... BufferedResponse doesn't have identifiable information
+// about
+				// which request was buffered
+			}
+			else if (handler instanceof IRequestHandlerDelegate)
+			{
+				getDelegateString(sb, (IRequestHandlerDelegate)handler);
+			}
+			else if (handler instanceof ListenerInterfaceRequestHandler)
+			{
+				getListenerString(sb, (ListenerInterfaceRequestHandler)handler);
+			}
+			else if (handler instanceof RenderPageRequestHandler)
+			{
+				getRendererString(sb, (RenderPageRequestHandler)handler);
+			}
+			else if (handler instanceof ResourceReferenceRequestHandler)
+			{
+				getResourceString(sb, (ResourceReferenceRequestHandler)handler);
+			}
+			else if (handler instanceof ResourceStreamRequestHandler)
+			{
+				getResourceString(sb, (ResourceStreamRequestHandler)handler);
+			}
 		}
 		else
 		{
-			sb.append(handler.toString());
+			sb.append("none");
 		}
-		sb.append("]");
 		return sb.toString();
 	}
 
