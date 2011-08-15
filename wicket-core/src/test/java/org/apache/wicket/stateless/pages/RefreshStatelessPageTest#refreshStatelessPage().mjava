@@ -1,0 +1,15 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-3965
+	 */
+	@Test
+	public void refreshStatelessPage()
+	{
+		tester.startPage(new StatefulPage());
+		tester.clickLink("link", false);
+
+		tester.assertRenderedPage(StatelessPage.class);
+		Page renderedPage = tester.getLastRenderedPage();
+		tester.executeUrl("wicket/page?" + renderedPage.getId());
+		tester.assertRenderedPage(StatelessPage.class);
+	}
+
