@@ -1,0 +1,23 @@
+	/**
+	 * Factory method for creating noncontextual instances
+	 * 
+	 * @param <T>
+	 * @param clazz
+	 * @param manager
+	 * @return
+	 */
+	public static <T> NonContextual<T> of(Class<? extends T> clazz, BeanManager manager)
+	{
+		ClassMetaCache<NonContextual<?>> meta = getCache(manager);
+
+		@SuppressWarnings("unchecked")
+		NonContextual<T> nc = (NonContextual<T>)meta.get(clazz);
+
+		if (nc == null)
+		{
+			nc = new NonContextual<T>(manager, clazz);
+			meta.put(clazz, nc);
+		}
+		return nc;
+	}
+

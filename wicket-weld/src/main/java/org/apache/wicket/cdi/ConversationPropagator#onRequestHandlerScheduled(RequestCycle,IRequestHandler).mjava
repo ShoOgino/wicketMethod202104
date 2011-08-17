@@ -1,0 +1,29 @@
+	public void onRequestHandlerScheduled(RequestCycle cycle, IRequestHandler handler)
+	{
+		Conversation conversation = container.getCurrentConversation(cycle);
+
+		if (conversation == null || conversation.isTransient())
+		{
+			return;
+		}
+
+		// propagate a converastion across non-bookmarkable page instances
+
+		Page page = getPage(handler);
+		if (page != null && !conversation.isTransient())
+		{
+			page.setMetaData(CID_KEY, conversation.getId());
+		}
+
+		if (propagation == ConversationPropagation.ALL)
+		{
+			// propagate cid to a scheduled bookmarkable page
+
+			PageParameters parameters = getPageParameters(handler);
+			if (parameters != null && propagation == ConversationPropagation.ALL)
+			{
+				parameters.add(CID, conversation.getId());
+			}
+		}
+	}
+

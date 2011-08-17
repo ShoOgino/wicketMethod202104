@@ -1,0 +1,17 @@
+	@Override
+	public void onUrlMapped(RequestCycle cycle, IRequestHandler handler, Url url)
+	{
+		Conversation conversation = container.getCurrentConversation(cycle);
+
+		if (conversation == null || conversation.isTransient())
+		{
+			return;
+		}
+
+		if (propagation == ConversationPropagation.ALL)
+		{
+			// propagate cid to bookmarkable pages via urls
+			url.setQueryParameter(CID, conversation.getId());
+		}
+	}
+
