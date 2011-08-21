@@ -1,0 +1,34 @@
+	/**
+	 * testAtomicity()
+	 */
+	@Test
+	public void atomicity()
+	{
+		TestPage page = new TestPage();
+
+		TestComponent t1 = new TestComponent("t1");
+		TestComponent t2 = new TestComponent("t2");
+		TestComponent t3 = new TestComponent("t3");
+
+		t1.add(t2);
+		t2.add(t3);
+
+		page.internalInitialize();
+		page.add(t1);
+
+		assertEquals(1, t1.getCount());
+		assertEquals(1, t2.getCount());
+		assertEquals(1, t3.getCount());
+
+		// test moving
+		page.add(t3);
+		assertEquals(1, t3.getCount());
+
+		// test removal and readdition
+		page.remove(t1);
+		assertEquals(1, t1.getCount());
+		page.add(t1);
+		assertEquals(1, t1.getCount());
+		assertEquals(1, t2.getCount());
+	}
+

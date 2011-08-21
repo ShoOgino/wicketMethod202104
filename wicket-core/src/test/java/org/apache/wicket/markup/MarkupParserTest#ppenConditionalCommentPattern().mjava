@@ -1,0 +1,35 @@
+	/**
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-3500">WICKET-3500</a>
+	 */
+	@Test
+	public void ppenConditionalCommentPattern()
+	{
+		assertFalse(AbstractMarkupParser.CONDITIONAL_COMMENT_OPENING.matcher(
+			"<!--x--> <!--[if IE]>").find());
+
+		String markup = " <!--[if IE]> <![endif]--><!--[if IE]>--><!--<![endif]--><!--[if IE]><!--><!--<![endif]--><!--[if IE]><! --><!--<![endif]-->";
+		Matcher m = AbstractMarkupParser.CONDITIONAL_COMMENT_OPENING.matcher(markup);
+		assertTrue(m.find());
+		assertEquals(" <!--[if IE]>", m.group());
+		assertFalse(m.find());
+
+		markup = " <!--[if IE]>--> <![endif]--><!--[if IE]>--><!--<![endif]--><!--[if IE]><!--><!--<![endif]--><!--[if IE]><! --><!--<![endif]-->";
+		m = AbstractMarkupParser.CONDITIONAL_COMMENT_OPENING.matcher(markup);
+		assertTrue(m.find());
+		assertEquals(" <!--[if IE]>-->", m.group());
+		assertFalse(m.find());
+
+		markup = " <!--[if IE]><!--> <![endif]--><!--[if IE]>--><!--<![endif]--><!--[if IE]><!--><!--<![endif]--><!--[if IE]><! --><!--<![endif]-->";
+		m = AbstractMarkupParser.CONDITIONAL_COMMENT_OPENING.matcher(markup);
+		assertTrue(m.find());
+		assertEquals(" <!--[if IE]><!-->", m.group());
+		assertFalse(m.find());
+
+		markup = " <!--[if IE]><! --> <![endif]--><!--[if IE]>--><!--<![endif]--><!--[if IE]><!--><!--<![endif]--><!--[if IE]><! --><!--<![endif]-->";
+		m = AbstractMarkupParser.CONDITIONAL_COMMENT_OPENING.matcher(markup);
+		assertTrue(m.find());
+		assertEquals(" <!--[if IE]><! -->", m.group());
+		assertFalse(m.find());
+
+	}
+

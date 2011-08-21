@@ -1,0 +1,20 @@
+	/**
+	 * @see href https://issues.apache.org/jira/browse/WICKET-3097
+	 */
+	@Test
+	public void urlRemainsStable()
+	{
+		TestPage page = new TestPage();
+
+		int indexBeforeRender = page.container.getBehaviorId(page.callbackBehavior);
+
+		tester.startPage(page);
+
+		page = (TestPage)tester.getLastRenderedPage();
+		int indexAfterRender = page.container.getBehaviorId(page.callbackBehavior);
+
+		assertEquals("index of behavior in the raw list should not have changed",
+			indexBeforeRender, indexAfterRender);
+
+	}
+

@@ -1,0 +1,20 @@
+	/**
+	 * Test &lt;wicket: .
+	 * 
+	 * @throws ParseException
+	 * @throws ResourceStreamNotFoundException
+	 * @throws IOException
+	 */
+	@Test
+	public void script() throws ParseException, ResourceStreamNotFoundException, IOException
+	{
+		final MarkupParser parser = new MarkupParser(
+			"<html wicket:id=\"test\"><script language=\"JavaScript\">... <x a> ...</script></html>");
+
+		IMarkupFragment markup = parser.parse();
+		assertEquals(5, markup.size());
+		assertEquals("html", ((ComponentTag)markup.get(0)).getName());
+		assertEquals("html", ((ComponentTag)markup.get(4)).getName());
+		assertEquals("\n/*<![CDATA[*/\n... <x a> ...\n/*]]>*/\n", markup.get(2).toString());
+	}
+

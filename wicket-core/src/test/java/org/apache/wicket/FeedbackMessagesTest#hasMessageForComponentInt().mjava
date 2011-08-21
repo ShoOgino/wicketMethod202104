@@ -1,0 +1,19 @@
+	/**
+	 * Test method for
+	 * {@link org.apache.wicket.feedback.FeedbackMessages#hasMessageFor(org.apache.wicket.Component, int)}
+	 * .
+	 */
+	@Test
+	public void hasMessageForComponentInt()
+	{
+		final Page page = new TestPage_1();
+		tester.startPage(page);
+		page.debug("debug message");
+		page.info("info message");
+		page.error("error message");
+		Assert.assertTrue(tester.getLastRenderedPage()
+			.getSession()
+			.getFeedbackMessages()
+			.hasMessageFor(page, FeedbackMessage.ERROR));
+	}
+

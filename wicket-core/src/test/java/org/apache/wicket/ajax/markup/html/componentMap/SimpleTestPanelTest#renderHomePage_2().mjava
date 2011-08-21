@@ -1,0 +1,17 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void renderHomePage_2() throws Exception
+	{
+		executeTest(SimpleTestPage.class, "SimpleTestPageExpectedResult.html");
+
+		Page page = tester.getLastRenderedPage();
+		tester.executeBehavior(((SimpleTestPanel)page.get("testPanel")).getTimeBehavior());
+
+		// Validate the document
+		String document = tester.getLastResponseAsString();
+		DiffUtil.validatePage(document, SimpleTestPage.class,
+			"SimpleTestPageExpectedResult-1.html", true);
+	}
+

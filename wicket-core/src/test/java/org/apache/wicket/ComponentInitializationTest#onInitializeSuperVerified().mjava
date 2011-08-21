@@ -1,0 +1,21 @@
+	/**
+	 * testOnInitializeSuperVerified()
+	 */
+	@Test
+	public void onInitializeSuperVerified()
+	{
+		TestPage page = new TestPage();
+		page.internalInitialize();
+
+		boolean illegalState = false;
+		try
+		{
+			page.add(new InvalidComponent("addedComponent"));
+		}
+		catch (IllegalStateException e)
+		{
+			illegalState = true;
+		}
+		assertTrue(illegalState);
+	}
+

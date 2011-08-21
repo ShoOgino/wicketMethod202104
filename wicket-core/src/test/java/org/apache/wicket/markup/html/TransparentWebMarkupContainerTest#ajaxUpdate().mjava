@@ -1,0 +1,35 @@
+	/**
+	 * Test case for <a href="https://issues.apache.org/jira/browse/WICKET-3719">WICKET-3719</a>
+	 */
+	@Test
+	public void ajaxUpdate()
+	{
+		WicketTester wicketTester = new WicketTester()
+		{
+			@Override
+			protected IPageManagerProvider newTestPageManagerProvider()
+			{
+				return new IPageManagerProvider()
+				{
+					public IPageManager get(IPageManagerContext context)
+					{
+						return new MockPageManager()
+						{
+							@Override
+							public void touchPage(IManageablePage page)
+							{
+								page = (IManageablePage)WicketObjects.cloneObject(page);
+								super.touchPage(page);
+							}
+						};
+					}
+				};
+			}
+
+		};
+
+		wicketTester.startPage(TransparentWithAjaxUpdatePage.class);
+		wicketTester.clickLink("link", true);
+		wicketTester.destroy();
+	}
+

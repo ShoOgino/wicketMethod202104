@@ -1,0 +1,21 @@
+	/**
+	 * Asserting that the component model assigning don't affect the behavior data index
+	 * 
+	 * @see href https://issues.apache.org/jira/browse/WICKET-3142
+	 */
+	@Test
+	public void urlRemainsStableAfterComponentReceiveAnModel()
+	{
+		TestPage page = new TestPage();
+
+		int indexBeforeRender = page.container.getBehaviorId(page.callbackBehavior);
+
+		page.container.setDefaultModel(Model.of(""));
+
+		int indexAfterRender = page.container.getBehaviorId(page.callbackBehavior);
+
+		assertEquals("index of behavior in the raw list should not have changed",
+			indexBeforeRender, indexAfterRender);
+
+	}
+

@@ -1,0 +1,18 @@
+	/**
+	 * Make sure components are iterated in the order they were added. Required e.g. for Repeaters
+	 */
+	@Test
+	public void iteratorOrder()
+	{
+		MarkupContainer container = new WebMarkupContainer("component");
+		for (int i = 0; i < 10; i++)
+		{
+			container.add(new WebComponent(Integer.toString(i)));
+		}
+		int i = 0;
+		for (Component component : container)
+		{
+			assertEquals(Integer.toString(i++), component.getId());
+		}
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * 
+	 */
+	@Test
+	public void ajaxButtonWhenCancelButtonHasAModelValue()
+	{
+		// start and render the test page
+		tester.startPage(HomePage.class);
+		// assert rendered page class
+		tester.assertRenderedPage(HomePage.class);
+		// assert rendered label component
+		tester.assertLabel("message",
+			"If you see this message wicket is properly configured and running");
+
+		// assert rendered page class
+		HomePage homePage = (HomePage)tester.getLastRenderedPage();
+		TestForm testForm = homePage.getForm();
+
+		tester.getRequest()
+			.getPostParameters()
+			.setParameterValue(homePage.getForm().getSubmitButton().getInputName(), "x");
+		tester.executeAjaxEvent(testForm.getSubmitButton(), "onclick");
+	}
+
