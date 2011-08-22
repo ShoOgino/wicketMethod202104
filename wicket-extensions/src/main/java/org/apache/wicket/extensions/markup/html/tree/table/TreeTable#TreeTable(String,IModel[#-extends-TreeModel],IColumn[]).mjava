@@ -12,6 +12,25 @@
 		final IColumn columns[])
 	{
 		super(id, model);
-		init(columns);
+
+		this.columns = columns;
+
+		// Attach the javascript that resizes the header according to the body
+		// This is necessary to support fixed position header. The header does
+		// not
+		// scroll together with body. The body contains vertical scrollbar. The
+		// header width must be same as body content width, so that the columns
+		// are properly aligned.
+		add(new Behavior()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void renderHead(final Component component, final IHeaderResponse response)
+			{
+				response.renderOnDomReadyJavaScript("Wicket.TreeTable.attachUpdate(\"" +
+					getMarkupId() + "\")");
+			}
+		});
 	}
 

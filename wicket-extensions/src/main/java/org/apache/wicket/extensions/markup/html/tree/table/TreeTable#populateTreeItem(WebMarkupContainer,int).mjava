@@ -22,16 +22,16 @@
 				if ((column.getLocation().getAlignment() == Alignment.LEFT) ||
 					(column.getLocation().getAlignment() == Alignment.RIGHT))
 				{
-					Component component;
+					TreeTableItem component;
 					// first try to create a renderable
 					IRenderable renderable = column.newCell(node, level);
 
 					if (renderable == null)
 					{
 						// if renderable failed, try to create a regular component.
-						// Id's shall not be number except for ListItems etc.
-						component = column.newCell(sideColumns, "r" + i, node, level);
-						sideColumns.add(component);
+						component = new TreeTableItem(i);
+						Component cell = column.newCell(sideColumns, TreeTableItem.ID, node, level);
+						component.add(cell);
 					}
 					else
 					{
@@ -53,16 +53,17 @@
 				IColumn column = columns[i];
 				if (column.getLocation().getAlignment() == Alignment.MIDDLE)
 				{
-					Component component;
+					TreeTableItem component;
 					// first try to create a renderable
 					IRenderable renderable = column.newCell(node, level);
 
 					if (renderable == null)
 					{
-						// if renderable failed, try to create a regular
-						// component
-						component = column.newCell(middleColumns, "" + i, node, level);
-						middleColumns.add(component);
+						// if renderable failed, try to create a regular component
+						component = new TreeTableItem(i);
+						Component cell = column.newCell(middleColumns, TreeTableItem.ID, node,
+							level);
+						component.add(cell);
 					}
 					else
 					{
@@ -76,8 +77,7 @@
 		item.add(middleColumns);
 
 		// do distinguish between selected and unselected rows we add an
-		// behavior
-		// that modifies row css class.
+		// behavior that modifies row css class.
 		item.add(new Behavior()
 		{
 			private static final long serialVersionUID = 1L;
