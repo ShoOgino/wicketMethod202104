@@ -1,0 +1,36 @@
+	public <C extends IRequestablePage> boolean isBookmarkable(Class<C> pageClass)
+	{
+		Boolean bookmarkable = pageToBookmarkableCache.get(pageClass.getName());
+		if (bookmarkable == null)
+		{
+			try
+			{
+				if (pageClass.getConstructor(new Class[] { }) != null)
+				{
+					bookmarkable = Boolean.TRUE;
+				}
+			}
+			catch (Exception ignore)
+			{
+				try
+				{
+					if (pageClass.getConstructor(new Class[] { PageParameters.class }) != null)
+					{
+						bookmarkable = Boolean.TRUE;
+					}
+				}
+				catch (Exception ignored)
+				{
+				}
+			}
+
+			if (bookmarkable == null)
+			{
+				bookmarkable = Boolean.FALSE;
+			}
+			pageToBookmarkableCache.put(pageClass.getName(), bookmarkable);
+		}
+
+		return bookmarkable;
+	}
+
