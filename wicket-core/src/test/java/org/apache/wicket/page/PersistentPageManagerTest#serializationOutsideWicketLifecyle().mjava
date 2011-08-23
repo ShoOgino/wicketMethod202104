@@ -10,6 +10,9 @@
 	@Test
 	public void serializationOutsideWicketLifecyle() throws IOException, ClassNotFoundException
 	{
+		// make sure no leaked threadlocals are present
+		ThreadContext.detach();
+
 		// create IPageManager (with IPageStore) and store a page instance
 		IPageManager pageManager = newPersistentPageManager(APP_NAME);
 		TestPage toSerializePage = new TestPage();
