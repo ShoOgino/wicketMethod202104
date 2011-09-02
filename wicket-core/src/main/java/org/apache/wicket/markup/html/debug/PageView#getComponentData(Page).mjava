@@ -30,6 +30,12 @@
 					componentData = new ComponentData(component.getPageRelativePath(), name,
 						component.getSizeInBytes());
 
+					Long renderDuration = component.getMetaData(RENDER_KEY);
+					if (renderDuration != null)
+					{
+						componentData.renderDuration = renderDuration;
+					}
+
 					try
 					{
 						componentData.value = component.getDefaultModelObjectAsString();

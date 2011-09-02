@@ -17,8 +17,16 @@
 		// Create an empty list. It'll be filled later
 		List<ComponentData> data = null;
 
+		String pageRenderDuration = "n/a";
+
 		if (page != null)
 		{
+			Long renderTime = page.getMetaData(RENDER_KEY);
+			if (renderTime != null)
+			{
+				pageRenderDuration = renderTime.toString();
+			}
+
 			// Get the components data and fill and sort the list
 			data = new ArrayList<ComponentData>(getComponentData(page));
 			Collections.sort(data, new Comparator<ComponentData>()
@@ -33,6 +41,9 @@
 		{
 			data = Collections.emptyList();
 		}
+
+		add(new Label("pageRenderDuration", pageRenderDuration));
+
 
 		// Create the table containing the list the components
 		add(new ListView<ComponentData>("components", data)
@@ -52,6 +63,8 @@
 				listItem.add(new Label("size", Bytes.bytes(componentData.size).toString()));
 				listItem.add(new Label("type", componentData.type));
 				listItem.add(new Label("model", componentData.value));
+				listItem.add(new Label("renderDuration", componentData.renderDuration != null
+					? componentData.renderDuration.toString() : "n/a"));
 			}
 		});
 	}
