@@ -9,6 +9,11 @@
 		try
 		{
 			setFlag(FLAG_AFTER_RENDERING, true);
+
+			// always detach children because components can be attached
+			// independently of their parents
+			onAfterRenderChildren();
+
 			onAfterRender();
 			getApplication().getComponentOnAfterRenderListeners().onAfterRender(this);
 			if (getFlag(FLAG_AFTER_RENDERING))
@@ -18,9 +23,6 @@
 					getClass().getName() +
 					" has not called super.onAfterRender() in the override of onAfterRender() method");
 			}
-			// always detach children because components can be attached
-			// independently of their parents
-			onAfterRenderChildren();
 		}
 		finally
 		{
