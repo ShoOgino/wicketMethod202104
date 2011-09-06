@@ -22,32 +22,39 @@
 		// current component on the top of the stack.
 		String prefix = getResourcePath(component);
 
-		// The reason why we need to create that stack is because we need to
-		// walk it downwards starting with Page down to the Component
-		List<Class<?>> searchStack = getComponentStack(component);
-
-		// Walk the component hierarchy down from page to the component
-		for (int i = searchStack.size() - 1; (i >= 0) && (string == null); i--)
+		// walk downwards starting with page going down to component
+		for (Component current : getComponentTrail(component))
 		{
-			Class<?> clazz = searchStack.get(i);
-
-			// First, try the fully qualified resource name relative to the
+			// get current component class
+			final Class<?> clazz = current.getClass();
+			
+			// first, try the fully qualified resource name relative to the
 			// component on the path from page down.
-			if ((prefix != null) && (prefix.length() > 0))
+			if (Strings.isEmpty(prefix) == false)
 			{
+				// lookup fully qualified path
 				string = loadStringResource(clazz, prefix + '.' + key, locale, style, variation);
 
-				if (string == null)
+				// return string if we found it
+				if (string != null)
+				{
+					return string;
+				}
+
+				// shorten resource key prefix when going downwards (skip for repeaters) 
+				if ((current instanceof AbstractRepeater) == false)
 				{
 					prefix = Strings.afterFirst(prefix, '.');
 				}
 			}
-
 			// If not found, than check if a property with the 'key' provided by
 			// the user can be found.
-			if (string == null)
+			string = loadStringResource(clazz, key, locale, style, variation);
+
+			// return string if we found it
+			if (string != null)
 			{
-				string = loadStringResource(clazz, key, locale, style, variation);
+				return string;
 			}
 		}
 
