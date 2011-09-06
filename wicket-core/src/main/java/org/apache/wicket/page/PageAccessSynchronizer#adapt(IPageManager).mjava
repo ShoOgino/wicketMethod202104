@@ -9,10 +9,22 @@
 		return new PageManagerDecorator(pagemanager)
 		{
 			@Override
-			public IManageablePage getPage(int id)
+			public IManageablePage getPage(int pageId)
 			{
-				lockPage(id);
-				return super.getPage(id);
+				IManageablePage page = null;
+				try
+				{
+					lockPage(pageId);
+					page = super.getPage(pageId);
+				}
+				finally
+				{
+					if (page == null)
+					{
+						unlockPage(pageId);
+					}
+				}
+				return page;
 			}
 
 			@Override

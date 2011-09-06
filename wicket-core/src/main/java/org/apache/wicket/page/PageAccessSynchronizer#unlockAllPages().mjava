@@ -3,32 +3,6 @@
 	 */
 	public void unlockAllPages()
 	{
-		final Thread thread = Thread.currentThread();
-		final Iterator<PageLock> locks = this.locks.get().values().iterator();
-
-		final boolean isDebugEnabled = logger.isDebugEnabled();
-
-		while (locks.hasNext())
-		{
-			// remove all locks held by this thread
-			final PageLock lock = locks.next();
-			if (lock.getThread() == thread)
-			{
-				locks.remove();
-				if (isDebugEnabled)
-				{
-					logger.debug("{} released lock to page {}", thread.getName(), lock.getPageId());
-				}
-				// if any locks were removed notify threads waiting for a lock
-				synchronized (lock)
-				{
-					if (isDebugEnabled)
-					{
-						logger.debug("{} notifying blocked threads", thread.getName());
-					}
-					lock.notifyAll();
-				}
-			}
-		}
+		internalUnlockPages(null);
 	}
 
