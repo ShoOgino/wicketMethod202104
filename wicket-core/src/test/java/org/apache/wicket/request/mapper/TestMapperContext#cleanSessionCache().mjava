@@ -1,0 +1,12 @@
+	/**
+	 * just making sure the session cache will be empty by simulating an intermezzo request
+	 */
+	public void cleanSessionCache()
+	{
+		getPageManager().getContext().setRequestData(null);
+		MockPage other = new MockPage();
+		other.setPageId(Integer.MAX_VALUE);
+		getPageManager().touchPage(other);
+		getPageManager().commitRequest();
+	}
+
