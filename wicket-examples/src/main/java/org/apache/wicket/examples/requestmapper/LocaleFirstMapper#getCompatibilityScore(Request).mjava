@@ -1,8 +1,13 @@
 	/**
 	 * @see org.apache.wicket.request.IRequestMapper#getCompatibilityScore(org.apache.wicket.request.Request)
 	 */
-	public int getCompatibilityScore(final Request request)
+	public int getCompatibilityScore(Request request)
 	{
+		if (getLocaleFromUrl(request) != null)
+		{
+			request = stripLocaleSegment(request);
+		}
+
 		// since we match all urls the score is simply delegated to the chain
 		return chain.getCompatibilityScore(request);
 	}

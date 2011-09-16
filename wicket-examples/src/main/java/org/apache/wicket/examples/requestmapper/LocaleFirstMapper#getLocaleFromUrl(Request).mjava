@@ -1,0 +1,15 @@
+	private Locale getLocaleFromUrl(Request request)
+	{
+		// locale is the first segment in the url
+		List<String> segments = request.getUrl().getSegments();
+		if (segments != null && segments.size() > 1)
+		{
+			String localeAsString = segments.get(0);
+			if (!Strings.isEmpty(localeAsString))
+			{
+				return LocaleHelper.parseLocale(localeAsString);
+			}
+		}
+		return null;
+	}
+
