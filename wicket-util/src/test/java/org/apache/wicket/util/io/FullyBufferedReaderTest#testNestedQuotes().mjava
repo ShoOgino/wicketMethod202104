@@ -1,0 +1,16 @@
+	@Test
+	public void testNestedQuotes() throws ParseException
+	{
+		// testTag is <a href='b \'" > a' theAtr="at'r'\"r">
+		String testTag = "<a href='b \\'\" > a' theAtr=\"at'r'\\\"r\">";
+		FullyBufferedReader fullyBufferedReader = new FullyBufferedReader(testTag);
+
+		// System.out.println(fullyBufferedReader);
+		int position = fullyBufferedReader.findOutOfQuotes('>', 0);
+
+		// have you found a close bracket?
+		assertEquals('>', testTag.charAt(position));
+		// close bracket must be at the end of the string
+		assertEquals(testTag.length(), position + 1);
+	}
+
