@@ -5,7 +5,7 @@
 		 * @param show2
 		 * @param show3
 		 */
-		public TestPage(final boolean show1, final boolean show2, final boolean show3)
+		public TestPage(final boolean show1, final boolean show2, final boolean show3, boolean show4)
 		{
 			List<? extends String> choices = Arrays.asList("a", "b", "c");
 			add(new CheckBoxMultipleChoice<String>("checkWithoutPrefix", choices)
@@ -50,5 +50,11 @@
 					return "suf" + index + choice;
 				}
 			});
+
+			WebMarkupContainer container = new WebMarkupContainer("container");
+			container.setVisibilityAllowed(show4);
+			container.setEnabled(false);
+			add(container);
+			container.add(new CheckBoxMultipleChoice<String>("disabled", choices));
 		}
 
