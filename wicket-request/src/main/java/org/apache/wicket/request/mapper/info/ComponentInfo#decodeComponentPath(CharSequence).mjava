@@ -1,5 +1,5 @@
 	/**
-	 * Replaces '--' with '-' and '-' with ':'
+	 * Replaces '~' with '-' and '-' with ':'
 	 * 
 	 * @param path
 	 *            the encoded path of the component in its page
@@ -16,16 +16,11 @@
 				char c = path.charAt(i);
 				switch (c)
 				{
+					case SEPARATOR_ENCODED :
+						result.append(SEPARATOR);
+						break;
 					case SEPARATOR :
-						if ((i < length - 1) && (path.charAt(i + 1) == SEPARATOR))
-						{
-							i++;
-							result.append(SEPARATOR);
-						}
-						else
-						{
-							result.append(COMPONENT_SEPARATOR);
-						}
+						result.append(COMPONENT_SEPARATOR);
 						break;
 					default :
 						result.append(c);
