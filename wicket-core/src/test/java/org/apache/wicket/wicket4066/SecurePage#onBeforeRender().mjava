@@ -1,0 +1,10 @@
+	@Override
+	protected void onBeforeRender()
+	{
+		if (((MySession)getSession()).isAnonymous())
+		{
+			throw new RestartResponseAtInterceptPageException(LoginPage.class);
+		}
+		super.onBeforeRender();
+	}
+

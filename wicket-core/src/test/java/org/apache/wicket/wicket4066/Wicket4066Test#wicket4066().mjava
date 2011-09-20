@@ -1,0 +1,23 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4066
+	 */
+	@Test
+	public void wicket4066()
+	{
+		// go to a secured page (a redirect to LoginPage with interception will be done)
+		tester.startPage(SecurePage.class);
+		tester.assertRenderedPage(LoginPage.class);
+
+		FormTester formTester = tester.newFormTester("form");
+		formTester.submit();
+		// continueToOriginalDestination() should return us to SecurePage
+		tester.assertRenderedPage(SecurePage.class);
+
+		// go directly to LoginPage (without interception)
+		tester.startPage(LoginPage.class);
+		FormTester formTester2 = tester.newFormTester("form");
+		formTester2.submit();
+		// no original destination then go to SuccessPage
+		tester.assertRenderedPage(SuccessPage.class);
+	}
+
