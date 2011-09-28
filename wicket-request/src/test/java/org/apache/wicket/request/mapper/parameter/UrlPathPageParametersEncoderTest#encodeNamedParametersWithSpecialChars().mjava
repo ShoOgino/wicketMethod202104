@@ -1,0 +1,18 @@
+	/**
+	 * Encode named parameters in the segments (so they look like indexed parameters) and the name
+	 * and/or value have non-ASCII characters
+	 */
+	@Test
+	public void encodeNamedParametersWithSpecialChars()
+	{
+		// the non-ASCII characters are randomly chosen
+		PageParameters params = new PageParameters();
+		params.add("name1", "valueএ");
+		params.add("nameㄘ", "value2");
+
+		UrlPathPageParametersEncoder encoder = new UrlPathPageParametersEncoder();
+		Url url = encoder.encodePageParameters(params);
+
+		assertEquals("name1/value%E0%A6%8F/name%E3%84%98/value2", url.toString());
+	}
+
