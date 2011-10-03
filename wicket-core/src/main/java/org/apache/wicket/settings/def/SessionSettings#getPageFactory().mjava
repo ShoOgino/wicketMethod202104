@@ -1,8 +1,17 @@
 	/**
 	 * @see org.apache.wicket.settings.ISessionSettings#getPageFactory()
+	 * @deprecated Use {@link Session#getPageFactory()}
 	 */
+	@Deprecated
 	public IPageFactory getPageFactory()
 	{
+		IPageFactory pageFactory = null;
+
+		if (Application.exists())
+		{
+			pageFactory = Application.get().getPageFactory();
+		}
+
 		return pageFactory;
 	}
 
