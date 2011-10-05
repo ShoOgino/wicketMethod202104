@@ -6,16 +6,13 @@
 		final RequestCycle requestCycle = RequestCycle.get();
 
 		// Temporarily replace the web response with a String response
-		webResponse = (WebResponse)requestCycle.getResponse();
+		originalResponse = requestCycle.getResponse();
 
-		// Create a new response object
-		final BufferedWebResponse response = newResponse(webResponse);
-		if (response == null)
-		{
-			throw new IllegalStateException("newResponse() must not return null");
-		}
+		WebResponse origResponse = (WebResponse)((originalResponse instanceof WebResponse)
+			? originalResponse : null);
+		BufferedWebResponse tempResponse = newResponse(origResponse);
 
-		// and make it the current one
-		requestCycle.setResponse(response);
+		// temporarily set StringResponse to collect the transformed output
+		requestCycle.setResponse(tempResponse);
 	}
 
