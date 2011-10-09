@@ -1,0 +1,25 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4116
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void recreateThePageWhenListenereInterfaceIsExecutedOnExpiredPage() throws Exception
+	{
+		tester.getApplication().mountPage("ajaxLink", AjaxLinkExpirePage.class);
+		AjaxLinkExpirePage page = tester.startPage(AjaxLinkExpirePage.class);
+
+		int initialPageId = page.getPageId();
+
+		Url urlToAjaxLink = tester.urlFor(page.link);
+		Session session = tester.getSession();
+		session.getPageManager().sessionExpired(session.getId());
+
+		// fire a request to the ajax link on the expired page
+		executeAjaxUrlWithLastBaseUrl(urlToAjaxLink);
+
+		Page lastRenderedPage = tester.getLastRenderedPage();
+		int lastRenderedPageId = lastRenderedPage.getPageId();
+		assertTrue("A new page must be create ", lastRenderedPageId > initialPageId);
+	}
+
