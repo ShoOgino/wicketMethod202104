@@ -1,0 +1,19 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4117
+	 * 
+	 * Test exception when we forgot to close quote
+	 * 
+	 * @throws ParseException
+	 */
+	@Test
+	public void missingOpeningQuote() throws ParseException
+	{
+		thrown.expect(ParseException.class);
+		thrown.expectMessage("Opening/closing quote not found for quote at (line 1, column 15)");
+
+		String testTag = "<a href=blabla'>";
+		FullyBufferedReader fullyBufferedReader = new FullyBufferedReader(testTag);
+
+		fullyBufferedReader.findOutOfQuotes('>', 0);
+	}
+
