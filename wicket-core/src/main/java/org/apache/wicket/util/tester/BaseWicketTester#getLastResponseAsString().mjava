@@ -13,13 +13,13 @@
 		String response = lastResponse.getDocument();
 
 		// null, if a Page was rendered last
-		if (startComponent == null)
+		if (componentInPage == null)
 		{
 			return response;
 		}
 
 		// remove the markup for the auto-generated page. leave just component's markup body
-		String componentId = startComponent.getId();
+		String componentId = componentInPage.component.getId();
 		String before = "wicket:id=\"" + componentId + "\">";
 		Matcher matcher = pattern.matcher(response);
 		if (matcher.matches())

@@ -55,12 +55,22 @@
 		// Add the child component
 		page.add(component);
 
+		// Preserve 'componentInPage' because #startPage() needs to null-fy it
+		ComponentInPage oldComponentInPage = componentInPage;
+
 		// Process the page
 		startPage(page);
 
 		// Remember the "root" component processes and return it
-		startComponent = component;
-
+		if (oldComponentInPage != null)
+		{
+			componentInPage = oldComponentInPage;
+		}
+		else
+		{
+			componentInPage = new ComponentInPage();
+			componentInPage.component = component;
+		}
 		return component;
 	}
 
