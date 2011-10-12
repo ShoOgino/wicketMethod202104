@@ -1,0 +1,16 @@
+	/**
+	 * Certain exceptions can carry a request handler they wish to be executed, this method tries to
+	 * resolve such a handler given an exception.
+	 * 
+	 * @param exception
+	 * @return request handler or null} if one cannot be resolved
+	 */
+	public final IRequestHandler resolveHandler(RuntimeException exception)
+	{
+		Args.notNull(exception, "exception");
+
+		ReplaceHandlerException replacer = Exceptions.findCause(exception,
+			ReplaceHandlerException.class);
+		return replacer != null ? replacer.replacementRequestHandler : null;
+	}
+
