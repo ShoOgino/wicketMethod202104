@@ -1,5 +1,15 @@
 		public void detach(final IRequestCycle requestCycle)
 		{
 			delegate.detach(requestCycle);
+
+			if (logData == null)
+			{
+				ILogData delegateData;
+				if (delegate instanceof ILoggableRequestHandler)
+					delegateData = ((ILoggableRequestHandler)delegate).getLogData();
+				else
+					delegateData = new NoLogData();
+				logData = new DelegateLogData(delegateData);
+			}
 		}
 

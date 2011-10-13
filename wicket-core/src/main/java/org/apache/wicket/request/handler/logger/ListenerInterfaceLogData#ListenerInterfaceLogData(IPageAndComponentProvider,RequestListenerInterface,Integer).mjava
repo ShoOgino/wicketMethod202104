@@ -1,0 +1,26 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param pageAndComponentProvider
+	 * @param listenerInterface
+	 * @param behaviorIndex
+	 */
+	public ListenerInterfaceLogData(IPageAndComponentProvider pageAndComponentProvider,
+		RequestListenerInterface listenerInterface, Integer behaviorIndex)
+	{
+		super(pageAndComponentProvider);
+		componentClass = pageAndComponentProvider.getComponent().getClass();
+		componentPath = pageAndComponentProvider.getComponentPath();
+		this.behaviorIndex = behaviorIndex;
+		if (behaviorIndex != null)
+		{
+			behaviorClass = pageAndComponentProvider.getComponent()
+				.getBehaviorById(behaviorIndex)
+				.getClass();
+		}
+		else
+			behaviorClass = null;
+		interfaceName = listenerInterface.getName();
+		interfaceMethod = listenerInterface.getMethod().getName();
+	}
+
