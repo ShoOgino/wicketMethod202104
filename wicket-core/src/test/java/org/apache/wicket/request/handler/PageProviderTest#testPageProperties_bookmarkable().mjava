@@ -1,0 +1,20 @@
+	public void testPageProperties_bookmarkable()
+	{
+		PageProvider provider = new PageProvider(StatelessPageTest.class);
+		assertFalse(provider.hasPageInstance());
+		try
+		{
+			provider.isPageInstanceFresh();
+			fail("expected illegal state exception");
+		}
+		catch (IllegalStateException e)
+		{
+			// expected
+		}
+
+		provider.getPageInstance();
+
+		assertTrue(provider.hasPageInstance());
+		assertTrue(provider.isPageInstanceFresh());
+	}
+
