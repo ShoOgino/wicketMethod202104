@@ -6,19 +6,17 @@
 	 */
 	public boolean isNewPageInstance()
 	{
-		if (isNewInstance == null)
+		boolean isNew = pageInstance == null;
+		if (isNew && pageId != null)
 		{
-			isNewInstance = pageInstance == null;
-			if (isNewInstance && pageId != null)
+			IRequestablePage storedPageInstance = getStoredPage(pageId);
+			if (storedPageInstance != null)
 			{
-				IRequestablePage storedPageInstance = getStoredPage(pageId);
-				if (storedPageInstance != null)
-				{
-					pageInstance = storedPageInstance;
-					isNewInstance = false;
-				}
+				pageInstance = storedPageInstance;
+				isNew = false;
 			}
 		}
-		return isNewInstance;
+
+		return isNew;
 	}
 
