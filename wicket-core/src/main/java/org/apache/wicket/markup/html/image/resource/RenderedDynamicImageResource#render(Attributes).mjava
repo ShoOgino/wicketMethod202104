@@ -1,0 +1,19 @@
+	/**
+	 * Renders this image
+	 * 
+	 * @param attributes
+	 *            the current request attributes
+	 * @return The image data
+	 */
+	protected byte[] render(final Attributes attributes)
+	{
+		while (true)
+		{
+			final BufferedImage image = new BufferedImage(getWidth(), getHeight(), getType());
+			if (render((Graphics2D)image.getGraphics(), attributes))
+			{
+				return toImageData(image);
+			}
+		}
+	}
+
