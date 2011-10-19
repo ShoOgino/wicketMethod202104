@@ -3,9 +3,9 @@
 		 *      java.lang.String, org.apache.wicket.markup.resolver.AutoLinkResolver.PathInfo)
 		 */
 		@SuppressWarnings("unchecked")
-		public Component newAutoComponent(final String autoId, PathInfo pathInfo)
+		public Component newAutoComponent(final MarkupContainer container, final String autoId,
+			PathInfo pathInfo)
 		{
-			final MarkupContainer container = pathInfo.getContainer();
 			if ((pathInfo.extension != null) &&
 				supportedPageExtensions.contains(pathInfo.extension))
 			{
@@ -81,7 +81,8 @@
 			{
 				// not a registered type for bookmarkable pages; create a link
 				// to a resource instead
-				return newPackageResourceReferenceAutoComponent(autoId, pathInfo, attribute);
+				return newPackageResourceReferenceAutoComponent(container, autoId, pathInfo,
+					attribute);
 			}
 
 			// fallthrough

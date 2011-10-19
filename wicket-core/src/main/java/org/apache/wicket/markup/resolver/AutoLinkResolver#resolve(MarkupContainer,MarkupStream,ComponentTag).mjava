@@ -8,25 +8,10 @@
 		// Must be marked as autolink tag
 		if (tag.isAutolinkEnabled())
 		{
-			// get the reference resolver
-			ITagReferenceResolver referenceResolver = tagNameToTagReferenceResolvers.get(tag.getName());
-			if (referenceResolver == null)
-			{
-				// fallback on default
-				referenceResolver = DEFAULT_ATTRIBUTE_RESOLVER;
-			}
-
-			// get the reference, which is typically the value of e.g. a href or src
-			// attribute
-			String reference = referenceResolver.getReference(tag);
-
-			// create the path info object
-			PathInfo pathInfo = new PathInfo(reference, container, markupStream);
-
 			// Try to find the Page matching the href
 			// Note: to not use tag.getId() because it will be modified while
 			// resolving the link and hence the 2nd render will fail.
-			Component link = resolveAutomaticLink(pathInfo, WicketLinkTagHandler.AUTOLINK_ID, tag);
+			Component link = resolveAutomaticLink(container, WicketLinkTagHandler.AUTOLINK_ID, tag);
 
 			if (log.isDebugEnabled())
 			{
