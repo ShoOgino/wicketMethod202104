@@ -1,0 +1,10 @@
+	@Test
+	public void fileOnly_relative_not_allowed()
+	{
+		// ".." is allowed as long as we have parent folder placeholder set in resource settings
+		tester.getApplication().getResourceSettings().setParentFolderPlaceholder(null);
+		SecurePackageResourceGuard guard = new SecurePackageResourceGuard();
+		guard.addPattern("+test*.gif");
+		assertFalse(guard.acceptAbsolutePath("../test.gif"));
+	}
+
