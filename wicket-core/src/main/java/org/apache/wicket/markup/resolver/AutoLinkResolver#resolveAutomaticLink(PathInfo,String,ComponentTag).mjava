@@ -5,17 +5,18 @@
 	 * <p>
 	 * None html references are treated similar.
 	 * 
-	 * @param container
-	 *            The container where the link is
+	 * @param pathInfo
+	 * 
 	 * @param id
 	 *            the name of the component
 	 * @param tag
 	 *            the component tag
 	 * @return A BookmarkablePageLink<?> to handle the href
 	 */
-	private final Component resolveAutomaticLink(final MarkupContainer container, final String id,
+	private final Component resolveAutomaticLink(final PathInfo pathInfo, final String id,
 		final ComponentTag tag)
 	{
+		final MarkupContainer container = pathInfo.getContainer();
 		final Page page = container.getPage();
 
 		// Make the id (page-)unique
@@ -30,28 +31,13 @@
 		{
 			tag.setAutoComponentTag(true);
 		}
-		// tag.setId(autoId);
 
-		// get the reference resolver
-		ITagReferenceResolver referenceResolver = tagNameToTagReferenceResolvers.get(tagName);
-		if (referenceResolver == null)
-		{
-			// fallback on default
-			referenceResolver = DEFAULT_ATTRIBUTE_RESOLVER;
-		}
-
-		// get the reference, which is typically the value of e.g. a href or src
-		// attribute
-		String reference = referenceResolver.getReference(tag);
-
-		// create the path info object
-		PathInfo pathInfo = new PathInfo(reference);
 		// now get the resolver delegate
 		IAutolinkResolverDelegate autolinkResolverDelegate = tagNameToAutolinkResolverDelegates.get(tagName);
 		Component autoComponent = null;
 		if (autolinkResolverDelegate != null)
 		{
-			autoComponent = autolinkResolverDelegate.newAutoComponent(container, autoId, pathInfo);
+			autoComponent = autolinkResolverDelegate.newAutoComponent(autoId, pathInfo);
 		}
 
 		if (autoComponent == null)
