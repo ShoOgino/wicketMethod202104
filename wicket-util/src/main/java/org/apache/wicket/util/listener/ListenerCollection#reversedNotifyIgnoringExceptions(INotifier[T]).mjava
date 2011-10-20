@@ -1,0 +1,26 @@
+	/**
+	 * Notifies each listener in this set in reverse order ignoring exceptions
+	 * 
+	 * @param notifier
+	 *            notifier used to notify each listener
+	 */
+	protected void reversedNotifyIgnoringExceptions(final INotifier<T> notifier)
+	{
+		reversedNotify(new INotifier<T>()
+		{
+			public void notify(T listener)
+			{
+				try
+				{
+					notifier.notify(listener);
+				}
+				catch (Exception e)
+				{
+					logger.error("Error invoking listener: " + listener, e);
+				}
+
+			}
+
+		});
+	}
+

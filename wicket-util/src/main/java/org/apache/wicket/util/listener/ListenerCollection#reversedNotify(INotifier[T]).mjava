@@ -6,6 +6,10 @@
 	 */
 	protected void reversedNotify(final INotifier<T> notifier)
 	{
-		reversedNotify(iterator(), notifier);
+		Iterator<T> it = new ReverseListIterator<T>(listeners);
+		while (it.hasNext())
+		{
+			notifier.notify(it.next());
+		}
 	}
 
