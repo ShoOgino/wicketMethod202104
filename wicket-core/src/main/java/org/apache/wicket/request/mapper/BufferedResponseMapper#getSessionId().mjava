@@ -1,8 +1,9 @@
 	/**
 	 * @return the current session id for stateful pages and <code>null</code> for stateless pages
+	 *         and non-http threads
 	 */
 	protected String getSessionId()
 	{
-		return Session.get().getId();
+		return RequestCycle.get() != null ? Session.get().getId() : null;
 	}
 
