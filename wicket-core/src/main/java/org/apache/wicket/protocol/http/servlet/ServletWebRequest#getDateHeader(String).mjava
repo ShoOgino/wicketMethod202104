@@ -1,0 +1,21 @@
+	@Override
+	public Time getDateHeader(String name)
+	{
+		try
+		{
+			long value = httpServletRequest.getDateHeader(name);
+
+			if (value == -1)
+			{
+				return null;
+			}
+
+			return Time.millis(value);
+		}
+		catch (IllegalArgumentException e)
+		{
+			// per spec thrown if the header contains a value that cannot be converted to a date
+			return null;
+		}
+	}
+

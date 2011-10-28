@@ -1,0 +1,45 @@
+	/**
+	 * Returns base url without context or filter mapping.
+	 * <p>
+	 * Example: if current url is
+	 * 
+	 * <pre>
+	 * http://localhost:8080/context/filter/mapping/wicket/bookmarkable/com.foo.Page?1&id=2
+	 * </pre>
+	 * 
+	 * the base url is <em>wicket/bookmarkable/com.foo.Page</em>
+	 * </p>
+	 * 
+	 * @see org.apache.wicket.request.Request#getClientUrl()
+	 */
+	@Override
+	public Url getClientUrl()
+	{
+		if (errorAttributes != null && !Strings.isEmpty(errorAttributes.getRequestUri()))
+		{
+			String problematicURI = Url.parse(errorAttributes.getRequestUri(), getCharset())
+				.toString();
+			Url url = getContextRelativeUrl(problematicURI, filterPrefix);
+			return setParameters(url);
+		}
+		else if (!isAjax())
+		{
+			return getContextRelativeUrl(httpServletRequest.getRequestURI(), filterPrefix);
+		}
+		else
+		{
+			String base = null;
+
+			base = getHeader(HEADER_AJAX_BASE_URL);
+
+			if (base == null)
+			{
+				base = getRequestParameters().getParameterValue(PARAM_AJAX_BASE_URL).toString(null);
+			}
+
+			Checks.notNull(base, "Current ajax request is missing the base url header or parameter");
+
+			return setParameters(Url.parse(base, getCharset()));
+		}
+	}
+
