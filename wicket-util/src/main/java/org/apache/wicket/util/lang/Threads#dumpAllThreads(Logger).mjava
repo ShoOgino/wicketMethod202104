@@ -1,0 +1,38 @@
+	/**
+	 * Creates a dump of all the threads' state and stack traces similar to what JVM produces when
+	 * signal SIGQUIT is send to the process on Unix machine.
+	 * <p>
+	 * Note: This is a best effort to dump as much information as possible because the Java API
+	 * doesn't provide means to get all the information that is produced by jstack program for
+	 * example.
+	 * </p>
+	 * 
+	 * @param logger
+	 *            the logger where the collected information will be written
+	 */
+	public static void dumpAllThreads(Logger logger)
+	{
+		Args.notNull(logger, "logger");
+		if (!logger.isWarnEnabled())
+		{
+			return;
+		}
+
+		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+
+		StringBuilder dump = new StringBuilder();
+
+		dump.append("Full thread dump ")
+			.append(runtimeMXBean.getVmName())
+			.append('(')
+			.append(runtimeMXBean.getVmVersion())
+			.append(')');
+		logger.warn(dump.toString());
+
+		Map<Thread, StackTraceElement[]> allStackTraces = Thread.getAllStackTraces();
+		for (Entry<Thread, StackTraceElement[]> entry : allStackTraces.entrySet())
+		{
+			dumpSingleThread(logger, entry.getKey(), entry.getValue());
+		}
+	}
+

@@ -1,0 +1,25 @@
+	/**
+	 * Creates a dump of the threads' state and stack traces similar to the one that the JVM
+	 * produces when signal SIGQUIT is send to the process on Unix machine.
+	 * <p>
+	 * Note: This is a best effort to dump as much information as possible because the Java API
+	 * doesn't provide means to get all the information that is produced by jstack program for
+	 * example.
+	 * </p>
+	 * 
+	 * @param logger
+	 *            the logger where the collected information will be written
+	 * @param thread
+	 *            the thread to dump
+	 */
+	public static void dumpSingleThread(Logger logger, Thread thread)
+	{
+		Args.notNull(logger, "logger");
+		if (!logger.isWarnEnabled())
+		{
+			return;
+		}
+
+		dumpSingleThread(logger, thread, thread.getStackTrace());
+	}
+
