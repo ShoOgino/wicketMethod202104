@@ -1,0 +1,39 @@
+	/** */
+	@Test
+	public void labelIntoMarkupInsertion()
+	{
+		class MyTestPage extends TestPage
+		{
+			private static final long serialVersionUID = 1L;
+
+			public MyTestPage(String labelMarkup)
+			{
+				super("<label wicket:for='t'>" + labelMarkup + "</label>");
+				field.setLabel(Model.of("t"));
+			}
+		}
+
+		// simple insertion
+		assertRendered(new MyTestPage("<wicket:label>text</wicket:label>"), ">t</label>");
+
+		// preserves markup before and after
+		assertRendered(new MyTestPage(" <div> a </div> <wicket:label>text</wicket:label> b "),
+			" <div> a </div> t b ");
+
+		// embedded span tags
+		assertRendered(new MyTestPage(" a <div> b <wicket:label>text</wicket:label> c </div> d"),
+			" a <div> b t c </div> d");
+
+		// no span - no insertion
+		assertRendered(new MyTestPage(" text "), " text ");
+
+		// empty label tag
+		assertRendered(new MyTestPage(""), "></label>");
+
+		// empty span tag
+		assertRendered(new MyTestPage("<wicket:label></wicket:label>"), ">t</label>");
+
+		// open/close span tag
+		assertRendered(new MyTestPage("<wicket:label/>"), ">t</label>");
+	}
+

@@ -1,0 +1,15 @@
+	/**
+	 * 
+	 */
+	@Test
+	public void decode1()
+	{
+		Url url = Url.parse("wicket/page?4");
+
+		IRequestHandler handler = encoder.mapRequest(getRequest(url));
+		assertTrue(handler instanceof RenderPageRequestHandler);
+
+		RenderPageRequestHandler h = (RenderPageRequestHandler)handler;
+		checkPage(h.getPage(), 4);
+	}
+

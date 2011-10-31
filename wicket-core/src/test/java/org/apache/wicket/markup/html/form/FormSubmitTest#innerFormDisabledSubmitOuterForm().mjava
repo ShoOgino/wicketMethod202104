@@ -1,0 +1,18 @@
+	/**
+	 * 
+	 */
+	@Test
+	public void innerFormDisabledSubmitOuterForm()
+	{
+		// disable middle form
+		innerForm.setEnabled(false);
+		assertEnabledState(true, true, false);
+
+		// submit outer form
+		FormTester formTester = tester.newFormTester("outerForm");
+		formTester.submit("submit");
+
+		assertOnSubmitCalled(true, true, false);
+		assertOnErrorCalled(false, false, false);
+	}
+

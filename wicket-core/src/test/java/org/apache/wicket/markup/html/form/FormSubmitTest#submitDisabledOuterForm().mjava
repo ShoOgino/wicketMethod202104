@@ -1,0 +1,23 @@
+	/**
+	 * 
+	 */
+	@Test
+	public void submitDisabledOuterForm()
+	{
+		outerForm.setEnabled(false);
+		assertEnabledState(false, true, true);
+
+		FormTester formTester = tester.newFormTester("outerForm");
+		try
+		{
+			formTester.submit("submit");
+			fail("Executing the listener on disabled component is not allowed.");
+		}
+		catch (ListenerInvocationNotAllowedException expected)
+		{
+			;
+		}
+		assertOnSubmitCalled(false, false, false);
+		assertOnErrorCalled(false, false, false);
+	}
+

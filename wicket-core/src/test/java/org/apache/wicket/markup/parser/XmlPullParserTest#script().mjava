@@ -1,0 +1,23 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public final void script() throws Exception
+	{
+		final XmlPullParser parser = new XmlPullParser();
+		parser.parse("<html><script language=\"JavaScript\">... <x a> ...</script></html>");
+		XmlTag tag = parser.nextTag();
+		assertTrue(tag.isOpen());
+		assertEquals("html", tag.getName());
+		tag = parser.nextTag();
+		assertTrue(tag.isOpen());
+		assertEquals("script", tag.getName());
+		tag = parser.nextTag();
+		assertTrue(tag.isClose());
+		assertEquals("script", tag.getName());
+		tag = parser.nextTag();
+		assertTrue(tag.isClose());
+		assertEquals("html", tag.getName());
+	}
+

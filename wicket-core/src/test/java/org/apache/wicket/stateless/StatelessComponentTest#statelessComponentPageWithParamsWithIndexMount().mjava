@@ -1,0 +1,26 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void statelessComponentPageWithParamsWithIndexMount() throws Exception
+	{
+		PageParameters params = new PageParameters();
+		params.set(0, "testValue1");
+		params.set(1, "testValue2");
+		tester.getApplication().mountPage("/stateless", StatelessComponentPageWithParams.class);
+		// test is always the home page. it doesn't work then
+		executeTest(StatelessComponentPageWithParams.class, params,
+			"StatelessComponentPageWithParams_indexed_mount_result.html");
+		tester.getRequest().setUrl(
+			Url.parse("stateless/testValue1/testValue2?0-1.ILinkListener-link"));
+		try
+		{
+			tester.processRequest();
+			fail("An exception should have been thrown for this request!");
+		}
+		catch (Exception e)
+		{
+			assertEquals("wanted exception", e.getMessage());
+		}
+	}
+

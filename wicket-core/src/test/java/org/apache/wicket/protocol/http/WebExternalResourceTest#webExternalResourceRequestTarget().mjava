@@ -1,0 +1,13 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void webExternalResourceRequestTarget() throws Exception
+	{
+		WebExternalResourceRequestHandler rt = new WebExternalResourceRequestHandler("/index.html");
+		tester.processRequest(rt);
+		assertTrue(tester.getContentTypeFromResponseHeader().startsWith("text/html"));
+		tester.assertContains("<h1>Hello, World!</h1>");
+	}
+

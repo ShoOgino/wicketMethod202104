@@ -1,0 +1,13 @@
+	/**
+	 * Asserting that the value attribute on tag input is escaped once by default
+	 */
+	@Test
+	public void valueAttribute()
+	{
+		TestPage testPage = new TestPage();
+		String text = "some text & another text";
+		testPage.textModel.setObject(text);
+		tester.startPage(testPage);
+		assertTrue(tester.getLastResponseAsString().contains(Strings.escapeMarkup(text)));
+	}
+

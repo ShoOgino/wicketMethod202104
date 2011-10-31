@@ -1,0 +1,22 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void renderHomePage_1() throws Exception
+	{
+		boolean hit = false;
+		try
+		{
+			executeTest(PanelPage_1.class, "Dummy.html");
+		}
+		catch (MarkupException mex)
+		{
+			hit = true;
+
+			assertNotNull(mex.getMarkupStream());
+			assertTrue(mex.getMessage().contains("Tag does not have a close tag"));
+			assertTrue(mex.toString().contains("SimplePanel_1.html"));
+		}
+		assertTrue("Did expect a MarkupException", hit);
+	}
+

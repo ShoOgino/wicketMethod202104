@@ -1,0 +1,17 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void mapSizeLookup() throws Exception
+	{
+		Map<String, Address> addresses = new HashMap<String, Address>();
+		Address address = new Address();
+		addresses.put("size", address);
+		addresses.put("test", new Address());
+		person.setAddressMap(addresses);
+		Object addressFromMap = PropertyResolver.getValue("addressMap.size", person);
+		assertEquals(addressFromMap, address);
+		Object size = PropertyResolver.getValue("addressMap.size()", person);
+		assertEquals(size, 2);
+	}
+

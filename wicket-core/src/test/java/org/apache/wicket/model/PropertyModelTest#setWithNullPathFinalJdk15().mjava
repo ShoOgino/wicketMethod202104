@@ -1,0 +1,16 @@
+	/**
+	 * Tests setting a value on a null, final property using a {@link PropertyModel}. This test
+	 * should pass when run using JDK 1.5 or newer.
+	 */
+	@Test
+	public void setWithNullPathFinalJdk15()
+	{
+		Person person = new Person();
+		PropertyModel<String> model = new PropertyModel<String>(person, "finalAddress.street");
+
+		model.setObject("foo");
+		assertNotNull("finalAddress", person.finalAddress);
+		assertTrue(person.finalAddress instanceof ConcreteAddress);
+		assertEquals("foo", person.finalAddress.street);
+	}
+

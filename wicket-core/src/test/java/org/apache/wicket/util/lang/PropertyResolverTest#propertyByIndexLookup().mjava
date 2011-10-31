@@ -1,0 +1,12 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void propertyByIndexLookup() throws Exception
+	{
+		PropertyResolver.setValue("addressAt.0", person, new Address(), CONVERTER);
+		PropertyResolver.setValue("addressAt.0.street", person, "wicket-street", CONVERTER);
+		String street = (String)PropertyResolver.getValue("addressAt.0.street", person);
+		assertEquals(street, "wicket-street");
+	}
+

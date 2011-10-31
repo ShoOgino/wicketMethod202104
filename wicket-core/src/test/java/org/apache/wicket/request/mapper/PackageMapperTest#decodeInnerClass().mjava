@@ -1,0 +1,16 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-3838
+	 */
+	@Test
+	public void decodeInnerClass()
+	{
+		Url url = Url.parse("PackageMapperTest$OuterPage$InnerPage");
+		IRequestHandler handler = innerClassEncoder.mapRequest(getRequest(url));
+
+		assertTrue(handler instanceof RenderPageRequestHandler);
+		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
+		assertEquals("InnerPage", page.getClass().getSimpleName());
+		assertEquals(0, page.getPageParameters().getIndexedCount());
+		assertTrue(page.getPageParameters().getNamedKeys().isEmpty());
+	}
+

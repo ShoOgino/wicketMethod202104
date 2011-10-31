@@ -1,0 +1,22 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void renderHomePage_4() throws Exception
+	{
+		boolean hit = false;
+		try
+		{
+			executeTest(SimplePage_4.class, "SimplePageExpectedResult_4.html");
+		}
+		catch (MarkupException mex)
+		{
+			hit = true;
+
+			assertNotNull(mex.getMarkupStream());
+			assertTrue(mex.getMessage().contains("<span>"));
+			assertTrue(mex.toString().contains("SimplePage_4.html"));
+		}
+		assertTrue("Did expect a MarkupException", hit);
+	}
+

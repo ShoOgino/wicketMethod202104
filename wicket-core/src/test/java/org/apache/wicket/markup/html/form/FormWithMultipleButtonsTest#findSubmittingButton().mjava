@@ -1,0 +1,17 @@
+	/**
+	 * Testing if the correct submit button is invoked in an form with multiple submit buttons. The
+	 * browser set the clicked button input name as parameter on the HTTP request.
+	 */
+	@Test
+	public void findSubmittingButton()
+	{
+		TestPage testPage = new TestPage();
+		tester.startPage(testPage);
+		tester.getRequest()
+			.getPostParameters()
+			.addParameterValue(testPage.ajaxFallbackButton.getInputName(), "");
+		tester.submitForm(testPage.form);
+		assertFalse(testPage.submitSequence.contains(testPage.button));
+		assertTrue(testPage.submitSequence.contains(testPage.ajaxFallbackButton));
+	}
+

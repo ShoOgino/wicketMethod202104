@@ -1,0 +1,22 @@
+	/**
+	 * Test that formTester deal with Multipart form correctly when no actual upload
+	 */
+	@Test
+	public void submitWithoutUploadFile()
+	{
+		// tester.startPage(MockFormFileUploadPage.class, new PageParameters("required=true"));
+		tester.startPage(MockFormFileUploadPage.class);
+		MockFormFileUploadPage page = (MockFormFileUploadPage)tester.getLastRenderedPage();
+
+		Session.get().setLocale(Locale.US);
+
+		FormTester formTester = tester.newFormTester("form");
+
+		tester.getRequest().setUseMultiPartContentType(true);
+		// without file upload
+		formTester.submit();
+		assertNull(page.getFileUpload());
+
+		tester.assertErrorMessages("Field 'file' is required.");
+	}
+

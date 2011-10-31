@@ -1,0 +1,34 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public final void comments() throws Exception
+	{
+		final XmlPullParser parser = new XmlPullParser();
+		parser.parse("<!-- test --><tag>");
+		XmlTag tag = parser.nextTag();
+// assertTrue(tag.isOpen("tag"));
+
+		parser.parse("<!-- test --><tag> aaa <!-- test 1 --> bbb <tag> <!-- test --> </tag>");
+		tag = parser.nextTag();
+// assertTrue(tag.isOpen("tag"));
+		tag = parser.nextTag();
+// assertTrue(tag.isOpen("tag"));
+		tag = parser.nextTag();
+		assertTrue(tag.isClose());
+		tag = parser.nextTag();
+		assertNull(tag);
+
+		// As you can see, XmlPullParser is really a shallow parser only
+		parser.parse("<!-- test --><tag> aaa <?tag test 1 ?> bbb <tag> <!DOCTYPE test > </tag>");
+		tag = parser.nextTag();
+// assertTrue(tag.isOpen("tag"));
+		tag = parser.nextTag();
+// assertTrue(tag.isOpen("tag"));
+		tag = parser.nextTag();
+		assertTrue(tag.isClose());
+		tag = parser.nextTag();
+		assertNull(tag);
+	}
+

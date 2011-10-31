@@ -1,0 +1,17 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void bookmarkableRequestWithInterceptWithParams() throws Exception
+	{
+		PageParameters pp = new PageParameters();
+		pp.set("test", "test");
+
+		tester.startPage(BookmarkableThrowsInterceptPage.class, pp);
+
+		assertEquals(tester.getLastRenderedPage().getClass(), BookmarkableSetSecurityPage.class);
+
+		tester.startPage(BookmarkableContinueToPage.class);
+		assertEquals(tester.getLastRenderedPage().getClass(), BookmarkableThrowsInterceptPage.class);
+	}
+

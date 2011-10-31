@@ -1,0 +1,16 @@
+	/**
+	 * Tests the escapeMarkup method with whitespace.
+	 */
+	@Test
+	public void escapeMarkupWhiteSpace()
+	{
+		assertNull(Strings.escapeMarkup(null, true));
+		assertEquals("", Strings.escapeMarkup("", true).toString());
+
+		assertEquals("\n \t", Strings.escapeMarkup("\n \t", false).toString());
+		assertEquals("\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", Strings.escapeMarkup("\n \t", true)
+			.toString());
+		assertEquals("  ", Strings.escapeMarkup("  ", false).toString());
+		assertEquals("&nbsp;&nbsp;", Strings.escapeMarkup("  ", true).toString());
+	}
+

@@ -1,0 +1,16 @@
+	/**
+	 * 
+	 */
+	@Test
+	public void decode1()
+	{
+		Url url = Url.parse(PAGE_CLASS_NAME);
+		IRequestHandler handler = encoder.mapRequest(getRequest(url));
+
+		assertTrue(handler instanceof RenderPageRequestHandler);
+		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
+		assertEquals(PAGE_CLASS_NAME, page.getClass().getSimpleName());
+		assertEquals(0, page.getPageParameters().getIndexedCount());
+		assertTrue(page.getPageParameters().getNamedKeys().isEmpty());
+	}
+

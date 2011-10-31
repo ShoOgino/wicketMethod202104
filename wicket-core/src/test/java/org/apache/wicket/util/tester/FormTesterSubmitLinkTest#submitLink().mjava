@@ -1,0 +1,17 @@
+	/**
+	 * Submit via SubmitLink.
+	 * <p>
+	 * This should work the same as regular submit
+	 */
+	@Test
+	public void submitLink()
+	{
+		tester.startPage(TestPage.class);
+
+		FormTester form = tester.newFormTester("form");
+		form.setValue("text", "some test text");
+		form.submitLink("submit", false);
+		assertEquals("some test text", tester.getComponentFromLastRenderedPage("form:text")
+			.getDefaultModelObjectAsString());
+	}
+

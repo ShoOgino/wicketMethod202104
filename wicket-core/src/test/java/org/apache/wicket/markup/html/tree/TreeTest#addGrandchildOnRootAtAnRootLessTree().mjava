@@ -1,0 +1,19 @@
+	/**
+	 * Asserting that {@link AbstractTree#treeNodesInserted(javax.swing.event.TreeModelEvent)} don't
+	 * add and not presented node to the AJAX response by invalidating it.
+	 * 
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-3309">WICKET-3309</a>
+	 */
+	@Test
+	public void addGrandchildOnRootAtAnRootLessTree()
+	{
+		TestPage testPage = new TestPage();
+		testPage.tree.setRootLess(true);
+		DefaultMutableTreeNode rootChild = new DefaultMutableTreeNode("rootChild");
+		testPage.rootNode.add(rootChild);
+		testPage.tree.getTreeState().selectNode(rootChild, true);
+		tester.startPage(testPage);
+		tester.clickLink("addChildToSelected", true);
+		assertTrue(tester.getLastResponseAsString().contains("newNode"));
+	}
+

@@ -1,0 +1,20 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void webMarkupContainer() throws Exception
+	{
+		MarkupContainer container = (MarkupContainer)new MyPage().get("container");
+		IMarkupFragment markup = container.getMarkup();
+		compareMarkupWithString(markup, "<span wicket:id=\"container\">text</span>");
+
+		// The container doesn't have an external markup file
+		markup = container.getAssociatedMarkup();
+		assertNull(markup);
+
+		// Get the markup which is used to search for children.
+		markup = container.getMarkup(null);
+		compareMarkupWithString(markup, "<span wicket:id=\"container\">text</span>");
+	}
+

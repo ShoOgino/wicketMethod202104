@@ -1,0 +1,19 @@
+	/**
+	 * Test simple table behavior.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void pagedTable() throws Exception
+	{
+		tester.startPage(PagedTablePage.class);
+		PagedTablePage page = (PagedTablePage)tester.getLastRenderedPage();
+		String document = tester.getLastResponseAsString();
+		assertTrue(document, validatePage1(document));
+
+		Link<?> link = (Link<?>)page.get("navigation:1:pageLink");
+		tester.clickLink(link.getPageRelativePath());
+		document = tester.getLastResponseAsString();
+		DiffUtil.validatePage(document, this.getClass(), "PagedTablePageExpectedResult.html", true);
+	}
+

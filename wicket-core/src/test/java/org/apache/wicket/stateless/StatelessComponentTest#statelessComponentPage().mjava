@@ -1,0 +1,23 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void statelessComponentPage() throws Exception
+	{
+		executeTest(StatelessComponentPage.class, "StatelessComponentPage_result.html");
+
+		tester.getRequest()
+			.setUrl(
+				Url.parse("wicket/bookmarkable/org.apache.wicket.stateless.StatelessComponentPage?0-1.ILinkListener-link"));
+		try
+		{
+			tester.processRequest();
+			fail();
+		}
+		catch (Exception e)
+		{
+			assertEquals("wanted exception", e.getMessage());
+		}
+
+	}
+

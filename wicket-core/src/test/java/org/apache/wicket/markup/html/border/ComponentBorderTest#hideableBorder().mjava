@@ -1,0 +1,24 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void hideableBorder() throws Exception
+	{
+		executeTest(HideableBorderPage.class, "HideableBorderPage_ExpectedResult.html");
+
+		Page page = tester.getLastRenderedPage();
+		Border border = (Border)page.get("hideable");
+		assertNotNull(border);
+		AjaxLink<?> link = (AjaxLink<?>)border.get("hideLink");
+		assertNotNull(link);
+		WebMarkupContainer wrapper = (WebMarkupContainer)border.get("wrapper");
+		assertNotNull(wrapper);
+		tester.clickLink("hideable:hideLink");
+		String ajaxResponse = tester.getLastResponseAsString();
+		tester.assertComponentOnAjaxResponse(wrapper);
+		tester.clickLink("hideable:hideLink");
+		ajaxResponse = tester.getLastResponseAsString();
+		tester.assertComponentOnAjaxResponse(wrapper);
+	}
+

@@ -1,0 +1,20 @@
+	/**
+	 * testReadsLocaleFromRequestOnConstruction()
+	 */
+	@Test
+	public void readsLocaleFromRequestOnConstruction()
+	{
+		final Locale locale = Locale.TRADITIONAL_CHINESE;
+		MockWebRequest request = new MockWebRequest(Url.parse("/"))
+		{
+			@Override
+			public Locale getLocale()
+			{
+				return locale;
+			}
+		};
+
+		WebSession session = new WebSession(request);
+		assertEquals(locale, session.getLocale());
+	}
+

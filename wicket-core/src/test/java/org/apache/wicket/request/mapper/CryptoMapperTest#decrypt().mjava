@@ -1,0 +1,15 @@
+	/**
+	 * Tests that {@link CryptoMapper} decrypts the passed url and pass it to the original request
+	 * mapper which resolves the page from the application mounts
+	 */
+	@Test
+	public void decrypt()
+	{
+		Request request = getRequest(Url.parse(ENCRYPTED_URL));
+		IRequestHandler requestHandler = mapper.mapRequest(request);
+		assertTrue(requestHandler instanceof RenderPageRequestHandler);
+
+		RenderPageRequestHandler handler = (RenderPageRequestHandler)requestHandler;
+		assertEquals(DummyHomePage.class, handler.getPageClass());
+	}
+

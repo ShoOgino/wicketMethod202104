@@ -1,0 +1,27 @@
+	/**
+	 * Tests light weight resource streams (everything but FileResourceStream and
+	 * UrlResourceStream). These should <strong>not</strong> be cached.
+	 */
+	@Test
+	public void lightweightResource()
+	{
+		IResourceStreamLocator resourceStreamLocator = mock(IResourceStreamLocator.class);
+
+		StringResourceStream srs = new StringResourceStream("anything");
+
+		when(
+			resourceStreamLocator.locate(String.class, "path", "style", "variation", null,
+				"extension", true)).thenReturn(srs);
+
+		CachingResourceStreamLocator cachingLocator = new CachingResourceStreamLocator(
+			resourceStreamLocator);
+
+		cachingLocator.locate(String.class, "path", "style", "variation", null, "extension", true);
+		cachingLocator.locate(String.class, "path", "style", "variation", null, "extension", true);
+
+		// lightweight resource streams should not be cached so expect just a call to the delegate
+		// for each call to the caching locator
+		verify(resourceStreamLocator, times(2)).locate(String.class, "path", "style", "variation",
+			null, "extension", true);
+	}
+

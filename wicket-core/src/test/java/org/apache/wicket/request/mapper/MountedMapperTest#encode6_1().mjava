@@ -1,0 +1,36 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4014
+	 * 
+	 * The difference with testEncode7 is that here ListenerInterfaceRequestHandler is used instead
+	 * of BookmarkableListenerInterfaceRequestHandler
+	 */
+	@Test
+	public void encode6_1()
+	{
+		MockPage page = new MockPage(15);
+		page.getPageParameters().set(0, "i1");
+		page.getPageParameters().set(1, "i2");
+		page.getPageParameters().set("a", "b");
+		page.getPageParameters().set("b", "c");
+
+		// WICKET-4038
+		page.getPageParameters().add(WebRequest.PARAM_AJAX, "true");
+		page.getPageParameters().add(WebRequest.PARAM_AJAX_BASE_URL, "some/base/url");
+
+		page.setRenderCount(4);
+
+		// shouldn't make any difference for ListenerInterfaceRequestHandler,
+		// as this explicitely says the url must be bookmarkable
+		page.setCreatedBookmarkable(false);
+
+		IRequestableComponent c = page.get("foo:bar");
+
+		PageAndComponentProvider provider = new PageAndComponentProvider(page, c);
+		IRequestHandler handler = new ListenerInterfaceRequestHandler(provider,
+			ILinkListener.INTERFACE);
+
+		Url url = encoder.mapHandler(handler);
+
+		assertEquals("some/mount/path/i1/i2?15-4.ILinkListener-foo-bar&a=b&b=c", url.toString());
+	}
+

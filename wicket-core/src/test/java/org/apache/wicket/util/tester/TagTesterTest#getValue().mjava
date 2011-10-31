@@ -1,0 +1,14 @@
+	/**
+	 * Test getValue returns the data between the open and close tag.
+	 */
+	@Test
+	public void getValue()
+	{
+		TagTester tagTester = TagTester.createTagByAttribute(MARKUP_1, "id", "test2");
+		assertEquals("mock", tagTester.getValue());
+
+		// Check that getValue also returns tags if the content of a tag is containing tags
+		TagTester tagTester2 = TagTester.createTagByAttribute(MARKUP_1, "id", "test");
+		assertEquals(tagTester.getMarkup(), tagTester2.getValue());
+	}
+

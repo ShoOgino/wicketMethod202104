@@ -1,0 +1,11 @@
+	/**
+	 * Preventing WICKET-3438
+	 */
+	@Test
+	public void submitLinkInputNameNotEncodedIntoFormAction()
+	{
+		tester.startPage(TestPage.class);
+		tester.clickLink("form:submitLink");
+		assertFalse(tester.getLastResponseAsString().contains("submitLink=x"));
+	}
+

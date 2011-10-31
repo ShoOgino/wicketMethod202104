@@ -1,0 +1,18 @@
+	/**
+	 * @throws Exception
+	 */
+	@Before
+	public void before() throws Exception
+	{
+		tester = new WicketTester()
+		{
+			@Override
+			protected Response newServletWebResponse(ServletWebRequest servletWebRequest)
+			{
+				return new HeaderBufferingWebResponse(new ProblematicResponse(servletWebRequest,
+					getResponse()));
+			}
+		};
+		tester.setExposeExceptions(false);
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Tests UrlResourceStreamReference
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void urlResource() throws Exception
+	{
+		IResourceStreamLocator resourceStreamLocator = mock(IResourceStreamLocator.class);
+
+		UrlResourceStream urs = new UrlResourceStream(new URL("file:///"));
+
+		when(resourceStreamLocator.locate(String.class, "path")).thenReturn(urs);
+
+		CachingResourceStreamLocator cachingLocator = new CachingResourceStreamLocator(
+			resourceStreamLocator);
+
+		cachingLocator.locate(String.class, "path");
+		cachingLocator.locate(String.class, "path");
+
+		// there is a url resource with that Key so expect just one call to the delegate
+		verify(resourceStreamLocator, times(1)).locate(String.class, "path");
+	}
+

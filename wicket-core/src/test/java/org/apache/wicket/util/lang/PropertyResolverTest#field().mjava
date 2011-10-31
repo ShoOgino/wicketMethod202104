@@ -1,0 +1,22 @@
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	public void field() throws Exception
+	{
+		Address address = new Address();
+		PropertyResolver.setValue("address2", person, address, CONVERTER);
+		Address address2 = (Address)PropertyResolver.getValue("address2", person);
+		assertEquals(address, address2);
+
+		try
+		{
+			PropertyResolver.setValue("address3", person, address, CONVERTER);
+			fail("Shoudln't come here");
+		}
+		catch (RuntimeException ex)
+		{
+
+		}
+	}
+

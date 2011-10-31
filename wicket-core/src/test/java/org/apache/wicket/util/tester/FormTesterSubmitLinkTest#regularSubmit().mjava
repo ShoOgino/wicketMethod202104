@@ -1,0 +1,15 @@
+	/**
+	 * Submit the form
+	 */
+	@Test
+	public void regularSubmit()
+	{
+		tester.startPage(TestPage.class);
+
+		FormTester form = tester.newFormTester("form");
+		form.setValue("text", "some test text");
+		form.submit();
+		assertEquals("some test text", tester.getComponentFromLastRenderedPage("form:text")
+			.getDefaultModelObjectAsString());
+	}
+

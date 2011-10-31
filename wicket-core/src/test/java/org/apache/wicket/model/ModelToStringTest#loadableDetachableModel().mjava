@@ -1,0 +1,19 @@
+	/**
+	 * Tests LoadableDetachableModel.toString()
+	 */
+	@Test
+	public void loadableDetachableModel()
+	{
+		LoadableDetachableModel<String> model = new MyLoadableDetachableModel();
+		assertTrue(model.toString().contains(":attached=false"));
+		assertTrue(model.toString().contains(":tempModelObject=[null]"));
+
+		model.getObject();
+		assertTrue(model.toString().contains(":attached=true"));
+		assertTrue(model.toString().contains(":tempModelObject=[foo]"));
+
+		model.detach();
+		assertTrue(model.toString().contains(":attached=false"));
+		assertTrue(model.toString().contains(":tempModelObject=[null]"));
+	}
+
