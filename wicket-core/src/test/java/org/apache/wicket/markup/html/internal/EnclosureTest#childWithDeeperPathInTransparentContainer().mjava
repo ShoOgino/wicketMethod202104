@@ -1,0 +1,17 @@
+	/**
+	 * Test case for https://issues.apache.org/jira/browse/WICKET-4172
+	 */
+	@Test
+	public void childWithDeeperPathInTransparentContainer()
+	{
+		boolean enclosureChildVisible = true;
+		tester.startPage(new ChildWithDeeperPathInTransparentContainerPage(enclosureChildVisible));
+
+		tester.assertContains(ChildWithDeeperPathInTransparentContainerPage.LABEL_TEXT);
+
+		enclosureChildVisible = false;
+		tester.startPage(new ChildWithDeeperPathInTransparentContainerPage(enclosureChildVisible));
+
+		tester.assertContainsNot(ChildWithDeeperPathInTransparentContainerPage.LABEL_TEXT);
+	}
+
