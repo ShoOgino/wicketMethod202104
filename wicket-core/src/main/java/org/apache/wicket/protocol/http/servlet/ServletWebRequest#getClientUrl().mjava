@@ -21,6 +21,12 @@
 				.toString();
 			return getContextRelativeUrl(problematicURI, filterPrefix);
 		}
+		else if (forwardAttributes != null && !Strings.isEmpty(forwardAttributes.getRequestUri()))
+		{
+			String forwardURI = Url.parse(forwardAttributes.getRequestUri(), getCharset())
+				.toString();
+			return getContextRelativeUrl(forwardURI, filterPrefix);
+		}
 		else if (!isAjax())
 		{
 			return getContextRelativeUrl(httpServletRequest.getRequestURI(), filterPrefix);
