@@ -1,0 +1,22 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param nameModel
+	 *            the model that brings the customer's name
+	 */
+	public MailTemplatePanel(String id, IModel<String> nameModel)
+	{
+		super(id);
+
+		add(new Label("name", nameModel));
+
+		CharSequence relativeUrl = urlFor(new PackageResourceReference(MailTemplate.class,
+			"resource.txt"), null);
+		String href = getRequestCycle().getUrlRenderer().renderFullUrl(
+			Url.parse(relativeUrl.toString()));
+		ExternalLink downloadLink = new ExternalLink("downloadLink", href);
+		add(downloadLink);
+	}
+
