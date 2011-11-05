@@ -1,33 +1,5 @@
-	/**
-	 * 
-	 * @param response
-	 * @param js
-	 */
 	private void respondInvocation(final Response response, final CharSequence js)
 	{
-		boolean encoded = false;
-		CharSequence javascript = js;
-
-		// encode the response if needed
-		if (needsEncoding(js))
-		{
-			encoded = true;
-			javascript = encode(js);
-		}
-
-		response.write("<evaluate");
-		if (encoded)
-		{
-			response.write(" encoding=\"");
-			response.write(getEncodingName());
-			response.write("\"");
-		}
-		response.write(">");
-		response.write("<![CDATA[");
-		response.write(javascript);
-		response.write("]]>");
-		response.write("</evaluate>");
-
-		encodingBodyResponse.reset();
+		respondJavascriptInvocation("evaluate", response, js);
 	}
 
