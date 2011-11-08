@@ -1,0 +1,14 @@
+	private static Class<? extends IRequestableComponent> tryToGetComponentClass(
+		IPageAndComponentProvider pageAndComponentProvider)
+	{
+		try
+		{
+			return pageAndComponentProvider.getComponent().getClass();
+		}
+		catch (Exception e)
+		{
+			// getComponent might fail if the page does not exist (ie session timeout)
+			return null;
+		}
+	}
+
