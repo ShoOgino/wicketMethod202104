@@ -1,0 +1,44 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.resource.loader.ComponentStringResourceLoader#loadStringResource(java.lang.Class,
+	 *      java.lang.String, java.util.Locale, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String loadStringResource(Class<?> clazz, final String key, final Locale locale,
+		final String style, final String variation)
+	{
+		if (clazz == null)
+		{
+			return null;
+		}
+
+		// Load the properties associated with the path
+		IPropertiesFactory propertiesFactory = getPropertiesFactory();
+
+		// Search the component's class and its parent classes
+		while (!isStopResourceSearch(clazz))
+		{
+			// Iterator over all the combinations
+			ResourceNameIterator iter = newResourceNameIterator(filename, locale, style, variation);
+			while (iter.hasNext())
+			{
+				String newPath = iter.next();
+				Properties props = propertiesFactory.load(clazz, newPath);
+				if (props != null)
+				{
+					// Lookup the value
+					String value = props.getString(key);
+					if (value != null)
+					{
+						return value;
+					}
+				}
+			}
+
+			clazz = clazz.getSuperclass();
+		}
+
+		// not found
+		return null;
+	}
+
