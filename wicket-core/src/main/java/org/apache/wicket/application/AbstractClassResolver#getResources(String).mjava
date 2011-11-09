@@ -2,25 +2,25 @@
 	{
 		List<URL> resultList = new ArrayList<URL>();
 
-		// URIs should be used instead of URLs as Set keys. See WICKET-3867.
-		HashSet<URI> loadedFiles = new HashSet<URI>();
+		// URL's externalForm should be used instead of URLs as Set keys. See WICKET-3867/4203.
+		Set<String> loadedResources = new HashSet<String>();
 		try
 		{
 			// Try the classloader for the wicket jar/bundle
 			Enumeration<URL> resources = Application.class.getClassLoader().getResources(name);
-			loadResources(resources, loadedFiles);
+			loadResources(resources, loadedResources);
 
 			// Try the classloader for the user's application jar/bundle
 			resources = Application.get().getClass().getClassLoader().getResources(name);
-			loadResources(resources, loadedFiles);
+			loadResources(resources, loadedResources);
 
 			// Try the context class loader
 			resources = getClassLoader().getResources(name);
-			loadResources(resources, loadedFiles);
+			loadResources(resources, loadedResources);
 
-			for (URI uri : loadedFiles)
+			for (String urlExternalForm : loadedResources)
 			{
-				resultList.add(uri.toURL());
+				resultList.add(new URL(urlExternalForm));
 			}
 		}
 		catch (Exception e)
