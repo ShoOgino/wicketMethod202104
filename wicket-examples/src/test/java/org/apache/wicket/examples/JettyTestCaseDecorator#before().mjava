@@ -1,6 +1,13 @@
-	@Override
-	protected void setUp() throws Exception
+	/**
+	 * @throws Exception
+	 */
+	@Before
+	public void before() throws Exception
 	{
+		HttpUnitOptions.setExceptionsThrownOnScriptError(false);
+
+		System.setProperty("wicket.configuration", "deployment");
+
 		server = new Server();
 		SelectChannelConnector connector = new SelectChannelConnector();
 		connector.setPort(8098);
@@ -29,7 +36,5 @@
 		server.setHandler(web);
 
 		server.start();
-
-		super.setUp();
 	}
 
