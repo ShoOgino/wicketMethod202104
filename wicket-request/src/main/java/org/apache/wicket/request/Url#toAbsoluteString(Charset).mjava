@@ -5,10 +5,18 @@
 	 * @param charset
 	 * 
 	 * @return see toStringRepresentation
+	 * @deprecated see {@link Url#toString(StringMode, Charset)}
 	 */
+	@Deprecated
 	public String toAbsoluteString(final Charset charset)
 	{
 		StringBuilder result = new StringBuilder();
+
+		String protocol = this.protocol;
+		if (Strings.isEmpty(protocol))
+		{
+			protocol = "http";
+		}
 
 		// output scheme://host:port if specified
 		if (protocol != null && Strings.isEmpty(host) == false)
