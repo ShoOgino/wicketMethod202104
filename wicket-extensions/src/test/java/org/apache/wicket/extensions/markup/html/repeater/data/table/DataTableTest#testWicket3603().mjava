@@ -2,18 +2,19 @@
 	 * Tests that DataTable doesn't produce thead/tfoot if there are no top/bottom toolbars or if
 	 * their children components are all invisible
 	 */
+	@Test
 	public void testWicket3603()
 	{
 		PageParameters parameters = new PageParameters();
 		parameters.add("empty", Boolean.TRUE);
 		tester.startPage(Wicket3603Page.class, parameters);
-		System.err.println(tester.getLastResponseAsString());
+// System.err.println(tester.getLastResponseAsString());
 		Assert.assertTrue(tester.getLastResponseAsString().contains("thead"));
 		Assert.assertTrue(tester.getLastResponseAsString().contains("tfoot"));
 
 		parameters.set("empty", Boolean.FALSE);
 		tester.startPage(Wicket3603Page.class);
-		System.err.println(tester.getLastResponseAsString());
+// System.err.println(tester.getLastResponseAsString());
 		Assert.assertFalse(tester.getLastResponseAsString().contains("thead"));
 		Assert.assertFalse(tester.getLastResponseAsString().contains("tfoot"));
 	}
