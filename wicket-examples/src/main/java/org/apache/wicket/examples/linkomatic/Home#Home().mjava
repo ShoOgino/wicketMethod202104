@@ -87,7 +87,32 @@
 			"Click this link to go to Google in a popup").setPopupSettings(googlePopupSettings));
 
 		// Shared resource link
-		add(new ResourceLink("cancelButtonLink", new SharedResourceReference("cancelButton")));
+		add(new ResourceLink<Void>("cancelButtonLink", new SharedResourceReference("cancelButton")));
+
+		add(new DownloadLink("downloadLink", new AbstractReadOnlyModel<File>()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public File getObject()
+			{
+				File tempFile;
+				try
+				{
+					tempFile = File.createTempFile("wicket-examples-download-link--", ".tmp");
+
+					InputStream data = new ByteArrayInputStream("some data".getBytes());
+					Files.writeTo(tempFile, data);
+
+				}
+				catch (IOException e)
+				{
+					throw new RuntimeException(e);
+				}
+
+				return tempFile;
+			}
+		}).setCacheDuration(Duration.NONE).setDeleteAfterDownload(true));
 
 		// redirect to external url form
 		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
