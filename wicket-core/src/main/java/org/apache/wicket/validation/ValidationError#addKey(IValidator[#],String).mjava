@@ -1,0 +1,25 @@
+	/**
+	 * Shortcut for adding a standard message key variation which is the simple name of the
+	 * validator class followed by a dot and the {@literal variation}
+	 * <p>
+	 * If the variation is empty only the validator's simple class name is used
+	 * </p>
+	 * 
+	 * @param validator
+	 *            validator
+	 * @param variation
+	 *            key variation
+	 * @return {@code this}
+	 */
+	public ValidationError addKey(IValidator<?> validator, String variation)
+	{
+		Args.notNull(validator, "validator");
+		String key = validator.getClass().getSimpleName();
+		if (!Strings.isEmpty(variation))
+		{
+			key = key + "." + variation;
+		}
+		addKey(key);
+		return this;
+	}
+
