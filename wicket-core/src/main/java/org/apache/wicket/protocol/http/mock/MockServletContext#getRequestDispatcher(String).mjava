@@ -5,16 +5,19 @@
 	 *            The name of the resource to get the dispatcher for
 	 * @return The dispatcher
 	 */
+	@Override
 	public RequestDispatcher getRequestDispatcher(final String name)
 	{
 		return new RequestDispatcher()
 		{
+			@Override
 			public void forward(ServletRequest servletRequest, ServletResponse servletResponse)
 				throws IOException
 			{
 				servletResponse.getWriter().write("FORWARD TO RESOURCE: " + name);
 			}
 
+			@Override
 			public void include(ServletRequest servletRequest, ServletResponse servletResponse)
 				throws IOException
 			{

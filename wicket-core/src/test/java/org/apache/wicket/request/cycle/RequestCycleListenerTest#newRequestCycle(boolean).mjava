@@ -4,6 +4,7 @@
 		Request request = new MockWebRequest(Url.parse("http://wicket.apache.org"));
 		handler = new IRequestHandler()
 		{
+			@Override
 			public void respond(IRequestCycle requestCycle)
 			{
 				if (throwExceptionInRespond)
@@ -13,6 +14,7 @@
 				responses++;
 			}
 
+			@Override
 			public void detach(IRequestCycle requestCycle)
 			{
 				detaches++;
@@ -20,16 +22,19 @@
 		};
 		IRequestMapper requestMapper = new IRequestMapper()
 		{
+			@Override
 			public IRequestHandler mapRequest(Request request)
 			{
 				return handler;
 			}
 
+			@Override
 			public Url mapHandler(IRequestHandler requestHandler)
 			{
 				throw new UnsupportedOperationException();
 			}
 
+			@Override
 			public int getCompatibilityScore(Request request)
 			{
 				throw new UnsupportedOperationException();
@@ -37,6 +42,7 @@
 		};
 		IExceptionMapper exceptionMapper = new IExceptionMapper()
 		{
+			@Override
 			public IRequestHandler map(Exception e)
 			{
 				exceptionsMapped++;
