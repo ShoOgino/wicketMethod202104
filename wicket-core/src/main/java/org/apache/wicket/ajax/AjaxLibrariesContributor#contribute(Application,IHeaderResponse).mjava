@@ -1,0 +1,31 @@
+	/**
+	 * Contributes the Ajax backing library plus wicket-event.js and wicket-ajax.js implementations.
+	 * Additionally if Ajax debug is enabled then wicket-ajax-debug.js implementation is also added.
+	 * 
+	 * @param application
+	 *            the application instance
+	 * @param response
+	 *            the current header response
+	 */
+	public static void contribute(final Application application, final IHeaderResponse response)
+	{
+		IAjaxSettings ajaxSettings = application.getAjaxSettings();
+		ResourceReference backingLibraryReference = ajaxSettings.getBackingLibraryReference();
+
+		ResourceReference wicketEventReference = ajaxSettings.getWicketEventReference();
+		ResourceReference wicketAjaxReference = ajaxSettings.getWicketAjaxReference();
+
+		response.renderJavaScriptReference(backingLibraryReference);
+		response.renderJavaScriptReference(wicketEventReference);
+		response.renderJavaScriptReference(wicketAjaxReference);
+
+
+		final IDebugSettings debugSettings = application.getDebugSettings();
+		if (debugSettings.isAjaxDebugModeEnabled())
+		{
+			response.renderJavaScriptReference(ajaxSettings.getWicketAjaxDebugReference());
+			response.renderJavaScript("Wicket.Ajax.DebugWindow.enabled=true;",
+				"wicket-ajax-debug-enable");
+		}
+	}
+
