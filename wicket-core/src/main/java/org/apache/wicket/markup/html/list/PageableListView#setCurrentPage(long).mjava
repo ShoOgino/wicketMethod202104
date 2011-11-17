@@ -1,0 +1,24 @@
+	/**
+	 * Sets the current page that this list view should show.
+	 * 
+	 * @param currentPage
+	 *            The currentPage to set.
+	 */
+	@Override
+	public final void setCurrentPage(long currentPage)
+	{
+		if (currentPage < 0)
+		{
+			currentPage = 0;
+		}
+
+		long pageCount = getPageCount();
+		if ((currentPage > 0) && (currentPage >= pageCount))
+		{
+			currentPage = pageCount - 1;
+		}
+
+		addStateChange();
+		this.currentPage = currentPage;
+	}
+

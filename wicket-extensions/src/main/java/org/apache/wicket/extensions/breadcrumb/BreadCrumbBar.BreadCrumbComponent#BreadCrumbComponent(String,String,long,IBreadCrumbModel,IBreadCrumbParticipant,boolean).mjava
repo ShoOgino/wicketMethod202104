@@ -1,0 +1,38 @@
+		/**
+		 * Construct.
+		 * 
+		 * @param id
+		 *            Component id
+		 * @param separatorMarkup
+		 *            markup used as a separator between breadcrumbs
+		 * @param index
+		 *            The index of the bread crumb
+		 * @param breadCrumbModel
+		 *            The bread crumb model
+		 * @param breadCrumbParticipant
+		 *            The bread crumb
+		 * @param enableLink
+		 *            Whether the link should be enabled
+		 */
+		public BreadCrumbComponent(final String id, final String separatorMarkup, final long index,
+			final IBreadCrumbModel breadCrumbModel,
+			final IBreadCrumbParticipant breadCrumbParticipant, final boolean enableLink)
+		{
+			super(id);
+			add(new Label("sep", (index > 0) ? separatorMarkup : "").setEscapeModelStrings(false)
+				.setRenderBodyOnly(true));
+			BreadCrumbLink link = new BreadCrumbLink("link", breadCrumbModel)
+			{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected IBreadCrumbParticipant getParticipant(final String componentId)
+				{
+					return breadCrumbParticipant;
+				}
+			};
+			link.setEnabled(enableLink);
+			add(link);
+			link.add(new Label("label", breadCrumbParticipant.getTitle()).setRenderBodyOnly(true));
+		}
+

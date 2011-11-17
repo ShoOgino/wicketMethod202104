@@ -1,0 +1,42 @@
+	/**
+	 * Generates a loop item used to represent a specific tab's <code>li</code> element.
+	 * 
+	 * @param tabIndex
+	 * @return new loop item
+	 */
+	protected LoopItem newTabContainer(final long tabIndex)
+	{
+		return new LoopItem(tabIndex)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTag(final ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+				String cssClass = tag.getAttribute("class");
+				if (cssClass == null)
+				{
+					cssClass = " ";
+				}
+				cssClass += " tab" + getIndex();
+
+				if (getIndex() == getSelectedTab())
+				{
+					cssClass += " selected";
+				}
+				if (getIndex() == getTabs().size() - 1)
+				{
+					cssClass += " last";
+				}
+				tag.put("class", cssClass.trim());
+			}
+
+			@Override
+			public boolean isVisible()
+			{
+				return getTabs().get((int)tabIndex).isVisible();
+			}
+		};
+	}
+
