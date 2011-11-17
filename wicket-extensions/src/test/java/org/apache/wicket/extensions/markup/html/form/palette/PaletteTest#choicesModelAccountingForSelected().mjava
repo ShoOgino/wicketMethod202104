@@ -1,0 +1,40 @@
+	/**
+	 * WICKET-4231 palette with choicesModel accounting for currently selected
+	 */
+	@Test
+	public void choicesModelAccountingForSelected()
+	{
+		final List<String> list = new ArrayList<String>(Arrays.asList("D"));
+
+		IModel<List<String>> selected = new ListModel<String>(list);
+
+		IModel<List<String>> all = new LoadableDetachableModel<List<String>>()
+		{
+			@Override
+			protected List<String> load()
+			{
+				List<String> fromDB = Arrays.asList("A", "B", "C"); // normally coming from DB
+
+				List<String> result = new ArrayList<String>();
+				result.addAll(fromDB);
+
+				// include already selected
+				result.addAll(list);
+
+				return result;
+			}
+		};
+
+		PaletteTestPage testPage = new PaletteTestPage(selected, all);
+
+		tester.startPage(testPage);
+
+		FormTester formTester = tester.newFormTester(testPage.form.getId());
+		formTester.submit();
+
+		Collection<String> collection = testPage.palette.getModelCollection();
+
+		assertEquals(1, collection.size());
+		assertEquals("D", collection.iterator().next());
+	}
+
