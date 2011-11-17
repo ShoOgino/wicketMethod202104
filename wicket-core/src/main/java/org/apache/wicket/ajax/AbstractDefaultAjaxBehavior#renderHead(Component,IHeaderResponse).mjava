@@ -6,6 +6,7 @@
 	{
 		super.renderHead(component, response);
 
+		response.renderJavaScriptReference(WicketJQueryReference.INSTANCE);
 		response.renderJavaScriptReference(WicketEventReference.INSTANCE);
 		response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
 
@@ -13,7 +14,8 @@
 		if (debugSettings.isAjaxDebugModeEnabled())
 		{
 			response.renderJavaScriptReference(JAVASCRIPT_DEBUG);
-			response.renderJavaScript("wicketAjaxDebugEnable=true;", "wicket-ajax-debug-enable");
+			response.renderJavaScript("Wicket.Ajax.DebugWindow.enabled=true;",
+				"wicket-ajax-debug-enable");
 		}
 
 		Url baseUrl = RequestCycle.get().getUrlRenderer().getBaseUrl();
