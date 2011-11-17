@@ -1,0 +1,18 @@
+	/**
+	 * Checks a value against this <code>PatternValidator</code>'s {@link Pattern}.
+	 * 
+	 * @param validatable
+	 *            the <code>IValidatable</code> to check
+	 */
+	@Override
+	public void validate(IValidatable<String> validatable)
+	{
+		// Check value against pattern
+		if (pattern.matcher(validatable.getValue()).matches() == reverse)
+		{
+			ValidationError error = new ValidationError(this);
+			error.setVariable("pattern", pattern.pattern());
+			validatable.error(decorate(error, validatable));
+		}
+	}
+
