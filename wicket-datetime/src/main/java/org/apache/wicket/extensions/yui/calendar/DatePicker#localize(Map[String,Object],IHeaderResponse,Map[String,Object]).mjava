@@ -35,19 +35,7 @@
 			return;
 		}
 
-		DateFormatSymbols dfSymbols = null;
-		if (GETINSTANCEMETHOD != null)
-		{
-			// try to use JDK 6 DateFormatSymbols.getInstance(Locale)
-			try
-			{
-				dfSymbols = (DateFormatSymbols)GETINSTANCEMETHOD.invoke(null, locale);
-			}
-			catch (Exception e)
-			{
-				// ignore
-			}
-		}
+		DateFormatSymbols dfSymbols = DateFormatSymbols.getInstance(locale);
 		if (dfSymbols == null)
 		{
 			dfSymbols = new DateFormatSymbols(locale);
