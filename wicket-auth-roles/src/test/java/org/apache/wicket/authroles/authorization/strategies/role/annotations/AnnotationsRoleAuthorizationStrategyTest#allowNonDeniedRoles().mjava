@@ -1,0 +1,20 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-3974
+	 */
+	@Test
+	public void allowNonDeniedRoles()
+	{
+		AnnotationsRoleAuthorizationStrategy strategy = new AnnotationsRoleAuthorizationStrategy(
+			new IRoleCheckingStrategy()
+			{
+				public boolean hasAnyRole(Roles roles)
+				{
+					return roles.contains("role1");
+				}
+			});
+
+		// use mock to not need Application in the thread
+		TestComponent component = Mockito.mock(TestComponent.class);
+		assertTrue(strategy.isActionAuthorized(component, Component.RENDER));
+	}
+
