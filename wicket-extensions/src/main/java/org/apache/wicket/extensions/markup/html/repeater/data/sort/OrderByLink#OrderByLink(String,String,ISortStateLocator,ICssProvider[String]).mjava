@@ -17,19 +17,12 @@
 	 * 
 	 */
 	public OrderByLink(final String id, final String property,
-		final ISortStateLocator stateLocator, final ICssProvider cssProvider)
+		final ISortStateLocator stateLocator, final ICssProvider<String> cssProvider)
 	{
 		super(id);
 
-		if (cssProvider == null)
-		{
-			throw new IllegalArgumentException("argument [cssProvider] cannot be null");
-		}
-
-		if (property == null)
-		{
-			throw new IllegalArgumentException("argument [sortProperty] cannot be null");
-		}
+		Args.notNull(cssProvider, "cssProvider");
+		Args.notNull(property, "property");
 
 		this.property = property;
 		this.stateLocator = stateLocator;
