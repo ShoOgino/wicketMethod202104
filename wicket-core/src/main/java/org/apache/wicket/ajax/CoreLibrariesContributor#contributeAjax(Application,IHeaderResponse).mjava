@@ -7,18 +7,14 @@
 	 * @param response
 	 *            the current header response
 	 */
-	public static void contribute(final Application application, final IHeaderResponse response)
+	public static void contributeAjax(final Application application, final IHeaderResponse response)
 	{
-		IAjaxSettings ajaxSettings = application.getAjaxSettings();
-		ResourceReference backingLibraryReference = ajaxSettings.getBackingLibraryReference();
+		CoreLibrariesContributor.contribute(application, response);
 
-		ResourceReference wicketEventReference = ajaxSettings.getWicketEventReference();
+		IAjaxSettings ajaxSettings = application.getAjaxSettings();
 		ResourceReference wicketAjaxReference = ajaxSettings.getWicketAjaxReference();
 
-		response.renderJavaScriptReference(backingLibraryReference);
-		response.renderJavaScriptReference(wicketEventReference);
 		response.renderJavaScriptReference(wicketAjaxReference);
-
 
 		final IDebugSettings debugSettings = application.getDebugSettings();
 		if (debugSettings.isAjaxDebugModeEnabled())
