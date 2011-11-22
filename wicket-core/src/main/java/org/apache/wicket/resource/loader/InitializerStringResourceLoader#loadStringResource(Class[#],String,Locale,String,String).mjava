@@ -1,0 +1,24 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.resource.loader.ComponentStringResourceLoader#loadStringResource(java.lang.Class,
+	 *      java.lang.String, java.util.Locale, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String loadStringResource(Class<?> clazz, final String key, final Locale locale,
+		final String style, final String variation)
+	{
+
+		for (IInitializer initializer : initializers)
+		{
+			String string = super.loadStringResource(initializer.getClass(), key, locale, style,
+				variation);
+			if (string != null)
+			{
+				return string;
+			}
+		}
+
+		// not found
+		return null;
+	}
+
