@@ -12,14 +12,14 @@
 
 		this.tabs = Args.notNull(tabs, "tabs");
 
-		final IModel<Long> tabCount = new AbstractReadOnlyModel<Long>()
+		final IModel<Integer> tabCount = new AbstractReadOnlyModel<Integer>()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Long getObject()
+			public Integer getObject()
 			{
-				return (long)TabbedPanel.this.tabs.size();
+				return TabbedPanel.this.tabs.size();
 			}
 		};
 
@@ -34,7 +34,7 @@
 			@Override
 			protected void populateItem(final LoopItem item)
 			{
-				final int index = (int)item.getIndex();
+				final int index = item.getIndex();
 				final ITab tab = TabbedPanel.this.tabs.get(index);
 
 				final WebMarkupContainer titleLink = newLink("link", index);
@@ -44,7 +44,7 @@
 			}
 
 			@Override
-			protected LoopItem newItem(final long iteration)
+			protected LoopItem newItem(final int iteration)
 			{
 				return newTabContainer(iteration);
 			}
