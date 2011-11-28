@@ -21,12 +21,10 @@
 					password = data[1];
 
 					// logon successful. Continue to the original destination
-					if (!continueToOriginalDestination())
-					{
-						// Ups, no original destination. Go to the home page
-						throw new RestartResponseException(getSession().getPageFactory().newPage(
-							getApplication().getHomePage()));
-					}
+					continueToOriginalDestination();
+					// Ups, no original destination. Go to the home page
+					throw new RestartResponseException(getSession().getPageFactory().newPage(
+						getApplication().getHomePage()));
 				}
 				else
 				{
