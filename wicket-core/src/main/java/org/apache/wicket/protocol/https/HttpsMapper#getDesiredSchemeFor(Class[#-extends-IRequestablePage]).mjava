@@ -1,0 +1,25 @@
+	/**
+	 * Determines which {@link Scheme} should be used to access the page
+	 * 
+	 * @param pageClass
+	 *            type of page
+	 * @return {@link Scheme}
+	 */
+	protected Scheme getDesiredSchemeFor(Class<? extends IRequestablePage> pageClass)
+	{
+		Scheme SCHEME = cache.get(pageClass);
+		if (SCHEME == null)
+		{
+			if (hasSecureAnnotation(pageClass))
+			{
+				SCHEME = Scheme.HTTPS;
+			}
+			else
+			{
+				SCHEME = Scheme.HTTP;
+			}
+			cache.put(pageClass, SCHEME);
+		}
+		return SCHEME;
+	}
+

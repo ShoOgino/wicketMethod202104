@@ -1,27 +1,20 @@
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public IRequestHandler mapRequest(final Request request)
+	public final IRequestHandler mapRequest(Request request)
 	{
-		IRequestHandler requestHandler = delegate.mapRequest(request);
+		IRequestHandler handler = delegate.mapRequest(request);
 
-		if (requestHandler != null)
+		Scheme desired = getDesiredSchemeFor(handler);
+		Scheme current = getSchemeOf(request);
+		if (!desired.isCompatibleWith(current))
 		{
-			final IRequestHandler httpsHandler = checker.checkSecureIncoming(requestHandler,
-				httpsConfig);
+			// we are currently on the wrong scheme for this handler
 
-			// XXX do we need to check if httpsHandler is instance of SwitchProtocolRequestHandler
-			if (httpsConfig.isPreferStateful())
-			{
-				// we need to persist the session before a redirect to https so the session lasts
-				// across both http and https calls.
-				Session.get().bind();
-			}
+			// construct a url for the handler on the correct scheme
+			String url = createRedirectUrl(handler, request, desired);
 
-			requestHandler = httpsHandler;
+			// replace handler with one that will redirect to the created url
+			handler = createRedirectHandler(url);
 		}
-
-		return requestHandler;
+		return handler;
 	}
 

@@ -1,0 +1,22 @@
+		@Override
+		public void respond(IRequestCycle requestCycle)
+		{
+			String location = url.toString();
+
+			if (location.startsWith("/"))
+			{
+				// context-absolute url
+				location = requestCycle.getUrlRenderer().renderContextRelativeUrl(location);
+			}
+
+			if (config.isPreferStateful())
+			{
+				// we need to persist the session before a redirect to https so the session lasts
+				// across both http and https calls.
+				Session.get().bind();
+			}
+
+			WebResponse response = (WebResponse)requestCycle.getResponse();
+			response.sendRedirect(location);
+		}
+

@@ -1,0 +1,16 @@
+	/**
+	 * Figures out which {@link Scheme} should be used to access the request handler
+	 * 
+	 * @param handler
+	 *            request handler
+	 * @return {@link Scheme}
+	 */
+	protected Scheme getDesiredSchemeFor(IRequestHandler handler)
+	{
+		if (handler instanceof IPageClassRequestHandler)
+		{
+			return getDesiredSchemeFor(((IPageClassRequestHandler)handler).getPageClass());
+		}
+		return Scheme.ANY;
+	}
+

@@ -1,0 +1,28 @@
+	/**
+	 * Construts a redirect url that should switch the user to the specified {@code scheme}
+	 * 
+	 * @param handler
+	 *            request handler being accessed
+	 * @param request
+	 *            current request
+	 * @param scheme
+	 *            desired scheme for the redirect url
+	 * @return url
+	 */
+	protected String createRedirectUrl(IRequestHandler handler, Request request, Scheme scheme)
+	{
+		HttpServletRequest req = (HttpServletRequest)((WebRequest)request).getContainerRequest();
+		String url = scheme.urlName() + "://";
+		url += req.getServerName();
+		if (!scheme.usesStandardPort(config))
+		{
+			url += ":" + scheme.getPort(config);
+		}
+		url += req.getRequestURI();
+		if (req.getQueryString() != null)
+		{
+			url += "?" + req.getQueryString();
+		}
+		return url;
+	}
+
