@@ -1,0 +1,20 @@
+	/**
+	 * WICKET-4276
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void rawInputKeepsSelectionOnError() throws Exception
+	{
+		tester.getRequest().setParameter("select", page.option1.getValue());
+
+		page.form.onFormSubmitted();
+
+		// form has error ...
+		boolean hasError = page.form.hasError();
+		assertTrue(hasError);
+
+		// ... but option1 is selected anyway through rawInput
+		assertTrue(page.select.isSelected(page.option1));
+	}
+
