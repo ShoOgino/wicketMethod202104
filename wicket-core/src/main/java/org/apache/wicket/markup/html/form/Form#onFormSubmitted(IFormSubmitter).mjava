@@ -42,14 +42,9 @@
 				}
 				else
 				{
-					// this is the root form
-					Form<?> formToProcess = this;
-
-					// find out whether it was a nested form that was submitted
-					if (submitter != null)
-					{
-						formToProcess = submitter.getForm();
-					}
+					// the submit request might be for one of the nested forms, so let's
+					// find the right one:
+					final Form<?> formToProcess = findFormToProcess(submitter);
 
 					// process the form for this request
 					formToProcess.process(submitter);

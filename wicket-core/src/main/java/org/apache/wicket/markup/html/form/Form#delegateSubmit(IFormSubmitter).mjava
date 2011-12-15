@@ -19,26 +19,14 @@
 	 */
 	protected void delegateSubmit(IFormSubmitter submittingComponent)
 	{
-		final Form<?> processingForm;
+		final Form<?> processingForm = findFormToProcess(submittingComponent);
+
 
 		// process submitting component (if specified)
 		if (submittingComponent != null)
 		{
-			// use form of submitting component for processing
-			processingForm = submittingComponent.getForm();
-
-			if (processingForm == null)
-			{
-				throw new IllegalStateException(
-					"submitting component must not return 'null' on getForm()");
-			}
-
 			// invoke submit on component
 			submittingComponent.onSubmit();
-		}
-		else
-		{
-			processingForm = this;
 		}
 
 		// invoke Form#onSubmit(..) going from innermost to outermost
