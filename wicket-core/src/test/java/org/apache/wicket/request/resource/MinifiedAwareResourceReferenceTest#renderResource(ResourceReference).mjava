@@ -1,0 +1,9 @@
+	private String renderResource(ResourceReference reference)
+	{
+		ByteArrayResponse byteResponse = new ByteArrayResponse();
+		Attributes mockAttributes = new Attributes(tester.getRequestCycle().getRequest(),
+			byteResponse);
+		reference.getResource().respond(mockAttributes);
+		return new String(byteResponse.getBytes());
+	}
+

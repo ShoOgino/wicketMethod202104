@@ -5,22 +5,19 @@
 
 		// two CSS resources in the same group. header.css is rendered first because has lower
 		// "order" number
-		response.renderCSSReference(new GroupedAndOrderedResourceReference(ResourceGroup.GLOBAL, 0,
-			HomePage.class, "footer.css"));
-		response.renderCSSReference(new GroupedAndOrderedResourceReference(ResourceGroup.GLOBAL, 0,
-			HomePage.class, "header.css"));
-
-		response.renderJavaScriptReference(new GroupedAndOrderedResourceReference(
-			ResourceGroup.GLOBAL, 0, HomePage.class, "jquery-1.4.3.min.js"));
+		response.render(CssHeaderItem.forReference(new CssResourceReference(HomePage.class,
+			"footer.css")));
+		response.render(CssHeaderItem.forReference(new CssResourceReference(HomePage.class,
+			"header.css")));
 
 		// example of something that may be in this single application:
-		response.renderCSSReference(new GroupedAndOrderedResourceReference(
-			ResourceGroup.APPLICATION, 0, HomePage.class, "app.css"));
+		response.render(CssHeaderItem.forReference(new CssResourceReference(HomePage.class,
+			"app.css")));
 
 		// example of something that may be limited to certain pages:
-		response.renderCSSReference(new GroupedAndOrderedResourceReference(ResourceGroup.PAGE, 0,
-			HomePage.class, "HomePage.css"));
-		response.renderJavaScriptReference(new GroupedAndOrderedResourceReference(
-			ResourceGroup.PAGE, 0, HomePage.class, "HomePage.js"));
+		response.render(CssHeaderItem.forReference(new CssResourceReference(HomePage.class,
+			"HomePage.css")));
+		response.render(JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(
+			HomePage.class, "HomePage.js")));
 	}
 

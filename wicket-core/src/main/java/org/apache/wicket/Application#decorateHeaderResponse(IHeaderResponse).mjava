@@ -11,8 +11,13 @@
 	 *            the response Wicket created
 	 * @return the response Wicket should use in IHeaderContributor traversal
 	 */
-	public final IHeaderResponse decorateHeaderResponse(final IHeaderResponse response)
+	public final IHeaderResponse decorateHeaderResponse(IHeaderResponse response)
 	{
+		if (getResourceSettings().getUseDefaultResourceAggregator())
+		{
+			response = new ResourceAggregator(response);
+		}
+
 		if (headerResponseDecorator == null)
 		{
 			return response;

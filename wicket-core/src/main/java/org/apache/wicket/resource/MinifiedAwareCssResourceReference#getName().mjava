@@ -1,0 +1,15 @@
+	/**
+	 * Returns the name of the file: minified or full version. This method is called in a
+	 * multithreaded context, so it has to be thread safe.
+	 * 
+	 * @see org.apache.wicket.request.resource.ResourceReference#getName()
+	 */
+	@Override
+	public String getName()
+	{
+		initMinifiedExists();
+		if (minifiedExists && Application.get().getResourceSettings().getUseMinifiedResources())
+			return getMinifiedName();
+		return super.getName();
+	}
+

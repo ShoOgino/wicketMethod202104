@@ -1,0 +1,16 @@
+	/**
+	 * bundle {a, b->a} and {a, c->a}, should give exception
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testTwoBundlesProvidingSameResource()
+	{
+		Application.get()
+			.getResourceBundles()
+			.addJavaScriptBundle(Application.class, "ab.js", new ResourceReferenceA(),
+				new ResourceReferenceB());
+		Application.get()
+			.getResourceBundles()
+			.addJavaScriptBundle(Application.class, "ac.js", new ResourceReferenceA(),
+				new ResourceReferenceC());
+	}
+

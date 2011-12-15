@@ -1,0 +1,13 @@
+	private void recordHeaderItem(HeaderItem item, Set<HeaderItem> depsDone)
+	{
+		renderDependencies(item, depsDone);
+		RecordedHeaderItem recordedItem = itemsToBeRendered.get(item);
+		if (recordedItem == null)
+		{
+			recordedItem = new RecordedHeaderItem(item);
+			itemsToBeRendered.put(item, recordedItem);
+		}
+		recordedItem.addLocation(renderBase, indexInRenderBase);
+		indexInRenderBase++;
+	}
+

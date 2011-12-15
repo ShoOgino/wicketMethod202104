@@ -17,10 +17,15 @@
 				return new DecoratingHeaderResponse(response)
 				{
 					@Override
-					public void renderJavaScriptReference(ResourceReference reference, String id)
+					public void render(HeaderItem item)
 					{
-						super.renderJavaScriptReference(new PackageResourceReference("DECORATED-" +
-							reference.getName()), id);
+						if (item instanceof JavaScriptReferenceHeaderItem)
+						{
+							JavaScriptReferenceHeaderItem original = (JavaScriptReferenceHeaderItem)item;
+							item = JavaScriptHeaderItem.forReference(new PackageResourceReference(
+								"DECORATED-" + original.getReference().getName()), original.getId());
+						}
+						super.render(item);
 					}
 				};
 			}

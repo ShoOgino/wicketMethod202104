@@ -3,17 +3,17 @@
 	{
 		// make sure we have all the javascript we need
 		CoreLibrariesContributor.contributeAjax(getApplication(), response);
-		response.renderJavaScriptReference(JS);
+		response.render(JavaScriptHeaderItem.forReference(JS));
 		String findCheckboxes = getFindCheckboxesFunction().toString();
 
 		// initialize the selector
-		response.renderOnLoadJavaScript("Wicket.CheckboxSelector.initializeSelector('" +
-			this.getMarkupId() + "', " + findCheckboxes + ");");
+		response.render(OnLoadHeaderItem.forScript("Wicket.CheckboxSelector.initializeSelector('" +
+			this.getMarkupId() + "', " + findCheckboxes + ");"));
 		if (wantAutomaticUpdate())
 		{
 			// initialize the handlers for automatic updating of the selector state
-			response.renderOnLoadJavaScript("Wicket.CheckboxSelector.attachUpdateHandlers('" +
-				this.getMarkupId() + "', " + findCheckboxes + ");");
+			response.render(OnLoadHeaderItem.forScript("Wicket.CheckboxSelector.attachUpdateHandlers('" +
+				this.getMarkupId() + "', " + findCheckboxes + ");"));
 		}
 	}
 

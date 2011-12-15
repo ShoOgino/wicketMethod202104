@@ -8,11 +8,29 @@
 	 */
 	public final CharSequence getContent(String filterName)
 	{
-		if (filterName == null)
+		if (filterName == null || !responseFilterMap.containsKey(filterName))
 		{
 			return "";
 		}
-		StringResponse resp = responseFilterMap.get(filterName);
-		return resp == null ? "" : resp.getBuffer();
+		List<HeaderItem> resp = responseFilterMap.get(filterName);
+		final StringResponse strResponse = new StringResponse();
+		IHeaderResponse headerRenderer = new HeaderResponse()
+		{
+			@Override
+			protected Response getRealResponse()
+			{
+				return strResponse;
+			}
+		};
+
+		if (Application.get().getResourceSettings().getUseDefaultResourceAggregator())
+			headerRenderer = new ResourceAggregator(headerRenderer);
+
+		for (HeaderItem curItem : resp)
+		{
+			headerRenderer.render(curItem);
+		}
+		headerRenderer.close();
+		return strResponse.getBuffer();
 	}
 

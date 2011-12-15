@@ -1,0 +1,14 @@
+	/**
+	 * Tests fallback to normal resource when pre-minified is not available
+	 */
+	@Test
+	public void noMinifiedResourceAvailable()
+	{
+		Application.get().getResourceSettings().setUseMinifiedResources(true);
+		ResourceReference reference = new MinifiedAwareJavaScriptResourceReference(
+			MinifiedAwareResourceReferenceTest.class, "a.js");
+		assertEquals("a.js", reference.getName());
+		String fileContent = renderResource(reference);
+		assertEquals("//a\n", fileContent);
+	}
+

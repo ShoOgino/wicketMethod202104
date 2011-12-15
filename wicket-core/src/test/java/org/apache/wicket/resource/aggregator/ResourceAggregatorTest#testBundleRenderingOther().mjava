@@ -1,0 +1,14 @@
+	/**
+	 * bundle {a, b->a}, render [b], should render [ab]
+	 */
+	@Test
+	public void testBundleRenderingOther()
+	{
+		HeaderItem bundleAB = Application.get()
+			.getResourceBundles()
+			.addJavaScriptBundle(Application.class, "ab.js", new ResourceReferenceA(),
+				new ResourceReferenceB());
+		aggregator.render(forReference(new ResourceReferenceB()));
+		assertItems(bundleAB);
+	}
+

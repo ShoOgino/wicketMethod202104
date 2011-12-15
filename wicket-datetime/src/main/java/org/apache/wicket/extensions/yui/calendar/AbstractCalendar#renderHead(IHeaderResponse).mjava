@@ -12,7 +12,6 @@
 		String javascriptId = getJavaScriptId();
 		String javascriptWidgetId = getJavaScriptWidgetId();
 		StringBuilder b = new StringBuilder();
-		b.append(JavaScriptUtils.SCRIPT_OPEN_TAG);
 		// initialize wicket namespace and register the init function
 		// for the YUI widget
 		b.append("YAHOO.namespace(\"wicket\");\nfunction init");
@@ -87,8 +86,7 @@
 		b.append("YAHOO.util.Event.addListener(window, \"load\", init");
 		b.append(javascriptId);
 		b.append(");");
-		b.append(JavaScriptUtils.SCRIPT_CLOSE_TAG);
 
-		response.renderString(b);
+		response.render(JavaScriptHeaderItem.forScript(b, null));
 	}
 

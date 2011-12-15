@@ -1,0 +1,14 @@
+	/**
+	 * bundle {c->a, d->c->a}, render [d], should render [a, cd]
+	 */
+	@Test
+	public void testBundleWithDependencies()
+	{
+		HeaderItem bundleCD = Application.get()
+			.getResourceBundles()
+			.addJavaScriptBundle(Application.class, "cd.js", new ResourceReferenceC(),
+				new ResourceReferenceD());
+		aggregator.render(forReference(new ResourceReferenceD()));
+		assertItems(forReference(new ResourceReferenceA()), bundleCD);
+	}
+

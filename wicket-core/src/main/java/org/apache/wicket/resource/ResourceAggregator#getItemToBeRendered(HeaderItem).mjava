@@ -1,0 +1,24 @@
+	/**
+	 * Resolves the actual item that needs to be rendered for the given item. This can be a
+	 * {@link NoHeaderItem} when the item was already rendered. It can also be a bundle or the item
+	 * itself, when it is not part of a bundle.
+	 * 
+	 * @param item
+	 * @return The item to be rendered
+	 */
+	private HeaderItem getItemToBeRendered(HeaderItem item)
+	{
+		if (getRealResponse().wasRendered(item))
+			return NoHeaderItem.get();
+
+		getRealResponse().markRendered(item);
+		HeaderItem bundle = Application.get().getResourceBundles().findBundle(item);
+		if (bundle == null)
+			return item;
+
+		for (HeaderItem curProvided : bundle.getProvidedResources())
+			getRealResponse().markRendered(curProvided);
+
+		return bundle;
+	}
+

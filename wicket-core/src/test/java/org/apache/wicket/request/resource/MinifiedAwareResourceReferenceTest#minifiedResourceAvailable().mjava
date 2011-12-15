@@ -1,0 +1,14 @@
+	/**
+	 * Tests is a pre-minified resource is detected
+	 */
+	@Test
+	public void minifiedResourceAvailable()
+	{
+		Application.get().getResourceSettings().setUseMinifiedResources(true);
+		ResourceReference reference = new MinifiedAwareJavaScriptResourceReference(
+			MinifiedAwareResourceReferenceTest.class, "b.js");
+		assertEquals("b.min.js", reference.getName());
+		String fileContent = renderResource(reference);
+		assertEquals("//minified-b\n", fileContent);
+	}
+
