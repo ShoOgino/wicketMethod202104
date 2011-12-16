@@ -1,37 +1,59 @@
 	/**
+	 * Verifies that a connection is opened just once but each #getInputStream() opens a new one
+	 * and all input streams are closed with UrlResourceStream#close()
+	 *
 	 * https://issues.apache.org/jira/browse/WICKET-3176
-	 * 
+	 * https://issues.apache.org/jira/browse/WICKET-4293
+	 *
 	 * @throws IOException
 	 * @throws ResourceStreamNotFoundException
 	 */
 	@Test
-	public void loadJustOnce() throws IOException, ResourceStreamNotFoundException
-	{
+	public void loadJustOnce() throws IOException, ResourceStreamNotFoundException {
 		String anyClassInJarFile = "/java/lang/String.class";
 		URL realURL = getClass().getResource(anyClassInJarFile);
 
-		final AtomicInteger counter = new AtomicInteger(0);
-		URL url = new URL(null, "test://anything", new CountingURLStreamHandler(realURL, counter));
+		final AtomicInteger connectCounter = new AtomicInteger(0);
+		final AtomicInteger streamCounter = new AtomicInteger(0);
+		URL url = new URL(null, "test://anything", new CountingURLStreamHandler(realURL,
+				connectCounter, streamCounter));
 
 		UrlResourceStream countingStream = new UrlResourceStream(url);
+
 		// assert the call is not made yet
-		assertEquals(0, counter.get());
-		countingStream.length();
+		assertEquals(0, connectCounter.get());
+		assertEquals(0, streamCounter.get());
+
 		// assert the connection is loaded lazily
-		assertEquals(1, counter.get());
+		countingStream.length();
+		assertEquals(1, connectCounter.get());
+		assertEquals(0, streamCounter.get());
 
 		// assert the following calls do not make new connections
 		countingStream.getInputStream();
-		assertEquals(1, counter.get());
+		assertEquals(1, connectCounter.get());
+		assertEquals(1, streamCounter.get());
 		countingStream.getContentType();
-		assertEquals(1, counter.get());
+		assertEquals(1, connectCounter.get());
+		assertEquals(1, streamCounter.get());
 		countingStream.getInputStream();
-		assertEquals(1, counter.get());
+		assertEquals(1, connectCounter.get());
+		assertEquals(2, streamCounter.get());
 		countingStream.close();
-		assertEquals(1, counter.get());
 
-		// assert the connection is re-opened (again lazily) second time
+		assertEquals(1, connectCounter.get());
+		assertEquals(2, streamCounter.get());
+
+		// assert the connection is re-opened (again lazily) second time,
+		// but stream is not re-opened yet
 		countingStream.length();
-		assertEquals(2, counter.get());
+
+		assertEquals(2, connectCounter.get());
+		assertEquals(2, streamCounter.get());
+
+		// assert stream is re-opened on next getInputStream call
+		countingStream.getInputStream();
+		assertEquals(2, connectCounter.get());
+		assertEquals(3, streamCounter.get());
 	}
 

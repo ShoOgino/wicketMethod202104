@@ -11,9 +11,11 @@
 		if (data != null)
 		{
 			Connections.closeQuietly(data.connection);
-			if (data.inputStream != null)
+			if (data.inputStreams != null)
 			{
-				IOUtils.closeQuietly(data.inputStream);
+				for (InputStream is : data.inputStreams) {
+					IOUtils.closeQuietly(is);
+				}
 			}
 			streamData = null;
 		}
