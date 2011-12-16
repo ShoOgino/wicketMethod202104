@@ -1,0 +1,14 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4301
+	 *
+	 * Verify that HttpServletResponse#SC_NOT_FOUND is returned if there is no data.
+	 */
+	@Test
+	public void noData() {
+		ByteArrayResource resource = new ByteArrayResource("text/plain");
+		tester.startResource(resource);
+
+		assertEquals(HttpServletResponse.SC_NOT_FOUND, tester.getLastResponse().getStatus());
+		assertEquals(0, tester.getLastResponse().getBinaryContent().length);
+	}
+
