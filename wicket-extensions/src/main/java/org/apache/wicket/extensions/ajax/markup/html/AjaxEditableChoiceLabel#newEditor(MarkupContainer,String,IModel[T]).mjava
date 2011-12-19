@@ -43,14 +43,30 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onComponentTag(final ComponentTag tag)
+			public void renderHead(final Component component, final IHeaderResponse response)
 			{
-				super.onComponentTag(tag);
-				final String saveCall = "{Wicket.Ajax.get('" + getCallbackUrl() +
-					"&save=true&'+this.name+'='+Wicket.Form.encode(this.value)); return true;}";
+				super.renderHead(component, response);
 
-				tag.put("onchange", saveCall);
+				AjaxRequestAttributes saveAttributes = getAttributes();
+				saveAttributes.getExtraParameters().put("save", "true");
+				saveAttributes.getDynamicExtraParameters().add(
+					"this.name+'='+Wicket.Form.encode(this.value)");
+				saveAttributes.setEventName("change");
+
+				CharSequence saveAttributesJson = renderAjaxAttributes(component, saveAttributes);
+				String saveCall = "Wicket.Ajax.ajax(" + saveAttributesJson + ")";
+
+				AjaxRequestTarget target = AjaxRequestTarget.get();
+				if (target != null)
+				{
+					target.appendJavaScript(saveCall);
+				}
+				else
+				{
+					response.render(JavaScriptHeaderItem.forScript(saveCall, "editable-blur-" + component.getMarkupId()));
+				}
 			}
+
 		});
 		return editor;
 	}

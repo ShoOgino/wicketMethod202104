@@ -5,8 +5,10 @@
 	 */
 	protected final String getJsTimeoutCall(final Duration updateInterval)
 	{
+		CharSequence ajaxAttributes = renderAjaxAttributes(getComponent());
+
 		// this might look strange, but it is necessary for IE not to leak :(
-		return "setTimeout(\"" + getCallbackScript() + "\", " + updateInterval.getMilliseconds() +
-			");";
+		return "setTimeout('Wicket.Ajax.ajax(" + ajaxAttributes + ");', " +
+			updateInterval.getMilliseconds() + ")";
 	}
 

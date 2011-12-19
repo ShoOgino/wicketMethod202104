@@ -4,14 +4,17 @@
 	 * @param event
 	 *            event this behavior will be attached to
 	 */
-	public AjaxEventBehavior(final String event)
+	public AjaxEventBehavior(String event)
 	{
-		if (Strings.isEmpty(event))
-		{
-			throw new IllegalArgumentException("argument [event] cannot be null or empty");
-		}
+		Args.notEmpty(event, "event");
 
 		onCheckEvent(event);
+
+		event = event.toLowerCase();
+		if (event.startsWith("on"))
+		{
+			event = event.substring(2);
+		}
 
 		this.event = event;
 	}

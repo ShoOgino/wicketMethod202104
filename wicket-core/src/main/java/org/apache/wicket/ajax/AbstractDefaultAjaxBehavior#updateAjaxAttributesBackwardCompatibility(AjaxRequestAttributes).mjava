@@ -1,0 +1,40 @@
+	/**
+	 * The code below handles backward compatibility.
+	 * 
+	 * @param attributes
+	 */
+	private void updateAjaxAttributesBackwardCompatibility(AjaxRequestAttributes attributes)
+	{
+		IAjaxCallDecorator callDecorator = getAjaxCallDecorator();
+		if (callDecorator != null)
+		{
+			CharSequence onSuccessScript = callDecorator.decorateOnSuccessScript(getComponent(),
+				getSuccessScript());
+
+			if (onSuccessScript != null)
+			{
+				attributes.getSuccessHandlers().add(onSuccessScript);
+			}
+
+			CharSequence onFailureScript = callDecorator.decorateOnFailureScript(getComponent(),
+				getFailureScript());
+
+			if (onFailureScript != null)
+			{
+				attributes.getErrorHandlers().add(onFailureScript);
+			}
+		}
+
+		CharSequence preconditionScript = getPreconditionScript();
+		if (preconditionScript != null)
+		{
+			attributes.getPreconditions().add(preconditionScript);
+		}
+
+		AjaxChannel channel = getChannel();
+		if (channel != null)
+		{
+			attributes.setChannel(channel);
+		}
+	}
+

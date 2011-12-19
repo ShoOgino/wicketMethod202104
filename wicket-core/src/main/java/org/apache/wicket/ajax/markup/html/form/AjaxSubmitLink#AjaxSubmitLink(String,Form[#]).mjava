@@ -8,7 +8,7 @@
 	{
 		super(id, form);
 
-		add(new AjaxFormSubmitBehavior(form, "onclick")
+		add(new AjaxFormSubmitBehavior(form, "click")
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -57,6 +57,13 @@
 			public boolean getDefaultProcessing()
 			{
 				return AjaxSubmitLink.this.getDefaultFormProcessing();
+			}
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+			{
+				super.updateAjaxAttributes(attributes);
+				AjaxSubmitLink.this.updateAjaxAttributes(attributes);
 			}
 		});
 

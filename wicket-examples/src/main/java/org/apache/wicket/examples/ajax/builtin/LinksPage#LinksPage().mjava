@@ -69,28 +69,20 @@
 			}
 
 			@Override
-			protected org.apache.wicket.ajax.IAjaxCallDecorator getAjaxCallDecorator()
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
 			{
-				return new AjaxCallDecorator()
-				{
-					@Override
-					public CharSequence decorateOnSuccessScript(Component c, CharSequence script)
-					{
-						return "alert('Success');";
-					}
+				super.updateAjaxAttributes(attributes);
 
-					@Override
-					public CharSequence decorateOnFailureScript(Component c, CharSequence script)
-					{
-						return "alert('Failure');";
-					}
+				attributes.getBeforeHandlers().add("alert('Before ajax call');");
+				attributes.getSuccessHandlers().add("alert('Success');");
+// attributes.getSuccessHandlers().add("alert('Success2');");
+				attributes.getErrorHandlers().add("alert('Failure');");
 
-					@Override
-					public CharSequence decorateScript(Component c, CharSequence script)
-					{
-						return "alert('Before ajax call');" + script;
-					}
-				};
+				List<CharSequence> urlArgumentMethods = attributes.getDynamicExtraParameters();
+				urlArgumentMethods.add("return {'htmlname': document.documentElement.tagName};");
+				urlArgumentMethods.add("return {'bodyname': document.body.tagName};");
+
+// attributes.getPreconditions().add(0, "return false;");
 			}
 		});
 
@@ -109,28 +101,13 @@
 			}
 
 			@Override
-			protected org.apache.wicket.ajax.IAjaxCallDecorator getAjaxCallDecorator()
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
 			{
-				return new AjaxCallDecorator()
-				{
-					@Override
-					public CharSequence decorateOnSuccessScript(Component c, CharSequence script)
-					{
-						return "alert('Success');";
-					}
+				super.updateAjaxAttributes(attributes);
 
-					@Override
-					public CharSequence decorateOnFailureScript(Component c, CharSequence script)
-					{
-						return "alert('Failure');";
-					}
-
-					@Override
-					public CharSequence decorateScript(Component c, CharSequence script)
-					{
-						return "alert('Before ajax call');" + script;
-					}
-				};
+				attributes.getBeforeHandlers().add("alert('Before ajax call');");
+				attributes.getSuccessHandlers().add("alert('Success');");
+				attributes.getErrorHandlers().add("alert('Failure');");
 			}
 		});
 
