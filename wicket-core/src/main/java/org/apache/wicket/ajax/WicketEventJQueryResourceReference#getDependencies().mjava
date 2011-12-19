@@ -1,6 +1,13 @@
 	@Override
 	public Iterable<? extends HeaderItem> getDependencies()
 	{
-		return Arrays.asList(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
+		final ResourceReference backingLibraryReference;
+		if (Application.exists()) {
+			backingLibraryReference = Application.get().getJavaScriptLibrarySettings().getBackingLibraryReference();
+		}
+		else {
+			backingLibraryReference = JQueryResourceReference.get();
+		}
+		return Arrays.asList(JavaScriptHeaderItem.forReference(backingLibraryReference));
 	}
 
