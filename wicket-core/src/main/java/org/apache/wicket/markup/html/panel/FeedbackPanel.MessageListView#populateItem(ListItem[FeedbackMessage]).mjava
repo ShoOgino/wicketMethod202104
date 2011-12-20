@@ -1,8 +1,6 @@
 		@Override
 		protected void populateItem(final ListItem<FeedbackMessage> listItem)
 		{
-			final FeedbackMessage message = listItem.getModelObject();
-			message.markRendered();
 			final IModel<String> replacementModel = new Model<String>()
 			{
 				private static final long serialVersionUID = 1L;
@@ -16,10 +14,12 @@
 				@Override
 				public String getObject()
 				{
-					return getCSSClass(message);
+					return getCSSClass(listItem.getModelObject());
 				}
 			};
 
+			final FeedbackMessage message = listItem.getModelObject();
+			message.markRendered();
 			final Component label = newMessageDisplayComponent("message", message);
 			final AttributeModifier levelModifier = new AttributeModifier("class", replacementModel);
 			label.add(levelModifier);
