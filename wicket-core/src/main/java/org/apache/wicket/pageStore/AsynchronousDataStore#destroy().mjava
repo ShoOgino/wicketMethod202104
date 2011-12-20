@@ -4,18 +4,16 @@
 	@Override
 	public void destroy()
 	{
-		destroy.set(true);
-
-		try
+		if (pageSavingThread.isAlive())
 		{
-			synchronized (destroy)
+			pageSavingThread.interrupt();
+			try
 			{
-				destroy.wait();
+				pageSavingThread.join();
+			} catch (InterruptedException e)
+			{
+				log.error(e.getMessage(), e);
 			}
-		}
-		catch (InterruptedException e)
-		{
-			log.error(e.getMessage(), e);
 		}
 
 		dataStore.destroy();
