@@ -1,6 +1,6 @@
 	@Override
 	public void renderHeader(final HtmlHeaderContainer headerContainer,
-		final Component rootComponent)
+		HeaderStreamState headerStreamState, final Component rootComponent)
 	{
 		Args.notNull(headerContainer, "headerContainer");
 		Args.notNull(rootComponent, "rootComponent");
@@ -8,10 +8,10 @@
 		// First the application level headers
 		renderApplicationLevelHeaders(headerContainer);
 
-		// Than its child hierarchy
+		// Then its child hierarchy
 		renderChildHeaders(headerContainer, rootComponent);
 
-		// Than the root component's headers
-		renderRootComponent(headerContainer, rootComponent);
+		// Then the root component's headers
+		renderRootComponent(headerContainer, headerStreamState, rootComponent);
 	}
 

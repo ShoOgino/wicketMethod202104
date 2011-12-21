@@ -25,10 +25,20 @@
 			// Allow component to contribute
 			if (response.wasRendered(this) == false)
 			{
-				// Make sure the markup source strategy contributes to the header first
-				// to be backward compatible. WICKET-3761
-				getMarkupSourcingStrategy().renderHead(this, container);
-
+				StringResponse markupHeaderResponse = new StringResponse();
+				Response oldResponse = getResponse();
+				RequestCycle.get().setResponse(markupHeaderResponse);
+				try
+				{
+					// Make sure the markup source strategy contributes to the header first
+					// to be backward compatible. WICKET-3761
+					getMarkupSourcingStrategy().renderHead(this, container);
+					response.render(StringHeaderItem.forString(markupHeaderResponse.getBuffer()));
+				} 
+				finally
+				{
+					RequestCycle.get().setResponse(oldResponse);
+				}
 				// Then let the component itself to contribute to the header
 				renderHead(this, response);
 

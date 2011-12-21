@@ -1,0 +1,34 @@
+	/**
+	 * Renders the content of the &lt;head&gt; section of the page, including &lt;wicket:head&gt;
+	 * sections in subclasses of the page. For every child-component, the content is rendered to a
+	 * string and passed to {@link IHeaderResponse}.
+	 * 
+	 * @param headerStreamState
+	 */
+	public void renderHeaderTagBody(HeaderStreamState headerStreamState)
+	{
+		if (headerStreamState == null)
+			return;
+
+		final Response oldResponse = getRequestCycle().getResponse();
+		try
+		{
+			// Create a separate (string) response for the header container itself
+			final StringResponse bodyResponse = new StringResponse();
+			getRequestCycle().setResponse(bodyResponse);
+
+			// render the header section directly associated with the markup
+			super.onComponentTagBody(headerStreamState.getMarkupStream(),
+				headerStreamState.getOpenTag());
+			CharSequence bodyOutput = getCleanResponse(bodyResponse);
+			if (bodyOutput.length() > 0)
+			{
+				getHeaderResponse().render(StringHeaderItem.forString(bodyOutput));
+			}
+		}
+		finally
+		{
+			getRequestCycle().setResponse(oldResponse);
+		}
+	}
+
