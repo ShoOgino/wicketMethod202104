@@ -1,0 +1,21 @@
+	/**
+	 * Compares two priority header items, converting the child-first order into parent-first.
+	 * 
+	 * @param o1
+	 * @param o2
+	 * @return -1, 0 or 1 if o1 needs to be rendered before, unchanged or after o2.
+	 */
+	protected int inversedComponentOrder(RecordedHeaderItem o1, RecordedHeaderItem o2)
+	{
+		RecordedHeaderItemLocation lastO1Location = o1.getLocations().get(
+			o1.getLocations().size() - 1);
+		RecordedHeaderItemLocation lastO2Location = o2.getLocations().get(
+			o2.getLocations().size() - 1);
+
+		// within a component, preserve order
+		if (lastO1Location.getRenderBase() == lastO2Location.getRenderBase())
+			return 0;
+
+		return lastO1Location.getIndexInRequest() < lastO2Location.getIndexInRequest() ? 1 : -1;
+	}
+

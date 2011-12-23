@@ -1,0 +1,22 @@
+	/**
+	 * Determines the type of the item: priority, page or component.
+	 * 
+	 * @param item
+	 * @return the type of the item
+	 */
+	protected HeaderItemType getItemType(RecordedHeaderItem item)
+	{
+		if (item.getItem() instanceof PriorityHeaderItem)
+			return HeaderItemType.PRIORITY;
+		if (renderPageFirst)
+		{
+			if (item.getItem() instanceof PageHeaderItem)
+				return HeaderItemType.PAGE;
+			for (RecordedHeaderItemLocation curLocation : item.getLocations())
+				if (curLocation.getRenderBase() instanceof Page)
+					return HeaderItemType.PAGE;
+		}
+
+		return HeaderItemType.COMPONENT;
+	}
+
