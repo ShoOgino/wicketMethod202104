@@ -47,24 +47,37 @@
 				attributesJson.put("i", indicatorId);
 			}
 
-			for (JavaScriptBeforeHandler bh : attributes.getBeforeHandlers())
+			for (IAjaxCallListener ajaxCallListener : attributes.getAjaxCallListeners())
 			{
-				attributesJson.append("bh", bh);
-			}
+				CharSequence beforeHandler = ajaxCallListener.getBeforeHandler(component);
+				if (Strings.isEmpty(beforeHandler) == false)
+				{
+					attributesJson.append("bh", beforeHandler);
+				}
 
-			for (JavaScriptAfterHandler ah : attributes.getAfterHandlers())
-			{
-				attributesJson.append("ah", ah);
-			}
+				CharSequence afterHandler = ajaxCallListener.getAfterHandler(component);
+				if (Strings.isEmpty(afterHandler) == false)
+				{
+					attributesJson.append("ah", afterHandler);
+				}
 
-			for (JavaScriptSuccessHandler sh : attributes.getSuccessHandlers())
-			{
-				attributesJson.append("sh", sh);
-			}
+				CharSequence successHandler = ajaxCallListener.getSuccessHandler(component);
+				if (Strings.isEmpty(successHandler) == false)
+				{
+					attributesJson.append("sh", successHandler);
+				}
 
-			for (JavaScriptFailureHandler fh : attributes.getFailureHandlers())
-			{
-				attributesJson.append("fh", fh);
+				CharSequence failureHandler = ajaxCallListener.getFailureHandler(component);
+				if (Strings.isEmpty(failureHandler) == false)
+				{
+					attributesJson.append("fh", failureHandler);
+				}
+
+				CharSequence completeHandler = ajaxCallListener.getCompleteHandler(component);
+				if (Strings.isEmpty(completeHandler) == false)
+				{
+					attributesJson.append("ch", completeHandler);
+				}
 			}
 
 			for (JavaScriptPrecondition pre : attributes.getPreconditions())
