@@ -17,9 +17,12 @@
 			}
 
 			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator()
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
 			{
-				return new CancelEventIfNoAjaxDecorator(decorator);
+				super.updateAjaxAttributes(attributes);
+				if (ajaxCallListener != null) {
+					attributes.getAjaxCallListeners().add(ajaxCallListener);
+				}
 			}
 
 			@Override
