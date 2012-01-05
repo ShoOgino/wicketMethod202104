@@ -8,6 +8,10 @@
 		{
 			// call template method
 			onBind(request, newSession);
+			for (BindListener listener : getBindListeners())
+			{
+				listener.bindingSession(request, newSession);
+			}
 
 			HttpSession httpSession = getHttpSession(request, false);
 

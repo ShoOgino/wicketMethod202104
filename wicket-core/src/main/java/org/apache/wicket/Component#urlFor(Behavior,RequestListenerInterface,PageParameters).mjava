@@ -6,14 +6,16 @@
 	 *            The behavior that the URL should point to
 	 * @param listener
 	 *            The listener interface that the URL should call
+	 * @param parameters
+	 *            The parameters that should be rendered into the urls
 	 * @return The URL
 	 */
 	public final CharSequence urlFor(final Behavior behaviour,
-		final RequestListenerInterface listener)
+		final RequestListenerInterface listener, final PageParameters parameters)
 	{
 		int id = getBehaviorId(behaviour);
 		Page page = getPage();
-		PageAndComponentProvider provider = new PageAndComponentProvider(page, this);
+		PageAndComponentProvider provider = new PageAndComponentProvider(page, this, parameters);
 		IRequestHandler handler;
 		if (page.isPageStateless())
 		{
