@@ -20,11 +20,11 @@
 				}
 
 				@Override
-				protected IAjaxCallDecorator getAjaxCallDecorator()
+				protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
 				{
-					return new HeaderContributingCallDecorator(callDecorator);
+					super.updateAjaxAttributes(attributes);
+					attributes.getAjaxCallListeners().add(new HeaderContributingCallDecorator(callDecorator));
 				}
-
 			});
 		}
 
