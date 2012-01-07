@@ -1,0 +1,33 @@
+	/**
+	 * Freezes the {@link #listeners}, and does not un-freeze them as the events will have been
+	 * fired by now.
+	 *
+	 * @param response
+	 */
+	private void fireOnAfterRespondListeners(final Response response)
+	{
+		listenersFrozen = true;
+
+		// invoke onafterresponse event on listeners
+		if (listeners != null)
+		{
+			final Map<String, Component> components = Collections.unmodifiableMap(markupIdToComponent);
+
+			// create response that will be used by listeners to append
+			// javascript
+			final IJavaScriptResponse jsresponse = new IJavaScriptResponse()
+			{
+				@Override
+				public void addJavaScript(String script)
+				{
+					respondInvocation(response, script);
+				}
+			};
+
+			for (AjaxRequestTarget.IListener listener : listeners)
+			{
+				listener.onAfterRespond(components, jsresponse);
+			}
+		}
+	}
+

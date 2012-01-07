@@ -1,0 +1,53 @@
+	/**
+	 *
+	 * @param response
+	 * @param component
+	 */
+	private void respondHeaderContribution(final Response response, final Component component)
+	{
+		headerRendering = true;
+
+		// create the htmlheadercontainer if needed
+		if (header == null)
+		{
+			header = new AjaxHtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID, this);
+			final Page page = component.getPage();
+			page.addOrReplace(header);
+		}
+
+		// save old response, set new
+		Response oldResponse = RequestCycle.get().setResponse(encodingHeaderResponse);
+
+		encodingHeaderResponse.reset();
+
+		// render the head of component and all it's children
+
+		component.renderHead(header);
+
+		if (component instanceof MarkupContainer)
+		{
+			((MarkupContainer)component).visitChildren(new IVisitor<Component, Void>()
+			{
+				@Override
+				public void component(final Component component, final IVisit<Void> visit)
+				{
+					if (component.isVisibleInHierarchy())
+					{
+						component.renderHead(header);
+					}
+					else
+					{
+						visit.dontGoDeeper();
+					}
+				}
+			});
+		}
+
+		// revert to old response
+		RequestCycle.get().setResponse(oldResponse);
+
+		writeHeaderContribution(response);
+
+		headerRendering = false;
+	}
+

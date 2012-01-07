@@ -1,0 +1,47 @@
+	/**
+	 * Processes components added to the target. This involves attaching components, rendering
+	 * markup into a client side xml envelope, and detaching them
+	 *
+	 * @param response
+	 */
+	private void respondComponents(Response response)
+	{
+		componentsFrozen = true;
+		// TODO: We might need to call prepareRender on all components upfront
+
+		// process component markup
+		for (Map.Entry<String, Component> stringComponentEntry : markupIdToComponent.entrySet())
+		{
+			final Component component = stringComponentEntry.getValue();
+			// final String markupId = stringComponentEntry.getKey();
+
+			if (!containsAncestorFor(component))
+			{
+				respondComponent(response, component.getAjaxRegionMarkupId(), component);
+			}
+		}
+
+		if (header != null)
+		{
+			// some header responses buffer all calls to render*** until close is called.
+			// when they are closed, they do something (i.e. aggregate all JS resource urls to a
+			// single url), and then "flush" (by writing to the real response) before closing.
+			// to support this, we need to allow header contributions to be written in the close
+			// tag, which we do here:
+			headerRendering = true;
+			// save old response, set new
+			Response oldResponse = RequestCycle.get().setResponse(encodingHeaderResponse);
+			encodingHeaderResponse.reset();
+
+			// now, close the response (which may render things)
+			header.getHeaderResponse().close();
+
+			// revert to old response
+			RequestCycle.get().setResponse(oldResponse);
+
+			// write the XML tags and we're done
+			writeHeaderContribution(response);
+			headerRendering = false;
+		}
+	}
+
