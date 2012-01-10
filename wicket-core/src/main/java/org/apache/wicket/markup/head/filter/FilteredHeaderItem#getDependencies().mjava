@@ -1,0 +1,11 @@
+	@Override
+	public Iterable<? extends HeaderItem> getDependencies()
+	{
+		List<FilteredHeaderItem> ret = new ArrayList<FilteredHeaderItem>();
+		for (HeaderItem curDependency : getWrapped().getDependencies())
+		{
+			ret.add(new FilteredHeaderItem(curDependency, getFilterName()));
+		}
+		return ret;
+	}
+
