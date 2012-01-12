@@ -3,7 +3,8 @@
 	{
 		Url url = super.mapHandler(requestHandler);
 
-		if (url == null && requestHandler instanceof ListenerInterfaceRequestHandler)
+		if (url == null && requestHandler instanceof ListenerInterfaceRequestHandler &&
+			getRecreateMountedPagesAfterExpiry())
 		{
 			ListenerInterfaceRequestHandler handler = (ListenerInterfaceRequestHandler)requestHandler;
 			IRequestablePage page = handler.getPage();
@@ -23,8 +24,9 @@
 					requestListenerInterfaceToString(listenerInterface), componentPath,
 					handler.getBehaviorIndex());
 				PageComponentInfo pageComponentInfo = new PageComponentInfo(pageInfo, componentInfo);
+				PageParameters parameters = new PageParameters(page.getPageParameters());
 				UrlInfo urlInfo = new UrlInfo(pageComponentInfo, page.getClass(),
-					page.getPageParameters());
+					parameters.mergeWith(handler.getPageParameters()));
 				url = buildUrl(urlInfo);
 			}
 		}
