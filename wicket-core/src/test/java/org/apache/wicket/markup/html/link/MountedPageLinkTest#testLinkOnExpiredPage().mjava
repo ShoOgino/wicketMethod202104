@@ -1,3 +1,7 @@
+	/**
+	 * Tests if it is possible to re-instantiate the page if it is expired. The page should be
+	 * instantiated with the same page parameters. The link will not be clicked however.
+	 */
 	@Test
 	public void testLinkOnExpiredPage()
 	{
@@ -5,6 +9,7 @@
 			new PageParameters().add("param", "value"));
 		Link<?> link = (Link<?>)page.get("link");
 		String url = link.getURL().toString();
+		// simulate a page expiry
 		url = url.replace("part2?0", "part2?3");
 		tester.executeUrl(url);
 	}
