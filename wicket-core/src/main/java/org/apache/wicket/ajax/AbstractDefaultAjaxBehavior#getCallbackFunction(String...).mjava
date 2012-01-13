@@ -1,0 +1,33 @@
+	/**
+	 * Generates a javascript function that can take parameters and performs an AJAX call which
+	 * includes these parameters. The generated code looks like this:
+	 * 
+	 * <pre>
+	 * function(param1, param2) {
+	 *    var attrs = attrsJson;
+	 *    var params = {'param1': param1, 'param2': param2};
+	 *    attrs.ep = jQuery.extend(attrs.ep, params);
+	 *    Wicket.Ajax.ajax(attrs);
+	 * }
+	 * </pre>
+	 * 
+	 * @param extraParameters
+	 * @return A function that can be used as a callback function in javascript
+	 */
+	protected CharSequence getCallbackFunction(String... extraParameters)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("function (");
+		boolean first = true;
+		for (String curExtraParameter : extraParameters)
+		{
+			if (!first)
+				sb.append(",");
+			sb.append(curExtraParameter);
+		}
+		sb.append(") {\n");
+		sb.append(getCallbackFunctionBody(extraParameters));
+		sb.append("}\n");
+		return sb;
+	}
+

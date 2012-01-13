@@ -1,27 +1,29 @@
 	/**
 	 * Renders header contribution by JavaScriptFunctionBody instances which additionally implement
 	 * IComponentAwareHeaderContributor interface.
-	 *
+	 * 
 	 * @param component
-	 *      the component assigned to this behavior
+	 *            the component assigned to this behavior
 	 * @param response
-	 *      the current header response
+	 *            the current header response
 	 */
 	private void renderExtraHeaderContributors(Component component, IHeaderResponse response)
 	{
 		AjaxRequestAttributes attributes = getAttributes();
 
 		List<IAjaxCallListener> ajaxCallListeners = attributes.getAjaxCallListeners();
-		for (IAjaxCallListener ajaxCallListener : ajaxCallListeners) {
+		for (IAjaxCallListener ajaxCallListener : ajaxCallListeners)
+		{
 			if (ajaxCallListener instanceof IComponentAwareHeaderContributor)
 			{
-				IComponentAwareHeaderContributor contributor = (IComponentAwareHeaderContributor) ajaxCallListener;
+				IComponentAwareHeaderContributor contributor = (IComponentAwareHeaderContributor)ajaxCallListener;
 				contributor.renderHead(component, response);
 			}
 		}
 
 		List<JavaScriptPrecondition> preconditions = attributes.getPreconditions();
-		for (JavaScriptPrecondition precondition : preconditions) {
+		for (JavaScriptPrecondition precondition : preconditions)
+		{
 			precondition.renderHead(component, response);
 		}
 	}
