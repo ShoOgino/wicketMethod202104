@@ -1,42 +1,42 @@
-	/**
-	 * Prepare
-	 */
-	@Before
-	public void before()
-	{
-		final Response realResponse = new StringResponse();
+    /**
+     * Prepare
+     */
+    @Before
+    public void before()
+    {
+        final Response realResponse = new StringResponse();
 
-		headerResponse = new HeaderResponse()
-		{
-			@Override
-			protected Response getRealResponse()
-			{
-				return realResponse;
-			}
-		};
+        headerResponse = new HeaderResponse()
+        {
+            @Override
+            protected Response getRealResponse()
+            {
+                return realResponse;
+            }
+        };
 
-		reference = new ResourceReference("testReference")
-		{
-			private static final long serialVersionUID = 1L;
+        reference = new ResourceReference("testReference")
+        {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public IResource getResource()
-			{
-				return null;
-			}
-		};
+            @Override
+            public IResource getResource()
+            {
+                return null;
+            }
+        };
 
-		RequestCycle requestCycle = mock(RequestCycle.class);
-		when(requestCycle.urlFor(any(IRequestHandler.class))).thenReturn(RESOURCE_NAME);
+        RequestCycle requestCycle = mock(RequestCycle.class);
+        when(requestCycle.urlFor(any(IRequestHandler.class))).thenReturn(RESOURCE_NAME);
 
-		Request request = mock(Request.class);
-		when(request.getCharset()).thenReturn(Charset.defaultCharset());
-		when(requestCycle.getRequest()).thenReturn(request);
+        Request request = mock(Request.class);
+        when(request.getCharset()).thenReturn(Charset.defaultCharset());
+        when(requestCycle.getRequest()).thenReturn(request);
 
-		UrlRenderer urlRenderer = mock(UrlRenderer.class);
-		when(urlRenderer.renderContextRelativeUrl((any(String.class)))).thenReturn(RESOURCE_NAME);
-		when(requestCycle.getUrlRenderer()).thenReturn(urlRenderer);
+        UrlRenderer urlRenderer = mock(UrlRenderer.class);
+        when(urlRenderer.renderContextRelativeUrl((any(String.class)))).thenReturn(RESOURCE_NAME);
+        when(requestCycle.getUrlRenderer()).thenReturn(urlRenderer);
 
-		ThreadContext.setRequestCycle(requestCycle);
-	}
+        ThreadContext.setRequestCycle(requestCycle);
+    }
 
