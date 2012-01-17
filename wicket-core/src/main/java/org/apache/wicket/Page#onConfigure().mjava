@@ -1,0 +1,16 @@
+	@Override
+       protected void onConfigure()
+	{
+               super.onConfigure();
+
+		// first try to check if the page can be rendered:
+		if (!isActionAuthorized(RENDER))
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("Page not allowed to render: " + this);
+			}
+			throw new UnauthorizedActionException(this, Component.RENDER);
+		}
+       }
+
