@@ -16,8 +16,13 @@
 		this.isServlet = isServlet;
 		initIgnorePaths(filterConfig);
 
-		applicationFactory = getApplicationFactory();
-		application = applicationFactory.createApplication(this);
+		// locate application instance unless it was already specified during construction
+		if (application == null)
+		{
+			applicationFactory = getApplicationFactory();
+			application = applicationFactory.createApplication(this);
+		}
+
 		application.setName(filterConfig.getFilterName());
 		application.setWicketFilter(this);
 
