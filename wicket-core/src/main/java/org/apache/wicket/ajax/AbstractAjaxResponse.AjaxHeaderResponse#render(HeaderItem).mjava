@@ -5,7 +5,7 @@
 			{
 				if (!wasItemRendered(item))
 				{
-					appendJavaScripts.add(((OnLoadHeaderItem)item).getJavaScript());
+					AbstractAjaxResponse.this.appendJavaScript(((OnLoadHeaderItem) item).getJavaScript());
 					markItemRendered(item);
 				}
 			}
@@ -13,13 +13,17 @@
 			{
 				if (!wasItemRendered(item))
 				{
-					domReadyJavaScripts.add(((OnDomReadyHeaderItem)item).getJavaScript());
+					AbstractAjaxResponse.this.domReadyJavaScripts.add(((OnDomReadyHeaderItem)item).getJavaScript());
 					markItemRendered(item);
 				}
 			}
 			else if (headerRendering)
+			{
 				super.render(item);
+			}
 			else
-				log.debug("Only methods that can be called on IHeaderResponse outside renderHead() are renderOnLoadJavaScript and renderOnDomReadyJavaScript");
+			{
+				LOG.debug("Only methods that can be called on IHeaderResponse outside renderHead() are renderOnLoadJavaScript and renderOnDomReadyJavaScript");
+			}
 		}
 

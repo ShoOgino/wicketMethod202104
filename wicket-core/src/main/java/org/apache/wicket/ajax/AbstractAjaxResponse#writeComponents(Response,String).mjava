@@ -3,11 +3,13 @@
 	 * markup into a client side xml envelope, and detaching them
 	 *
 	 * @param response
+	 *      the response to write to
+	 * @param encoding
+	 *      the encoding for the response
 	 */
-	private void respondComponents(Response response)
+	private void writeComponents(Response response, String encoding)
 	{
 		componentsFrozen = true;
-		// TODO: We might need to call prepareRender on all components upfront
 
 		// process component markup
 		for (Map.Entry<String, Component> stringComponentEntry : markupIdToComponent.entrySet())
@@ -17,7 +19,7 @@
 
 			if (!containsAncestorFor(component))
 			{
-				respondComponent(response, component.getAjaxRegionMarkupId(), component);
+				writeComponent(response, component.getAjaxRegionMarkupId(), component, encoding);
 			}
 		}
 

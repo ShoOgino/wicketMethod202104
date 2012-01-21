@@ -1,19 +1,11 @@
-	/**
-	 *
-	 * @param response
-	 * @param markupId
-	 *            id of client-side dom element
-	 * @param component
-	 *            component to render
-	 */
-	private void respondComponent(final Response response, final String markupId,
-		final Component component)
+	@Override
+	protected void writeComponent(Response response, String markupId, Component component, String encoding)
 	{
 		if (component.getRenderBodyOnly() == true)
 		{
 			throw new IllegalStateException(
-				"Ajax render cannot be called on component that has setRenderBodyOnly enabled. Component: " +
-					component.toString());
+					"Ajax render cannot be called on component that has setRenderBodyOnly enabled. Component: " +
+							component.toString());
 		}
 
 		component.setOutputMarkupId(true);
@@ -29,8 +21,8 @@
 		{
 			// dont throw an exception but just ignore this component, somehow
 			// it got removed from the page.
-			log.debug("component: " + component + " with markupid: " + markupId +
-				" not rendered because it was already removed from page");
+			LOG.debug("component: " + component + " with markupid: " + markupId +
+					" not rendered because it was already removed from page");
 			return;
 		}
 
@@ -41,7 +33,7 @@
 			component.prepareForRender();
 
 			// render any associated headers of the component
-			respondHeaderContribution(response, component);
+			writeHeaderContribution(response, component);
 		}
 		catch (RuntimeException e)
 		{

@@ -1,0 +1,48 @@
+	/**
+	 * Serializes this object to the response.
+	 *
+	 * @param response
+	 *      the response to write to
+	 * @param encoding
+	 *      the encoding for the response
+	 */
+	void writeTo(final Response response, final String encoding)
+	{
+		writeHeader(response, encoding);
+
+		// invoke onbeforerespond event on listeners
+		fireOnBeforeRespondListeners();
+
+		// process added components
+		writeComponents(response, encoding);
+
+		fireOnAfterRespondListeners(response);
+
+		// queue up prepend javascripts. unlike other steps these are executed out of order so that
+		// components can contribute them from inside their onbeforerender methods.
+		Iterator<CharSequence> it = prependJavaScripts.iterator();
+		while (it.hasNext())
+		{
+			CharSequence js = it.next();
+			writePriorityEvaluation(response, js);
+		}
+
+		// execute the dom ready javascripts as first javascripts
+		// after component replacement
+		it = domReadyJavaScripts.iterator();
+		while (it.hasNext())
+		{
+			CharSequence js = it.next();
+			writeNormalEvaluation(response, js);
+		}
+
+		it = appendJavaScripts.iterator();
+		while (it.hasNext())
+		{
+			CharSequence js = it.next();
+			writeNormalEvaluation(response, js);
+		}
+
+		writeFooter(response, encoding);
+	}
+

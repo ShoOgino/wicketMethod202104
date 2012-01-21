@@ -1,0 +1,21 @@
+	/**
+	 * Detaches the page if at least one of its components was updated.
+	 *
+	 * @param requestCycle
+	 *      the current request cycle
+	 */
+	void detach(IRequestCycle requestCycle)
+	{
+		Iterator<Component> iterator = markupIdToComponent.values().iterator();
+		while (iterator.hasNext())
+		{
+			final Component component = iterator.next();
+			final Page parentPage = component.findParent(Page.class);
+			if (parentPage != null)
+			{
+				parentPage.detach();
+				break;
+			}
+		}
+	}
+
