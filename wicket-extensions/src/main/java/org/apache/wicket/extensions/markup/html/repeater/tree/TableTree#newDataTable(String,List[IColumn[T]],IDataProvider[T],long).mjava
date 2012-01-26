@@ -1,0 +1,29 @@
+	/**
+	 * Factory method for the wrapped {@link DataTable}.
+	 * 
+	 * @param id
+	 * @param columns
+	 * @param dataProvider
+	 * @param rowsPerPage
+	 * @return nested data table
+	 */
+	protected DataTable<T> newDataTable(String id, List<IColumn<T>> columns,
+		IDataProvider<T> dataProvider, long rowsPerPage)
+	{
+		return new DataTable<T>(id, columns, dataProvider, rowsPerPage)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Item<T> newRowItem(String id, int index, IModel<T> model)
+			{
+				Item<T> item = TableTree.this.newRowItem(id, index, model);
+
+				// see #update(Node);
+				item.setOutputMarkupId(true);
+
+				return item;
+			}
+		};
+	}
+

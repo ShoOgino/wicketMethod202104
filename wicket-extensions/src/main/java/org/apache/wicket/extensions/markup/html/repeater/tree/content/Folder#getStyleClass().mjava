@@ -1,0 +1,42 @@
+	/**
+	 * Delegates to others methods depending wether the given model is a folder, expanded, collapsed
+	 * or selected.
+	 * 
+	 * @see ITreeProvider#hasChildren(Object)
+	 * @see AbstractTree#getState(Object)
+	 * @see #isSelected()
+	 * @see #getOpenStyleClass()
+	 * @see #getClosedStyleClass()
+	 * @see #getOtherStyleClass(Object)
+	 * @see #getSelectedStyleClass()
+	 */
+	@Override
+	protected String getStyleClass()
+	{
+		T t = getModelObject();
+
+		String styleClass;
+		if (tree.getProvider().hasChildren(t))
+		{
+			if (tree.getState(t) == State.EXPANDED)
+			{
+				styleClass = getOpenStyleClass();
+			}
+			else
+			{
+				styleClass = getClosedStyleClass();
+			}
+		}
+		else
+		{
+			styleClass = getOtherStyleClass(t);
+		}
+
+		if (isSelected())
+		{
+			styleClass += " " + getSelectedStyleClass();
+		}
+
+		return styleClass;
+	}
+

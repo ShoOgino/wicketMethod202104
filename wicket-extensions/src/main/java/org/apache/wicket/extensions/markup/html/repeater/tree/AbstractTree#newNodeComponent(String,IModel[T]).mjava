@@ -1,0 +1,23 @@
+	/**
+	 * Create a new component for a node.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            the model containing the node
+	 * @return created component
+	 */
+	public Component newNodeComponent(String id, final IModel<T> model)
+	{
+		return new Node<T>(id, this, model)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Component createContent(String id, IModel<T> model)
+			{
+				return AbstractTree.this.newContentComponent(id, model);
+			}
+		};
+	}
+

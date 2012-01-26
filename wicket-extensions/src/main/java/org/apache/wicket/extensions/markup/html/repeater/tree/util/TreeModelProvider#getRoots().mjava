@@ -1,0 +1,31 @@
+	public Iterator<T> getRoots()
+	{
+		if (rootVisible)
+		{
+			return new Iterator<T>()
+			{
+				boolean next = true;
+
+				public boolean hasNext()
+				{
+					return next;
+				}
+
+				public T next()
+				{
+					next = false;
+					return cast(treeModel.getRoot());
+				}
+
+				public void remove()
+				{
+					throw new UnsupportedOperationException();
+				}
+			};
+		}
+		else
+		{
+			return getChildren(cast(treeModel.getRoot()));
+		}
+	}
+

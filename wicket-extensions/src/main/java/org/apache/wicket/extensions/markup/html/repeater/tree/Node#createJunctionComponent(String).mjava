@@ -1,0 +1,27 @@
+	/**
+	 * The junction component expands and collapses this node.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @return component representing the junction
+	 */
+	protected MarkupContainer createJunctionComponent(String id)
+	{
+		return new AjaxFallbackLink<Void>(id)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				toggle();
+			}
+
+			@Override
+			public boolean isEnabled()
+			{
+				return tree.getProvider().hasChildren(Node.this.getModelObject());
+			}
+		};
+	}
+

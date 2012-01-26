@@ -1,0 +1,37 @@
+	/**
+	 * Call this method after all change to the wrapped {@link TreeModel} being initiated via
+	 * {@link AjaxRequestTarget}.
+	 * 
+	 * @param tree
+	 *            the tree utilizing this {@link ITreeProvider}
+	 * @param target
+	 *            the {@link AjaxRequestTarget} which initiated the changes
+	 */
+	public void update(AbstractTree<T> tree, AjaxRequestTarget target)
+	{
+		if (completeUpdate)
+		{
+			target.add(tree);
+		}
+		else
+		{
+			if (nodeUpdates != null)
+			{
+				for (T object : nodeUpdates)
+				{
+					tree.updateNode(object, target);
+				}
+			}
+
+			if (branchUpdates != null)
+			{
+				for (T object : branchUpdates)
+				{
+					tree.updateBranch(object, target);
+				}
+			}
+		}
+
+		detach();
+	}
+
