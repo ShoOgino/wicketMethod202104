@@ -4,7 +4,9 @@
 		Args.notEmpty(url, "url");
 
 		String urlWoSessionId = Strings.stripJSessionId(url);
-		if (Strings.isEmpty(condition) == false)
+		
+		boolean hasCondition = Strings.isEmpty(condition) == false; 
+		if (hasCondition)
 		{
 			response.write("<!--[if ");
 			response.write(condition);
@@ -20,7 +22,7 @@
 			response.write("\"");
 		}
 		response.write(" />");
-		if (Strings.isEmpty(condition) == false)
+		if (hasCondition)
 		{
 			response.write("<![endif]-->");
 		}
