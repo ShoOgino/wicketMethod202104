@@ -1,20 +1,19 @@
 	/**
-	 * Convert to primitive types, returning default value if text is null.
+	 * Convert to character, returning default value if text is inconvertible.
 	 * 
 	 * @param defaultValue
-	 *            the default value to return of text is null
-	 * @return the converted text as a primitive or the default if text is null
-	 * @throws StringValueConversionException
+	 *            the default value
+	 * @return the converted text as a primitive char or the default value if text is not a single character
 	 */
-	public final char toChar(final char defaultValue) throws StringValueConversionException
+	public final char toChar(final char defaultValue)
 	{
-		char result = defaultValue;
 		if (text != null)
 		{
 			try
 			{
-				result = toChar();
-			} catch (Exception x)
+				return toChar();
+			}
+			catch (StringValueConversionException x)
 			{
 				if (LOG.isDebugEnabled())
 				{
@@ -23,7 +22,6 @@
 				}
 			}
 		}
-
-		return result;
+		return defaultValue;
 	}
 

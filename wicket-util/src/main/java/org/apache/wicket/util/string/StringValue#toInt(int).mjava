@@ -1,20 +1,19 @@
 	/**
-	 * Convert to primitive types, returning default value if text is null.
+	 * Convert to integer, returning default value if text is inconvertible.
 	 * 
 	 * @param defaultValue
-	 *            the default value to return of text is null
-	 * @return the converted text as a primitive or the default if text is null
-	 * @throws StringValueConversionException
+	 *            the default value
+	 * @return the converted text as an integer or the default value if text is not an integer
 	 */
-	public final int toInt(final int defaultValue) throws StringValueConversionException
+	public final int toInt(final int defaultValue)
 	{
-		int result = defaultValue;
 		if (text != null)
 		{
 			try
 			{
-				result = toInt();
-			} catch (Exception x)
+				return toInt();
+			}
+			catch (StringValueConversionException x)
 			{
 				if (LOG.isDebugEnabled())
 				{
@@ -23,7 +22,6 @@
 				}
 			}
 		}
-
-		return result;
+		return defaultValue;
 	}
 
