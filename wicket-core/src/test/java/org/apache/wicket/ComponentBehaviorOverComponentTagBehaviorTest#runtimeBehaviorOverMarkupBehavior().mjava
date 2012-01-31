@@ -1,0 +1,15 @@
+	/**
+	 * Verifies that the Label's title attribute comes from the
+	 * Component behavior instead of ComponentTag's behavior (added by
+	 * WicketMessageTagHandler)
+	 */
+	@Test
+	public void runtimeBehaviorOverMarkupBehavior()
+	{
+		tester.getApplication().getResourceSettings().getStringResourceLoaders().add(new TestStringResourceLoader());
+		WicketMessage page = new WicketMessage();
+		tester.startPage(page);
+
+		tester.assertContains("title=\"Component behavior title\"");
+	}
+
