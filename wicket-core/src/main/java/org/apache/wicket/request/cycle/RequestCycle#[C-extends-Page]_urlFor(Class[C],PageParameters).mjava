@@ -14,6 +14,8 @@
 	public final <C extends Page> CharSequence urlFor(final Class<C> pageClass,
 		final PageParameters parameters)
 	{
-		return renderUrl(mapUrlFor(pageClass, parameters));
+		IRequestHandler handler = new BookmarkablePageRequestHandler(new PageProvider(pageClass,
+			parameters));
+		return renderUrl(mapUrlFor(handler), handler);
 	}
 

@@ -1,13 +1,27 @@
 	/**
-	 * Convert to primitive types, returning default value if text is null.
+	 * Convert to long integer, returning default value if text is inconvertible.
 	 * 
 	 * @param defaultValue
-	 *            the default value to return of text is null
-	 * @return the converted text as a primitive or the default if text is null
-	 * @throws StringValueConversionException
+	 *            the default value
+	 * @return the converted text as a long integer or the default value if text is empty or inconvertible
 	 */
-	public final long toLong(final long defaultValue) throws StringValueConversionException
+	public final long toLong(final long defaultValue)
 	{
-		return (text == null) ? defaultValue : toLong();
+		if (text != null)
+		{
+			try
+			{
+				return toLong();
+			}
+			catch (StringValueConversionException x)
+			{
+				if (LOG.isDebugEnabled())
+				{
+					LOG.debug(String.format(
+						"An error occurred while converting '%s' to a long: %s", text, x.getMessage()), x);
+				}
+			}
+		}
+		return defaultValue;
 	}
 

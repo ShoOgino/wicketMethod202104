@@ -4,6 +4,19 @@
 	 */
 	protected String getSessionId()
 	{
-		return RequestCycle.get() != null ? Session.get().getId() : null;
+		String sessionId = null;
+
+		if (Application.exists() && RequestCycle.get() != null)
+		{
+			ISessionStore sessionStore = Application.get().getSessionStore();
+			IRequestCycle requestCycle = RequestCycle.get();
+			Session session = sessionStore.lookup(requestCycle.getRequest());
+			if (session != null)
+			{
+				sessionId = session.getId();
+			}
+		}
+
+		return sessionId;
 	}
 

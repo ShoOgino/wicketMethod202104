@@ -49,6 +49,12 @@
 		application.setRequestCycleProvider(new TestRequestCycleProvider(
 			application.getRequestCycleProvider()));
 
+		// set a feedback message filter that will not remove any messages
+		originalFeedbackMessageCleanupFilter = application.getApplicationSettings()
+			.getFeedbackMessageCleanupFilter();
+		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
+			IFeedbackMessageFilter.NONE);
+
 		IPageManagerProvider pageManagerProvider = newTestPageManagerProvider();
 		if (pageManagerProvider != null)
 		{

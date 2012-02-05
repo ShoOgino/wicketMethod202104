@@ -1,40 +1,14 @@
 	/**
 	 * Adds a component to the list of components to be rendered
-	 * 
+	 *
 	 * @param markupId
 	 *            id of client-side dom element that will be updated
 	 * @param component
 	 *            component to be rendered
 	 * @throws IllegalArgumentException
-	 *             if the component is a {@link Page} or an {@link AbstractRepeater}
+	 *             if the component is a {@link org.apache.wicket.Page} or an {@link org.apache.wicket.markup.repeater.AbstractRepeater}
 	 * @throws IllegalStateException
 	 *             if the components are currently being rendered, or have already been rendered
 	 */
-	public final void add(final Component component, final String markupId)
-		throws IllegalArgumentException, IllegalStateException
-	{
-		Args.notEmpty(markupId, "markupId");
-		Args.notNull(component, "component");
-
-		if (component instanceof Page)
-		{
-			if (component != page)
-			{
-				throw new IllegalArgumentException("component cannot be a page");
-			}
-		}
-		else if (component instanceof AbstractRepeater)
-		{
-			throw new IllegalArgumentException(
-				"Component " +
-					component.getClass().getName() +
-					" has been added to the target. This component is a repeater and cannot be repainted via ajax directly. " +
-					"Instead add its parent or another markup container higher in the hierarchy.");
-		}
-
-		assertComponentsNotFrozen();
-
-		component.setMarkupId(markupId);
-		markupIdToComponent.put(markupId, component);
-	}
+	void add(final Component component, final String markupId);
 

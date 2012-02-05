@@ -7,7 +7,8 @@
 		setDefaultModel(new CompoundPropertyModel<Input>(input));
 
 		// Add a FeedbackPanel for displaying our messages
-		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		feedbackPanel.setOutputMarkupId(true);
 		add(feedbackPanel);
 
 		// Add a form with an onSumbit implementation that sets a message
@@ -25,6 +26,16 @@
 		// designate the
 		// current selection, and that uses the SITES list for the available
 		// options.
-		form.add(new RadioChoice<String>("site", SITES));
+		RadioChoice<String> sites = new RadioChoice<String>("site", SITES);
+		sites.add(new AjaxFormChoiceComponentUpdatingBehavior()
+		{
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				info("Selected: " + getComponent().getDefaultModelObjectAsString());
+				target.add(feedbackPanel);
+			}
+		});
+		form.add(sites);
 	}
 

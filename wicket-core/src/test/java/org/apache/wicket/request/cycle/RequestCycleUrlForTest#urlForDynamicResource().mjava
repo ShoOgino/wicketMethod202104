@@ -1,0 +1,14 @@
+	/**
+	 * Non-IStaticCacheableResource should have the jsessionid encoded in the url
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void urlForDynamicResource() throws Exception
+	{
+		ByteArrayResource resource = new ByteArrayResource(null, new byte[] {1, 2}, "test.bin");
+		ResourceRequestHandler handler = new ResourceRequestHandler(resource, new PageParameters());
+		CharSequence url = requestCycle.urlFor(handler);
+		assertEquals(RESOURCE_URL + JSESSIONID, url);
+	}
+

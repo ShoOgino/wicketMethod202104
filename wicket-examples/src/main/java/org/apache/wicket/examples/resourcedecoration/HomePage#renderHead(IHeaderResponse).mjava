@@ -6,7 +6,7 @@
 		// two CSS resources in the same group. header.css is rendered first because has lower
 		// "order" number
 		response.render(CssHeaderItem.forReference(new CssResourceReference(HomePage.class,
-				"footer.css")));
+			"footer.css")));
 		response.render(CssHeaderItem.forReference(new CssResourceReference(HomePage.class,
 			"header.css")));
 
@@ -19,5 +19,8 @@
 			"HomePage.css")));
 		response.render(JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(
 			HomePage.class, "HomePage.js")));
+		response.render(new FilteredHeaderItem(
+			JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(HomePage.class,
+				"top.js")), JavaScriptFilteredIntoFooterHeaderResponse.HEADER_FILTER_NAME));
 	}
 

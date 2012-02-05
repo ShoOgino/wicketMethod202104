@@ -1,0 +1,16 @@
+	@Override
+	void internalOnAfterConfigure()
+	{
+		super.internalOnAfterConfigure();
+
+		// first try to check if the page can be rendered:
+		if (!isRenderAllowed())
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("Page not allowed to render: " + this);
+			}
+			throw new UnauthorizedActionException(this, Component.RENDER);
+		}
+	}
+

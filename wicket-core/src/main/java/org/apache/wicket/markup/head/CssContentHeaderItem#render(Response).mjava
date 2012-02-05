@@ -1,6 +1,19 @@
 	@Override
 	public void render(Response response)
 	{
+		boolean hasCondition = Strings.isEmpty(getCondition()) == false;
+		if (hasCondition)
+		{
+			response.write("<!--[if ");
+			response.write(getCondition());
+			response.write("]>");
+		}
+
 		CssUtils.writeCss(response, getCss(), getId());
+
+		if (hasCondition)
+		{
+			response.write("<![endif]-->\n");
+		}
 	}
 

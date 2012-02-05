@@ -1,5 +1,5 @@
 	@Override
-	public void renderHead(Component component, IHeaderResponse response)
+	public void renderHead(final Component component, final IHeaderResponse response)
 	{
 		super.renderHead(component, response);
 
@@ -12,7 +12,7 @@
 
 			js.append(");");
 
-			AjaxRequestTarget target = AjaxRequestTarget.get();
+			AjaxRequestTarget target = component.getRequestCycle().find(AjaxRequestTarget.class);
 			if (target == null)
 			{
 				response.render(OnDomReadyHeaderItem.forScript(js.toString()));

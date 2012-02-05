@@ -11,10 +11,15 @@
 			parameters.set(i, s);
 			++i;
 		}
-
-		for (QueryParameter p : request.getUrl().getQueryParameters())
+		
+		IRequestParameters requestParameters = request.getRequestParameters();
+		for (String paramName : requestParameters.getParameterNames())
 		{
-			parameters.add(p.getName(), p.getValue());
+			List<StringValue> parameterValues = requestParameters.getParameterValues(paramName);
+			for (StringValue paramValue : parameterValues)
+			{
+				parameters.add(paramName, paramValue);
+			}
 		}
 
 		return parameters.isEmpty() ? null : parameters;

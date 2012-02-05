@@ -59,7 +59,8 @@
 
 		// remove previously generated markup (see onRendered) via javascript in
 		// ajax requests to not render the yui calendar multiple times
-		if (AjaxRequestTarget.get() != null)
+		AjaxRequestTarget target = component.getRequestCycle().find(AjaxRequestTarget.class);
+		if (target != null)
 		{
 			String escapedComponentMarkupId = getEscapedComponentMarkupId();
 			String javascript = "var e = Wicket.$('" + escapedComponentMarkupId + "Dp" +
@@ -69,7 +70,7 @@
 				escapedComponentMarkupId + "DpJs.destroy(); delete YAHOO.wicket." +
 				escapedComponentMarkupId + "DpJs;}";
 
-			AjaxRequestTarget.get().prependJavaScript(javascript);
+			target.prependJavaScript(javascript);
 		}
 	}
 

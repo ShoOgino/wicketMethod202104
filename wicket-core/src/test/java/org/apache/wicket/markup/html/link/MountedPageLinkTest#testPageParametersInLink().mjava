@@ -1,0 +1,15 @@
+	/**
+	 * Tests if the page parameters are part of the url of the link, and if the link actually works.
+	 */
+	@Test
+	public void testPageParametersInLink()
+	{
+		PageWithLink page = tester.startPage(PageWithLink.class,
+			new PageParameters().add("param", "value"));
+		Link<?> link = (Link<?>)page.get("link");
+		String url = link.getURL().toString();
+		assertTrue("URL for link should contain 'mount/value/part2': " + url, url.toString()
+			.contains("mount/value/part2"));
+		tester.executeUrl(url);
+	}
+

@@ -1,8 +1,19 @@
 	/**
-	 * @return All feedback messages for this component
+	 * Gets feedback messages for this component. This method will instantiate a
+	 * {@link FeedbackMessages} instance and add it to the component metadata, even when called on a
+	 * component that has no feedback messages, to avoid the overhead use
+	 * {@link #hasFeedbackMessage()}
+	 * 
+	 * @return feedback messages instance
 	 */
-	public final List<FeedbackMessage> getFeedbackMessages()
+	public FeedbackMessages getFeedbackMessages()
 	{
-		return getSession().getFeedbackMessages().messagesForComponent(this);
+		FeedbackMessages messages = getMetaData(FEEDBACK_KEY);
+		if (messages == null)
+		{
+			messages = new FeedbackMessages();
+			setMetaData(FEEDBACK_KEY, messages);
+		}
+		return messages;
 	}
 

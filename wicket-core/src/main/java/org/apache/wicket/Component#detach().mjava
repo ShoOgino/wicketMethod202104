@@ -5,8 +5,6 @@
 	@Override
 	public final void detach()
 	{
-		// if the component has been previously attached via attach()
-		// detach it now
 		setFlag(FLAG_DETACHING, true);
 		onDetach();
 		if (getFlag(FLAG_DETACHING))
@@ -42,6 +40,8 @@
 		clearVisibleInHierarchyCache();
 
 		requestFlags = 0;
+
+		detachFeedback();
 
 		internalDetach();
 

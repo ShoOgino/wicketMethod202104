@@ -10,6 +10,21 @@
 	{
 		if (needToRenderTag(tag))
 		{
+			// apply behaviors that are attached to the component tag.
+			if (tag.hasBehaviors())
+			{
+				Iterator<? extends Behavior> tagBehaviors = tag.getBehaviors();
+				while (tagBehaviors.hasNext())
+				{
+					final Behavior behavior = tagBehaviors.next();
+					if (behavior.isEnabled(this))
+					{
+						behavior.onComponentTag(this, tag);
+					}
+					behavior.detach(this);
+				}
+			}
+
 			// Apply behavior modifiers
 			List<? extends Behavior> behaviors = getBehaviors();
 			if ((behaviors != null) && !behaviors.isEmpty() && !tag.isClose() &&
@@ -23,21 +38,6 @@
 					{
 						behavior.onComponentTag(this, tag);
 					}
-				}
-			}
-
-			// apply behaviors that are attached to the component tag.
-			if (tag.hasBehaviors())
-			{
-				Iterator<? extends Behavior> tagBehaviors = tag.getBehaviors();
-				while (tagBehaviors.hasNext())
-				{
-					final Behavior behavior = tagBehaviors.next();
-					if (behavior.isEnabled(this))
-					{
-						behavior.onComponentTag(this, tag);
-					}
-					behavior.detach(this);
 				}
 			}
 

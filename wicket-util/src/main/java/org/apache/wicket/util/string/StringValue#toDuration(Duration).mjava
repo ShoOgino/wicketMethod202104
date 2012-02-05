@@ -1,14 +1,28 @@
 	/**
-	 * Convert to primitive types, returning default value if text is null.
+	 * Convert to duration, returning default value if text is inconvertible.
 	 * 
 	 * @param defaultValue
-	 *            the default value to return of text is null
-	 * @return the converted text as a primitive or the default if text is null
-	 * @throws StringValueConversionException
+	 *            the default value
+	 * @return the converted text as a duration or the default value if text is empty or inconvertible
+	 * @see Duration#valueOf(String, java.util.Locale) 
 	 */
 	public final Duration toDuration(final Duration defaultValue)
-		throws StringValueConversionException
 	{
-		return (text == null) ? defaultValue : toDuration();
+		if (text != null)
+		{
+			try
+			{
+				return toDuration();
+			}
+			catch (Exception x)
+			{
+				if (LOG.isDebugEnabled())
+				{
+					LOG.debug(String.format(
+						"An error occurred while converting '%s' to a Duration: %s", text, x.getMessage()), x);
+				}
+			}
+		}
+		return defaultValue;
 	}
 
