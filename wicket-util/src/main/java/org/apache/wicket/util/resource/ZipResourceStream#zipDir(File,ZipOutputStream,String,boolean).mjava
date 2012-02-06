@@ -25,8 +25,10 @@
 
 		for (String file : files)
 		{
-			log.debug("Adding: '{}'", file);
-
+			if (log.isDebugEnabled())
+			{
+				log.debug("Adding: '{}'", file);
+			}
 			File f = new File(dir, file);
 			if (f.isDirectory())
 			{
@@ -42,12 +44,16 @@
 				FileInputStream fi = new FileInputStream(f);
 				origin = new BufferedInputStream(fi, BUFFER);
 
-				int count;
-				while ((count = origin.read(data, 0, BUFFER)) != -1)
+				try
 				{
-					out.write(data, 0, count);
+					int count;
+					while ((count = origin.read(data, 0, BUFFER)) != -1)
+					{
+						out.write(data, 0, count);
+					}
+				} finally {
+					origin.close();
 				}
-				origin.close();
 			}
 		}
 
