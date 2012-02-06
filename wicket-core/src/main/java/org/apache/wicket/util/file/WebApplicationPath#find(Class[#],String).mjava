@@ -5,31 +5,28 @@
 	@Override
 	public IResourceStream find(final Class<?> clazz, final String pathname)
 	{
-		for (Folder folder : folders)
-		{
-			final File file = new File(folder, pathname);
-			if (file.exists())
-			{
-				return new FileResourceStream(file);
-			}
-		}
+		IResourceStream resourceStream = super.find(clazz, pathname);
 
-		for (String path : webappPaths)
+		if (resourceStream == null)
 		{
-			try
+			for (String path : webappPaths)
 			{
-				final URL url = servletContext.getResource(path + pathname);
-				if (url != null)
+				try
 				{
-					return new UrlResourceStream(url);
+					final URL url = servletContext.getResource(path + pathname);
+					if (url != null)
+					{
+						resourceStream = new UrlResourceStream(url);
+						break;
+					}
+				}
+				catch (Exception ex)
+				{
+					// ignore, file couldn't be found
 				}
 			}
-			catch (Exception ex)
-			{
-				// ignore, file couldn't be found
-			}
 		}
 
-		return null;
+		return resourceStream;
 	}
 
