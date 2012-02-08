@@ -9,10 +9,13 @@
 
 		if (Application.exists())
 		{
-			for (IHeaderContributor listener : Application.get()
-				.getHeaderContributorListenerCollection())
+			HeaderContributorListenerCollection headerContributorListenerCollection =
+					Application.get().getHeaderContributorListenerCollection();
+			IHeaderResponse headerResponse = headerContainer.getHeaderResponse();
+
+			for (IHeaderContributor listener : headerContributorListenerCollection)
 			{
-				listener.renderHead(headerContainer.getHeaderResponse());
+				listener.renderHead(headerResponse);
 			}
 		}
 	}
