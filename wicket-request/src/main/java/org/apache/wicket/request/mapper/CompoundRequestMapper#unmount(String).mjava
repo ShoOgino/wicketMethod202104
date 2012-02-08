@@ -1,11 +1,11 @@
+	@Override
 	public void unmount(String path)
 	{
 		final Url url = Url.parse(path);
 		final Request request = createRequest(url);
 
-		for (Iterator<IRequestMapper> itor = iterator(); itor.hasNext();)
+		for (IRequestMapper mapper : this)
 		{
-			IRequestMapper mapper = itor.next();
 			if (mapper.mapRequest(request) != null)
 			{
 				remove(mapper);
