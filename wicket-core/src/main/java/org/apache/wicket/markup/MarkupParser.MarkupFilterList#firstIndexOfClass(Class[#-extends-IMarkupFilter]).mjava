@@ -1,0 +1,26 @@
+		/**
+		 * Finds the index of the first entry which is from the same type as the passed
+		 * {@literal filterClass} argument.
+		 *
+		 * @param filterClass
+		 *      the class to search for
+		 * @return the index of the first match or -1 otherwise
+		 */
+		private int firstIndexOfClass(final Class<? extends IMarkupFilter> filterClass)
+		{
+			int result = -1;
+			if (filterClass != null)
+			{
+				final int size = size();
+				for (int index = 0; index < size; index++) {
+					Class<? extends IMarkupFilter> currentFilterClass = get(index).getClass();
+					if (Objects.equal(filterClass, currentFilterClass))
+					{
+						result = index;
+						break;
+					}
+				}
+			}
+			return result;
+		}
+
