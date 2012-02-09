@@ -1,0 +1,17 @@
+	/**
+	 * Tests that resource bundle is properly loaded for implementations of
+	 * IValidator need to be wrapped in ValidatorAdapter
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-4379
+	 */
+	@Test
+	public void interfaceValidator()
+	{
+		tester.startPage(new ValidatorLoaderPage(new InterfaceValidator()));
+		FormTester formTester = tester.newFormTester("form");
+		formTester.setValue("passwd", "anything");
+		formTester.submit();
+
+		tester.assertErrorMessages("Interface error loaded OK");
+	}
+

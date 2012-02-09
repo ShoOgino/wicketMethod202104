@@ -1,0 +1,17 @@
+	/**
+	 * Tests that resource bundle is properly loaded for implementations of
+	 * AbstractValidator
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-4379
+	 */
+	@Test
+	public void classValidator()
+	{
+		tester.startPage(new ValidatorLoaderPage(new ClassValidator()));
+		FormTester formTester = tester.newFormTester("form");
+		formTester.setValue("passwd", "anything");
+		formTester.submit();
+
+		tester.assertErrorMessages("Class error loaded OK");
+	}
+
