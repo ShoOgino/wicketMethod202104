@@ -1,0 +1,20 @@
+	/**
+	 * Collapse the given node, tries to update the affected branch if the change happens on an
+	 * {@link AjaxRequestTarget}.
+	 * 
+	 * @param t
+	 *            the object to collapse
+	 * 
+	 * @see #getModelObject()
+	 * @see Set#remove(Object)
+	 * @see #updateBranch(Object, AjaxRequestTarget)
+	 */
+	public void collapse(T t)
+	{
+		modelChanging();
+		getModelObject().remove(t);
+		modelChanged();
+
+		updateBranch(t, getRequestCycle().find(AjaxRequestTarget.class));
+	}
+

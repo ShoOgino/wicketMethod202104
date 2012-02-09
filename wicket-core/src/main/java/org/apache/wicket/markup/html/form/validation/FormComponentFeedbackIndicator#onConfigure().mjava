@@ -6,6 +6,7 @@
 	{
 		super.onConfigure();
 		// Get the messages for the current page
-		setVisible(Session.get().getFeedbackMessages().hasMessage(getFeedbackMessageFilter()));
+		setVisible(new FeedbackCollector(getPage()).collect(getFeedbackMessageFilter())
+			.size() > 0);
 	}
 

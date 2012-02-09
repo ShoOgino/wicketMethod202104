@@ -1,0 +1,16 @@
+	@Override
+	protected AbstractTree<Foo> createTree(FooProvider provider, IModel<Set<Foo>> state)
+	{
+		tree = new NestedTree<Foo>("tree", provider, state)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Component newContentComponent(String id, IModel<Foo> model)
+			{
+				return NestedTreePage.this.newContentComponent(id, model);
+			}
+		};
+		return tree;
+	}
+

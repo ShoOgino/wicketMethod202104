@@ -3,6 +3,11 @@
 	 */
 	public final boolean hasErrorMessage()
 	{
-		return getSession().getFeedbackMessages().hasErrorMessageFor(this);
+		FeedbackMessages messages = getMetaData(FEEDBACK_KEY);
+		if (messages == null)
+		{
+			return false;
+		}
+		return messages.hasMessage(FeedbackMessage.ERROR);
 	}
 

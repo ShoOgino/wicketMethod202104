@@ -1,0 +1,25 @@
+	/**
+	 * Hook method to create a new checkbox component. This default implementation uses an
+	 * {@link AjaxCheckBox}.
+	 * 
+	 * @param id
+	 * @param model
+	 * @return created component
+	 * 
+	 * @see #newCheckBoxModel(IModel)
+	 * @see #onUpdate(AjaxRequestTarget)
+	 */
+	protected Component newCheckBox(String id, IModel<T> model)
+	{
+		return new AjaxCheckBox(id, newCheckBoxModel(model))
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				CheckedFolder.this.onUpdate(target);
+			}
+		};
+	}
+

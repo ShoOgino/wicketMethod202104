@@ -6,9 +6,9 @@
 	 */
 	protected void onError(final AjaxRequestTarget target)
 	{
-		Serializable errorMessage = editor.getFeedbackMessage().getMessage();
-		if (errorMessage != null)
+		if (editor.hasErrorMessage())
 		{
+			Serializable errorMessage = editor.getFeedbackMessages().first(FeedbackMessage.ERROR);
 			target.appendJavaScript("window.status='" +
 				JavaScriptUtils.escapeQuotes(errorMessage.toString()) + "';");
 		}

@@ -1,0 +1,15 @@
+	/**
+	 * Cleans up feedback messages given the specified filter.
+	 * 
+	 * @param filter
+	 *            filter used to cleanup messages, accepted messages will be removed
+	 */
+	private void cleanupFeedbackMessages(IFeedbackMessageFilter filter)
+	{
+		application.getApplicationSettings().setFeedbackMessageCleanupFilter(filter);
+		getLastRenderedPage().detach();
+		getSession().detach();
+		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
+			IFeedbackMessageFilter.NONE);
+	}
+

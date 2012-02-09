@@ -12,17 +12,22 @@
 			{
 				OutputStream stream = new FileOutputStream(index);
 				ObjectOutputStream oos = new ObjectOutputStream(stream);
-				Map<String, SessionEntry> map = new HashMap<String, SessionEntry>(
-					sessionEntryMap.size());
-				for (Entry<String, SessionEntry> e : sessionEntryMap.entrySet())
+				try
 				{
-					if (e.getValue().unbound == false)
+					Map<String, SessionEntry> map = new HashMap<String, SessionEntry>(
+						sessionEntryMap.size());
+					for (Entry<String, SessionEntry> e : sessionEntryMap.entrySet())
 					{
-						map.put(e.getKey(), e.getValue());
+						if (e.getValue().unbound == false)
+						{
+							map.put(e.getKey(), e.getValue());
+						}
 					}
+					oos.writeObject(map);
+				} finally {
+					stream.close();
+					oos.close();
 				}
-				oos.writeObject(map);
-				stream.close();
 			}
 			catch (Exception e)
 			{

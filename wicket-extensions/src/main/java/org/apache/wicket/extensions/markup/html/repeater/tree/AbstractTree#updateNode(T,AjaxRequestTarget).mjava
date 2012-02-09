@@ -1,0 +1,28 @@
+	/**
+	 * Convenience method to update a single node on an {@link AjaxRequestTarget}. Does nothing if
+	 * the given node is currently not visible or target is <code>null</code>.
+	 * 
+	 * @param t
+	 * @param target
+	 */
+	public void updateNode(T t, final AjaxRequestTarget target)
+	{
+		if (target != null)
+		{
+			final IModel<T> model = getProvider().model(t);
+			visitChildren(Node.class, new IVisitor<Node<T>, Void>()
+			{
+				public void component(Node<T> node, IVisit<Void> visit)
+				{
+					if (model.equals(node.getModel()))
+					{
+						target.add(node);
+						visit.stop();
+					}
+					visit.dontGoDeeper();
+				}
+			});
+			model.detach();
+		}
+	}
+

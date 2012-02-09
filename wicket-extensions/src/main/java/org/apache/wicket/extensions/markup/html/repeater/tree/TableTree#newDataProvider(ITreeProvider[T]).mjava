@@ -1,0 +1,21 @@
+	/**
+	 * Hook method to create an {@link ITreeDataProvider}.
+	 * 
+	 * @param provider
+	 *            the tree provider
+	 * @return the data provider
+	 */
+	protected ITreeDataProvider<T> newDataProvider(ITreeProvider<T> provider)
+	{
+		return new TreeDataProvider<T>(provider)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected boolean iterateChildren(T object)
+			{
+				return TableTree.this.getState(object) == State.EXPANDED;
+			}
+		};
+	}
+

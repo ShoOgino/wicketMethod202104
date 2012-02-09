@@ -9,16 +9,17 @@
 			@Override
 			public String getObject()
 			{
-				boolean error = Session.get()
-					.getFeedbackMessages()
-					.hasMessage(new IFeedbackMessageFilter()
+				final IFeedbackMessageFilter filter = feedback.getFilter();
+
+				boolean error = new FeedbackCollector(getPage()).collect(
+					new IFeedbackMessageFilter()
 					{
 						@Override
 						public boolean accept(FeedbackMessage message)
 						{
-							return feedback.getFilter().accept(message) && message.isError();
+							return filter.accept(message) && message.isError();
 						}
-					});
+					}).size() > 0;
 				return "border: 1px solid " + (error ? "red" : "green");
 			}
 		}));

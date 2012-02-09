@@ -1,0 +1,20 @@
+	/**
+	 * Expand the given node, tries to update the affected branch if the change happens on an
+	 * {@link AjaxRequestTarget}.
+	 * 
+	 * @param t
+	 *            the node to expand
+	 * 
+	 * @see #getModelObject()
+	 * @see Set#add(Object)
+	 * @see #updateBranch(Object, AjaxRequestTarget)
+	 */
+	public void expand(T t)
+	{
+		modelChanging();
+		getModelObject().add(t);
+		modelChanged();
+
+		updateBranch(t, getRequestCycle().find(AjaxRequestTarget.class));
+	}
+
