@@ -1,0 +1,19 @@
+	/**
+	 * Tests that org.apache.wicket.request.parameter.CombinedRequestParametersAdapter#getParameterValues(java.lang.String)
+	 * will return all values for a given parameter by name.
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-4417
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void getParameterValuesSameNameSameValue() throws Exception
+	{
+		Url url = Url.parse("?param1=value1&param1=value1");
+		UrlRequestParametersAdapter urlAdapter = new UrlRequestParametersAdapter(url);
+		CombinedRequestParametersAdapter adapter = new CombinedRequestParametersAdapter(urlAdapter);
+
+		List<StringValue> values = adapter.getParameterValues("param1");
+		assertEquals(2, values.size());
+	}
+
