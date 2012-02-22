@@ -1,0 +1,15 @@
+	private boolean shouldProcess(ComponentTag openTag)
+	{
+		// do not wrap in CDATA any <script> which has special MIME type. WICKET-4425
+		String typeAttribute = openTag.getAttribute("type");
+		boolean shouldProcess =
+				// style elements should be processed
+				"style".equals(openTag.getName()) ||
+
+				// script elements should be processed only if they have no type (HTML5 recommendation)
+				// or the type is "text/javascript"
+				(typeAttribute == null || "text/javascript".equalsIgnoreCase(typeAttribute));
+
+		return shouldProcess && openTag.getUserData("STYLE_OR_SCRIPT") != null;
+	}
+
