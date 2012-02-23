@@ -1,11 +1,14 @@
 	/**
 	 * Initializes the cache for the existence of the minified resource.
+	 * @return the name of the minified resource or the special constant {@value #NO_MINIFIED_NAME}
+	 * if there is no minified version
 	 */
-	private void initMinifiedExists()
+	private String internalGetMinifiedName()
 	{
-		if (minifiedExists != null)
+		String minifiedExists = MINIFIED_NAMES_CACHE.get(this);
+		if (minifiedExists != null && minifiedExists != NO_MINIFIED_NAME)
 		{
-			return;
+			return minifiedExists;
 		}
 
 		String name = getMinifiedName();
@@ -15,11 +18,14 @@
 		String absolutePath = Packages.absolutePath(getScope(), name);
 		IResourceStream stream = locator.locate(getScope(), absolutePath, getStyle(),
 				getVariation(), getLocale(), null, true);
-		minifiedExists = stream != null;
-		if (!minifiedExists && log.isDebugEnabled())
+
+		minifiedExists = stream != null ? name : NO_MINIFIED_NAME;
+		MINIFIED_NAMES_CACHE.put(this, minifiedExists);
+		if (minifiedExists == NO_MINIFIED_NAME && log.isDebugEnabled())
 		{
 			log.debug("No minified version of '" + super.getName() +
 					"' found, expected a file with the name '" + name + "', using full version");
 		}
+		return minifiedExists;
 	}
 
