@@ -1,18 +1,18 @@
 		/**
-		 * @see org.apache.wicket.markup.resolver.AutoLinkResolver.IAutolinkResolverDelegate#newAutoComponent(org.apache.wicket.MarkupContainer,
-		 *      java.lang.String, org.apache.wicket.markup.resolver.AutoLinkResolver.PathInfo)
+		 * @see org.apache.wicket.markup.resolver.AutoLinkResolver.IAutolinkResolverDelegate#newAutoComponent(java.lang.String,
+		 * org.apache.wicket.markup.resolver.AutoLinkResolver.PathInfo)
 		 */
 		@Override
 		@SuppressWarnings("unchecked")
-		public Component newAutoComponent(final MarkupContainer container, final String autoId,
-			PathInfo pathInfo)
+		public Component newAutoComponent(final String autoId, PathInfo pathInfo)
 		{
+			final MarkupContainer container = pathInfo.getContainer();
+
 			if ((pathInfo.extension != null) &&
 				supportedPageExtensions.contains(pathInfo.extension))
 			{
 				// Obviously a href like href="myPkg.MyLabel.html" will do as
 				// well. Wicket will not throw an exception. It accepts it.
-
 
 				Page page = container.getPage();
 				final IClassResolver defaultClassResolver = page.getApplication()
@@ -82,8 +82,7 @@
 			{
 				// not a registered type for bookmarkable pages; create a link
 				// to a resource instead
-				return newPackageResourceReferenceAutoComponent(container, autoId, pathInfo,
-					attribute);
+				return newPackageResourceReferenceAutoComponent(autoId, pathInfo, attribute);
 			}
 
 			// fallthrough

@@ -1,8 +1,6 @@
 		/**
 		 * Creates a new auto component that references a package resource.
-		 * 
-		 * @param container
-		 *            the parent container
+		 *
 		 * @param autoId
 		 *            the automatically generated id for the auto component
 		 * @param pathInfo
@@ -12,9 +10,11 @@
 		 * @return a new auto component or null if the path was absolute
 		 */
 		protected final Component newPackageResourceReferenceAutoComponent(
-			final MarkupContainer container, final String autoId, final PathInfo pathInfo,
+			final String autoId, final PathInfo pathInfo,
 			final String attribute)
 		{
+			final MarkupContainer container = pathInfo.getContainer();
+
 			if (!pathInfo.absolute && (pathInfo.path != null) && (pathInfo.path.length() > 0))
 			{
 				// Href is relative. Create a resource reference pointing at this file
@@ -24,7 +24,7 @@
 				// header has been added to (e.g. the Page). What we need
 				// however, is the component (e.g. a Panel) which
 				// contributed it.
-				MarkupStream markupStream = new MarkupStream(container.getMarkup());
+				MarkupStream markupStream = pathInfo.getMarkupStream();
 				Class<? extends Component> clazz = markupStream.getContainerClass();
 
 				// However if the markup stream is a merged markup stream (inheritance), than we
