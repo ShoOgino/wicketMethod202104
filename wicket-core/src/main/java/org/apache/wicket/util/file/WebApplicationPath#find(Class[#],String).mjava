@@ -5,9 +5,14 @@
 	@Override
 	public IResourceStream find(final Class<?> clazz, final String pathname)
 	{
+		if (pathname == null)
+		{
+			return null;
+		}
+
 		IResourceStream resourceStream = super.find(clazz, pathname);
 
-		if (resourceStream == null)
+		if (resourceStream == null && pathname.startsWith(WEB_INF) == false)
 		{
 			for (String path : webappPaths)
 			{
