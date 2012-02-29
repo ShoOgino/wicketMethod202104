@@ -1,0 +1,27 @@
+	/**
+	 * Constructor.
+	 *
+	 * @param cache
+	 *      the internal cache that will hold the results for all already checked resources
+	 */
+	public SecurePackageResourceGuard(final ConcurrentMap<String, Boolean> cache)
+	{
+		this.cache = Args.notNull(cache, "cache");
+
+		// the order is important for better performance
+		// first add the most commonly used
+		addPattern("+*.js");
+		addPattern("+*.css");
+		addPattern("+*.png");
+		addPattern("+*.jpg");
+		addPattern("+*.gif");
+		addPattern("+*.ico");
+
+		// WICKET-208 non page templates may be served
+		addPattern("+*.html");
+
+		addPattern("+*.txt");
+		addPattern("+*.swf");
+		addPattern("+*.bmp");
+	}
+

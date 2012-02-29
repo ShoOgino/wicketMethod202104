@@ -5,6 +5,13 @@
 	protected void init()
 	{
 		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+		IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
+		if (packageResourceGuard instanceof SecurePackageResourceGuard)
+		{
+			SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
+			// allow velocity macros resources
+			guard.addPattern("+*.vm");
+		}
 
 		// initialize velocity
 		try

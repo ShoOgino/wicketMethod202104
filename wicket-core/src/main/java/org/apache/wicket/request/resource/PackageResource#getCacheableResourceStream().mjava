@@ -1,23 +1,14 @@
 	/**
 	 * be aware that method takes the current wicket session's locale and style into account when
 	 * locating the stream.
-	 * 
+	 *
 	 * @return resource stream
-	 * 
+	 *
 	 * @see org.apache.wicket.request.resource.caching.IStaticCacheableResource#getCacheableResourceStream()
 	 * @see #getResourceStream()
 	 */
-	@Override
 	public IResourceStream getCacheableResourceStream()
 	{
-		// get resource locator
-		IResourceStreamLocator locator = ThreadContext.getApplication()
-			.getResourceSettings()
-			.getResourceStreamLocator();
-
-		// determine current resource stream
-		// taking client locale and style into account
-		return locator.locate(getScope(), absolutePath, getCurrentStyle(), variation,
-			getCurrentLocale(), null, false);
+		return internalGetResourceStream(getCurrentStyle(), getCurrentLocale());
 	}
 
