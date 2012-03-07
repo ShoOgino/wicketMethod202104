@@ -1,0 +1,16 @@
+		private boolean shouldCollect(final String entryName)
+		{
+			if (
+				// all modules have META-INF {MANIFEST.MF, Maven stuff, ..}
+				entryName.startsWith("META-INF/") ||
+
+				// ignore Wicket's IInitializer conf files
+				(entryName.startsWith("wicket") && entryName.endsWith(".properties"))
+			)
+			{
+				return false;
+			}
+
+			return true;
+		}
+

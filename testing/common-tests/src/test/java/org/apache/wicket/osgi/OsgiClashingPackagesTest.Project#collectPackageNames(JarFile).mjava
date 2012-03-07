@@ -9,10 +9,10 @@
 			while (entries.hasMoreElements())
 			{
 				JarEntry jarEntry = entries.nextElement();
-				String className = jarEntry.getName();
-				if (className.endsWith(".class"))
+				String entryName = jarEntry.getName();
+				if (shouldCollect(entryName))
 				{
-					String packageName = Strings.beforeLast(className, '/');
+					String packageName = Strings.beforeLast(entryName, '/');
 					packagesWithContent.add(packageName);
 				}
 			}
