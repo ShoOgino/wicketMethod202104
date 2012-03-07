@@ -104,7 +104,6 @@
 						bookmarkablePageLink, (Object[])null);
 
 					startPage(bookmarkablePageLink.getPageClass(), parameters);
-					return;
 				}
 				catch (Exception e)
 				{
@@ -112,8 +111,14 @@
 						+ "Please report this in Wicket's Issue Tracker.", e);
 				}
 			}
-
-			executeListener(link, ILinkListener.INTERFACE);
+			else if (link instanceof ResourceLink)
+			{
+				executeListener(link, IResourceListener.INTERFACE);
+			}
+			else
+			{
+				executeListener(link, ILinkListener.INTERFACE);
+			}
 		}
 		else
 		{
