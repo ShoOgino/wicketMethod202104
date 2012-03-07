@@ -1,0 +1,25 @@
+	/**
+	 * Creates a new instance using the current application's class resolver. Returns null if
+	 * className is null.
+	 *
+	 * @param className
+	 *            The full class name
+	 * @return The new object instance
+	 */
+	public static Object newInstance(final String className)
+	{
+		if (!Strings.isEmpty(className))
+		{
+			try
+			{
+				Class<?> c = WicketObjects.resolveClass(className);
+				return c.newInstance();
+			}
+			catch (Exception e)
+			{
+				throw new WicketRuntimeException("Unable to create " + className, e);
+			}
+		}
+		return null;
+	}
+

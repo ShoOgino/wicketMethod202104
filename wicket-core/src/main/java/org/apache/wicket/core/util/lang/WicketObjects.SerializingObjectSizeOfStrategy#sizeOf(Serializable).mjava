@@ -1,0 +1,27 @@
+		/**
+		 * @see org.apache.wicket.core.util.lang.WicketObjects.IObjectSizeOfStrategy#sizeOf(java.io.Serializable)
+		 */
+		@Override
+		public long sizeOf(Serializable object)
+		{
+			if (object == null)
+			{
+				return 0;
+			}
+			try
+			{
+				final ByteCountingOutputStream out = new ByteCountingOutputStream();
+				new ObjectOutputStream(out).writeObject(object);
+				out.close();
+				return out.size();
+			}
+			catch (IOException e)
+			{
+				if (log.isWarnEnabled())
+				{
+					log.warn("Unable to determine object size: " + object.toString(), e);
+				}
+				return -1;
+			}
+		}
+

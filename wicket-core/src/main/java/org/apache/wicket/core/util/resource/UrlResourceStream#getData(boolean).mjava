@@ -1,0 +1,41 @@
+	/**
+	 * Lazy loads the stream settings on demand
+	 *
+	 * @param initialize
+	 *            a flag indicating whether to load the settings
+	 * @return the meta data with the stream settings
+	 */
+	private StreamData getData(boolean initialize)
+	{
+		if (streamData == null && initialize)
+		{
+			streamData = new StreamData();
+
+			try
+			{
+				streamData.connection = url.openConnection();
+				streamData.contentLength = streamData.connection.getContentLength();
+				streamData.contentType = streamData.connection.getContentType();
+
+				if (streamData.contentType == null || streamData.contentType.contains("unknown"))
+				{
+					if (Application.exists())
+					{
+						streamData.contentType = Application.get().getMimeType(url.getFile());
+					}
+					else
+					{
+						streamData.contentType = URLConnection.getFileNameMap().getContentTypeFor(
+							url.getFile());
+					}
+				}
+			}
+			catch (IOException ex)
+			{
+				throw new IllegalArgumentException("Invalid URL parameter " + url, ex);
+			}
+		}
+
+		return streamData;
+	}
+

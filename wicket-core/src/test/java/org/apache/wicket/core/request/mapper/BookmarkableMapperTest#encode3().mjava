@@ -1,0 +1,20 @@
+	/**
+	 *
+	 */
+	@Test
+	public void encode3()
+	{
+		PageParameters parameters = new PageParameters();
+		parameters.set(0, "i1");
+		parameters.set(1, "i2");
+		parameters.set("a", "b");
+		parameters.set("b", "c");
+
+		PageProvider provider = new PageProvider(MockPage.class, parameters);
+		provider.setPageSource(context);
+		IRequestHandler handler = new BookmarkablePageRequestHandler(provider);
+		Url url = encoder.mapHandler(handler);
+
+		assertEquals("wicket/bookmarkable/" + PAGE_CLASS_NAME + "/i1/i2?a=b&b=c", url.toString());
+	}
+

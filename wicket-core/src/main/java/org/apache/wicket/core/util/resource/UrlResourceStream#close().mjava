@@ -1,0 +1,23 @@
+	/**
+	 * Closes this resource.
+	 *
+	 * @throws IOException
+	 */
+	@Override
+	public void close() throws IOException
+	{
+		StreamData data = getData(false);
+
+		if (data != null)
+		{
+			Connections.closeQuietly(data.connection);
+			if (data.inputStreams != null)
+			{
+				for (InputStream is : data.inputStreams) {
+					IOUtils.closeQuietly(is);
+				}
+			}
+			streamData = null;
+		}
+	}
+

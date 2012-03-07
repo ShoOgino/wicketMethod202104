@@ -1,0 +1,13 @@
+	/**
+	 *
+	 */
+	@Test
+	public void encode1()
+	{
+		PageProvider provider = new PageProvider(MockPage.class, new PageParameters());
+		provider.setPageSource(context);
+		IRequestHandler handler = new BookmarkablePageRequestHandler(provider);
+		Url url = encoder.mapHandler(handler);
+		assertEquals("some/mount/path", url.toString());
+	}
+

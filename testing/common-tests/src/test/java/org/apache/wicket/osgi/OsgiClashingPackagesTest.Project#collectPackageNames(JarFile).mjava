@@ -1,0 +1,20 @@
+		/**
+		 * Collects the names of all packages in this JarFile
+		 * @param jarFile
+		 *      the jar file to analyze
+		 */
+		private void collectPackageNames(final JarFile jarFile)
+		{
+			Enumeration<JarEntry> entries = jarFile.entries();
+			while (entries.hasMoreElements())
+			{
+				JarEntry jarEntry = entries.nextElement();
+				String className = jarEntry.getName();
+				if (className.endsWith(".class"))
+				{
+					String packageName = Strings.beforeLast(className, '/');
+					packagesWithContent.add(packageName);
+				}
+			}
+		}
+

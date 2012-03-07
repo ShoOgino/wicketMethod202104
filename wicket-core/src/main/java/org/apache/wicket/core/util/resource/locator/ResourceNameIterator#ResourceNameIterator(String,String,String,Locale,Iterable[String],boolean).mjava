@@ -1,0 +1,40 @@
+	/**
+	 * Construct.
+	 *
+	 * @param path
+	 *            The path of the resource. In case the parameter 'extensions' is null, the path
+	 *            will be checked and if a filename extension is present, it'll be used instead.
+	 * @param style
+	 *            A theme or style (see {@link org.apache.wicket.Session})
+	 * @param variation
+	 *            The component's variation (of the style)
+	 * @param locale
+	 *            The Locale to apply
+	 * @param extensions
+	 *            the filename's extensions
+	 * @param strict
+	 *            If false, weaker combinations of style, locale, etc. are tested as well
+	 */
+	public ResourceNameIterator(final String path, final String style, final String variation,
+		final Locale locale, final Iterable<String> extensions, final boolean strict)
+	{
+		this.locale = locale;
+
+		boolean noext = extensions == null || !extensions.iterator().hasNext();
+
+		if (noext && (path != null) && (path.indexOf('.') != -1))
+		{
+			String[] extns = Strings.split(Strings.afterLast(path, '.'), ',');
+			this.extensions = Arrays.asList(extns);
+			this.path = Strings.beforeLast(path, '.');
+		}
+		else
+		{
+			this.extensions = extensions;
+			this.path = path;
+		}
+
+		styleIterator = newStyleAndVariationResourceNameIterator(style, variation);
+		this.strict = strict;
+	}
+

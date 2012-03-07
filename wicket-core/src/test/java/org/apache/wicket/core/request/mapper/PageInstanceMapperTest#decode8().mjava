@@ -1,0 +1,15 @@
+	/**
+	 *
+	 */
+	@Test(expected = StalePageException.class)
+	public void decode8()
+	{
+		Url url = Url.parse("wicket/page?4-6.ILinkListener.5-a-b-c");
+
+		context.setNextPageRenderCount(8);
+
+		IRequestHandler handler = encoder.mapRequest(getRequest(url));
+
+		((IPageRequestHandler)handler).getPage();
+	}
+

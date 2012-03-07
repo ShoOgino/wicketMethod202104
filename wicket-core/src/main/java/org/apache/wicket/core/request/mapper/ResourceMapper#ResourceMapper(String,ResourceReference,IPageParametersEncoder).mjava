@@ -1,0 +1,22 @@
+	/**
+	 * create a resource mapper for a resource
+	 *
+	 * @param path
+	 *            mount path for the resource
+	 * @param resourceReference
+	 *            resource reference that should be linked to the mount path
+	 * @param encoder
+	 *            encoder for url parameters
+	 */
+	public ResourceMapper(String path, ResourceReference resourceReference,
+		IPageParametersEncoder encoder)
+	{
+		Args.notEmpty(path, "path");
+		Args.notNull(resourceReference, "resourceReference");
+		Args.notNull(encoder, "encoder");
+
+		this.resourceReference = resourceReference;
+		mountSegments = getMountSegments(path);
+		parametersEncoder = encoder;
+	}
+

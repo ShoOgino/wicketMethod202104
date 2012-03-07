@@ -1,0 +1,37 @@
+	/**
+	 *
+	 * @see org.apache.wicket.util.file.IResourceFinder#find(Class, String)
+	 */
+	@Override
+	public IResourceStream find(final Class<?> clazz, final String pathname)
+	{
+		if (pathname == null)
+		{
+			return null;
+		}
+
+		IResourceStream resourceStream = super.find(clazz, pathname);
+
+		if (resourceStream == null && pathname.startsWith(WEB_INF) == false)
+		{
+			for (String path : webappPaths)
+			{
+				try
+				{
+					final URL url = servletContext.getResource(path + pathname);
+					if (url != null)
+					{
+						resourceStream = new UrlResourceStream(url);
+						break;
+					}
+				}
+				catch (Exception ex)
+				{
+					// ignore, file couldn't be found
+				}
+			}
+		}
+
+		return resourceStream;
+	}
+

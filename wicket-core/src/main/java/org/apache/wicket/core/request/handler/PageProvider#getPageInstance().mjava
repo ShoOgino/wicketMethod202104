@@ -1,0 +1,18 @@
+	/**
+	 * @see IPageProvider#getPageInstance()
+	 */
+	@Override
+	public IRequestablePage getPageInstance()
+	{
+		if (pageInstance == null)
+		{
+			resolvePageInstance(pageId, pageClass, pageParameters, renderCount);
+
+			if (pageInstance == null)
+			{
+				throw new PageExpiredException("Page with id '" + pageId + "' has expired.");
+			}
+		}
+		return pageInstance;
+	}
+

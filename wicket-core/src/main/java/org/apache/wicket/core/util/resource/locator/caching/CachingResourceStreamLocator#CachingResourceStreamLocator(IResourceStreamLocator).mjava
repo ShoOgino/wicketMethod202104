@@ -1,0 +1,15 @@
+	/**
+	 * Construct.
+	 *
+	 * @param resourceStreamLocator
+	 *            the delegate
+	 */
+	public CachingResourceStreamLocator(final IResourceStreamLocator resourceStreamLocator)
+	{
+		Args.notNull(resourceStreamLocator, "resourceStreamLocator");
+
+		delegate = resourceStreamLocator;
+
+		cache = new ConcurrentHashMap<Key, IResourceStreamReference>();
+	}
+
