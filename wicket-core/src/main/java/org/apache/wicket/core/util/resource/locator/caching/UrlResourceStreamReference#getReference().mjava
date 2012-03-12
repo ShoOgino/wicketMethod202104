@@ -1,20 +1,8 @@
 	@Override
 	public UrlResourceStream getReference()
 	{
-		try
-		{
-			UrlResourceStream resourceStream = new UrlResourceStream(new URL(url));
-			restoreResourceStream(resourceStream);
-			return resourceStream;
-		}
-		catch (MalformedURLException e)
-		{
-			// It can happen when the previously existing URL had a non-standard protocol, and
-			// had a custom URLStreamHandler associated with it, which knew how to deal with
-			// said protocol. When the URL is recreated from the external form, the
-			// URLStreamHandler is no longer associated, and, if the URL has a non-standard
-			// protocol for which Java has no handler, a MalformedURLException will be thrown.
-			throw new WicketRuntimeException(e);
-		}
+		UrlResourceStream resourceStream = new UrlResourceStream(url);
+		restoreResourceStream(resourceStream);
+		return resourceStream;
 	}
 
