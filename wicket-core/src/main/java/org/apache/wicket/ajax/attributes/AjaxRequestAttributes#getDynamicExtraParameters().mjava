@@ -1,16 +1,31 @@
 	/**
-	 * Array of JavaScript functions that produce additional URL arguments. Each of the functions
-	 * must return a <code>Map&lt;String, String&gt;</code> (Object).
-	 * <p>
-	 * Example of single function:
-	 * 
+	 * Array of JavaScript functions that produce additional URL arguments.
+	 *
+	 * <p>If there are no multivalued parameters then the function can return a
+	 * simple JavaScript object. Example:
+	 *
 	 * <pre>
-	 *    function()
-	 *    {
-	 *    	return { 'param1': document.body.tagName }
-	 *    }
+	 *  return {
+	 *      'param1': document.body.tagName,
+	 *      'param2': calculateParam2()
+	 *  }
 	 * </pre>
-	 * 
+	 *
+	 * </p>
+	 * <p>If there are multivalued parameters then an array of objects may be used.
+	 * Example:
+	 *
+	 * <pre>
+	 *  return [
+	 *      { name: 'param1', value: document.body.tagName },
+	 *      { name: 'param1', value: calculateSecondValueForParam1() },
+	 *      { name: 'param2', value: calculateParam2() }
+	 *  ]
+	 *
+	 * </pre>
+	 *
+	 * </p>
+	 *
 	 * @return a list of functions that produce additional URL arguments.
 	 */
 	public List<CharSequence> getDynamicExtraParameters()
