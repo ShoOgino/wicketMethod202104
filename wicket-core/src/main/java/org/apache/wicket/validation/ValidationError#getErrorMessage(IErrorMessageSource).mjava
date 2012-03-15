@@ -2,7 +2,7 @@
 	 * @see IValidationError#getErrorMessage(IErrorMessageSource)
 	 */
 	@Override
-	public final String getErrorMessage(IErrorMessageSource messageSource)
+	public final Serializable getErrorMessage(IErrorMessageSource messageSource)
 	{
 		String errorMessage = null;
 
@@ -31,6 +31,6 @@
 			final Map<String, Object> p = (vars != null) ? vars : EMPTY_VARS;
 			errorMessage = messageSource.substitute(errorMessage, p);
 		}
-		return errorMessage;
+		return new ValidationErrorFeedback(this, errorMessage);
 	}
 
