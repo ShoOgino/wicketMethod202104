@@ -1,20 +1,16 @@
 	/**
+	 * Sets the current session Locale as first segment in the Url.
+	 *
 	 * @see org.apache.wicket.core.request.mapper.HomePageMapper#mapHandler(org.apache.wicket.request.IRequestHandler)
 	 */
 	public Url mapHandler(IRequestHandler requestHandler)
 	{
-		Url homeUrl = null;
+		Url homeUrl = super.mapHandler(requestHandler);
 
-		if (requestHandler instanceof IPageRequestHandler)
+		if (homeUrl != null)
 		{
-			IPageRequestHandler pageRequestHandler = (IPageRequestHandler)requestHandler;
-
-			if (pageRequestHandler.getPageClass().equals(Application.get().getHomePage()))
-			{
-				String locale = Session.get().getLocale().toString();
-				homeUrl = new Url();
-				homeUrl.getSegments().add(0, locale);
-			}
+			String locale = Session.get().getLocale().toString();
+			homeUrl.getSegments().add(0, locale);
 		}
 
 		return homeUrl;
