@@ -1,0 +1,16 @@
+	private String loadStringResource(Form<?> form, final String key,
+		final Locale locale, final String style, final String variation)
+	{
+		for (IFormValidator validator : form.getFormValidators())
+		{
+			Class<?> scope = getScope(validator);
+			String resource = loadStringResource(scope, key, locale, style,
+					variation);
+			if (resource != null)
+			{
+				return resource;
+			}
+		}
+		return null;
+	}
+

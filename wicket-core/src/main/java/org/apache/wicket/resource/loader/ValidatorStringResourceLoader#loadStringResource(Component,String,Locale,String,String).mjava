@@ -6,24 +6,21 @@
 	public String loadStringResource(final Component component, final String key,
 		final Locale locale, final String style, final String variation)
 	{
-		if (component == null || !(component instanceof FormComponent))
+
+		final String resource;
+		if (component instanceof FormComponent)
 		{
-			return null;
+			resource = loadStringResource((FormComponent) component, key, locale, style, variation);
+		}
+		else if (component instanceof Form)
+		{
+			resource = loadStringResource((Form) component, key, locale, style, variation);
+		}
+		else
+		{
+			resource = null;
 		}
 
-		FormComponent<?> fc = (FormComponent<?>)component;
-		for (IValidator<?> validator : fc.getValidators())
-		{
-			Class<?> scope = getScope(validator);
-			String resource = loadStringResource(scope, key, locale, style,
-				variation);
-			if (resource != null)
-			{
-				return resource;
-			}
-		}
-
-		// not found
-		return null;
+		return resource;
 	}
 

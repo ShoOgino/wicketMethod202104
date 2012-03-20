@@ -6,8 +6,10 @@
 	public String loadStringResource(Class<?> clazz, final String key, final Locale locale,
 		final String style, final String variation)
 	{
-		// only care about IValidator subclasses
-		if (clazz == null || !IValidator.class.isAssignableFrom(clazz))
+		// only care about IValidator/IFormValidator subclasses
+		if (
+				clazz == null ||
+				!(IValidator.class.isAssignableFrom(clazz) || IFormValidator.class.isAssignableFrom(clazz)))
 		{
 			return null;
 		}
