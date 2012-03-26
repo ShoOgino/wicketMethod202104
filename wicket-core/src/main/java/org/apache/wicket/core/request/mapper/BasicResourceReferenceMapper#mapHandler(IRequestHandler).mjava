@@ -8,6 +8,12 @@
 
 			Url url;
 
+			if (reference instanceof ResourceBundleReference)
+			{
+				// unwrap the bundle to render the url for the actual reference
+				reference = ((ResourceBundleReference)reference).getBundleReference();
+			}
+
 			if (reference instanceof MetaInfStaticResourceReference)
 			{
 				url = ((MetaInfStaticResourceReference)reference).mapHandler(referenceRequestHandler);
@@ -20,7 +26,7 @@
 			}
 			else if (reference instanceof ExternalUrlResourceReference)
 			{
-				ExternalUrlResourceReference externalUrlReference = (ExternalUrlResourceReference) reference;
+				ExternalUrlResourceReference externalUrlReference = (ExternalUrlResourceReference)reference;
 				url = externalUrlReference.getUrl();
 				return url;
 			}
@@ -70,7 +76,8 @@
 
 						if (Strings.isEmpty(token))
 						{
-							throw new IllegalStateException("caching strategy returned empty name for " + resource);
+							throw new IllegalStateException(
+								"caching strategy returned empty name for " + resource);
 						}
 					}
 				}
