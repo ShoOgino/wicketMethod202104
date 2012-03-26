@@ -21,9 +21,14 @@
 			}
 			providedResourcesToBundles.put(curProvidedResource, bundle);
 		}
-		bundles.add(bundle);
 		if (bundle instanceof IReferenceHeaderItem)
-			registry.registerResourceReference(((IReferenceHeaderItem)bundle).getReference());
+		{
+			ResourceReference reference = ((IReferenceHeaderItem) bundle).getReference();
+			if (reference.canBeRegistered())
+			{
+				registry.registerResourceReference(reference);
+			}
+		}
 		return bundle;
 	}
 
