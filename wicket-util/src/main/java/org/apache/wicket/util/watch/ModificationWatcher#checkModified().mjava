@@ -1,0 +1,22 @@
+	/**
+	 * Checks which IModifiables were modified and notifies their listeners
+	 */
+	protected void checkModified()
+	{
+		for (Entry entry : modifiableToEntry.values())
+		{
+			// If the modifiable has been modified after the last known
+			// modification time
+			final Time modifiableLastModified = entry.modifiable.lastModifiedTime();
+			if ((modifiableLastModified != null) &&
+					modifiableLastModified.after(entry.lastModifiedTime))
+			{
+				// Notify all listeners that the modifiable was modified
+				entry.listeners.notifyListeners();
+
+				// Update timestamp
+				entry.lastModifiedTime = modifiableLastModified;
+			}
+		}
+	}
+

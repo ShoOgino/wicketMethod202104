@@ -1,6 +1,4 @@
-	/**
-	 * @see org.apache.wicket.util.watch.IModificationWatcher#start(org.apache.wicket.util.time.Duration)
-	 */
+	@Override
 	public void start(final Duration pollFrequency)
 	{
 		// Construct task with the given polling frequency
@@ -8,23 +6,10 @@
 
 		task.run(pollFrequency, new ICode()
 		{
+			@Override
 			public void run(final Logger log)
 			{
-				for (Entry entry : modifiableToEntry.values())
-				{
-					// If the modifiable has been modified after the last known
-					// modification time
-					final Time modifiableLastModified = entry.modifiable.lastModifiedTime();
-					if ((modifiableLastModified != null) &&
-						modifiableLastModified.after(entry.lastModifiedTime))
-					{
-						// Notify all listeners that the modifiable was modified
-						entry.listeners.notifyListeners();
-
-						// Update timestamp
-						entry.lastModifiedTime = modifiableLastModified;
-					}
-				}
+				checkModified();
 			}
 		});
 	}
