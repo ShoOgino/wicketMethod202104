@@ -8,6 +8,11 @@
 	 */
 	public final <T> T to(final Class<T> type) throws StringValueConversionException
 	{
+		if (type == null)
+		{
+			return null;
+		}
+
 		if (type == String.class)
 		{
 			return (T) toString();
@@ -46,6 +51,11 @@
 		if (type == Duration.class)
 		{
 			return (T) toDuration();
+		}
+
+		if (type.isEnum())
+		{
+			return (T) toEnum((Class) type);
 		}
 
 		throw new StringValueConversionException("Cannot convert '" + toString() + "'to type " +
