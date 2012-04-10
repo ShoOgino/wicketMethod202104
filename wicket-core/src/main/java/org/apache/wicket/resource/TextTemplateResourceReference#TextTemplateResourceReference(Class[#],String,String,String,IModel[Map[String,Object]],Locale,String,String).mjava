@@ -29,9 +29,31 @@
 		textTemplate = new PackageTextTemplate(scope, fileName, contentType, encoding);
 		this.variablesModel = variablesModel;
 
+		resource = new ResourceStreamResource(null)
+		{
+			@Override
+			protected IResourceStream getResourceStream()
+			{
+				IModel<Map<String, Object>> variables = TextTemplateResourceReference.this.variablesModel;
+				String stringValue = textTemplate.asString(variables.getObject());
+				variables.detach(); // We're done with the model so detach it!
+
+				StringResourceStream resourceStream = new StringResourceStream(stringValue,
+						textTemplate.getContentType());
+				resourceStream.setLastModified(Time.now());
+
+				return resourceStream;
+			}
+		};
+		resource.setCacheDuration(Duration.NONE);
+
 		if (Application.exists())
 		{
-			Application.get().getResourceReferenceRegistry().registerResourceReference(this);
+			// TextTemplateResourceReference should not be cached due to its dynamic nature
+			// Old entry in the registry would keep wrong 'variablesModel'
+			ResourceReferenceRegistry resourceReferenceRegistry = Application.get().getResourceReferenceRegistry();
+			resourceReferenceRegistry.unregisterResourceReference(getKey());
+			resourceReferenceRegistry.registerResourceReference(this);
 		}
 	}
 
