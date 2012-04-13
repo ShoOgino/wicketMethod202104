@@ -1,0 +1,17 @@
+		@Override
+		public IMarkupFragment getMarkup(final MarkupContainer container, final Component child)
+		{
+			IMarkupFragment markup = markupProvider.getAssociatedMarkup();
+			if (markup == null)
+			{
+				throw new MarkupException("The EntityText has no markup!");
+			}
+			//
+			if (child == null)
+			{
+				return markup;
+			}
+			// search for the child insight the fragment markup
+			return markup.find(child.getId());
+		}
+
