@@ -2,13 +2,15 @@
 	 * Allows subclasses to change the callback script if needed.
 	 * 
 	 * @param response
+	 *      the current response that writes to the header
 	 * @param callbackScript
+	 *      the JavaScript to write in the header
 	 * @param component
+	 *      the component which produced the callback script
 	 */
 	protected void handleCallbackScript(final IHeaderResponse response,
 		final CharSequence callbackScript, final Component component)
 	{
-		response.render(JavaScriptHeaderItem.forScript(callbackScript,
-				String.format("lazy-load-%s-%d", component.getMarkupId(), component.getPage().getAutoIndex())));
+		response.render(OnDomReadyHeaderItem.forScript(callbackScript));
 	}
 
