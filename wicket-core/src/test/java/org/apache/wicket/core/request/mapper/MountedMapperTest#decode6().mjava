@@ -9,7 +9,7 @@
 
 		assertTrue(handler instanceof ListenerInterfaceRequestHandler);
 		ListenerInterfaceRequestHandler h = (ListenerInterfaceRequestHandler)handler;
-
+		context.setCurrentPageParameters(h.getPageParameters());
 		IRequestablePage page = h.getPage();
 		checkPage(page, 15);
 
@@ -17,8 +17,8 @@
 		assertEquals("foo:bar", h.getComponent().getPageRelativePath());
 
 		PageParameters p = page.getPageParameters();
-		assertEquals(0, p.getIndexedCount());
+		assertEquals(2, p.getIndexedCount());
 
-		assertEquals(0, p.getNamedKeys().size());
+		assertEquals(2, p.getNamedKeys().size());
 	}
 
