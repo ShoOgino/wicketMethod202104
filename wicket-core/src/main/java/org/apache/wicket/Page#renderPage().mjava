@@ -4,11 +4,8 @@
 	@Override
 	public void renderPage()
 	{
-		if (getApplication().getRequestCycleSettings().getRenderStrategy() != RenderStrategy.REDIRECT_TO_BUFFER)
-		{
-			// don't increment page id for redirect to render and one pass render during rendering
-			setFreezePageId(true);
-		}
+		// page id is frozen during the render
+		final boolean frozen = setFreezePageId(true);
 		try
 		{
 			++renderCount;
@@ -16,7 +13,7 @@
 		}
 		finally
 		{
-			setFreezePageId(false);
+			setFreezePageId(frozen);
 		}
 	}
 
