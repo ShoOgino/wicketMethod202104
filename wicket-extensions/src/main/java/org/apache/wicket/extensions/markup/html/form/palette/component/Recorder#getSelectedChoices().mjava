@@ -1,28 +1,8 @@
 	/**
 	 * @return iterator over selected choices
 	 */
-	@SuppressWarnings("unchecked")
 	public Iterator<T> getSelectedChoices()
 	{
-		IChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
-		if (ids.length == 0)
-		{
-			return Collections.EMPTY_LIST.iterator();
-		}
-
-		List<T> selected = new ArrayList<T>(ids.length);
-		Collection<? extends T> choices = getPalette().getChoices();
-		for (String id : ids)
-		{
-			for (T choice : choices)
-			{
-				if (renderer.getIdValue(choice, 0).equals(id))
-				{
-					selected.add(choice);
-					break;
-				}
-			}
-		}
-		return selected.iterator();
+		return getSelectedList().iterator();
 	}
 
