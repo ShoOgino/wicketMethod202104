@@ -1,0 +1,16 @@
+	/**
+	 * Creates and registers an {@code EventBus} for the given application
+	 * 
+	 * @param application
+	 */
+	public EventBus(WebApplication application)
+	{
+		this.application = application;
+		application.setMetaData(EVENT_BUS_KEY, this);
+		application.mount(new AtmosphereRequestMapper());
+		application.getComponentPreOnBeforeRenderListeners().add(
+			new AtmosphereEventSubscriptionCollector(this));
+		application.getSessionStore().registerUnboundListener(this);
+		broadcaster = BroadcasterFactory.getDefault().lookup("/*");
+	}
+

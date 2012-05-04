@@ -1,0 +1,18 @@
+	@SuppressWarnings("unchecked")
+	private static Predicate<Object> createFilter(Method method)
+	{
+		Subscribe subscribe = method.getAnnotation(Subscribe.class);
+		try
+		{
+			return (Predicate<Object>)subscribe.filter().newInstance();
+		}
+		catch (InstantiationException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

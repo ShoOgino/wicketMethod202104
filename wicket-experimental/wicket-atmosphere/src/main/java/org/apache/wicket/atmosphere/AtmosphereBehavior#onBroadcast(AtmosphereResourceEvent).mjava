@@ -1,0 +1,20 @@
+	@Override
+	public void onBroadcast(AtmosphereResourceEvent event)
+	{
+		log.info("onBroadcast: " + event.getMessage());
+
+		// If we are using long-polling, resume the connection as soon as we get
+		// an event.
+		String transport = event.getResource()
+			.getRequest()
+			.getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
+		if (transport != null)
+		{
+			if (transport.equalsIgnoreCase(HeaderConfig.LONG_POLLING_TRANSPORT))
+			{
+				Meteor meteor = Meteor.lookup(event.getResource().getRequest());
+				meteor.resume();
+			}
+		}
+	}
+
