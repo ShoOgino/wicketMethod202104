@@ -1,0 +1,21 @@
+	/**
+	 * Registers a replacement resource for the given javascript resource. This replacement can be
+	 * another {@link JavaScriptResourceReference} for a packaged resource, but it can also be an
+	 * {@link ExternalUrlResourceReference} to replace the resource by a resource hosted on a CDN.
+	 * Registering a replacement will cause the resource to replaced by the given resource
+	 * throughout the application: if {@code base} is added, {@code replacement} will be added
+	 * instead.
+	 * 
+	 * @param base
+	 *            The resource to replace
+	 * @param replacement
+	 *            The replacement
+	 */
+	public final void addResourceReplacement(JavaScriptResourceReference base,
+		ResourceReference replacement)
+	{
+		ResourceBundleReference bundle = new ResourceBundleReference(replacement);
+		bundle.addProvidedResources(JavaScriptHeaderItem.forReference(base));
+		getResourceBundles().addBundle(JavaScriptHeaderItem.forReference(bundle));
+	}
+
