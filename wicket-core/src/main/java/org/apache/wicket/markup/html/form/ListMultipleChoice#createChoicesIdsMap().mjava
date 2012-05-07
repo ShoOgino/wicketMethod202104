@@ -1,0 +1,23 @@
+	/**
+	 * Creates a map of choice IDs to choice values. This map can be used to speed up lookups e.g.
+	 * in {@link #convertChoiceIdsToChoices(String[])}. <strong>Do not store the result of this
+	 * method.</strong> The choices list can change between requests so this map <em>must</em> be
+	 * regenerated.
+	 * 
+	 * @return a map.
+	 */
+	private Map<String, T> createChoicesIdsMap()
+	{
+		final List<? extends T> choices = getChoices();
+
+		final Map<String, T> choiceIds2choiceValues = new HashMap<String, T>(choices.size(), 1);
+
+		for (int index = 0; index < choices.size(); index++)
+		{
+			// Get next choice
+			final T choice = choices.get(index);
+			choiceIds2choiceValues.put(getChoiceRenderer().getIdValue(choice, index), choice);
+		}
+		return choiceIds2choiceValues;
+	}
+
