@@ -34,13 +34,6 @@
 			String fileName = data.getFileName();
 			ContentDisposition disposition = data.getContentDisposition();
 			String mimeType = data.getContentType();
-			String encoding = null;
-
-			if (mimeType != null && mimeType.contains("text"))
-			{
-				encoding = data.getTextEncoding();
-			}
-
 			long contentLength = data.getContentLength();
 
 			// 3. Content Disposition
@@ -56,6 +49,8 @@
 			// 4. Mime Type (+ encoding)
 			if (mimeType != null)
 			{
+				final String encoding = data.getTextEncoding();
+				
 				if (encoding == null)
 				{
 					webResponse.setContentType(mimeType);
