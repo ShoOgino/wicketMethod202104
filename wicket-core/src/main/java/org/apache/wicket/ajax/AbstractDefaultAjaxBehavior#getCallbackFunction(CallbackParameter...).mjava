@@ -14,18 +14,21 @@
 	 * @param extraParameters
 	 * @return A function that can be used as a callback function in javascript
 	 */
-	public CharSequence getCallbackFunction(String... extraParameters)
+	public CharSequence getCallbackFunction(CallbackParameter... extraParameters)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("function (");
 		boolean first = true;
-		for (String curExtraParameter : extraParameters)
+		for (CallbackParameter curExtraParameter : extraParameters)
 		{
-			if (!first)
-				sb.append(",");
-			else
-				first = false;
-			sb.append(curExtraParameter);
+			if (curExtraParameter.getFunctionParameterName() != null)
+			{
+				if (!first)
+					sb.append(",");
+				else
+					first = false;
+				sb.append(curExtraParameter.getFunctionParameterName());
+			}
 		}
 		sb.append(") {\n");
 		sb.append(getCallbackFunctionBody(extraParameters));
