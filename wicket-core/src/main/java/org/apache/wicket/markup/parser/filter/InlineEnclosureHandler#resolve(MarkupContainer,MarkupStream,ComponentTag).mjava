@@ -5,7 +5,11 @@
 		String inlineEnclosureChildId = getInlineEnclosureAttribute(tag);
 		if (Strings.isEmpty(inlineEnclosureChildId) == false)
 		{
-			String id = tag.getId() + container.getPage().getAutoIndex();
+			String id = tag.getId();
+			if (id.startsWith(getWicketNamespace()))
+			{
+				id = id + container.getPage().getAutoIndex();
+			}
 			// Yes, we handled the tag
 			return new InlineEnclosure(id, inlineEnclosureChildId);
 		}
