@@ -1,0 +1,27 @@
+	/**
+	 * create new sort order toggling link
+	 * 
+	 * @param id
+	 *            component id
+	 * @param property
+	 *            sort property
+	 * @param stateLocator
+	 *            sort state locator
+	 * @return link
+	 */
+	protected OrderByLink newOrderByLink(final String id, final S property,
+		final ISortStateLocator<S> stateLocator)
+	{
+		return new OrderByLink(id, property, stateLocator,
+			OrderByLink.VoidCssProvider.getInstance())
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSortChanged()
+			{
+				OrderByBorder.this.onSortChanged();
+			}
+		};
+	}
+
