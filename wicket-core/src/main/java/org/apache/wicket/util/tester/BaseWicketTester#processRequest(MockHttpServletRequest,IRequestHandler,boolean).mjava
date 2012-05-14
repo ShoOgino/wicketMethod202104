@@ -75,6 +75,14 @@
 				Url newUrl = Url.parse(lastResponse.getRedirectLocation(),
 					Charset.forName(request.getCharacterEncoding()));
 
+				if (isExternalRedirect(lastRequest.getUrl(), newUrl))
+				{
+					// we can't handle external redirects here
+					// just bail out here and let the user's test code
+					// check #assertRedirectUrl
+					return true;
+				}
+
 				if (newUrl.isAbsolute())
 				{
 					request.setUrl(newUrl);

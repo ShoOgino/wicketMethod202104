@@ -1,0 +1,29 @@
+	/**
+	 * Determine whether a given response contains a redirect leading to an external site (which
+	 * cannot be replicated in WicketTester). This is done by comparing the previous request's
+	 * hostname with the hostname given in the redirect.
+	 * 
+	 * @param requestUrl
+	 *            request...
+	 * @param newUrl
+	 *            ...and the redirect generated in its response
+	 * @return true if there is a redirect and it is external, false otherwise
+	 */
+	private boolean isExternalRedirect(Url requestUrl, Url newUrl)
+	{
+		String originalHost = requestUrl.getHost();
+		String redirectHost = newUrl.getHost();
+		if (originalHost == redirectHost)
+		{
+			return false; // identical or both null
+		}
+		else if (redirectHost == null)
+		{
+			return false; // no new host
+		}
+		else
+		{
+			return !(redirectHost.equals(originalHost));
+		}
+	}
+
