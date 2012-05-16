@@ -9,15 +9,21 @@
 	private HeaderItem getItemToBeRendered(HeaderItem item)
 	{
 		if (getRealResponse().wasRendered(item))
+		{
 			return NoHeaderItem.get();
+		}
 
 		getRealResponse().markRendered(item);
 		HeaderItem bundle = Application.get().getResourceBundles().findBundle(item);
 		if (bundle == null)
+		{
 			return item;
+		}
 
 		for (HeaderItem curProvided : bundle.getProvidedResources())
+		{
 			getRealResponse().markRendered(curProvided);
+		}
 
 		return bundle;
 	}
