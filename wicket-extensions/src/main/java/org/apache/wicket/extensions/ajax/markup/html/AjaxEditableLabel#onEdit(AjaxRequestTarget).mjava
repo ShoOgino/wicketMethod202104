@@ -9,12 +9,9 @@
 		label.setVisible(false);
 		editor.setVisible(true);
 		target.add(AjaxEditableLabel.this);
-		// put focus on the textfield and stupid explorer hack to move the
-		// caret to the end
-		target.appendJavaScript("{ var el=Wicket.$('" + editor.getMarkupId() + "');" +
-			"   if (el.createTextRange) { " +
-			"     var v = el.value; var r = el.createTextRange(); " +
-			"     r.moveStart('character', v.length); r.select(); } }");
+		String selectScript = String.format("(function(){var el = Wicket.$('%s'); if (el.select) el.select();})()",
+				editor.getMarkupId());
+		target.appendJavaScript(selectScript);
 		target.focusComponent(editor);
 	}
 
