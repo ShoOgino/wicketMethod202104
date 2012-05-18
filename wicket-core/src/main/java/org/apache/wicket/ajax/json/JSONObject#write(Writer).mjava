@@ -1,50 +1,13 @@
-	/**
-	 * Write the contents of the JSONObject as JSON text to a writer. For compactness, no whitespace
-	 * is added.
-	 * <p>
-	 * Warning: This method assumes that the data structure is acyclical.
-	 * 
-	 * @return The writer.
-	 * @throws JSONException
-	 */
-	public Writer write(Writer writer) throws JSONException
-	{
-		try
-		{
-			boolean commanate = false;
-			Iterator keys = keys();
-			writer.write('{');
-
-			while (keys.hasNext())
-			{
-				if (commanate)
-				{
-					writer.write(',');
-				}
-				Object key = keys.next();
-				writer.write(quote(key.toString()));
-				writer.write(':');
-				Object value = map.get(key);
-				if (value instanceof JSONObject)
-				{
-					((JSONObject)value).write(writer);
-				}
-				else if (value instanceof JSONArray)
-				{
-					((JSONArray)value).write(writer);
-				}
-				else
-				{
-					writer.write(valueToString(value));
-				}
-				commanate = true;
-			}
-			writer.write('}');
-			return writer;
-		}
-		catch (IOException exception)
-		{
-			throw new JSONException(exception);
-		}
-	}
+     /**
+      * Write the contents of the JSONObject as JSON text to a writer.
+      * For compactness, no whitespace is added.
+      * <p>
+      * Warning: This method assumes that the data structure is acyclical.
+      *
+      * @return The writer.
+      * @throws JSONException
+      */
+     public Writer write(Writer writer) throws JSONException {
+        return this.write(writer, 0, 0);
+    }
 
