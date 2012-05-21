@@ -1,0 +1,16 @@
+	@Test
+	public void footerDependsOnHeadItem() throws Exception
+	{
+		tester.getApplication().setHeaderResponseDecorator(new IHeaderResponseDecorator()
+		{
+
+			public IHeaderResponse decorate(IHeaderResponse response)
+			{
+				// use this header resource decorator to load all JavaScript resources in the page
+				// footer (after </body>)
+				return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
+			}
+		});
+		executeTest(FilteredHeaderPage.class, "FilteredHeaderPageExpected.html");
+	}
+
