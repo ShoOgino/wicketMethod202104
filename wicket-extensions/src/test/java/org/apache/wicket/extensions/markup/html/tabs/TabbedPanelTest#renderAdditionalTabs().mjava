@@ -1,0 +1,27 @@
+	@Test
+	public void renderAdditionalTabs() throws Exception
+	{
+		TestPage page = tester.startPage(TestPage.class);
+		page.tabbedPanel.getTabs().add(new AbstractTab(Model.of("added 1"))
+		{
+			@Override
+			public WebMarkupContainer getPanel(String panelId)
+			{
+				return new TestPanel(panelId, "added 1");
+			}
+		});
+		// the additional tab isn't rendered yet
+		tester.assertContainsNot("<span wicket:id=\"title\">added 1</span></a>");
+		tester.assertContainsNot("<span wicket:id=\"label\">added 1</span>");
+
+		// now its title is visible, but the contents not
+		tester.clickLink("tabpanel:tabs-container:tabs:1:link");
+		tester.assertContains("<span wicket:id=\"title\">added 1</span></a>");
+		tester.assertContainsNot("<span wicket:id=\"label\">added 1</span>");
+
+		// now the entire panel should be there
+		tester.clickLink("tabpanel:tabs-container:tabs:2:link");
+		tester.assertContains("<span wicket:id=\"title\">added 1</span></a>");
+		tester.assertContains("<span wicket:id=\"label\">added 1</span>");
+	}
+
