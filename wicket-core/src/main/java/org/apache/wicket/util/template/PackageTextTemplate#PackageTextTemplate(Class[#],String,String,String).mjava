@@ -15,60 +15,6 @@
 	public PackageTextTemplate(final Class<?> clazz, final String fileName,
 		final String contentType, final String encoding)
 	{
-		super(contentType);
-
-		String path = Packages.absolutePath(clazz, fileName);
-
-		Application app = Application.get();
-
-		// first try default class loading locator to find the resource
-		IResourceStream stream = app.getResourceSettings()
-			.getResourceStreamLocator()
-			.locate(clazz, path);
-
-		if (stream == null)
-		{
-			// if the default locator didn't find the resource then fallback
-			stream = new ResourceStreamLocator().locate(clazz, path);
-		}
-
-		if (stream == null)
-		{
-			throw new IllegalArgumentException("resource " + fileName + " not found for scope " +
-				clazz + " (path = " + path + ")");
-		}
-
-		setLastModified(stream.lastModifiedTime());
-
-		try
-		{
-			if (encoding != null)
-			{
-				buffer.append(Streams.readString(stream.getInputStream(), encoding));
-			}
-			else
-			{
-				buffer.append(Streams.readString(stream.getInputStream()));
-			}
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (ResourceStreamNotFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
-		finally
-		{
-			try
-			{
-				stream.close();
-			}
-			catch (IOException e)
-			{
-				log.error(e.getMessage(), e);
-			}
-		}
+		this(clazz, fileName, null, null, null, contentType, encoding);
 	}
 
