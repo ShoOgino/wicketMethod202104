@@ -1,0 +1,55 @@
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            component id
+	 * @param tabs
+	 *            list of ITab objects used to represent tabs
+	 * @param model
+	 *            model holding the selected tab index OR {@code -1}
+	 */
+	public TabbedPanel(final String id, final List<T> tabs, IModel<Integer> model)
+	{
+		super(id, model);
+
+		this.tabs = Args.notNull(tabs, "tabs");
+
+		final IModel<Integer> tabCount = new AbstractReadOnlyModel<Integer>()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Integer getObject()
+			{
+				return TabbedPanel.this.tabs.size();
+			}
+		};
+
+		WebMarkupContainer tabsContainer = newTabsContainer("tabs-container");
+		add(tabsContainer);
+
+		// add the loop used to generate tab names
+		tabsContainer.add(new Loop("tabs", tabCount)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(final LoopItem item)
+			{
+				final int index = item.getIndex();
+				final T tab = TabbedPanel.this.tabs.get(index);
+
+				final WebMarkupContainer titleLink = newLink("link", index);
+
+				titleLink.add(newTitle("title", tab.getTitle(), index));
+				item.add(titleLink);
+			}
+
+			@Override
+			protected LoopItem newItem(final int iteration)
+			{
+				return newTabContainer(iteration);
+			}
+		});
+	}
+
