@@ -3,11 +3,9 @@
 	 * should be used to configure such things as visibility and enabled flags.
 	 * <p>
 	 * Overrides must call {@code super.onConfigure()}, usually before any other code
-	 * </p>
 	 * <p>
 	 * NOTE: Component hierarchy should not be modified inside this method, instead it should be
 	 * done in {@link #onBeforeRender()}
-	 * </p>
 	 * <p>
 	 * NOTE: Why this method is preferrable to directly overriding {@link #isVisible()} and
 	 * {@link #isEnabled()}? Because those methods are called multiple times even for processing of
@@ -15,46 +13,14 @@
 	 * entire page. Further, overriding those methods directly on form components may lead to
 	 * inconsistent or unexpected state depending on when those methods are called in the form
 	 * processing workflow. It is a better practice to push changes to state rather than pull.
-	 * </p>
 	 * <p>
 	 * NOTE: If component's visibility or another property depends on another component you may call
 	 * {@code other.configure()} followed by {@code other.isVisible()} as mentioned in
 	 * {@link #configure()} javadoc.
-	 * </p>
 	 * <p>
-	 * NOTE: Why should {@link #onBeforeRender()} not be used for this? Because if visibility of a
-	 * component is toggled inside {@link #onBeforeRender()} another method needs to be overridden
-	 * to make sure {@link #onBeforeRender()} will be invoked on invisible components:
-	 * 
-	 * <pre>
-	 * class MyComponent extends WebComponent
-	 * {
-	 * 	protected void onBeforeRender()
-	 * 	{
-	 * 		setVisible(Math.rand() &gt; 0.5f);
-	 * 		super.onBeforeRender();
-	 * 	}
-	 * 
-	 * 	// if this override is forgotten, once invisible component will never become visible
-	 * 	protected boolean callOnBeforeRenderIfNotVisible()
-	 * 	{
-	 * 		return true;
-	 * 	}
-	 * }
-	 * </pre>
-	 * 
-	 * VS
-	 * 
-	 * <pre>
-	 * class MyComponent extends WebComponent
-	 * {
-	 * 	protected void onConfigure()
-	 * 	{
-	 * 		super.onConfigure();
-	 * 		setVisible(Math.rand() &gt; 0.5f);
-	 * 	}
-	 * }
-	 * </pre>
+	 * NOTE: Why should {@link #onBeforeRender()} not be used for this? Because if a component's
+	 * visibility is controlled inside {@link #onBeforeRender()}, once invisible the component will
+	 * never become visible again.
 	 */
 	protected void onConfigure()
 	{
