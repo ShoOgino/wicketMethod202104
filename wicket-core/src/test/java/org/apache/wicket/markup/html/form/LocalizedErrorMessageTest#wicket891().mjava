@@ -10,12 +10,10 @@
 		LocalizedMessagePage page = new LocalizedMessagePage();
 		tester.startPage(page);
 
-		tester.getRequest()
-			.getPostParameters()
-			.setParameterValue(page.integerField.getInputName(), "foo");
+		tester.getRequest().getPostParameters().setParameterValue(page.field.getInputName(), "foo");
 		tester.submitForm(page.form);
 
-		tester.assertErrorMessages("'Number' moet een geheel getal zijn. ");
+		tester.assertErrorMessages("'Number' moet een getal zijn. ");
 		tester.getSession().setLocale(new Locale("us"));
 
 		tester.clearFeedbackMessages();
@@ -23,12 +21,10 @@
 		page = new LocalizedMessagePage();
 		tester.startPage(page);
 
-		tester.getRequest()
-			.getPostParameters()
-			.setParameterValue(page.integerField.getInputName(), "foo");
+		tester.getRequest().getPostParameters().setParameterValue(page.field.getInputName(), "foo");
 
 		tester.submitForm(page.form);
 
-		tester.assertErrorMessages("'Number' is not a valid Integer.");
+		tester.assertErrorMessages("'Number' is not a valid Double.");
 	}
 

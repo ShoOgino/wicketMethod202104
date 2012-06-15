@@ -1,13 +1,34 @@
-		/**
-		 * @see org.apache.wicket.validation.IErrorMessageSource#substitute(java.lang.String,
-		 *      java.util.Map)
-		 */
-		@Override
-		public String substitute(String string, Map<String, Object> vars)
+		private String substitute(String string, final Map<String, Object> vars)
 			throws IllegalStateException
 		{
-			return new MapVariableInterpolator(string, addDefaultVars(vars), Application.get()
+			return new VariableInterpolator(string, Application.get()
 				.getResourceSettings()
-				.getThrowExceptionOnMissingResource()).toString();
+				.getThrowExceptionOnMissingResource())
+			{
+				private static final long serialVersionUID = 1L;
+
+				@SuppressWarnings({ "rawtypes", "unchecked" })
+				@Override
+				protected String getValue(String variableName)
+				{
+					Object value = vars.get(variableName);
+					if (value == null)
+					{
+						return null;
+					}
+					else
+					{
+						IConverter converter = getConverter(value.getClass());
+						if (converter == null)
+						{
+							return Strings.toString(value);
+						}
+						else
+						{
+							return converter.convertToString(value, getLocale());
+						}
+					}
+				}
+			}.toString();
 		}
 

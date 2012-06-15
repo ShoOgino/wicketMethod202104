@@ -1,0 +1,18 @@
+	/**
+	 * WICKET-4608 vars should be properly converted
+	 */
+	@Test
+	public void testConvertedVars()
+	{
+		tester.getSession().setLocale(new Locale("de"));
+
+		LocalizedMessagePage page = new LocalizedMessagePage();
+		tester.startPage(page);
+
+		tester.getRequest().getPostParameters().setParameterValue(page.field.getInputName(), "20");
+		tester.submitForm(page.form);
+
+		// decimal separator is ',' in German
+		tester.assertErrorMessages("Number muss zwischen 0,5 und 1,5 liegen.");
+	}
+
