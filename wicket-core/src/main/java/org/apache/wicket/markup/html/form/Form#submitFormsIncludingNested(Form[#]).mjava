@@ -1,0 +1,17 @@
+	// invoke Form#onSubmit(..) going from innermost to outermost
+	private void submitFormsIncludingNested(final Form<?> processingForm)
+	{
+		Visits.visitPostOrder(processingForm, new IVisitor<Form<?>, Void>()
+		{
+			@Override
+			public void component(Form<?> form, IVisit<Void> visit)
+			{
+				if (form.isEnabledInHierarchy() && form.isVisibleInHierarchy())
+				{
+
+					form.onSubmit();
+				}
+			}
+		}, new ClassVisitFilter(Form.class));
+	}
+
