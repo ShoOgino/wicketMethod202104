@@ -1,0 +1,15 @@
+	@Override
+	public void push(byte[] message, int offset, int length)
+	{
+		if (connection.isOpen())
+		{
+			try
+			{
+				connection.sendMessage(message, offset, length);
+			} catch (IOException iox)
+			{
+				LOG.error("An error occurred while pushing binary message.", iox);
+			}
+		}
+	}
+

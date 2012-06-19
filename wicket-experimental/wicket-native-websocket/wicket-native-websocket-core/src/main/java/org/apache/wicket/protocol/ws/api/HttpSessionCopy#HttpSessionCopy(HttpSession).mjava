@@ -1,0 +1,16 @@
+	public HttpSessionCopy(final HttpSession originalSession) {
+		this.sessionId = originalSession.getId();
+		this.servletContext = originalSession.getServletContext();
+		this.creationTime = originalSession.getCreationTime();
+
+		this.attributes = new ConcurrentHashMap<String, Object>();
+		Enumeration<String> attributeNames = originalSession.getAttributeNames();
+		while (attributeNames.hasMoreElements())
+		{
+			String attributeName = attributeNames.nextElement();
+			Object attributeValue = originalSession.getAttribute(attributeName);
+			attributes.put(attributeName, attributeValue);
+		}
+
+	}
+

@@ -1,0 +1,18 @@
+	protected boolean acceptWebSocket(HttpServletRequest req, HttpServletResponse resp, Application application)
+			throws ServletException, IOException
+	{
+		if (!super.acceptWebSocket(req, resp, application))
+		{
+			return false;
+		}
+
+		String key = req.getHeader("Sec-WebSocket-Key");
+		resp.setHeader("Sec-WebSocket-Accept", getWebSocketAccept(key));
+
+		// Small hack until the Servlet API provides a way to do this.
+		TomcatWebSocketProcessor webSocketHandler = new TomcatWebSocketProcessor(req, application);
+		TomcatWebSocketProcessor.TomcatWebSocket tomcatWebSocket = webSocketHandler.new TomcatWebSocket();
+		((RequestFacade) req).doUpgrade(tomcatWebSocket);
+		return true;
+	}
+
