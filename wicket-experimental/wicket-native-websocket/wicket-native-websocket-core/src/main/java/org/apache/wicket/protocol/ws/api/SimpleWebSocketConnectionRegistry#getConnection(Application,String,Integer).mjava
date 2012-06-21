@@ -1,15 +1,15 @@
 	@Override
-	public WebSocketConnection getConnection(Application application, String sessionId, Integer pageId)
+	public IWebSocketConnection getConnection(Application application, String sessionId, Integer pageId)
 	{
 		Args.notNull(application, "application");
 		Args.notNull(sessionId, "sessionId");
 		Args.notNull(pageId, "pageId");
 
-		WebSocketConnection connection = null;
-		ConcurrentMap<String, ConcurrentMap<Integer, WebSocketConnection>> connectionsBySession = application.getMetaData(KEY);
+		IWebSocketConnection connection = null;
+		ConcurrentMap<String, ConcurrentMap<Integer, IWebSocketConnection>> connectionsBySession = application.getMetaData(KEY);
 		if (connectionsBySession != null)
 		{
-			ConcurrentMap<Integer, WebSocketConnection> connectionsByPage = connectionsBySession.get(sessionId);
+			ConcurrentMap<Integer, IWebSocketConnection> connectionsByPage = connectionsBySession.get(sessionId);
 			if (connectionsByPage != null)
 			{
 				connection = connectionsByPage.get(pageId);
