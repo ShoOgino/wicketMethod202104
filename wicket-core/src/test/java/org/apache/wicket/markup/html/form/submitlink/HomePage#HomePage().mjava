@@ -7,7 +7,7 @@
 		Form<Void> form = new Form<Void>("form")
 		{
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -22,14 +22,23 @@
 		{
 
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onSubmit()
+			public void onSubmitBeforeForm()
 			{
-				submittedViaLink = true;
+				submittedViaLinkBefore = true;
+				assertFalse("before must be the first!", submittedViaLinkAfter);
+			}
+
+
+			@Override
+			public void onSubmitAfterForm()
+			{
+				assertTrue("before must have been called!", submittedViaLinkBefore);
+				submittedViaLinkAfter = true;
 			}
 
 		});
