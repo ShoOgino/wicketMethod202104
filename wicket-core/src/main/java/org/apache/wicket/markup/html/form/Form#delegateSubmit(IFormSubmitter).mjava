@@ -4,8 +4,8 @@
 	 * processing to clients.
 	 * <p>
 	 * This implementation first finds out whether the form processing was triggered by a nested
-	 * IFormSubmittingComponent of this form. If that is the case, that component's onSubmit is
-	 * called first.
+	 * IFormSubmittingComponent of this form. If that is the case, that component's
+	 * onSubmitBefore/AfterForm methods are called appropriately..
 	 * </p>
 	 * <p>
 	 * Regardless of whether a submitting component was found, the form's onSubmit method is called
@@ -20,7 +20,6 @@
 	protected void delegateSubmit(IFormSubmitter submittingComponent)
 	{
 		final Form<?> processingForm = findFormToProcess(submittingComponent);
-
 
 		// process submitting component (if specified)
 		if (submittingComponent != null)
