@@ -1,0 +1,20 @@
+	/**
+	 * Verifies that any meta data actions set to a BufferedWebResponse during page rendering
+	 * wont be lost if at some point during the rendering a new IRequestHandler is scheduled.
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-4358
+	 */
+	@Test
+	public void preserveCookie()
+	{
+		tester.startPage(StartPage.class);
+		tester.assertRenderedPage(StartPage.class);
+		assertEquals(0, tester.getLastResponse().getCookies().size());
+
+		tester.clickLink("link");
+		tester.assertRenderedPage(StartPage.class);
+		List<Cookie> cookies = tester.getLastResponse().getCookies();
+		assertEquals(1, cookies.size());
+		assertEquals("value", cookies.get(0).getValue());
+	}
+
