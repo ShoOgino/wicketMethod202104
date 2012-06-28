@@ -1,0 +1,20 @@
+	public static File createTempFile(String contents) throws IOException
+	{
+		FileOutputStream out = null;
+		try
+		{
+			File tmp = File.createTempFile("temp", "temp");
+			tmp.deleteOnExit();
+			out = new FileOutputStream(tmp);
+			out.write(contents.getBytes(Charset.defaultCharset()));
+			return tmp;
+		}
+		finally
+		{
+			if (out != null)
+			{
+				out.close();
+			}
+		}
+	}
+
