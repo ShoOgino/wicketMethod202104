@@ -4,36 +4,37 @@
 	@Override
 	protected void onBeforeRender()
 	{
-		int index = getSelectedTab();
-
-		if (index == -1 || isTabVisible(index) == false)
+		if (tabs.size() == 0)
+		{
+			// force an empty container to be created every time if we have no tabs
+			setSelectedTab(0);
+		}
+		else if ((getSelectedTab() == -1) || (isTabVisible(getSelectedTab()) == false))
 		{
 			// find first visible selected tab
-			index = 0;
+			int selected = 0;
 			for (int i = 0; i < tabs.size(); i++)
 			{
 				if (isTabVisible(i))
 				{
-					index = i;
+					selected = i;
 					break;
 				}
 			}
 
-			if (index == tabs.size())
+			if (selected == tabs.size())
 			{
 				/*
 				 * none of the tabs are selected...
+				 * 
+				 * we do not need to do anything special because the check in setSelectedTab() will
+				 * replace the current tab panel with an empty one
 				 */
-				index = -1;
+				selected = 0;
 			}
-			else
-			{
-				setModelObject(index);
-			}
-		}
 
-		// updating the tab will do no harm if the index hasn't changed
-		updateTab(index);
+			setSelectedTab(selected);
+		}
 
 		super.onBeforeRender();
 	}
