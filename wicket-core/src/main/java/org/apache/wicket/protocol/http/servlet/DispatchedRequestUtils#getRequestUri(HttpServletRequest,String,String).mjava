@@ -1,0 +1,32 @@
+	/**
+	 * Extracts the request uri for a dispatched request (error or forward) and removes the leading
+	 * {@code filterPrefix} from it if it is there.
+	 *
+	 * @param request
+	 *      the dispatched request
+	 * @param attributeName
+	 *      the name of the requets attribute in which the original request uri is stored
+	 * @param filterPrefix
+	 *      the configured filter prefix for WicketFilter
+	 * @return the uri of the dispatched request without the leading filterPrefix
+	 */
+	static String getRequestUri(final HttpServletRequest request, final String attributeName, String filterPrefix)
+	{
+		if (filterPrefix == null)
+		{
+			filterPrefix = "";
+		}
+
+		if (Strings.isEmpty(filterPrefix) == false && filterPrefix.startsWith("/") == false)
+		{
+			filterPrefix = '/' + filterPrefix;
+		}
+
+		String uri = (String)request.getAttribute(attributeName);
+		if (uri != null && uri.startsWith(filterPrefix) && "/".equals(filterPrefix) == false) {
+			uri = uri.substring(filterPrefix.length());
+		}
+
+		return uri;
+	}
+
