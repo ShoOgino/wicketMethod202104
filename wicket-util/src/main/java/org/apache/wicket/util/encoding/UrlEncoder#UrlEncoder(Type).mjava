@@ -3,13 +3,9 @@
 	 * 
 	 * @param type
 	 *            encoder type
-	 * @param stopChar
-	 *            stop encoding when stopChar found
 	 */
-	protected UrlEncoder(final Type type, final char stopChar)
+	protected UrlEncoder(final Type type)
 	{
-		this.stopChar = stopChar;
-
 		/*
 		 * This note from java.net.URLEncoder ==================================
 		 * 
@@ -58,6 +54,7 @@
 		 * query =( pchar / "/" / "?" )
 		 */
 
+		this.type = type;
 		// unreserved
 		dontNeedEncoding = new BitSet(256);
 		int i;
@@ -99,7 +96,7 @@
 		// encoding type-specific
 		switch (type)
 		{
-			// this code consistent with java.net.URLEncoder version
+		// this code consistent with java.net.URLEncoder version
 			case QUERY :
 				// encoding a space to a + is done in the encode() method
 				dontNeedEncoding.set(' ');
