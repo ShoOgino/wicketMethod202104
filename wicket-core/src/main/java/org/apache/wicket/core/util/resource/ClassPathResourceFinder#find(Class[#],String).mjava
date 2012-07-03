@@ -1,0 +1,34 @@
+	@Override
+	public IResourceStream find(Class<?> clazz, String path)
+	{
+		Args.notEmpty(path, "path");
+		String fullPath = prefix + (path.startsWith("/") ? path.substring(1) : path);
+		IResourceStream resourceStream;
+		if (clazz != null)
+		{
+			resourceStream = getResourceStreamWithClassLoader(clazz.getClassLoader(), fullPath);
+			if (resourceStream != null)
+			{
+				return resourceStream;
+			}
+		}
+
+		// use context classloader when no specific classloader is set
+		// (package resources for instance)
+		resourceStream = getResourceStreamWithClassLoader(Thread.currentThread()
+			.getContextClassLoader(), fullPath);
+		if (resourceStream != null)
+		{
+			return resourceStream;
+		}
+
+		// use Wicket classloader when no specific classloader is set
+		resourceStream = getResourceStreamWithClassLoader(getClass().getClassLoader(), fullPath);
+		if (resourceStream != null)
+		{
+			return resourceStream;
+		}
+
+		return null;
+	}
+

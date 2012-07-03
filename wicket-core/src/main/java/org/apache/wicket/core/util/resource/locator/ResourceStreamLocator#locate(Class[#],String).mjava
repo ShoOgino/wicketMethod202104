@@ -8,19 +8,21 @@
 	{
 		// First try with the resource finder registered with the application
 		// (allows for markup reloading)
-		IResourceStream stream = locateByResourceFinder(clazz, path);
-		if (stream != null)
+		if (finders == null)
 		{
-			return stream;
+			finders = Application.get().getResourceSettings().getResourceFinders();
 		}
 
-		// Then search the resource on the classpath
-		stream = locateByClassLoader(clazz, path);
-		if (stream != null)
+		IResourceStream result;
+		for (IResourceFinder finder : finders)
 		{
-			return stream;
+			log.debug("Attempting to locate resource '{}' using finder'{}'", path, finder);
+			result = finder.find(clazz, path);
+			if (result != null)
+			{
+				return result;
+			}
 		}
-
 		return null;
 	}
 
