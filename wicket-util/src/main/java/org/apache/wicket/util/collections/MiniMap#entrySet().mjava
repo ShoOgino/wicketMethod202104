@@ -1,6 +1,7 @@
 	/**
 	 * @see java.util.Map#entrySet()
 	 */
+	@Override
 	public Set<Entry<K, V>> entrySet()
 	{
 		return new AbstractSet<Entry<K, V>>()
@@ -10,11 +11,13 @@
 			{
 				return new Iterator<Entry<K, V>>()
 				{
+					@Override
 					public boolean hasNext()
 					{
 						return index < size;
 					}
 
+					@Override
 					public Entry<K, V> next()
 					{
 						if (!hasNext())
@@ -28,16 +31,19 @@
 
 						return new Map.Entry<K, V>()
 						{
+							@Override
 							public K getKey()
 							{
 								return keys[keyIndex];
 							}
 
+							@Override
 							public V getValue()
 							{
 								return values[keyIndex];
 							}
 
+							@Override
 							public V setValue(final V value)
 							{
 								final V oldValue = values[keyIndex];
@@ -49,6 +55,7 @@
 						};
 					}
 
+					@Override
 					public void remove()
 					{
 						keys[keyIndex] = null;
