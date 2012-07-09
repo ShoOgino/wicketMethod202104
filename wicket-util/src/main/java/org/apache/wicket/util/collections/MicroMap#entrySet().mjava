@@ -1,6 +1,7 @@
 	/**
 	 * @see java.util.Map#entrySet()
 	 */
+	@Override
 	public Set<Entry<K, V>> entrySet()
 	{
 		return new AbstractSet<Entry<K, V>>()
@@ -10,11 +11,13 @@
 			{
 				return new Iterator<Entry<K, V>>()
 				{
+					@Override
 					public boolean hasNext()
 					{
 						return index < MicroMap.this.size();
 					}
 
+					@Override
 					public Entry<K, V> next()
 					{
 						if (!hasNext())
@@ -25,16 +28,19 @@
 
 						return new Map.Entry<K, V>()
 						{
+							@Override
 							public K getKey()
 							{
 								return key;
 							}
 
+							@Override
 							public V getValue()
 							{
 								return value;
 							}
 
+							@Override
 							public V setValue(final V value)
 							{
 								final V oldValue = MicroMap.this.value;
@@ -46,6 +52,7 @@
 						};
 					}
 
+					@Override
 					public void remove()
 					{
 						clear();
