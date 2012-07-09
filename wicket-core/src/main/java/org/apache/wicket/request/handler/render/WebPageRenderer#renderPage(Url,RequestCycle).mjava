@@ -8,6 +8,10 @@
 	 */
 	protected BufferedWebResponse renderPage(Url targetUrl, RequestCycle requestCycle)
 	{
+		// get the page before checking for a scheduled request handler because
+		// the page may call setResponsePage in its constructor
+		IRequestablePage requestablePage = getPage();
+
 		IRequestHandler scheduled = requestCycle.getRequestHandlerScheduledAfterCurrent();
 
 		if (scheduled != null)
@@ -28,7 +32,7 @@
 		try
 		{
 			requestCycle.setResponse(response);
-			getPage().renderPage();
+			requestablePage.renderPage();
 
 			if (scheduled == null && requestCycle.getRequestHandlerScheduledAfterCurrent() != null)
 			{
