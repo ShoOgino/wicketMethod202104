@@ -1,0 +1,13 @@
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+
+		// Clean up comments for comments older than one hour
+		for (Comment comment : comments) {
+			Time createdAt = Time.valueOf(comment.getCreatedAt());
+			if (Duration.elapsed(createdAt).seconds() > 10) {
+				comments.remove(comment);
+			}
+		}
+	}
+
