@@ -2,11 +2,13 @@
 	 * Construct.
 	 * 
 	 * @param component
+	 * @param behavior
 	 * @param method
 	 */
-	public EventSubscription(Component component, Method method)
+	public EventSubscription(Component component, Behavior behavior, Method method)
 	{
 		componentPath = component.getPageRelativePath();
+		behaviorIndex = behavior == null ? null : component.getBehaviorId(behavior);
 		Class<?> eventType = method.getParameterTypes()[1];
 		filter = Predicates.and(Predicates.instanceOf(eventType), createFilter(method));
 		methodName = method.getName();
