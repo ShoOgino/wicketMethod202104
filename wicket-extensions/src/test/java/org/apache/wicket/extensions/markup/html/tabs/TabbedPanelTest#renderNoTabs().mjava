@@ -1,3 +1,8 @@
+	/**
+	 * No tabs thus no tab component rendered.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void renderNoTabs() throws Exception
 	{
@@ -5,12 +10,12 @@
 		page.tabbedPanel.getTabs().clear();
 		tester.startPage(page);
 
-		tester.assertContainsNot("<span wicket:id=\"title\">default 1</span></a>");
+		tester.assertContainsNot("<span wicket:id=\"title\">default 1</span>");
 		tester.assertContainsNot("<span wicket:id=\"label\">default 1</span>");
-		tester.assertContainsNot("<span wicket:id=\"title\">default 2</span></a>");
+		tester.assertContainsNot("<span wicket:id=\"title\">default 2</span>");
 		tester.assertContainsNot("<span wicket:id=\"label\">default 2</span>");
 		tester.assertContains("<!-- no panel -->");
 
-		assertEquals(Integer.valueOf(0), page.tabbedPanel.getDefaultModelObject());
+		assertEquals(Integer.valueOf(-1), page.tabbedPanel.getDefaultModelObject());
 	}
 
