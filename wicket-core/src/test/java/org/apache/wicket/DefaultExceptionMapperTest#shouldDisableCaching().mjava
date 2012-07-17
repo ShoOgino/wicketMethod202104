@@ -1,0 +1,13 @@
+	/**
+	 * <a href="https://issues.apache.org/jira/browse/WICKET-4659">WICKET-4659</a>
+	 */
+	@Test
+	public void shouldDisableCaching()
+	{
+		WebResponse response = mock(WebResponse.class);
+		tester.getRequestCycle().setResponse(response);
+		new DefaultExceptionMapper().map(mock(Exception.class));
+		verify(response).disableCaching();
+		tester.destroy();
+	}
+
