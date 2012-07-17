@@ -12,13 +12,13 @@
 	 * @param state
 	 *            expansion state
 	 */
-	public DefaultTableTree(String id, List<IColumn<T, S>> columns, ISortableTreeProvider<T, S> provider,
-		int rowsPerPage, IModel<Set<T>> state)
+	public DefaultTableTree(String id, List<IColumn<T, S>> columns,
+		ISortableTreeProvider<T, S> provider, int rowsPerPage, IModel<Set<T>> state)
 	{
 		super(id, columns, provider, rowsPerPage, state);
 
 		getTable().addTopToolbar(new NavigationToolbar(getTable()));
-		getTable().addTopToolbar(new HeadersToolbar(getTable(), provider));
+		getTable().addTopToolbar(new HeadersToolbar<S>(getTable(), provider));
 		getTable().addBottomToolbar(new NoRecordsToolbar(getTable()));
 
 		add(new WindowsTheme());
