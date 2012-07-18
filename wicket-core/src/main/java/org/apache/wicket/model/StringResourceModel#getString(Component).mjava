@@ -1,4 +1,4 @@
-	private String getString(Component component)
+	private String getString(final Component component)
 	{
 
 		final Localizer localizer = getLocalizer();
@@ -47,8 +47,8 @@
 					}
 					else if (model != null && parameters[i] instanceof String)
 					{
-						realParams[i] = PropertyVariableInterpolator.interpolate(
-							(String)parameters[i], model.getObject());
+						realParams[i] = localizer.substitutePropertyExpressions(component,
+							(String)parameters[i], model);
 					}
 					else
 					{

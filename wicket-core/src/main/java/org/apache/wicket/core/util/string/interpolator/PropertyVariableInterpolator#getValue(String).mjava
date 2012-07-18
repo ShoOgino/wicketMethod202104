@@ -1,10 +1,3 @@
-	/**
-	 * Retrieves a value for a variable name during interpolation.
-	 *
-	 * @param variableName
-	 *            the variable name
-	 * @return the value
-	 */
 	@Override
 	protected String getValue(final String variableName)
 	{
@@ -12,15 +5,7 @@
 
 		if (value != null)
 		{
-			final IConverter converter = getConverter(value.getClass());
-			if (converter != null)
-			{
-				return converter.convertToString(value, Session.get().getLocale());
-			}
-			else
-			{
-				return value.toString();
-			}
+			return toString(value);
 		}
 		return null;
 	}
