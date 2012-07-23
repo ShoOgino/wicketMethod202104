@@ -24,7 +24,20 @@
 
 			try
 			{
-				return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+				if (Application.exists())
+				{
+					IClassResolver classResolver = (IClassResolver) Application.get()
+							.getApplicationSettings()
+							.getClassResolver();
+
+					if (classResolver != null)
+					{
+						classLoader = classResolver.getClassLoader();
+					}
+				}
+
+				return Proxy.newProxyInstance(classLoader,
 					new Class[] { type, Serializable.class, ILazyInitProxy.class,
 							IWriteReplace.class }, handler);
 			}
