@@ -18,12 +18,12 @@
 				newEntry.listeners.add(listener);
 
 				// Put in map
-				modifiableToEntry.put(modifiable, newEntry);
+				modifiableToEntry.putIfAbsent(modifiable, newEntry);
 			}
 			else
 			{
 				// The IModifiable is not returning a valid lastModifiedTime
-				log.info("Cannot track modifications to resource " + modifiable);
+				log.info("Cannot track modifications to resource '{}'", modifiable);
 			}
 
 			return true;

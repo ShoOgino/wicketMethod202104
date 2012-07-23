@@ -20,7 +20,7 @@
 				return cachedValue;
 			}
 
-			final Object target;
+			Object target;
 			if (wrapInProxies)
 			{
 				target = LazyInitProxyFactory.createProxy(field.getType(), locator);
@@ -33,7 +33,11 @@
 			// only put the proxy into the cache if the bean is a singleton
 			if (locator.isSingletonBean())
 			{
-				cache.put(locator, target);
+				Object tmpTarget = cache.putIfAbsent(locator, target);
+				if (tmpTarget != null)
+				{
+					target = tmpTarget;
+				}
 			}
 			return target;
 		}

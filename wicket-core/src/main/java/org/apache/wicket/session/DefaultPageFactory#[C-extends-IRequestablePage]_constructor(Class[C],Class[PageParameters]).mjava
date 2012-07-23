@@ -23,22 +23,20 @@
 				constructor = pageClass.getConstructor(new Class[] { argumentType });
 
 				// Store it in the cache
-				constructorForClass.put(pageClass, constructor);
-
-				if (log.isDebugEnabled())
+				Constructor<?> tmpConstructor = constructorForClass.putIfAbsent(pageClass, constructor);
+				if (tmpConstructor != null)
 				{
-					log.debug("Found constructor for Page of type '{}' and argument of type '{}'.",
-						pageClass, argumentType);
+					constructor = tmpConstructor;
 				}
+
+				log.debug("Found constructor for Page of type '{}' and argument of type '{}'.",
+					pageClass, argumentType);
 			}
 			catch (NoSuchMethodException e)
 			{
-				if (log.isDebugEnabled())
-				{
-					log.debug(
-						"Page of type '{}' has not visible constructor with an argument of type '{}'.",
-						pageClass, argumentType);
-				}
+				log.debug(
+					"Page of type '{}' has not visible constructor with an argument of type '{}'.",
+					pageClass, argumentType);
 
 				return null;
 			}
