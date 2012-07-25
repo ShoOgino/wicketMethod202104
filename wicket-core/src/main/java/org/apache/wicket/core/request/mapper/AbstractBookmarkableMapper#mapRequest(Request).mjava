@@ -13,7 +13,7 @@
 			Class<? extends IRequestablePage> pageClass = urlInfo.getPageClass();
 			PageParameters pageParameters = urlInfo.getPageParameters();
 
-			if (info == null || info.getPageInfo().getPageId() == null)
+			if (info == null)
 			{
 				// if there are is no page instance information (only page map name - optionally)
 				// then this is a simple bookmarkable URL
@@ -31,6 +31,11 @@
 				// with both page instance and component+listener this is a listener interface URL
 				return processListener(info, pageClass, pageParameters);
 			}
+			else if (info.getPageInfo().getPageId() == null)
+			{
+				return processBookmarkable(pageClass, pageParameters);
+			}
+
 		}
 		return null;
 	}

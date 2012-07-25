@@ -1,6 +1,3 @@
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Url mapHandler(IRequestHandler requestHandler)
 	{
@@ -54,11 +51,7 @@
 			if (checkPageInstance(page) &&
 				(!pageMustHaveBeenCreatedBookmarkable() || page.wasCreatedBookmarkable()))
 			{
-				PageInfo info = null;
-				if (!page.isPageStateless())
-				{
-					info = new PageInfo(page.getPageId());
-				}
+				PageInfo info = getPageInfo(handler);
 				PageComponentInfo pageComponentInfo = info != null ? new PageComponentInfo(info,
 					null) : null;
 
@@ -89,7 +82,7 @@
 				renderCount = handler.getRenderCount();
 			}
 
-			PageInfo pageInfo = new PageInfo(handler.getPageId());
+			PageInfo pageInfo = getPageInfo(handler);
 			ComponentInfo componentInfo = new ComponentInfo(renderCount,
 				requestListenerInterfaceToString(handler.getListenerInterface()),
 				handler.getComponentPath(), handler.getBehaviorIndex());
