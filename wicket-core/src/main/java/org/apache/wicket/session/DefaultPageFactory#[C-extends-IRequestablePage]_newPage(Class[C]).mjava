@@ -1,18 +1,18 @@
 	@Override
-	public final <C extends IRequestablePage> Page newPage(final Class<C> pageClass)
+	public final <C extends IRequestablePage> C newPage(final Class<C> pageClass)
 	{
 		try
 		{
 			// throw an exception in case default constructor is missing
 			// => improved error message
-			Constructor<? extends IRequestablePage> constructor = pageClass.getConstructor((Class<?>[])null);
+			Constructor<C> constructor = pageClass.getConstructor((Class<?>[])null);
 
 			return processPage(newPage(constructor, null), null);
 		}
 		catch (NoSuchMethodException e)
 		{
 			// a bit of a hack here..
-			Constructor<?> constructor = constructor(pageClass, PageParameters.class);
+			Constructor<C> constructor = constructor(pageClass, PageParameters.class);
 			if (constructor != null)
 			{
 				PageParameters pp = new PageParameters();

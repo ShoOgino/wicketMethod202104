@@ -10,17 +10,17 @@
 	 *             Thrown if the Page cannot be instantiated using the given constructor and
 	 *             argument.
 	 */
-	private Page newPage(final Constructor<?> constructor, final Object argument)
+	private <C extends IRequestablePage> C newPage(final Constructor<C> constructor, final PageParameters argument)
 	{
 		try
 		{
 			if (argument != null)
 			{
-				return (Page)constructor.newInstance(argument);
+				return constructor.newInstance(argument);
 			}
 			else
 			{
-				return (Page)constructor.newInstance();
+				return constructor.newInstance();
 			}
 		}
 		catch (InstantiationException e)

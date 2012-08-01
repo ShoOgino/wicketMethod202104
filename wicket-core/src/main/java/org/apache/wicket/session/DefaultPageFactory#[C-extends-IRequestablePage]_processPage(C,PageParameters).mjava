@@ -1,4 +1,4 @@
-	private Page processPage(final Page page, final PageParameters pageParameters)
+	private <C extends IRequestablePage> C processPage(final C page, final PageParameters pageParameters)
 	{
 		// the page might have not propagate page parameters from constructor. if that's the case
 		// we force the parameters
@@ -7,7 +7,7 @@
 			page.getPageParameters().overwriteWith(pageParameters);
 		}
 
-		page.setWasCreatedBookmarkable(true);
+		((Page)page).setWasCreatedBookmarkable(true);
 
 		return page;
 	}
