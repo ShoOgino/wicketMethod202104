@@ -4,8 +4,7 @@
 	@Test
 	public void test_1() throws Exception
 	{
-		tester.startPage(DataTablePage.class);
-		tester.assertRenderedPage(DataTablePage.class);
+		executeTest(DataTablePage.class, "DataTablePage_ExpectedResult.html");
 
 		String document = tester.getLastResponseAsString();
 		int index = document.indexOf("<thead");
@@ -20,13 +19,5 @@
 
 		index = document.indexOf("<caption", index + 1);
 		assertTrue("There must be not be <caption>", index == -1);
-
-// log.error(document);
-// log.error("==============================================");
-// log.error("==============================================");
-// log.error(removeFillers(document));
-
-		DiffUtil.validatePage(removeFillers(document), getClass(),
-			"DataTablePage_ExpectedResult.html", true);
 	}
 
