@@ -5,11 +5,7 @@
 	 */
 	public final void beforeRender()
 	{
-		if (!(this instanceof IFeedback))
-		{
-			internalBeforeRender();
-		}
-		else
+		if (this instanceof IFeedback)
 		{
 			// this component is a feedback. Feedback must be initialized last, so that
 			// they can collect messages from other components
@@ -37,6 +33,10 @@
 			{
 				feedbacks.add(this);
 			}
+		}
+		else
+		{
+			internalBeforeRender();
 		}
 	}
 
