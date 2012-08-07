@@ -9,13 +9,10 @@
 		ClassProvider<? extends IRequestablePage> pageClassProvider,
 		IPageParametersEncoder pageParametersEncoder)
 	{
-		Args.notEmpty(mountPath, "mountPath");
-		Args.notNull(pageClassProvider, "pageClassProvider");
-		Args.notNull(pageParametersEncoder, "pageParametersEncoder");
+		super(mountPath, pageParametersEncoder);
 
-		this.pageParametersEncoder = pageParametersEncoder;
+		Args.notNull(pageClassProvider, "pageClassProvider");
+
 		this.pageClassProvider = pageClassProvider;
-		mountSegments = getMountSegments(mountPath);
-		pathSegments = getPathSegments(mountSegments);
 	}
 

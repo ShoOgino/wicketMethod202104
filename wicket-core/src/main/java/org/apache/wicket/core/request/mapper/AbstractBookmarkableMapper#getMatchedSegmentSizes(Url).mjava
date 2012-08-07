@@ -1,4 +1,4 @@
-	private int[] getMatchedSegmentSizes(Url url)
+	protected int[] getMatchedSegmentSizes(Url url)
 	{
 		int[] ret = new int[pathSegments.size()];
 		int segmentIndex = 0;
@@ -8,13 +8,13 @@
 			boolean foundFixedPart = false;
 			segmentIndex += curPathSegment.getMinParameters();
 			int max = Math.min(curPathSegment.getOptionalParameters() + 1,
-				url.getSegments().size() - segmentIndex);
+					url.getSegments().size() - segmentIndex);
 
 			for (int count = max - 1; count >= 0; count--)
 			{
 				if (url.getSegments()
-					.get(segmentIndex + count)
-					.equals(curPathSegment.getFixedPart()))
+						.get(segmentIndex + count)
+						.equals(curPathSegment.getFixedPart()))
 				{
 					foundFixedPart = true;
 					segmentIndex += count + 1;
@@ -31,7 +31,7 @@
 		if (segmentIndex > url.getSegments().size())
 			return null;
 		ret[pathSegmentIndex] = Math.min(lastSegment.getMaxParameters(), url.getSegments().size() -
-			segmentIndex + lastSegment.getMinParameters());
+				segmentIndex + lastSegment.getMinParameters());
 		return ret;
 	}
 

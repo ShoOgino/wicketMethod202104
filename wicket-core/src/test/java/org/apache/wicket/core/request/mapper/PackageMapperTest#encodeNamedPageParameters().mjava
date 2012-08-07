@@ -1,0 +1,21 @@
+	/**
+	 *
+	 */
+	@Test
+	public void encodeNamedPageParameters()
+	{
+		MockPage page = new MockPage(15);
+		page.setBookmarkable(true);
+		page.setCreatedBookmarkable(true);
+		page.setPageStateless(true);
+
+		IPageProvider provider = new PageProvider(page);
+		page.getPageParameters().set("foo", "fooValue");
+		page.getPageParameters().set("bar", "barValue");
+		IRequestHandler handler = new RenderPageRequestHandler(provider);
+
+		Url url = namedParametersEncoder.mapHandler(handler);
+
+		assertEquals(MOUNT_PATH + "/fooValue/barValue/" + PAGE_CLASS_NAME, url.toString());
+	}
+

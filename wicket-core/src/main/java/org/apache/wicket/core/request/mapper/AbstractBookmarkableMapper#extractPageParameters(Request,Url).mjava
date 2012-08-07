@@ -1,7 +1,7 @@
-	/*
-	 * extract the PageParameters from URL if there are any
+	/**
+	 * Extracts the PageParameters from URL if there are any
 	 */
-	private PageParameters extractPageParameters(Request request, Url url)
+	protected PageParameters extractPageParameters(Request request, Url url)
 	{
 		int[] matchedParameters = getMatchedSegmentSizes(url);
 		int total = 0;
@@ -30,12 +30,12 @@
 				if (placeholder != null)
 				{
 					pageParameters.add(placeholder,
-						url.getSegments().get(curSegmentIndex - skippedParameters));
+							url.getSegments().get(curSegmentIndex - skippedParameters));
 				}
 				else if (optionalPlaceholder != null && optionalParameterMatch > 0)
 				{
 					pageParameters.add(optionalPlaceholder,
-						url.getSegments().get(curSegmentIndex - skippedParameters));
+							url.getSegments().get(curSegmentIndex - skippedParameters));
 					optionalParameterMatch--;
 				}
 			}
