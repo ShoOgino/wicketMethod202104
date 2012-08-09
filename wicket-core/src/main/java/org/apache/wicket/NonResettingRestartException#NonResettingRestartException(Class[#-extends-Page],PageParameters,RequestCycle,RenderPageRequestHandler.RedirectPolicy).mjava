@@ -1,0 +1,29 @@
+	/**
+	 * Constructor.
+	 *
+	 * @param pageClass
+	 *      the class of the new page that should be rendered
+	 * @param params
+	 *      the page parameters to use for the new page
+	 * @param cycle
+	 *      the request cycle to use to find the Response`s
+	 * @param redirectPolicy
+	 *      the policy that mandates whether to do a redirect
+	 */
+	public NonResettingRestartException(final Class<? extends Page> pageClass,
+		final PageParameters params, final RequestCycle cycle, RenderPageRequestHandler.RedirectPolicy redirectPolicy)
+	{
+		super(createRequestHandler(pageClass, params, redirectPolicy), true);
+
+		Response response = cycle.getResponse();
+		if (response instanceof IMetaDataBufferingWebResponse)
+		{
+			WebResponse originalResponse = (WebResponse) cycle.getOriginalResponse();
+			if (originalResponse != response)
+			{
+				IMetaDataBufferingWebResponse bufferingWebResponse = (IMetaDataBufferingWebResponse) response;
+				bufferingWebResponse.writeMetaData(originalResponse);
+			}
+		}
+	}
+
