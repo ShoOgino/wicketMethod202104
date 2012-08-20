@@ -27,7 +27,7 @@
 				catch (ResourceStreamNotFoundException e)
 				{
 					data.setError(HttpServletResponse.SC_NOT_FOUND);
-					close();
+					close(resourceStream);
 				}
 			}
 
@@ -55,7 +55,7 @@
 					public void writeData(Attributes attributes) throws IOException
 					{
 						((IResourceStreamWriter)resourceStream).write(attributes.getResponse().getOutputStream());
-						close();
+						close(resourceStream);
 					}
 				});
 			}
@@ -73,7 +73,7 @@
 						}
 						finally
 						{
-							close();
+							close(resourceStream);
 						}
 					}
 				});
