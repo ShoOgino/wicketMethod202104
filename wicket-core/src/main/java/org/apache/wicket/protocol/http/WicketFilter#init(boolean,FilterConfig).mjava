@@ -27,22 +27,29 @@
 		application.setWicketFilter(this);
 
 		// Allow the filterPath to be preset via setFilterPath()
-		if (filterPath == null)
+		String configureFilterPath = getFilterPath();
+
+		if (configureFilterPath == null)
 		{
-			filterPath = getFilterPathFromConfig(filterConfig);
+			configureFilterPath = getFilterPathFromConfig(filterConfig);
 		}
 
-		if (filterPath == null)
+		if (configureFilterPath == null)
 		{
-			filterPath = getFilterPathFromWebXml(isServlet, filterConfig);
+			configureFilterPath = getFilterPathFromWebXml(isServlet, filterConfig);
 		}
 
-		if (filterPath == null)
+		if (configureFilterPath == null)
 		{
-			filterPath = getFilterPathFromAnnotation(isServlet);
+			configureFilterPath = getFilterPathFromAnnotation(isServlet);
 		}
 
-		if (filterPath == null)
+		if (configureFilterPath != null)
+		{
+			setFilterPath(configureFilterPath);
+		}
+
+		if (getFilterPath() == null)
 		{
 			log.warn("Unable to determine filter path from filter init-parm, web.xml, "
 				+ "or servlet 3.0 annotations. Assuming user will set filter path "

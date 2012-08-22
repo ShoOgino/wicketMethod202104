@@ -6,14 +6,27 @@
 	 * 
 	 * @param filterPath
 	 */
-	public final void setFilterPath(final String filterPath)
+	public final void setFilterPath(String filterPath)
 	{
 		// see https://issues.apache.org/jira/browse/WICKET-701
 		if (this.filterPath != null)
 		{
 			throw new IllegalStateException(
-				"Filter path is write-once. You can not change it. Current value='" + filterPath +
-					"'");
+				"Filter path is write-once. You can not change it. Current value='" + filterPath + '\'');
+		}
+		if (filterPath != null)
+		{
+			filterPath = canonicaliseFilterPath(filterPath);
+
+			// We only need to determine it once. It'll not change.
+			if (filterPath.endsWith("/"))
+			{
+				filterPathLength = filterPath.length() - 1;
+			}
+			else
+			{
+				filterPathLength = filterPath.length();
+			}
 		}
 		this.filterPath = filterPath;
 	}
