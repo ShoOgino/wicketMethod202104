@@ -1,6 +1,3 @@
-		/**
-		 * @see org.apache.wicket.core.util.lang.WicketObjects.IObjectSizeOfStrategy#sizeOf(java.io.Serializable)
-		 */
 		@Override
 		public long sizeOf(Serializable object)
 		{
@@ -8,20 +5,17 @@
 			{
 				return 0;
 			}
-			try
+
+			ISerializer serializer;
+			if (Application.exists())
 			{
-				final ByteCountingOutputStream out = new ByteCountingOutputStream();
-				new ObjectOutputStream(out).writeObject(object);
-				out.close();
-				return out.size();
+				serializer = Application.get().getFrameworkSettings().getSerializer();
 			}
-			catch (IOException e)
+			else
 			{
-				if (log.isWarnEnabled())
-				{
-					log.warn("Unable to determine object size: " + object.toString(), e);
-				}
-				return -1;
+				serializer = new JavaSerializer("SerializingObjectSizeOfStrategy");
 			}
+			byte[] serialized = serializer.serialize(object);
+			return serialized.length;
 		}
 
