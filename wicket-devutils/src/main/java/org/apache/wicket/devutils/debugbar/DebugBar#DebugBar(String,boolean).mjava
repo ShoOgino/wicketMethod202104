@@ -1,0 +1,31 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 *         component id
+	 * @param initiallyExpanded
+	 *         {@code true} to show debug bar initially expanded
+	 *         
+	 * @see #DebugBar(String) 
+	 */
+	public DebugBar(final String id, boolean initiallyExpanded)
+	{
+		super(id);
+		setMarkupId("wicketDebugBar");
+		setOutputMarkupId(true);
+		add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getObject()
+			{
+				return "wicketDebugBar" + (DebugBar.this.hasErrorMessage() ? "Error" : "");
+			}
+		}));
+
+		add(new Image("logo", new PackageResourceReference(DebugBar.class, "wicket.png")));
+		
+		add(contentSection("content", initiallyExpanded));
+	}
+
