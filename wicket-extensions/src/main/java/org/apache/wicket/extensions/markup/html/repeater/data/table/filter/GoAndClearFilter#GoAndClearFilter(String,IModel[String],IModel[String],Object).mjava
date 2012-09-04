@@ -1,0 +1,35 @@
+	/**
+	 * Constructor
+	 *
+	 * @param id
+	 *            component id
+	 * @param goModel
+	 *            model for the label of the 'go' button
+	 * @param clearModel
+	 *            model for the label of the 'clear' button
+	 * @param originalState
+	 *            the object to use as original state
+	 */
+	public GoAndClearFilter(final String id, final IModel<String> goModel,
+			final IModel<String> clearModel, Object originalState)
+	{
+		super(id, goModel);
+
+		this.originalState = originalState;
+
+		clear = new Button("clear", clearModel)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onSubmit()
+			{
+				onClearSubmit(this);
+			}
+		};
+
+		clear.setDefaultFormProcessing(true);
+
+		add(clear);
+	}
+
