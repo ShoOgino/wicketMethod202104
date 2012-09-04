@@ -1,0 +1,17 @@
+		private SecondEventTestPage(final AtomicInteger counter)
+		{
+			WebComponent comp = new WebComponent("comp");
+			add(comp);
+
+			// register a behavior that listens on two events and the
+			// tested one also has a prefix 'on'
+			comp.add(new AjaxEventBehavior("eventOne oneventTwo")
+			{
+				@Override
+				protected void onEvent(AjaxRequestTarget target)
+				{
+					counter.incrementAndGet();
+				}
+			});
+		}
+

@@ -1,0 +1,30 @@
+	/**
+	 * Tests execution of the second configured event
+	 * https://issues.apache.org/jira/browse/WICKET-4748
+	 */
+	@Test
+	public void executeSecondEvent()
+	{
+		AtomicInteger counter = new AtomicInteger(0);
+		SecondEventTestPage page = new SecondEventTestPage(counter);
+		tester.startPage(page);
+
+		assertEquals(0, counter.get());
+
+		// execute the first event (without the leading 'on')
+		tester.executeAjaxEvent("comp", "eventOne");
+		assertEquals(1, counter.get());
+
+		// execute the first event (with the leading 'on')
+		tester.executeAjaxEvent("comp", "oneventOne");
+		assertEquals(2, counter.get());
+
+		// execute the second event (without the leading 'on')
+		tester.executeAjaxEvent("comp", "eventTwo");
+		assertEquals(3, counter.get());
+
+		// execute the second event (with the leading 'on')
+		tester.executeAjaxEvent("comp", "oneventTwo");
+		assertEquals(4, counter.get());
+	}
+
