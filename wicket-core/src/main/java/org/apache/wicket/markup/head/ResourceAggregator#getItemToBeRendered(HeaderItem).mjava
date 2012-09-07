@@ -8,6 +8,10 @@
 	 */
 	private HeaderItem getItemToBeRendered(HeaderItem item)
 	{
+		while (item instanceof IWrappedHeaderItem)
+		{
+			item = ((IWrappedHeaderItem)item).getWrapped();
+		}
 		if (getRealResponse().wasRendered(item))
 		{
 			return NoHeaderItem.get();
