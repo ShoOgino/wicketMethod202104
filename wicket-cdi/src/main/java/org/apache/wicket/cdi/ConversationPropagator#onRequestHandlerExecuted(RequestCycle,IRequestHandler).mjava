@@ -1,0 +1,19 @@
+	@Override
+	public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler)
+	{
+		Conversation conversation = getConversation(cycle);
+
+		if (conversation == null || conversation.isTransient())
+		{
+			return;
+		}
+
+
+		Page page = getPage(handler);
+		if (page != null && propagation.propagatesViaPage(page, handler))
+		{
+			// propagate a conversation across non-bookmarkable page instances
+			setConversationOnPage(conversation, page);
+		}
+	}
+

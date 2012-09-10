@@ -1,0 +1,13 @@
+	@Override
+	protected void init()
+	{
+		super.init();
+
+		// lookup bean manager from Weld's servlet listener
+		BeanManager manager = (BeanManager)getServletContext().getAttribute(
+			Listener.BEAN_MANAGER_ATTRIBUTE_NAME);
+
+		// configure wicket/cdi
+		new CdiConfiguration(manager).configure(this);
+	}
+
