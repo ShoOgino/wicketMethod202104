@@ -22,6 +22,8 @@
 		{
 			private static final long serialVersionUID = 1L;
 
+			private transient IFormSubmitter submittingComponent;
+
 			@Override
 			protected void onError()
 			{
@@ -40,6 +42,15 @@
 			@Override
 			public void process(IFormSubmitter submittingComponent)
 			{
+				// keep submitting component for #onValidate()
+				this.submittingComponent = submittingComponent;
+
+				super.process(submittingComponent);
+			}
+
+			@Override
+			protected void onValidate()
+			{
 				// set the error based on which link submitted the form
 				if (submittingComponent == submitFormComponent)
 				{
@@ -53,8 +64,6 @@
 				{
 					error("Form validation error");
 				}
-
-				super.process(submittingComponent);
 			}
 		};
 		add(form);
