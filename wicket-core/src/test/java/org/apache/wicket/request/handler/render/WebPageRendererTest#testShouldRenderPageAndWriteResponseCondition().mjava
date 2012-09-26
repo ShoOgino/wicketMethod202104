@@ -1,8 +1,3 @@
-	// or one pass render mode is on
-	// or the targetUrl matches current url and the page is not stateless
-	// or the targetUrl matches current url, page is stateless but it's redirect-to-render
-	// or the request determines that the current url should be preserved
-	// just render the page
 	@Test
 	public void testShouldRenderPageAndWriteResponseCondition() {
 
@@ -34,6 +29,60 @@
 		targetEqualsCurrentUrl=false;
 		newPageInstance=false;
 		pageStateless=false;
+
+		Assert.assertTrue(WebPageRenderer.shouldRenderPageAndWriteResponse(ajax, onePassRender, redirectToRender, redirectPolicy, shouldPreserveClientUrl, targetEqualsCurrentUrl, newPageInstance, pageStateless));
+
+		// or one pass render mode is on
+		// -> or one pass render mode is on and its NOT ajax and its NOT always redirect
+		redirectPolicy=RedirectPolicy.AUTO_REDIRECT;
+		onePassRender=true;
+		ajax=false;
+
+		Assert.assertTrue(WebPageRenderer.shouldRenderPageAndWriteResponse(ajax, onePassRender, redirectToRender, redirectPolicy, shouldPreserveClientUrl, targetEqualsCurrentUrl, newPageInstance, pageStateless));
+
+		redirectToRender=true;
+		shouldPreserveClientUrl=true;
+		targetEqualsCurrentUrl=true;
+		newPageInstance=true;
+		pageStateless=true;
+
+		Assert.assertTrue(WebPageRenderer.shouldRenderPageAndWriteResponse(ajax, onePassRender, redirectToRender, redirectPolicy, shouldPreserveClientUrl, targetEqualsCurrentUrl, newPageInstance, pageStateless));
+
+		// or the targetUrl matches current url and the page is not stateless
+		// or the targetUrl matches current url, page is stateless but it's redirect-to-render
+		// --> its NOT ajax and
+		// 				the targetUrl matches current url and the page is NOT stateless and its NOT a new instance
+		// 		or the targetUrl matches current url and it's redirect-to-render
+
+		ajax=false;
+		targetEqualsCurrentUrl=true;
+		pageStateless=false;
+		newPageInstance=false;
+
+		onePassRender=false;
+		redirectToRender=false;
+		shouldPreserveClientUrl=false;
+
+		Assert.assertTrue(WebPageRenderer.shouldRenderPageAndWriteResponse(ajax, onePassRender, redirectToRender, redirectPolicy, shouldPreserveClientUrl, targetEqualsCurrentUrl, newPageInstance, pageStateless));
+
+		targetEqualsCurrentUrl=true;
+		pageStateless=true;
+		newPageInstance=true;
+		redirectToRender=true;
+
+		Assert.assertTrue(WebPageRenderer.shouldRenderPageAndWriteResponse(ajax, onePassRender, redirectToRender, redirectPolicy, shouldPreserveClientUrl, targetEqualsCurrentUrl, newPageInstance, pageStateless));
+
+		// or the request determines that the current url should be preserved
+		// just render the page
+		shouldPreserveClientUrl=true;
+
+		redirectPolicy=RedirectPolicy.AUTO_REDIRECT;
+		ajax=true;
+		onePassRender=false;
+		redirectToRender=false;
+		targetEqualsCurrentUrl=false;
+		newPageInstance=true;
+		pageStateless=true;
 
 		Assert.assertTrue(WebPageRenderer.shouldRenderPageAndWriteResponse(ajax, onePassRender, redirectToRender, redirectPolicy, shouldPreserveClientUrl, targetEqualsCurrentUrl, newPageInstance, pageStateless));
 
