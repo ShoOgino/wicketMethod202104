@@ -1,18 +1,27 @@
-	// if the policy is never to redirect
-	// or one pass render mode is on
-	// or the targetUrl matches current url and the page is not stateless
-	// or the targetUrl matches current url, page is stateless but it's redirect-to-render
-	// or the request determines that the current url should be preserved
-	// just render the page
+	// if
+	// 		the policy is never to redirect
+	// 	or
+	//		its NOT ajax and
+	//				one pass render mode is on and NOT forced to redirect
+	//			or
+	//				the targetUrl matches current url and page is NOT stateless and NOT a new instance
+	//	or
+	//		the targetUrl matches current url and it's redirect-to-render
+	//	or
+	//  	the request determines that the current url should be preserved
+	//	just render the page
 	protected static boolean shouldRenderPageAndWriteResponse(boolean ajax, boolean onePassRender, boolean redirectToRender, RedirectPolicy redirectPolicy, boolean shouldPreserveClientUrl, boolean targetEqualsCurrentUrl, boolean newPageInstance, boolean pageStateless) {
-		return redirectPolicy == RedirectPolicy.NEVER_REDIRECT ||
-			(onePassRender && ajax == false && redirectPolicy != RedirectPolicy.ALWAYS_REDIRECT) //
+		return neverRedirect(redirectPolicy)
 			||
-			(!ajax //
-				&&
-				(targetEqualsCurrentUrl && !newPageInstance && !pageStateless) //
-			|| (targetEqualsCurrentUrl && redirectToRender) //
-			) //
-			|| shouldPreserveClientUrl;
+			(!ajax &&
+				(
+					(onePassRender && notForcedRedirect(redirectPolicy))
+					||
+					(targetEqualsCurrentUrl && notNewAndNotStatelessPage(newPageInstance, pageStateless)))
+				)
+			||
+			(targetEqualsCurrentUrl && redirectToRender)
+			||
+			shouldPreserveClientUrl;
 	}
 
