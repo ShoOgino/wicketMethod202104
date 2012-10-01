@@ -1,0 +1,11 @@
+	@Override
+	public IWebSocketConnection sendMessage(String message) throws IOException
+	{
+		checkClosed();
+
+		FutureCallback<Void> waiter = new FutureCallback<Void>();
+		connection.write(null, waiter, message);
+		waitForMessageSent(waiter);
+		return this;
+	}
+
