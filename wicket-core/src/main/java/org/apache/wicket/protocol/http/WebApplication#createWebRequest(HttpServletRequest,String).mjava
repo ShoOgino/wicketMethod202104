@@ -42,19 +42,6 @@
 
 		WebRequest webRequest = newWebRequest(servletRequest, filterPath);
 
-		if (ServletFileUpload.isMultipartContent(servletRequest))
-		{
-			try
-			{
-				return ((ServletWebRequest)webRequest).newMultipartWebRequest(
-					getApplicationSettings().getDefaultMaximumUploadSize(), "externalForm");
-			}
-			catch (FileUploadException e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
-
 		return webRequest;
 	}
 
