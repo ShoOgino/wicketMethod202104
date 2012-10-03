@@ -2,17 +2,17 @@
 		String id, boolean defer, String charset, String condition)
 	{
 		Args.notEmpty(url, "url");
-		
-		boolean hasCondition = Strings.isEmpty(condition) == false; 
+
+		boolean hasCondition = Strings.isEmpty(condition) == false;
 		if (hasCondition)
 		{
 			response.write("<!--[if ");
 			response.write(condition);
 			response.write("]>");
 		}
-		
+
 		JavaScriptUtils.writeJavaScriptUrl(response, url, id, defer, charset);
-		
+
 		if (hasCondition)
 		{
 			response.write("<![endif]-->\n");
