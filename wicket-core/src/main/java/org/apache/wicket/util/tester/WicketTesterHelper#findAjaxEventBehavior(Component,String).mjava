@@ -1,39 +1,19 @@
 	/**
+	 * Finds the first AjaxEventBehavior attached to the specified component with the
+	 * specified event.
+	 *
 	 * @param component
 	 * @param event
-	 * @return AjaxEventBehavior or null
+	 * @return the first behavior for this event, or {@code null}
 	 */
 	public static AjaxEventBehavior findAjaxEventBehavior(Component component, String event)
 	{
-		Args.notEmpty(event, "event");
-		String[] eventNames = Strings.split(event, ' ');
-		for (String eventName : eventNames)
+		List<AjaxEventBehavior> behaviors = findAjaxEventBehaviors(component, event);
+		AjaxEventBehavior behavior = null;
+		if (behaviors != null)
 		{
-			if (eventName.startsWith("on"))
-			{
-				eventName = eventName.substring(2);
-			}
-
-			for (Behavior behavior : component.getBehaviors())
-			{
-				if (behavior instanceof AjaxEventBehavior)
-				{
-					String behaviorEvent = ((AjaxEventBehavior)behavior).getEvent();
-					String[] behaviorEventNames = Strings.split(behaviorEvent, ' ');
-					for (String behaviorEventName : behaviorEventNames)
-					{
-						if (behaviorEventName.startsWith("on"))
-						{
-							behaviorEventName = behaviorEventName.substring(2);
-						}
-						if (eventName.equalsIgnoreCase(behaviorEventName))
-						{
-							return (AjaxEventBehavior)behavior;
-						}
-					}
-				}
-			}
+			behavior = behaviors.get(0);
 		}
-		return null;
+		return behavior;
 	}
 
