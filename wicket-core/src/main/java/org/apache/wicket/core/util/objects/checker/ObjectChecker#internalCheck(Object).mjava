@@ -9,10 +9,24 @@
 		nameStack.add(simpleName);
 		traceStack.add(new TraceSlot(obj, fieldDescription));
 
-		if (!(obj instanceof Serializable) && (!Proxy.isProxyClass(cls)))
+		for (IObjectChecker checker : checkers)
 		{
-			throw new WicketNotSerializableException(
-				toPrettyPrintedStack(obj.getClass().getName()), exception);
+			IObjectChecker.Result result = checker.check(obj);
+			if (result.status == IObjectChecker.Result.Status.FAILURE)
+			{
+				ObjectCheckException ocx;
+				String prettyPrintMessage = toPrettyPrintedStack(Classes.name(cls));
+				String exceptionMessage = result.reason + '\n' + prettyPrintMessage;
+				if (result.cause != null)
+				{
+					ocx = new ObjectCheckException(exceptionMessage, result.cause);
+				}
+				else
+				{
+					ocx = new ObjectCheckException(exceptionMessage);
+				}
+				throw ocx;
+			}
 		}
 
 		ObjectStreamClass desc;
@@ -23,8 +37,8 @@
 				desc = (ObjectStreamClass)LOOKUP_METHOD.invoke(null, cls, Boolean.TRUE);
 				Class<?> repCl;
 				if (!(Boolean)HAS_WRITE_REPLACE_METHOD_METHOD.invoke(desc, (Object[])null) ||
-					(obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, obj)) == null ||
-					(repCl = obj.getClass()) == cls)
+						(obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, obj)) == null ||
+						(repCl = obj.getClass()) == cls)
 				{
 					break;
 				}
@@ -94,7 +108,7 @@
 					throw (WicketNotSerializableException)e;
 				}
 				log.warn("error delegating to Externalizable : " + e.getMessage() + ", path: " +
-					currentPath());
+						currentPath());
 			}
 		}
 		else
@@ -105,7 +119,7 @@
 				try
 				{
 					writeObjectMethod = cls.getDeclaredMethod("writeObject",
-						new Class[] { java.io.ObjectOutputStream.class });
+							new Class[] { java.io.ObjectOutputStream.class });
 				}
 				catch (SecurityException e)
 				{
@@ -167,7 +181,7 @@
 						throw (WicketNotSerializableException)e;
 					}
 					log.warn("error delegating to writeObject : " + e.getMessage() + ", path: " +
-						currentPath());
+							currentPath());
 				}
 			}
 			else
