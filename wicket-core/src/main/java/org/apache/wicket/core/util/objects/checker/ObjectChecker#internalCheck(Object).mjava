@@ -14,18 +14,9 @@
 			IObjectChecker.Result result = checker.check(obj);
 			if (result.status == IObjectChecker.Result.Status.FAILURE)
 			{
-				ObjectCheckException ocx;
 				String prettyPrintMessage = toPrettyPrintedStack(Classes.name(cls));
 				String exceptionMessage = result.reason + '\n' + prettyPrintMessage;
-				if (result.cause != null)
-				{
-					ocx = new ObjectCheckException(exceptionMessage, result.cause);
-				}
-				else
-				{
-					ocx = new ObjectCheckException(exceptionMessage);
-				}
-				throw ocx;
+				throw new ObjectCheckException(exceptionMessage, result.cause);
 			}
 		}
 
@@ -103,11 +94,11 @@
 			}
 			catch (Exception e)
 			{
-				if (e instanceof WicketNotSerializableException)
+				if (e instanceof ObjectCheckException)
 				{
-					throw (WicketNotSerializableException)e;
+					throw (ObjectCheckException)e;
 				}
-				log.warn("error delegating to Externalizable : {}, path: {}", e.getMessage(), currentPath());
+				log.warn("Error delegating to Externalizable : {}, path: {}", e.getMessage(), currentPath());
 			}
 		}
 		else
@@ -175,9 +166,9 @@
 				}
 				catch (Exception e)
 				{
-					if (e instanceof WicketNotSerializableException)
+					if (e instanceof ObjectCheckException)
 					{
-						throw (WicketNotSerializableException)e;
+						throw (ObjectCheckException)e;
 					}
 					log.warn("error delegating to writeObject : {}, path: {}", e.getMessage(), currentPath());
 				}
