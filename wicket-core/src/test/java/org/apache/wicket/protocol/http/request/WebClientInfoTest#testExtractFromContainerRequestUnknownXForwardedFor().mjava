@@ -1,0 +1,14 @@
+	/**
+	 * Test X-Forwarded-For ip address extraction with fallback when no ip is contained.
+	 */
+	@Test
+	public void testExtractFromContainerRequestUnknownXForwardedFor()
+	{
+		String expected = "10.17.37.8";
+		when(servletRequest.getRemoteAddr()).thenReturn(expected);
+		when(webRequest.getHeader("X-Forwarded-For")).thenReturn("unknown");
+		WebClientInfo clientInfo = new WebClientInfo(requestCycleMock, "No user agent");
+		String actual = clientInfo.getRemoteAddr(requestCycleMock);
+		assertThat(actual, is(equalTo(expected)));
+	}
+
