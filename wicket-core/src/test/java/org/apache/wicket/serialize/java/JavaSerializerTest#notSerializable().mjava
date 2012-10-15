@@ -1,0 +1,15 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4812
+	 * 
+	 * Tests that serialization fails when using the default ObjectOutputStream in
+	 * JavaSerializer and some object in the tree is not Serializable
+	 */
+	@Test
+	public void notSerializable()
+	{
+		JavaSerializer serializer = new JavaSerializer("JavaSerializerTest");
+		WebComponent component = new NotSerializableComponent("id");
+		byte[] serialized = serializer.serialize(component);
+		assertNull("The produced byte[] must be null if there was an error", serialized);
+	}
+

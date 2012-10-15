@@ -9,10 +9,15 @@
 		nameStack.add(simpleName);
 		traceStack.add(new TraceSlot(obj, fieldDescription));
 
-		if (!(obj instanceof Serializable) && (!Proxy.isProxyClass(cls)))
+		for (IObjectChecker checker : checkers)
 		{
-			throw new WicketNotSerializableException(
-				toPrettyPrintedStack(obj.getClass().getName()), exception);
+			IObjectChecker.Result result = checker.check(obj);
+			if (result.status == IObjectChecker.Result.Status.FAILURE)
+			{
+				String prettyPrintMessage = toPrettyPrintedStack(Classes.name(cls));
+				String exceptionMessage = result.reason + '\n' + prettyPrintMessage;
+				throw new ObjectCheckException(exceptionMessage, result.cause);
+			}
 		}
 
 		ObjectStreamClass desc;
@@ -23,8 +28,8 @@
 				desc = (ObjectStreamClass)LOOKUP_METHOD.invoke(null, cls, Boolean.TRUE);
 				Class<?> repCl;
 				if (!(Boolean)HAS_WRITE_REPLACE_METHOD_METHOD.invoke(desc, (Object[])null) ||
-					(obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, obj)) == null ||
-					(repCl = obj.getClass()) == cls)
+						(obj = INVOKE_WRITE_REPLACE_METHOD.invoke(desc, obj)) == null ||
+						(repCl = obj.getClass()) == cls)
 				{
 					break;
 				}
@@ -53,7 +58,7 @@
 				Object[] objs = (Object[])obj;
 				for (int i = 0; i < objs.length; i++)
 				{
-					String arrayPos = "[" + i + "]";
+					CharSequence arrayPos = new StringBuilder(4).append('[').append(i).append(']');
 					simpleName = arrayPos;
 					fieldDescription += arrayPos;
 					check(objs[i]);
@@ -79,7 +84,7 @@
 						}
 
 						checked.put(streamObj, null);
-						String arrayPos = "[write:" + count++ + "]";
+						CharSequence arrayPos = new StringBuilder(10).append("[write:").append(count++).append(']');
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
 
@@ -89,12 +94,11 @@
 			}
 			catch (Exception e)
 			{
-				if (e instanceof WicketNotSerializableException)
+				if (e instanceof ObjectCheckException)
 				{
-					throw (WicketNotSerializableException)e;
+					throw (ObjectCheckException)e;
 				}
-				log.warn("error delegating to Externalizable : " + e.getMessage() + ", path: " +
-					currentPath());
+				log.warn("Error delegating to Externalizable : {}, path: {}", e.getMessage(), currentPath());
 			}
 		}
 		else
@@ -105,7 +109,7 @@
 				try
 				{
 					writeObjectMethod = cls.getDeclaredMethod("writeObject",
-						new Class[] { java.io.ObjectOutputStream.class });
+							new Class[] { java.io.ObjectOutputStream.class });
 				}
 				catch (SecurityException e)
 				{
@@ -148,7 +152,7 @@
 						}
 
 						checked.put(streamObj, null);
-						String arrayPos = "[write:" + counter + "]";
+						CharSequence arrayPos = new StringBuilder(10).append("[write:").append(counter).append(']');
 						simpleName = arrayPos;
 						fieldDescription += arrayPos;
 						check(streamObj);
@@ -162,12 +166,11 @@
 				}
 				catch (Exception e)
 				{
-					if (e instanceof WicketNotSerializableException)
+					if (e instanceof ObjectCheckException)
 					{
-						throw (WicketNotSerializableException)e;
+						throw (ObjectCheckException)e;
 					}
-					log.warn("error delegating to writeObject : " + e.getMessage() + ", path: " +
-						currentPath());
+					log.warn("error delegating to writeObject : {}, path: {}", e.getMessage(), currentPath());
 				}
 			}
 			else
