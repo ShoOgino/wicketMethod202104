@@ -5,10 +5,10 @@
 			@Override
 			protected ObjectOutputStream newObjectOutputStream(OutputStream out) throws IOException
 			{
-				return new ObjectCheckerObjectOutputStream(out);
+				return new CheckingObjectOutputStream(out);
 			}
 		};
 		byte[] bytes = serializer.serialize("Something to serialize");
-		System.err.println("bytes: " + bytes.length);
+		assertEquals(57, bytes.length);
 	}
 

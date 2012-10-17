@@ -8,12 +8,12 @@
 	@Test
 	public void runtimeExceptionTolerance() throws IOException
 	{
-		Logger logger = LogManager.getLogger(ObjectChecker.class);
+		Logger logger = LogManager.getLogger(CheckingObjectOutputStream.class);
 		logger.setLevel(Level.WARN);
 		Log4jEventHistory logHistory = new Log4jEventHistory();
 		logger.addAppender(logHistory);
-		SerializableChecker serializableChecker = new SerializableChecker(
-			new NotSerializableException());
+		SerializableChecker serializableChecker = new SerializableChecker(new ByteArrayOutputStream(),
+				new NotSerializableException());
 		try
 		{
 			serializableChecker.writeObject(new TestType1());
