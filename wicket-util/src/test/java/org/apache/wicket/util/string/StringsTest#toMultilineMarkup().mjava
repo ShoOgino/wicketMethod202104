@@ -15,6 +15,13 @@
 		assertEquals("<p>abc<br/>def<br/>ghi</p>", Strings.toMultilineMarkup("abc\ndef\nghi")
 			.toString());
 
+		// WICKET-4837
+		assertEquals(
+			"<p><a href=\"mailto:john@doe.com\">john@doe.com</a><br/><a href=\"http://apache.wicket.org\">http://apache.wicket.org</a></p>",
+			Strings.toMultilineMarkup(
+				"<a href=\"mailto:john@doe.com\">john@doe.com</a>\n<a href=\"http://apache.wicket.org\">http://apache.wicket.org</a>")
+				.toString());
+
 		assertEquals("<p>abc</p><p>def</p><p>ghi</p>",
 			Strings.toMultilineMarkup("abc\n\ndef\n\nghi").toString());
 		assertEquals("<p>abc</p><p>def</p><p>ghi</p>",
