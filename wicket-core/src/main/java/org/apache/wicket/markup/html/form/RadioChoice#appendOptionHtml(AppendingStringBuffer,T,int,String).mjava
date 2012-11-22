@@ -16,13 +16,15 @@
 		final String selected)
 	{
 		Object displayValue = getChoiceRenderer().getDisplayValue(choice);
-		Class<?> objectClass = displayValue == null ? null : displayValue.getClass();
+		Class<?> objectClass = (displayValue == null ? null : displayValue.getClass());
+
 		// Get label for choice
 		String label = "";
+
 		if (objectClass != null && objectClass != String.class)
 		{
 			@SuppressWarnings("rawtypes")
-			IConverter converter = getConverter(objectClass);
+			final IConverter converter = getConverter(objectClass);
 			label = converter.convertToString(displayValue, getLocale());
 		}
 		else if (displayValue != null)
@@ -32,7 +34,7 @@
 
 		// If there is a display value for the choice, then we know that the
 		// choice is automatic in some way. If label is /null/ then we know
-		// that the choice is a manually created checkbox tag at some random
+		// that the choice is a manually created radio tag at some random
 		// location in the page markup!
 		if (label != null)
 		{
@@ -40,26 +42,48 @@
 			buffer.append(getPrefix(index, choice));
 
 			String id = getChoiceRenderer().getIdValue(choice, index);
-			final String idAttr = getCheckBoxMarkupId(id);
+			final String idAttr = getMarkupId() + "-" + id;
 
-			// Add checkbox element
-			buffer.append("<input name=\"");
-			buffer.append(getInputName());
-			buffer.append("\"");
-			buffer.append(" type=\"checkbox\"");
-			if (isSelected(choice, index, selected))
+			boolean enabled = isEnabledInHierarchy() && !isDisabled(choice, index, selected);
+
+			// Add radio tag
+			buffer.append("<input name=\"")
+				.append(getInputName())
+				.append("\"")
+				.append(" type=\"radio\"")
+				.append((isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
+				.append((enabled ? "" : " disabled=\"disabled\""))
+				.append(" value=\"")
+				.append(id)
+				.append("\" id=\"")
+				.append(idAttr)
+				.append("\"");
+
+			// Should a roundtrip be made (have onSelectionChanged called)
+			// when the option is clicked?
+			if (wantOnSelectionChangedNotifications())
 			{
-				buffer.append(" checked=\"checked\"");
+				CharSequence url = urlFor(IOnChangeListener.INTERFACE, new PageParameters());
+
+				Form<?> form = findParent(Form.class);
+				if (form != null)
+				{
+					buffer.append(" onclick=\"")
+						.append(form.getJsForInterfaceUrl(url))
+						.append(";\"");
+				}
+				else
+				{
+					// NOTE: do not encode the url as that would give
+					// invalid JavaScript
+					buffer.append(" onclick=\"window.location.href='")
+						.append(url)
+						.append((url.toString().indexOf('?') > -1 ? "&" : "?") + getInputName())
+						.append("=")
+						.append(id)
+						.append("';\"");
+				}
 			}
-			if (isDisabled(choice, index, selected) || !isEnabledInHierarchy())
-			{
-				buffer.append(" disabled=\"disabled\"");
-			}
-			buffer.append(" value=\"");
-			buffer.append(id);
-			buffer.append("\" id=\"");
-			buffer.append(idAttr);
-			buffer.append("\"");
 
 			// Allows user to add attributes to the <input..> tag
 			{
@@ -91,19 +115,24 @@
 
 			buffer.append("/>");
 
-			// Add label for checkbox
+			// Add label for radio button
 			String display = label;
 			if (localizeDisplayValues())
 			{
 				display = getLocalizer().getString(label, this, label);
 			}
 
-			final CharSequence escaped = (getEscapeModelStrings() ? Strings.escapeMarkup(display)
-				: display);
+			CharSequence escaped = display;
+			if (getEscapeModelStrings())
+			{
+				escaped = Strings.escapeMarkup(display);
+			}
 
-			buffer.append("<label for=\"");
-			buffer.append(idAttr);
-			buffer.append("\">").append(escaped).append("</label>");
+			buffer.append("<label for=\"")
+				.append(idAttr)
+				.append("\">")
+				.append(escaped)
+				.append("</label>");
 
 			// Append option suffix
 			buffer.append(getSuffix(index, choice));
