@@ -1,0 +1,25 @@
+	/**
+	 * @return the {@link Class} stored in this reference
+	 */
+	@SuppressWarnings("unchecked")
+	public Class<? extends T> get()
+	{
+		Class<? extends T> clazz = cache != null ? cache.get() : null;
+		if (clazz == null)
+		{
+			try
+			{
+				clazz = (Class<? extends T>)Application.get()
+					.getApplicationSettings()
+					.getClassResolver()
+					.resolveClass(name);
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new RuntimeException("Could not resolve class: " + name, e);
+			}
+			cache(clazz);
+		}
+		return clazz;
+	}
+
