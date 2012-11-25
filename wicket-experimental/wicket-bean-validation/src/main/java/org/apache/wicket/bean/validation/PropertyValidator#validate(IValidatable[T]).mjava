@@ -1,0 +1,22 @@
+	@SuppressWarnings("unchecked")
+	@Override
+	public void validate(IValidatable<T> validatable)
+	{
+		BeanValidationContext config = BeanValidationConfiguration.get();
+		Validator validator = config.getValidator();
+
+		Property property = getProperty();
+
+		// validate the value using the bean validator
+
+		Set<?> violations = validator.validateValue(property.getOwner(), property.getName(),
+			validatable.getValue(), getGroups());
+
+		// iterate over violations and report them
+
+		for (ConstraintViolation<?> violation : (Set<ConstraintViolation<?>>)violations)
+		{
+			validatable.error(config.getViolationTranslator().convert(violation));
+		}
+	}
+

@@ -1,0 +1,21 @@
+	public ConstraintIterator(Validator validator, Property property, Class<?>... groups)
+	{
+		BeanDescriptor beanDesc = validator.getConstraintsForClass(property.getOwner());
+		if (beanDesc != null)
+		{
+			PropertyDescriptor propDesc = beanDesc.getConstraintsForProperty(property.getName());
+			if (propDesc != null)
+			{
+				// TODO use hasConstraintDesc to optimize...?
+				Set<ConstraintDescriptor<?>> constraints = propDesc.findConstraints()
+					.unorderedAndMatchingGroups(groups)
+					.getConstraintDescriptors();
+				if (constraints != null)
+				{
+					stack.add(constraints.iterator());
+					findNext();
+				}
+			}
+		}
+	}
+

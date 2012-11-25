@@ -1,0 +1,29 @@
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void onComponentTag(Component component, ComponentTag tag)
+	{
+		super.onComponentTag(component, tag);
+
+		BeanValidationContext config = BeanValidationConfiguration.get();
+		Validator validator = config.getValidator();
+		Property property = getProperty();
+
+		// find any tag modifiers that apply to the constraints of the property being validated
+		// and allow them to modify the component tag
+
+		Iterator<ConstraintDescriptor<?>> it = new ConstraintIterator(validator, property,
+			getGroups());
+
+		while (it.hasNext())
+		{
+			ConstraintDescriptor<?> desc = it.next();
+
+			ITagModifier modifier = config.getTagModifier(desc.getAnnotation().annotationType());
+
+			if (modifier != null)
+			{
+				modifier.modify((FormComponent<?>)component, tag, desc.getAnnotation());
+			}
+		}
+	}
+
