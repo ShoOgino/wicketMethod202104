@@ -1,0 +1,44 @@
+	@Test
+	public void fencing()
+	{
+		TestPage page = scope.getTester().startPage(TestPage.class);
+		page.containerInput.error("error");
+
+		// container messages should be visible to container feedbacks but not outside
+
+		assertTrue(page.containerFeedback.anyMessage());
+		assertTrue(page.containerFeedback2.anyMessage());
+		assertFalse(page.formFeedback.anyMessage());
+		assertFalse(page.externalFeedback.anyMessage());
+
+		page = scope.getTester().startPage(TestPage.class);
+		page.formInput.error("error");
+
+		// form messages should be visible only to the form feedbacks
+
+		assertFalse(page.containerFeedback.anyMessage());
+		assertFalse(page.containerFeedback2.anyMessage());
+		assertTrue(page.formFeedback.anyMessage());
+		assertFalse(page.externalFeedback.anyMessage());
+
+		page = scope.getTester().startPage(TestPage.class);
+		page.externalLabel.error("error");
+
+		// external messages should be picked up only by catch-all feedbacks
+
+		assertFalse(page.containerFeedback.anyMessage());
+		assertFalse(page.containerFeedback2.anyMessage());
+		assertFalse(page.formFeedback.anyMessage());
+		assertTrue(page.externalFeedback.anyMessage());
+
+		page = scope.getTester().startPage(TestPage.class);
+		page.getSession().error("error");
+
+		// session scoped errors should only be picked up by catch-all feedbacks
+
+		assertFalse(page.containerFeedback.anyMessage());
+		assertFalse(page.containerFeedback2.anyMessage());
+		assertFalse(page.formFeedback.anyMessage());
+		assertTrue(page.externalFeedback.anyMessage());
+	}
+

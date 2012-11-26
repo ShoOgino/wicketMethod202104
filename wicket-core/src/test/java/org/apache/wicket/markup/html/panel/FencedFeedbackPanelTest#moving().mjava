@@ -1,0 +1,37 @@
+	@Test
+	public void moving()
+	{
+		TestPage page = scope.getTester().startPage(TestPage.class);
+		page.containerInput.error("error");
+
+		assertTrue(page.containerFeedback.anyMessage());
+		assertTrue(page.containerFeedback2.anyMessage());
+
+		// does not propagate out of container
+		assertFalse(page.formFeedback.anyMessage());
+
+		// remove one of two fencing feedback panels
+
+		page = scope.getTester().startPage(TestPage.class);
+		page.containerFeedback.remove();
+
+		page.containerInput.error("error");
+
+		assertTrue(page.containerFeedback2.anyMessage());
+
+		// still does not propagate out of container because there is still a fencing panel
+		assertFalse(page.formFeedback.anyMessage());
+
+		// remove the last fencing feedback panel
+
+		page = scope.getTester().startPage(TestPage.class);
+		page.containerFeedback.remove();
+		page.containerFeedback2.remove();
+
+		page.containerInput.error("error");
+
+		// now propagates out of container
+		assertTrue(page.formFeedback.anyMessage());
+
+	}
+

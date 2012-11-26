@@ -1,0 +1,21 @@
+	/**
+	 * Creates a fenced feedback panel with a filter.
+	 * 
+	 * @see #FencedFeedbackPanel(String, Component)
+	 * 
+	 * @param id
+	 * @param fence
+	 * @param filter
+	 */
+	public FencedFeedbackPanel(String id, Component fence, IFeedbackMessageFilter filter)
+	{
+		super(id, filter);
+		this.fence = fence;
+		if (fence != null)
+		{
+			Integer count = fence.getMetaData(FENCE_KEY);
+			count = count == null ? 1 : count + 1;
+			fence.setMetaData(FENCE_KEY, count);
+		}
+	}
+
