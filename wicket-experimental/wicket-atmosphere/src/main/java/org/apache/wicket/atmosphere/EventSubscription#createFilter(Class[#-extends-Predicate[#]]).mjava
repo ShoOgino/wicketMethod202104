@@ -1,10 +1,9 @@
 	@SuppressWarnings("unchecked")
-	private static Predicate<Object> createFilter(Method method)
+	private static Predicate<Object> createFilter(Class<? extends Predicate<?>> filterClass)
 	{
-		Subscribe subscribe = method.getAnnotation(Subscribe.class);
 		try
 		{
-			return (Predicate<Object>)subscribe.filter().newInstance();
+			return (Predicate<Object>)filterClass.newInstance();
 		}
 		catch (InstantiationException e)
 		{
