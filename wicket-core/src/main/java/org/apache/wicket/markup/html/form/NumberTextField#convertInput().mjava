@@ -1,0 +1,18 @@
+	/**
+	 * Always use {@link Locale#ENGLISH} to parse the input.
+	 */
+	@Override
+	protected void convertInput()
+	{
+		IConverter<N> converter = getConverter(getNumberType());
+
+		try
+		{
+			setConvertedInput(converter.convertToObject(getInput(), Locale.ENGLISH));
+		}
+		catch (ConversionException e)
+		{
+			error(newValidationError(e));
+		}
+	}
+
