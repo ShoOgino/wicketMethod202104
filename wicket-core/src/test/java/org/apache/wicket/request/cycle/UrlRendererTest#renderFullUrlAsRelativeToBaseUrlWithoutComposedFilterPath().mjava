@@ -1,11 +1,11 @@
 	@Test
-	public void renderFullUrlAsRelativeToBaseUrlWithoutFilterPath()
+	public void renderFullUrlAsRelativeToBaseUrlWithoutComposedFilterPath()
 	{
 		Url baseUrl = Url.parse("a/b/c/d"); // base url without context path and filter path
-		Url encodedFullUrl = Url.parse("http://host:8080/contextPath/a/b;jsessionid=123456");
+		Url encodedFullUrl = Url.parse("http://host:8080/context/path/a/b;jsessionid=123456");
 
 		MockWebRequest request = new MockWebRequest(baseUrl);
-		request.setContextPath("contextPath");
+		request.setContextPath("context/path");
 		UrlRenderer renderer = new UrlRenderer(request);
 		String encodedRelativeUrl = renderer.renderRelativeUrl(encodedFullUrl);
 
