@@ -1,0 +1,21 @@
+	@Override
+	protected WebApplication newApplication()
+	{
+		return new MockApplication()
+		{
+			@Override
+			protected void init()
+			{
+				super.init();
+
+				// remove that setting to see the original (non-compressed) version of the bundle
+				getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
+
+				getResourceBundles().addJavaScriptBundle(CompressBundlesTest.class, "bundle.js",
+					new JavaScriptResourceReference(CompressBundlesTest.class, "two.js"),
+					new JavaScriptResourceReference(CompressBundlesTest.class, "one.js")
+				);
+			}
+		};
+	}
+
