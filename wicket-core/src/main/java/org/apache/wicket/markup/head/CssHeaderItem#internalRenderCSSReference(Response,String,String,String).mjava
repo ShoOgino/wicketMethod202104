@@ -6,6 +6,14 @@
 		boolean hasCondition = Strings.isEmpty(condition) == false; 
 		if (hasCondition)
 		{
+			if (RequestCycle.get().find(AjaxRequestTarget.class) != null)
+			{
+				// WICKET-4894
+				logger.warn("IE CSS engine doesn't support dynamically injected links in " +
+						"conditional comments. See the javadoc of IHeaderResponse for alternative solution.");
+			}
+
+
 			response.write("<!--[if ");
 			response.write(condition);
 			response.write("]>");
