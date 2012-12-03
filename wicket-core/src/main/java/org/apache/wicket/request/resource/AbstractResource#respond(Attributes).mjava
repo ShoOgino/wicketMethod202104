@@ -23,7 +23,8 @@
 		// set response header
 		setResponseHeaders(data, attributes);
 
-		if (!data.dataNeedsToBeWritten(attributes) || data.getErrorCode() != null || data.getStatusCode() != null)
+		if (!data.dataNeedsToBeWritten(attributes) || data.getErrorCode() != null
+				|| needsBody(data.getStatusCode()) == false)
 		{
 			return;
 		}
