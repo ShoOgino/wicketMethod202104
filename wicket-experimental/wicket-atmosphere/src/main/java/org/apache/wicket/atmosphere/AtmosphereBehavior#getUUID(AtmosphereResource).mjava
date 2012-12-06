@@ -1,18 +1,11 @@
 	/**
 	 * @param resource
 	 * @return the unique id for the given suspended connection
+	 * @deprecated use {@link AtmosphereResource#uuid()}
 	 */
+	@Deprecated
 	public static String getUUID(AtmosphereResource resource)
 	{
-		Object trackingId = resource.getRequest().getHeader(HeaderConfig.X_ATMOSPHERE_TRACKING_ID);
-		if (trackingId != null && !trackingId.equals("0"))
-			return trackingId.toString();
-
-		trackingId = resource.getRequest().getAttribute(
-			ApplicationConfig.SUSPENDED_ATMOSPHERE_RESOURCE_UUID);
-		if (trackingId != null && !trackingId.equals("0"))
-			return trackingId.toString();
-
-		return resource.getRequest().getHeader("Sec-WebSocket-Key");
+		return resource.uuid();
 	}
 

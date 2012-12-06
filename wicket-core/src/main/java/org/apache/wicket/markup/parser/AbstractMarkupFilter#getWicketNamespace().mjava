@@ -1,16 +1,18 @@
 	/**
+	 * Extracts the markup namespace from the MarkupResourceStream
+	 * passed at creation time.
+	 *
+	 * <p>
+	 *     There are two versions of this method because most IMarkupFilter's
+	 *     have dual personality - {@link IMarkupFilter} (one instance per MarkupParser)
+	 *     and {@link org.apache.wicket.markup.resolver.IComponentResolver} (one
+	 *     instance per application).
+	 * </p>
+	 *
 	 * @return the namespace of the loaded markup
 	 */
 	protected String getWicketNamespace()
 	{
-		String wicketNamespace;
-		if (markupResourceStream != null)
-		{
-			wicketNamespace = markupResourceStream.getWicketNamespace();
-		}
-		else {
-			wicketNamespace = MarkupParser.WICKET;
-		}
-		return wicketNamespace;
+		return getWicketNamespace(null);
 	}
 

@@ -1,0 +1,17 @@
+	@SuppressWarnings("unchecked")
+	private static Predicate<Object> createFilter(Class<? extends Predicate<?>> filterClass)
+	{
+		try
+		{
+			return (Predicate<Object>)filterClass.newInstance();
+		}
+		catch (InstantiationException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
+	}
+

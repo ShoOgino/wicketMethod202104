@@ -1,0 +1,45 @@
+	@Test
+	public void filtering()
+	{
+		TestPage page = scope.getTester().startPage(TestPage.class);
+
+		// set a filter that will only allow errors or higher
+
+		page.containerFeedback.setFilter(new ErrorLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
+
+		// report an info message - should be filtered out
+
+		page.containerInput.info("info");
+
+		// check info message was filtered out
+
+		assertFalse(page.containerFeedback.anyMessage());
+		assertTrue(page.containerFeedback2.anyMessage());
+
+		// ensure filtered out messages dont leak
+
+		assertFalse(page.formFeedback.anyMessage());
+		assertFalse(page.externalFeedback.anyMessage());
+
+		// same setup
+
+		page = scope.getTester().startPage(TestPage.class);
+
+		page.containerFeedback.setFilter(new ErrorLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
+
+		// but now with an error message that should not be filtered out
+
+		page.containerInput.error("info");
+
+		// check message was not filtered out
+
+		assertTrue(page.containerFeedback.anyMessage());
+		assertTrue(page.containerFeedback2.anyMessage());
+
+		// and that it should not leak
+
+		assertFalse(page.formFeedback.anyMessage());
+		assertFalse(page.externalFeedback.anyMessage());
+
+	}
+

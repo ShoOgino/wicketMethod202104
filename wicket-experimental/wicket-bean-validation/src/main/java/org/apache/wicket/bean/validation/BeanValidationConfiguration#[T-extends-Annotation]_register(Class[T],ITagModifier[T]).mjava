@@ -1,0 +1,20 @@
+	/**
+	 * Registeres a tag modifier for a specific constraint annotation
+	 * 
+	 * @param annotationType
+	 *            constraint annotation such as {@link Size}
+	 * @param modifier
+	 *            tag modifier to use
+	 * @return {@code this}
+	 */
+	public <T extends Annotation> BeanValidationConfiguration register(Class<T> annotationType,
+		ITagModifier<T> modifier)
+	{
+		Args.notNull(annotationType, "annotationType");
+		Args.notNull(modifier, "modifier");
+
+		tagModifiers.put(annotationType, modifier);
+
+		return this;
+	}
+

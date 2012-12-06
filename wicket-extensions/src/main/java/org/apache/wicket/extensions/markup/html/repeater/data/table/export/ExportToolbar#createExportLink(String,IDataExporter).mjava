@@ -1,0 +1,24 @@
+	/**
+	 * Creates a new link to the exported data for the provided {@link IDataExporter}.
+	 *
+	 * @param componentId
+	 *      The component of the link.
+	 * @param dataExporter
+	 *      The data exporter to use to export the data.
+	 * @return a new link to the exported data for the provided {@link IDataExporter}.
+	 */
+	protected Component createExportLink(String componentId, final IDataExporter dataExporter)
+	{
+		IResource resource = new ResourceStreamResource()
+		{
+			@Override
+			protected IResourceStream getResourceStream()
+			{
+				return new DataExportResourceStreamWriter(dataExporter, getTable());
+			}
+		}.setFileName(fileNameModel.getObject() + "." + dataExporter.getFileNameExtension());
+
+		return new ResourceLink<Void>(componentId, resource)
+			.setBody(dataExporter.getDataFormatNameModel());
+	}
+

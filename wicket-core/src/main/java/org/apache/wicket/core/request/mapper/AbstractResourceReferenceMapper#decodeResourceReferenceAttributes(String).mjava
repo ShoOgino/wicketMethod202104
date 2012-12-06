@@ -1,22 +1,21 @@
-	protected final ResourceReference.UrlAttributes decodeResourceReferenceAttributes(
-		String attributes)
+	protected final ResourceReference.UrlAttributes decodeResourceReferenceAttributes(String attributes)
 	{
 		Locale locale = null;
 		String style = null;
 		String variation = null;
 
-		if (!Strings.isEmpty(attributes))
+		if (Strings.isEmpty(attributes) == false)
 		{
-			String split[] = attributes.split("-", 3);
+			String split[] = Strings.split(attributes, '-');
 			locale = parseLocale(split[0]);
 			if (split.length == 2)
 			{
-				style = nonEmpty(split[1]);
+				style = nonEmpty(unescapeAttributesSeparator(split[1]));
 			}
 			else if (split.length == 3)
 			{
-				style = nonEmpty(split[1]);
-				variation = nonEmpty(split[2]);
+				style = nonEmpty(unescapeAttributesSeparator(split[1]));
+				variation = nonEmpty(unescapeAttributesSeparator(split[2]));
 			}
 		}
 		return new ResourceReference.UrlAttributes(locale, style, variation);
