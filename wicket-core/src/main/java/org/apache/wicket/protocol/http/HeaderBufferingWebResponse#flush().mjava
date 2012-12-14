@@ -1,12 +1,8 @@
 	@Override
 	public void flush()
 	{
-		if (!bufferedWritten)
-		{
-			bufferedResponse.writeTo(originalResponse);
-			bufferedResponse.reset();
-		}
+		stopBuffering();
+
 		originalResponse.flush();
-		flushed = true;
 	}
 
