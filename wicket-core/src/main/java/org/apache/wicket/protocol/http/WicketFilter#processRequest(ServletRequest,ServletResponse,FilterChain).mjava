@@ -58,18 +58,7 @@
 					httpServletResponse);
 
 				RequestCycle requestCycle = application.createRequestCycle(webRequest, webResponse);
-				if (!requestCycle.processRequestAndDetach())
-				{
-					if (chain != null)
-					{
-						chain.doFilter(request, response);
-					}
-					res = false;
-				}
-				else
-				{
-					webResponse.flush();
-				}
+				res = processRequestCycle(requestCycle, webResponse, httpServletRequest, httpServletResponse, chain);
 			}
 			else
 			{
