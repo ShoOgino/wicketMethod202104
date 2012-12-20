@@ -1,0 +1,16 @@
+	/**
+	 * Decides whether the filter should be applied.
+	 *
+	 * @param responseBuffer The buffer to filter
+	 * @return {@code true} if the buffer brings Ajax response
+	 */
+	protected boolean shouldFilter(AppendingStringBuffer responseBuffer)
+	{
+		// To avoid reading the whole buffer for non-Ajax responses
+		// read just the first N chars. A candidate can start with:
+		// <?xml version="1.0" encoding="UTF-8" standalone="yes"?><ajax-response>
+		int min = Math.min(150, responseBuffer.length());
+		String firstNChars = responseBuffer.substring(0, min);
+		return firstNChars.contains("<ajax-response>");
+	}
+

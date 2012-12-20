@@ -1,0 +1,48 @@
+	/**
+	 * This method ensures that the output String has only
+	 * valid XML unicode characters as specified by the
+	 * XML 1.0 standard. For reference, please see
+	 * <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char">the
+	 * standard</a>. This method will return an empty
+	 * String if the input is null or empty.
+	 *
+	 * @param input The StringBuffer whose non-valid characters we want to remove.
+	 * @return The in String, stripped of non-valid characters.
+	 */
+	public AppendingStringBuffer stripNonValidXMLCharacters(AppendingStringBuffer input)
+	{
+		char[] chars = input.getValue();
+		AppendingStringBuffer out = null;
+
+		int codePoint;
+
+		int i = 0;
+
+		while (i < input.length())
+		{
+			codePoint = Character.codePointAt(chars, i, chars.length);
+
+			if (!isValidXmlChar(codePoint))
+			{
+				if (out == null)
+				{
+					out = new AppendingStringBuffer(chars.length);
+					out.append(input.subSequence(0, i));
+				}
+				else
+				{
+					out.append(Character.toChars(codePoint));
+				}
+			}
+			else if (out != null)
+			{
+				out.append(Character.toChars(codePoint));
+			}
+
+			// Increment with the number of code units(java chars) needed to represent a Unicode char.
+			i += Character.charCount(codePoint);
+		}
+
+		return out != null ? out : input;
+	}
+
