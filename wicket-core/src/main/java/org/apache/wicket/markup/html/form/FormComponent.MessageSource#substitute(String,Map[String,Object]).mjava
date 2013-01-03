@@ -16,6 +16,12 @@
 					{
 						return null;
 					}
+					else if (value instanceof String)
+					{
+						// small optimization - no need to bother with conversion
+						// for String vars, e.g. {label}
+						return (String)value;
+					}
 					else
 					{
 						IConverter converter = getConverter(value.getClass());
