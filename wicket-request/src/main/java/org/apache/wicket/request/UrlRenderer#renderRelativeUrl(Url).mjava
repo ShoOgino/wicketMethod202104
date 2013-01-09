@@ -59,14 +59,10 @@
 		}
 		newSegments.addAll(urlSegments);
 
-		// sanitize start
 		String renderedUrl = new Url(newSegments, url.getQueryParameters()).toString();
-		if (renderedUrl.startsWith("/"))
-		{
-			// WICKET-4920
-			renderedUrl = "." + renderedUrl;
-		}
-		else if (!renderedUrl.startsWith(".."))
+
+		// sanitize start
+		if (!renderedUrl.startsWith(".."))
 		{
 			// WICKET-4260
 			renderedUrl = "./" + renderedUrl;
@@ -78,6 +74,7 @@
 			// WICKET-4401
 			renderedUrl = renderedUrl + '/';
 		}
+
 		return renderedUrl;
 	}
 
