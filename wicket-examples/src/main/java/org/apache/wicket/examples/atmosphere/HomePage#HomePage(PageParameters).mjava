@@ -7,6 +7,7 @@
 
 		Form<Void> form = new Form<Void>("form");
 		add(form);
+		form.add(receiver = new TextField<String>("receiver", Model.of("")));
 		form.add(input = new TextField<String>("input", Model.of("")));
 		form.add(new AjaxSubmitLink("send", form)
 		{
@@ -15,7 +16,8 @@
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
-				EventBus.get().post(input.getModelObject());
+				EventBus.get().post(
+					new ChatMessage(receiver.getModelObject(), input.getModelObject()));
 			}
 
 			@Override

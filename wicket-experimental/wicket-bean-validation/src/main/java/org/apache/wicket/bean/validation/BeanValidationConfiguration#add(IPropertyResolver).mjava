@@ -1,0 +1,18 @@
+	/**
+	 * Adds a property resolver to the configuration. Property resolvers registered last are the
+	 * first to be allowed to resolve the property.
+	 * 
+	 * @param resolver
+	 * @return {@code this}
+	 */
+	public BeanValidationConfiguration add(IPropertyResolver resolver)
+	{
+		Args.notNull(resolver, "resolver");
+
+		// put newly added resolvers in the beginning so its possible to override previously added
+		// resolvers with newer ones
+		propertyResolvers.add(0, resolver);
+
+		return this;
+	}
+

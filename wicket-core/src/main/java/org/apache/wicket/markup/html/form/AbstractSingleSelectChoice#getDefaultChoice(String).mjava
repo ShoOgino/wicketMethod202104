@@ -23,12 +23,7 @@
 		if (isNullValid())
 		{
 			// Null is valid, so look up the value for it
-			String option = getLocalizer().getStringIgnoreSettings(getNullValidKey(), this, null,
-				null);
-			if (Strings.isEmpty(option))
-			{
-				option = getLocalizer().getString("nullValid", this, "");
-			}
+			String option = getNullValidDisplayValue();
 
 			// The <option> tag buffer
 			final AppendingStringBuffer buffer = new AppendingStringBuffer(64 + option.length());
@@ -52,14 +47,7 @@
 			if ("".equals(selectedValue))
 			{
 				// Force the user to pick a non-null value
-				String option = getLocalizer().getStringIgnoreSettings(getNullKey(), this, null,
-					null);
-
-				if (Strings.isEmpty(option))
-				{
-					option = getLocalizer().getString("null", this, CHOOSE_ONE);
-				}
-
+				String option = getNullKeyDisplayValue();
 				return "\n<option selected=\"selected\" value=\"\">" + option + "</option>";
 			}
 		}

@@ -4,7 +4,7 @@
 	 * @param filter
 	 * @return a {@link List} of collected messages
 	 */
-	public List<FeedbackMessage> collect(final IFeedbackMessageFilter filter)
+	public final List<FeedbackMessage> collect(final IFeedbackMessageFilter filter)
 	{
 		final List<FeedbackMessage> messages = new ArrayList<FeedbackMessage>();
 
@@ -26,6 +26,12 @@
 				@Override
 				public void component(Component object, IVisit<Void> visit)
 				{
+					if (!shouldRecurseInto(object))
+					{
+						visit.dontGoDeeper();
+						return;
+					}
+
 					if (object.hasFeedbackMessage())
 					{
 						messages.addAll(object.getFeedbackMessages().messages(filter));

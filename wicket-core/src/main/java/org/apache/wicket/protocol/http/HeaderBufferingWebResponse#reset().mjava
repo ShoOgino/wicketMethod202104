@@ -1,11 +1,15 @@
 	@Override
 	public void reset()
 	{
-		if (flushed)
+		if (buffering)
 		{
-			throw new IllegalStateException("Response has already been flushed!");
+			// still buffering so just reset the buffer of meta data
+			bufferedResponse.reset();
 		}
-		bufferedResponse.reset();
-		bufferedWritten = false;
+		else
+		{
+			// the original response is never reset (see class javadoc)
+			throw new IllegalStateException("Response is no longer buffering!");
+		}
 	}
 

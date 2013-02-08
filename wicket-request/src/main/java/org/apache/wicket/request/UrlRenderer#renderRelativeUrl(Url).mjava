@@ -60,16 +60,21 @@
 		newSegments.addAll(urlSegments);
 
 		String renderedUrl = new Url(newSegments, url.getQueryParameters()).toString();
+
+		// sanitize start
 		if (!renderedUrl.startsWith(".."))
 		{
 			// WICKET-4260
 			renderedUrl = "./" + renderedUrl;
 		}
+
+		// sanitize end
 		if (renderedUrl.endsWith(".."))
 		{
 			// WICKET-4401
 			renderedUrl = renderedUrl + '/';
 		}
+
 		return renderedUrl;
 	}
 

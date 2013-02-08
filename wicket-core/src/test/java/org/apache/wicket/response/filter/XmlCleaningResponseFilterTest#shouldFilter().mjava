@@ -1,0 +1,17 @@
+	/**
+	 * Asserts that XmlCleaningResponseFilter#shouldFilter() returns true when
+	 * there is <ajax-response> in the text to filter
+	 * @throws Exception
+	 */
+	@Test
+	public void shouldFilter() throws Exception
+	{
+		XmlFilter filter = new XmlFilter();
+
+		assertFalse(filter.shouldFilter(new AppendingStringBuffer("anything")));
+
+		assertTrue(filter.shouldFilter(
+				new AppendingStringBuffer("<?xml version=\"1.0\" encoding=\"UTF-8\"" +
+						" standalone=\"yes\"><ajax-response></ajax-response>")));
+	}
+

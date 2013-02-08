@@ -1,3 +1,7 @@
+	/**
+	 * Find all checkboxes in the containing form with the same input name as the {@link CheckGroup}
+	 * .
+	 */
 	@Override
 	protected CharSequence getFindCheckboxesFunction()
 	{
@@ -9,7 +13,10 @@
 					getPath() +
 					"] cannot find its parent CheckGroup. All CheckGroupSelector components must be a child of or below in the hierarchy of a CheckGroup component.");
 		}
-		return "Wicket.CheckboxSelector.Group.findCheckboxesFunction('" +
-			group.getForm().getRootForm().getMarkupId() + "','" + group.getInputName() + "')";
+
+		// we search the complete form because the CheckGroup might not output its markup tag or be
+		// located on a <wicket:container>
+		return String.format("Wicket.CheckboxSelector.findCheckboxesFunction('%s','%s')",
+			group.getForm().getMarkupId(), group.getInputName());
 	}
 
