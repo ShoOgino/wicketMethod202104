@@ -1,6 +1,9 @@
 	@Override
 	public Charset getCharset()
 	{
+		// called from the super constructor, when wrappedRequest is still null
+		if (wrappedRequest == null)
+			return RequestUtils.getCharset(super.getContainerRequest());
 		return wrappedRequest.getCharset();
 	}
 
