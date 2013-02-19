@@ -19,9 +19,27 @@
 			request.setServerPort(lastRequest.getServerPort());
 		}
 
-		transferCookies();
+		transferRequestCookies();
 
 		response = new MockHttpServletResponse(request);
+
+		// Preserve response cookies in redirects
+		// XXX: is this really needed ? Browsers wont do that, but some
+		// Wicket tests assert that a cookie is in the response,
+		// even after redirects (see org.apache.wicket.util.cookies.SetCookieAndRedirectTest.statefulPage())
+		// They should assert that the cookie is in the next *request*
+		if (lastResponse != null && lastResponse.isRedirect())
+		{
+			List<Cookie> lastResponseCookies = lastResponse.getCookies();
+			for (Cookie cookie : lastResponseCookies)
+			{
+				if (cookie.getMaxAge() != 0)
+				{
+					// max-age==0 are already handled in #transferRequestCookies() above
+					response.addCookie(cookie);
+				}
+			}
+		}
 
 		ServletWebRequest servletWebRequest = newServletWebRequest();
 		requestCycle = application.createRequestCycle(servletWebRequest,
