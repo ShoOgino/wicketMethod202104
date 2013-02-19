@@ -1,9 +1,9 @@
 	@Override
-	public boolean apply(Object input)
+	public boolean apply(AtmosphereEvent input)
 	{
-		if (input instanceof ChatMessage)
+		if (input.getPayload() instanceof ChatMessage)
 		{
-			ChatMessage msg = (ChatMessage)input;
+			ChatMessage msg = (ChatMessage)input.getPayload();
 			return msg.getReceiver() == null || msg.getReceiver().isEmpty() ||
 				msg.getReceiver().equals(Session.get().getId());
 		}

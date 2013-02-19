@@ -8,6 +8,8 @@
 		Iterator<T> options = getOptionsIterator();
 		IChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
 
+		boolean localizeDisplayValues = localizeDisplayValues();
+
 		while (options.hasNext())
 		{
 			final T choice = options.next();
@@ -34,7 +36,10 @@
 				@SuppressWarnings("unchecked")
 				IConverter<Object> converter = (IConverter<Object>)getConverter(displayClass);
 				String displayString = converter.convertToString(displayValue, getLocale());
-				displayString = getLocalizer().getString(displayString, this, displayString);
+				if (localizeDisplayValues)
+				{
+					displayString = getLocalizer().getString(displayString, this, displayString);
+				}
 
 				if (getEscapeModelStrings())
 				{
