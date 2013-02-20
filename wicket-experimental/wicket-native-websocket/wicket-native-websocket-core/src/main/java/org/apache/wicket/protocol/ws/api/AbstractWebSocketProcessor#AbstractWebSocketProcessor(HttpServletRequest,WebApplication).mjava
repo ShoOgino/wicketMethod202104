@@ -6,7 +6,7 @@
 	 * @param application
 	 *      the current Wicket Application
 	 */
-	public AbstractWebSocketProcessor(final HttpServletRequest request, final Application application)
+	public AbstractWebSocketProcessor(final HttpServletRequest request, final WebApplication application)
 	{
 		this.sessionId = request.getSession(true).getId();
 		Session.get().bind();
@@ -19,7 +19,8 @@
 		Checks.notNull(baseUrl, String.format("Request parameter '%s' is required!", WebRequest.PARAM_AJAX_BASE_URL));
 		this.baseUrl = Url.parse(baseUrl);
 
-		this.webRequest = new WebSocketRequest(new ServletRequestCopy(request));
+		WicketFilter wicketFilter = application.getWicketFilter();
+		this.webRequest = new WebSocketRequest(new ServletRequestCopy(request), getFilterPath(wicketFilter));
 
 		this.application = Args.notNull(application, "application");
 		IWebSocketSettings webSocketSettings = IWebSocketSettings.Holder.get(application);
