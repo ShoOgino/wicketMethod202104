@@ -1,8 +1,10 @@
 	/**
-	 * @see org.apache.wicket.Component#onBeforeRender()
+	 * Try to sign-in with remembered credentials.
+	 * 
+	 * @see #setRememberMe(boolean)
 	 */
 	@Override
-	protected void onBeforeRender()
+	protected void onConfigure()
 	{
 		// logged in already?
 		if (isSignedIn() == false)
@@ -20,11 +22,7 @@
 					username = data[0];
 					password = data[1];
 
-					// logon successful. Continue to the original destination
-					continueToOriginalDestination();
-					// Ups, no original destination. Go to the home page
-					throw new RestartResponseException(getSession().getPageFactory().newPage(
-						getApplication().getHomePage()));
+					onSignInRemembered();
 				}
 				else
 				{
@@ -34,7 +32,6 @@
 			}
 		}
 
-		// don't forget
-		super.onBeforeRender();
+		super.onConfigure();
 	}
 
