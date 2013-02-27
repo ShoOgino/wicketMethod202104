@@ -8,7 +8,7 @@
 
 			Url url;
 
-			if (reference instanceof ResourceBundleReference)
+			while (reference instanceof ResourceBundleReference)
 			{
 				// unwrap the bundle to render the url for the actual reference
 				reference = ((ResourceBundleReference)reference).getBundleReference();
@@ -23,12 +23,6 @@
 					return url;
 				}
 				// otherwise it has to be served by the standard wicket way
-			}
-			else if (reference instanceof UrlResourceReference)
-			{
-				UrlResourceReference urlReference = (UrlResourceReference)reference;
-				url = urlReference.getUrl();
-				return url;
 			}
 
 			if (reference.canBeRegistered())
