@@ -21,14 +21,8 @@
 	{
 		final Form<?> processingForm = findFormToProcess(submittingComponent);
 
-		// process submitting component (if specified)
-		if (submittingComponent != null)
-		{
-			// invoke submit on component
-			submittingComponent.onSubmit();
-		}
-
-		// invoke Form#onSubmit(..) going from innermost to outermost
+		// collect all forms innermost to outermost before any hierarchy is changed
+		final List<Form<?>> forms = Generics.newArrayList(3);
 		Visits.visitPostOrder(processingForm, new IVisitor<Form<?>, Void>()
 		{
 			@Override
@@ -36,10 +30,23 @@
 			{
 				if (form.isEnabledInHierarchy() && form.isVisibleInHierarchy())
 				{
-					form.onSubmit();
+					forms.add(form);
 				}
 			}
 		}, new ClassVisitFilter(Form.class));
+
+		// process submitting component (if specified)
+		if (submittingComponent != null)
+		{
+			// invoke submit on component
+			submittingComponent.onSubmit();
+		}
+
+		// invoke Form#onSubmit(..)
+		for (Form<?> form : forms)
+		{
+			form.onSubmit();
+		}
 
 		if (submittingComponent != null)
 		{
