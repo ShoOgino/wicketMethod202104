@@ -3,7 +3,13 @@
 	{
 		if (isOpen())
 		{
-			connection.close(code, reason);
+			try
+			{
+				session.close(code, reason);
+			} catch (IOException iox)
+			{
+				LOG.error("An error occurred while closing WebSocket session", iox);
+			}
 		}
 	}
 
