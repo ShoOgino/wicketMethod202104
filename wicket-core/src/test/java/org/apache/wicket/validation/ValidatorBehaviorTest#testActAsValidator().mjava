@@ -19,7 +19,8 @@
 		ft.setValue("name", "999999999");
 		ft.submit();
 		assertEquals(1, new FeedbackCollector(page).collect().size());
-		assertEquals("MAX", new FeedbackCollector(page).collect()
+		// WICKET-5115 variables in default message are not substituted (was the case in 1.5.x)
+		assertEquals("MAX ${len}", new FeedbackCollector(page).collect()
 			.get(0)
 			.getMessage()
 			.toString());
