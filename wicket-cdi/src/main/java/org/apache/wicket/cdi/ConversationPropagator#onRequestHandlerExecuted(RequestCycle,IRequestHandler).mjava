@@ -3,14 +3,24 @@
 	{
 		Conversation conversation = getConversation(cycle);
 
-		if (conversation == null || conversation.isTransient())
+		if (conversation == null)
 		{
 			return;
 		}
 
-
 		Page page = getPage(handler);
-		if (page != null && propagation.propagatesViaPage(page, handler))
+
+		if (page == null)
+		{
+			return;
+		}
+
+		// apply auto semantics
+
+		autoEndIfNecessary(page, handler, conversation);
+		autoBeginIfNecessary(page, handler, conversation);
+
+		if (propagation.propagatesViaPage(page, handler))
 		{
 			// propagate a conversation across non-bookmarkable page instances
 			setConversationOnPage(conversation, page);

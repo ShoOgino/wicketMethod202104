@@ -1,6 +1,8 @@
 	@Override
 	public void onRequestHandlerScheduled(RequestCycle cycle, IRequestHandler handler)
 	{
+		// propagate current non-transient conversation to the newly scheduled page
+
 		Conversation conversation = getConversation(cycle);
 
 		if (conversation == null || conversation.isTransient())
@@ -9,10 +11,13 @@
 		}
 
 		Page page = getPage(handler);
-		if (page != null && propagation.propagatesViaPage(page, handler))
+		if (page != null)
 		{
-			// propagate a conversation across non-bookmarkable page instances
-			setConversationOnPage(conversation, page);
+			if (propagation.propagatesViaPage(page, handler))
+			{
+				// propagate a conversation across non-bookmarkable page instances
+				setConversationOnPage(conversation, page);
+			}
 		}
 
 		if (propagation.propagatesViaParameters(handler))
