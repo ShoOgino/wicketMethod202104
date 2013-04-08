@@ -47,7 +47,7 @@
 				return false;
 			}
 
-			if ("OPTIONS".equals(httpServletRequest.getMethod()))
+			if ("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod()))
 			{
 				// handle the OPTIONS request outside of normal request processing.
 				// wicket pages normally only support GET and POST methods, but resources and
@@ -71,7 +71,8 @@
 					httpServletResponse);
 
 				RequestCycle requestCycle = application.createRequestCycle(webRequest, webResponse);
-				res = processRequestCycle(requestCycle, webResponse, httpServletRequest, httpServletResponse, chain);
+				res = processRequestCycle(requestCycle, webResponse, httpServletRequest,
+					httpServletResponse, chain);
 			}
 			else
 			{
