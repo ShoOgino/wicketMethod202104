@@ -1,0 +1,17 @@
+	/**
+	 * WICKET-4658
+	 */
+	@Test
+	public void lastSelected_2Visible()
+	{
+		final TabbedPanelVisibilityTestPage visibilityTestPage = new TabbedPanelVisibilityTestPage(
+			2, 2);
+		// selecting the last tab
+		visibilityTestPage.tabbedPanel.setSelectedTab(1);
+		tester.startPage(visibilityTestPage);
+
+		final List<TagTester> tabsTags = tester.getTagsByWicketId("tabs");
+		assertEquals("tab0", tabsTags.get(0).getAttribute("class"));
+		assertEquals("tab1 selected last", tabsTags.get(1).getAttribute("class"));
+	}
+
