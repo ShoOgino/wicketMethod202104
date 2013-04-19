@@ -78,6 +78,23 @@
 				ThreadContext.detach();
 			}
 		}
+		catch (Exception e)
+		{
+			// #destroy() might not be called by the web container when #init() fails,
+			// so destroy now
+			log.warn("initialization failed, destroying now");
+
+			try
+			{
+				destroy();
+			}
+			catch (Exception destroyException)
+			{
+				log.warn("Unable to destroy after initialization failure", destroyException);
+			}
+
+			throw new ServletException(e);
+		}
 		finally
 		{
 			if (newClassLoader != previousClassLoader)
