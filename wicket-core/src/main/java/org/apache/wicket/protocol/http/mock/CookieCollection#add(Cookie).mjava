@@ -1,0 +1,21 @@
+	/**
+	 * add cookie to collection
+	 *   if cookie is expired, it will be moved to expired cookie set
+	 *   overwrite existing cookie with new value 
+	 * @param cookie a cookie
+	 */
+	public void add(Cookie cookie)
+	{
+		Key key = Cookies.keyOf(cookie);
+		Cookie copyOfCookie = Cookies.copyOf(cookie);
+		if (isExpired(cookie))
+		{
+			expiredCookies.put(key, copyOfCookie);
+			cookies.remove(key);
+		}
+		else
+		{
+			cookies.put(key, copyOfCookie);
+		}
+	}
+
