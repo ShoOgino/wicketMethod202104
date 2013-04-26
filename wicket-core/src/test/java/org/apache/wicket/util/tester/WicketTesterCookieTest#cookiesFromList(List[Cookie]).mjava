@@ -1,0 +1,17 @@
+	/**
+	 * create a cookie map based on cookie name
+	 * @param cookies cookie list
+	 * @return as map
+	 * @throws RuntimeException if more than one cookie with the same name
+	 */
+	private static Map<String,Cookie> cookiesFromList(List<Cookie> cookies) {
+		Map<String, Cookie> ret = new LinkedHashMap<String, Cookie>();
+		for (Cookie cookie : cookies) {
+			Cookie oldValue = ret.put(cookie.getName(), cookie);
+			if (oldValue!=null) {
+				throw new RuntimeException("Cookie with name "+cookie.getName()+"("+asString(oldValue)+") allready in map "+asString(ret));
+			}
+		}
+		return ret;
+	}
+
