@@ -4,13 +4,11 @@
 	@Test
 	public void controllingChildShouldDefaultToTheSingleComponentInsideEnclosure()
 	{
-		final String enclosurePath = "wicket_InlineEnclosure-0";
-
 		{
 			// enclosure On
 			AjaxEnclosurePage_3 ajaxPage = tester.startPage(AjaxEnclosurePage_3.class);
 			assertVisible(ajaxPage.getLabel1(), true);
-			ensureEnclosureIsVisible(enclosurePath, ajaxPage);
+			ensureEnclosureIsVisible(ajaxPage, new AtomicInteger(1));
 			tester.clickLink(ajaxPage.getToggleLabel1Link().getPageRelativePath());
 		}
 		{
@@ -18,7 +16,7 @@
 			AjaxEnclosurePage_3 ajaxPage = (AjaxEnclosurePage_3)tester.getLastRenderedPage();
 			tester.assertContains(inlineEnclosureHiddenPattern);
 			assertInvisible(ajaxPage.getLabel1());
-			ensureEnclosureIsInVisible(enclosurePath, ajaxPage);
+			ensureEnclosureIsInvisible(ajaxPage, new AtomicInteger(1));
 			tester.clickLink(ajaxPage.getToggleLabel1Link().getPageRelativePath());
 		}
 		{
@@ -26,7 +24,7 @@
 			AjaxEnclosurePage_3 ajaxPage = (AjaxEnclosurePage_3)tester.getLastRenderedPage();
 			tester.assertContains(inlineEnclosureVisiblePattern);
 			assertVisible(ajaxPage.getLabel1(), true);
-			ensureEnclosureIsVisible(enclosurePath, ajaxPage);
+			ensureEnclosureIsVisible(ajaxPage, new AtomicInteger(1));
 			tester.clickLink(ajaxPage.getToggleLabel1Link().getPageRelativePath());
 		}
 		{
@@ -34,7 +32,7 @@
 			AjaxEnclosurePage_3 ajaxPage = (AjaxEnclosurePage_3)tester.getLastRenderedPage();
 			tester.assertContains(inlineEnclosureHiddenPattern);
 			assertInvisible(ajaxPage.getLabel1());
-			ensureEnclosureIsInVisible(enclosurePath, ajaxPage);
+			ensureEnclosureIsInvisible(ajaxPage, new AtomicInteger(1));
 			tester.clickLink(ajaxPage.getToggleLabel1Link().getPageRelativePath());
 		}
 	}

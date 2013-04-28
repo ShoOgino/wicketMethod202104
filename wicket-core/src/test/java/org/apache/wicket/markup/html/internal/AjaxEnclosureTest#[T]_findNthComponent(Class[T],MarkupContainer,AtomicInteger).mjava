@@ -1,0 +1,17 @@
+	private <T> T findNthComponent(final Class<T> type, MarkupContainer container, final AtomicInteger n)
+	{
+		// finds the Nth InlineEnclosure in the children
+		Component instance = container.visitChildren(new IVisitor<Component, Component>()
+		{
+			@Override
+			public void component(Component object, IVisit<Component> visit)
+			{
+				if (type.isInstance(object) && n.decrementAndGet() == 0)
+				{
+					visit.stop(object);
+				}
+			}
+		});
+		return type.cast(instance);
+	}
+
