@@ -15,19 +15,24 @@
 			return null;
 		}
 
+		URL result = null;
+
 		if (name.startsWith("/"))
 		{
 			name = name.substring(1);
 		}
 
 		File f = new File(webappRoot, name);
-		if (!f.exists())
+		if (f.exists())
 		{
-			return null;
+			result = f.toURI().toURL();
 		}
-		else
+
+		if (result == null)
 		{
-			return f.toURI().toURL();
+			result = getClass().getClassLoader().getResource("META-INF/resources/" + name);
 		}
+
+		return result;
 	}
 
