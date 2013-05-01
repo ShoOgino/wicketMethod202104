@@ -9,11 +9,12 @@
 			{
 				if (CheckingObjectOutputStream.isAvailable())
 				{
-					// trigger serialization again, but this time gather
-					// some more info
-					new SerializableChecker(outputStream, nsx).writeObject(obj);
-					// if we get here, we didn't fail, while we
-					// should;
+					// trigger serialization again, but this time gather some more info
+					CheckingObjectOutputStream checkingObjectOutputStream =
+							new CheckingObjectOutputStream(outputStream, new ObjectSerializationChecker(nsx));
+					checkingObjectOutputStream.writeObject(obj);
+
+					// if we get here, we didn't fail, while we should
 					throw nsx;
 				}
 				throw nsx;
