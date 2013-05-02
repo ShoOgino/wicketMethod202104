@@ -1,5 +1,5 @@
 	@Override
-	public Iterable<? extends HeaderItem> getDependencies()
+	public List<HeaderItem> getDependencies()
 	{
 		final ResourceReference wicketEventReference;
 		if (Application.exists())
@@ -10,6 +10,8 @@
 		{
 			wicketEventReference = WicketEventJQueryResourceReference.get();
 		}
-		return Collections.singletonList(JavaScriptHeaderItem.forReference(wicketEventReference));
+		List<HeaderItem> dependencies = super.getDependencies();
+		dependencies.add(JavaScriptHeaderItem.forReference(wicketEventReference));
+		return dependencies;
 	}
 

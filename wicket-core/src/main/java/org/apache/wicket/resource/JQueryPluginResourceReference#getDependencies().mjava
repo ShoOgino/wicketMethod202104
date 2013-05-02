@@ -1,5 +1,5 @@
 	@Override
-	public Iterable<? extends HeaderItem> getDependencies()
+	public List<HeaderItem> getDependencies()
 	{
 		final ResourceReference backingLibraryReference;
 		if (Application.exists())
@@ -12,6 +12,8 @@
 		{
 			backingLibraryReference = JQueryResourceReference.get();
 		}
-		return Arrays.asList(JavaScriptHeaderItem.forReference(backingLibraryReference));
+		List<HeaderItem> dependencies = super.getDependencies();
+		dependencies.add(JavaScriptHeaderItem.forReference(backingLibraryReference));
+		return dependencies;
 	}
 
