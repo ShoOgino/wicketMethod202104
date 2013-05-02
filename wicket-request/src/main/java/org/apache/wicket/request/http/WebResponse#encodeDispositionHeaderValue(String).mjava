@@ -1,0 +1,16 @@
+	/**
+	 * <a href="http://greenbytes.de/tech/tc2231/">Encodes</a> the value of the filename
+	 * used in "Content-Disposition" response header
+	 *
+	 * @param filename
+	 *          the non-encoded file name
+	 * @return encoded filename
+	 */
+	private String encodeDispositionHeaderValue(final String filename)
+	{
+		return 	(Strings.isEmpty(filename) ?
+						"" :
+						String.format("; filename=\"%1$s\"; filename*=UTF-8''%1$s",
+								UrlEncoder.PATH_INSTANCE.encode(filename, "UTF-8")));
+	}
+
