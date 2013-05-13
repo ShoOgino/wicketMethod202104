@@ -1,0 +1,28 @@
+	/**
+	 * Matches when the request url starts with
+	 * {@link org.apache.wicket.core.request.mapper.IMapperContext#getNamespace()}/{@link org.apache.wicket.core.request.mapper.IMapperContext#getPageIdentifier()}
+	 * or when the base url starts with {@link org.apache.wicket.core.request.mapper.IMapperContext#getNamespace()}
+	 * and the request url with {@link org.apache.wicket.core.request.mapper.IMapperContext#getPageIdentifier()}
+
+	 * @param request
+	 *      the request to check
+	 * @return {@code true} if the conditions match
+	 */
+	private boolean matches(final Request request)
+	{
+		boolean matches = false;
+		Url url = request.getUrl();
+		String namespace = getContext().getNamespace();
+		String pageIdentifier = getContext().getPageIdentifier();
+		if (urlStartsWith(url, namespace, pageIdentifier))
+		{
+			matches = true;
+		}
+		else if (urlStartsWith(request.getClientUrl(), namespace) && urlStartsWith(url, pageIdentifier))
+		{
+			matches = true;
+		}
+
+		return matches;
+	}
+
