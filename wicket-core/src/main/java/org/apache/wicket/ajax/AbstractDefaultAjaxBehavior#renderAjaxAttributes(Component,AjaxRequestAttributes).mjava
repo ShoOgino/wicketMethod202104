@@ -57,7 +57,8 @@
 						AjaxAttributeName.BEFORE_HANDLER.jsonName(),
 						BEFORE_HANDLER_FUNCTION_TEMPLATE);
 
-					CharSequence beforeSendHandler = ajaxCallListener.getBeforeSendHandler(component);
+					CharSequence beforeSendHandler = ajaxCallListener
+						.getBeforeSendHandler(component);
 					appendListenerHandler(beforeSendHandler, attributesJson,
 						AjaxAttributeName.BEFORE_SEND_HANDLER.jsonName(),
 						BEFORE_SEND_HANDLER_FUNCTION_TEMPLATE);
@@ -136,11 +137,13 @@
 				attributesJson.put(AjaxAttributeName.IS_PREVENT_DEFAULT.jsonName(), true);
 			}
 
-			if (AjaxRequestAttributes.EventPropagation.BUBBLE.equals(attributes.getEventPropagation()))
+			if (AjaxRequestAttributes.EventPropagation.STOP
+				.equals(attributes.getEventPropagation()))
 			{
-				attributesJson.put(AjaxAttributeName.EVENT_PROPAGATION.jsonName(), "bubble");
+				attributesJson.put(AjaxAttributeName.EVENT_PROPAGATION.jsonName(), "stop");
 			}
-			else if (AjaxRequestAttributes.EventPropagation.STOP_IMMEDIATE.equals(attributes.getEventPropagation()))
+			else if (AjaxRequestAttributes.EventPropagation.STOP_IMMEDIATE.equals(attributes
+				.getEventPropagation()))
 			{
 				attributesJson.put(AjaxAttributeName.EVENT_PROPAGATION.jsonName(), "stopImmediate");
 			}
