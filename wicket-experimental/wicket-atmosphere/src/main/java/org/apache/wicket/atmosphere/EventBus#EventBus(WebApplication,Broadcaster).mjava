@@ -9,9 +9,9 @@
 		this.application = application;
 		this.broadcaster = broadcaster;
 		application.setMetaData(EVENT_BUS_KEY, this);
-		application.mount(new AtmosphereRequestMapper());
+		application.mount(new AtmosphereRequestMapper(createEventSubscriptionInvoker()));
 		application.getComponentPostOnBeforeRenderListeners().add(
-			new AtmosphereEventSubscriptionCollector(this));
+			createEventSubscriptionCollector());
 		application.getSessionStore().registerUnboundListener(this);
 	}
 
