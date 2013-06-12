@@ -1,5 +1,5 @@
 	@Override
-	public boolean invoke(AjaxRequestTarget target, EventSubscription subscription, Object base,
+	public void invoke(AjaxRequestTarget target, EventSubscription subscription, Object base,
 		AtmosphereEvent event, AjaxRequestInitializer ajaxRequestInitializer)
 	{
 		for (Method curMethod : base.getClass().getMethods())
@@ -12,7 +12,6 @@
 				{
 					curMethod.setAccessible(true);
 					curMethod.invoke(base, target, event.getPayload());
-					return true;
 				}
 				catch (IllegalAccessException e)
 				{
@@ -28,6 +27,5 @@
 				}
 			}
 		}
-		return false;
 	}
 
