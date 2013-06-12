@@ -1,0 +1,21 @@
+	/**
+	 * WICKET-5230 nested FormComponent with error message makes group invalid
+	 */
+	@Test
+	public void nestedInvalidFormComponent()
+	{
+		ChoiceComponentPage page = tester.startPage(ChoiceComponentPage.class);
+
+		tester.submitForm(page.form);
+
+		assertTrue(page.text.hasErrorMessage());
+
+		tester.getRequest().setParameter("form.group", page.radioFalse.getValue());
+		tester.executeAjaxEvent(page.group, "click");
+
+		// group is invalid because nested text has error message
+		assertFalse(page.group.isValid());
+		// .. so model object stays unchanged
+		assertEquals(Boolean.TRUE, page.group.getModelObject());
+	}
+

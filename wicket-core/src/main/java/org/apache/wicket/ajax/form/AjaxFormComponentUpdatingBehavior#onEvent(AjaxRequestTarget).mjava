@@ -16,13 +16,7 @@
 		{
 			formComponent.inputChanged();
 			formComponent.validate();
-			if (formComponent.hasErrorMessage())
-			{
-				formComponent.invalid();
-
-				onError(target, null);
-			}
-			else
+			if (formComponent.isValid())
 			{
 				formComponent.valid();
 				if (getUpdateModel())
@@ -31,6 +25,12 @@
 				}
 
 				onUpdate(target);
+			}
+			else
+			{
+				formComponent.invalid();
+
+				onError(target, null);
 			}
 		}
 		catch (RuntimeException e)
