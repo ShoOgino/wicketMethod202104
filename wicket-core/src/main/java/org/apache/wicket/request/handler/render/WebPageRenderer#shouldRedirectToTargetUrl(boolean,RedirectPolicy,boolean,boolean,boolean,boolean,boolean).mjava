@@ -1,0 +1,19 @@
+	protected static boolean shouldRedirectToTargetUrl(boolean ajax, RedirectPolicy redirectPolicy, boolean redirectToRender, boolean targetEqualsCurrentUrl, boolean newPageInstance, boolean pageStateless,boolean sessionTemporary) {
+		return alwaysRedirect(redirectPolicy) //
+						||
+						redirectToRender //
+						||
+						(ajax && targetEqualsCurrentUrl)
+						||
+						(!targetEqualsCurrentUrl //
+							&&
+							(newPageInstance || (sessionTemporary && pageStateless))
+						);
+		// if target URL is different and session is temporary and page is stateless
+		// this is special case when page is stateless but there is no session so we can't
+		// render it to buffer
+
+		// alternatively if URLs are different and we have a page class and not an instance we
+		// can redirect to the url which will instantiate the instance of us
+	}
+
