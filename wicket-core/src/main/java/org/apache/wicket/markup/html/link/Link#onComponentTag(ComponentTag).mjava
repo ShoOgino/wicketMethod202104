@@ -12,11 +12,7 @@
 		super.onComponentTag(tag);
 
 		// If we're disabled
-		if (!isLinkEnabled())
-		{
-			disableLink(tag);
-		}
-		else
+		if (isEnabledInHierarchy())
 		{
 			// Set href to link to this link's linkClicked method
 			CharSequence url = getURL();
@@ -74,6 +70,10 @@
 			{
 				tag.put("onclick", onClickJavaScript);
 			}
+		}
+		else
+		{
+			disableLink(tag);
 		}
 	}
 

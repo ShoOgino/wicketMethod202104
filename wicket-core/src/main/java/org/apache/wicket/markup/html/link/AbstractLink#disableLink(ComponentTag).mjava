@@ -8,23 +8,17 @@
 	 */
 	protected void disableLink(final ComponentTag tag)
 	{
-		// if the tag is an anchor proper
-		if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
-			tag.getName().equalsIgnoreCase("area"))
+		// if the tag is a button or input
+		if ("button".equalsIgnoreCase(tag.getName()) || "input".equalsIgnoreCase(tag.getName()))
 		{
-			// Change anchor link to span tag
-			tag.setName("span");
-
+			tag.put("disabled", "disabled");
+		}
+		else
+		{
 			// Remove any href from the old link
 			tag.remove("href");
 
 			tag.remove("onclick");
-		}
-		// if the tag is a button or input
-		else if ("button".equalsIgnoreCase(tag.getName()) ||
-			"input".equalsIgnoreCase(tag.getName()))
-		{
-			tag.put("disabled", "disabled");
 		}
 	}
 
