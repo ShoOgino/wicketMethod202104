@@ -1,0 +1,33 @@
+	@Override
+	public void onComponentTag(Component component, ComponentTag tag)
+	{
+		super.onComponentTag(component, tag);
+
+		if (component instanceof AbstractLink)
+		{
+			AbstractLink link = (AbstractLink) component;
+
+			if (link.isLinkEnabled() == false)
+			{
+				// if the tag is an anchor proper
+				if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
+						tag.getName().equalsIgnoreCase("area"))
+				{
+					// Change anchor link to span tag
+					tag.setName("span");
+
+					// Remove any href from the old link
+					tag.remove("href");
+
+					tag.remove("onclick");
+				}
+				// if the tag is a button or input
+				else if ("button".equalsIgnoreCase(tag.getName()) ||
+						"input".equalsIgnoreCase(tag.getName()))
+				{
+					tag.put("disabled", "disabled");
+				}
+			}
+		}
+	}
+

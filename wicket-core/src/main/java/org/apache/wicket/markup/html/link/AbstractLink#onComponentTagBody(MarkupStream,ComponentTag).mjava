@@ -10,12 +10,6 @@
 	@Override
 	public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 	{
-		// Draw anything before the body?
-		if (!isLinkEnabled() && getBeforeDisabledLink() != null)
-		{
-			getResponse().write(getBeforeDisabledLink());
-		}
-
 		// Get a copy of the body model from the getBody() method. This method could be overridden.
 		IModel<?> tmpBodyModel = getBody();
 
@@ -28,11 +22,6 @@
 		{
 			// Render the body of the link
 			super.onComponentTagBody(markupStream, openTag);
-		}
-		// Draw anything after the body?
-		if (!isLinkEnabled() && getAfterDisabledLink() != null)
-		{
-			getResponse().write(getAfterDisabledLink());
 		}
 	}
 
