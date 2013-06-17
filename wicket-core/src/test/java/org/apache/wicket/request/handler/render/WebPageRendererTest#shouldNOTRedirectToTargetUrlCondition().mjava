@@ -1,0 +1,35 @@
+	@Test
+	public void shouldNOTRedirectToTargetUrlCondition() {
+
+		boolean ajax;
+		RedirectPolicy redirectPolicy;
+		boolean redirectToRender;
+		boolean targetEqualsCurrentUrl;
+		boolean newPageInstance;
+		boolean pageStateless;
+		boolean sessionTemporary;
+
+		// NOT if
+		//		render policy is always-redirect
+		// AND NOT
+		//		it's redirect-to-render
+		// AND NOT
+		//		its ajax and the targetUrl matches current url
+		// AND NOT
+		//		targetUrl DONT matches current url and
+		//				is new page instance
+		//			or
+		//				session is temporary and page is stateless
+
+		ajax=false;
+		redirectPolicy=RedirectPolicy.AUTO_REDIRECT;
+		redirectToRender=false;
+		targetEqualsCurrentUrl=false;
+		newPageInstance=false;
+		pageStateless=false;
+		sessionTemporary=false;
+
+		TestPageRenderer renderer = new TestPageRenderer(null);
+		Assert.assertFalse(renderer.shouldRedirectToTargetUrl(ajax, redirectPolicy, redirectToRender, targetEqualsCurrentUrl, newPageInstance, pageStateless,sessionTemporary));
+	}
+
