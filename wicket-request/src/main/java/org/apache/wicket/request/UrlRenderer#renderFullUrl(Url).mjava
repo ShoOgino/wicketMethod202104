@@ -8,7 +8,7 @@
 	{
 		if (url instanceof IUrlRenderer)
 		{
-			IUrlRenderer renderer = (IUrlRenderer) url;
+			IUrlRenderer renderer = (IUrlRenderer)url;
 			return renderer.renderFullUrl(url, getBaseUrl());
 		}
 
@@ -17,7 +17,7 @@
 		final Integer port = resolvePort(url);
 
 		final String path;
-		if (url.isAbsolute())
+		if (url.isFull() || url.isContextAbsolute())
 		{
 			path = url.toString();
 		}
@@ -47,7 +47,7 @@
 			}
 		}
 
-		if (url.isAbsolute() == false)
+		if (!(url.isFull() || url.isContextAbsolute()))
 		{
 			render.append(request.getContextPath());
 			render.append(request.getFilterPath());

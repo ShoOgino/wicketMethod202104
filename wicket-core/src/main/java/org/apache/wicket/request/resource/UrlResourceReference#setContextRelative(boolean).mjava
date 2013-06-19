@@ -1,9 +1,9 @@
 	public UrlResourceReference setContextRelative(final boolean contextRelative)
 	{
-		if (contextRelative && url.isAbsolute())
+		if (contextRelative && (url.isFull() || url.isContextAbsolute()))
 		{
-			throw new IllegalStateException(
-					String.format("An absolute url '%s' cannot be rendered as context relative", url));
+			throw new IllegalStateException(String.format(
+				"An absolute url '%s' cannot be rendered as context relative", url));
 		}
 		this.contextRelative = contextRelative;
 		return this;
