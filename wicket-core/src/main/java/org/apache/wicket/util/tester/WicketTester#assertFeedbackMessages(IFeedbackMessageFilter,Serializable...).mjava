@@ -1,0 +1,15 @@
+	/**
+	 * Assert there are feedback messages accepted by the provided filter.
+	 *
+	 * @param filter
+	 *            the filter that will decide which messages to check
+	 * @param expectedMessages
+	 *            expected feedback messages
+	 */
+	public void assertFeedbackMessages(IFeedbackMessageFilter filter, Serializable... expectedMessages)
+	{
+		List<FeedbackMessage> feedbackMessages = getFeedbackMessages(filter);
+		List<Serializable> actualMessages = getActualFeedbackMessages(feedbackMessages);
+		WicketTesterHelper.assertEquals(Arrays.asList(expectedMessages), actualMessages);
+	}
+
