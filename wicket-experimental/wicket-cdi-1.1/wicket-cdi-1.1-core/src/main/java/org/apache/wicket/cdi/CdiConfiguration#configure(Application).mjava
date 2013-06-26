@@ -4,11 +4,13 @@
 	 * @param application
 	 * @return
 	 */
-	public AbstractCdiContainer configure(Application application)
+	public synchronized void configure(Application application)
 	{		
+		if(configured)
+		{
+			throw new IllegalStateException("Cannot configure CdiConfiguration multiple times");
+		}
 		
-		container.bind(application);
-
 		RequestCycleListenerCollection listeners = new RequestCycleListenerCollection();
 		application.getRequestCycleListeners().add(listeners);
 
@@ -27,24 +29,24 @@
 		// inject application instance
 		if (isInjectApplication())
 		{
-			container.getNonContextualManager().postConstruct(application);
+			nonContextualManager.postConstruct(application);
 		}
 
 		// enable injection of various framework components
 
 		if (isInjectSession())
 		{
-			application.getSessionListeners().add(new SessionInjector(container));
+			application.getSessionListeners().add(sessionInjector);
 		}
 
 		if (isInjectComponents())
 		{
-			application.getComponentInstantiationListeners().add(new ComponentInjector(container));
+			application.getComponentInstantiationListeners().add(componentInjector);
 		}
 
 		if (isInjectBehaviors())
 		{
-			application.getBehaviorInstantiationListeners().add(new BehaviorInjector(container));
+			application.getBehaviorInstantiationListeners().add(behaviorInjector);
 		}
 
 		// enable cleanup
@@ -52,6 +54,7 @@
 		application.getApplicationListeners().add(
 			new CdiShutdownCleaner(isInjectApplication()));
 
-		return container;
+		configured = true;
+
 	}
 

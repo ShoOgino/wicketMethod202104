@@ -7,10 +7,6 @@
 	@Override
 	public void activateConversationalContext(RequestCycle cycle, String cid)
 	{
-		// Force a session created if one does not exist 
-		// Glassfish does not have a session initially to store the transactions
-		// so it gets lost in the request.              
-		getRequest(cycle).getSession(true);
 		HttpConversationContext conversationContext = conversationContextSource.get();               
 		conversationContext.associate(getRequest(cycle)); 
 		if(conversationContext.isActive())
