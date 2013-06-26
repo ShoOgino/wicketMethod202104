@@ -1,0 +1,20 @@
+	/**
+	 * Undeploys specified bean manager from cache
+	 * 
+	 * @param beanManager
+	 */
+	public static void undeploy()
+	{
+		if (cache.containsKey(CDI.current().getBeanManager()))
+		{
+			synchronized (lock)
+			{
+				// copy-on-write the cache
+				Map<BeanManager, ClassMetaCache<NonContextual<?>>> newCache = new WeakHashMap<BeanManager, ClassMetaCache<NonContextual<?>>>(
+					cache);
+				newCache.remove(CDI.current().getBeanManager());
+				cache = Collections.unmodifiableMap(newCache);
+			}
+		}
+	}
+

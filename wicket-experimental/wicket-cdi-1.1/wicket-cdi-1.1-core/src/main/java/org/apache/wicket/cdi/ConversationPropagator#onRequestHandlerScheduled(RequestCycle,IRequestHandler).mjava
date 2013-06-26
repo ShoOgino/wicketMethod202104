@@ -1,0 +1,38 @@
+	@Override
+	public void onRequestHandlerScheduled(RequestCycle cycle, IRequestHandler handler)
+	{
+		// propagate current non-transient conversation to the newly scheduled page
+
+		Conversation conversation = getConversation(cycle);
+
+		if (conversation == null || conversation.isTransient())
+		{
+			return;
+		}
+
+		Page page = getPage(handler);
+		if (page != null)
+		{
+			if (propagationSource.get().propagatesViaPage(page, handler))
+			{
+				// propagate a conversation across non-bookmarkable page instances
+				setConversationOnPage(conversation, page);
+			}
+		}
+
+		if (propagationSource.get().propagatesViaParameters(handler))
+		{
+			// propagate cid to a scheduled bookmarkable page
+
+			logger.debug(
+				"Propagating non-transient conversation {} via page parameters of handler {}",
+				conversation.getId(), handler);
+
+			PageParameters parameters = getPageParameters(handler);
+			if (parameters != null)
+			{
+				parameters.set(CID_ATTR, conversation.getId());
+			}
+		}
+	}
+

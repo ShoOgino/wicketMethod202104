@@ -1,0 +1,21 @@
+	@Override
+	public void onDetach(RequestCycle cycle)
+	{
+		Conversation conversation = getConversation(cycle);
+		if (conversation != null)
+		{
+			logger.debug("Deactivating conversation {}", conversation.getId());
+
+			for (IRequestCycleListener listener : Application.get().getRequestCycleListeners())
+			{
+				if (listener instanceof ICdiAwareRequestCycleListener)
+				{
+					((ICdiAwareRequestCycleListener)listener).onBeforeConversationDeactivated(cycle);
+				}
+			}
+			container.deactivateConversationalContext(cycle);
+
+			cycle.setMetaData(CONVERSATION_STARTED_KEY, null);
+		}
+	}
+

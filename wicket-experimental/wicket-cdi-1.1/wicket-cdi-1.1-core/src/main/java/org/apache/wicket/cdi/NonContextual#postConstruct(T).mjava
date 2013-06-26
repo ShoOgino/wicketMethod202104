@@ -1,0 +1,12 @@
+	/**
+	 * Injects the instance and calls any {@link PostConstruct} methods
+	 * 
+	 * @param instance
+	 */
+	public void postConstruct(T instance)
+	{
+		CreationalContext<T> cc = CDI.current().getBeanManager().createCreationalContext(null);
+		it.inject(instance, cc);
+		it.postConstruct(instance);
+	}
+
