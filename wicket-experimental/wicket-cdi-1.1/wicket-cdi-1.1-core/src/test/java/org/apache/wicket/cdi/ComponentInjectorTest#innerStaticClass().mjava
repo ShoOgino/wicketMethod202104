@@ -4,31 +4,8 @@
 	@Test
 	public void innerStaticClass()
 	{
-            //Disabled for now need to add injectable test dependencies
-//		BeanManager beanManager = mock(BeanManager.class);
-//		INonContextualManager nonContextualManager = mock(INonContextualManager.class);
-//		final String expectedValue = "injected";
-//
-//		doAnswer(new Answer<Void>()
-//		{
-//			@Override
-//			public Void answer(InvocationOnMock invocation) throws Throwable
-//			{
-//				TestStaticComponent component = (TestStaticComponent) invocation.getArguments()[0];
-//				component.dependency = expectedValue;
-//
-//				return null;
-//			}
-//		}).when(nonContextualManager).inject(any(TestStaticComponent.class));
-//
-//		AbstractCdiContainer cdiContainer = new AbstractCdiContainer(beanManager, nonContextualManager);
-//		ComponentInjector injector = new ComponentInjector(cdiContainer);
-//
-//		TestStaticComponent component = new TestStaticComponent("someId");
-//		assertNull(component.dependency);
-//
-//		injector.onInstantiation(component);
-//
-//		assertEquals(expectedValue, component.dependency);
+		TestStaticComponent component = new TestStaticComponent("someId");
+		componentInjector.onInstantiation(component);
+		assertEquals(component.dependency, "Test String");
 	}
 
