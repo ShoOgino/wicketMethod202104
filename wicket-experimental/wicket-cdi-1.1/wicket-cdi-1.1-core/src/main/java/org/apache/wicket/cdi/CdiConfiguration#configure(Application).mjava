@@ -1,25 +1,25 @@
 	/**
 	 * Configures the specified application
-	 * 
+	 *
 	 * @param application
 	 * @return
 	 */
 	public synchronized void configure(Application application)
-	{		
-		if(configured)
+	{
+		if (configured)
 		{
 			throw new IllegalStateException("Cannot configure CdiConfiguration multiple times");
 		}
-		
+
 		RequestCycleListenerCollection listeners = new RequestCycleListenerCollection();
 		application.getRequestCycleListeners().add(listeners);
 
 		// enable conversation propagation
 		if (getPropagation() != ConversationPropagation.NONE)
-		{                    
+		{
 			listeners.add(conversationPropagatorSource.get());
 			application.getComponentPreOnBeforeRenderListeners().add(
-				conversationExpiryCheckerSource.get());
+					conversationExpiryCheckerSource.get());
 		}
 
 		// enable detach event
@@ -52,7 +52,7 @@
 		// enable cleanup
 
 		application.getApplicationListeners().add(
-			new CdiShutdownCleaner(isInjectApplication()));
+				new CdiShutdownCleaner(isInjectApplication()));
 
 		configured = true;
 
