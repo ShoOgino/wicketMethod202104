@@ -13,6 +13,12 @@
 		// get undecorated filename
 		final String filename = url.getFileName();
 
+		if (filename.contains(getVersionPrefix()))
+		{
+			LOG.error("A resource with name '{}' contains the version prefix '{}' so the un-decoration will not work." +
+					" Either use a different version prefix or rename this resource.", filename, getVersionPrefix());
+		}
+
 		// check if resource name has extension
 		final int extensionAt = filename.lastIndexOf('.');
 
