@@ -14,7 +14,10 @@
 		}
 		for (RecordedHeaderItem curRenderItem : sortedItemsToBeRendered)
 		{
-			getRealResponse().render(getItemToBeRendered(curRenderItem.getItem()));
+			if (markItemRendered(curRenderItem.getItem()))
+			{
+				getRealResponse().render(curRenderItem.getItem());
+			}
 		}
 	}
 

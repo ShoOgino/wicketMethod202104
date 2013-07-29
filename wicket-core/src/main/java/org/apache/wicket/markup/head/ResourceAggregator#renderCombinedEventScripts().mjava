@@ -6,16 +6,11 @@
 		StringBuilder combinedScript = new StringBuilder();
 		for (OnDomReadyHeaderItem curItem : domReadyItemsToBeRendered)
 		{
-			HeaderItem itemToBeRendered = getItemToBeRendered(curItem);
-			if (itemToBeRendered == curItem)
+			if (markItemRendered(curItem))
 			{
 				combinedScript.append('\n');
 				combinedScript.append(curItem.getJavaScript());
 				combinedScript.append(';');
-			}
-			else
-			{
-				getRealResponse().render(itemToBeRendered);
 			}
 		}
 		if (combinedScript.length() > 0)
@@ -27,16 +22,11 @@
 		combinedScript.setLength(0);
 		for (OnLoadHeaderItem curItem : loadItemsToBeRendered)
 		{
-			HeaderItem itemToBeRendered = getItemToBeRendered(curItem);
-			if (itemToBeRendered == curItem)
+			if (markItemRendered(curItem))
 			{
 				combinedScript.append('\n');
 				combinedScript.append(curItem.getJavaScript());
 				combinedScript.append(';');
-			}
-			else
-			{
-				getRealResponse().render(itemToBeRendered);
 			}
 		}
 		if (combinedScript.length() > 0)
