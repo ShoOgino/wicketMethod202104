@@ -1,0 +1,18 @@
+	/**
+	 * Constructor.
+	 *
+	 * @param session
+	 *            the WebSocket session
+	 * @param application
+	 *            the current Wicket Application
+	 */
+	public JavaxWebSocketProcessor(final Session session, final WebApplication application)
+	{
+		super(new JavaxUpgradeHttpRequest(session), application);
+
+		onConnect(new JavaxWebSocketConnection(session, this));
+
+		session.addMessageHandler(new StringMessageHandler());
+		session.addMessageHandler(new BinaryMessageHandler());
+	}
+

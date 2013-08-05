@@ -1,0 +1,15 @@
+	@Override
+	public void close(int code, String reason)
+	{
+		if (isOpen())
+		{
+			try
+			{
+				session.close(new CloseReason(new CloseCode(code), reason));
+			} catch (IOException iox)
+			{
+				LOG.error("An error occurred while closing WebSocket session", iox);
+			}
+		}
+	}
+
