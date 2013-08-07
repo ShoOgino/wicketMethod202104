@@ -24,6 +24,15 @@
 			// create filename without version string 
 			// (required for working resource lookup)
 			url.setFileName(extension == null? basename : basename + extension);
+
+			// store the version in the request cycle
+			RequestCycle requestCycle = RequestCycle.get();
+			if (requestCycle != null)
+			{
+				int idx = fullname.indexOf(versionPrefix);
+				String urlVersion = fullname.substring(pos + idx + 1);
+				requestCycle.setMetaData(URL_VERSION, urlVersion);
+			}
 		}
 	}
 
