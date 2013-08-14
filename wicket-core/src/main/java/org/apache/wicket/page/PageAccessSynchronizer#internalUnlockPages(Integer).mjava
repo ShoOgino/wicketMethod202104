@@ -19,14 +19,7 @@
 						lock.pageId);
 				}
 				// if any locks were removed notify threads waiting for a lock
-				synchronized (lock)
-				{
-					if (isDebugEnabled)
-					{
-						logger.debug("'{}' notifying blocked threads", thread.getName());
-					}
-					lock.notifyAll();
-				}
+				lock.markReleased(isDebugEnabled);
 				if (pageId != null)
 				{
 					// unlock just the page with the specified id
