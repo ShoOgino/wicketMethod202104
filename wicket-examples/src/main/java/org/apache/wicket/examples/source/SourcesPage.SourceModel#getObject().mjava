@@ -7,23 +7,18 @@
 		public String getObject()
 		{
 			// name contains the name of the selected file
-			if (Strings.isEmpty(name) &&
-				Strings.isEmpty(getPage().getRequest()
-					.getRequestParameters()
-					.getParameterValue(SOURCE)
-					.toOptionalString()))
+			StringValue sourceParam = getPageParameters().get(SOURCE);
+			if (Strings.isEmpty(name) && sourceParam.isEmpty())
 			{
 				return "";
 			}
+
 			BufferedReader br = null;
 			String source = null;
 			try
 			{
-			 StringBuilder sb = new StringBuilder();
-				source = (name != null) ? name : getPage().getRequest()
-					.getRequestParameters()
-					.getParameterValue(SOURCE)
-					.toOptionalString();
+			    StringBuilder sb = new StringBuilder();
+				source = (name != null) ? name : sourceParam.toString();
 				InputStream resourceAsStream = getPageTargetClass().getResourceAsStream(source);
 				if (resourceAsStream == null)
 				{
@@ -34,7 +29,7 @@
 				while (br.ready())
 				{
 					sb.append(br.readLine());
-					sb.append("\n");
+					sb.append('\n');
 				}
 				int lastDot = source.lastIndexOf('.');
 				if (lastDot != -1)
@@ -46,9 +41,8 @@
 						return renderer.highlight(source, sb.toString(), "UTF-8", true);
 					}
 				}
-				return Strings.escapeMarkup(sb.toString(), false, true)
-					.toString()
-					.replaceAll("\n", "<br />");
+				CharSequence escaped = Strings.escapeMarkup(sb.toString(), false, true);
+				return Strings.replaceAll(escaped, "\n", "<br />").toString();
 			}
 			catch (IOException e)
 			{

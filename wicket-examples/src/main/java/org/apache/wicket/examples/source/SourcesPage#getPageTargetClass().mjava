@@ -2,35 +2,33 @@
 	{
 		if (page == null)
 		{
-			try
+			String pageParam = getPageParameters().get(PAGE_CLASS).toOptionalString();
+			if (pageParam == null)
 			{
-				String pageParam = getPageParam();
-				if (pageParam == null)
+				if (log.isErrorEnabled())
 				{
-					if (log.isErrorEnabled())
-					{
-						log.error("key: " + PAGE_CLASS + " is null.");
-					}
-					getRequestCycle().replaceAllRequestHandlers(
-						new ErrorCodeRequestHandler(404,
-							"Could not find sources for the page you requested"));
+					log.error("key: " + PAGE_CLASS + " is null.");
 				}
-				if (!pageParam.startsWith("org.apache.wicket.examples"))
-				{
-					if (log.isErrorEnabled())
-					{
-						log.error("user is trying to access class: " + pageParam +
-							" which is not in the scope of org.apache.wicket.examples");
-					}
-					throw new UnauthorizedInstantiationException(getClass());
-				}
-				page = (Class<? extends Page>)Class.forName(getPageParam());
-			}
-			catch (ClassNotFoundException e)
-			{
 				getRequestCycle().replaceAllRequestHandlers(
 					new ErrorCodeRequestHandler(404,
 						"Could not find sources for the page you requested"));
+			}
+			else if (!pageParam.startsWith("org.apache.wicket.examples"))
+			{
+				if (log.isErrorEnabled())
+				{
+					log.error("user is trying to access class: " + pageParam +
+						" which is not in the scope of org.apache.wicket.examples");
+				}
+				throw new UnauthorizedInstantiationException(getClass());
+			}
+			page = WicketObjects.resolveClass(pageParam);
+
+			if (page == null)
+			{
+				getRequestCycle().replaceAllRequestHandlers(
+						new ErrorCodeRequestHandler(404,
+								"Could not find sources for the page you requested"));
 			}
 		}
 		return page;

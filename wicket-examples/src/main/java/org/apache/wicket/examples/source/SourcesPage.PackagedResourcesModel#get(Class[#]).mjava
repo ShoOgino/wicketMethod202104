@@ -1,5 +1,7 @@
-		private void get(Class<?> scope)
+		private List<String> get(Class<?> scope)
 		{
+			List<String> resources = new ArrayList<String>();
+
 			String packageRef = Strings.replaceAll(PackageName.forClass(scope).getName(), ".", "/")
 				.toString();
 			ClassLoader loader = scope.getClassLoader();
@@ -14,7 +16,7 @@
 					if (connection instanceof JarURLConnection)
 					{
 						JarFile jf = ((JarURLConnection)connection).getJarFile();
-						scanJarFile(scope, packageRef, jf);
+						scanJarFile(packageRef, jf, resources);
 					}
 					else
 					{
@@ -56,15 +58,15 @@
 							// ".zip"
 							log.debug("trying the filename: " + filename + " to load as a zip/jar.");
 							JarFile jarFile = new JarFile(filename, false);
-							scanJarFile(scope, packageRef, jarFile);
-							return;
+							scanJarFile(packageRef, jarFile, resources);
+							return resources;
 						}
 						if (!basedir.isDirectory())
 						{
 							throw new IllegalStateException(
 								"unable to read resources from directory " + basedir);
 						}
-						addResources(scope, new AppendingStringBuffer(), basedir);
+						addResources(new AppendingStringBuffer(), basedir, resources);
 					}
 				}
 			}
@@ -73,5 +75,7 @@
 				throw new WicketRuntimeException(e);
 			}
 			Collections.sort(resources);
+
+			return resources;
 		}
 
