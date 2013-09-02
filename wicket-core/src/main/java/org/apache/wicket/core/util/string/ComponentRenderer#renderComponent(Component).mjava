@@ -12,18 +12,25 @@
 		final Response originalResponse = requestCycle.getResponse();
 		BufferedWebResponse tempResponse = new BufferedWebResponse(null);
 
+		MarkupContainer oldParent = component.getParent();
+
 		try
 		{
 			requestCycle.setResponse(tempResponse);
 
-			RenderPage page = new RenderPage();
-			page.add(component);
+			// add the component to a dummy page just for the rendering
+			RenderPage page = new RenderPage(component);
 			page.internalInitialize();
 
 			component.render();
 		}
 		finally
 		{
+			if (oldParent != null)
+			{
+				oldParent.add(component); // re-add the child to its old parent
+			}
+
 			requestCycle.setResponse(originalResponse);
 		}
 
