@@ -1,8 +1,6 @@
 	/**
 	 * @param id
 	 *            Component id
-	 * @param model
-	 *            Model representing collection of user's selections
 	 * @param choicesModel
 	 *            Model representing collection of all available choices
 	 * @param choiceRenderer
@@ -13,16 +11,9 @@
 	 * @param allowOrder
 	 *            Allow user to move selections up and down
 	 */
-	@SuppressWarnings("unchecked")
-	public Palette(final String id, final IModel<? extends List<? extends T>> model,
-		final IModel<? extends Collection<? extends T>> choicesModel,
+	public Palette(final String id, final IModel<? extends Collection<T>> choicesModel,
 		final IChoiceRenderer<T> choiceRenderer, final int rows, final boolean allowOrder)
 	{
-		super(id, (IModel<Collection<? extends T>>)(IModel<?>)model);
-
-		this.choicesModel = choicesModel;
-		this.choiceRenderer = choiceRenderer;
-		this.rows = rows;
-		this.allowOrder = allowOrder;
+		this(id, null, choicesModel, choiceRenderer, rows, allowOrder);
 	}
 

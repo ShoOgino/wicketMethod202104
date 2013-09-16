@@ -6,25 +6,9 @@
 	 * 
 	 * @see FormComponent#updateModel()
 	 */
-	protected final void updateModel()
+	@Override
+	public final void updateModel()
 	{
-		// get the selected choices first, since the available choices might depend on the
-		// previously selected objects.
-		Iterator<T> it = getRecorderComponent().getSelectedChoices();
-
-		modelChanging();
-
-		Collection<T> collection = getModelCollection();
-		collection.clear();
-		while (it.hasNext())
-		{
-			collection.add(it.next());
-		}
-
-		modelChanged();
-
-		@SuppressWarnings("unchecked")
-		IModel<Object> defaultModel = (IModel<Object>)getDefaultModel();
-		defaultModel.setObject(collection);
+		FormComponent.updateCollectionModel(this);
 	}
 
