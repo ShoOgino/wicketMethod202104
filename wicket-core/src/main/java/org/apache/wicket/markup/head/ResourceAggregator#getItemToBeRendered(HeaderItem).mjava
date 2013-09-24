@@ -19,6 +19,14 @@
 		}
 
 		HeaderItem bundle = Application.get().getResourceBundles().findBundle(innerItem);
-		return bundle == null ? item : bundle;
+		if (bundle == null)
+		{
+			return item;
+		}
+		if (item instanceof IHeaderItemWrapper)
+		{
+			bundle = ((IHeaderItemWrapper)item).wrap(bundle);
+		}
+		return bundle;
 	}
 

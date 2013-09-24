@@ -1,5 +1,6 @@
 	/**
-	 * bundle {a, b->a} and {c->a, d->c->a}, render [priority(b), d], should render [ab, cd]
+	 * bundle {a, b->a} and {c->a, d->c->a}, render [priority(b), d], should render [priority(ab),
+	 * cd]
 	 */
 	@Test
 	public void testTwoBundlesWithDependenciesAndPriority()
@@ -14,6 +15,6 @@
 				new ResourceReferenceD());
 		aggregator.render(new PriorityHeaderItem(forReference(new ResourceReferenceB())));
 		aggregator.render(forReference(new ResourceReferenceD()));
-		assertItems(bundleAB, bundleCD);
+		assertItems(new PriorityHeaderItem(bundleAB), bundleCD);
 	}
 
