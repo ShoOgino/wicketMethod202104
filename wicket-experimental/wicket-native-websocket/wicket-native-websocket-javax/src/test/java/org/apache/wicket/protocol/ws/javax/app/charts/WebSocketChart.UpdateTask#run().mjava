@@ -1,0 +1,35 @@
+		@Override
+		public void run()
+		{
+			Application application = Application.get(applicationName);
+			IWebSocketSettings webSocketSettings = IWebSocketSettings.Holder.get(application);
+			IWebSocketConnectionRegistry webSocketConnectionRegistry = webSocketSettings.getConnectionRegistry();
+			IWebSocketConnection connection = webSocketConnectionRegistry.getConnection(application, sessionId, pageId);
+
+			int dataIndex = 0;
+
+			while (dataIndex < data.length)
+			{
+				try
+				{
+					Record record = data[dataIndex++];
+					String json = String.format(JSON_SKELETON, record.year, record.field, record.value);
+
+					if (connection == null || !connection.isOpen())
+					{
+						// stop if the web socket connection is closed
+						return;
+					}
+					connection.sendMessage(json);
+
+					// sleep for a while to simulate work
+					TimeUnit.SECONDS.sleep(1);
+				}
+				catch (Exception x)
+				{
+					x.printStackTrace();
+					return;
+				}
+			}
+		}
+
