@@ -1,26 +1,27 @@
 	/**
 	 * https://issues.apache.org/jira/browse/WICKET-5237
+	 * 
 	 * @throws ParseException
 	 */
 	@Test
 	public void doNotExpandVoidElements() throws ParseException
 	{
-		String[] htmlVoidElements = new String[] {
-			"area", "base", "br", "col", "command", "embed", "hr", "img", "input",
-			"keygen", "link", "meta", "param", "source", "track", "wbr"
-		};
+		String[] htmlVoidElements = new String[] { "area", "base", "br", "col", "command", "embed",
+				"hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr" };
 
 		for (String htmlVoidElement : htmlVoidElements)
 		{
 
-			OpenCloseTagExpander expander = new OpenCloseTagExpander() {
+			OpenCloseTagExpander expander = new OpenCloseTagExpander()
+			{
 				@Override
 				public IMarkupFilter getNextFilter()
 				{
 					return new AbstractMarkupFilter()
 					{
 						@Override
-						protected MarkupElement onComponentTag(ComponentTag tag) throws ParseException
+						protected MarkupElement onComponentTag(ComponentTag tag)
+							throws ParseException
 						{
 							return null;
 						}
