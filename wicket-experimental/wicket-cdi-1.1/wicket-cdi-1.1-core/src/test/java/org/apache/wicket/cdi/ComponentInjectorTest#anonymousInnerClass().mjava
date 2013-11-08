@@ -5,6 +5,7 @@
 		WebComponent component = new WebComponent("someId")
 		{
 			@Inject
+			@TestQualifier
 			private String dependency;
 
 			@Override
@@ -13,7 +14,6 @@
 				return dependency;
 			}
 		};
-		componentInjector.onInstantiation(component);
-		assertNull(component.toString());
+		assertEquals(component.toString(), "Test String");
 	}
 
