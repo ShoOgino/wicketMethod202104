@@ -1,11 +1,11 @@
 	private static ClassMetaCache<NonContextual<?>> getCache()
 	{
-		ClassMetaCache<NonContextual<?>> meta = cache.get(CDI.current().getBeanManager());
+		ClassMetaCache<NonContextual<?>> meta = cache.get(BeanManagerLookup.lookup());
 		if (meta == null)
 		{
 			synchronized (lock)
 			{
-                                BeanManager manager = CDI.current().getBeanManager(); 
+				BeanManager manager = BeanManagerLookup.lookup();
 				meta = cache.get(manager);
 				if (meta == null)
 				{
