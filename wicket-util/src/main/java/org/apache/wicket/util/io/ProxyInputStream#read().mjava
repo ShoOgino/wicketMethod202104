@@ -1,0 +1,18 @@
+    /**
+     * Invokes the delegate's <code>read()</code> method.
+     * @return the byte read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    public int read() throws IOException {
+        try {
+            beforeRead(1);
+            final int b = in.read();
+            afterRead(b != -1 ? 1 : -1);
+            return b;
+        } catch (final IOException e) {
+            handleIOException(e);
+            return -1;
+        }
+    }
+

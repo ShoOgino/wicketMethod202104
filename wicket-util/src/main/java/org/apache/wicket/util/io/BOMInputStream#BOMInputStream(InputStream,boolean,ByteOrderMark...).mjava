@@ -1,0 +1,22 @@
+    /**
+     * Constructs a new BOM InputStream that detects the specified BOMs and optionally includes them.
+     * 
+     * @param delegate
+     *            the InputStream to delegate to
+     * @param include
+     *            true to include the specified BOMs or false to exclude them
+     * @param boms
+     *            The BOMs to detect and optionally exclude
+     */
+    public BOMInputStream(final InputStream delegate, final boolean include, final ByteOrderMark... boms) {
+        super(delegate);
+        if (boms == null || boms.length == 0) {
+            throw new IllegalArgumentException("No BOMs specified");
+        }
+        this.include = include;
+        // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
+        Arrays.sort(boms, ByteOrderMarkLengthComparator);
+        this.boms = Arrays.asList(boms);
+
+    }
+

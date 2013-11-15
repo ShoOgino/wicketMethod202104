@@ -1,0 +1,19 @@
+    /**
+     * Invokes the delegate's <code>read(byte[])</code> method.
+     * @param bts the buffer to read the bytes into
+     * @return the number of bytes read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    public int read(final byte[] bts) throws IOException {
+        try {
+            beforeRead(bts != null ? bts.length : 0);
+            final int n = in.read(bts);
+            afterRead(n);
+            return n;
+        } catch (final IOException e) {
+            handleIOException(e);
+            return -1;
+        }
+    }
+

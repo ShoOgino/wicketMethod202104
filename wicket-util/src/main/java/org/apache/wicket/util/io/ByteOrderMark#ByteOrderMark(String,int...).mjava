@@ -1,0 +1,22 @@
+    /**
+     * Construct a new BOM.
+     *
+     * @param charsetName The name of the charset the BOM represents
+     * @param bytes The BOM's bytes
+     * @throws IllegalArgumentException if the charsetName is null or
+     * zero length
+     * @throws IllegalArgumentException if the bytes are null or zero
+     * length
+     */
+    public ByteOrderMark(final String charsetName, final int... bytes) {
+        if (charsetName == null || charsetName.length() == 0) {
+            throw new IllegalArgumentException("No charsetName specified");
+        }
+        if (bytes == null || bytes.length == 0) {
+            throw new IllegalArgumentException("No bytes specified");
+        }
+        this.charsetName = charsetName;
+        this.bytes = new int[bytes.length];
+        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
+    }
+

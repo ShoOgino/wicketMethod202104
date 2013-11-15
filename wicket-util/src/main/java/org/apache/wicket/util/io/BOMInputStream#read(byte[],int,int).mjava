@@ -1,0 +1,29 @@
+    /**
+     * Invokes the delegate's <code>read(byte[], int, int)</code> method, detecting and optionally skipping BOM.
+     * 
+     * @param buf
+     *            the buffer to read the bytes into
+     * @param off
+     *            The start offset
+     * @param len
+     *            The number of bytes to read (excluding BOM)
+     * @return the number of bytes read or -1 if the end of stream
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Override
+    public int read(final byte[] buf, int off, int len) throws IOException {
+        int firstCount = 0;
+        int b = 0;
+        while (len > 0 && b >= 0) {
+            b = readFirstBytes();
+            if (b >= 0) {
+                buf[off++] = (byte) (b & 0xFF);
+                len--;
+                firstCount++;
+            }
+        }
+        final int secondCount = in.read(buf, off, len);
+        return secondCount < 0 ? firstCount > 0 ? firstCount : -1 : firstCount + secondCount;
+    }
+
