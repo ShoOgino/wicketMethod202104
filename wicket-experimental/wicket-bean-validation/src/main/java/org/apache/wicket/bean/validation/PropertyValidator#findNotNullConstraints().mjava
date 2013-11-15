@@ -1,23 +1,22 @@
-	/**
-	 * Marks the form component required if necessary
-	 */
-	private void setComponentRequiredFlag()
+	private List<NotNull> findNotNullConstraints()
 	{
 		BeanValidationContext config = BeanValidationConfiguration.get();
 		Validator validator = config.getValidator();
 		Property property = getProperty();
 
-		// if the property has a NotNull constraint mark the form component required
+		List<NotNull> constraints = new ArrayList<NotNull>();
 
 		Iterator<ConstraintDescriptor<?>> it = new ConstraintIterator(validator, property);
+
 		while (it.hasNext())
 		{
 			ConstraintDescriptor<?> desc = it.next();
 			if (desc.getAnnotation().annotationType().equals(NotNull.class))
 			{
-				component.setRequired(true);
-				break;
+				constraints.add((NotNull)desc.getAnnotation());
 			}
 		}
+
+		return constraints;
 	}
 
