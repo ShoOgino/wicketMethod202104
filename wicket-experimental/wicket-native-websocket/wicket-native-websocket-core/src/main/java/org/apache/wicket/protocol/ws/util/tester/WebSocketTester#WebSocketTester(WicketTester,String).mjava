@@ -1,20 +1,21 @@
 	/**
 	 * Constructor.
+	 *
 	 * Prepares a WebSockConnection that will be used to send messages from the client (the test case)
 	 * to the server.
 	 *
-	 * @param page
-	 *      the page that may have registered {@link org.apache.wicket.protocol.ws.api.WebSocketBehavior}
+	 * @param resourceName
+	 *      the name of the shared WebSocketResource that will handle the web socket messages
 	 */
-	public WebSocketTester(final WicketTester wicketTester, final Page page)
+	public WebSocketTester(final WicketTester wicketTester, final String resourceName)
 	{
 		Args.notNull(wicketTester, "wicketTester");
-		Args.notNull(page, "page");
+		Args.notNull(resourceName, "resourceName");
 
 		WebApplication webApplication = wicketTester.getApplication();
 		webApplication.getWicketFilter().setFilterPath("");
 
-		socketProcessor = new TestWebSocketProcessor(wicketTester, page)
+		socketProcessor = new TestWebSocketProcessor(wicketTester, resourceName)
 		{
 			@Override
 			protected void onOutMessage(String message)
