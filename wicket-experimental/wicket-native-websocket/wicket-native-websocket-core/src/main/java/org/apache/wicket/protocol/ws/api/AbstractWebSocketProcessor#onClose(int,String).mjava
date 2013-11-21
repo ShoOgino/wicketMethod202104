@@ -1,7 +1,8 @@
 	@Override
 	public void onClose(int closeCode, String message)
 	{
-		broadcastMessage(new ClosedMessage(getApplication(), getSessionId(), pageId));
-		connectionRegistry.removeConnection(getApplication(), getSessionId(), pageId);
+		IKey key = getRegistryKey();
+		broadcastMessage(new ClosedMessage(getApplication(), getSessionId(), key));
+		connectionRegistry.removeConnection(getApplication(), getSessionId(), key);
 	}
 

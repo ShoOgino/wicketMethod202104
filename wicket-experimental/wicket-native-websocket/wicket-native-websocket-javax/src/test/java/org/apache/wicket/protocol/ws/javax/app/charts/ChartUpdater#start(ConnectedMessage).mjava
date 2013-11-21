@@ -1,0 +1,9 @@
+	public static void start(ConnectedMessage message)
+	{
+		Record[] data = generateData();
+
+		// create an asynchronous task that will write the data to the client
+		UpdateTask updateTask = new UpdateTask(message.getApplication(), message.getSessionId(), message.getKey(), data);
+		Executors.newScheduledThreadPool(1).schedule(updateTask, 1, TimeUnit.SECONDS);
+	}
+
