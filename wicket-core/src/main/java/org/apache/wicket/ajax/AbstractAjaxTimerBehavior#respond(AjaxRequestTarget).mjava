@@ -11,9 +11,15 @@
 
 			if (shouldTrigger())
 			{
-				target.getHeaderResponse().render(
-					OnLoadHeaderItem.forScript(getJsTimeoutCall(updateInterval)));
+				// re-add timeout
+				hasTimeout = false;
+
+				addTimeout(target.getHeaderResponse());
+
+				return;
 			}
 		}
+
+		clearTimeout(target.getHeaderResponse());
 	}
 

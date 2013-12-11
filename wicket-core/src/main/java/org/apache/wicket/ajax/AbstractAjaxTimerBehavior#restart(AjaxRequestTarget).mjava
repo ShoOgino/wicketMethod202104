@@ -1,16 +1,19 @@
 	/**
 	 * Re-enables the timer if already stopped
-	 *
+	 * 
 	 * @param target
+	 *            may be null
 	 */
 	public final void restart(final AjaxRequestTarget target)
 	{
-		if (isStopped())
+		if (stopped == true)
 		{
 			stopped = false;
 
-			target.getHeaderResponse().render(
-				OnLoadHeaderItem.forScript(getJsTimeoutCall(updateInterval)));
+			if (target != null)
+			{
+				addTimeout(target.getHeaderResponse());
+			}
 		}
 	}
 
