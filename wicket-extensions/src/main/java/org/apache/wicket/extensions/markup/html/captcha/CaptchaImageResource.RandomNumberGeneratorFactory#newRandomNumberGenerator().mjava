@@ -1,0 +1,21 @@
+		/**
+		 * @return new secure random number generator instance using best fitting service
+		 */
+		Random newRandomNumberGenerator()
+		{
+			if (service != null)
+			{
+				try
+				{
+					return SecureRandom.getInstance(service.getAlgorithm(), service.getProvider());
+				}
+				catch (NoSuchAlgorithmException nsax)
+				{
+					// this shouldn't happen, because 'detectBestFittingService' has checked for existing provider and
+					// algorithms.
+				}
+			}
+
+			return new SecureRandom();
+		}
+
