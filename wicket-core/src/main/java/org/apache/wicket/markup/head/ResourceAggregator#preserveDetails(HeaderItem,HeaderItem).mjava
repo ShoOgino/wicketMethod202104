@@ -1,0 +1,32 @@
+	/**
+	 * Preserves the resource reference details for resource replacements.
+	 *
+	 * For example if CSS resource with media <em>screen</em> is replaced with
+	 * {@link org.apache.wicket.protocol.http.WebApplication#addResourceReplacement(org.apache.wicket.request.resource.CssResourceReference, org.apache.wicket.request.resource.ResourceReference)} then the replacement will
+	 * will inherit the media attribute
+	 *
+	 * @param item   The replaced header item
+	 * @param bundle The bundle that represents the replacement
+	 * @return the bundle with the preserved details
+	 */
+	protected HeaderItem preserveDetails(HeaderItem item, HeaderItem bundle)
+	{
+		HeaderItem resultBundle;
+		if (item instanceof CssReferenceHeaderItem && bundle instanceof CssReferenceHeaderItem)
+		{
+			CssReferenceHeaderItem originalHeaderItem = (CssReferenceHeaderItem) item;
+			resultBundle = preserveCssDetails(originalHeaderItem, (CssReferenceHeaderItem) bundle);
+		}
+		else if (item instanceof JavaScriptReferenceHeaderItem && bundle instanceof JavaScriptReferenceHeaderItem)
+		{
+			JavaScriptReferenceHeaderItem originalHeaderItem = (JavaScriptReferenceHeaderItem) item;
+			resultBundle = preserveJavaScriptDetails(originalHeaderItem, (JavaScriptReferenceHeaderItem) bundle);
+		}
+		else
+		{
+			resultBundle = bundle;
+		}
+
+		return resultBundle;
+	}
+
