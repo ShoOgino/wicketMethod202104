@@ -1,8 +1,8 @@
 	/**
+	 * Constructor.
+	 *
 	 * @param id
 	 *            Component id
-	 * @param model
-	 *            Model representing collection of user's selections
 	 * @param choicesModel
 	 *            Model representing collection of all available choices
 	 * @param choiceRenderer
@@ -12,12 +12,20 @@
 	 *            Number of choices to be visible on the screen with out scrolling
 	 * @param allowOrder
 	 *            Allow user to move selections up and down
+	 * @param allowMoveAll
+	 *            Allow user to add or remove all items at once
 	 */
-	@SuppressWarnings("unchecked")
 	public Palette(final String id, final IModel<? extends Collection<T>> model,
-		final IModel<? extends Collection<? extends T>> choicesModel,
-		final IChoiceRenderer<T> choiceRenderer, final int rows, final boolean allowOrder)
+	               final IModel<? extends Collection<? extends T>> choicesModel,
+	               final IChoiceRenderer<T> choiceRenderer, final int rows, final boolean allowOrder,
+	               boolean allowMoveAll)
 	{
-		this(id, model, choicesModel, choiceRenderer, rows, allowOrder, false);
+		super(id, (IModel<Collection<T>>)model);
+
+		this.choicesModel = choicesModel;
+		this.choiceRenderer = choiceRenderer;
+		this.rows = rows;
+		this.allowOrder = allowOrder;
+		this.allowMoveAll = allowMoveAll;
 	}
 
