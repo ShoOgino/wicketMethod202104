@@ -1,7 +1,10 @@
 	/**
 	 * @param request
-	 *      the http servlet request to extract the charset from
-	 * @return the request's charset
+	 *            the http servlet request to extract the charset from
+	 * @return the request's charset or a default it request is {@code null} or has an unsupported
+	 *         character encoding
+	 * 
+	 * @see IRequestCycleSettings#getResponseRequestEncoding()
 	 */
 	public static Charset getCharset(HttpServletRequest request)
 	{
@@ -11,7 +14,13 @@
 			String charsetName = request.getCharacterEncoding();
 			if (charsetName != null)
 			{
-				charset = Charset.forName(charsetName);
+				try
+				{
+					charset = Charset.forName(charsetName);
+				}
+				catch (UnsupportedCharsetException useDefault)
+				{
+				}
 			}
 		}
 		if (charset == null)

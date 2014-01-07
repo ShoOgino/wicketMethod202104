@@ -1,0 +1,12 @@
+	@Test
+	public void charset() throws Exception
+	{
+		MockHttpServletRequest request = new MockHttpServletRequest(null, null, null);
+
+		request.setCharacterEncoding("UTF-8");
+		assertEquals(Charset.forName("UTF-8"), RequestUtils.getCharset(request));
+
+		request.setCharacterEncoding("FOO");
+		assertEquals(Charset.forName("UTF-8"), RequestUtils.getCharset(request));
+	}
+
