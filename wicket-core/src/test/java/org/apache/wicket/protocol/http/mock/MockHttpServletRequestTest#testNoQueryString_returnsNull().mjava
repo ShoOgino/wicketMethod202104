@@ -1,0 +1,14 @@
+    /**
+     * WICKET-4664 - no query string returns null as per HttpServletRequest
+     */
+    @Test
+    public void testNoQueryString_returnsNull()
+    {
+        WicketTester tester = new WicketTester();
+        MockHttpServletRequest request = tester.getRequest();
+        request.setURL("my/servlet/without/query/param");
+        
+        Url url = request.getUrl();
+        assertNull(url.getQueryString());
+    }
+

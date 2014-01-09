@@ -1,0 +1,31 @@
+	/**
+	 * @return the location of the folder where {@link org.apache.wicket.pageStore.DiskDataStore} will store the files with page
+	 *         instances per session
+	 */
+	public File getFileStoreFolder()
+	{
+		if (fileStoreFolder == null)
+		{
+			if (Application.exists())
+			{
+				fileStoreFolder = (File)((WebApplication)Application.get()).getServletContext()
+					.getAttribute("javax.servlet.context.tempdir");
+			}
+
+			if (fileStoreFolder != null)
+			{
+				return fileStoreFolder;
+			}
+
+			try
+			{
+				fileStoreFolder = File.createTempFile("file-prefix", null).getParentFile();
+			}
+			catch (IOException e)
+			{
+				throw new WicketRuntimeException(e);
+			}
+		}
+		return fileStoreFolder;
+	}
+

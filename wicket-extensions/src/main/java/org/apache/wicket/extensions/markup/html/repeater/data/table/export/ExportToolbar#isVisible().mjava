@@ -1,0 +1,28 @@
+	/**
+	 * This toolbar is only visible if there are rows in the data set and if there are exportable columns in the
+	 * data table and if there are data exporters added to the toolbar.
+	 */
+	@Override
+	public boolean isVisible()
+	{
+		if (dataExporters.isEmpty())
+		{
+			return false;
+		}
+
+		if (getTable().getRowCount() == 0)
+		{
+			return false;
+		}
+
+		for (IColumn<?, ?> col : getTable().getColumns())
+		{
+			if (col instanceof IExportableColumn)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+

@@ -1,0 +1,16 @@
+		@Override
+		public String getInitParameter(String name)
+		{
+			if ("applicationFactoryClassName".equals(name))
+			{
+				// use Spring factory
+				return SpringWebApplicationFactory.class.getName();
+			}
+			if ("contextConfigLocation".equals(name))
+			{
+				// use application-specific context
+				return "classpath:" + Packages.absolutePath(getClass(), "applicationContext.xml");
+			}
+			return null;
+		}
+

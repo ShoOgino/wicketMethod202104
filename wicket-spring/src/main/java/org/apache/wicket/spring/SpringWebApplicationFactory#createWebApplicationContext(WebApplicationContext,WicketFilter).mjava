@@ -6,20 +6,20 @@
 	 *            parent application context
 	 * @param filter
 	 *            wicket filter
-	 * @return instance of additional application context
+	 * @return instance of web application context
 	 * @throws BeansException
 	 */
 	protected final ConfigurableWebApplicationContext createWebApplicationContext(
 		final WebApplicationContext parent, final WicketFilter filter) throws BeansException
 	{
-		ConfigurableWebApplicationContext wac = newApplicationContext();
-		wac.setParent(parent);
-		wac.setServletContext(filter.getFilterConfig().getServletContext());
-		wac.setConfigLocation(getContextConfigLocation(filter));
+		webApplicationContext = newApplicationContext();
+		webApplicationContext.setParent(parent);
+		webApplicationContext.setServletContext(filter.getFilterConfig().getServletContext());
+		webApplicationContext.setConfigLocation(getContextConfigLocation(filter));
 
-		postProcessWebApplicationContext(wac, filter);
-		wac.refresh();
+		postProcessWebApplicationContext(webApplicationContext, filter);
+		webApplicationContext.refresh();
 
-		return wac;
+		return webApplicationContext;
 	}
 

@@ -1,0 +1,19 @@
+	/**
+	 * Tests that LessResourceReference is properly registered in ResourceReferenceRegistry
+	 * and later when making a request for it will actually resolve the registered reference
+	 * instead of automatically created PackageResourceReference
+	 */
+	@Test
+	public void processLessResources()
+	{
+		// load the page to register the resource
+		LessResourcePage page = new LessResourcePage();
+		tester.startPage(page);
+		assertFalse(PROCESS_RESPONSE_CALLED.get());
+
+		// make a request to the resource and assert
+		CharSequence urlToReference = page.urlFor(page.resourceReference, null);
+		tester.executeUrl(urlToReference.toString());
+		assertTrue(PROCESS_RESPONSE_CALLED.get());
+	}
+

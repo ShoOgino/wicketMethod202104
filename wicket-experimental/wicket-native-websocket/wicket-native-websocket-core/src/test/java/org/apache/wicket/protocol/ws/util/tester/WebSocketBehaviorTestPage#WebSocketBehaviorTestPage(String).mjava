@@ -1,0 +1,16 @@
+	WebSocketBehaviorTestPage(final String expectedMessage)
+	{
+		add(new WebSocketBehavior()
+		{
+			@Override
+			protected void onMessage(WebSocketRequestHandler handler, TextMessage message)
+			{
+				// assert the inbould message
+				Assert.assertEquals(expectedMessage, message.getText());
+				
+				// now send an outbound message
+				handler.push(Strings.capitalize(expectedMessage));
+			}
+		});
+	}
+

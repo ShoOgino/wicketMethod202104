@@ -5,8 +5,18 @@
 	 *            The class
 	 * @return The class name
 	 */
-	public static String name(final Class<?> c)
+	public static String name(Class<?> c)
 	{
-		return (c != null) ? c.getName() : null;
+		String name = null;
+		if (c != null)
+		{
+			while (c.isAnonymousClass())
+			{
+				c = c.getSuperclass();
+			}
+			name = c.getName();
+		}
+
+		return name;
 	}
 

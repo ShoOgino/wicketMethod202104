@@ -1,0 +1,31 @@
+	/**
+	 * A simple test that sends and receives a text message.
+	 * The page asserts that it received the correct message and then
+	 * pushed back the same message but capitalized.
+	 */
+	@Test
+	public void sendTextMessage()
+	{
+		assertFalse(TestWebSocketResource.ON_CONNECT_CALLED.get());
+
+		WebSocketTester webSocketTester = new WebSocketTester(tester, TestWebSocketResource.TEXT)
+		{
+			@Override
+			protected void onOutMessage(String message)
+			{
+				ON_OUT_TEXT_CALLED.set(true);
+				assertEquals(Strings.capitalize(EXPECTED_TEXT), message);
+			}
+		};
+
+		assertTrue(TestWebSocketResource.ON_CONNECT_CALLED.get());
+		assertFalse(ON_OUT_TEXT_CALLED.get());
+
+		webSocketTester.sendMessage(EXPECTED_TEXT);
+		assertTrue(ON_OUT_TEXT_CALLED.get());
+
+		assertFalse(TestWebSocketResource.ON_CLOSE_CALLED.get());
+		webSocketTester.destroy();
+		assertTrue(TestWebSocketResource.ON_CLOSE_CALLED.get());
+	}
+

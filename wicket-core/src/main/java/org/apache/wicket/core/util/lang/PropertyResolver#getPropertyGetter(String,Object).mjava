@@ -1,16 +1,16 @@
 	/**
 	 * @param expression
 	 * @param object
-	 * @return Getter method for the property expression or null if such getter doesn't exist (only
-	 *         field)
+	 * @return Getter method for the property expression
+	 * @throws WicketRuntimeException if there is no getter method
 	 */
-	public final static Method getPropertyGetter(final String expression, final Object object)
+	public static Method getPropertyGetter(final String expression, final Object object)
 	{
 		ObjectAndGetSetter setter = getObjectAndGetSetter(expression, object, RESOLVE_CLASS);
 		if (setter == null)
 		{
 			throw new WicketRuntimeException("Null object returned for expression: " + expression +
-				" for getting the target classs of: " + object);
+				" for getting the target class of: " + object);
 		}
 		return setter.getGetter();
 	}

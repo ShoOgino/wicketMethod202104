@@ -2,7 +2,7 @@
 	 * @param child
 	 *            Component being added
 	 */
-	private final void addedComponent(final Component child)
+	private void addedComponent(final Component child)
 	{
 		// Check for degenerate case
 		Args.notNull(child, "child");
@@ -16,8 +16,9 @@
 		// Set child's parent
 		child.setParent(this);
 
-		final IDebugSettings debugSettings = Application.get().getDebugSettings();
-		if (debugSettings.isLinePreciseReportingOnAddComponentEnabled())
+		final DebugSettings debugSettings = Application.get().getDebugSettings();
+		if (debugSettings.isLinePreciseReportingOnAddComponentEnabled() &&
+			debugSettings.getComponentUseCheck())
 		{
 			child.setMetaData(ADDED_AT_KEY,
 				ComponentStrings.toString(child, new MarkupException("added")));

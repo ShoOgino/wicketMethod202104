@@ -1,0 +1,16 @@
+	@Override
+	public void start(final Duration pollFrequency)
+	{
+		// Construct task with the given polling frequency
+		task = new Task("Wicket-ModificationWatcher-NIO2");
+
+		task.run(pollFrequency, new ICode() {
+			@Override
+			public void run(final Logger log)
+			{
+				checkCreated();
+				checkModified();
+			}
+		});
+	}
+

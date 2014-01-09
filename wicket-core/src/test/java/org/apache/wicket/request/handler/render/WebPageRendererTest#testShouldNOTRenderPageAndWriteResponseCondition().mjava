@@ -1,0 +1,38 @@
+	@Test
+	public void testShouldNOTRenderPageAndWriteResponseCondition() {
+
+		TestPageRenderer renderer = new TestPageRenderer(handler);
+
+		// NOT if the policy is never to redirect
+		renderer.redirectPolicy = RedirectPolicy.AUTO_REDIRECT;
+
+		// NOT or one pass render mode is on
+		// -> or one pass render mode is on and its NOT ajax and its NOT always redirect
+		renderer.ajax = true;
+		renderer.onePassRender = false;
+
+		// NOT or the targetUrl matches current url and the page is not stateless
+		// or the targetUrl matches current url, page is stateless but it's redirect-to-render
+		// --> its NOT ajax and
+		// 				the targetUrl matches current url and the page is NOT stateless and its NOT a new instance
+		// 		or the targetUrl matches current url and it's redirect-to-render
+
+		// or the request determines that the current url should be preserved
+		// just render the page
+		renderer.shouldPreserveClientUrl = false;
+
+		renderer.redirectToRender = true;
+		renderer.newPageInstance = true;
+		renderer.pageStateless = true;
+
+		Assert.assertFalse(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+			Url.parse("test1"), Url.parse("test2")));
+
+		renderer.redirectToRender = false;
+		renderer.newPageInstance = false;
+		renderer.pageStateless = false;
+
+		Assert.assertFalse(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+			Url.parse("test"), Url.parse("test")));
+	}
+

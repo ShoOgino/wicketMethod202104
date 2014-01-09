@@ -1,0 +1,52 @@
+	/**
+	 * @see WicketTesterCookieTest#wicketTesterCookieHandlingWithoutRedirect()
+	 *  
+	 * https://issues.apache.org/jira/browse/WICKET-5147
+	 */
+	@Test
+	public void wicketTesterCookieHandlingWithRedirect() {
+		// set cookie in response then redirect to other page
+		Cookie firstCookie = newCookie("a","firstValue",1);
+		setCookieInResponseAndRedirect(firstCookie);
+		lastResponseShouldHaveTheseCookies(firstCookie);
+		requestShouldHaveTheseCookies(firstCookie);
+
+		// cookie in response after redirect should appear in next request
+		CollectAllRequestCookiesPage collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage,firstCookie);
+		lastResponseDoesNotHaveAnyCookies();
+		requestShouldHaveTheseCookies(firstCookie);
+		responseDoesNotHaveAnyCookies();
+		
+		// set cookie on request and overwrite in response then redirect to other page
+		Cookie cookieSetInRequest = newCookie("a","valueFromRequest",1);
+		Cookie cookieSetInResponse = newCookie("a","overwriteInResponse",1);
+		tester.getRequest().addCookie(cookieSetInRequest);
+		setCookieInResponseAndRedirect(cookieSetInResponse);
+		lastResponseShouldHaveTheseCookies(cookieSetInResponse);
+		requestShouldHaveTheseCookies(cookieSetInResponse);
+		
+		// cookie in response after redirect should appear in next request
+		collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage,cookieSetInResponse);
+		lastResponseDoesNotHaveAnyCookies();
+		requestShouldHaveTheseCookies(cookieSetInResponse);
+		responseDoesNotHaveAnyCookies();
+		
+		// set cookie on request and remove it in response then redirect to other page
+		Cookie nextCookieSetInRequest = newCookie("a","nextValueFromRequest",1);
+		Cookie nextCookieSetInResponse = newCookie("a","newValue",0);
+		tester.getRequest().addCookie(nextCookieSetInRequest);
+		setCookieInResponseAndRedirect(nextCookieSetInResponse);
+		lastResponseShouldHaveTheseCookies(nextCookieSetInResponse);
+		requestDoesNotHaveAnyCookies();
+		responseDoesNotHaveAnyCookies();
+		
+		// no cookies left
+		collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage);
+		lastResponseDoesNotHaveAnyCookies();
+		requestDoesNotHaveAnyCookies();
+		responseDoesNotHaveAnyCookies();
+	}
+

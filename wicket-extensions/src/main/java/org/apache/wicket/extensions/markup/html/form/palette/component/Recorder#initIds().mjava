@@ -1,10 +1,10 @@
 	/**
-	 * Synchronize ids collection from the palette's model
+	 * Synchronize the ids in this' model from the palette's model.
 	 */
 	private void initIds()
 	{
 		// construct the model string based on selection collection
-		IChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
+		ChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
 		StringBuilder modelStringBuffer = new StringBuilder();
 		Collection<T> modelCollection = getPalette().getModelCollection();
 		if (modelCollection == null)
@@ -21,13 +21,12 @@
 			modelStringBuffer.append(renderer.getIdValue(selection.next(), i++));
 			if (selection.hasNext())
 			{
-				modelStringBuffer.append(",");
+				modelStringBuffer.append(',');
 			}
 		}
 
 		// set model and update ids array
 		String modelString = modelStringBuffer.toString();
-		setDefaultModel(new Model<String>(modelString));
-		updateIds(modelString);
+		setModelObject(modelString);
 	}
 

@@ -1,6 +1,7 @@
 	/**
 	 * @throws Exception
 	 */
+	@Test
 	public void testRenderPage13() throws Exception
 	{
 		tester = new WicketTester(new MockApplication()
@@ -11,19 +12,12 @@
 				super.init();
 
 				// This should cause all SecuredContainer components to be hidden
-				getSecuritySettings().setAuthorizationStrategy(new IAuthorizationStrategy()
+				getSecuritySettings().setAuthorizationStrategy(new IAuthorizationStrategy.AllowAllAuthorizationStrategy()
 				{
 					@Override
 					public boolean isActionAuthorized(Component component, Action action)
 					{
 						return !(component instanceof SecuredContainer_13);
-					}
-
-					@Override
-					public <T extends IRequestableComponent> boolean isInstantiationAuthorized(
-						Class<T> componentClass)
-					{
-						return true;
 					}
 				});
 			}

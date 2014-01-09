@@ -19,9 +19,56 @@
 			request.setServerPort(lastRequest.getServerPort());
 		}
 
-		transferCookies();
-
 		response = new MockHttpServletResponse(request);
+
+		// Preserve response cookies in redirects
+		// XXX: is this really needed ? Browsers wont do that, but some
+		// Wicket tests assert that a cookie is in the response,
+		// even after redirects (see org.apache.wicket.util.cookies.SetCookieAndRedirectTest.statefulPage())
+		// They should assert that the cookie is in the next *request*
+		if (lastResponse != null)
+		{
+			List<Cookie> lastResponseCookies = lastResponse.getCookies();
+			if (lastResponse.isRedirect())
+			{
+				CookieCollection responseCookies = new CookieCollection();
+
+				// if the last request is a redirect, all cookies from last response should appear
+				// in current response
+				// this call will filter duplicates
+				responseCookies.addAll(lastResponseCookies);
+				for (Cookie cookie : responseCookies.allAsList())
+				{
+					response.addCookie(cookie);
+				}
+
+				// copy all request cookies from last request to the new request because of redirect
+				// handling this way, the cookie will be send to the next requested page
+				if (lastRequest != null)
+				{
+					CookieCollection requestCookies = new CookieCollection();
+					// this call will filter duplicates
+					requestCookies.addAll(lastRequest.getCookies());
+					request.addCookies(requestCookies.asList());
+				}
+			}
+			else
+			{
+				// if the last response is not a redirect
+				// - copy last request cookies to collection
+				// - copy last response cookies to collection
+				// - set only the not expired cookies to the next request
+				CookieCollection cookies = new CookieCollection();
+				if (lastRequest != null)
+				{
+					// this call will filter duplicates
+					cookies.addAll(lastRequest.getCookies());
+				}
+				// this call will filter duplicates
+				cookies.addAll(lastResponseCookies);
+				request.addCookies(cookies.asList());
+			}
+		}
 
 		ServletWebRequest servletWebRequest = newServletWebRequest();
 		requestCycle = application.createRequestCycle(servletWebRequest,

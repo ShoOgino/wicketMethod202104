@@ -1,5 +1,6 @@
 	/**
-	 * Constructor
+	 * Constructor.
+	 * Uses the form's model object as an original state
 	 * 
 	 * @param id
 	 *            component id
@@ -13,23 +14,6 @@
 	public GoAndClearFilter(final String id, final FilterForm<?> form,
 		final IModel<String> goModel, final IModel<String> clearModel)
 	{
-		super(id, goModel);
-
-		originalState = WicketObjects.cloneModel(form.getDefaultModelObject());
-
-		clear = new Button("clear", clearModel)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onSubmit()
-			{
-				onClearSubmit(this);
-			}
-		};
-
-		clear.setDefaultFormProcessing(true);
-
-		add(clear);
+		this(id, goModel, clearModel, WicketObjects.cloneModel(form.getDefaultModelObject()));
 	}
 

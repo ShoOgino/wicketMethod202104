@@ -5,12 +5,21 @@
 	@Override
 	protected final void respond(final AjaxRequestTarget target)
 	{
-		if (!isStopped() && isEnabled(getComponent()))
+		if (shouldTrigger())
 		{
 			onTimer(target);
 
-			target.getHeaderResponse().render(
-			OnLoadHeaderItem.forScript(getJsTimeoutCall(updateInterval)));
+			if (shouldTrigger())
+			{
+				// re-add timeout
+				hasTimeout = false;
+
+				addTimeout(target.getHeaderResponse());
+
+				return;
+			}
 		}
+
+		clearTimeout(target.getHeaderResponse());
 	}
 

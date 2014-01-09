@@ -1,0 +1,41 @@
+	/**
+	 * Writes HTML5 attributes for {@link AbstractTextComponent} inputs:
+	 * 
+	 * <ul>
+	 * <li>{@code required} if component {@link AbstractTextComponent#isRequired()}</li>
+	 * <li>{@code placeholder} for {@link AbstractTextComponent#getLabel()}</li>
+	 * <li>{@code pattern} for {@link AbstractTextComponent}s with a {@link PatternValidator}</li>
+	 * <ul>
+	 * 
+	 * @param input
+	 *            input component
+	 * @param tag
+	 *            component tag
+	 */
+	protected void onInput(AbstractTextComponent<?> input, ComponentTag tag)
+	{
+		if (input.isRequired())
+		{
+			tag.put("required", "required");
+		}
+
+		IModel<String> label = input.getLabel();
+		if (label != null && label.getObject() != null)
+		{
+			tag.put("placeholder", label.getObject());
+		}
+
+		for (IValidator<?> validator : input.getValidators())
+		{
+			if (validator instanceof ValidatorAdapter)
+			{
+				validator = ((ValidatorAdapter<?>)validator).getValidator();
+			}
+
+			if (validator instanceof PatternValidator)
+			{
+				tag.put("pattern", ((PatternValidator)validator).getPattern().toString());
+			}
+		}
+	}
+

@@ -1,0 +1,15 @@
+	/**
+	 * Make it possible to use full url without protocol
+	 * https://issues.apache.org/jira/browse/WICKET-5065
+	 */
+	@Test
+	public void parse16()
+	{
+		String s = "//localhost:56704;jsessionid=8kxeo3reannw1qjtxgkju8yiu";
+		Url url = Url.parse(s);
+		assertNull(url.getProtocol());
+		assertEquals("localhost", url.getHost());
+		assertEquals(Integer.valueOf(56704), url.getPort());
+		checkSegments(url, ";jsessionid=8kxeo3reannw1qjtxgkju8yiu");
+	}
+

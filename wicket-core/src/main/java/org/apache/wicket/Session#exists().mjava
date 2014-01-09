@@ -1,10 +1,26 @@
 	/**
-	 * Checks if the <code>Session</code> threadlocal is set in this thread
+	 * Checks existence of a <code>Session</code> associated with the current thread.
 	 * 
-	 * @return true if {@link Session#get()} can return the instance of session, false otherwise
+	 * @return {@code true} if {@link Session#get()} can return the instance of session,
+	 *         {@code false} otherwise
 	 */
 	public static boolean exists()
 	{
-		return ThreadContext.getSession() != null;
+		Session session = ThreadContext.getSession();
+
+		if (session == null)
+		{
+			// no session is available via ThreadContext, so lookup in session store
+			RequestCycle requestCycle = RequestCycle.get();
+			if (requestCycle != null)
+			{
+				session = Application.get().getSessionStore().lookup(requestCycle.getRequest());
+				if (session != null)
+				{
+					ThreadContext.setSession(session);
+				}
+			}
+		}
+		return session != null;
 	}
 

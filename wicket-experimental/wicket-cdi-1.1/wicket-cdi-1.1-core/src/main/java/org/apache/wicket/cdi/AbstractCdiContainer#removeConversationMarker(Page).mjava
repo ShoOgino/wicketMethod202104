@@ -1,0 +1,15 @@
+	/**
+	 * Removes conversation marker from the page instance which prevents the conversation from
+	 * propagating to the page. This method should usually be called from page's {@code onDetach()}
+	 * method.
+	 * 
+	 * @param page
+	 */
+	public void removeConversationMarker(Page page)
+	{
+		Args.notNull(page, "page");
+
+		page.setMetaData(ConversationIdMetaKey.INSTANCE, null);
+		page.getPageParameters().remove(ConversationPropagator.CID_ATTR);
+	}
+

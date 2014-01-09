@@ -1,0 +1,15 @@
+	/**
+	 * Creates an HttpServletRequest that is needed by AbstractWebSocketProcessor
+	 *
+	 * @param page
+	 *      the page that may have registered {@link org.apache.wicket.protocol.ws.api.WebSocketBehavior}
+	 * @return a mock http request
+	 */
+	private static HttpServletRequest createRequest(final WicketTester wicketTester, final Page page)
+	{
+		Args.notNull(page, "page");
+		MockHttpServletRequest request = createRequest(wicketTester);
+		request.addParameter("pageId", page.getId());
+		return request;
+	}
+

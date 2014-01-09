@@ -1,0 +1,26 @@
+	/**
+	 * Sets whether Wicket should try to get extensive client info by redirecting to
+	 * {@link org.apache.wicket.markup.html.pages.BrowserInfoPage a page that polls for client capabilities}. This method is used by the
+	 * default implementation of {@link org.apache.wicket.Session#getClientInfo()}, so if that method is
+	 * overridden, there is no guarantee this method will be taken into account.
+	 *
+	 * <p>
+	 * <strong>WARNING: </strong> though this facility should work transparently in most cases, it
+	 * is recommended that you trigger the roundtrip to get the browser info somewhere where it
+	 * hurts the least. The roundtrip will be triggered the first time you call
+	 * {@link org.apache.wicket.Session#getClientInfo()} for a session, and after the roundtrip a new request with the
+	 * same info (url, post parameters) is handled. So rather than calling this in the middle of an
+	 * implementation of a form submit method, which would result in the code of that method before
+	 * the call to {@link org.apache.wicket.Session#getClientInfo()} to be executed twice, you best call
+	 * {@link org.apache.wicket.Session#getClientInfo()} e.g. in a page constructor or somewhere else where you didn't
+	 * do a lot of processing first.
+	 * </p>
+	 *
+	 * @param gatherExtendedBrowserInfo
+	 *            Whether to gather extensive client info
+	 */
+	public void setGatherExtendedBrowserInfo(boolean gatherExtendedBrowserInfo)
+	{
+		this.gatherExtendedBrowserInfo = gatherExtendedBrowserInfo;
+	}
+

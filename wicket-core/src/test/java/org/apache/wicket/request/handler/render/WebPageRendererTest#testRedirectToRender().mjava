@@ -1,20 +1,16 @@
 	/**
-	 * Tests that when {@link IRequestCycleSettings.RenderStrategy#REDIRECT_TO_RENDER} is configured
-	 * then no matter what are the fromUrl and toUrl a redirect will happen
+	 * Tests that when {@link org.apache.wicket.settings.RequestCycleSettings.RenderStrategy#REDIRECT_TO_RENDER}
+	 * is configured then no matter what are the fromUrl and toUrl a redirect will happen
 	 */
 	@Test
 	public void testRedirectToRender()
 	{
 
-		PageRenderer renderer = new TestPageRenderer(handler)
-		{
-			@Override
-			protected boolean isRedirectToRender()
-			{
-				return true;
-			}
+		TestPageRenderer renderer = new TestPageRenderer(handler);
+		renderer.redirectToRender = true;
 
-		};
+		when(provider.getPageInstance()).thenThrow(
+			new AssertionFailedError("no page instance should be created"));
 
 		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("a"));
 

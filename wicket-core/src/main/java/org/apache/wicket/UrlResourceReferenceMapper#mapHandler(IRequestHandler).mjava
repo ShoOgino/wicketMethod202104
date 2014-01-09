@@ -1,0 +1,24 @@
+	@Override
+	public Url mapHandler(IRequestHandler requestHandler)
+	{
+		Url url = null;
+		if (requestHandler instanceof ResourceReferenceRequestHandler)
+		{
+			ResourceReferenceRequestHandler resourceReferenceRequestHandler = (ResourceReferenceRequestHandler) requestHandler;
+			ResourceReference resourceReference = resourceReferenceRequestHandler.getResourceReference();
+
+			while (resourceReference instanceof ResourceBundleReference)
+			{
+				// unwrap the bundle to render the url for the actual reference
+				resourceReference = ((ResourceBundleReference)resourceReference).getBundleReference();
+			}
+
+			if (resourceReference instanceof UrlResourceReference)
+			{
+				UrlResourceReference urlResourceReference = (UrlResourceReference) resourceReference;
+				url = urlResourceReference.getUrl();
+			}
+		}
+		return url;
+	}
+

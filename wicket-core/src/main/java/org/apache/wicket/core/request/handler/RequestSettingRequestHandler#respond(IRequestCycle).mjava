@@ -1,0 +1,16 @@
+	@Override
+	public void respond(IRequestCycle requestCycle)
+	{
+		RequestCycle cycle = (RequestCycle) requestCycle;
+		Request originalRequest = cycle.getRequest();
+		try
+		{
+			cycle.setRequest(request);
+			delegate.respond(requestCycle);
+		}
+		finally
+		{
+			cycle.setRequest(originalRequest);
+		}
+	}
+

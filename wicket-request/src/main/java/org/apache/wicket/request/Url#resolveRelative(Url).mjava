@@ -32,12 +32,12 @@
 	{
 		if (getSegments().size() > 0)
 		{
-			// strip the first non-folder segment
+			// strip the first non-folder segment (if it is not empty)
 			getSegments().remove(getSegments().size() - 1);
 		}
 
-		// remove leading './' (current folder) and empty segments, process any ../ segments from the
-		// relative url
+		// remove leading './' (current folder) and empty segments, process any ../ segments from
+		// the relative url
 		while (!relative.getSegments().isEmpty())
 		{
 			if (".".equals(relative.getSegments().get(0)))
@@ -60,6 +60,11 @@
 			{
 				break;
 			}
+		}
+
+		if (!getSegments().isEmpty() && relative.getSegments().isEmpty())
+		{
+			getSegments().add("");
 		}
 
 		// append the remaining relative segments

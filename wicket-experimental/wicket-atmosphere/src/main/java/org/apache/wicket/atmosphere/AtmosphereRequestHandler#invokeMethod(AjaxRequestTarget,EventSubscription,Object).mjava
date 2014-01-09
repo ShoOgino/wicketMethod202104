@@ -1,28 +1,18 @@
-	private void invokeMethod(AjaxRequestTarget target, EventSubscription subscription, Object base)
+	private void invokeMethod(final AjaxRequestTarget target, EventSubscription subscription,
+		Object base)
 	{
-		for (Method curMethod : base.getClass().getMethods())
+		AjaxRequestInitializer initializer = new AjaxRequestInitializer()
 		{
-			if (curMethod.isAnnotationPresent(Subscribe.class) &&
-				curMethod.getName().equals(subscription.getMethodName()))
+			@Override
+			public void initialize()
 			{
-				try
+				if (!ajaxRequestScheduled)
 				{
-					curMethod.setAccessible(true);
-					curMethod.invoke(base, target, event);
-				}
-				catch (IllegalAccessException e)
-				{
-					throw new WicketRuntimeException(e);
-				}
-				catch (IllegalArgumentException e)
-				{
-					throw new WicketRuntimeException(e);
-				}
-				catch (InvocationTargetException e)
-				{
-					throw new WicketRuntimeException(e);
+					RequestCycle.get().scheduleRequestHandlerAfterCurrent(target);
+					ajaxRequestScheduled = true;
 				}
 			}
-		}
+		};
+		eventSubscriptionInvoker.invoke(target, subscription, base, event, initializer);
 	}
 

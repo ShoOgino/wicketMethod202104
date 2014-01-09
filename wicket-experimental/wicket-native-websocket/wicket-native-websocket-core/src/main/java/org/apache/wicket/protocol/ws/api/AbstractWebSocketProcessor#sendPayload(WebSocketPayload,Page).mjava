@@ -1,0 +1,34 @@
+	/**
+	 * Sends the payload either to the page (and its WebSocketBehavior)
+	 * or to the WebSocketResource with name {@linkplain #resourceName}
+	 *
+	 * @param payload
+	 *          The payload with the web socket message
+	 * @param page
+	 *          The page that owns the WebSocketBehavior, in case of behavior usage
+	 */
+	private void sendPayload(WebSocketPayload payload, Page page)
+	{
+		if (pageId != NO_PAGE_ID)
+		{
+			page.send(application, Broadcast.BREADTH, payload);
+		}
+		else
+		{
+			ResourceReference reference = new SharedResourceReference(resourceName);
+			IResource resource = reference.getResource();
+			if (resource instanceof WebSocketResource)
+			{
+				WebSocketResource wsResource = (WebSocketResource) resource;
+				wsResource.onPayload(payload);
+			}
+			else
+			{
+				throw new IllegalStateException(
+						String.format("Shared resource with name '%s' is not a %s but %s",
+								resourceName, WebSocketResource.class.getSimpleName(),
+								Classes.name(resource.getClass())));
+			}
+		}
+	}
+

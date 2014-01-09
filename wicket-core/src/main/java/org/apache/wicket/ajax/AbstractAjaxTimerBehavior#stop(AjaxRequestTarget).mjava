@@ -1,10 +1,19 @@
 	/**
-	 * Stops the timer
+	 * Stops the timer.
+	 * 
+	 * @param target
+	 *            may be null
 	 */
 	public final void stop(final AjaxRequestTarget target)
 	{
-		stopped = true;
-		String timeoutHandle = getTimeoutHandle();
-		target.prependJavaScript("clearTimeout("+timeoutHandle+"); delete "+timeoutHandle+";");
+		if (stopped == false)
+		{
+			stopped = true;
+
+			if (target != null)
+			{
+				clearTimeout(target.getHeaderResponse());
+			}
+		}
 	}
 

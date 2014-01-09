@@ -1,0 +1,17 @@
+    /**
+     * Invokes the delegate's <code>skip(long)</code> method, detecting and optionallyskipping BOM.
+     * 
+     * @param n
+     *            the number of bytes to skip
+     * @return the number of bytes to skipped or -1 if the end of stream
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Override
+    public long skip(long n) throws IOException {
+        while (n > 0 && readFirstBytes() >= 0) {
+            n--;
+        }
+        return in.skip(n);
+    }
+

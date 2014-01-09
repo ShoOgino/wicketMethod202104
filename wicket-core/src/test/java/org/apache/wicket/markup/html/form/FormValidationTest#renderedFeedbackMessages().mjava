@@ -1,0 +1,39 @@
+	/**
+	 * Tests validation of form components when all errors are rendered using a feedback panel.
+	 * 
+	 * Validation status depends on whether or not a form component has error messages, here we test
+	 * submission roundtrip in a usecase where all error messages are rendered and cleared at the
+	 * end of the request.
+	 */
+	@Test
+	public void renderedFeedbackMessages()
+	{
+		// start the page
+
+		TestPage page = new TestPage();
+		scope.getTester().startPage(page);
+
+		// submit the form without filling out any values
+
+		FormTester formTester = scope.getTester().newFormTester(page.form.getPageRelativePath());
+		formTester.setClearFeedbackMessagesBeforeSubmit(true);
+		formTester.submit();
+
+		// the first required form component should fail and so should the form
+
+		assertTrue(page.form.hasError());
+		assertFalse(page.field1.isValid());
+
+		// fill out a value and submit again
+
+		formTester = scope.getTester().newFormTester(page.form.getPageRelativePath());
+		formTester.setValue(page.field1, "hi");
+		formTester.setClearFeedbackMessagesBeforeSubmit(true);
+		formTester.submit();
+
+		// now the form and the form component should be valid
+
+		assertFalse(page.form.hasError());
+		assertTrue(page.field1.isValid());
+	}
+

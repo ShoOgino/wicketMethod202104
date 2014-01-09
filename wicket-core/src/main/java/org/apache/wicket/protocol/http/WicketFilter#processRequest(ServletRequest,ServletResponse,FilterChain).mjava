@@ -19,15 +19,15 @@
 		final ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
 		final ClassLoader newClassLoader = getClassLoader();
 
+		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+		HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+
 		try
 		{
 			if (previousClassLoader != newClassLoader)
 			{
 				Thread.currentThread().setContextClassLoader(newClassLoader);
 			}
-
-			HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-			HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
 			// Make sure getFilterPath() gets called before checkIfRedirectRequired()
 			String filterPath = getFilterPath(httpServletRequest);
@@ -47,6 +47,19 @@
 				return false;
 			}
 
+			if ("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod()))
+			{
+				// handle the OPTIONS request outside of normal request processing.
+				// wicket pages normally only support GET and POST methods, but resources and
+				// special pages acting like REST clients can also support other methods, so
+				// we include them all.
+				httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+				httpServletResponse.setHeader("Allow",
+					"GET,POST,OPTIONS,PUT,HEAD,PATCH,DELETE,TRACE");
+				httpServletResponse.setHeader("Content-Length", "0");
+				return true;
+			}
+
 			String redirectURL = checkIfRedirectRequired(httpServletRequest);
 			if (redirectURL == null)
 			{
@@ -58,18 +71,8 @@
 					httpServletResponse);
 
 				RequestCycle requestCycle = application.createRequestCycle(webRequest, webResponse);
-				if (!requestCycle.processRequestAndDetach())
-				{
-					if (chain != null)
-					{
-						chain.doFilter(request, response);
-					}
-					res = false;
-				}
-				else
-				{
-					webResponse.flush();
-				}
+				res = processRequestCycle(requestCycle, webResponse, httpServletRequest,
+					httpServletResponse, chain);
 			}
 			else
 			{
@@ -99,7 +102,7 @@
 				Thread.currentThread().setContextClassLoader(previousClassLoader);
 			}
 
-			if (response.isCommitted())
+			if (response.isCommitted() && httpServletRequest.isAsyncStarted() == false)
 			{
 				response.flushBuffer();
 			}

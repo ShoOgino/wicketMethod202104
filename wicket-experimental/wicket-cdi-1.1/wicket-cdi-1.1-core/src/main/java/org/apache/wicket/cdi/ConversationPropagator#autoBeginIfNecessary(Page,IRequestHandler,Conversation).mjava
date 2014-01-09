@@ -1,0 +1,16 @@
+	protected void autoBeginIfNecessary(Page page, IRequestHandler handler,
+		Conversation conversation)
+	{
+		if (!auto.get() || conversation == null || !conversation.isTransient() || page == null ||
+			!propagationSource.get().propagatesViaPage(page, handler) || !hasConversationalComponent(page))
+		{
+			return;
+		}
+
+		// auto activate conversation
+
+		conversation.begin();
+
+		logger.debug("Auto-began conversation {} for page {}", conversation.getId(), page);
+	}
+

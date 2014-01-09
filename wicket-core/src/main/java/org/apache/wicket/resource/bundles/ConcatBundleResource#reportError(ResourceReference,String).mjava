@@ -1,0 +1,26 @@
+	/**
+	 * If a bundle resource is missing then throws a {@link MissingResourceException} if
+	 * {@link org.apache.wicket.settings.IResourceSettings#getThrowExceptionOnMissingResource()}
+	 * says so, or logs a warning message if the logging level allows
+	 * @param reference
+	 *              The resource reference to the missing resource
+	 * @param prefix
+	 *              The error message prefix
+	 */
+	private void reportError(ResourceReference reference, String prefix)
+	{
+		String scope = Classes.name(reference.getScope());
+		String name = reference.getName();
+		StringBuilder message = new StringBuilder(prefix);
+		message.append(scope).append('/').append(name);
+
+		if (getThrowExceptionOnMissingResource())
+		{
+			throw new MissingResourceException(message.toString(), scope, name);
+		}
+		else if (log.isWarnEnabled())
+		{
+			log.warn(message.toString());
+		}
+	}
+

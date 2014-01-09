@@ -1,0 +1,12 @@
+	/**
+	 * Injects the instance and calls any {@link PostConstruct} methods
+	 * 
+	 * @param instance
+	 */
+	public void postConstruct(T instance)
+	{
+		CreationalContext<T> cc = BeanManagerLookup.lookup().createCreationalContext(null);
+		it.inject(instance, cc);
+		it.postConstruct(instance);
+	}
+

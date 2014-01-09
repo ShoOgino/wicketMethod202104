@@ -1,0 +1,32 @@
+	/**
+	 * Factory method for the wrapped {@link DataTable}.
+	 * 
+	 * Note: If overwritten, the DataTable's row items have to output their markupId, or
+	 * {@link #updateNode(Object, AjaxRequestTarget)} will fail.
+	 * 
+	 * @param id
+	 * @param columns
+	 * @param dataProvider
+	 * @param rowsPerPage
+	 * @return nested data table
+	 */
+	protected DataTable<T, S> newDataTable(String id, List<? extends IColumn<T, S>> columns,
+		IDataProvider<T> dataProvider, long rowsPerPage)
+	{
+		return new DataTable<T, S>(id, columns, dataProvider, rowsPerPage)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Item<T> newRowItem(String id, int index, IModel<T> model)
+			{
+				Item<T> item = TableTree.this.newRowItem(id, index, model);
+
+				// see #update(Node);
+				item.setOutputMarkupId(true);
+
+				return item;
+			}
+		};
+	}
+

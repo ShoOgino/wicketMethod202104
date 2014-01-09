@@ -1,0 +1,17 @@
+	/**
+	 * Use an {@link IConverter} to convert the given value to a String.
+	 * 
+	 * @param value
+	 *            the value, never {@code null}
+	 * 
+	 * @return converted value
+	 */
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected String toString(Object value)
+	{
+		IConverter converter = locator.getConverter(value.getClass());
+
+		return converter.convertToString(value, locale);
+	}
+

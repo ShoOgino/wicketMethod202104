@@ -14,12 +14,14 @@
 		RenderPageRequestHandler renderPageRequestHandler = new RenderPageRequestHandler(
 			new PageProvider(DummyHomePage.class, expectedParameters));
 		Url url = mapper.mapHandler(renderPageRequestHandler);
-// System.err.println(url.toString());
+		// System.err.println(url.toString());
 		assertEquals(expectedEncrypted, url.toString());
 
 		Request request = getRequest(url);
 		IRequestHandler requestHandler = mapper.mapRequest(request);
-		assertTrue(requestHandler instanceof RenderPageRequestHandler);
+		assertThat(requestHandler, instanceOf(RequestSettingRequestHandler.class));
+		requestHandler = ((RequestSettingRequestHandler)requestHandler).getDelegateHandler();
+		assertThat(requestHandler, instanceOf(RenderPageRequestHandler.class));
 
 		RenderPageRequestHandler handler = (RenderPageRequestHandler)requestHandler;
 		assertEquals(DummyHomePage.class, handler.getPageClass());

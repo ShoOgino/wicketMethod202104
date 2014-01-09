@@ -1,18 +1,20 @@
-	private WebApplication createApplication(final ApplicationContext ac, final String beanName)
+	private WebApplication createApplication(final ApplicationContext applicationContext,
+		final String beanName)
 	{
+		WebApplication application;
+
 		if (beanName != null)
 		{
-			WebApplication application = (WebApplication)ac.getBean(beanName);
+			application = (WebApplication)applicationContext.getBean(beanName);
 			if (application == null)
 			{
 				throw new IllegalArgumentException(
 					"Unable to find WebApplication bean with name [" + beanName + "]");
 			}
-			return application;
 		}
 		else
 		{
-			Map<?, ?> beans = BeanFactoryUtils.beansOfTypeIncludingAncestors(ac,
+			Map<?, ?> beans = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,
 				WebApplication.class, false, false);
 			if (beans.size() == 0)
 			{
@@ -24,7 +26,12 @@
 				throw new IllegalStateException("More than one bean of type [" +
 					WebApplication.class.getName() + "] found, must have only one");
 			}
-			return (WebApplication)beans.values().iterator().next();
+			application = (WebApplication)beans.values().iterator().next();
 		}
+
+		// make the application context default for SpringComponentInjectors
+		SpringComponentInjector.setDefaultContext(application, applicationContext);
+
+		return application;
 	}
 

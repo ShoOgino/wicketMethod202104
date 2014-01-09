@@ -1,0 +1,17 @@
+		private RenderPage(Component component)
+		{
+			// do not store the page in IPageStore/IDataStore. WICKET-5422
+			setStatelessHint(true);
+
+			String componentMarkup;
+			try
+			{
+				componentMarkup = component.getMarkup().toString(true);
+			} catch (MarkupNotFoundException mnfx)
+			{
+				componentMarkup = String.format(DEFAULT_MARKUP, component.getId());
+			}
+			this.markup = componentMarkup;
+			add(component); // this changes the component's parent
+		}
+

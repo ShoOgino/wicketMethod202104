@@ -1,23 +1,15 @@
 	@Override
 	public void onBeforeRender(Component component)
 	{
-		for (Method curMethod : component.getClass().getMethods())
+		for (Method curMethod : findSubscribedMethods(component.getClass()))
 		{
-			if (curMethod.isAnnotationPresent(Subscribe.class))
-			{
-				verifyMethodParameters(curMethod);
-				subscribeComponent(component, null, curMethod);
-			}
+			subscribeComponent(component, null, curMethod);
 		}
 		for (Behavior curBehavior : component.getBehaviors())
 		{
-			for (Method curMethod : curBehavior.getClass().getMethods())
+			for (Method curMethod : findSubscribedMethods(curBehavior.getClass()))
 			{
-				if (curMethod.isAnnotationPresent(Subscribe.class))
-				{
-					verifyMethodParameters(curMethod);
-					subscribeComponent(component, curBehavior, curMethod);
-				}
+				subscribeComponent(component, curBehavior, curMethod);
 			}
 		}
 	}

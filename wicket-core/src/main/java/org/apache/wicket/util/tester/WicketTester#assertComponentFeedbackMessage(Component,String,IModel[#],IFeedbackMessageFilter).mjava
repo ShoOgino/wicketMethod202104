@@ -1,0 +1,26 @@
+	/**
+	 * Asserts that there is a feedback message provided by a given component
+	 *
+	 * @param component
+	 *          the component that provided the expected feedback message. Optional.
+	 * @param key
+	 *          the resource key for the feedback message. Mandatory.
+	 * @param model
+	 *          the model used for interpolating the feedback message. Optional.
+	 * @param filter
+	 *          the filter that decides in which messages to look in. E.g. with a specific
+	 *          level, rendered or not, etc.
+	 */
+	public void assertComponentFeedbackMessage(Component component, String key, IModel<?> model, IFeedbackMessageFilter filter)
+	{
+		Args.notNull(key, "key");
+
+		String expectedMessage = getApplication().getResourceSettings().getLocalizer().getString(key, component, model);
+
+		List<FeedbackMessage> feedbackMessages = getFeedbackMessages(filter);
+		List<Serializable> actualMessages = getActualFeedbackMessages(feedbackMessages);
+
+		assertThat(String.format("Feedback message with key '%s' cannot be found", key),
+				actualMessages, IsCollectionContaining.hasItem(expectedMessage));
+	}
+

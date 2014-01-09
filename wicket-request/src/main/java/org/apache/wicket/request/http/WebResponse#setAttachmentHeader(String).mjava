@@ -2,13 +2,14 @@
 	 * Convenience method for setting the content-disposition:attachment header. This header is used
 	 * if the response should prompt the user to download it as a file instead of opening in a
 	 * browser.
-	 * 
+	 * <p>
+	 * The file name will be <a href="http://greenbytes.de/tech/tc2231/">encoded</a>
+	 *
 	 * @param filename
 	 *            file name of the attachment
 	 */
 	public void setAttachmentHeader(final String filename)
 	{
-		setHeader("Content-Disposition", "attachment" +
-			((!Strings.isEmpty(filename)) ? ("; filename=\"" + filename + "\"") : ""));
+		setHeader("Content-Disposition", "attachment" + encodeDispositionHeaderValue(filename));
 	}
 

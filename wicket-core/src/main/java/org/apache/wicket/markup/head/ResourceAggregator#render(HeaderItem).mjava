@@ -1,6 +1,7 @@
 	@Override
 	public void render(HeaderItem item)
 	{
+		item = getItemToBeRendered(item);
 		if (item instanceof OnDomReadyHeaderItem)
 		{
 			renderDependencies(item, new LinkedHashSet<HeaderItem>());
@@ -13,7 +14,7 @@
 		}
 		else
 		{
-			Set<HeaderItem> depsDone = new LinkedHashSet<HeaderItem>();
+			Set<HeaderItem> depsDone = new LinkedHashSet<>();
 			depsDone.add(item);
 			recordHeaderItem(item, depsDone);
 		}

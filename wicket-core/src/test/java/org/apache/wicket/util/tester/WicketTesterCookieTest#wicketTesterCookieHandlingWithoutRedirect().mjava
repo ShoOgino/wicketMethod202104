@@ -1,0 +1,58 @@
+	/**
+	 * @see WicketTester
+	 * 
+	 * TODO add a cookie to request, which should override cookie from last response and last request
+	 * https://issues.apache.org/jira/browse/WICKET-5147
+	 */
+	@Test
+	public void wicketTesterCookieHandlingWithoutRedirect() {
+		// no cookies set
+		CollectAllRequestCookiesPage collectingPage = collectAllRequestCookiesOnThisPage();
+		Assert.assertTrue("no cookie in first request",collectingPage.getCookies().isEmpty());
+		lastResponseDoesNotHaveAnyCookies();
+		responseDoesNotHaveAnyCookies();
+		requestDoesNotHaveAnyCookies();
+		
+		// set cookie on request
+		Cookie firstCookie = newCookie("a","firstValue",1);
+		tester.getRequest().addCookie(firstCookie);
+		collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage, firstCookie);
+		lastResponseDoesNotHaveAnyCookies();
+		requestShouldHaveTheseCookies(firstCookie);
+		responseDoesNotHaveAnyCookies();
+
+		// cookies from last request should appear on following requests
+		collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage, firstCookie);
+		lastResponseDoesNotHaveAnyCookies();
+		requestShouldHaveTheseCookies(firstCookie);
+		responseDoesNotHaveAnyCookies();
+
+		// cookie will be overwritten if response will do so
+		Cookie cookieSetInResponse = newCookie("a","overwriteWithNewValue",1);
+		setCookieInResponse(cookieSetInResponse);
+		lastResponseShouldHaveTheseCookies(cookieSetInResponse);
+		requestShouldHaveTheseCookies(cookieSetInResponse);
+		
+		// cookies from last response then should appear on following requests
+		collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage, cookieSetInResponse);
+		lastResponseDoesNotHaveAnyCookies();
+		requestShouldHaveTheseCookies(cookieSetInResponse);
+		
+		// cookies from requests will be deleted if the response will do so
+		Cookie expiredCookieSetInResponse = newCookie("a","removeMe",0);
+		setCookieInResponse(expiredCookieSetInResponse);
+		lastResponseShouldHaveTheseCookies(expiredCookieSetInResponse);
+		responseDoesNotHaveAnyCookies();
+		requestDoesNotHaveAnyCookies();
+		
+		// no cookies in next request while last cookie was deleted
+		collectingPage = collectAllRequestCookiesOnThisPage();
+		requestOnPageShouldHaveTheseCookies(collectingPage);
+		lastResponseDoesNotHaveAnyCookies();
+		requestDoesNotHaveAnyCookies();
+		responseDoesNotHaveAnyCookies();
+	}
+

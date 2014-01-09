@@ -1,0 +1,25 @@
+	/**
+	 * WICKET-4738 wrapOnAssigment and detach on fileName
+	 */
+	@Test
+	public void fileNameModel()
+	{
+
+		FileNameModel fileNameModel = new FileNameModel();
+
+		DownloadLink link = new DownloadLink("test", new AbstractReadOnlyModel<File>()
+		{
+			@Override
+			public File getObject()
+			{
+				return null;
+			}
+		}, fileNameModel);
+
+		assertTrue(fileNameModel.wrapOnAssignmentCalled);
+
+		link.detach();
+
+		assertTrue(fileNameModel.detachCalled);
+	}
+

@@ -1,0 +1,12 @@
+	public IResourceStreamLocator getResourceStreamLocator()
+	{
+		if (resourceStreamLocator == null)
+		{
+			// Create compound resource locator using source path from
+			// application settings
+			resourceStreamLocator = new ResourceStreamLocator(getResourceFinders());
+			resourceStreamLocator = new CachingResourceStreamLocator(resourceStreamLocator);
+		}
+		return resourceStreamLocator;
+	}
+

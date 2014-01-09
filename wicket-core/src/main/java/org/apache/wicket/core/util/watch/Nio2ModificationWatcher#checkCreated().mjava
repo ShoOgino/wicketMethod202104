@@ -1,0 +1,52 @@
+	/**
+	 * Checks for newly created files and folders.
+	 * New folders are registered to be watched.
+	 * New files are removed from the MarkupCache because there could be
+	 * {@link org.apache.wicket.markup.Markup#NO_MARKUP} (Not Found) entries for them already.
+	 */
+	protected void checkCreated()
+	{
+		WatchKey watchKey = watchService.poll();
+		if (watchKey != null)
+		{
+			List<WatchEvent<?>> events = watchKey.pollEvents();
+			for (WatchEvent<?> event : events)
+			{
+				WatchEvent.Kind<?> eventKind = event.kind();
+				Path eventPath = (Path) event.context();
+
+				if (eventKind == ENTRY_CREATE)
+				{
+					if (Files.isDirectory(eventPath))
+					{
+						try
+						{
+							// a directory is created. register it for notifications
+							register(eventPath, watchService);
+						} catch (IOException iox)
+						{
+							LOG.warn("Cannot register folder '" + eventPath + "' to be watched.", iox);
+						}
+					}
+					else
+					{
+						// a new file appeared. we need to clear the NOT_FOUND entry that may be added earlier.
+						// MarkupCache keys are fully qualified URIs
+						String absolutePath = eventPath.toAbsolutePath().toFile().toURI().toString();
+
+						try
+						{
+							ThreadContext.setApplication(application);
+							application.getMarkupSettings()
+									.getMarkupFactory().getMarkupCache().removeMarkup(absolutePath);
+						} finally {
+							ThreadContext.setApplication(null);
+						}
+					}
+				}
+			}
+
+			watchKey.reset();
+		}
+	}
+

@@ -1,25 +1,25 @@
 	/**
-	 * @return list over selected choices
+	 * Get the selected choices based on the palette's available choices and the current model or
+	 * input data entered by the user.
+	 * 
+	 * @return selected choices
+	 * 
+	 * @see #getValue()
 	 */
-	protected List<T> getSelectedList()
+	public List<T> getSelectedList()
 	{
-		if (getSelectedIds().isEmpty())
-		{
-			return Collections.emptyList();
-		}
-
-		final IChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
-		final List<T> selected = new ArrayList<T>(getSelectedIds().size());
+		final ChoiceRenderer<T> renderer = getPalette().getChoiceRenderer();
 		final Collection<? extends T> choices = getPalette().getChoices();
-		final Map<T, String> idForChoice = new HashMap<T, String>(choices.size());
+		final List<T> selected = new ArrayList<>(choices.size());
 
 		// reduce number of method calls by building a lookup table
+		final Map<T, String> idForChoice = new HashMap<>(choices.size());
 		for (final T choice : choices)
 		{
 			idForChoice.put(choice, renderer.getIdValue(choice, 0));
 		}
 
-		for (final String id : getSelectedIds())
+		for (final String id : Strings.split(getValue(), ','))
 		{
 			for (final T choice : choices)
 			{
@@ -31,6 +31,7 @@
 				}
 			}
 		}
+
 		return selected;
 	}
 

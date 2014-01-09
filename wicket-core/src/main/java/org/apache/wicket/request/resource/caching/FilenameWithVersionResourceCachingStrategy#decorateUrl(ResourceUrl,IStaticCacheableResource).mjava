@@ -32,6 +32,14 @@
 		{
 			versionedFilename.append(filename.substring(0, extensionAt));
 		}
+
+		int pos = versionedFilename.indexOf(getVersionPrefix());
+		if (pos != -1 && isVersion(versionedFilename.substring(pos + versionPrefix.length())))
+		{
+			LOG.error("A resource with name '{}' contains the version prefix '{}' so the un-decoration will not work." +
+					" Either use a different version prefix or rename this resource.", filename, getVersionPrefix());
+		}
+
 		// add version suffix
 		versionedFilename.append(versionPrefix);
 		

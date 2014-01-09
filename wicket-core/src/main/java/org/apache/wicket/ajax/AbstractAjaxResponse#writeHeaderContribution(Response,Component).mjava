@@ -24,28 +24,9 @@
 		try {
 			encodingHeaderResponse.reset();
 
-			// render the head of component and all it's children
+			IHeaderRenderStrategy strategy = AbstractHeaderRenderStrategy.get();
 
-			component.renderHead(header);
-
-			if (component instanceof MarkupContainer)
-			{
-				((MarkupContainer)component).visitChildren(new IVisitor<Component, Void>()
-				{
-					@Override
-					public void component(final Component component, final IVisit<Void> visit)
-					{
-						if (component.isVisibleInHierarchy())
-						{
-							component.renderHead(header);
-						}
-						else
-						{
-							visit.dontGoDeeper();
-						}
-					}
-				});
-			}
+			strategy.renderHeader(header, null, component);
 		} finally {
 			// revert to old response
 			requestCycle.setResponse(oldResponse);

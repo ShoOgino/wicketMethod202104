@@ -2,7 +2,7 @@
 	 * Creates a {@code IRequestHandler} that processes a hybrid request. When the page identified
 	 * by {@code pageInfo} was not available, the request should be treated as a bookmarkable
 	 * request.
-	 *
+	 * 
 	 * @param pageInfo
 	 * @param pageClass
 	 * @param pageParameters
@@ -16,6 +16,14 @@
 		PageProvider provider = new PageProvider(pageInfo.getPageId(), pageClass, pageParameters,
 			renderCount);
 		provider.setPageSource(getContext());
-		return new RenderPageRequestHandler(provider);
+		if (provider.isNewPageInstance() && !getRecreateMountedPagesAfterExpiry())
+		{
+			throw new PageExpiredException(String.format("Bookmarkable page id '%d' has expired.",
+				pageInfo.getPageId()));
+		}
+		else
+		{
+			return new RenderPageRequestHandler(provider);
+		}
 	}
 

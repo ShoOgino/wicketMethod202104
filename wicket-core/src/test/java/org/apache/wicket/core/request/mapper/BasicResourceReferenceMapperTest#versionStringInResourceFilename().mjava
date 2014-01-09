@@ -45,7 +45,7 @@
 		};
 
 		IResourceCachingStrategy strategy = new FilenameWithVersionResourceCachingStrategy(
-			"-version-", new StaticResourceVersion("foobar"));
+			"-version-", new AlphaDigitResourceVersion("foobar"));
 
 		INamedParameters params = new PageParameters();
 		ResourceUrl url = new ResourceUrl("test.js", params);
@@ -84,7 +84,8 @@
 		strategy.undecorateUrl(url);
 		assertEquals("test.txt", url.getFileName());
 
-		// check a version that contains a dot which also marks the filename extension
+		// check a version that contains a dot which also marks the filename
+		// extension
 		strategy = new FilenameWithVersionResourceCachingStrategy("-version-",
 			new StaticResourceVersion("1.0.4-beta"));
 		url = new ResourceUrl("test.txt", params);

@@ -8,9 +8,9 @@
 	 */
 	public String decode(final String s, final String enc)
 	{
-		if (s == null)
+		if (Strings.isEmpty(s))
 		{
-			return null;
+			return s;
 		}
 
 		int numChars = s.length();
@@ -66,8 +66,10 @@
 						// "%x" will cause an exception to be thrown
 						if ((i < numChars) && (c == '%'))
 						{
-							throw new IllegalArgumentException(
-								"URLDecoder: Incomplete trailing escape (%) pattern");
+							LOG.info("Incomplete trailing escape (%) pattern in '%s'. The escape character (%) will be ignored.",
+									s);
+							i++;
+							break;
 						}
 
 						try
@@ -81,9 +83,10 @@
 					}
 					catch (NumberFormatException e)
 					{
-						throw new IllegalArgumentException(
-							"URLDecoder: Illegal hex characters in escape (%) pattern - " +
-								e.getMessage());
+						LOG.info("Illegal hex characters in escape (%) pattern in '{}'. " +
+								"The escape character (%) will be ignored. NumberFormatException: {} ",
+							s, e.getMessage());
+						i++;
 					}
 					break;
 

@@ -3,14 +3,15 @@
 		if (url != null)
 		{
 			boolean shouldEncodeStaticResource = Application.exists() &&
-					Application.get().getResourceSettings().isEncodeJSessionId();
+				Application.get().getResourceSettings().isEncodeJSessionId();
 
 			String renderedUrl = getUrlRenderer().renderUrl(url);
 			if (handler instanceof ResourceReferenceRequestHandler)
 			{
 				ResourceReferenceRequestHandler rrrh = (ResourceReferenceRequestHandler)handler;
 				IResource resource = rrrh.getResource();
-				if (resource != null && !(resource instanceof IStaticCacheableResource) || shouldEncodeStaticResource)
+				if (resource != null && !(resource instanceof IStaticCacheableResource) ||
+					shouldEncodeStaticResource)
 				{
 					renderedUrl = getOriginalResponse().encodeURL(renderedUrl);
 				}
@@ -19,7 +20,8 @@
 			{
 				ResourceRequestHandler rrh = (ResourceRequestHandler)handler;
 				IResource resource = rrh.getResource();
-				if (resource != null && !(resource instanceof IStaticCacheableResource) || shouldEncodeStaticResource)
+				if (resource != null && !(resource instanceof IStaticCacheableResource) ||
+					shouldEncodeStaticResource)
 				{
 					renderedUrl = getOriginalResponse().encodeURL(renderedUrl);
 				}

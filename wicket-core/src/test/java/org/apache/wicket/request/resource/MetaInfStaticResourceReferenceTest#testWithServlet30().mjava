@@ -8,7 +8,7 @@
 	public void testWithServlet30() throws MalformedURLException
 	{
 		MockApplication application = new MockApplication();
-		MockServletContext servletContext = new MockServletContext30(application, null);
+		MockServletContext servletContext = new MockServletContext(application, "/");
 		BaseWicketTester tester = new BaseWicketTester(application, servletContext);
 
 		MetaInfStaticResourceReference metaRes = new MetaInfStaticResourceReference(getClass(),
@@ -26,7 +26,7 @@
 			metaUrl.equals(packUrl));
 
 		String metaUrlStr = metaUrl.toString();
-		if (!metaUrlStr.startsWith("/"))
+		if (metaUrlStr.charAt(1) != '/')
 		{
 			metaUrlStr = "/" + metaUrlStr;
 		}

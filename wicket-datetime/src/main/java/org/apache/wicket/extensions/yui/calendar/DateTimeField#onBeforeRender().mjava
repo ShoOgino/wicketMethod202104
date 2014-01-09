@@ -20,16 +20,15 @@
 		}
 		else
 		{
+			MutableDateTime mDate = new MutableDateTime(modelObject);
 			// convert date to the client's time zone if we have that info
 			TimeZone zone = getClientTimeZone();
 			if (zone != null)
 			{
-				modelObject = changeTimeZone(modelObject, zone);
+				mDate.setZone(DateTimeZone.forTimeZone(zone));
 			}
 
-			MutableDateTime mDate = new MutableDateTime(modelObject);
-
-			date = mDate.toDate();
+			date = mDate.toDateTime().toLocalDate().toDate();
 
 			if (use12HourFormat)
 			{

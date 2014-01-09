@@ -1,0 +1,19 @@
+	/**
+	 * Updates auto label css classes such as error/required during ajax updates when the labels may
+	 * not be directly repainted in the response.
+	 * 
+	 * @param target
+	 */
+	public final void updateAutoLabels(AjaxRequestTarget target)
+	{
+		AutoLabelMarker marker = getMetaData(AutoLabelResolver.MARKER_KEY);
+	
+		if (marker == null)
+		{
+			// this component does not have an auto label
+			return;
+		}
+
+		marker.updateFrom(this, target);
+	}
+

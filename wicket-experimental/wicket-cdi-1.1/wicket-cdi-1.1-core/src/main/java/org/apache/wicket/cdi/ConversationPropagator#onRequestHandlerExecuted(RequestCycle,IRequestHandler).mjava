@@ -1,0 +1,29 @@
+	@Override
+	public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler)
+	{
+		Conversation conversation = getConversation(cycle);
+
+		if (conversation == null)
+		{
+			return;
+		}
+
+		Page page = getPage(handler);
+
+		if (page == null)
+		{
+			return;
+		}
+
+		// apply auto semantics
+
+		autoEndIfNecessary(page, handler, conversation);
+		autoBeginIfNecessary(page, handler, conversation);
+
+		if (propagationSource.get().propagatesViaPage(page, handler))
+		{
+			// propagate a conversation across non-bookmarkable page instances
+			setConversationOnPage(conversation, page);
+		}
+	}
+

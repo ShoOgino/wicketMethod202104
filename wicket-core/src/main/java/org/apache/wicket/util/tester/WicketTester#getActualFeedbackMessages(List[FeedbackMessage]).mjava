@@ -1,0 +1,26 @@
+	/**
+	 * Extracts the actual messages from the passed feedback messages.
+	 * Specially handles ValidationErrorFeedback messages by extracting their String message
+	 *
+	 * @param feedbackMessages
+	 *            the feedback messages
+	 * @return the FeedbackMessages' messages
+	 */
+	private List<Serializable> getActualFeedbackMessages(List<FeedbackMessage> feedbackMessages)
+	{
+		List<Serializable> actualMessages = new ArrayList<>();
+		for (FeedbackMessage feedbackMessage : feedbackMessages)
+		{
+			Serializable message = feedbackMessage.getMessage();
+			if (message instanceof ValidationErrorFeedback)
+			{
+				actualMessages.add(message.toString());
+			}
+			else
+			{
+				actualMessages.add(message);
+			}
+		}
+		return actualMessages;
+	}
+

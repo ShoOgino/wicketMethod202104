@@ -1,0 +1,13 @@
+	/**
+	 * WICKET-3570
+	 */
+	@Test
+	public void giveUpRespondingOnIOExceptions()
+	{
+		TestRequestCycleListener testRequestCycleListener = new TestRequestCycleListener();
+		tester.getApplication().getRequestCycleListeners().add(testRequestCycleListener);
+		tester.startResource(new ResourceStreamResource(new StringResourceStream("asdf")));
+		assertThat(testRequestCycleListener.lastExceptionRquestHandlerResolved,
+			instanceOf(EmptyRequestHandler.class));
+	}
+

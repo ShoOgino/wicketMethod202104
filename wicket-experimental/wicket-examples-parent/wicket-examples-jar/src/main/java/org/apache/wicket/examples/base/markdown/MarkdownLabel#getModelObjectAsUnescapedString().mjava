@@ -1,0 +1,19 @@
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private String getModelObjectAsUnescapedString()
+	{
+		Object modelObject = getDefaultModelObject();
+		if (modelObject != null)
+		{
+			// Get converter
+			final Class<?> objectClass = modelObject.getClass();
+
+			final IConverter converter = getConverter(objectClass);
+
+			// Model string from property
+			final String modelString = converter.convertToString(modelObject, getLocale());
+
+			return modelString;
+		}
+		return null;
+	}
+

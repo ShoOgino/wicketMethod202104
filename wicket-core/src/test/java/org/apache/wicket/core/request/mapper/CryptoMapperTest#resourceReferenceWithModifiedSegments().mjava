@@ -14,7 +14,9 @@
 
 		IRequestHandler requestHandler = mapper.mapRequest(request);
 
-		assertTrue(requestHandler instanceof ResourceReferenceRequestHandler);
+		assertThat(requestHandler, instanceOf(RequestSettingRequestHandler.class));
+		requestHandler = ((RequestSettingRequestHandler)requestHandler).getDelegateHandler();
+		assertThat(requestHandler, instanceOf(ResourceReferenceRequestHandler.class));
 		ResourceReferenceRequestHandler handler = (ResourceReferenceRequestHandler)requestHandler;
 
 		assertEquals(getClass(), handler.getResourceReference().getScope());

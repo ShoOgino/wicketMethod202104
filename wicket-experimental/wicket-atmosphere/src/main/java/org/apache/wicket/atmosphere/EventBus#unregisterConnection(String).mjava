@@ -1,0 +1,19 @@
+	/**
+	 * Unregisters all subscriptions for the given tracking id.
+	 * 
+	 * @param trackingId
+	 */
+	public synchronized void unregisterConnection(String trackingId)
+	{
+		PageKey pageKey = trackedPages.remove(trackingId);
+		if (pageKey != null)
+		{
+			fireUnregistration(trackingId);
+			if (log.isDebugEnabled())
+			{
+				log.debug("unregistering page {} for session {}",
+						pageKey.getPageId(), pageKey.getSessionId());
+			}
+		}
+	}
+

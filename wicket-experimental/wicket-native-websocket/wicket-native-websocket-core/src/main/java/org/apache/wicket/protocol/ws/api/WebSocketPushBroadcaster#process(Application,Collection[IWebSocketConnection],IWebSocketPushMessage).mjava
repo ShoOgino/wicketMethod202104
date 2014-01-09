@@ -1,0 +1,18 @@
+	private void process(final Application application, final Collection<IWebSocketConnection> wsConnections,
+	                     final IWebSocketPushMessage message)
+	{
+		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(application);
+		Executor executor = webSocketSettings.getWebSocketPushMessageExecutor();
+		for (final IWebSocketConnection wsConnection : wsConnections)
+		{
+			executor.run(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					wsConnection.sendMessage(message);
+				}
+			});
+		}
+	}
+

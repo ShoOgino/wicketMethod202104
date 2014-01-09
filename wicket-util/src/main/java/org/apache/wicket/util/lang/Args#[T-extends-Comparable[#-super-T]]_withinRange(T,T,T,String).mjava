@@ -1,0 +1,24 @@
+	/**
+	 * Checks if argument is within a range
+	 * 
+	 * @param <T>
+	 * @param min
+	 * @param max
+	 * @param value
+	 * @param name
+	 * @throws IllegalArgumentException
+	 */
+	public static <T extends Comparable<? super T>> T withinRange(final T min, final T max,
+		final T value, final String name)
+	{
+		notNull(min, name);
+		notNull(max, name);
+		if ((value.compareTo(min) < 0) || (value.compareTo(max) > 0))
+		{
+			throw new IllegalArgumentException(
+				String.format("Argument '%s' must have a value within [%s,%s], but was %s", name,
+					min, max, value));
+		}
+		return value;
+	}
+

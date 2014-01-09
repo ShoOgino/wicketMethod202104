@@ -1,0 +1,18 @@
+    /**
+     * Indicates whether the stream contains the specified BOM.
+     * 
+     * @param bom
+     *            The BOM to check for
+     * @return true if the stream has the specified BOM, otherwise false if it does not
+     * @throws IllegalArgumentException
+     *             if the BOM is not one the stream is configured to detect
+     * @throws IOException
+     *             if an error reading the first bytes of the stream occurs
+     */
+    public boolean hasBOM(final ByteOrderMark bom) throws IOException {
+        if (!boms.contains(bom)) {
+            throw new IllegalArgumentException("Stream not configure to detect " + bom);
+        }
+        return byteOrderMark != null && getBOM().equals(bom);
+    }
+

@@ -1,0 +1,28 @@
+		@Override
+		protected final void writeObjectOverride(Object obj) throws IOException
+		{
+			try
+			{
+				oos.writeObject(obj);
+			}
+			catch (NotSerializableException nsx)
+			{
+				if (CheckingObjectOutputStream.isAvailable())
+				{
+					// trigger serialization again, but this time gather some more info
+					CheckingObjectOutputStream checkingObjectOutputStream =
+							new CheckingObjectOutputStream(outputStream, new ObjectSerializationChecker(nsx));
+					checkingObjectOutputStream.writeObject(obj);
+
+					// if we get here, we didn't fail, while we should
+					throw nsx;
+				}
+				throw nsx;
+			}
+			catch (Exception e)
+			{
+				log.error("error writing object " + obj + ": " + e.getMessage(), e);
+				throw new WicketRuntimeException(e);
+			}
+		}
+

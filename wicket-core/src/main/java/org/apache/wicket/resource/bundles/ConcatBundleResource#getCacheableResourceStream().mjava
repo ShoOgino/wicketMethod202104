@@ -2,7 +2,13 @@
 	public IResourceStream getCacheableResourceStream()
 	{
 		List<IResourceStream> resources = collectResourceStreams();
-		byte[] bytes = null;
+
+		if (resources == null)
+		{
+			return null;
+		}
+
+		byte[] bytes;
 		try
 		{
 			bytes = readAllResources(resources);

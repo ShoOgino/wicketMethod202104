@@ -8,7 +8,7 @@
 
 			Url url;
 
-			if (reference instanceof ResourceBundleReference)
+			while (reference instanceof ResourceBundleReference)
 			{
 				// unwrap the bundle to render the url for the actual reference
 				reference = ((ResourceBundleReference)reference).getBundleReference();
@@ -24,11 +24,11 @@
 				}
 				// otherwise it has to be served by the standard wicket way
 			}
-			else if (reference instanceof UrlResourceReference)
+
+			if (reference.canBeRegistered())
 			{
-				UrlResourceReference urlReference = (UrlResourceReference)reference;
-				url = urlReference.getUrl();
-				return url;
+				ResourceReferenceRegistry resourceReferenceRegistry = getContext().getResourceReferenceRegistry();
+				resourceReferenceRegistry.registerResourceReference(reference);
 			}
 
 			url = new Url();
@@ -78,11 +78,7 @@
 							getCachingStrategy().decorateUrl(resourceUrl, cacheable);
 							token = resourceUrl.getFileName();
 	
-							if (Strings.isEmpty(token))
-							{
-								throw new IllegalStateException(
-									"caching strategy returned empty name for " + resource);
-							}
+						  Checks.notEmpty(token, "Caching strategy returned empty name for '%s'", resource);
 						}
 					}
 				}

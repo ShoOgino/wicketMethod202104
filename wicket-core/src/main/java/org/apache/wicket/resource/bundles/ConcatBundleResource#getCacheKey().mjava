@@ -1,12 +1,15 @@
 	@Override
 	public Serializable getCacheKey()
 	{
-		ArrayList<Serializable> key = new ArrayList<Serializable>(providedResources.size());
+		ArrayList<Serializable> key = new ArrayList<>(providedResources.size());
 		for (IReferenceHeaderItem curItem : providedResources)
 		{
-			Serializable curKey = ((PackageResource)curItem.getReference().getResource()).getCacheKey();
+			Serializable curKey = ((IStaticCacheableResource)curItem.getReference().getResource()).getCacheKey();
 			if (curKey == null)
+			{
+				reportError(curItem.getReference(), "Unable to get cache key for ");
 				return null;
+			}
 			key.add(curKey);
 		}
 		return key;

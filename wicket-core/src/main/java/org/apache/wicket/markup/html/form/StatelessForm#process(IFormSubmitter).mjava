@@ -6,9 +6,12 @@
 	@Override
 	public void process(IFormSubmitter submittingComponent)
 	{
+		// get the parameters before processing the form because the
+		// application may remove this form from its parent in #onSubmit() (WICKET-5158)
+		final PageParameters parameters = getPage().getPageParameters();
+
 		super.process(submittingComponent);
 
-		final PageParameters parameters = getPage().getPageParameters();
 		if (parameters != null)
 		{
 			visitFormComponents(new IVisitor<FormComponent<?>, Void>()
@@ -24,6 +27,19 @@
 			{
 				AbstractSubmitLink submitLink = (AbstractSubmitLink)submittingComponent;
 				parameters.remove(submitLink.getInputName());
+			}
+
+			// remove the special parameter for IRequestListener
+			List<INamedParameters.NamedPair> namedParameters = parameters.getAllNamed();
+			Iterator<INamedParameters.NamedPair> iterator = namedParameters.iterator();
+			while (iterator.hasNext())
+			{
+				INamedParameters.NamedPair namedParameter = iterator.next();
+				if (Strings.isEmpty(namedParameter.getValue()))
+				{
+					parameters.remove(namedParameter.getKey());
+					break;
+				}
 			}
 		}
 	}

@@ -1,0 +1,43 @@
+	/**
+	 * Removes common prefixes like empty first segment, context path and filter path.
+	 * 
+	 * @param request
+	 *            the current web request
+	 * @param segments
+	 *            the segments to clean
+	 */
+	private void removeCommonPrefixes(Request request, List<String> segments)
+	{
+		// try to remove context/filter path only if the Url starts with '/',
+		// i.e. has an empty segment in the beginning
+		if (segments.isEmpty() || "".equals(segments.get(0)) == false)
+		{
+			return;
+		}
+
+		Url commonPrefix = Url.parse(request.getContextPath() + request.getFilterPath());
+		// if both context and filter path are empty, common prefixes are empty too
+		if (commonPrefix.getSegments().isEmpty())
+		{
+			// WICKET-4920 and WICKET-4935
+			commonPrefix.getSegments().add("");
+		}
+
+		for (int i = 0; i < commonPrefix.getSegments().size() && i < segments.size(); i++)
+		{
+			String commonPrefixSegment = Strings.stripJSessionId(commonPrefix.getSegments().get(i));
+			String segmentToClean = Strings.stripJSessionId(segments.get(i));
+			if (commonPrefixSegment.equals(segmentToClean) == false)
+			{
+				LOG.debug("Segments '{}' do not start with common prefix '{}'", segments,
+					commonPrefix);
+				return;
+			}
+		}
+
+		for (int i = 0; i < commonPrefix.getSegments().size() && !segments.isEmpty(); i++)
+		{
+			segments.remove(0);
+		}
+	}
+

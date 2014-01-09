@@ -16,7 +16,7 @@
 		pos = fullname.lastIndexOf(versionPrefix);
 
 		// remove version string if it exists
-		if (pos != -1)
+		if (pos != -1 && isVersion(fullname.substring(pos + versionPrefix.length())))
 		{
 			// get filename before version string
 			final String basename = fullname.substring(0, pos);
@@ -24,6 +24,15 @@
 			// create filename without version string 
 			// (required for working resource lookup)
 			url.setFileName(extension == null? basename : basename + extension);
+
+			// store the version in the request cycle
+			RequestCycle requestCycle = RequestCycle.get();
+			if (requestCycle != null)
+			{
+				int idx = fullname.indexOf(versionPrefix);
+				String urlVersion = fullname.substring(idx + versionPrefix.length());
+				requestCycle.setMetaData(URL_VERSION, urlVersion);
+			}
 		}
 	}
 

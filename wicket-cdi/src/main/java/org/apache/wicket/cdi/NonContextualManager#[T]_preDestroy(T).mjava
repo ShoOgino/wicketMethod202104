@@ -1,0 +1,10 @@
+	/**
+	 * Invokes any {@link PreDestroy} callbacks and cleans up any injected dependencies
+	 */
+	@Override
+	public <T> void preDestroy(T instance)
+	{
+		Args.notNull(instance, "instance");
+		NonContextual.of(instance.getClass(), beanManager).preDestroy(instance);
+	}
+

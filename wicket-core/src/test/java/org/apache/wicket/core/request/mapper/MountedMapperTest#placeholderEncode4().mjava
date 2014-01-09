@@ -1,0 +1,20 @@
+	/**
+	 * WICKET-5247 page instantiated without required parameters won't be mapped
+	 */
+	@Test
+	public void placeholderEncode4()
+	{
+		PageProvider provider = new PageProvider(new MockPage())
+		{
+			@Override
+			public boolean isNewPageInstance()
+			{
+				return false;
+			}
+		};
+		provider.setPageSource(context);
+		IRequestHandler handler = new RenderPageRequestHandler(provider);
+		Url url = placeholderEncoder.mapHandler(handler);
+		assertNull(url);
+	}
+

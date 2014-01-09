@@ -1,0 +1,32 @@
+		/**
+		 * Exports the data from the provided data table to the provided output stream.
+		 * This methods calls {@link IDataExporter#exportData(org.apache.wicket.markup.repeater.data.IDataProvider, java.util.List, java.io.OutputStream) }
+		 * passing it the {@link IDataProvider} of the {@link DataTable}, and a list of the {@link IExportableColumn}s in the table.
+		 *
+		 * @param <T>
+		 *      The type of each row in the data table.
+		 * @param <S>
+		 *      The type of the sort property of the table.
+		 * @param dataTable
+		 *      The {@link DataTable} to export.
+		 * @param dataExporter
+		 *      The {@link IDataExporter} to use to export the data.
+		 * @param outputStream
+		 *      The {@link OutputStream} to which the data should be exported to.
+		 * @throws IOException
+		 */
+		private <T, S> void exportData(DataTable<T, S> dataTable, IDataExporter dataExporter, OutputStream outputStream)
+			throws IOException
+		{
+			IDataProvider<T> dataProvider = dataTable.getDataProvider();
+			List<IExportableColumn<T, ?, ?>> exportableColumns = new LinkedList<>();
+			for (IColumn<T, S> col : dataTable.getColumns())
+			{
+				if (col instanceof IExportableColumn)
+				{
+					exportableColumns.add((IExportableColumn<T, ?, ?>)col);
+				}
+			}
+			dataExporter.exportData(dataProvider, exportableColumns, outputStream);
+		}
+

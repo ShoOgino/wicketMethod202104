@@ -1,7 +1,11 @@
 	@Override
 	public void render(Response response)
 	{
-		JavaScriptUtils.writeJavaScript(response, "Wicket.Event.add(window, \"domready\", " +
-			"function(event) { " + getJavaScript() + ";});");
+		CharSequence js = getJavaScript();
+		if (Strings.isEmpty(js) == false)
+		{
+			JavaScriptUtils.writeJavaScript(response, "Wicket.Event.add(window, \"domready\", " +
+				"function(event) { " + js + ";});");
+		}
 	}
 

@@ -17,6 +17,10 @@
 		{
 			payload = new WebSocketClosedPayload((ClosedMessage) message, handler);
 		}
+		else if (message instanceof IWebSocketPushMessage)
+		{
+			payload = new WebSocketPushPayload((IWebSocketPushMessage) message, handler);
+		}
 		else
 		{
 			throw new IllegalArgumentException("Unsupported message type: " + message.getClass().getName());

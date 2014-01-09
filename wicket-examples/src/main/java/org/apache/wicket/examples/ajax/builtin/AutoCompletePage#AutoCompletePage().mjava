@@ -3,11 +3,35 @@
 	 */
 	public AutoCompletePage()
 	{
-		Form<Void> form = new Form<Void>("form");
+		Form<Void> form = new Form<>("form");
 		add(form);
 
-		final AutoCompleteTextField<String> field = new AutoCompleteTextField<String>("ac",
-			new Model<String>(""))
+		final IModel<String> model = new IModel<String>()
+		{
+			private String value = null;
+
+			@Override
+			public String getObject()
+			{
+				return value;
+			}
+
+			@Override
+			public void setObject(String object)
+			{
+				value = object;
+
+				values.append("\n");
+				values.append(value);
+			}
+
+			@Override
+			public void detach()
+			{
+			}
+		};
+
+		final AutoCompleteTextField<String> field = new AutoCompleteTextField<String>("ac", model)
 		{
 			@Override
 			protected Iterator<String> getChoices(String input)
@@ -18,7 +42,7 @@
 					return emptyList.iterator();
 				}
 
-				List<String> choices = new ArrayList<String>(10);
+				List<String> choices = new ArrayList<>(10);
 
 				Locale[] locales = Locale.getAvailableLocales();
 
@@ -41,7 +65,8 @@
 		};
 		form.add(field);
 
-		final Label label = new Label("selectedValue", field.getDefaultModel());
+		final MultiLineLabel label = new MultiLineLabel("history", new PropertyModel<String>(this,
+			"values"));
 		label.setOutputMarkupId(true);
 		form.add(label);
 
@@ -50,10 +75,6 @@
 			@Override
 			protected void onSubmit(AjaxRequestTarget target)
 			{
-				BookmarkablePageRequestHandler bookmarkablePageRequestHandler = new BookmarkablePageRequestHandler(
-					new PageProvider(Index.class));
-				RequestCycle requestCycle = RequestCycle.get();
-				CharSequence urlFor = requestCycle.urlFor(bookmarkablePageRequestHandler);
 				target.add(label);
 			}
 

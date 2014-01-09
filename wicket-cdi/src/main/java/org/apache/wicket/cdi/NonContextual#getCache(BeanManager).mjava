@@ -1,0 +1,23 @@
+	private static ClassMetaCache<NonContextual<?>> getCache(BeanManager manager)
+	{
+		ClassMetaCache<NonContextual<?>> meta = cache.get(manager);
+		if (meta == null)
+		{
+			synchronized (lock)
+			{
+				meta = cache.get(manager);
+				if (meta == null)
+				{
+					meta = new ClassMetaCache<>();
+
+					// copy-on-write the cache
+					Map<BeanManager, ClassMetaCache<NonContextual<?>>> newCache = new WeakHashMap<>(
+						cache);
+					newCache.put(manager, meta);
+					cache = Collections.unmodifiableMap(newCache);
+				}
+			}
+		}
+		return meta;
+	}
+

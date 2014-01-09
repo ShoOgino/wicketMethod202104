@@ -1,0 +1,15 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5417
+	 */
+	@Test
+	public void replaceWithInConstructor()
+	{
+		HomePage page = new HomePage();
+
+		expectedException.expect(IllegalStateException.class);
+		expectedException.
+		    expectMessage("This method can only be called on a component that has already been added to its parent.");
+
+		page.add(new ReplaceInConstructorPanel("panel"));
+	}
+

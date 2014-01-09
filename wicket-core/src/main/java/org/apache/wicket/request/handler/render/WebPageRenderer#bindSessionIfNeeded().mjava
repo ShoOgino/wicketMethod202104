@@ -1,0 +1,15 @@
+	/**
+	 * Bind the session if there are feedback messages pending.
+	 * https://issues.apache.org/jira/browse/WICKET-5165
+	 */
+	private void bindSessionIfNeeded()
+	{
+		// check for session feedback messages only
+		FeedbackCollector collector = new FeedbackCollector();
+		List<FeedbackMessage> feedbackMessages = collector.collect();
+		if (feedbackMessages.size() > 0)
+		{
+			Session.get().bind();
+		}
+	}
+

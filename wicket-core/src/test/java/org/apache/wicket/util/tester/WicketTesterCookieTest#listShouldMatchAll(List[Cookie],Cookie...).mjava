@@ -1,0 +1,16 @@
+	/**
+	 * check if every cookie is found in the list and no cookie is left 
+	 * @param cookieList cookie list
+	 * @param cookies cookies to check
+	 */
+	private void listShouldMatchAll(List<Cookie> cookieList, Cookie... cookies)
+	{
+		Map<String, Cookie> cookieMap = cookiesFromList(cookieList);
+		for (Cookie cookie : cookies) {
+			Cookie removed = cookieMap.remove(cookie.getName());
+			Assert.assertNotNull("Cookie "+cookie.getName(),removed);
+			Assert.assertTrue("Cookie "+cookie.getName()+" matches",Cookies.isEqual(cookie, removed));
+		}
+		Assert.assertTrue("no cookies left "+asString(cookieMap),cookieMap.isEmpty());
+	}
+

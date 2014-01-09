@@ -1,0 +1,16 @@
+	public WebSocketBehaviorDemoPage()
+	{
+		WebSocketChart chartPanel = new WebSocketChart("chartPanel");
+		chartPanel.add(new WebSocketBehavior()
+		{
+			@Override
+			protected void onConnect(ConnectedMessage message)
+			{
+				super.onConnect(message);
+
+				ChartUpdater.start(message);
+			}
+		});
+		add(chartPanel);
+	}
+

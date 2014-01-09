@@ -1,0 +1,24 @@
+	/**
+	 * WICKET-5085: Since {@link InlineEnclosure}s are not removed as other auto-Components, they must be
+	 * resolved once only.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void inlineEnclosuresAreResolvedOnceOnly() throws Exception
+	{
+		InlineEnclosurePanelPage page = new InlineEnclosurePanelPage();
+
+		tester.startPage(page);
+
+		assertEquals(2, page.visitChildren(InlineEnclosure.class).toList().size());
+
+		tester.startPage(page);
+
+		assertEquals(2, page.visitChildren(InlineEnclosure.class).toList().size());
+
+		tester.startPage(page);
+
+		assertEquals(2, page.visitChildren(InlineEnclosure.class).toList().size());
+	}
+

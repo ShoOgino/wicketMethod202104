@@ -9,23 +9,6 @@
 	 */
 	public InlineFrame(final String id, final Page page)
 	{
-		this(id, new IPageLink()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Page getPage()
-			{
-				// use given page
-				return page;
-			}
-
-			@Override
-			public Class<? extends Page> getPageIdentity()
-			{
-				return page.getClass();
-			}
-
-		});
+		this(id, new PageProvider(page.getPageId(), page.getClass(), page.getRenderCount()));
 	}
 

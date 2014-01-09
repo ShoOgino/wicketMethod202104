@@ -1,4 +1,4 @@
-	private final static IGetAndSet getGetAndSetter(String exp, final Class<?> clz)
+	private static IGetAndSet getGetAndSetter(String exp, final Class<?> clz)
 	{
 		IClassCache classesToGetAndSetters = getClassesToGetAndSetters();
 		Map<String, IGetAndSet> getAndSetters = classesToGetAndSetters.get(clz);
@@ -12,7 +12,7 @@
 		if (getAndSetter == null)
 		{
 			Method method = null;
-			Field field = null;
+			Field field;
 			if (exp.startsWith("["))
 			{
 				// if expression begins with [ skip method finding and use it as

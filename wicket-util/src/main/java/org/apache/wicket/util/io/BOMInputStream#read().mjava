@@ -1,0 +1,13 @@
+    /**
+     * Invokes the delegate's <code>read()</code> method, detecting and optionally skipping BOM.
+     * 
+     * @return the byte read (excluding BOM) or -1 if the end of stream
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Override
+    public int read() throws IOException {
+        final int b = readFirstBytes();
+        return b >= 0 ? b : in.read();
+    }
+

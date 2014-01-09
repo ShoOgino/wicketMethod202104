@@ -2,14 +2,15 @@
 	 * @param expression
 	 * @param object
 	 * @return class of the target property object
+	 * @throws WicketRuntimeException if the cannot be resolved
 	 */
-	public final static Class<?> getPropertyClass(final String expression, final Object object)
+	public static Class<?> getPropertyClass(final String expression, final Object object)
 	{
 		ObjectAndGetSetter setter = getObjectAndGetSetter(expression, object, RESOLVE_CLASS);
 		if (setter == null)
 		{
 			throw new WicketRuntimeException("Null object returned for expression: " + expression +
-				" for getting the target classs of: " + object);
+				" for getting the target class of: " + object);
 		}
 		return setter.getTargetClass();
 	}

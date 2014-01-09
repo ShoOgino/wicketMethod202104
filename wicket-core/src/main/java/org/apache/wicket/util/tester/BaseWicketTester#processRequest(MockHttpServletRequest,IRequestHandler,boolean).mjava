@@ -42,29 +42,24 @@
 			preHeader = null;
 		}
 
+		applyRequest();
+		requestCycle.scheduleRequestHandlerAfterCurrent(null);
+
 		try
 		{
-			if (getLastResponse() != null)
-			{
-				// transfer cookies from previous response to this request, quirky but how old stuff
-				// worked...
-				for (Cookie cookie : getLastResponse().getCookies())
-				{
-					request.addCookie(cookie);
-				}
-			}
-
-			applyRequest();
-			requestCycle.scheduleRequestHandlerAfterCurrent(null);
-
 			if (!requestCycle.processRequestAndDetach())
 			{
 				return false;
 			}
-
+		}
+		finally
+		{
 			recordRequestResponse();
 			setupNextRequestCycle();
+		}
 
+		try
+		{
 			if (followRedirects && lastResponse.isRedirect())
 			{
 				if (redirectCount++ >= 100)
@@ -83,7 +78,7 @@
 					return true;
 				}
 
-				if (newUrl.isAbsolute())
+				if (newUrl.isFull() || newUrl.isContextAbsolute())
 				{
 					request.setUrl(newUrl);
 

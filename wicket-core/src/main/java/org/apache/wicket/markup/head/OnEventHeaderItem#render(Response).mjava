@@ -1,7 +1,9 @@
 	@Override
 	public void render(Response response)
 	{
-		JavaScriptUtils.writeJavaScript(response, "Wicket.Event.add(" + getTarget() + ", \"" +
-			getEvent() + "\", function(event) { " + getJavaScript() + ";});");
+		if (Strings.isEmpty(getJavaScript()) == false)
+		{
+			JavaScriptUtils.writeJavaScript(response, getCompleteJavaScript());
+		}
 	}
 

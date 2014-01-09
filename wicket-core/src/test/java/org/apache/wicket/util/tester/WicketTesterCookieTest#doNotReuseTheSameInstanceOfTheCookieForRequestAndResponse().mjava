@@ -1,0 +1,25 @@
+	/**
+	 * The response cookie should not be the same instance as the request
+	 * cookie.
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-4989
+	 */
+	@Test
+	public void doNotReuseTheSameInstanceOfTheCookieForRequestAndResponse()
+	{
+		//start and render the test page
+		String cookieName = "cookieName";
+		String cookieValue = "cookieValue";
+		Cookie requestCookie = new Cookie(cookieName, cookieValue);
+		tester.getRequest().addCookie(requestCookie);
+		tester.startPage(new CookiePage(cookieName, cookieValue));
+
+		//assert rendered page class
+		tester.assertRenderedPage(CookiePage.class);
+
+		Cookie responseCookie = tester.getLastResponse().getCookies().get(0);
+		requestCookie.setValue("valueChanged");
+
+		Assert.assertEquals(cookieValue, responseCookie.getValue());
+	}
+

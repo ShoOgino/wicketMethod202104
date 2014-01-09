@@ -1,0 +1,45 @@
+	/**
+	 * Assert that a particular feedback panel is rendering certain messages.
+	 * 
+	 * NOTE: this casts the component at the specified path to a {@link FeedbackPanel}, so it will
+	 * not work with custom {@link IFeedback} implementations unless you are subclassing
+	 * {@link FeedbackPanel}
+	 * 
+	 * @param path
+	 *            path to the feedback panel
+	 * @param messages
+	 *            messages expected to be rendered
+	 */
+	public void assertFeedback(String path, Serializable... messages)
+	{
+		final FeedbackPanel fbp = (FeedbackPanel)getComponentFromLastRenderedPage(path);
+		final IModel<List<FeedbackMessage>> model = fbp.getFeedbackMessagesModel();
+		final List<FeedbackMessage> renderedMessages = model.getObject();
+		if (renderedMessages == null)
+		{
+			fail(String.format("feedback panel at path [%s] returned null messages", path));
+		}
+		if (messages.length != renderedMessages.size())
+		{
+			fail(String.format("you expected '%d' messages for the feedback panel [%s], but there were actually '%d'",
+					messages.length, path, renderedMessages.size()));
+		}
+		for (int i = 0; i < messages.length && i < renderedMessages.size(); i++)
+		{
+			final Serializable expected = messages[i];
+			boolean found = false;
+			for (FeedbackMessage actual : renderedMessages)
+			{
+				if (Objects.equal(expected, actual.getMessage()))
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				assertResult(Result.fail("Missing expected feedback message: " + expected));
+			}
+		}
+	}
+

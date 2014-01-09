@@ -7,14 +7,8 @@
 	{
 		final AtomicBoolean stored = new AtomicBoolean(false);
 
-		PageRenderer renderer = new TestPageRenderer(handler)
+		TestPageRenderer renderer = new TestPageRenderer(handler)
 		{
-			@Override
-			protected boolean isRedirectToBuffer()
-			{
-				return true;
-			}
-
 			@Override
 			protected BufferedWebResponse renderPage(Url targetUrl, RequestCycle requestCycle)
 			{
@@ -27,6 +21,7 @@
 				stored.set(true);
 			}
 		};
+		renderer.redirectToBuffer = true;
 
 		// needed for earlier checks
 		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("a"));

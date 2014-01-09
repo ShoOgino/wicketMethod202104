@@ -1,0 +1,26 @@
+	/**
+	 * A cookie set in the request headers should not be
+	 * expected in the response headers unless the page
+	 * sets it explicitly.
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-4989
+	 */
+	@Test
+	public void cookieSetInRequestShouldNotBeInResponse()
+	{
+		//start and render the test page
+		tester.getRequest().addCookie(new Cookie("dummy", "sample"));
+		tester.startPage(tester.getApplication().getHomePage());
+
+		//assert rendered page class
+		tester.assertRenderedPage(tester.getApplication().getHomePage());
+
+		Assert.assertEquals("The cookie should not be in the response unless explicitly set",
+				0, tester.getLastResponse().getCookies().size());
+
+		// The cookie should be in each following request unless the server code
+		// schedules it for removal it with cookie.setMaxAge(0)
+		Assert.assertEquals("The cookie should be in each following request",
+				1, tester.getRequest().getCookies().length);
+	}
+

@@ -1,0 +1,55 @@
+	/**
+	 * A filterPath should have all leading slashes removed and exactly one trailing slash. A
+	 * wildcard asterisk character has no special meaning. If your intention is to mean the top
+	 * level "/" then an empty string should be used instead.
+	 * 
+	 * @param filterPath
+	 * @return canonic filter path
+	 */
+	static String canonicaliseFilterPath(String filterPath)
+	{
+		if (Strings.isEmpty(filterPath))
+		{
+			return filterPath;
+		}
+
+		int beginIndex = 0;
+		int endIndex = filterPath.length();
+		while (beginIndex < endIndex)
+		{
+			char c = filterPath.charAt(beginIndex);
+			if (c != '/')
+			{
+				break;
+			}
+			beginIndex++;
+		}
+		int o;
+		int i = o = beginIndex;
+		while (i < endIndex)
+		{
+			char c = filterPath.charAt(i);
+			i++;
+			if (c != '/')
+			{
+				o = i;
+			}
+		}
+		if (o < endIndex)
+		{
+			o++; // include exactly one trailing slash
+			filterPath = filterPath.substring(beginIndex, o);
+		}
+		else
+		{
+			// ensure to append trailing slash
+			filterPath = filterPath.substring(beginIndex) + '/';
+		}
+
+		if (filterPath.equals("/"))
+		{
+			return "";
+		}
+		return filterPath;
+	}
+
