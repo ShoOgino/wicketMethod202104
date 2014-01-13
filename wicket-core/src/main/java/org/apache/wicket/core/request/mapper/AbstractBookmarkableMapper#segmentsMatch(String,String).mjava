@@ -1,0 +1,27 @@
+	/**
+	 * Decides whether a segment from the mounted path matches with a segment
+	 * from the requested url.
+	 *
+	 * A custom implementation of this class may use more complex logic to handle
+	 * spelling errors
+	 *
+	 * @param mountedSegment
+	 *          the segment from the mounted path
+	 * @param urlSegment
+	 *          the segment from the request url
+	 * @return {@code true} if the segments match
+	 */
+	protected boolean segmentsMatch(String mountedSegment, String urlSegment)
+	{
+		final boolean result;
+		if (isCaseSensitiveMatch())
+		{
+			result = mountedSegment.equals(urlSegment);
+		}
+		else
+		{
+			result = mountedSegment.equalsIgnoreCase(urlSegment);
+		}
+		return result;
+	}
+
