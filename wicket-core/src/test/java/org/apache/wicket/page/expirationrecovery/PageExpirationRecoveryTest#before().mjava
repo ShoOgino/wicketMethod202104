@@ -1,0 +1,12 @@
+	@Before
+	public void before()
+	{
+		tester.getApplication().mountPage("under/test", ExpirationRecoveryPage.class);
+
+		// Execution of Ajax callbacks doesn't record the newly created page in
+		// org.apache.wicket.util.tester.BaseWicketTester.LastPageRecordingPageRendererProvider
+		// so we need to use static fields
+		ExpirationRecoveryPage.ajaxLinkClicked.set(false);
+		ExpirationRecoveryPage.ajaxSubmitLinkSubmitted.set(false);
+	}
+

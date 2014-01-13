@@ -1,0 +1,15 @@
+	@Test(expected = PageExpiredException.class)
+	public void cannotRecreatePageShouldThrowPEE()
+	{
+		PageSettings pageSettings = tester.getApplication().getPageSettings();
+		pageSettings.setRecreateMountedPagesAfterExpiry(false); // CANNOT recreate
+
+		ExpirationRecoveryPage page = tester.startPage(ExpirationRecoveryPage.class, parameters);
+		assertEquals(parameters, page.getPageParameters());
+
+		tester.getSession().invalidateNow();
+
+		assertFalse(page.linkClicked.get());
+		tester.clickLink("link", false); // leads to PageExpiredException
+	}
+
