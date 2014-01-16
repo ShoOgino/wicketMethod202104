@@ -1,0 +1,24 @@
+	/**
+	 * Makes a deep clone of an object by serializing and deserializing it. The object must be fully
+	 * serializable to be cloned. No extra debug info is gathered.
+	 *
+	 * @param object
+	 *            The object to clone
+	 * @return A deep copy of the object
+	 * @see #cloneModel(Object)
+	 */
+	public static <T> T cloneObject(final T object)
+	{
+		if (object == null)
+		{
+			return null;
+		}
+		else
+		{
+			ISerializer serializer = Application.get().getFrameworkSettings().getSerializer();
+			byte[] serialized = serializer.serialize(object);
+			Object deserialized = serializer.deserialize(serialized);
+			return (T) deserialized;
+		}
+	}
+
