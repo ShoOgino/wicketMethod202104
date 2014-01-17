@@ -1,0 +1,20 @@
+	/**
+	 * testOrder()
+	 */
+	@Test
+	public void order()
+	{
+		tester.getApplication().getComponentOnConfigureListeners().add(new TestInitListener());
+
+		tester.startPage(new TestPage());
+
+		assertEquals("Page must be configured first!", 0, PAGE.get());
+//		assertEquals("Application listener for page must be configured second!", 1, APPLICATION_LISTENER.get());
+		assertEquals("Component must be configured third!", 2, COMPONENT.get());
+		assertEquals("The behavior must be configured fourth!", 3, BEHAVIOR.get());
+//		assertEquals("Application listener for HtmlHeaderContainer must be configured second!",
+//          4, APPLICATION_LISTENER.get());
+		assertEquals("The application listener for the component must be configured fifth!",
+				5, APPLICATION_LISTENER.get());
+	}
+
