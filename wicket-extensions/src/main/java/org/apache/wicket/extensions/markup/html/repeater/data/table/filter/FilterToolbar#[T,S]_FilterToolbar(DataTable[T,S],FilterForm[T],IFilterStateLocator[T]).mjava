@@ -78,6 +78,27 @@
 					}
 				}
 
+				if (col instanceof IStyledColumn)
+				{
+					filter.add(new Behavior()
+					{
+						private static final long serialVersionUID = 1L;
+
+						/**
+						 * @see Behavior#onComponentTag(Component, ComponentTag)
+						 */
+						@Override
+						public void onComponentTag(final Component component, final ComponentTag tag)
+						{
+							String className = ((IStyledColumn<?, S>)col).getCssClass();
+							if (!Strings.isEmpty(className))
+							{
+								tag.append("class", className, " ");
+							}
+						}
+					});
+				}
+
 				item.add(filter);
 			}
 		};
