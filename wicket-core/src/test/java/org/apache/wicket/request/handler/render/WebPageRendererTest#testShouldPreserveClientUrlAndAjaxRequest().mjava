@@ -1,0 +1,24 @@
+	/**
+	 * Tests that when {@link WebRequest#shouldPreserveClientUrl()} returns {@code true} and the
+	 * current request is Ajax then a redirect should be issued
+	 */
+	@Test
+	public void testShouldPreserveClientUrlAndAjaxRequest()
+	{
+		TestPageRenderer renderer = new TestPageRenderer(handler);
+		renderer.ajax = true;
+		renderer.newPageInstance = true;
+
+		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("base"));
+
+		when(requestCycle.mapUrlFor(eq(handler))).thenReturn(Url.parse("base/a"));
+
+		when(request.shouldPreserveClientUrl()).thenReturn(true);
+
+		renderer.respond(requestCycle);
+
+		verify(response).sendRedirect(anyString());
+		verify(response, never()).write(any(byte[].class));
+
+	}
+
