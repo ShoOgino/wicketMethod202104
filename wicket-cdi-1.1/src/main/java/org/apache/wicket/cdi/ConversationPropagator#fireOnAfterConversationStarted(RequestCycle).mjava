@@ -1,0 +1,12 @@
+	private void fireOnAfterConversationStarted(RequestCycle cycle)
+	{
+		cycle.setMetaData(CONVERSATION_STARTED_KEY, true);
+		for (IRequestCycleListener listener : application.getRequestCycleListeners())
+		{
+			if (listener instanceof ICdiAwareRequestCycleListener)
+			{
+				((ICdiAwareRequestCycleListener)listener).onAfterConversationActivated(cycle);
+			}
+		}
+	}
+

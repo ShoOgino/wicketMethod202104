@@ -1,0 +1,18 @@
+	@PreDestroy
+	public void finish()
+	{
+		try
+		{
+			logger.debug("Destroying Cdi Wicket Tester");
+			if (getLastRequest() != null)
+			{
+				contextManager.deactivateContexts();
+			}
+			contextManager.destroy();
+			destroy();
+		}
+		catch (Throwable t)
+		{
+		}
+	}
+

@@ -1,0 +1,17 @@
+	/**
+	 * Asserts that the respons contains the right count. This can only be done
+	 * by parsing the markup because models only contain valid values during a
+	 * request, not after.
+	 * 
+	 * @param count
+	 *            TODO
+	 */
+	public void assertCount(int count)
+	{
+		assertTrue("Response does not contain a count",
+				getLastResponseAsString().contains("COUNT=x"));
+		Matcher matcher = COUNT_PATTERN.matcher(getLastResponseAsString());
+		assertTrue(matcher.find());
+		assertEquals(Integer.toString(count), matcher.group(1));
+	}
+

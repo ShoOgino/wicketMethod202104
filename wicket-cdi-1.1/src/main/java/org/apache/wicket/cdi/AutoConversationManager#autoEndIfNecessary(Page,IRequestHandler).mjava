@@ -1,0 +1,20 @@
+	protected void autoEndIfNecessary(Page page, IRequestHandler handler)
+	{
+		if (conversation == null || conversation.isTransient() || page == null
+				|| hasConversationalComponent(page) || !propagation.propagatesVia(handler, page)
+				|| autoConversation.isAutomatic() == false)
+		{
+			return;
+		}
+
+		// auto de-activate conversation
+
+		String cid = conversation.getId();
+
+		autoConversation.setAutomatic(false);
+		conversation.end();
+		ConversationPropagator.removeConversationIdFromPage(page);
+
+		logger.debug("Auto-ended conversation {} for page {}", cid, page);
+	}
+

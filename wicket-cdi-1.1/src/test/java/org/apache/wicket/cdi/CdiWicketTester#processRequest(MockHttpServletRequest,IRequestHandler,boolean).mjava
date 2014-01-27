@@ -1,0 +1,23 @@
+	/**
+	 * Process the request by first activating the contexts on initial call.
+	 * This call is called recursively in the super class so keep track of the
+	 * topmost call and only activate and deactivate the contexts during that
+	 * time.
+	 * 
+	 * @param forcedRequest
+	 * @param forcedRequestHandler
+	 * @param redirect
+	 * @return
+	 */
+	@Override
+	protected boolean processRequest(final MockHttpServletRequest forcedRequest,
+			final IRequestHandler forcedRequestHandler, final boolean redirect)
+	{
+		if (getLastRequest() != null)
+		{
+			contextManager.deactivateContexts();
+		}
+		contextManager.activateContexts(forcedRequest == null ? getRequest() : forcedRequest);
+		return super.processRequest(forcedRequest, forcedRequestHandler, redirect);
+	}
+
