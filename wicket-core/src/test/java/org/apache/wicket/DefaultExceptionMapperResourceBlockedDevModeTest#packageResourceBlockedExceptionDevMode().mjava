@@ -1,0 +1,17 @@
+	/**
+	 * In development mode return http status 500 when a resource is blocked
+	 * so the developer can see the problem early (the exception will be displayed
+	 * on the screen)
+	 */
+	@Test
+	public void packageResourceBlockedExceptionDevMode()
+	{
+		DefaultExceptionMapper mapper = new DefaultExceptionMapper();
+		PackageResource.PackageResourceBlockedException x =
+				new PackageResource.PackageResourceBlockedException("test");
+		IRequestHandler handler = mapper.map(x);
+		assertThat(handler, instanceOf(ErrorCodeRequestHandler.class));
+		ErrorCodeRequestHandler errorCodeRequestHandler = (ErrorCodeRequestHandler) handler;
+		assertThat(errorCodeRequestHandler.getErrorCode(), is(HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+	}
+
