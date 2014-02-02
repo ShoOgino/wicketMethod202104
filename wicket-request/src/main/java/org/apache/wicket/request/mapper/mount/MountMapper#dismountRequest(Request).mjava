@@ -1,0 +1,14 @@
+	/**
+	 *
+	 * @param request
+	 *            a {@link org.apache.wicket.request.Request} with the all mount segments - mount ones and the ones for the
+	 *            delegated mapper
+	 * @return a {@link org.apache.wicket.request.Request} with {@link org.apache.wicket.request.Url} without the mount segments
+	 */
+	private Request dismountRequest(final Request request)
+	{
+		Url dismountedUrl = new Url(request.getUrl());
+		dismountedUrl.removeLeadingSegments(mountSegments.length);
+		return request.cloneWithUrl(dismountedUrl);
+	}
+
