@@ -1,5 +1,5 @@
 	@Override
-	public <T> void exportData(IDataProvider<T> dataProvider, List<IExportableColumn<T, ?, ?>> columns, OutputStream outputStream)
+	public <T> void exportData(IDataProvider<T> dataProvider, List<IExportableColumn<T, ?>> columns, OutputStream outputStream)
 		throws IOException
 	{
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream, Charset.forName(characterSet)));
@@ -8,7 +8,7 @@
 			if (isExportHeadersEnabled())
 			{
 				boolean first = true;
-				for (IExportableColumn<T, ?, ?> col : columns)
+				for (IExportableColumn<T, ?> col : columns)
 				{
 					if (first)
 					{
@@ -29,7 +29,7 @@
 				T row = rowIterator.next();
 
 				boolean first = true;
-				for (IExportableColumn<T, ?, ?> col : columns)
+				for (IExportableColumn<T, ?> col : columns)
 				{
 					if (first)
 					{
