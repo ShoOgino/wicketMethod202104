@@ -8,10 +8,18 @@
 	@Test
 	public void getInputStream() throws Exception
 	{
-		IFileCleaner fileUploadCleaner = new FileCleaner();
+		final IFileCleaner fileUploadCleaner = new FileCleaner();
 
-		FileItem fileItem = new DiskFileItemFactory(fileUploadCleaner).createItem("dummyFieldName",
-			"text/java", false, "FileUploadTest.java");
+		DiskFileItemFactory itemFactory = new DiskFileItemFactory()
+		{
+			@Override
+			public FileCleaningTracker getFileCleaningTracker()
+			{
+				return new FileCleanerTrackerAdapter(fileUploadCleaner);
+			}
+		};
+		FileItem fileItem = itemFactory.createItem("dummyFieldName",
+				"text/java", false, "FileUploadTest.java");
 		// Initialize the upload
 		fileItem.getOutputStream();
 
