@@ -1,5 +1,15 @@
 	protected final Component getChild()
 	{
+		if (childComponent == null)
+		{
+			// try to find child when queued
+			childComponent = get(childId);
+		}
+		if (childComponent == null)
+		{
+			// try to find child when resolved
+			childComponent = getChildComponent(new MarkupStream(getMarkup()), getEnclosureParent());
+		}
 		return childComponent;
 	}
 

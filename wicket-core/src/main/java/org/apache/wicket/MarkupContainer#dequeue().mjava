@@ -1,0 +1,24 @@
+	void dequeue()
+	{
+		if (!(this instanceof IQueueRegion))
+		{
+			// TODO queueing mesage
+			throw new UnsupportedOperationException();
+		}
+
+		if (dequeuing)
+		{
+			throw new IllegalStateException();
+		}
+
+		dequeuing = true;
+		try
+		{
+			internalDequeue();
+		}
+		finally
+		{
+			dequeuing = false;
+		}
+	}
+

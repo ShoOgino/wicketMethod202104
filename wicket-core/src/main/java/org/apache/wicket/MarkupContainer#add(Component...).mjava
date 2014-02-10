@@ -47,13 +47,22 @@
 				log.debug("Add " + child.getId() + " to " + this);
 			}
 
+			// remove child from existing parent
+			parent = child.getParent();
+			if (parent != null)
+			{
+				parent.remove(child);
+			}
+
 			// Add to map
-			addedComponent(child);
 			if (put(child) != null)
 			{
-				throw new IllegalArgumentException(exceptionMessage("A child with id '" +
-					child.getId() + "' already exists"));
+				throw new IllegalArgumentException(exceptionMessage("A child with id '"
+					+ child.getId() + "' already exists"));
 			}
+
+			addedComponent(child);
+
 		}
 		return this;
 	}
