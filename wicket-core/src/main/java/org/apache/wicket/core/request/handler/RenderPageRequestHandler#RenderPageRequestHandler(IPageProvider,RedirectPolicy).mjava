@@ -14,16 +14,10 @@
 
 		if (pageProvider.hasPageInstance())
 		{
-			IRequestablePage page = pageProvider.getPageInstance();
-			if (page instanceof Page)
-			{
-				((Page) page).setStatelessHint(false);
-			}
-
 			if (Session.exists())
 			{
 				// WICKET-5499
-				Session.get().getPageManager().touchPage(page);
+				Session.get().getPageManager().touchPage(pageProvider.getPageInstance());
 			}
 		}
 	}
