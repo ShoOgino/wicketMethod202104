@@ -1,6 +1,12 @@
-	public JavaxUpgradeHttpRequest(final Session session)
+	public JavaxUpgradeHttpRequest(final Session session, EndpointConfig endpointConfig)
 	{
 		Map<String, Object> userProperties = session.getUserProperties();
+
+		if (userProperties == null || userProperties.isEmpty())
+		{
+			// workaround for JBoss Wildfly 8.0.Final
+			userProperties = endpointConfig.getUserProperties();
+		}
 
 		this.httpSession = (HttpSession) userProperties.get("session");
 		this.headers = (Map<String, List<String>>) userProperties.get("headers");
