@@ -4,17 +4,15 @@
 	{
 		MarkupContainer a = new A(), b = new B(), c= new C(), d = new D(), r = new R(), s = new S();
 
-		TestBorder outerBorder = new TestBorder("outerBorder");
-		outerBorder.setBorderMarkup("<wicket:border><p wicket:id='r'><p wicket:id='innerBorder'>" +
-				"<p wicket='s'></p></p><wicket:body/></p></wicket:border>");
+		Border outerBorder = new OuterBorder("outerBorder");
 
-		TestBorder innerBorder = new TestBorder("innerBorder");
-		innerBorder.setBorderMarkup("<wicket:border><p wicket:id='c'><p wicket:id='d'>" +
-				"<wicket:body/></p></p></wicket:border>");
+		Border innerBorder = new InnerBorder("innerBorder");
 
 		outerBorder.queueToBorder(r, innerBorder);
 
 		innerBorder.queueToBorder(c, d);
+
+		// TODO WICKET-3335 Where to queue 's' to make it work ?!
 		outerBorder.queue(s);
 
 		TestPage p = new TestPage();
@@ -24,7 +22,8 @@
 
 		tester.startPage(p);
 
-		assertThat(p, hasPath(new Path(a, outerBorder, r, innerBorder, s)));
-		assertThat(p, hasPath(new Path(a, outerBorder, r, innerBorder, innerBorder.getBodyContainer(), c, d)));
+		assertThat(p, hasPath(new Path(a, outerBorder, outerBorder.getBodyContainer(), b)));
+		assertThat(p, hasPath(new Path(a, outerBorder, r, innerBorder, c, d)));
+		assertThat(p, hasPath(new Path(a, outerBorder, r, innerBorder, innerBorder.getBodyContainer(), s)));
 	}
 
