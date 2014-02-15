@@ -1,0 +1,17 @@
+	private boolean canDequeue(ComponentTag open)
+	{
+		if (containers.size() < 1)
+		{
+			// TODO queueing message: called too early
+			throw new IllegalStateException();
+		}
+		for (int i = containers.size() - 1; i >= 0; i--)
+		{
+			if (containers.get(i).supportsDequeueingFrom((open)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+

@@ -1,0 +1,63 @@
+	public void dequeue(DequeueContext dequeue)
+	{
+		
+
+		while (dequeue.isAtOpenOrOpenCloseTag())
+		{
+		
+			ComponentTag tag = dequeue.popTag();
+	
+			// see if child is already added to parent
+	
+
+			Component child = get(tag.getId()); // TODO queueing add this into findInQueue and
+												// rename it to dequeue
+	
+			if (child == null)
+			{
+				// the container does not yet have a child with this id, see if we can
+				// dequeue
+				
+				child = dequeue.dequeue(tag);
+	
+				if (child != null)
+				{
+					add(child);
+					if (child instanceof IQueueRegion)
+					{
+						((MarkupContainer)child).dequeue();
+					}
+				}
+			}
+					
+			if (child == null || tag.isOpenClose() || !(child instanceof MarkupContainer))
+			{
+				// could not dequeue, or does not contain children
+	
+				dequeue.skipToCloseTag();
+			}
+			else
+			{
+				MarkupContainer container = (MarkupContainer)child;
+				dequeue.pushContainer(container);
+				container.dequeue(dequeue);
+				dequeue.popContainer();
+			}
+
+			if (tag.isOpen())
+			{
+				// pull the close tag off
+				ComponentTag close = dequeue.popTag();
+				if (!close.closes(tag))
+				{
+					// sanity check
+					// FIXME queueing message
+					throw new IllegalStateException();
+				}
+			}
+
+
+		}
+
+	}
+

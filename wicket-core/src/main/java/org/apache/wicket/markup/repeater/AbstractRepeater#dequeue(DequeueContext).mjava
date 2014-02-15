@@ -1,0 +1,18 @@
+	@Override
+	public void dequeue(DequeueContext dequeue) {
+		if (size()>0) {
+			Bookmark bookmark=dequeue.save();
+			
+			for (Component child:this) {
+				if (child instanceof MarkupContainer) {
+					dequeue.popContainer(); // pop the repeater
+					MarkupContainer container=(MarkupContainer) child;
+					dequeue.pushContainer(container);
+					container.dequeue(dequeue);
+					dequeue.restore(bookmark);
+				}
+			}	
+		}
+		dequeue.skipToCloseTag();
+	}
+
