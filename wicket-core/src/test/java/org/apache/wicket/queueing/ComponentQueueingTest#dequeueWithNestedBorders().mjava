@@ -1,4 +1,3 @@
-	@Ignore
 	@Test
 	public void dequeueWithNestedBorders()
 	{
@@ -12,18 +11,17 @@
 
 		innerBorder.queueToBorder(c, d);
 
-		// TODO WICKET-3335 Where to queue 's' to make it work ?!
-		outerBorder.queue(s);
+		outerBorder.queueToBorder(s);
+
 
 		TestPage p = new TestPage();
 		p.setPageMarkup("<p wicket:id='a'><p wicket:id='outerBorder'><p wicket:id='b'></p></p></p>");
-
+		
 		p.queue(b, outerBorder, a);
 
 		tester.startPage(p);
-
-		assertThat(p, hasPath(new Path(a, outerBorder, outerBorder.getBodyContainer(), b)));
-		assertThat(p, hasPath(new Path(a, outerBorder, r, innerBorder, c, d)));
-		assertThat(p, hasPath(new Path(a, outerBorder, r, innerBorder, innerBorder.getBodyContainer(), s)));
+		
+		assertThat(p, hasPath(new Path(a, outerBorder,  r, innerBorder, c, d, innerBorder.getBodyContainer(), s)));
+		assertThat(p, hasPath(new Path(a, outerBorder, r, outerBorder.getBodyContainer(), b)));
 	}
 

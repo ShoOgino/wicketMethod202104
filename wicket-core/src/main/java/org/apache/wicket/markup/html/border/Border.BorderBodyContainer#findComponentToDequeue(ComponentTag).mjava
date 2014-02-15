@@ -1,0 +1,27 @@
+		@Override
+		public Component findComponentToDequeue(ComponentTag tag) {
+			/* the body container is allowed to search for queued components 
+			 * all the way to the page even though it is an IQueueRegion so it can
+			 * find components queueud below the border
+			 */
+			
+			Component component=super.findComponentToDequeue(tag);
+			if (component!=null) {
+				return component;
+			}
+			
+			MarkupContainer cursor=getParent();
+			while (cursor!=null) {
+				component=cursor.findComponentToDequeue(tag);
+				if (component!=null) {
+					return component;
+				}
+				if (cursor instanceof BorderBodyContainer) {
+					// optimization - find call above wouldve already recursed to page
+					break;
+				}
+				cursor=cursor.getParent();
+			}
+			return null;
+		}
+
