@@ -1,0 +1,23 @@
+	private void dequeueAutoComponents()
+	{
+		// dequeue auto components
+		IMarkupFragment markup = getDequeueMarkup();
+		if (markup != null)
+		{
+			// make sure we have markup, when running inside tests we wont
+			for (int i = 0; i < markup.size(); i++)
+			{
+				MarkupElement element = markup.get(i);
+				if (element instanceof ComponentTag)
+				{
+					ComponentTag tag = (ComponentTag)element;
+					if (tag.getAutoComponentFactory() != null)
+					{
+						Component auto = tag.getAutoComponentFactory().newComponent(tag);
+						queue(auto);
+					}
+				}
+			}
+		}
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Checks if this container can dequeue a child represented by the specified tag. This method
+	 * should be overridden when containers can dequeue components represented by non-standard tags.
+	 * For example, borders override this method and dequeue their body container when processing
+	 * the body tag.
+	 * 
+	 * By default all {@link ComponentTag}s are supported as well as {@link WicketTag}s that return
+	 * a non-null value from {@link WicketTag#getAutoComponentFactory()} method.
+	 * 
+	 * @param tag
+	 */
+	protected boolean canDequeueTag(ComponentTag tag) {
+		if (tag instanceof WicketTag) {
+			WicketTag wicketTag=(WicketTag)tag;
+			if (wicketTag.getAutoComponentFactory() != null)
+			{
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
