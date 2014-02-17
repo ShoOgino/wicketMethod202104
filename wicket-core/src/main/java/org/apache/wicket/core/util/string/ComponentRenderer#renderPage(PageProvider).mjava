@@ -7,11 +7,7 @@
 	 */
 	public static CharSequence renderPage(final PageProvider pageProvider)
 	{
-		final RenderPageRequestHandler handler = new RenderPageRequestHandler(pageProvider,
-				RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT);
-
 		Application application = Application.get();
-		final PageRenderer pageRenderer = application.getPageRendererProvider().get(handler);
 
 		RequestCycle originalRequestCycle = RequestCycle.get();
 
@@ -21,16 +17,14 @@
 				tempResponse, application.getRootRequestMapper(), application.getExceptionMapperProvider().get());
 		RequestCycle tempRequestCycle = new RequestCycle(requestCycleContext);
 
-		final Response oldResponse = originalRequestCycle.getResponse();
-
 		try
 		{
-			originalRequestCycle.setResponse(tempResponse);
-			pageRenderer.respond(tempRequestCycle);
+			ThreadContext.setRequestCycle(tempRequestCycle);
+			pageProvider.getPageInstance().renderPage();
 		}
 		finally
 		{
-			originalRequestCycle.setResponse(oldResponse);
+			ThreadContext.setRequestCycle(originalRequestCycle);
 		}
 
 		return tempResponse.getText();
