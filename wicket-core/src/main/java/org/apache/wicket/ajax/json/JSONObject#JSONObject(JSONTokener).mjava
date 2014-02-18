@@ -1,10 +1,14 @@
     /**
      * Construct a JSONObject from a JSONTokener.
-     * @param x A JSONTokener object containing the source string.
-     * @throws JSONException If there is a syntax error in the source string
-     *  or a duplicated key.
+     *
+     * @param x
+     *            A JSONTokener object containing the source string.
+     * @throws JSONException
+     *             If there is a syntax error in the source string or a
+     *             duplicated key.
      */
-    public JSONObject(JSONTokener x) throws JSONException {
+    public JSONObject(JSONTokener x) throws JSONException
+    {
         this();
         char c;
         String key;
@@ -24,19 +28,15 @@
                 key = x.nextValue().toString();
             }
 
-// The key is followed by ':'. We will also tolerate '=' or '=>'.
+// The key is followed by ':'.
 
             c = x.nextClean();
-            if (c == '=') {
-                if (x.next() != '>') {
-                    x.back();
-                }
-            } else if (c != ':') {
+            if (c != ':') {
                 throw x.syntaxError("Expected a ':' after a key");
             }
             this.putOnce(key, x.nextValue());
 
-// Pairs are separated by ','. We will also tolerate ';'.
+// Pairs are separated by ','.
 
             switch (x.nextClean()) {
             case ';':
