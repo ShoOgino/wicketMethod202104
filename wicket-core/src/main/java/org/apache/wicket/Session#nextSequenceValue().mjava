@@ -3,12 +3,9 @@
 	 * 
 	 * @return session-unique value
 	 */
-	public synchronized int nextSequenceValue()
+	public int nextSequenceValue()
 	{
-		if (isTemporary() == false)
-		{
-			dirty();
-		}
-		return sequence++;
+		dirty(false);
+		return sequence.getAndIncrement();
 	}
 
