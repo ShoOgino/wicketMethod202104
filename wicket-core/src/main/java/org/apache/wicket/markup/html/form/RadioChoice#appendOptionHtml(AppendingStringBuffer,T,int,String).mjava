@@ -130,7 +130,26 @@
 
 			buffer.append("<label for=\"")
 				.append(idAttr)
-				.append("\">")
+				.append('"');
+
+			// Allows user to add attributes to the <label..> tag
+			{
+				IValueMap labelAttrs = getAdditionalAttributesForLabel(index, choice);
+				if (labelAttrs != null)
+				{
+					for (Map.Entry<String, Object> attr : labelAttrs.entrySet())
+					{
+						buffer.append(' ')
+								.append(attr.getKey())
+								.append("=\"")
+								.append(attr.getValue())
+								.append('"');
+					}
+				}
+			}
+
+			buffer
+				.append('>')
 				.append(escaped)
 				.append("</label>");
 
