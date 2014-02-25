@@ -1,16 +1,76 @@
 	private ComponentTag nextTag()
 	{
+		if (skipFirst && first == null)
+		{
+			for (; index < markup.size(); index++)
+			{
+				MarkupElement element = markup.get(index);
+				if (element instanceof ComponentTag)
+				{
+					first = (ComponentTag)element;
+					index++;
+					break;
+				}
+			}
+		}
+
 		for (; index < markup.size(); index++)
 		{
 			MarkupElement element = markup.get(index);
 			if (element instanceof ComponentTag)
 			{
 				ComponentTag tag = (ComponentTag)element;
-				ComponentTag open = tag.isClose() ? tag.getOpenTag() : tag;
-				if (open != null && canDequeueTag(open))
+
+				if (tag.isOpen() || tag.isOpenClose())
 				{
-					index++;
-					return tag;
+					DequeueTagAction action = canDequeueTag(tag);
+					switch (action)
+					{
+						case IGNORE :
+							continue;
+						case DEQUEUE :
+							index++;
+							return tag;
+						case SKIP : // skip to close tag
+							boolean found = false;
+							for (; index < markup.size(); index++)
+							{
+								if ((markup.get(index) instanceof ComponentTag)
+									&& ((ComponentTag)markup.get(index)).closes(tag))
+								{
+									found = true;
+									break;
+								}
+							}
+							if (!found)
+							{
+								throw new IllegalStateException(
+									"Could not find close tag for tag: " + tag);
+							}
+
+					}
+				}
+				else
+				{
+					// closed tag
+					ComponentTag open = tag.isClose() ? tag.getOpenTag() : tag;
+
+					if (skipFirst && first != null && open == first)
+					{
+						continue;
+					}
+
+					switch (canDequeueTag(open))
+					{
+						case DEQUEUE :
+							index++;
+							return tag;
+						case IGNORE :
+							continue;
+						case SKIP :
+							throw new IllegalStateException(
+								"Should not see closed tag of skipped open tag: " + tag);
+					}
 				}
 			}
 		}
