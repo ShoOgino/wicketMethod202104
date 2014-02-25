@@ -36,7 +36,7 @@
 							for (; index < markup.size(); index++)
 							{
 								if ((markup.get(index) instanceof ComponentTag)
-									&& ((ComponentTag)markup.get(index)).closes(tag))
+									&& markup.get(index).closes(tag))
 								{
 									found = true;
 									break;
@@ -45,7 +45,8 @@
 							if (!found)
 							{
 								throw new IllegalStateException(
-									"Could not find close tag for tag: " + tag);
+									String.format("Could not find close tag for tag '%s' in markup: %s ",
+											tag, markup));
 							}
 
 					}
@@ -69,7 +70,8 @@
 							continue;
 						case SKIP :
 							throw new IllegalStateException(
-								"Should not see closed tag of skipped open tag: " + tag);
+								String.format("Should not see closed tag of skipped open tag '%s' in markup:%s",
+										tag, markup));
 					}
 				}
 			}
