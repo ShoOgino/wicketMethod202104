@@ -1,0 +1,28 @@
+	/**
+	 * Modifies one style, removes another and adds a new style
+	 */
+	@Test
+	public void addRemoveCssStyles()
+	{
+		StyleAttributeModifier cam = new StyleAttributeModifier()
+		{
+			@Override
+			protected Map<String, String> update(Map<String, String> oldStyles)
+			{
+				oldStyles.put("color", "black");           // modify the value
+				oldStyles.remove("font-size");             // remove
+				oldStyles.put("background-color", "red");  // add
+				return oldStyles;
+			}
+		};
+		ComponentTag tag = createTag();
+
+		Map<String, Object> attributes = tag.getAttributes();
+		attributes.put(cam.getAttribute(), "color:white;font-size:9px;");
+
+		cam.replaceAttributeValue(null, tag);
+
+		String classes = (String) attributes.get(cam.getAttribute());
+		assertEquals("color:black;background-color:red;", classes);
+	}
+
