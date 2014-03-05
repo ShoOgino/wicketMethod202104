@@ -1,0 +1,22 @@
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		protected Item newCellItem(final String id, final int index, final IModel model)
+		{
+			Item item = DataTable.this.newCellItem(id, index, model);
+			final IColumn<T, S> column = DataTable.this.columns.get(index);
+			if (column instanceof IStyledColumn)
+			{
+				item.add(new CssAttributeBehavior()
+				{
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected String getCssClass()
+					{
+						return ((IStyledColumn<T, S>)column).getCssClass();
+					}
+				});
+			}
+			return item;
+		}
+
