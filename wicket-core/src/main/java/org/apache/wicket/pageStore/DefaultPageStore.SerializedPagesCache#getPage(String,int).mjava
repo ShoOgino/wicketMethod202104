@@ -14,26 +14,23 @@
 			SerializedPage result = null;
 			if (size > 0)
 			{
-				synchronized (cache)
+				for (Iterator<SoftReference<SerializedPage>> i = cache.iterator(); i.hasNext();)
 				{
-					for (Iterator<SoftReference<SerializedPage>> i = cache.iterator(); i.hasNext();)
+					SoftReference<SerializedPage> ref = i.next();
+					SerializedPage entry = ref.get();
+					if (entry != null && entry.getPageId() == pageId &&
+						entry.getSessionId().equals(sessionId))
 					{
-						SoftReference<SerializedPage> ref = i.next();
-						SerializedPage entry = ref.get();
-						if (entry != null && entry.getPageId() == pageId &&
-							entry.getSessionId().equals(sessionId))
-						{
-							i.remove();
-							result = entry;
-							break;
-						}
+						i.remove();
+						result = entry;
+						break;
 					}
+				}
 
-					if (result != null)
-					{
-						// move to top
-						storePage(result);
-					}
+				if (result != null)
+				{
+					// move to top
+					storePage(result);
 				}
 			}
 			return result;
