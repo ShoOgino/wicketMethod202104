@@ -1,6 +1,6 @@
 		Entry<V> nextEntry()
 		{
-			if (modCount != expectedModCount)
+			if (!modCount.compareAndSet(expectedModCount, expectedModCount))
 			{
 				throw new ConcurrentModificationException();
 			}
