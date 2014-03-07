@@ -1,0 +1,15 @@
+	/**
+	 * Broadcasts/pushes a message to all active web socket connections
+	 *
+	 * @param application
+	 *          The application where the web socket connection is registered
+	 * @param message
+	 *          The message to broadcast/push
+	 */
+	public void broadcastAll(Application application, IWebSocketPushMessage message)
+	{
+		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(application);
+		WebSocketPushBroadcaster broadcaster = new WebSocketPushBroadcaster(webSocketSettings.getConnectionRegistry());
+		broadcaster.broadcastAll(application, message);
+	}
+
