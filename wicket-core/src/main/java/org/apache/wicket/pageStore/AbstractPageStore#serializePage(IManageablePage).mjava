@@ -1,0 +1,20 @@
+	/**
+	 * Serializes the passed page to byte[]
+	 *
+	 * @param page
+	 *          The page to serialize
+	 * @return the serialized view of the passed page
+	 */
+	protected byte[] serializePage(final IManageablePage page)
+	{
+		Args.notNull(page, "page");
+
+		byte[] data = pageSerializer.serialize(page);
+
+		if (data == null && LOG.isWarnEnabled())
+		{
+			LOG.warn("Page {} cannot be serialized. See previous logs for possible reasons.", page);
+		}
+		return data;
+	}
+

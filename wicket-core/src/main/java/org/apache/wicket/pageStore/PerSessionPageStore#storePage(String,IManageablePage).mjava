@@ -1,0 +1,11 @@
+	@Override
+	public void storePage(final String sessionId, final IManageablePage page)
+	{
+		byte[] data = serializePage(page);
+		if (data != null)
+		{
+			pagesCache.storePage(sessionId, page.getPageId(), page);
+			storePageData(sessionId, page.getPageId(), data);
+		}
+	}
+

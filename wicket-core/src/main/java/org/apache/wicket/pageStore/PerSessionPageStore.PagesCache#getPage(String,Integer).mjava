@@ -1,0 +1,42 @@
+		/**
+		 * Returns a {@link org.apache.wicket.page.IManageablePage} by looking it up by <code>sessionId</code> and
+		 * <code>pageId</code>. If there is a match then it is <i>touched</i>, i.e. it is moved at
+		 * the top of the cache.
+		 * 
+		 * @param sessionId
+		 *          The id of the http session
+		 * @param pageId
+		 *          The id of the page to find
+		 * @return the found serialized page or <code>null</code> when not found
+		 */
+		@Override
+		public IManageablePage getPage(String sessionId, Integer pageId)
+		{
+			IManageablePage result = null;
+
+			if (maxEntriesPerSession > 0)
+			{
+				Args.notNull(sessionId, "sessionId");
+				Args.notNull(pageId, "pageId");
+
+				SoftReference<ConcurrentSkipListMap<PageValue, IManageablePage>> pagesPerSession = cache.get(sessionId);
+				if (pagesPerSession != null)
+				{
+					ConcurrentSkipListMap<PageValue, IManageablePage> pages = pagesPerSession.get();
+					if (pages != null)
+					{
+						PageValue pv = new PageValue(pageId);
+						Map.Entry<PageValue, IManageablePage> entry = pages.ceilingEntry(pv);
+
+						if (entry != null)
+						{
+							// touch the entry
+							entry.getKey().accessTime = Time.now();
+							result = entry.getValue();
+						}
+					}
+				}
+			}
+			return result;
+		}
+

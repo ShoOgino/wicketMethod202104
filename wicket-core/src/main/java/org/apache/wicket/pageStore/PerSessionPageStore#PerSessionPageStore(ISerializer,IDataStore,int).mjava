@@ -1,0 +1,18 @@
+	/**
+	 * Construct.
+	 *
+	 * @param pageSerializer
+	 *            the {@link org.apache.wicket.serialize.ISerializer} that will be used to convert pages from/to byte arrays
+	 * @param dataStore
+	 *            the {@link org.apache.wicket.pageStore.IDataStore} that actually stores the pages
+	 * @param cacheSize
+	 *            the number of pages to cache in memory before passing them to
+	 *            {@link org.apache.wicket.pageStore.IDataStore#storeData(String, int, byte[])}
+	 */
+	public PerSessionPageStore(final ISerializer pageSerializer, final IDataStore dataStore,
+	                           final int cacheSize)
+	{
+		super(pageSerializer, dataStore);
+		this.pagesCache = new PagesCache(cacheSize);
+	}
+
