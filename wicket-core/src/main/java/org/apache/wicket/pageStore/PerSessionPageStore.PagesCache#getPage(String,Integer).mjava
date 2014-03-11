@@ -26,15 +26,12 @@
 					if (pages != null)
 					{
 						PageValue sample = new PageValue(pageId);
-						Iterator<Map.Entry<PageValue,IManageablePage>> iterator = pages.entrySet().iterator();
-						while (iterator.hasNext())
+						for (Map.Entry<PageValue, IManageablePage> entry : pages.entrySet())
 						{
-							Map.Entry<PageValue, IManageablePage> entry = iterator.next();
-
 							if (sample.equals(entry.getKey()))
 							{
 								// touch the entry
-								entry.getKey().accessTime = System.nanoTime();
+								entry.getKey().touch();
 								result = entry.getValue();
 								break;
 							}
