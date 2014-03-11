@@ -12,7 +12,16 @@
 			}
 
 			RequestCycle cycle = RequestCycle.get();
-			Attributes attributes = new Attributes(cycle.getRequest(), cycle.getResponse());
+			Attributes attributes;
+			if (cycle != null)
+			{
+				attributes = new Attributes(cycle.getRequest(), cycle.getResponse());
+			}
+			else
+			{
+				// use empty request and response in case of non-http thread. WICKET-5532
+				attributes = new Attributes(new MockWebRequest(Url.parse("")), new StringResponse());
+			}
 			byte[] processedBytes = processResponse(attributes, bytes);
 			return new ByteArrayInputStream(processedBytes);
 		}
