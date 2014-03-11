@@ -7,7 +7,7 @@
 		@Override
 		public void storePage(String sessionId, Integer pageId, SerializedPage page)
 		{
-			if (size > 0)
+			if (maxSize > 0)
 			{
 				Args.notNull(sessionId, "sessionId");
 				Args.notNull(pageId, "pageId");
@@ -24,11 +24,7 @@
 					}
 				}
 
-				cache.add(new SoftReference<>(page));
-				while (cache.size() > size)
-				{
-					cache.remove(0);
-				}
+				internalStore(page);
 			}
 		}
 

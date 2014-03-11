@@ -25,14 +25,19 @@
 					ConcurrentSkipListMap<PageValue, IManageablePage> pages = pagesPerSession.get();
 					if (pages != null)
 					{
-						PageValue pv = new PageValue(pageId);
-						Map.Entry<PageValue, IManageablePage> entry = pages.ceilingEntry(pv);
-
-						if (entry != null)
+						PageValue sample = new PageValue(pageId);
+						Iterator<Map.Entry<PageValue,IManageablePage>> iterator = pages.entrySet().iterator();
+						while (iterator.hasNext())
 						{
-							// touch the entry
-							entry.getKey().accessTime = Time.now();
-							result = entry.getValue();
+							Map.Entry<PageValue, IManageablePage> entry = iterator.next();
+
+							if (sample.equals(entry.getKey()))
+							{
+								// touch the entry
+								entry.getKey().accessTime = System.nanoTime();
+								result = entry.getValue();
+								break;
+							}
 						}
 					}
 				}

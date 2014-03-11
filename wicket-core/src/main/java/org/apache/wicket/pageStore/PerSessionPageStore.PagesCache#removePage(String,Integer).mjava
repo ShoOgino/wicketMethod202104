@@ -22,11 +22,17 @@
 					ConcurrentMap<PageValue, IManageablePage> pages = pagesPerSession.get();
 					if (pages != null)
 					{
-						PageValue pv = new PageValue(pageId);
-						IManageablePage page = pages.remove(pv);
-						if (page != null)
+						PageValue sample = new PageValue(pageId);
+						Iterator<Map.Entry<PageValue, IManageablePage>> iterator = pages.entrySet().iterator();
+						while (iterator.hasNext())
 						{
-							result = page;
+							Map.Entry<PageValue, IManageablePage> entry = iterator.next();
+							if (sample.equals(entry.getKey()))
+							{
+								result = entry.getValue();
+								iterator.remove();
+								break;
+							}
 						}
 					}
 				}
