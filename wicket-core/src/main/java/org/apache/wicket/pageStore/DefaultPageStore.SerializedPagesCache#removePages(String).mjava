@@ -4,22 +4,20 @@
 		 * 
 		 * @param sessionId
 		 */
+		@Override
 		public void removePages(String sessionId)
 		{
-			Args.notNull(sessionId, "sessionId");
-
-			if (size > 0)
+			if (maxSize > 0)
 			{
-				synchronized (cache)
+				Args.notNull(sessionId, "sessionId");
+
+				for (Iterator<SoftReference<SerializedPage>> i = cache.iterator(); i.hasNext();)
 				{
-					for (Iterator<SoftReference<SerializedPage>> i = cache.iterator(); i.hasNext();)
+					SoftReference<SerializedPage> ref = i.next();
+					SerializedPage entry = ref.get();
+					if (entry != null && entry.getSessionId().equals(sessionId))
 					{
-						SoftReference<SerializedPage> ref = i.next();
-						SerializedPage entry = ref.get();
-						if (entry != null && entry.getSessionId().equals(sessionId))
-						{
-							i.remove();
-						}
+						i.remove();
 					}
 				}
 			}

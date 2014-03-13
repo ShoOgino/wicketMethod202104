@@ -1,0 +1,13 @@
+	@SuppressWarnings("unchecked")
+	@Override
+	public void storePage(final String sessionId, final IManageablePage page)
+	{
+		byte[] data = serializePage(page);
+		if (data != null)
+		{
+			int pageId = page.getPageId();
+			pagesCache.storePage(sessionId, pageId,  (P) page);
+			storePageData(sessionId, pageId, data);
+		}
+	}
+

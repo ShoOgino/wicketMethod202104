@@ -1,0 +1,41 @@
+		/**
+		 * Returns a {@link SerializedPage} by looking it up by <code>sessionId</code> and
+		 * <code>pageId</code>. If there is a match then it is <i>touched</i>, i.e. it is moved at
+		 * the top of the cache.
+		 * 
+		 * @param sessionId
+		 * @param pageId
+		 * @return the found serialized page or <code>null</code> when not found
+		 */
+		@Override
+		public SerializedPage getPage(String sessionId, Integer pageId)
+		{
+			SerializedPage result = null;
+			if (maxSize > 0)
+			{
+				Args.notNull(sessionId, "sessionId");
+				Args.notNull(pageId, "pageId");
+
+				SerializedPage sample = new SerializedPage(sessionId, pageId, null);
+
+				for (Iterator<SoftReference<SerializedPage>> i = cache.iterator(); i.hasNext();)
+				{
+					SoftReference<SerializedPage> ref = i.next();
+					SerializedPage entry = ref.get();
+					if (sample.equals(entry))
+					{
+						i.remove();
+						result = entry;
+						break;
+					}
+				}
+
+				if (result != null)
+				{
+					// move to top
+					internalStore(result);
+				}
+			}
+			return result;
+		}
+
