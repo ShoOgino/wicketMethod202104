@@ -10,10 +10,11 @@
 			return false;
 		}
 
-		return neverRedirect(getRedirectPolicy())
+		return (compatibleProtocols(currentUrl.getProtocol(), targetUrl.getProtocol())) &&
+				(neverRedirect(getRedirectPolicy())
 			|| ((isOnePassRender() && notForcedRedirect(getRedirectPolicy())) || (targetUrl
 				.equals(currentUrl) && notNewAndNotStatelessPage(isNewPageInstance(),
 				isPageStateless()))) || (targetUrl.equals(currentUrl) && isRedirectToRender())
-			|| (shouldPreserveClientUrl(cycle) && notForcedRedirect(getRedirectPolicy()));
+			|| (shouldPreserveClientUrl(cycle) && notForcedRedirect(getRedirectPolicy())));
 	}
 
