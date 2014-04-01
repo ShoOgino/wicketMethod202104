@@ -1,0 +1,20 @@
+	/**
+	 * Unregisters all {@link EventSubscription}s for the given component, including the
+	 * subscriptions for its behaviors.
+	 *
+	 * @param page
+	 * @param subscription
+	 */
+	public synchronized void unregister(Component component)
+	{
+		String componentPath = component.getPageRelativePath();
+		PageKey pageKey = new PageKey(component.getPage().getPageId(), Session.get().getId());
+		Collection<EventSubscription> subscriptionsForPage = subscriptions.get(pageKey);
+		Iterator<EventSubscription> it = subscriptionsForPage.iterator();
+		while (it.hasNext())
+		{
+			if (it.next().getComponentPath().equals(componentPath))
+				it.remove();
+		}
+	}
+

@@ -1,15 +1,15 @@
 	/**
-	 * Registers an {@link EventSubscription} for the given page.
+	 * Unregisters an {@link EventSubscription} for the given page.
 	 *
 	 * @param page
 	 * @param subscription
 	 */
-	public synchronized void register(Page page, EventSubscription subscription)
+	public synchronized void unregister(Page page, EventSubscription subscription)
 	{
 		if (log.isDebugEnabled())
 		{
 			log.debug(
-				"registering {} for page {} for session {}: {}{}",
+				"unregistering {} for page {} for session {}: {}{}",
 				new Object[] {
 						subscription.getBehaviorIndex() == null ? "component" : "behavior",
 						page.getPageId(),
@@ -19,9 +19,6 @@
 							subscription.getBehaviorIndex() });
 		}
 		PageKey pageKey = new PageKey(page.getPageId(), Session.get().getId());
-		if (!subscriptions.containsEntry(pageKey, subscription))
-		{
-			subscriptions.put(pageKey, subscription);
-		}
+		subscriptions.remove(pageKey, subscription);
 	}
 
