@@ -4,16 +4,17 @@
 	@Override
 	public Session newSession(final Request request, final Response response)
 	{
+		Class<? extends AbstractAuthenticatedWebSession> webSessionClass = getWebSessionClass();
 		try
 		{
-			return webSessionClassRef.get()
+			return webSessionClass
 				.getDeclaredConstructor(Request.class)
 				.newInstance(request);
 		}
 		catch (Exception e)
 		{
 			throw new WicketRuntimeException("Unable to instantiate web session " +
-				webSessionClassRef.get(), e);
+				webSessionClass, e);
 		}
 	}
 
