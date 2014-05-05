@@ -35,9 +35,7 @@
 						if (!pageClass.equals(application.getHomePage()))
 						{
 							// WICKET-5094 only enforce mount if page is mounted
-							Url reverseUrl = application.getRootRequestMapper().mapHandler(
-								new RenderPageRequestHandler(new PageProvider(pageClass)));
-							if (!matches(request.cloneWithUrl(reverseUrl)))
+							if (isPageMounted(pageClass, application))
 							{
 								return null;
 							}
