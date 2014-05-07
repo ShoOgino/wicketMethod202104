@@ -6,9 +6,10 @@
 		{
 			for (ComponentTag tag = context.takeTag(); tag != null; tag = context.takeTag())
 			{
-				if (tag.getAutoComponentFactory() != null)
+				ComponentTag.IAutoComponentFactory autoComponentFactory = tag.getAutoComponentFactory();
+				if (autoComponentFactory != null)
 				{
-					queue(tag.getAutoComponentFactory().newComponent(tag));
+					queue(autoComponentFactory.newComponent(tag));
 				}
 			}
 		}
