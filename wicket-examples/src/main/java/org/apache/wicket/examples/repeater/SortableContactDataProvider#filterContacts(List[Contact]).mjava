@@ -1,0 +1,26 @@
+	private List<Contact> filterContacts(List<Contact> contactsFound)
+	{
+	    ArrayList<Contact> result = new ArrayList<>();
+	    Date dateFrom = contactFilter.getDateFrom();
+	    Date dateTo = contactFilter.getDateTo();
+	    
+	    for (Contact contact : contactsFound)
+	    {
+		Date bornDate = contact.getBornDate();
+		
+		if(dateFrom != null && bornDate.before(dateFrom))
+		{
+		    continue;
+		}
+		
+		if(dateTo != null && bornDate.after(dateTo))
+		{
+		    continue;
+		}
+		
+		result.add(contact);
+	    }
+	    
+	    return result;
+	}
+

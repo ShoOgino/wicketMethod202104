@@ -1,6 +1,10 @@
 	@Override
 	public Iterator<Contact> iterator(long first, long count)
 	{
-		return getContactsDB().find(first, count, getSort()).iterator();
+		List<Contact> contactsFound = getContactsDB().getIndex(getSort());
+		
+		return filterContacts(contactsFound).
+			subList((int)first, (int)(first + count)).
+			iterator();
 	}
 
