@@ -1,6 +1,3 @@
-	/**
-	 * @see org.apache.wicket.request.resource.AbstractResource#newResourceResponse(org.apache.wicket.request.resource.IResource.Attributes)
-	 */
 	@Override
 	protected ResourceResponse newResourceResponse(final Attributes attributes)
 	{
@@ -21,18 +18,21 @@
 			}
 		}
 
-
 		response.setContentType(contentType);
 		response.setLastModified(lastModified);
 
-		final byte[] data = getData(attributes);
+		final T data = getData(attributes);
 		if (data == null)
 		{
 			response.setError(HttpServletResponse.SC_NOT_FOUND);
 		}
 		else
 		{
-			response.setContentLength(data.length);
+			Long length = getLength(data);
+			if (length != null)
+			{
+				response.setContentLength(length);
+			}
 
 			if (response.dataNeedsToBeWritten(attributes))
 			{
@@ -51,7 +51,7 @@
 					@Override
 					public void writeData(final Attributes attributes)
 					{
-						attributes.getResponse().write(data);
+						BaseDataResource.this.writeData(attributes.getResponse(), data);
 					}
 				});
 
