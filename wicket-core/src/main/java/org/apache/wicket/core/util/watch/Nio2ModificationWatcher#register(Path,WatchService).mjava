@@ -1,6 +1,7 @@
 	private void register(final Path folder, final WatchService watchService) throws IOException
 	{
-		LOG.debug("Registering folder '{}'", folder);
-		folder.register(watchService, ENTRY_CREATE);
+		WatchEvent.Kind[] watchedKinds = getWatchedKinds(folder);
+		LOG.debug("Registering folder '{}' to the watching service with kinds: {}", folder, watchedKinds);
+		folder.register(watchService, watchedKinds);
 	}
 

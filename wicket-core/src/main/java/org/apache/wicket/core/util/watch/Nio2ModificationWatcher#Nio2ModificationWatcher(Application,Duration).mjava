@@ -1,0 +1,25 @@
+	/**
+	 * Constructor.
+	 *
+	 * @param application
+	 *              The application that manages the caches
+	 * @param pollFrequency
+	 *              How often to check on <code>IModifiable</code>s
+	 */
+	public Nio2ModificationWatcher(final Application application, Duration pollFrequency)
+	{
+		try
+		{
+			this.application = application;
+
+			this.watchService = FileSystems.getDefault().newWatchService();
+			registerWatchables(watchService);
+
+			start(pollFrequency);
+
+		} catch (IOException iox)
+		{
+			throw new WicketRuntimeException("Cannot get the watch service", iox);
+		}
+	}
+

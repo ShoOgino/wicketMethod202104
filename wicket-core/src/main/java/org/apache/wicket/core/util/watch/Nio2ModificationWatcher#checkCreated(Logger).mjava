@@ -1,0 +1,37 @@
+	/**
+	 * Checks for newly created files and folders.
+	 * New folders are registered to be watched.
+	 * New files are removed from the MarkupCache because there could be
+	 * {@link org.apache.wicket.markup.Markup#NO_MARKUP} (Not Found) entries for them already.
+	 * @param log
+	 *              a logger that can be used to log the events
+	 */
+	protected void checkCreated(Logger log)
+	{
+		WatchKey watchKey = watchService.poll();
+		if (watchKey != null)
+		{
+			List<WatchEvent<?>> events = watchKey.pollEvents();
+			for (WatchEvent<?> event : events)
+			{
+				WatchEvent.Kind<?> eventKind = event.kind();
+				Path eventPath = (Path) event.context();
+
+				if (eventKind == ENTRY_CREATE)
+				{
+					entryCreated(eventPath, log);
+				}
+				else if (eventKind == ENTRY_DELETE)
+				{
+					entryDeleted(eventPath, log);
+				}
+				else if (eventKind == ENTRY_MODIFY)
+				{
+					entryModified(eventPath, log);
+				}
+			}
+
+			watchKey.reset();
+		}
+	}
+

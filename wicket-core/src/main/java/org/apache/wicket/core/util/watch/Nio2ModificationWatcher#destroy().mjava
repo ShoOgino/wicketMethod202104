@@ -1,10 +1,17 @@
 	@Override
 	public void destroy()
 	{
-		if (task != null)
+		try
 		{
-			task.interrupt();
+			super.destroy();
+
+			if (task != null)
+			{
+				task.interrupt();
+			}
+		} finally
+		{
+			IOUtils.closeQuietly(watchService);
 		}
-		IOUtils.closeQuietly(watchService);
 	}
 

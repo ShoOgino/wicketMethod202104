@@ -1,0 +1,38 @@
+	/**
+	 * A callback method called when a new Path entry is created
+	 *
+	 * @param path
+	 *              the new path entry
+	 * @param log
+	 *              a logger that can be used to log the events
+	 */
+	protected void entryCreated(Path path, Logger log)
+	{
+		if (Files.isDirectory(path))
+		{
+			try
+			{
+				// a directory is created. register it for notifications
+				register(path, watchService);
+			} catch (IOException iox)
+			{
+				log.warn("Cannot register folder '" + path + "' to be watched.", iox);
+			}
+		}
+		else
+		{
+			// A new file is created. We need to clear the NOT_FOUND entry that may have been added earlier.
+			// MarkupCache keys are fully qualified URIs
+			String absolutePath = path.toAbsolutePath().toFile().toURI().toString();
+
+			try
+			{
+				ThreadContext.setApplication(application);
+				application.getMarkupSettings()
+						.getMarkupFactory().getMarkupCache().removeMarkup(absolutePath);
+			} finally {
+				ThreadContext.setApplication(null);
+			}
+		}
+	}
+
