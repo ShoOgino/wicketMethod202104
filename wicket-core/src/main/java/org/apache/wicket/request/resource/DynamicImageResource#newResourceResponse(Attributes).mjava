@@ -14,8 +14,6 @@
 
 		if (response.dataNeedsToBeWritten(attributes))
 		{
-			response.setContentType("image/" + getFormat());
-
 			response.setContentDisposition(ContentDisposition.INLINE);
 
 			final byte[] imageData = getImageData(attributes);
@@ -25,6 +23,7 @@
 			}
 			else
 			{
+				response.setContentType("image/" + getFormat());
 				response.setWriteCallback(new WriteCallback()
 				{
 					@Override
