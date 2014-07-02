@@ -1,0 +1,13 @@
+		SendPayloadWithContextTestPage()
+		{
+			add(new WebSocketBehavior()
+			{
+				@Override
+				protected void onMessage(WebSocketRequestHandler handler, TextMessage ignored)
+				{
+					// send an outbound message with the current context encoded as String
+					handler.push(String.valueOf(context.get()));
+				}
+			});
+		}
+
