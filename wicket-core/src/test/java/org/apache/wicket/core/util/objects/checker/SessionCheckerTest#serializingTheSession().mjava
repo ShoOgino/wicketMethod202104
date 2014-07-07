@@ -1,0 +1,25 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5634
+	 *
+	 * Tests that the serialization fails when a checking ObjectOutputStream is
+	 * used with SessionChecker and there is a component in the object tree that
+	 * keeps a reference to the Wicket Session.
+	 */
+	@Test
+	public void serializingTheSession()
+	{
+		JavaSerializer serializer = new JavaSerializer("JavaSerializerTest")
+		{
+			@Override
+			protected ObjectOutputStream newObjectOutputStream(OutputStream out) throws IOException
+			{
+				IObjectChecker checker = new SessionChecker();
+				return new CheckingObjectOutputStream(out, checker);
+			}
+		};
+
+		WebComponent component = new ComponentWithAReferenceToTheSession("id");
+		byte[] serialized = serializer.serialize(component);
+		assertNull("The produced byte[] must be null if there was an error", serialized);
+	}
+

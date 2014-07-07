@@ -1,0 +1,27 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5634
+	 *
+	 * Tests that the serialization fails when a checking ObjectOutputStream is
+	 * used with DifferentPageChecker and there is a component in the object tree that
+	 * keeps a reference to a page which is not component.getPage()..
+	 */
+	@Test
+	public void serializingAnotherPage()
+	{
+		JavaSerializer serializer = new JavaSerializer("JavaSerializerTest")
+		{
+			@Override
+			protected ObjectOutputStream newObjectOutputStream(OutputStream out) throws IOException
+			{
+				IObjectChecker checker = new DifferentPageChecker();
+				return new CheckingObjectOutputStream(out, checker);
+			}
+		};
+
+		WebComponent component = new ComponentThatKeepsAReferenceToAnotherPage(MockPageWithLink.LINK_ID);
+		MockPageWithLink rootPage = new MockPageWithLink();
+		rootPage.add(component);
+		byte[] serialized = serializer.serialize(rootPage);
+		assertNull("The produced byte[] must be null if there was an error", serialized);
+	}
+
