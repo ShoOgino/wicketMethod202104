@@ -1,0 +1,24 @@
+	/**
+	 * Calls {@linkplain #onValidateModelObjects()} on this form and all
+	 * nested forms that are visible and enabled
+	 */
+	private void internalOnValidateModelObjects()
+	{
+		onValidateModelObjects();
+		visitChildren(Form.class, new IVisitor<Form<?>, Void>()
+		{
+			@Override
+			public void component(Form<?> nestedForm, IVisit<Void> visit)
+			{
+				if (nestedForm.isEnabledInHierarchy() && nestedForm.isVisibleInHierarchy())
+				{
+					nestedForm.onValidateModelObjects();
+				}
+				else
+				{
+					visit.dontGoDeeper();
+				}
+			}
+		});
+	}
+
