@@ -1,0 +1,20 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5578
+	 * 
+	 * Listener interfaces for stateless component must be invoked also for 
+	 * "lazy" stateless pages.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void statelessListenerInterfaceInvoked() throws Exception
+	{
+	    tester.startPage(StatelessListenerPage.class);
+	    tester.assertRenderedPage(StatelessListenerPage.class);
+	    
+	    FormTester formTester = tester.newFormTester("statelessForm");
+	    formTester.submit();
+	    
+	    tester.assertRenderedPage(EmptyPage.class);	    
+	}
+
