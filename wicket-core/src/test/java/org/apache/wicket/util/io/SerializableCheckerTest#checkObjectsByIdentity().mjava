@@ -1,0 +1,20 @@
+	/**
+	 * Asserts that {@link org.apache.wicket.core.util.objects.checker.CheckingObjectOutputStream}
+	 * will check an instance just once, despite it occurs more than once in the object tree
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-5642
+	 *
+	 * @throws IOException
+	 */
+	@Test
+	public void checkObjectsByIdentity() throws IOException
+	{
+		CountingChecker countingChecker = new CountingChecker();
+		CheckingObjectOutputStream outputStream = new CheckingObjectOutputStream(new ByteArrayOutputStream(), countingChecker);
+		final IdentityTestType type = new IdentityTestType();
+		type.member = new SerializableTypeWithMember(type);
+		outputStream.writeObject(type);
+
+		assertThat(countingChecker.getCount(), is(2));
+	}
+
