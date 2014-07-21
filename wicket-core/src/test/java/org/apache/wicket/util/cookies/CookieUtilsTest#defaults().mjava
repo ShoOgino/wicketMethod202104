@@ -1,0 +1,18 @@
+	@Test
+	public void defaults()
+	{
+		CookieDefaults defaults = new CookieDefaults();
+		defaults.setComment("A comment");
+		defaults.setDomain("A domain");
+		defaults.setMaxAge(123);
+		defaults.setSecure(true);
+		defaults.setVersion(456);
+		CookieUtils utils = new CookieUtils(defaults);
+		String value1 = "value one";
+		String key = "key";
+		utils.save(key, value1);
+		before(); // execute a request cycle, so the response cookie is send with the next request
+		Cookie result = utils.getCookie(key);
+		assertThat(result.getComment(), is(equalTo(defaults.getComment())));
+	}
+

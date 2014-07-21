@@ -1,0 +1,14 @@
+	@Test
+	public void saveLoadValues()
+	{
+		CookieUtils utils = new CookieUtils();
+		String value1 = "value one";
+		String value2 = "value two";
+		String value3 = "value three";
+		String key = "key";
+		utils.save(key, value1, value2, value3);
+		before(); // execute a request cycle, so the response cookie is send with the next request
+		String[] result = utils.loadValues(key);
+		assertThat(result, is(Matchers.arrayContaining(value1, value2, value3)));
+	}
+
