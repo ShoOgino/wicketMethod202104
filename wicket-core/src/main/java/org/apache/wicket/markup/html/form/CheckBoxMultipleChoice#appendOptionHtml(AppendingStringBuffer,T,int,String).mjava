@@ -42,6 +42,31 @@
 			String id = getChoiceRenderer().getIdValue(choice, index);
 			final String idAttr = getCheckBoxMarkupId(id);
 
+			// Add label for checkbox
+			String display = label;
+			if (localizeDisplayValues())
+			{
+				display = getLocalizer().getString(label, this, label);
+			}
+
+			final CharSequence escaped = (getEscapeModelStrings() ? Strings.escapeMarkup(display)
+					: display);
+
+			switch (labelPosition)
+			{
+				case BEFORE:
+					buffer.append("<label for=\"");
+					buffer.append(idAttr);
+					buffer.append("\">").append(escaped).append("</label>");
+					break;
+				case WRAP_AFTER:
+					buffer.append("<label>");
+				case WRAP_BEFORE:
+					buffer.append("<label>");
+					buffer.append(escaped).append(' ');
+					break;
+			}
+
 			// Add checkbox element
 			buffer.append("<input name=\"");
 			buffer.append(getInputName());
@@ -98,19 +123,20 @@
 
 			buffer.append("/>");
 
-			// Add label for checkbox
-			String display = label;
-			if (localizeDisplayValues())
+			switch (labelPosition)
 			{
-				display = getLocalizer().getString(label, this, label);
+				case WRAP_BEFORE:
+					buffer.append("</label>");
+					break;
+				case WRAP_AFTER:
+					buffer.append(' ').append(escaped).append("</label>");
+					break;
+				case AFTER:
+					buffer.append("<label for=\"");
+					buffer.append(idAttr);
+					buffer.append("\">").append(escaped).append("</label>");
+					break;
 			}
-
-			final CharSequence escaped = (getEscapeModelStrings() ? Strings.escapeMarkup(display)
-				: display);
-
-			buffer.append("<label for=\"");
-			buffer.append(idAttr);
-			buffer.append("\">").append(escaped).append("</label>");
 
 			// Append option suffix
 			buffer.append(getSuffix(index, choice));
