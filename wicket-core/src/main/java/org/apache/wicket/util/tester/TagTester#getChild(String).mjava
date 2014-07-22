@@ -1,0 +1,26 @@
+	/**
+	 * Checks if the tag has a child with the given <code>tagName</code>.
+	 *
+	 * @param tagName
+	 *            the tag name to search for
+	 * @return <code>true</code> if this tag has a child with the given <code>tagName</code>.
+	 */
+	public TagTester getChild(String tagName)
+	{
+		Args.notNull(tagName, "tagName");
+
+		TagTester childTagTester = null;
+
+		if (openTag.isOpen())
+		{
+			// Get the content of the tag
+			int startPos = openTag.getPos() + openTag.getLength();
+			int endPos = closeTag.getPos();
+			String markup = parser.getInput(startPos, endPos).toString();
+
+			childTagTester = createTagByAttribute(markup, tagName);
+		}
+
+		return childTagTester;
+	}
+

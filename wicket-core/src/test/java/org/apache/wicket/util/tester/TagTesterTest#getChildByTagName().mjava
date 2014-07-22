@@ -1,0 +1,19 @@
+	@Test
+	public void getChildByTagName()
+	{
+		TagTester tester = TagTester.createTagByAttribute(
+			"<div id=\"id\">" +
+				"<div class=\"radio\">" +
+					"<label>" +
+						"<input name=\"id\" type=\"radio\" value=\"0\" id=\"id1-0\"/> One" +
+					"</label>" +
+				"</div>" +
+			"</div>", "id", "id");
+		assertThat(tester.getChild("DIV"), is(notNullValue())); // case-insensitive
+		TagTester divClassRadioTagTester = tester.getChild("div");
+		assertThat(divClassRadioTagTester, is(notNullValue()));
+		TagTester labelTagTester = divClassRadioTagTester.getChild("label");
+		String labelMarkup = labelTagTester.getValue();
+		assertThat(labelMarkup, endsWith(" One"));
+	}
+
