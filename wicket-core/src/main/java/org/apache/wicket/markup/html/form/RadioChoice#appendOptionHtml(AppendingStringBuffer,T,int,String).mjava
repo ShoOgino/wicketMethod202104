@@ -46,6 +46,60 @@
 
 			boolean enabled = isEnabledInHierarchy() && !isDisabled(choice, index, selected);
 
+			// Add label for radio button
+			String display = label;
+			if (localizeDisplayValues())
+			{
+				display = getLocalizer().getString(label, this, label);
+			}
+
+			CharSequence escaped = display;
+			if (getEscapeModelStrings())
+			{
+				escaped = Strings.escapeMarkup(display);
+			}
+
+			// Allows user to add attributes to the <label..> tag
+			IValueMap labelAttrs = getAdditionalAttributesForLabel(index, choice);
+			StringBuilder extraLabelAttributes = new StringBuilder();
+			if (labelAttrs != null)
+			{
+				for (Map.Entry<String, Object> attr : labelAttrs.entrySet())
+				{
+					extraLabelAttributes.append(' ')
+							.append(attr.getKey())
+							.append("=\"")
+							.append(attr.getValue())
+							.append('"');
+				}
+			}
+
+			switch (labelPosition)
+			{
+				case BEFORE:
+
+					buffer.append("<label for=\"")
+							.append(idAttr)
+							.append('"')
+							.append(extraLabelAttributes)
+							.append('>')
+							.append(escaped)
+							.append("</label>");
+					break;
+				case WRAP_BEFORE:
+					buffer.append("<label")
+							.append(extraLabelAttributes)
+							.append('>')
+							.append(escaped)
+							.append(' ');
+					break;
+				case WRAP_AFTER:
+					buffer.append("<label")
+							.append(extraLabelAttributes)
+							.append('>');
+					break;
+			}
+
 			// Add radio tag
 			buffer.append("<input name=\"")
 				.append(getInputName())
@@ -122,43 +176,26 @@
 
 			buffer.append("/>");
 
-			// Add label for radio button
-			String display = label;
-			if (localizeDisplayValues())
+			switch (labelPosition)
 			{
-				display = getLocalizer().getString(label, this, label);
+				case AFTER:
+					buffer.append("<label for=\"")
+							.append(idAttr)
+							.append('"')
+							.append(extraLabelAttributes)
+							.append('>')
+							.append(escaped)
+							.append("</label>");
+					break;
+				case WRAP_BEFORE:
+					buffer.append("</label>");
+					break;
+				case WRAP_AFTER:
+					buffer.append(' ')
+							.append(escaped)
+							.append("</label>");
+					break;
 			}
-
-			CharSequence escaped = display;
-			if (getEscapeModelStrings())
-			{
-				escaped = Strings.escapeMarkup(display);
-			}
-
-			buffer.append("<label for=\"")
-				.append(idAttr)
-				.append('"');
-
-			// Allows user to add attributes to the <label..> tag
-			{
-				IValueMap labelAttrs = getAdditionalAttributesForLabel(index, choice);
-				if (labelAttrs != null)
-				{
-					for (Map.Entry<String, Object> attr : labelAttrs.entrySet())
-					{
-						buffer.append(' ')
-								.append(attr.getKey())
-								.append("=\"")
-								.append(attr.getValue())
-								.append('"');
-					}
-				}
-			}
-
-			buffer
-				.append('>')
-				.append(escaped)
-				.append("</label>");
 
 			// Append option suffix
 			buffer.append(getSuffix(index, choice));

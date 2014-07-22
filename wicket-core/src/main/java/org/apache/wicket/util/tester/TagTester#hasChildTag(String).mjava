@@ -1,18 +1,15 @@
 	/**
 	 * Checks if the tag has a child with the given <code>tagName</code>.
-	 * 
+	 *
 	 * @param tagName
 	 *            the tag name to search for
 	 * @return <code>true</code> if this tag has a child with the given <code>tagName</code>.
 	 */
 	public boolean hasChildTag(String tagName)
 	{
-		boolean hasChild = false;
+		Args.notEmpty(tagName, "tagName");
 
-		if (Strings.isEmpty(tagName))
-		{
-			throw new IllegalArgumentException("You need to provide a not empty/not null argument.");
-		}
+		boolean hasChild = false;
 
 		if (openTag.isOpen())
 		{
@@ -28,7 +25,7 @@
 					XmlPullParser p = new XmlPullParser();
 					p.parse(markup);
 
-					XmlTag tag = null;
+					XmlTag tag;
 					while ((tag = p.nextTag()) != null)
 					{
 						if (tagName.equalsIgnoreCase(tag.getName()))
@@ -41,10 +38,8 @@
 			}
 			catch (Exception e)
 			{
-				// NOTE: IllegalStateException(Throwable) only exists since Java 1.5
 				throw new WicketRuntimeException(e);
 			}
-
 		}
 
 		return hasChild;
