@@ -16,7 +16,7 @@
 			Files.removeFolderAsync(nonExistingFolder, fileCleaner));
 		assertFalse(nonExistingFolder.exists());
 
-		java.io.File folder = new File(System.getProperty("java.io.tmpdir"), "wicket-test-folder");
+		java.io.File folder = getFolder();
 		Files.mkdirs(folder);
 		assertTrue(folder.isDirectory());
 		File file = new File(folder, "child");
@@ -25,9 +25,15 @@
 
 		assertTrue("The folder is scheduled for deletion.",
 			Files.removeFolderAsync(folder, fileCleaner));
+
+		// remove the reference to the folder to be deleted
+		// this way the FileCleaningTracker's ReferenceQueue will mark it as eligible for GC
+		folder = null;
+
 		// give chance to the file cleaner to run and delete the folder
 		System.gc();
 		Thread.sleep(5);
-		assertFalse("", folder.exists());
+		java.io.File newFolderReference = getFolder();
+		assertFalse("The folder still exists", newFolderReference.exists());
 	}
 
