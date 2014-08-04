@@ -6,10 +6,10 @@
 			// We need to find a FormComponent...
 			Component related = null;
 			// ...which could be explicitly specified...
-			if (tag.getAttribute("for") != null)
+			String forAttributeValue = tag.getAttribute("for");
+			if (forAttributeValue != null)
 			{
-				Component component = AutoLabelResolver.findRelatedComponent(container,
-					tag.getAttribute("for"));
+				Component component = AutoLabelResolver.findRelatedComponent(container, forAttributeValue);
 				related = component;
 			}
 			if (related == null)
@@ -32,7 +32,8 @@
 			if (related == null)
 			{
 				// ...or it might just not be available.
-				throw new IllegalStateException("no related component found for <wicket:label>");
+				String forAttr = forAttributeValue != null ? " for=\"" + forAttributeValue + "\"" : "";
+				throw new ComponentNotFoundException("no related component found for <wicket:label"+forAttr+">");
 			}
 			else
 			{
