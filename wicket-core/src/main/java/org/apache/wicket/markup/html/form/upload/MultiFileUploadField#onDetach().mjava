@@ -4,24 +4,27 @@
 	@Override
 	protected void onDetach()
 	{
-		// cleanup any opened filestreams
-		Collection<FileUpload> uploads = getConvertedInput();
-		if (uploads != null)
+		if (forceCloseStreamsOnDetach())
 		{
-			for (FileUpload upload : uploads)
+			// cleanup any opened filestreams
+			Collection<FileUpload> uploads = getConvertedInput();
+			if (uploads != null)
 			{
-				upload.closeStreams();
+				for (FileUpload upload : uploads)
+				{
+					upload.closeStreams();
+				}
 			}
-		}
 
-		// cleanup any caches
-		inputArrayCache = null;
+			// cleanup any caches
+			inputArrayCache = null;
 
-		// clean up the model because we don't want FileUpload objects in session
-		Collection<FileUpload> modelObject = getModelObject();
-		if (modelObject != null)
-		{
-			modelObject.clear();
+			// clean up the model because we don't want FileUpload objects in session
+			Collection<FileUpload> modelObject = getModelObject();
+			if (modelObject != null)
+			{
+				modelObject.clear();
+			}
 		}
 
 		super.onDetach();
