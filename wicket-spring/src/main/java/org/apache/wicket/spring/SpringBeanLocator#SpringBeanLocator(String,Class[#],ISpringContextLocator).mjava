@@ -11,14 +11,8 @@
 	public SpringBeanLocator(final String beanName, final Class<?> beanType,
 		final ISpringContextLocator locator)
 	{
-		if (locator == null)
-		{
-			throw new IllegalArgumentException("[locator] argument cannot be null");
-		}
-		if (beanType == null)
-		{
-			throw new IllegalArgumentException("[beanType] argument cannot be null");
-		}
+		Args.notNull(locator, "locator");
+		Args.notNull(beanType, "beanType");
 
 		beanTypeCache = new WeakReference<Class<?>>(beanType);
 		beanTypeName = beanType.getName();

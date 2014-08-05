@@ -8,11 +8,10 @@
 	 *            bean name
 	 * @param clazz
 	 *            bean class
-	 * @throws IllegalStateException
+	 * @throws java.lang.IllegalStateException
 	 * @return found bean
 	 */
-	private static Object lookupSpringBean(final ApplicationContext ctx, final String name,
-		final Class<?> clazz)
+	private Object lookupSpringBean(ApplicationContext ctx, String name, Class<?> clazz)
 	{
 		try
 		{
@@ -28,7 +27,7 @@
 		catch (NoSuchBeanDefinitionException e)
 		{
 			throw new IllegalStateException("bean with name [" + name + "] and class [" +
-				clazz.getName() + "] not found");
+				clazz.getName() + "] not found", e);
 		}
 	}
 
