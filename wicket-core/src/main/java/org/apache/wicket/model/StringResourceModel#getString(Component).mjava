@@ -2,15 +2,6 @@
 	{
 
 		final Localizer localizer = getLocalizer();
-		final Locale locale;
-		if (component != null)
-		{
-			locale = component.getLocale();
-		}
-		else
-		{
-			locale = Session.exists() ? Session.get().getLocale() : Locale.getDefault();
-		}
 
 		String value;
 
@@ -72,7 +63,7 @@
 				}
 
 				// Apply the parameters
-				final MessageFormat format = new MessageFormat(value, locale);
+				final MessageFormat format = new MessageFormat(value, getLocale());
 				value = format.format(realParams);
 
 				if (model != null)
