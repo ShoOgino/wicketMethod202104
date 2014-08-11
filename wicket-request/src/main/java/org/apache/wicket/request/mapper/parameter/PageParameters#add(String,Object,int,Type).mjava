@@ -1,11 +1,7 @@
-	/**
-	 * @see org.apache.wicket.request.mapper.parameter.INamedParameters#add(java.lang.String,
-	 *      java.lang.Object, int)
-	 */
 	@Override
-	public PageParameters add(final String name, final Object value, final int index)
+	public PageParameters add(final String name, final Object value, final int index, Type type)
 	{
-		Args.notNull(name, "name");
+		Args.notEmpty(name, "name");
 		Args.notNull(value, "value");
 
 		if (namedParameters == null)
@@ -25,7 +21,7 @@
 
 		for (String val : values)
 		{
-			NamedPair entry = new NamedPair(name, val);
+			NamedPair entry = new NamedPair(name, val, type);
 
 			if (index < 0 || index > namedParameters.size())
 			{
