@@ -1,0 +1,22 @@
+	@Override
+	public List<NamedPair> getAllNamedByType(Type type)
+	{
+		List<NamedPair> allNamed = getAllNamed();
+		if (type == null || allNamed.isEmpty())
+		{
+			return allNamed;
+		}
+
+		List<NamedPair> parametersByType = new ArrayList<>();
+		Iterator<NamedPair> iterator = allNamed.iterator();
+		while (iterator.hasNext())
+		{
+			NamedPair pair = iterator.next();
+			if (type == pair.getType())
+			{
+				parametersByType.add(pair);
+			}
+		}
+		return Collections.unmodifiableList(parametersByType);
+	}
+
