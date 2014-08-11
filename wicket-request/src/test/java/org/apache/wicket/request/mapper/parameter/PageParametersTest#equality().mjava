@@ -1,0 +1,19 @@
+	/**
+	 * NamedPairs equality should not depend on the type
+	 *
+	 * https://issues.apache.org/jira/browse/WICKET-5669
+	 */
+	@Test
+	public void equality()
+	{
+		PageParameters p1 = new PageParameters()
+				.add("a", "b", INamedParameters.Type.MANUAL)
+				.set("c", "d", INamedParameters.Type.MANUAL);
+
+		PageParameters p2 = new PageParameters()
+				.set("a", "b", INamedParameters.Type.QUERY_STRING)
+				.add("c", "d", INamedParameters.Type.PATH);
+
+		assertThat(p1, is(equalTo(p2)));
+	}
+
