@@ -3,10 +3,10 @@
 	{
 		if (log.isDebugEnabled())
 		{
-			String transport = event.getResource().getRequest().getHeader("X-Atmosphere-Transport");
-			HttpServletRequest req = event.getResource().getRequest();
+			AtmosphereRequest atmosphereRequest = event.getResource().getRequest();
+			String transport = atmosphereRequest.getHeader("X-Atmosphere-Transport");
 			log.debug(String.format("%s connection dropped from ip %s:%s", transport == null
-				? "websocket" : transport, req.getRemoteAddr(), req.getRemotePort()));
+				? "websocket" : transport, atmosphereRequest.getRemoteAddr(), atmosphereRequest.getRemotePort()));
 		}
 		// It is possible that the application has already been destroyed, in which case
 		// unregistration is no longer needed
