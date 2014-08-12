@@ -1,0 +1,34 @@
+	/**
+	 * Checks whether the url starts with the given segments and additionally
+	 * checks whether the following segment is non-empty
+	 *
+	 * @param url
+	 *          The url to be checked
+	 * @param segments
+	 *          The expected leading segments
+	 * @return {@code true} if the url starts with the given segments and there is non-empty segment after them
+	 */
+	protected boolean urlStartsWithAndHasPageClass(Url url, String... segments)
+	{
+		boolean result = urlStartsWith(url, segments);
+
+		if (result)
+		{
+			List<String> urlSegments = url.getSegments();
+			if (urlSegments.size() == segments.length)
+			{
+				result = false;
+			}
+			else
+			{
+				String pageClassSegment = urlSegments.get(segments.length);
+				if (Strings.isEmpty(pageClassSegment))
+				{
+					result = false;
+				}
+			}
+		}
+
+		return result;
+	}
+
