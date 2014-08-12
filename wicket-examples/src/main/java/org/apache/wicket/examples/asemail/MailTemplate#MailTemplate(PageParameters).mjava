@@ -15,7 +15,7 @@
 		final Form<Void> form = new Form<>("form");
 		add(form);
 
-		TextField<String> nameTextField = new TextField<String>("name", new PropertyModel<String>(
+		TextField<String> nameTextField = new TextField<>("name", new PropertyModel<String>(
 			MailTemplate.this, "name"));
 		nameTextField.setOutputMarkupId(true);
 		form.add(nameTextField);
@@ -32,7 +32,7 @@
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
 				PageParameters parameters = new PageParameters();
-				parameters.set("name", name, INamedParameters.Type.MANUAL);
+				parameters.set("name", name);
 				PageProvider pageProvider = new PageProvider(TemplateBasedOnPage. class, parameters);
 				CharSequence pageHtml = ComponentRenderer.renderPage(pageProvider);
 
