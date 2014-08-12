@@ -10,6 +10,7 @@
 				super.updateTime(target, event);
 
 				System.err.println("updateTime");
+				target.appendJavaScript("updateTime is executed");
 			}
 
 			@Subscribe(contextAwareFilter = ReceiverFilter.class)
@@ -27,6 +28,8 @@
 
 		Date payload = new Date();
 		waTester.post(payload);
+
+		System.err.println(tester.getLastResponseAsString());
 
 		tester.destroy();
 	}
