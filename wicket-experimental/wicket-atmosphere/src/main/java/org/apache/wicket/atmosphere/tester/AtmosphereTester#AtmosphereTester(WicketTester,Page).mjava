@@ -1,4 +1,4 @@
-	public WicketAtmosphereTester(final WicketTester wicketTester, Page page)
+	public AtmosphereTester(final WicketTester wicketTester, Page page)
 	{
 		WebApplication application = wicketTester.getApplication();
 		this.eventBus = new TesterEventBus(application);
@@ -22,13 +22,14 @@
 
 				String uuid = atmosphereResource.uuid();
 				Page page = getComponent().getPage();
-				eventBus.eventSubscriptionCollector.onBeforeRender(page);
+
 				page.setMetaData(ATMOSPHERE_UUID, uuid);
 				eventBus.registerPage(uuid, page);
 			}
 		};
 		page.add(atmosphereBehavior);
 
+		wicketTester.startPage(page);
 		wicketTester.executeBehavior(atmosphereBehavior);
 	}
 
