@@ -10,9 +10,15 @@
 		}
 		// It is possible that the application has already been destroyed, in which case
 		// unregistration is no longer needed
+		EventBus eventBus = findEventBus();
 		if (Application.get(applicationKey) != null)
 		{
-			findEventBus().unregisterConnection(event.getResource().uuid());
+			eventBus.unregisterConnection(event.getResource().uuid());
+		}
+
+		if (eventBus.isWantAtmosphereNotifications())
+		{
+			eventBus.post(new AtmosphereInternalEvent(AtmosphereInternalEvent.Type.Disconnect, event));
 		}
 	}
 
