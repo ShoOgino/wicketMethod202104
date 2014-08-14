@@ -1,0 +1,21 @@
+	private void initialize(final WicketTester wicketTester, Page page)
+	{
+		// remove any already installed AtmosphereBehaviors on the page
+		List<AtmosphereBehavior> behaviors = page.getBehaviors(AtmosphereBehavior.class);
+		page.remove(behaviors.toArray(new AtmosphereBehavior[behaviors.size()]));
+
+		// install AtmosphereBehavior that doesn't use Meteor
+		AtmosphereBehavior atmosphereBehavior = new TesterAtmosphereBehavior(wicketTester, eventBus);
+		page.add(atmosphereBehavior);
+
+		// start the page to collect all @Subscribe methods in the component hierarchy
+		wicketTester.startPage(page);
+
+		// pretend it is a websocket connection
+		wicketTester.getRequest().setHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT, AtmosphereResource.TRANSPORT.WEBSOCKET.name());
+
+		// start the "upgrade" connection
+		suspendedResponse = wicketTester.getResponse();
+		wicketTester.executeBehavior(atmosphereBehavior);
+	}
+
