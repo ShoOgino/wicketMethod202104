@@ -1,0 +1,27 @@
+	private List<String> getViolationMessages(ConstraintViolation<?> violation,
+		ConstraintDescriptor<?> desc)
+	{
+		String defaultMessage = (String)desc.getAttributes().get("message");
+		String violationMessage = violation.getMessage();
+		String violationMessageTemplate = violation.getMessageTemplate();		
+		List<String> messages = new ArrayList<String>();
+
+		//violation message is considered only if it is different from
+		//the interpolated message
+		if (!Strings.isEqual(violationMessage, violationMessageTemplate))
+		{
+			messages.add(violationMessageTemplate);
+		}
+		
+		messages.add(violationMessage);
+		
+		//the default message is considered only if it is different from
+		//the violation message template
+		if (!Strings.isEqual(defaultMessage, violationMessageTemplate))
+		{
+			messages.add(defaultMessage);
+		}
+
+		return messages;
+	}
+

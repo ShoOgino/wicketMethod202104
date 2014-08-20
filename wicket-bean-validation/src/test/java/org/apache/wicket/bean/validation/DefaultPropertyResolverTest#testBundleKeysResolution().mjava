@@ -1,0 +1,49 @@
+	/**
+	 * Test custom bundle mechanism of jsr 303
+	 * 
+	 * https://issues.apache.org/jira/browse/WICKET-5654
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testBundleKeysResolution() throws Exception
+	{
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		DefaultViolationTranslator translator = new DefaultViolationTranslator();
+
+		// test with a too short password
+		BeanWithPassword bean = new BeanWithPassword("short");
+
+		Set<ConstraintViolation<BeanWithPassword>> constraintViolations = validator.validate(bean);
+		assertEquals(1, constraintViolations.size());
+
+		@SuppressWarnings("unchecked")
+		ConstraintViolation<BeanWithPassword> shortViolation = (ConstraintViolation<BeanWithPassword>)constraintViolations
+			.toArray()[0];
+
+		ValidationError error = translator.convert(shortViolation);
+
+		checkErrorBundleKeys(error, DEFAULT_BUNDLE_KEY + ".String", DEFAULT_BUNDLE_KEY);
+
+		// test with a password containing non-word chars
+		bean.setPassword("notWord&%$£");
+
+		constraintViolations = validator.validate(bean);
+		assertEquals(1, constraintViolations.size());
+
+		@SuppressWarnings("unchecked")
+		ConstraintViolation<BeanWithPassword> nonWordviolation = (ConstraintViolation<BeanWithPassword>)constraintViolations.toArray()[0];
+
+		error = translator.convert(nonWordviolation);
+
+		checkErrorBundleKeys(error, CUSTOM_BUNDLE_KEY + ".String", CUSTOM_BUNDLE_KEY,
+			DEFAULT_BUNDLE_KEY + ".String", DEFAULT_BUNDLE_KEY);
+
+		// test with a valid password
+		bean.setPassword("aValidPassword1234");
+
+		constraintViolations = validator.validate(bean);
+		assertEquals(0, constraintViolations.size());
+	}
+
