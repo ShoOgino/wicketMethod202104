@@ -7,28 +7,28 @@
 		SecurePackageResourceGuard guard = new SecurePackageResourceGuard();
 		guard.setAllowAccessToRootResources(false);
 		guard.addPattern("+*.gif");
-		assertTrue(guard.accept(Application.class,
+		assertTrue(guard.accept(
 			Packages.absolutePath(Application.class, "test.gif")));
-		assertTrue(guard.accept(Application.class,
+		assertTrue(guard.accept(
 			Packages.absolutePath(Application.class, "mydir/test.gif")));
-		assertTrue(guard.accept(Application.class, "/root/mydir/test.gif"));
-		assertTrue(guard.accept(Application.class,
+		assertTrue(guard.accept("/root/mydir/test.gif"));
+		assertTrue(guard.accept(
 			Packages.absolutePath(Application.class, "../test.gif")));
-		assertTrue(guard.accept(Application.class,
+		assertTrue(guard.accept(
 			Packages.absolutePath(Application.class, "../../test.gif")));
 
 		// web-inf (root package)
-		assertFalse(guard.accept(Application.class,
+		assertFalse(guard.accept(
 			Packages.absolutePath(Application.class, "../../../test.gif")));
 		guard.setAllowAccessToRootResources(true);
-		assertTrue(guard.accept(Application.class,
+		assertTrue(guard.accept(
 			Packages.absolutePath(Application.class, "../../../test.gif")));
 
 		boolean hit = false;
 		try
 		{
 			// you can not go below root
-			assertTrue(guard.accept(Application.class,
+			assertTrue(guard.accept(
 				Packages.absolutePath(Application.class, "../../../../test.gif")));
 		}
 		catch (IllegalArgumentException ex)

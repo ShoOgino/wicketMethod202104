@@ -5,7 +5,6 @@
 				.getResourceStreamLocator();
 		IResourceStream resourceStream = resourceStreamLocator.locate(getScope(), absolutePath, style, variation, locale, null, false);
 
-		Class<?> realScope = getScope();
 		String realPath = absolutePath;
 		if (resourceStream instanceof IFixedLocationResourceStream)
 		{
@@ -17,11 +16,6 @@
 				{
 					realPath = realPath.substring(index);
 				}
-				else
-				{
-					// just fall back on the full path without a scope..
-					realScope = null;
-				}
 			}
 			else
 			{
@@ -30,7 +24,7 @@
 
 		}
 
-		if (accept(realScope, realPath) == false)
+		if (accept(realPath) == false)
 		{
 			throw new PackageResourceBlockedException(
 					"Access denied to (static) package resource " + absolutePath +
