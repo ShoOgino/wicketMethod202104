@@ -1,0 +1,20 @@
+	/**
+	 * testInjectionAndSerialization()
+	 */
+	@Test
+	public void testInjectionAndSerialization()
+	{
+		// Create a new component, which should be automatically injected,
+		// and test to make sure the injection has worked.
+		TestComponentInterface testComponent = newTestComponent("id");
+		doChecksForComponent(testComponent);
+
+		// Serialize and deserialize the object, and check it still works.
+		TestComponentInterface clonedComponent = (TestComponentInterface)WicketObjects.cloneObject(testComponent);
+		doChecksForComponent(clonedComponent);
+
+		// Test injection of a class that does not extend Component
+		TestNoComponentInterface noncomponent = newTestNoComponent();
+		doChecksForNoComponent(noncomponent);
+	}
+
