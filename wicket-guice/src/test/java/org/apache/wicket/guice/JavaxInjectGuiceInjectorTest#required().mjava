@@ -1,0 +1,28 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5686
+	 *
+	 * Wicket-Guice creates a lazy proxy that fails only when trying to use it
+	 *
+	 * @see org.apache.wicket.guice.GuiceFieldValueFactory#GuiceFieldValueFactory(boolean)
+	 */
+	@Test
+	public void required()
+	{
+		JavaxInjectTestComponent component = newTestComponent("id");
+
+		// get the lazy proxy
+		IAjaxCallListener nonExisting = component.getNonExisting();
+
+		try
+		{
+			// call any method on the lazy proxy
+			nonExisting.getAfterHandler(null);
+			fail("Fields annotated with @javax.inject.Inject are required!");
+		}
+		catch (ConfigurationException cx)
+		{
+			Message message = cx.getErrorMessages().iterator().next();
+			assertThat(message.getMessage(), is(equalTo("No implementation for org.apache.wicket.ajax.attributes.IAjaxCallListener was bound.")));
+		}
+	}
+

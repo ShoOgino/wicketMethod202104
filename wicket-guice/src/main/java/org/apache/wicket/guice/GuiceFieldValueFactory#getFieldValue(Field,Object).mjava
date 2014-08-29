@@ -14,9 +14,9 @@
 			{
 				try
 				{
+					boolean optional = injectAnnotation != null && injectAnnotation.optional();
 					Annotation bindingAnnotation = findBindingAnnotation(field.getAnnotations());
-					final IProxyTargetLocator locator = new GuiceProxyTargetLocator(field,
-						bindingAnnotation, injectAnnotation != null ? injectAnnotation.optional() : false);
+					final IProxyTargetLocator locator = new GuiceProxyTargetLocator(field, bindingAnnotation, optional);
 
 					if (wrapInProxies)
 					{
@@ -31,13 +31,6 @@
 					{
 						field.setAccessible(true);
 					}
-
-					field.set(fieldOwner, target);
-				}
-				catch (IllegalAccessException e)
-				{
-					throw new WicketRuntimeException("Error Guice-injecting field " +
-						field.getName() + " in " + fieldOwner, e);
 				}
 				catch (MoreThanOneBindingException e)
 				{

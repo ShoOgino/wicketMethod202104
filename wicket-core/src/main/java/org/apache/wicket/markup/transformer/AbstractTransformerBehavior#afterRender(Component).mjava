@@ -7,6 +7,11 @@
 		{
 			BufferedWebResponse tempResponse = (BufferedWebResponse)requestCycle.getResponse();
 
+			if (component instanceof Page && originalResponse instanceof WebResponse)
+			{
+				tempResponse.writeMetaData((WebResponse) originalResponse);
+			}
+
 			// Transform the data
 			CharSequence output = transform(component, tempResponse.getText());
 			originalResponse.write(output);
