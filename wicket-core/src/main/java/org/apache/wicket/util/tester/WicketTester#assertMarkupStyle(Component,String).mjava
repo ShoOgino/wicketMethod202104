@@ -1,0 +1,23 @@
+	/**
+	 * Asserts that a component's markup has loaded with the given style
+	 *
+	 * @param component
+	 *              The component which markup to check
+	 * @param expectedStyle
+	 *              The expected style of the component's markup
+	 */
+	public void assertMarkupStyle(Component component, String expectedStyle)
+	{
+		Result result = Result.PASS;
+		IMarkupFragment markup = getMarkupFragment(component);
+
+		String actualStyle = markup.getMarkupResourceStream().getStyle();
+		if (Objects.equal(expectedStyle, actualStyle) == false)
+		{
+			result = Result.fail(String.format("Wrong style for component '%s'. Actual: '%s', expected: '%s'",
+					component.getPageRelativePath(), actualStyle, expectedStyle));
+		}
+
+		assertResult(result);
+	}
+
