@@ -1,6 +1,11 @@
 	@Override
 	public Class<?> getType(final String name) throws NoSuchBeanDefinitionException
 	{
-		throw new UnsupportedOperationException();
+		Object bean = beans.get(name);
+		if (bean == null)
+		{
+			throw new NoSuchBeanDefinitionException("No bean with name '" + name + "'");
+		}
+		return bean.getClass();
 	}
 
