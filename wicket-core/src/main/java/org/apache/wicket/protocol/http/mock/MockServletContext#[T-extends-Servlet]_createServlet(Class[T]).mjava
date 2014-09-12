@@ -1,6 +1,13 @@
 	@Override
 	public <T extends Servlet> T createServlet(Class<T> clazz) throws ServletException
 	{
-		return null;
+		try
+		{
+			return clazz.newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
 	}
 

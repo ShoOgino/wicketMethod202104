@@ -1,6 +1,13 @@
 	@Override
 	public ServletRegistration.Dynamic addServlet(String servletName, Class<? extends Servlet> servletClass)
 	{
-		return null;
+		try
+		{
+			return addServlet(servletName, servletClass.newInstance());
+		}
+		catch (InstantiationException | IllegalAccessException e)
+		{
+			throw new WicketRuntimeException(e);
+		}
 	}
 
