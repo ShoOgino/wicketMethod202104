@@ -1,0 +1,26 @@
+	@Before
+	public void before()
+	{
+		tester = new WicketTester();
+		tester.getApplication().getRequestCycleListeners().add(new AbstractRequestCycleListener()
+		{
+			@Override
+			public void onBeginRequest(RequestCycle cycle)
+			{
+				beginRequestCalled.set(true);
+			}
+
+			@Override
+			public void onEndRequest(RequestCycle cycle)
+			{
+				endRequestCalled.set(true);
+			}
+
+			@Override
+			public void onDetach(RequestCycle cycle)
+			{
+				detachCalled.set(true);
+			}
+		});
+	}
+
