@@ -1,0 +1,26 @@
+	@Test
+	public void onReAddEnforcesSuperCall()
+	{
+		Page page = createPage();
+		page.internalInitialize();
+		Label brokenProbe = new Label("foo")
+		{
+			@Override
+			protected void onReAdd()
+			{
+				; // I should call super, but since I don't, this should throw an exception
+			}
+		};
+		brokenProbe.internalInitialize();
+		page.add(brokenProbe);
+		page.remove(brokenProbe);
+		try
+		{
+			page.add(brokenProbe);
+			fail("should have thrown exception");
+		} catch (IllegalStateException e)
+		{
+			assertTrue(e.getMessage().contains("super.onReAdd"));
+		}
+	}
+

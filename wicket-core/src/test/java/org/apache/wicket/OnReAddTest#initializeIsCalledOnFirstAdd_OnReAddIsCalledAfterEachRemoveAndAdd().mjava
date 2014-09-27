@@ -1,0 +1,31 @@
+	@Test
+	public void initializeIsCalledOnFirstAdd_OnReAddIsCalledAfterEachRemoveAndAdd()
+	{
+		Page page = createPage();
+		page.internalInitialize();
+		Component probe = createUninitializedProbe();
+		page.add(probe);
+		assertFalse(onReAddCalled);
+		assertTrue(onInitializeCalled);
+		onInitializeCalled = false;
+		page.internalInitialize();
+		assertFalse(onReAddCalled);
+		assertFalse(onInitializeCalled);
+		page.remove(probe);
+		assertFalse(onReAddCalled);
+		assertFalse(onInitializeCalled);
+		page.add(probe);
+		assertTrue(onReAddCalled);
+		assertFalse(onInitializeCalled);
+		onReAddCalled = false;
+		page.internalInitialize();
+		// just another initialize run shouldn't call onReAdd nor onInitialize. onReAdd should only be called
+		// after remove and add
+		assertFalse(onReAddCalled);
+		assertFalse(onInitializeCalled);
+		page.remove(probe);
+		page.add(probe);
+		assertTrue(onReAddCalled);
+		assertFalse(onInitializeCalled);
+	}
+
