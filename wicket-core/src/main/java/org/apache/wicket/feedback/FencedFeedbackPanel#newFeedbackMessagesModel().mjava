@@ -7,7 +7,7 @@
 
 			@Override
 			protected List<FeedbackMessage> collectMessages(Component panel,
-				IFeedbackMessageFilter filter)
+					IFeedbackMessageFilter filter)
 			{
 				if (fence == null)
 				{
@@ -18,7 +18,7 @@
 						@Override
 						protected boolean shouldRecurseInto(Component component)
 						{
-							return component.getMetaData(FENCE_KEY) == null;
+							return !componentIsMarkedAsFence(component);
 						}
 					}.collect(filter);
 				}
@@ -32,8 +32,7 @@
 						protected boolean shouldRecurseInto(Component component)
 						{
 							// only recurse into components that are not fences
-
-							return component.getMetaData(FENCE_KEY) == null;
+							return !componentIsMarkedAsFence(component);
 						}
 					}.setIncludeSession(false).collect(filter);
 				}
