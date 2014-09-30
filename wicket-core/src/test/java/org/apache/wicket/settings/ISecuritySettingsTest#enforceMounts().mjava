@@ -35,5 +35,15 @@
 		tester.assertRenderedPage(MockPageWithLink.class);
 		tester.clickLink(MockPageWithLink.LINK_ID);
 		Assert.assertNull(tester.getLastRenderedPage());
+
+		/*
+		 * Test that mounts are enforced when the root compound mapper does not directly contain the mounted mapper.
+		 */
+		tester.getApplication().setRootRequestMapper(new HttpsMapper(tester.getApplication().getRootRequestMapper(), new HttpsConfig()));
+
+		tester.startPage(pageWithLink);
+		tester.assertRenderedPage(MockPageWithLink.class);
+		tester.clickLink(MockPageWithLink.LINK_ID);
+		Assert.assertNull(tester.getLastRenderedPage());
 	}
 
