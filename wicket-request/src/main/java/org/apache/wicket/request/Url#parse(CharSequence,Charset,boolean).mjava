@@ -22,6 +22,15 @@
 		final String queryString;
 		final String absoluteUrl;
 
+		final int fragmentAt = url.indexOf('#');
+
+		// matches url fragment, but doesn't match optional path parameter (e.g. .../#{optional}/...)
+		if (fragmentAt > -1 && url.length() > fragmentAt + 1 && url.charAt(fragmentAt + 1) != '{')
+		{
+			result.fragment = url.substring(fragmentAt + 1);
+			url = url.substring(0, fragmentAt);
+		}
+
 		final int queryAt = url.indexOf('?');
 
 		if (queryAt == -1)
