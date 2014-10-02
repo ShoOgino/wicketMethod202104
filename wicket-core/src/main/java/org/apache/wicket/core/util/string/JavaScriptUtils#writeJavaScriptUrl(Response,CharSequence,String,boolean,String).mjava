@@ -1,6 +1,6 @@
 	/**
 	 * Write a reference to a javascript file to the response object
-	 * 
+	 *
 	 * @param response
 	 *            The HTTP response
 	 * @param url
@@ -14,24 +14,8 @@
 	 *            a non null value specifies the charset attribute of the script tag
 	 */
 	public static void writeJavaScriptUrl(final Response response, final CharSequence url,
-		final String id, boolean defer, String charset)
+	                                      final String id, boolean defer, String charset)
 	{
-		response.write("<script type=\"text/javascript\" ");
-		if (id != null)
-		{
-			response.write("id=\"" + Strings.escapeMarkup(id) + "\" ");
-		}
-		if (defer)
-		{
-			response.write("defer=\"defer\" ");
-		}
-		if (charset != null)
-		{
-			response.write("charset=\"" + Strings.escapeMarkup(charset) + "\" ");
-		}
-		response.write("src=\"");
-		response.write(url);
-		response.write("\"></script>");
-		response.write("\n");
+		writeJavaScriptUrl(response, url, id, defer, charset, false);
 	}
 
