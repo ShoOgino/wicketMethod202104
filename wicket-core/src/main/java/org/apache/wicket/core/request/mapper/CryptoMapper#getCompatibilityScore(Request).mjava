@@ -1,6 +1,25 @@
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation decrypts the URL and passes the decrypted URL to the wrapped mapper.
+	 * </p>
+	 * @param request
+	 *		The request for which to get a compatability score.
+	 * 
+	 * @return The compatability score.
+	 */
 	@Override
 	public int getCompatibilityScore(final Request request)
 	{
-		return wrappedMapper.getCompatibilityScore(request);
+		Url decryptedUrl = decryptUrl(request, request.getUrl());
+
+		if (decryptedUrl == null)
+		{
+			return 0;
+		}
+
+		Request decryptedRequest = request.cloneWithUrl(decryptedUrl);
+
+		return wrappedMapper.getCompatibilityScore(decryptedRequest);
 	}
 

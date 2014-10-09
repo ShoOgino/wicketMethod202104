@@ -1,0 +1,31 @@
+	/**
+	 * Verifies that the home page can be reached with non-encrypted query parameters.
+	 * https://issues.apache.org/jira/browse/WICKET-4345
+	 *
+	 * Also, test that the URL for the home page with non-encrypted parameters is not encrypted, to avoid unnecessary redirects.
+	 */
+	@Test
+	public void homePageWithNonEncryptedQueryParameters()
+	{
+		String expectedEncrypted = "?namedKey1=namedValue1";
+		PageParameters expectedParameters = new PageParameters();
+		expectedParameters.add("namedKey1", "namedValue1");
+
+		RenderPageRequestHandler renderPageRequestHandler = new RenderPageRequestHandler(
+			new PageProvider(tester.getApplication().getHomePage(), expectedParameters));
+
+		Url url = mapper.mapHandler(renderPageRequestHandler);
+		assertEquals(expectedEncrypted, url.toString());
+
+		Request request = getRequest(url);
+		IRequestHandler requestHandler = mapper.mapRequest(request);
+		assertNotNull(requestHandler);
+
+		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
+		assertThat(requestHandler, instanceOf(RenderPageRequestHandler.class));
+		RenderPageRequestHandler handler = (RenderPageRequestHandler) requestHandler;
+		assertEquals(tester.getApplication().getHomePage(), handler.getPageClass());
+		StringValue queryParam = handler.getPageParameters().get("namedKey1");
+		assertEquals("namedValue1", queryParam.toOptionalString());
+	}
+

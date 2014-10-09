@@ -1,0 +1,18 @@
+	/**
+	 * Tests that encrypted URLs for bookmarkable pages are decrypted and passed to the wrapped mapper.
+	 */
+	@Test
+	public void bookmarkablePageDecrypt()
+	{
+		Request request = getRequest(Url.parse(ENCRYPTED_BOOKMARKABLE_URL));
+		IRequestHandler requestHandler = mapper.mapRequest(request);
+
+		assertNotNull(requestHandler);
+		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
+
+		assertThat(requestHandler, instanceOf(RenderPageRequestHandler.class));
+
+		RenderPageRequestHandler handler = (RenderPageRequestHandler) requestHandler;
+		assertEquals(Page2.class, handler.getPageClass());
+	}
+

@@ -4,8 +4,45 @@
 	@Test
 	public void enforceMountsWithCryptoMapper()
 	{
-	    WebApplication app = tester.getApplication();
-	    app.setRootRequestMapper(new CryptoMapper(app.getRootRequestMapper(), app));
-	    enforceMounts();
+		WebApplication app = tester.getApplication();
+
+		IRequestHandler handler = new BookmarkablePageRequestHandler(new PageProvider(UnknownPage.class));
+
+		String plainTextNonMountedUrl = tester.urlFor(handler).toString();
+
+		assertTrue("Plain text non mounted url should start with wicket/bookmarkable/: " + plainTextNonMountedUrl, plainTextNonMountedUrl.startsWith("wicket/bookmarkable/"));
+
+		tester.executeUrl(plainTextNonMountedUrl);
+		tester.assertRenderedPage(UnknownPage.class);
+
+		app.setRootRequestMapper(new CryptoMapper(app.getRootRequestMapper(), app));
+
+		/*
+		 * Execute dummy request to get WicketTester to re-initialise with CryptoMapper in place.
+		 */
+		tester.executeUrl("");
+
+		String encryptedNonMountedUrl = tester.urlFor(handler).toString();
+
+		assertFalse("Encrypted URL should not start with wicket/bookmarkable/" + encryptedNonMountedUrl, encryptedNonMountedUrl.startsWith("wicket/bookmarkable/"));
+
+		tester.executeUrl(plainTextNonMountedUrl);
+		assertNull(tester.getLastRenderedPage());
+		tester.executeUrl(encryptedNonMountedUrl);
+		tester.assertRenderedPage(UnknownPage.class);
+
+		app.mountPackage("unknown", UnknownPage.class);
+
+		tester.executeUrl(plainTextNonMountedUrl);
+		assertNull(tester.getLastRenderedPage());
+		tester.executeUrl(encryptedNonMountedUrl);
+		tester.assertRenderedPage(UnknownPage.class);
+
+		app.getSecuritySettings().setEnforceMounts(true);
+
+		tester.executeUrl(plainTextNonMountedUrl);
+		assertNull(tester.getLastRenderedPage());
+		tester.executeUrl(encryptedNonMountedUrl);
+		assertNull(tester.getLastRenderedPage());
 	}
 
