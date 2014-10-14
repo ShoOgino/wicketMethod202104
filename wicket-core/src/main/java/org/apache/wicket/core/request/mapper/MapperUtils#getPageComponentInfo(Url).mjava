@@ -1,0 +1,25 @@
+	/**
+	 * Extracts the {@link PageComponentInfo} from the URL. The {@link PageComponentInfo} is encoded
+	 * as the very first query parameter and the parameter consists of name only (no value).
+	 *
+	 * @param url
+	 *
+	 * @return PageComponentInfo instance if one was encoded in URL, <code>null</code> otherwise.
+	 */
+	public static PageComponentInfo getPageComponentInfo(final Url url)
+	{
+		Args.notNull(url, "url");
+
+		for (Url.QueryParameter queryParameter : url.getQueryParameters())
+		{
+			PageComponentInfo pageComponentInfo = parsePageComponentInfoParameter(queryParameter);
+
+			if (pageComponentInfo != null)
+			{
+				return pageComponentInfo;
+			}
+		}
+
+		return null;
+	}
+
