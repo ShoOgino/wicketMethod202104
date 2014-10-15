@@ -46,12 +46,13 @@
 			// if we are already dequeueing there is no need to dequeue again
 			if (!queueRegion.getRequestFlag(RFLAG_CONTAINER_DEQUEING))
 			{
-				// do not dequeue auto components since they are added
-				// during render phase
-				if (!child.isAuto())
-				{
-					queueRegion.dequeue();
-				}
+			    /**
+			     * Also auto component are queued. 
+			     * 
+		         * https://issues.apache.org/jira/browse/WICKET-5724
+		         */
+				queueRegion.dequeue();
+
 			}
 		}
 
