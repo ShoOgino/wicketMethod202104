@@ -10,23 +10,7 @@
 			{
 				Component component = (Component)child;
 				component.detach();
-
-				// We need to keep InlineEnclosures for Ajax request handling.
-				// TODO this is really ugly. Feature request for 1.5: change auto-component that
-				// they don't need to be removed anymore.
-				if (!(component instanceof InlineEnclosure) && component.isAuto())
-				{
-					children_remove(i);
-				}
 			}
-		}
-
-		if (children instanceof ChildList)
-		{
-			ChildList lst = (ChildList)children;
-			Object[] tmp = new Object[lst.size];
-			System.arraycopy(lst.childs, 0, tmp, 0, lst.size);
-			children = tmp;
 		}
 	}
 
