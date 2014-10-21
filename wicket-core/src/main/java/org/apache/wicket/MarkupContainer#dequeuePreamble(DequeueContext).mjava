@@ -1,0 +1,35 @@
+	/**
+	 * Run preliminary operations before running {@link #dequeue(DequeueContext)}. More in detail
+	 * it throws an exception if the container is already dequeuing, and it also takes care of 
+	 * setting flag {@code RFLAG_CONTAINER_DEQUEING} to true before running {@link #dequeue(DequeueContext)} 
+	 * and setting it back to false after dequeuing is completed.
+	 * 
+	 * @param dequeue
+	 *             the dequeue context to use
+	 */
+	protected void dequeuePreamble(DequeueContext dequeue)
+	{
+		if (getRequestFlag(RFLAG_CONTAINER_DEQUEING))
+		{
+			throw new IllegalStateException("This container is already dequeing: " + this);
+		}
+
+		setRequestFlag(RFLAG_CONTAINER_DEQUEING, true);
+		try
+		{
+			if (dequeue == null)
+			{
+				return;
+			}
+
+			if (dequeue.peekTag() != null)
+			{
+				dequeue(dequeue);
+			}
+		}
+		finally
+		{
+			setRequestFlag(RFLAG_CONTAINER_DEQUEING, false);
+		}
+	}
+

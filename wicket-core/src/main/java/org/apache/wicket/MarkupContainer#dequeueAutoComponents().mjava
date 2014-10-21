@@ -6,11 +6,18 @@
 		{
 			for (ComponentTag tag = context.takeTag(); tag != null; tag = context.takeTag())
 			{
-				ComponentTag.IAutoComponentFactory autoComponentFactory = tag.getAutoComponentFactory();
-				if (autoComponentFactory != null)
-				{
-					queue(autoComponentFactory.newComponent(this, tag));
-				}
+		        ComponentTag.IAutoComponentFactory autoComponentFactory = tag.getAutoComponentFactory();
+		        if (autoComponentFactory != null)
+		        {
+		            queue(autoComponentFactory.newComponent(this, tag));
+		        }                    
+                
+		        // Every component is responsible just for its own auto components
+		        // so skip to the close tag. 		        
+		        if (tag.isOpen() && !tag.hasNoCloseTag())
+                {
+                    context.skipToCloseTag();
+                }
 			}
 		}
 	}

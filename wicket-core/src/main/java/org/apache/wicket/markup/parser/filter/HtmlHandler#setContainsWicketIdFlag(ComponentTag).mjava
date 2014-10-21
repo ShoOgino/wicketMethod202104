@@ -1,0 +1,21 @@
+	/**
+	 * Checks if the tag is a Wicket component explicitly added. i.e 
+	 * it has the "wicket:id" attribute.
+	 * 
+	 * @param tag
+	 */
+	private void setContainsWicketIdFlag(ComponentTag tag)
+    {
+	  //check if it is a wicket:id component
+      String wicketIdAttr = getWicketNamespace() + ":" + "id";
+      boolean hasWicketId = tag.getAttributes().get(wicketIdAttr) != null;
+      
+      if (hasWicketId)
+      {
+          for (ComponentTag componentTag : stack)
+          {
+              componentTag.setContainsWicketId(hasWicketId);
+          }
+      }
+    }
+

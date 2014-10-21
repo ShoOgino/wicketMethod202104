@@ -24,34 +24,22 @@
 				ComponentStrings.toString(child, new MarkupException("added")));
 		}
 
-		Page page = null;
-		MarkupContainer queueRegion = null;
-		Component cursor = this;
-		while (cursor != null)
+		Page page = findPage();
+		
+		// if we have a path to page dequeue any container children.
+		// we can do it only if page is not already rendering!
+		if (page != null && !page.getFlag(FLAG_RENDERING) && child instanceof MarkupContainer)
 		{
-			if (queueRegion == null && (cursor instanceof IQueueRegion))
-			{
-				queueRegion = (MarkupContainer)cursor;
-			}
-			if (cursor instanceof Page)
-			{
-				page = (Page)cursor;
-			}
-			cursor = cursor.getParent();
-		}
-
-		// if we have a path to page dequeue any children
-		if (page != null)
-		{
-			// if we are already dequeueing there is no need to dequeue again
-			if (!queueRegion.getRequestFlag(RFLAG_CONTAINER_DEQUEING))
+		    MarkupContainer childContainer = (MarkupContainer)child;
+		    // if we are already dequeueing there is no need to dequeue again
+		    if (!childContainer.getRequestFlag(RFLAG_CONTAINER_DEQUEING))
 			{
 				/*
 				 * dequeue both normal and auto components
 				 *
 				 * https://issues.apache.org/jira/browse/WICKET-5724
 				 */
-				queueRegion.dequeue();
+		        childContainer.dequeue();
 			}
 		}
 

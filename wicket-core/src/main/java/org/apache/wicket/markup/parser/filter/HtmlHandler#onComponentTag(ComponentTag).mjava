@@ -4,8 +4,11 @@
 		// Check tag type
 		if (tag.isOpen())
 		{
+		    // Check if open tags contains a "wicket:id" component
+		    setContainsWicketIdFlag(tag);
+		    
 			// Push onto stack
-			stack.push(tag);
+			stack.push(tag);			
 		}
 		else if (tag.isClose())
 		{
@@ -21,13 +24,12 @@
 
 				if (mismatch)
 				{
-					top.setHasNoCloseTag(true);
-
 					// Pop any simple tags off the top of the stack
 					while (mismatch && !requiresCloseTag(top.getName()))
 					{
 						top.setHasNoCloseTag(true);
-
+						top.setContainsWicketId(false);
+						
 						// Pop simple tag
 						if (stack.isEmpty())
 						{

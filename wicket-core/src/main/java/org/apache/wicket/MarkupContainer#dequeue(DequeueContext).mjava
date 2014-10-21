@@ -4,14 +4,12 @@
 	 * components in queues filled by a call to {@link #queue(Component...)}. It then delegates the
 	 * dequeueing to these children.
 	 * 
-	 * The provided {@link DequeueContext} is used to maintain the place in markup as well as the
-	 * stack of components whose queues will be searched. For example, before delegating the call to
-	 * a child the container will push the child onto the stack of components.
 	 * 
 	 * Certain components that implement custom markup behaviors (such as repeaters and borders)
 	 * override this method to bring dequeueing in line with their custom markup handling.
 	 * 
 	 * @param dequeue
+	 *             the dequeue context to use     
 	 */
 	public void dequeue(DequeueContext dequeue)
 	{
@@ -20,65 +18,24 @@
 			ComponentTag tag = dequeue.takeTag();
 	
 			// see if child is already added to parent
-
 			Component child = get(tag.getId());
 
 			if (child == null)
 			{
 				// the container does not yet have a child with this id, see if we can
 				// dequeue
-				
 				child = dequeue.findComponentToDequeue(tag);
 
 				if (child != null)
 				{
-					addDequeuedComponent(child, tag);
-					if (child instanceof IQueueRegion)
-					{
-						((MarkupContainer)child).dequeue();
-					}
+					addDequeuedComponent(child, tag);					
 				}
 			}
-			if (child == null || !(child instanceof MarkupContainer))
-			{
-				// could not dequeue, or does not contain children
-	
-				if (tag.isOpen() && !tag.hasNoCloseTag())
-				{
-					dequeue.skipToCloseTag();
-				}
-			}
-			else
-			{
-				MarkupContainer container = (MarkupContainer)child;
-				if (container instanceof IQueueRegion)
-				{
-					// if this is a dequeue container we do not process its markup, it will do so
-					// itself when it is dequeued for the first time
-					if (tag.isOpen())
-					{
-						dequeue.skipToCloseTag();
-					}
-				}
-				else if (tag.isOpen())
-				{
-					// this component has more markup and possibly more children to dequeue
-					dequeue.pushContainer(container);
-					container.dequeue(dequeue);
-					dequeue.popContainer();
-				}
-			}
-
+			
 			if (tag.isOpen() && !tag.hasNoCloseTag())
-			{
-				// pull the close tag off
-				ComponentTag close = dequeue.takeTag();
-				if (!close.closes(tag))
-				{
-					// sanity check
-					throw new IllegalStateException(String.format("Tag '%s' should be the closing one for '%s'", close, tag));
-				}
-			}
+            {
+			    dequeueChild(child, tag, dequeue);
+            }
 		}
 
 	}

@@ -1,81 +1,81 @@
-	private ComponentTag nextTag()
-	{
-		if (skipFirst && first == null)
-		{
-			for (; index < markup.size(); index++)
-			{
-				MarkupElement element = markup.get(index);
-				if (element instanceof ComponentTag)
-				{
-					first = (ComponentTag)element;
-					index++;
-					break;
-				}
-			}
-		}
+    private ComponentTag nextTag()
+    {
+        if (skipFirst && first == null)
+        {
+            for (; index < markup.size(); index++)
+            {
+                MarkupElement element = markup.get(index);
+                if (element instanceof ComponentTag)
+                {
+                    first = (ComponentTag)element;
+                    index++;
+                    break;
+                }
+            }
+        }
 
-		for (; index < markup.size(); index++)
-		{
-			MarkupElement element = markup.get(index);
-			if (element instanceof ComponentTag)
-			{
-				ComponentTag tag = (ComponentTag)element;
+        for (; index < markup.size(); index++)
+        {
+            MarkupElement element = markup.get(index);
+            if (element instanceof ComponentTag)
+            {
+                ComponentTag tag = (ComponentTag)element;
 
-				if (tag.isOpen() || tag.isOpenClose())
-				{
-					DequeueTagAction action = canDequeueTag(tag);
-					switch (action)
-					{
-						case IGNORE :
-							continue;
-						case DEQUEUE :
-							index++;
-							return tag;
-						case SKIP : // skip to close tag
-							boolean found = false;
-							for (; index < markup.size(); index++)
-							{
-								if ((markup.get(index) instanceof ComponentTag)
-									&& markup.get(index).closes(tag))
-								{
-									found = true;
-									break;
-								}
-							}
-							if (!found)
-							{
-								throw new IllegalStateException(
-									String.format("Could not find close tag for tag '%s' in markup: %s ",
-											tag, markup));
-							}
+                if (tag.isOpen() || tag.isOpenClose())
+                {
+                    DequeueTagAction action = canDequeueTag(tag);
+                    switch (action)
+                    {
+                        case IGNORE :
+                            continue;
+                        case DEQUEUE :
+                            index++;
+                            return tag;
+                        case SKIP : // skip to close tag
+                            boolean found = false;
+                            for (; index < markup.size(); index++)
+                            {
+                                if ((markup.get(index) instanceof ComponentTag)
+                                    && markup.get(index).closes(tag))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found)
+                            {
+                                throw new IllegalStateException(String.format(
+                                    "Could not find close tag for tag '%s' in markup: %s ", tag,
+                                    markup));
+                            }
 
-					}
-				}
-				else
-				{
-					// closed tag
-					ComponentTag open = tag.isClose() ? tag.getOpenTag() : tag;
+                    }
+                }
+                else
+                {
+                    // closed tag
+                    ComponentTag open = tag.isClose() ? tag.getOpenTag() : tag;
 
-					if (skipFirst && first != null && open == first)
-					{
-						continue;
-					}
+                    if (skipFirst && first != null && open == first)
+                    {
+                        continue;
+                    }
 
-					switch (canDequeueTag(open))
-					{
-						case DEQUEUE :
-							index++;
-							return tag;
-						case IGNORE :
-							continue;
-						case SKIP :
-							throw new IllegalStateException(
-								String.format("Should not see closed tag of skipped open tag '%s' in markup:%s",
-										tag, markup));
-					}
-				}
-			}
-		}
-		return null;
-	}
+                    switch (canDequeueTag(open))
+                    {
+                        case DEQUEUE :
+                            index++;
+                            return tag;
+                        case IGNORE :
+                            continue;
+                        case SKIP :
+                            throw new IllegalStateException(String.format(
+                                "Should not see closed tag of skipped open tag '%s' in markup:%s",
+                                tag, markup));
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
