@@ -1,31 +1,30 @@
 	@Override
 	public void postProcess(Markup markup)
 	{
-	    /**
-         * https://issues.apache.org/jira/browse/WICKET-5724
-         * 
-         * Transparent component inside page body must allow 
-         * queued children components.
-         */
-	    Iterator<MarkupElement> markupIterator = markup.iterator();
-	    while (markupIterator.hasNext())
-        {
-            MarkupElement next = markupIterator.next();
-            
-            if(next instanceof ComponentTag)
-            {
-                ComponentTag componentTag = (ComponentTag)next;
-                
-                /**
-                 * if component tag is for a transparent component
-                 * and contains "wicket:id", must be queueable.
-                 */
-                if (componentTag.containsWicketId() && 
-                    componentTag.getId().startsWith(getWicketRelativePathPrefix(null)))
-                {                        
-                    componentTag.setAutoComponentFactory(FACTORY);
-                }
-            }            
-        }
+		/**
+		 * https://issues.apache.org/jira/browse/WICKET-5724
+		 * 
+		 * Transparent component inside page body must allow queued children components.
+		 */
+		Iterator<MarkupElement> markupIterator = markup.iterator();
+		while (markupIterator.hasNext())
+		{
+			MarkupElement next = markupIterator.next();
+
+			if (next instanceof ComponentTag)
+			{
+				ComponentTag componentTag = (ComponentTag)next;
+
+				/**
+				 * if component tag is for a transparent component and contains "wicket:id", must be
+				 * queueable.
+				 */
+				if (componentTag.containsWicketId()
+					&& componentTag.getId().startsWith(getWicketRelativePathPrefix(null)))
+				{
+					componentTag.setAutoComponentFactory(FACTORY);
+				}
+			}
+		}
 	}
 

@@ -3,19 +3,19 @@
 	 */
 	public void dequeue()
 	{
-	    if (this instanceof IQueueRegion)
-        {                
-    	    DequeueContext dequeue = newDequeueContext();	    
-    	    dequeuePreamble(dequeue);
-        }
-	    else 
-        {
-	        MarkupContainer queueRegion = (MarkupContainer)findParent(IQueueRegion.class);
-	        
-	        if (!queueRegion.getRequestFlag(RFLAG_CONTAINER_DEQUEING))
-            {
-	            queueRegion.dequeue();
-            }
-        }
+		if (this instanceof IQueueRegion)
+		{
+			DequeueContext dequeue = newDequeueContext();
+			dequeuePreamble(dequeue);
+		}
+		else
+		{
+			MarkupContainer queueRegion = (MarkupContainer)findParent(IQueueRegion.class);
+
+			if (queueRegion != null && !queueRegion.getRequestFlag(RFLAG_CONTAINER_DEQUEING))
+			{
+				queueRegion.dequeue();
+			}
+		}
 	}
 
