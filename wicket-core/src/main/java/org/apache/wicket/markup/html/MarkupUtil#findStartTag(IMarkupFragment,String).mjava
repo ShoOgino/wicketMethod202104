@@ -1,0 +1,34 @@
+	/**
+	 * Searches for {@code tagName} in the given {@code markup}.
+	 * 
+	 * @param markup
+	 * @param tagName
+	 * @return The {@link IMarkupFragment} corresponding to {@code tagName}. Null, if such {@code tagName} is not found
+	 */
+	public static IMarkupFragment findStartTag(final IMarkupFragment markup, final String tagName)
+	{
+		MarkupStream stream = new MarkupStream(markup);
+
+		while (stream.skipUntil(ComponentTag.class))
+		{
+			ComponentTag tag = stream.getTag();
+			if (tag.isOpen() || tag.isOpenClose())
+			{
+				if (tag instanceof WicketTag)
+				{
+					WicketTag wtag = (WicketTag)tag;
+					if (tagName.equalsIgnoreCase(wtag.getName()))
+					{
+						return stream.getMarkupFragment();
+					}
+				}
+
+				stream.skipToMatchingCloseTag(tag);
+			}
+
+			stream.next();
+		}
+
+		return null;
+	}
+
