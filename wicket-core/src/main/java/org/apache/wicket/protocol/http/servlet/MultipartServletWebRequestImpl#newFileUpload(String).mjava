@@ -1,0 +1,27 @@
+	/**
+	 * Factory method for creating new instances of FileUploadBase
+	 *
+	 * @param encoding
+	 *            The encoding to use while reading the data
+	 * @return A new instance of FileUploadBase
+	 */
+	protected FileUploadBase newFileUpload(String encoding) {
+		// Configure the factory here, if desired.
+		ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
+
+		// set encoding specifically when we found it
+		if (encoding != null)
+		{
+			fileUpload.setHeaderEncoding(encoding);
+		}
+
+		fileUpload.setSizeMax(getMaxSize().bytes());
+
+		Bytes fileMaxSize = getFileMaxSize();
+		if (fileMaxSize != null) {
+			fileUpload.setFileSizeMax(fileMaxSize.bytes());
+		}
+
+		return fileUpload;
+	}
+

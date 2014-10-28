@@ -13,8 +13,10 @@
 			try
 			{
 				ServletWebRequest request = (ServletWebRequest)getRequest();
-				final WebRequest multipartWebRequest = request.newMultipartWebRequest(getMaxSize(),
-					getPage().getId());
+				final MultipartServletWebRequest multipartWebRequest = request.newMultipartWebRequest(getMaxSize(), getPage().getId());
+				multipartWebRequest.setFileMaxSize(getFileMaxSize());
+				multipartWebRequest.parseFileParts();
+
 				// TODO: Can't this be detected from header?
 				getRequestCycle().setRequest(multipartWebRequest);
 			}
@@ -24,6 +26,7 @@
 				final Map<String, Object> model = new HashMap<>();
 				model.put("exception", fux);
 				model.put("maxSize", getMaxSize());
+				model.put("fileMaxSize", getFileMaxSize());
 
 				onFileUploadException(fux, model);
 

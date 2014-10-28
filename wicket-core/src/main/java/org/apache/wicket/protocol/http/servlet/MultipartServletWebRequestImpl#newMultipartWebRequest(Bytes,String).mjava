@@ -2,17 +2,23 @@
 	public MultipartServletWebRequest newMultipartWebRequest(Bytes maxSize, String upload)
 		throws FileUploadException
 	{
+		// FIXME mgrigorov: Why these checks are made here ?!
+		// Why they are not done also at org.apache.wicket.protocol.http.servlet.MultipartServletWebRequestImpl.newMultipartWebRequest(org.apache.wicket.util.lang.Bytes, java.lang.String, org.apache.wicket.util.upload.FileItemFactory)() ?
+		// Why there is no check that the summary of all files' sizes is less than the set maxSize ?
+		// Setting a breakpoint here never breaks with the standard upload examples.
+
+		Bytes fileMaxSize = getFileMaxSize();
 		for (Map.Entry<String, List<FileItem>> entry : files.entrySet())
 		{
 			List<FileItem> fileItems = entry.getValue();
 			for (FileItem fileItem : fileItems)
 			{
-				if (fileItem.getSize() > maxSize.bytes())
+				if (fileMaxSize != null && fileItem.getSize() > fileMaxSize.bytes())
 				{
 					String fieldName = entry.getKey();
-					FileUploadException fslex = new FileUploadBase.FileSizeLimitExceededException("The field " +
-							fieldName + " exceeds its maximum permitted " + " size of " +
-							maxSize + " characters.", fileItem.getSize(), maxSize.bytes());
+					FileUploadException fslex = new FileUploadBase.FileSizeLimitExceededException("The field '" +
+							fieldName + "' exceeds its maximum permitted size of '" +
+							maxSize + "' characters.", fileItem.getSize(), fileMaxSize.bytes());
 					throw fslex;
 				}
 			}
