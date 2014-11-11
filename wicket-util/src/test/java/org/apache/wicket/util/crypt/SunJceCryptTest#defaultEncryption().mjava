@@ -1,0 +1,14 @@
+	/**
+	 * Default encryption uses {@value org.apache.wicket.util.crypt.SunJceCrypt#DEFAULT_CRYPT_METHOD}
+	 */
+	@Test
+	public void defaultEncryption() throws GeneralSecurityException
+	{
+		SunJceCrypt crypt = new SunJceCrypt();
+		String input = "input";
+		byte[] encrypted = crypt.crypt(input.getBytes(), Cipher.ENCRYPT_MODE);
+
+		byte[] decrypted = crypt.crypt(encrypted, Cipher.DECRYPT_MODE);
+		assertThat(new String(decrypted), is(equalTo(input)));
+	}
+

@@ -1,0 +1,29 @@
+	/**
+	 * Constructor that uses a custom encryption method (cipher).
+	 * You may need to override {@link #createKeySpec()} and/or
+	 * {@link #createParameterSpec()} for the custom cipher.
+	 *
+	 * @param cryptMethod
+	 *              the name of encryption method (the cipher)
+	 */
+	public SunJceCrypt(String cryptMethod)
+	{
+		this.cryptMethod = Args.notNull(cryptMethod, "Crypt method");
+
+		if (Security.getProviders("Cipher." + cryptMethod).length > 0)
+		{
+			return; // we are good to go!
+		}
+		try
+		{
+			// Initialize and add a security provider required for encryption
+			final Class<?> clazz = Class.forName("com.sun.crypto.provider.SunJCE");
+
+			Security.addProvider((Provider)clazz.newInstance());
+		}
+		catch (Exception ex)
+		{
+			throw new RuntimeException("Unable to load SunJCE service provider", ex);
+		}
+	}
+
