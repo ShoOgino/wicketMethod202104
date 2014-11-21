@@ -17,7 +17,7 @@
 			final Map<String, Object> variablesReplaced = new HashMap<String, Object>();
 
 			// Replace all ${var} within the property value with real values
-			String text = new MapVariableInterpolator(value, childTags)
+			CharSequence text = new MapVariableInterpolator(value, childTags)
 			{
 				@Override
 				protected String getValue(final String variableName)
@@ -67,6 +67,11 @@
 					return value;
 				}
 			}.toString();
+
+			if (escapeValue) 
+			{
+				text = Strings.escapeMarkup(text);
+			}
 
 			getResponse().write(text);
 
