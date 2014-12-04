@@ -1,0 +1,22 @@
+	/**
+	 * Instantiates a new context relative resource reference for the given name. We can
+	 * specify which postfix we want to use for minification with parameter @code minPostfix}
+	 * while parameter {@code minifyIt} says if the resource can be minified (true) or not (false). 
+	 * @param name 
+	 * 				the resource name
+	 * @param minPostfix 
+	 * 				the minfied postfix
+	 * @param minifyIt 
+	 * 				says if the resource name can be minified or not
+	 */
+	public ContextRelativeResourceReference(final String name, final String minPostfix, final boolean minifyIt)
+	{
+		super(name);
+		
+		Args.notNull(minPostfix, "minPostfix");
+		
+		this.minPostfix = minPostfix;
+		this.minifyIt = minifyIt;
+		this.contextRelativeResource = buildContextRelativeResource(name, minPostfix);
+	}
+

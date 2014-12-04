@@ -1,0 +1,21 @@
+	/**
+	 * Build the context-relative resource for this resource reference.
+	 * 
+	 * @param name
+	 * 				the resource name
+	 * @param minPostfix
+	 * 				the postfix to use to minify the resource name (typically "min")
+	 * @return the context-relative resource 
+	 */
+	protected ContextRelativeResource buildContextRelativeResource(final String name, final String minPostfix)
+	{
+		String minifiedName = name;
+		
+		if (canBeMinified()) 
+		{
+			minifiedName = ResourceUtils.getMinifiedName(name, minPostfix);
+		}
+		
+		return new ContextRelativeResource(minifiedName);
+	}
+
