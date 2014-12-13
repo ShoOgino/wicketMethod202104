@@ -1,0 +1,19 @@
+	/**
+	 * create a new {@link TextField} instance for hours to be added to this panel.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            model that should be used by the {@link TextField}
+	 * @param type
+	 *            the type of the text field
+	 * @return a new text field instance
+	 */
+	protected TextField<Integer> newHoursTextField(final String id, IModel<Integer> model, Class<Integer> type) {
+		TextField<Integer> hoursTextField = new TextField<>(id, model, type);
+		hoursTextField.add(getMaximumHours() == 24 ? RangeValidator.range(0, 23) : RangeValidator
+			.range(1, 12));
+		hoursTextField.setLabel(new Model<>(HOURS));
+		return hoursTextField;
+	}
+
