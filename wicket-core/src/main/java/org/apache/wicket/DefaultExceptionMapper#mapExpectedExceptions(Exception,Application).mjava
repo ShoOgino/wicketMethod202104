@@ -1,0 +1,45 @@
+	/**
+	 * Maps expected exceptions (i.e. those internally used by Wicket) to their corresponding
+	 * {@link IRequestHandler}.
+	 * 
+	 * @param e
+	 * 			the current exception
+	 * @param application
+	 * 			the current application object
+	 * @return the {@link IRequestHandler} for the current exception
+	 */
+	protected IRequestHandler mapExpectedExceptions(Exception e, final Application application)
+	{
+		if (e instanceof StalePageException)
+		{
+			// If the page was stale, just re-render it
+			// (the url should always be updated by an redirect in that case)
+			return new RenderPageRequestHandler(new PageProvider(((StalePageException)e).getPage()));
+		}
+		else if (e instanceof PageExpiredException)
+		{
+			return createPageRequestHandler(new PageProvider(Application.get()
+				.getApplicationSettings()
+				.getPageExpiredErrorPage()));
+		}
+		else if (e instanceof AuthorizationException ||
+			e instanceof ListenerInvocationNotAllowedException)
+		{
+			return createPageRequestHandler(new PageProvider(Application.get()
+				.getApplicationSettings()
+				.getAccessDeniedPage()));
+		}
+		else if (e instanceof ResponseIOException)
+		{
+			logger.error("Connection lost, give up responding.", e);
+			return new EmptyRequestHandler();
+		}
+		else if (e instanceof PackageResource.PackageResourceBlockedException && application.usesDeploymentConfig())
+		{
+			logger.debug(e.getMessage(), e);
+			return new ErrorCodeRequestHandler(404);
+		}
+		
+		return null;
+	}
+

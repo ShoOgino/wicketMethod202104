@@ -1,0 +1,32 @@
+	/**
+	 * Maps unexpected exceptions to their corresponding {@link IRequestHandler}.
+	 * 
+	 * @param e
+	 * 			the current exception
+	 * @param application
+	 * 			the current application object
+	 * @return the {@link IRequestHandler} for the current exception
+	 */
+	protected IRequestHandler mapUnexpectedExceptions(Exception e, final Application application)
+	{
+		final ExceptionSettings.UnexpectedExceptionDisplay unexpectedExceptionDisplay = application.getExceptionSettings()
+			.getUnexpectedExceptionDisplay();
+
+		logger.error("Unexpected error occurred", e);
+
+		if (ExceptionSettings.SHOW_EXCEPTION_PAGE.equals(unexpectedExceptionDisplay))
+		{
+			Page currentPage = extractCurrentPage();
+			return createPageRequestHandler(new PageProvider(new ExceptionErrorPage(e,
+				currentPage)));
+		}
+		else if (ExceptionSettings.SHOW_INTERNAL_ERROR_PAGE.equals(unexpectedExceptionDisplay))
+		{
+			return createPageRequestHandler(new PageProvider(
+				application.getApplicationSettings().getInternalErrorPage()));
+		}
+		
+		// IExceptionSettings.SHOW_NO_EXCEPTION_PAGE
+		return new ErrorCodeRequestHandler(500);
+	}
+
