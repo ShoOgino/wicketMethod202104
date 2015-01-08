@@ -1,0 +1,37 @@
+	/**
+	 * create a new {@link TextField} instance for minutes to be added to this panel.
+	 *
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            model that should be used by the {@link TextField}
+	 * @param type
+	 *            the type of the text field
+	 * @return a new text field instance
+	 */
+	protected TextField<Integer> newMinutesTextField(final String id, IModel<Integer> model,
+		Class<Integer> type)
+	{
+		TextField<Integer> minutesField = new TextField<Integer>(id, model, type)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <C> IConverter<C> getConverter(Class<C> type)
+			{
+				if (Integer.class.isAssignableFrom(type))
+				{
+					return (IConverter<C>)MINUTES_CONVERTER;
+				}
+				else
+				{
+					return super.getConverter(type);
+				}
+			}
+		};
+		minutesField.add(new RangeValidator<>(0, 59));
+		minutesField.setLabel(new Model<>(MINUTES));
+		return minutesField;
+	}
+
