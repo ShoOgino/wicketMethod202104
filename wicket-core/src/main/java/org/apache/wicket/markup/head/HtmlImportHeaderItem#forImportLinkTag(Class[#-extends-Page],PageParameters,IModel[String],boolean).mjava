@@ -1,0 +1,24 @@
+	/**
+	 * Factory method to create lt;link&gt; tag for html import.
+	 *
+	 * @param pageClass
+	 *            the page class to generate the import for
+	 * @param pageParameters
+	 *            the page parameters to apply to the import
+	 * @param media
+	 *            the 'media' attribute of the tag as String model
+	 * @param async
+	 * 			  the 'async' attribute as boolean value
+	 * @return A new {@link MetaDataHeaderItem}
+	 */
+	public static MetaDataHeaderItem forImportLinkTag(Class<? extends Page> pageClass,
+		PageParameters pageParameters, IModel<String> media, boolean async)
+	{
+		MetaDataHeaderItem linkTag = forLinkTag(Model.of("import"),
+			Model.of(RequestCycle.get().urlFor(pageClass, pageParameters).toString()), media);
+		
+		addAsyncAttribute(linkTag, async);
+		
+		return linkTag;
+	}
+

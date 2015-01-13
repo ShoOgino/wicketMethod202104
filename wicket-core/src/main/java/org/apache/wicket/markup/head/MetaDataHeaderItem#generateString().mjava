@@ -19,15 +19,22 @@
 				value = ((IModel<?>)value).getObject();
 			}
 
+			buffer.append(' ')
+				.append(Strings.escapeMarkup(entry.getKey()));
+
 			if (value != null)
 			{
-				buffer.append(' ')
-					.append(Strings.escapeMarkup(entry.getKey()))
-					.append('=')
+				buffer.append('=')
 					.append('"')
-					.append(Strings.escapeMarkup(value.toString()))
+					.append(JavaScriptUtils.escapeQuotes(value.toString()))
 					.append('"');
 			}
+		}
+		
+		for (String attrName : tagMinimizedAttributes)
+		{
+			buffer.append(' ')
+				.append(Strings.escapeMarkup(attrName));
 		}
 
 		buffer.append(" />\n");
