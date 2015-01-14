@@ -1,5 +1,10 @@
 	private Locale getCurrentLocale()
 	{
-		return locale != null ? locale : Session.get().getLocale();
+		if (locale == null && Session.exists())
+		{
+			return Session.get().getLocale();
+		}
+		
+		return locale;
 	}
 
