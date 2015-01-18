@@ -1,0 +1,24 @@
+	/**
+	 * Gets the root bean definition for the given name.
+	 * 
+	 * @param ctx
+	 * 				spring application context.
+	 * @param name
+	 * 				bean name
+	 * @return bean definition for the current name, null if such a definition is not found.
+	 */
+	public RootBeanDefinition getBeanDefinition(final ApplicationContext ctx,
+		final String name)		
+	{
+		AbstractBeanFactory beanFactory = (AbstractBeanFactory)(
+			(AbstractApplicationContext)ctx).getBeanFactory();
+		
+		BeanDefinition beanDef = beanFactory.getMergedBeanDefinition(name);
+		
+		if (beanDef instanceof RootBeanDefinition) {
+			return (RootBeanDefinition)beanDef;
+		}
+		
+		return null;
+	}
+

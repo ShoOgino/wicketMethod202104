@@ -3,16 +3,18 @@
 	 * @param field
 	 * @return bean name
 	 */
-	private String getBeanName(final Field field, String name, boolean required)
+	private String getBeanName(final Field field, String name, boolean required,Class<?> generic)
 	{
 
 		if (Strings.isEmpty(name))
 		{
 			Class<?> fieldType = field.getType();
+			
 			name = beanNameCache.get(fieldType);
 			if (name == null)
 			{
-				name = getBeanNameOfClass(contextLocator.getSpringContext(), fieldType, required);
+				name = getBeanNameOfClass(contextLocator.getSpringContext(), fieldType, generic,
+					required);
 
 				if (name != null)
 				{

@@ -19,14 +19,10 @@
 				required = true;
 			}
 
-			String beanName = getBeanName(field, name, required);
+			Class<?> generic = ResolvableType.forField(field).resolveGeneric(0);
+			String beanName = getBeanName(field, name, required,generic);
 
-			if (beanName == null)
-			{
-				return null;
-			}
-
-			SpringBeanLocator locator = new SpringBeanLocator(beanName, field.getType(),
+			SpringBeanLocator locator = new SpringBeanLocator(beanName, field.getType(),field,
 				contextLocator);
 
 			// only check the cache if the bean is a singleton
@@ -60,7 +56,7 @@
 			}
 
 			// only put the proxy into the cache if the bean is a singleton
-			if (locator.isSingletonBean())
+			if (field.getType() == List.class || locator.isSingletonBean())
 			{
 				Object tmpTarget = cache.putIfAbsent(locator, target);
 				if (tmpTarget != null)

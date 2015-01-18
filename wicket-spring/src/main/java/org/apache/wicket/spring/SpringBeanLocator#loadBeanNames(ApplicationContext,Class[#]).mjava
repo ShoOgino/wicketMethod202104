@@ -1,0 +1,26 @@
+	/**
+	 * Returns a list of candidate names for the given class.
+	 * 
+	 * @param ctx
+	 * 			spring application context
+	 * @param lookupClass
+	 * 			the class to lookup
+	 * @return a list of candidate names
+	 */
+	private List<String> loadBeanNames(ApplicationContext ctx, Class<?> lookupClass)
+	{		
+		List<String> beanNames = new ArrayList<>();
+		String[] beanNamesArr = BeanFactoryUtils
+			.beanNamesForTypeIncludingAncestors(ctx, lookupClass);
+		
+		//add field name if defined
+		if (ctx.containsBean(fieldName))
+		{
+			beanNames.add(fieldName);
+		}
+		
+		beanNames.addAll(Arrays.asList(beanNamesArr));
+		
+		return beanNames;
+	}
+

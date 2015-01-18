@@ -1,0 +1,62 @@
+	/**
+	 * Retrieves a list of beans for the given list of names and assignable to the
+	 * current field to inject.
+	 * 
+	 * @param ctx
+	 * 				spring application context.
+	 * @param names
+	 * 				the list of candidate names
+	 * @return a list of matching beans.
+	 */
+	private ArrayList<Object> getBeansByName(ApplicationContext ctx, List<String> names)
+	{
+		ArrayList<Object> beansAsList = new ArrayList<>();
+		
+		for (String beanName : names)
+		{
+			RootBeanDefinition beanDef = getBeanDefinition(ctx, beanName);
+			
+			if (beanDef == null)
+			{
+				continue;
+			}
+			
+			ResolvableType candidateRt = null;
+			
+			//check if we have the class of the bean or the factory method.
+			//Usually if use XML as config file we have the class while we 
+			//have the factory method if we use Java-based configuration.
+			if(beanDef.hasBeanClass())
+			{
+				candidateRt = ResolvableType.forClass(
+					beanDef.getBeanClass());
+			}
+			else if (beanDef.getResolvedFactoryMethod() != null)
+			{
+				candidateRt = ResolvableType.forMethodReturnType(
+					beanDef.getResolvedFactoryMethod());
+			}
+			
+			if (candidateRt == null)
+			{				
+				continue;
+			}
+			
+			boolean exactMatch = fieldResolvableType.isAssignableFrom(candidateRt);
+			boolean elementMatch = fieldCollectionResolvableType != null ? 
+				fieldCollectionResolvableType.isAssignableFrom(candidateRt) : false;
+			
+			if (exactMatch || elementMatch)
+			{				
+				beansAsList.add(ctx.getBean(beanName));
+			}
+			
+			if(exactMatch)
+			{
+				this.beanName = beanName;
+				return beansAsList;
+			} 			
+		}
+		return beansAsList;
+	}
+

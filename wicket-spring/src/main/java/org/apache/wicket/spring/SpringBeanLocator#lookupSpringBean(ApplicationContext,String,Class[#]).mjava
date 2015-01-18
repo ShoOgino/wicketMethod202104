@@ -15,14 +15,39 @@
 	{
 		try
 		{
-			if (name == null)
-			{
-				return ctx.getBean(clazz);
-			}
-			else
+			// If the name is set the lookup is clear
+			if (name != null)
 			{
 				return ctx.getBean(name, clazz);
 			}
+
+			// If the beanField information is null the clazz is going to be used
+			if (fieldResolvableType == null)
+			{
+				return ctx.getBean(clazz);
+			}
+			
+			// If the given class is a list try to get the generic of the list
+			Class<?> lookupClass = clazz == List.class ? 
+				fieldResolvableType.getGeneric(0).resolve() : clazz;
+			
+			// Else the lookup is done via Generic
+			List<String> names = loadBeanNames(ctx, lookupClass);
+			
+			ArrayList<Object> beansAsList = getBeansByName(ctx, names);
+			
+			if(beansAsList.size() == 1)
+			{
+				return beansAsList.get(0);				
+			}
+			
+			if(!beansAsList.isEmpty())
+			{
+				return beansAsList;
+			}
+			throw new IllegalStateException(
+				"Concrete bean could not be received from the application context " +
+					clazz.getName() + ".");
 		}
 		catch (NoSuchBeanDefinitionException e)
 		{
