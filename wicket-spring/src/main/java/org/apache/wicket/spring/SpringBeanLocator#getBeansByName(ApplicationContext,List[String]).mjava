@@ -1,14 +1,14 @@
 	/**
-	 * Retrieves a list of beans for the given list of names and assignable to the
+	 * Retrieves a list of beans or a single bean for the given list of names and assignable to the
 	 * current field to inject.
 	 * 
 	 * @param ctx
 	 * 				spring application context.
 	 * @param names
 	 * 				the list of candidate names
-	 * @return a list of matching beans.
+	 * @return a list of matching beans or a single one.
 	 */
-	private List<Object> getBeansByName(ApplicationContext ctx, List<String> names)
+	private Object getBeansByName(ApplicationContext ctx, List<String> names)
 	{
 		List<Object> beansAsList = new ArrayList<>();
 
@@ -53,9 +53,10 @@
 			if (exactMatch)
 			{
 				this.beanName = beanName;
-				return beansAsList;
+				return ctx.getBean(beanName);
 			}
 		}
-		return beansAsList;
+		
+		return beansAsList.size() > 0 ? beansAsList : null;
 	}
 

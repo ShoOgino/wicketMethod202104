@@ -28,22 +28,18 @@
 			}
 
 			// If the given class is a list try to get the generic of the list
-			Class<?> lookupClass = clazz == List.class ? 
+			final boolean isList = clazz == List.class;
+			Class<?> lookupClass = isList ? 
 				fieldResolvableType.getGeneric(0).resolve() : clazz;
 
 			// Else the lookup is done via Generic
 			List<String> names = loadBeanNames(ctx, lookupClass);
 
-			List<Object> beansAsList = getBeansByName(ctx, names);
+			Object foundBeans = getBeansByName(ctx, names);
 
-			if(beansAsList.size() == 1)
+			if(foundBeans != null)
 			{
-				return beansAsList.get(0);
-			}
-
-			if (!beansAsList.isEmpty())
-			{
-				return beansAsList;
+				return foundBeans;
 			}
 
 			throw new IllegalStateException(

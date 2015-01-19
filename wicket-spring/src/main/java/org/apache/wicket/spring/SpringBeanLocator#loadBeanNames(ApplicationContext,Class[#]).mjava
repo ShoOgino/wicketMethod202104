@@ -10,17 +10,30 @@
 	private List<String> loadBeanNames(ApplicationContext ctx, Class<?> lookupClass)
 	{		
 		List<String> beanNames = new ArrayList<>();
-		String[] beanNamesArr = BeanFactoryUtils
-			.beanNamesForTypeIncludingAncestors(ctx, lookupClass);
-
-		//add field name if defined
-		if (ctx.containsBean(fieldName))
-		{
-			beanNames.add(fieldName);
-		}
-
+		Class<?> fieldType = getBeanType();
+		String[] beanNamesArr = ctx.getBeanNamesForType(fieldType);
+		
+		//add names for field class 
 		beanNames.addAll(Arrays.asList(beanNamesArr));
-
+		
+		//add names for lookup class 
+		if (lookupClass != fieldType)
+		{
+			beanNamesArr = ctx.getBeanNamesForType(lookupClass);
+			beanNames.addAll(Arrays.asList(beanNamesArr));			
+		}
+		
+		Iterator<String> nameIterator = beanNames.iterator();
+		
+		//filter those beans who don't have a definition (used internally by Spring)
+		while (nameIterator.hasNext())
+		{
+			if (!ctx.containsBeanDefinition(nameIterator.next()))
+			{
+				nameIterator.remove();
+			}			
+		}
+		
 		return beanNames;
 	}
 
