@@ -2,13 +2,13 @@
 	 * Convenience method for setting next page to be rendered.
 	 * 
 	 * @param pageClass
+	 *              The class of the page to render
 	 * @param parameters
+	 *              The query parameters for the page to be rendered
 	 */
 	public void setResponsePage(Class<? extends IRequestablePage> pageClass,
 		PageParameters parameters)
 	{
-		IPageProvider provider = new PageProvider(pageClass, parameters);
-		scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(provider,
-			RenderPageRequestHandler.RedirectPolicy.ALWAYS_REDIRECT));
+		setResponsePage(pageClass, parameters, RenderPageRequestHandler.RedirectPolicy.ALWAYS_REDIRECT);
 	}
 
