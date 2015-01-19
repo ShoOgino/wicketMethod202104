@@ -4,23 +4,19 @@
 	@Override
 	protected void onComponentTag(final ComponentTag tag)
 	{
-		checkComponentTag(tag, "img");
 		super.onComponentTag(tag);
-		final IResource resource = getImageResource();
-		if (resource != null)
+		if (tag.getName().equals("source"))
 		{
-			localizedImageResource.setResource(resource);
+			this.buildSrcSetAttribute(tag);
+			tag.remove("src");
 		}
-		final ResourceReference resourceReference = getImageResourceReference();
-		if (resourceReference != null)
+		else
 		{
-			localizedImageResource.setResourceReference(resourceReference);
+			this.checkComponentTag(tag, "img");
+			String srcAttribute = this.buildSrcAttribute(tag);
+			this.buildSrcSetAttribute(tag);
+			tag.put("src", srcAttribute);
 		}
-		localizedImageResource.setSrcAttribute(tag);
-
-		if (shouldAddAntiCacheParameter())
-		{
-			addAntiCacheParameter(tag);
-		}
+		this.buildSizesAttribute(tag);
 	}
 

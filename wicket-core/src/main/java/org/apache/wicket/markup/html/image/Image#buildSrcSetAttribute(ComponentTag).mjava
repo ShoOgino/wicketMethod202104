@@ -1,0 +1,34 @@
+	/**
+	 * Builds the srcset attribute if multiple localizedImageResources are found as varargs
+	 *
+	 * @param tag
+	 *            the component tag
+	 */
+	protected void buildSrcSetAttribute(final ComponentTag tag)
+	{
+		int srcSetPosition = 0;
+		for (LocalizedImageResource localizedImageResource : this.localizedImageResources)
+		{
+			localizedImageResource.setSrcAttribute(tag);
+
+			if (this.shouldAddAntiCacheParameter())
+			{
+				this.addAntiCacheParameter(tag);
+			}
+
+			String srcset = tag.getAttribute("srcset");
+			String xValue = "";
+
+			// If there are xValues set process them in the applied order to the srcset attribute.
+			if (this.xValues != null)
+			{
+				xValue = this.xValues.size() > srcSetPosition &&
+					this.xValues.get(srcSetPosition) != null ? " " +
+					this.xValues.get(srcSetPosition) : "";
+			}
+			tag.put("srcset", (srcset != null ? srcset + ", " : "") + tag.getAttribute("src") +
+				xValue);
+			srcSetPosition++;
+		}
+	}
+

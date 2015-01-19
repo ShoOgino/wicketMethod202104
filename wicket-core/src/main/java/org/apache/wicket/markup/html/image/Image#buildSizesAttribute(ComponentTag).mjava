@@ -1,0 +1,29 @@
+	/**
+	 * builds the sizes attribute of the img tag
+	 *
+	 * @param tag
+	 *            the component tag
+	 */
+	protected void buildSizesAttribute(final ComponentTag tag)
+	{
+		// if no sizes have been set then don't build the attribute
+		if (this.sizes == null)
+		{
+			return;
+		}
+		String sizes = "";
+		for (String size : this.sizes)
+		{
+			sizes += size + ",";
+		}
+		int lastIndexOf = sizes.lastIndexOf(",");
+		if (lastIndexOf != -1)
+		{
+			sizes = sizes.substring(0, lastIndexOf);
+		}
+		if (!"".equals(sizes))
+		{
+			tag.put("sizes", sizes);
+		}
+	}
+

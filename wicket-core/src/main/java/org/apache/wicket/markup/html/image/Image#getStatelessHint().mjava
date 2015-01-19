@@ -4,7 +4,16 @@
 	@Override
 	protected boolean getStatelessHint()
 	{
-		return (getImageResource() == null || getImageResource() == localizedImageResource.getResource()) &&
+		boolean stateless = (getImageResource() == null || getImageResource() == localizedImageResource.getResource()) &&
 			localizedImageResource.isStateless();
+		boolean statelessList = false;
+		for (LocalizedImageResource localizedImageResource : this.localizedImageResources)
+		{
+			if (localizedImageResource.isStateless())
+			{
+				statelessList = true;
+			}
+		}
+		return stateless || statelessList;
 	}
 
