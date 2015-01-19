@@ -1,0 +1,31 @@
+    /**
+     * Lookup for property-aware model, attached to certain form component.
+     *
+     * @param component
+     *              form component
+     *
+     * @return property-aware model, extracted from supplied component or <code>null</code>
+     */
+    public static IPropertyReflectionAwareModel<?> resolvePropertyModelFrom(FormComponent<?> component)
+    {
+        IModel<?> model = component.getModel();
+        while (true)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+            if (model instanceof IPropertyReflectionAwareModel)
+            {
+                return (IPropertyReflectionAwareModel<?>) model;
+            }
+            if (model instanceof IWrapModel<?>)
+            {
+                model = ((IWrapModel<?>)model).getWrappedModel();
+                continue;
+            }
+            break; // not model found
+        }
+        return null;
+    }
+
