@@ -10,8 +10,8 @@
 	 */
 	private Object getBeansByName(ApplicationContext ctx, List<String> names)
 	{
-		List<Object> beansAsList = new ArrayList<>();
-
+		FieldBeansCollector beansCollector = new FieldBeansCollector(fieldResolvableType);
+		
 		for (String beanName : names)
 		{
 			RootBeanDefinition beanDef = getBeanDefinition(ctx, beanName);
@@ -42,21 +42,22 @@
 			}
 
 			boolean exactMatch = fieldResolvableType.isAssignableFrom(candidateResolvableType);
-			boolean elementMatch = fieldCollectionResolvableType != null ? 
-				fieldCollectionResolvableType.isAssignableFrom(candidateResolvableType) : false;
-
-			if (exactMatch || elementMatch)
-			{
-				beansAsList.add(ctx.getBean(beanName));
-			}
+			boolean elementMatch = fieldElementsResolvableType != null ? 
+				fieldElementsResolvableType.isAssignableFrom(candidateResolvableType) : false;
 
 			if (exactMatch)
 			{
 				this.beanName = beanName;
 				return ctx.getBean(beanName);
 			}
+			
+			if (elementMatch)
+			{
+				beansCollector.addBean(beanName, ctx.getBean(beanName));
+			}
+
 		}
 		
-		return beansAsList.size() > 0 ? beansAsList : null;
+		return beansCollector.getBeansToInject();
 	}
 

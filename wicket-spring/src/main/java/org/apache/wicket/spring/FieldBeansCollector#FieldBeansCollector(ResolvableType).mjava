@@ -1,0 +1,33 @@
+	public FieldBeansCollector(final ResolvableType fieldResolvableType)
+	{
+		Class<?> clazz = fieldResolvableType.resolve();
+		
+		// The required code starts here which replaces
+		if (clazz == Map.class)
+		{
+			fieldType = FieldType.MAP;
+			// the getGeneric has to be called with 1 because the map contains the typified
+			// information in the value generic
+			beansToInjectColl = null;
+			beansToInjectMap = new HashMap<>();
+		}
+		else if (clazz == Set.class)
+		{
+			fieldType = FieldType.SET;
+			beansToInjectColl = new HashSet<>();
+			beansToInjectMap = null;
+		}
+		else if (clazz == List.class)
+		{
+			fieldType = FieldType.LIST;
+			beansToInjectColl = new ArrayList<>();
+			beansToInjectMap = null;
+		}
+		else
+		{
+			fieldType = FieldType.NONE;
+			beansToInjectColl = null;
+			beansToInjectMap = null;
+		}
+	}
+
