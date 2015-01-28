@@ -5,23 +5,24 @@
 	protected void onComponentTag(final ComponentTag tag)
 	{
 		super.onComponentTag(tag);
-		if (tag.getName().equals("source"))
+
+		if ("source".equals(tag.getName()))
 		{
-			this.buildSrcSetAttribute(tag);
+			buildSrcSetAttribute(tag);
 			tag.remove("src");
 		}
 		else
 		{
-			this.checkComponentTag(tag, "img");
-			String srcAttribute = this.buildSrcAttribute(tag);
-			this.buildSrcSetAttribute(tag);
+			checkComponentTag(tag, "img");
+			String srcAttribute = buildSrcAttribute(tag);
+			buildSrcSetAttribute(tag);
 			tag.put("src", srcAttribute);
-
 		}
-		this.buildSizesAttribute(tag);
+		buildSizesAttribute(tag);
 
-		if (this.crossorigin != null) {
-			tag.put("crossorigin", this.crossorigin.getRealName());
+		Cors crossOrigin = getCrossOrigin();
+		if (crossOrigin != null && Cors.NO_CORS != crossOrigin) {
+			tag.put("crossOrigin", crossOrigin.getRealName());
 		}
 	}
 

@@ -7,24 +7,24 @@
 	protected void buildSrcSetAttribute(final ComponentTag tag)
 	{
 		int srcSetPosition = 0;
-		for (LocalizedImageResource localizedImageResource : this.localizedImageResources)
+		for (LocalizedImageResource localizedImageResource : localizedImageResources)
 		{
 			localizedImageResource.setSrcAttribute(tag);
 
-			if (this.shouldAddAntiCacheParameter())
+			if (shouldAddAntiCacheParameter())
 			{
-				this.addAntiCacheParameter(tag);
+				addAntiCacheParameter(tag);
 			}
 
 			String srcset = tag.getAttribute("srcset");
 			String xValue = "";
 
 			// If there are xValues set process them in the applied order to the srcset attribute.
-			if (this.xValues != null)
+			if (xValues != null)
 			{
-				xValue = this.xValues.size() > srcSetPosition &&
-					this.xValues.get(srcSetPosition) != null ? " " +
-					this.xValues.get(srcSetPosition) : "";
+				xValue = xValues.size() > srcSetPosition &&
+					xValues.get(srcSetPosition) != null ? " " +
+					xValues.get(srcSetPosition) : "";
 			}
 			tag.put("srcset", (srcset != null ? srcset + ", " : "") + tag.getAttribute("src") +
 				xValue);
