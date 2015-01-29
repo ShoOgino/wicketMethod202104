@@ -1,0 +1,15 @@
+	@Test
+	public void listOfStringGenerics() throws Exception
+	{
+		AnnotatedListOfBeanStringGenericQualifier page =
+				tester.startPage(new AnnotatedListOfBeanStringGenericQualifier());
+
+		List<BeanWithGeneric<String>> beans = page.getBeans();
+
+		assertThat(beans, is(notNullValue()));
+		assertThat(beans.size(), is(1));
+
+		BeanWithGeneric<String> stringBean = (BeanWithGeneric<String>) ctx.getBean("stringBean");
+		assertThat(beans, hasItem(stringBean));
+	}
+
