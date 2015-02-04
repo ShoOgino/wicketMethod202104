@@ -1,7 +1,6 @@
 	/**
 	 * Replaces the URLs of CSS resources with Wicket representatives.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public String compress(String original)
 	{
@@ -14,7 +13,7 @@
 			{
 				try
 				{
-					Class<Page> pageClass = (Class<Page>)Class.forName(pageName);
+					Class<Page> pageClass = WicketObjects.resolveClass(pageName);
 					String url = matcher.group(1);
 					if (!url.contains("/"))
 					{
