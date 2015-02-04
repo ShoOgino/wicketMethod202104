@@ -1,7 +1,7 @@
 	public CssUrlReplacer(Application application)
 	{
 
-		// Create an instantiation listener which filters only pages.
+		// Create an instantiation listener to detect components
 		application.getComponentInitializationListeners().add(
 			new IComponentInitializationListener()
 			{
@@ -9,11 +9,8 @@
 				@Override
 				public void onInitialize(Component component)
 				{
-					if (Page.class.isAssignableFrom(component.getClass()))
-					{
-						CssUrlReplacer.this.pageNames.put(component.getClass().getName(),
-							component.getClass().getSimpleName());
-					}
+					CssUrlReplacer.this.componentNames.put(component.getClass().getName(),
+						component.getClass().getSimpleName());
 				}
 			});
 	}
