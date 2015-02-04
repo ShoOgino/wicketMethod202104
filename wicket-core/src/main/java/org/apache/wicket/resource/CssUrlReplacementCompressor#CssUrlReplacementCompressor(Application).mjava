@@ -1,0 +1,19 @@
+	public CssUrlReplacementCompressor(Application application)
+	{
+
+		// Create an instantiation listener which filters only pages.
+		application.getComponentInitializationListeners().add(
+			new IComponentInitializationListener()
+			{
+
+				@Override
+				public void onInitialize(Component component)
+				{
+					if (Page.class.isAssignableFrom(component.getClass()))
+					{
+						CssUrlReplacementCompressor.this.pageNames.add(component.getClass().getName());
+					}
+				}
+			});
+	}
+

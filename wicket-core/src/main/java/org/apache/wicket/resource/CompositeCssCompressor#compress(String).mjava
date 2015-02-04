@@ -1,0 +1,21 @@
+	/**
+	 * Compresses the given original content in the order of compressors.
+	 */
+	@Override
+	public String compress(String original)
+	{
+		if (compressors != null)
+		{
+			String compressed = original;
+			for (ICssCompressor compressor : compressors)
+			{
+				compressed = compressor.compress(compressed);
+			}
+			return compressed;
+		}
+		else
+		{
+			return original;
+		}
+	}
+
