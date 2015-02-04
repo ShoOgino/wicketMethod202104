@@ -1,21 +1,15 @@
 	/**
-	 * Compresses the given original content in the order of compressors.
+	 * Compresses the given original content in the order of compressors. If no compressor has been
+	 * given the original content is going to be returned.
 	 */
 	@Override
 	public String compress(String original)
 	{
-		if (compressors != null)
+		String compressed = original;
+		for (ICssCompressor compressor : compressors)
 		{
-			String compressed = original;
-			for (ICssCompressor compressor : compressors)
-			{
-				compressed = compressor.compress(compressed);
-			}
-			return compressed;
+			compressed = compressor.compress(compressed);
 		}
-		else
-		{
-			return original;
-		}
+		return compressed;
 	}
 
