@@ -5,59 +5,58 @@
 		// The time management is used to set the start / stop
 		// time in seconds of the movie to be played back
 		String timeManagement = "";
-		if (this.startTime != null)
+		if (startTime != null)
 		{
-			timeManagement = timeManagement += "#t=" + this.startTime +
-				(this.endTime != null ? "," + this.endTime : "");
+			timeManagement = timeManagement += "#t=" + startTime +
+				(endTime != null ? "," + endTime : "");
 		}
 
-		if (this.mediaStreamingResourceReference != null)
+		if (mediaStreamingResourceReference != null)
 		{
 			tag.put("src",
-				RequestCycle.get()
-					.urlFor(this.mediaStreamingResourceReference, this.pageParameters) +
+				RequestCycle.get().urlFor(mediaStreamingResourceReference, pageParameters) +
 					timeManagement);
 		}
 
-		if (this.url != null)
+		if (url != null)
 		{
-			tag.put("src", this.url + timeManagement);
+			tag.put("src", url + timeManagement);
 		}
 
-		if (this.mediaGroup != null)
+		if (mediaGroup != null)
 		{
-			tag.put("mediagroup", this.mediaGroup);
+			tag.put("mediagroup", mediaGroup);
 		}
 
-		if (this.autoplay != null && this.autoplay)
+		if (autoplay != null && autoplay)
 		{
 			tag.put("autoplay", "autoplay");
 		}
 
-		if (this.loop != null && this.loop)
+		if (loop != null && loop)
 		{
 			tag.put("loop", "loop");
 		}
 
-		if (this.muted != null && this.muted)
+		if (muted != null && muted)
 		{
 			tag.put("muted", "muted");
 		}
 
 		// Use getter here because controls should be visible by default
-		if (this.getControls())
+		if (getControls())
 		{
 			tag.put("controls", "controls");
 		}
 
-		if (this.preload != null)
+		if (preload != null)
 		{
-			tag.put("preload", this.preload.name());
+			tag.put("preload", preload.getRealName());
 		}
 
-		if (this.crossorigin != null)
+		if (crossOrigin != null)
 		{
-			tag.put("crossorigin", this.crossorigin.getRealName());
+			tag.put("crossorigin", crossOrigin.getRealName());
 		}
 	}
 
