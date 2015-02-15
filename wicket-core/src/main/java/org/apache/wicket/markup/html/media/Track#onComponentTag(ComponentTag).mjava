@@ -1,0 +1,44 @@
+	@Override
+	protected void onComponentTag(ComponentTag tag)
+	{
+		checkComponentTag(tag, "track");
+		super.onComponentTag(tag);
+
+		if (resourceReference != null)
+		{
+			tag.put("src", RequestCycle.get().urlFor(resourceReference, pageParameters));
+		}
+
+		if (url != null)
+		{
+			tag.put("src", url);
+		}
+
+		if (kind != null)
+		{
+			tag.put("kind", kind.name());
+		}
+
+		if (label != null)
+		{
+			tag.put("label", label);
+		}
+
+		if (defaultTrack != null && defaultTrack)
+		{
+			tag.put("default", "default");
+		}
+
+		// if the srclang field is set use this, else if the
+		// resource reference provides a locale use the language
+		// of the resource reference
+		if (srclang != null)
+		{
+			tag.put("srclang", srclang.getLanguage());
+		}
+		else if (resourceReference != null && resourceReference.getLocale() != null)
+		{
+			tag.put("srclang", resourceReference.getLocale().getLanguage());
+		}
+	}
+
