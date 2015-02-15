@@ -6,11 +6,9 @@
 
 		if (mediaStreamingResourceReference != null)
 		{
-			tag.put("src",
-				RequestCycle.get().urlFor(mediaStreamingResourceReference, pageParameters));
-		}
-
-		if (url != null)
+			CharSequence url = RequestCycle.get().urlFor(mediaStreamingResourceReference, pageParameters);
+			tag.put("src", url);
+		} else if (url != null)
 		{
 			tag.put("src", url);
 		}
@@ -27,9 +25,10 @@
 			}
 		}
 
-		if (media != null)
+		String _media = getMedia();
+		if (_media != null)
 		{
-			tag.put("media", media);
+			tag.put("media", _media);
 		}
 
 	}

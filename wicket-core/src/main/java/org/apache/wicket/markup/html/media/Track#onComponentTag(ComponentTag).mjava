@@ -8,23 +8,24 @@
 		{
 			tag.put("src", RequestCycle.get().urlFor(resourceReference, pageParameters));
 		}
-
-		if (url != null)
+		else if (url != null)
 		{
 			tag.put("src", url);
 		}
 
-		if (kind != null)
+		Kind _kind = getKind();
+		if (_kind != null)
 		{
-			tag.put("kind", kind.name());
+			tag.put("kind", _kind.name());
 		}
 
-		if (label != null)
+		String _label = getLabel();
+		if (_label != null)
 		{
-			tag.put("label", label);
+			tag.put("label", _label);
 		}
 
-		if (defaultTrack != null && defaultTrack)
+		if (defaultTrack)
 		{
 			tag.put("default", "default");
 		}
@@ -32,9 +33,10 @@
 		// if the srclang field is set use this, else if the
 		// resource reference provides a locale use the language
 		// of the resource reference
-		if (srclang != null)
+		Locale _srclang = getSrclang();
+		if (_srclang != null)
 		{
-			tag.put("srclang", srclang.getLanguage());
+			tag.put("srclang", _srclang.getLanguage());
 		}
 		else if (resourceReference != null && resourceReference.getLocale() != null)
 		{
