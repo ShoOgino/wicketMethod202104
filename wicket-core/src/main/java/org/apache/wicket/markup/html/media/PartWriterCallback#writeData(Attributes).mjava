@@ -1,7 +1,7 @@
 	/**
 	 * Writes the data
 	 * 
-	 * @param Attributes
+	 * @param attributes
 	 *            the attributes to get the output stream of the response
 	 */
 	@Override
@@ -9,9 +9,9 @@
 	{
 		try
 		{
-			InputStream inputStream = packageResourceStream.getInputStream();
+			InputStream inputStream = resourceStream.getInputStream();
 			OutputStream outputStream = attributes.getResponse().getOutputStream();
-			byte[] buffer = new byte[getBuffer()];
+			byte[] buffer = new byte[getBufferSize()];
 
 			if (startbyte != null || endbyte != null)
 			{
@@ -25,11 +25,11 @@
 				// If there are no end bytes given read the whole stream till the end
 				if (endbyte == null)
 				{
-					endbyte = packageResourceStream.length().bytes();
+					endbyte = resourceStream.length().bytes();
 				}
 
 				long totalBytes = 0;
-				int actualReadBytes = 0;
+				int actualReadBytes;
 
 				while ((actualReadBytes = inputStream.read(buffer)) != -1)
 				{
@@ -37,7 +37,7 @@
 					long lowerBuffer = endbyte - totalBytes;
 					if (lowerBuffer <= 0)
 					{
-						buffer = (byte[])resizeArray(buffer, actualReadBytes);
+						buffer = resizeArray(buffer, actualReadBytes);
 						outputStream.write(buffer);
 						break;
 					}

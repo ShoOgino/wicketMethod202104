@@ -1,14 +1,14 @@
 	@Override
-	public IResource getResource()
+	public PackageResource getResource()
 	{
-		AbstractResource mediaStreamingResource = new AbstractResource()
+		return new PackageResource(getScope(), getName(), getLocale(), getStyle(), getVariation())
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes)
 			{
-				PackageResourceStream packageResourceStream = null;
+				IResourceStream packageResourceStream = getResourceStream();
 				Long startbyte = null;
 				Long endbyte = null;
 				try
@@ -19,19 +19,11 @@
 					if (!(request instanceof WebRequest) || !(response instanceof WebResponse))
 					{
 						throw new IllegalStateException(
-							"Either the request is no web request or the response is no web response");
+							"Web request/response are required! Request: " + request + ", response: " + response);
 					}
 
 					WebRequest webRequest = (WebRequest)request;
 					WebResponse webResponse = (WebResponse)response;
-
-					packageResourceStream = new PackageResourceStream(
-						MediaStreamingResourceReference.this.getScope(),
-						MediaStreamingResourceReference.this.getName(),
-						MediaStreamingResourceReference.this.getLocale(),
-						MediaStreamingResourceReference.this.getStyle(),
-						MediaStreamingResourceReference.this.getVariation());
-
 
 					long length = packageResourceStream.length().bytes();
 
@@ -41,13 +33,13 @@
 					resourceResponse.setContentDisposition(ContentDisposition.ATTACHMENT);
 					resourceResponse.setLastModified(packageResourceStream.lastModifiedTime());
 
-					// We accept ranges, so that the player can
+					// accept ranges, so that the player can
 					// load and play content from a specific byte position
 					webResponse.setHeader("Accept-Range", "bytes");
 
 					// Calculating the response code and the byte range to be played
 					String rangeHeader = webRequest.getHeader("range");
-					if (rangeHeader == null || "".equals(rangeHeader))
+					if (Strings.isEmpty(rangeHeader))
 					{
 						resourceResponse.setStatusCode(200);
 						resourceResponse.setContentLength(length);
@@ -55,7 +47,6 @@
 					else
 					{
 						rangeHeader = rangeHeader.replaceAll(" ", "");
-						// If the range header is filled 206 for
 						// partial content has to be returned
 						resourceResponse.setStatusCode(206);
 
@@ -65,11 +56,11 @@
 						// http://stackoverflow.com/questions/8293687/sample-http-range-request-session
 						String range = rangeHeader.substring(rangeHeader.indexOf('=') + 1,
 							rangeHeader.length());
-						String[] rangeParts = range.split("-");
-						if (rangeParts[0].equals("0"))
+						String[] rangeParts = Strings.split(range, '-');
+						if ("0".equals(rangeParts[0]))
 						{
-							webResponse.setHeader("Content-Range", "bytes 0-" + (length - 1) + "/" +
-								length);
+							webResponse.setHeader("Content-Range",
+									"bytes 0-" + (length - 1) + "/" + length);
 							resourceResponse.setContentLength(length);
 						}
 						else
@@ -83,8 +74,8 @@
 							{
 								endbyte = length - 1;
 							}
-							webResponse.setHeader("Content-Range", "bytes " + startbyte + "-" +
-								endbyte + "/" + length);
+							webResponse.setHeader("Content-Range",
+									"bytes " + startbyte + '-' + endbyte + '/' + length);
 							resourceResponse.setContentLength((endbyte - startbyte) + 1);
 						}
 					}
@@ -117,7 +108,6 @@
 				}
 			}
 		};
-		return mediaStreamingResource;
 
 	}
 
