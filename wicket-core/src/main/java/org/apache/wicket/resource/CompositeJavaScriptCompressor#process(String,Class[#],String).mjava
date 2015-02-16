@@ -1,0 +1,23 @@
+	/**
+	 * Compresses the given original content in the order of compressors. If no compressor has been
+	 * given the original content is going to be returned.
+	 */
+	@Override
+	public String process(String input, Class<?> scope, String name)
+	{
+		String compressed = input;
+		for (IJavaScriptCompressor compressor : compressors)
+		{
+			if (compressor instanceof IScopeAwareTextResourceProcessor)
+			{
+				IScopeAwareTextResourceProcessor processor = (IScopeAwareTextResourceProcessor)compressor;
+				compressed = processor.process(compressed, scope, name);
+			}
+			else
+			{
+				compressed = compressor.compress(compressed);
+			}
+		}
+		return compressed;
+	}
+
