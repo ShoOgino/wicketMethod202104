@@ -8,18 +8,20 @@
 		String timeManagement = "";
 		if (startTime != null)
 		{
-			timeManagement += "#t=" + startTime +
-				(endTime != null ? "," + endTime : "");
+			timeManagement += "#t=" + startTime + (endTime != null ? "," + endTime : "");
 		}
 
 		if (mediaStreamingResourceReference != null)
 		{
-			CharSequence urlToMediaReference = RequestCycle.get().urlFor(mediaStreamingResourceReference, pageParameters);
+			CharSequence urlToMediaReference = RequestCycle.get().urlFor(
+				mediaStreamingResourceReference, pageParameters);
 			tag.put("src", urlToMediaReference + timeManagement);
 		}
 		else if (url != null)
 		{
-			tag.put("src", url + timeManagement);
+			Url encoded = new PageParametersEncoder().encodePageParameters(pageParameters);
+			String queryString = encoded.getQueryString();
+			tag.put("src", url + (queryString != null ? "?" + queryString : "") + timeManagement);
 		}
 
 		String mg = getMediaGroup();
