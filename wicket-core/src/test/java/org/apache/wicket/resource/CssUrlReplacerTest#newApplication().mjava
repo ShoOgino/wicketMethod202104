@@ -1,20 +1,23 @@
 	@Override
 	protected WebApplication newApplication()
 	{
-		return new MockApplication() {
+		return new MockApplication()
+		{
 			@Override
 			protected void init()
 			{
 				super.init();
 
-				getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy("=VER=", new MessageDigestResourceVersion())
-				{
-					@Override
-					public void decorateUrl(ResourceUrl url, IStaticCacheableResource resource)
+				getResourceSettings().setCachingStrategy(
+					new FilenameWithVersionResourceCachingStrategy("=VER=",
+						new MessageDigestResourceVersion())
 					{
-						url.setFileName(url.getFileName() + DECORATION_SUFFIX);
-					}
-				});
+						@Override
+						public void decorateUrl(ResourceUrl url, IStaticCacheableResource resource)
+						{
+							url.setFileName(url.getFileName() + DECORATION_SUFFIX);
+						}
+					});
 			}
 		};
 	}
