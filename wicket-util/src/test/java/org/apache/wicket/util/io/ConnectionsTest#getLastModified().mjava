@@ -1,0 +1,13 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5838
+	 * @throws Exception
+	 */
+	@Test
+	public void getLastModified() throws Exception
+	{
+		URL url = new URL("http://wicket.apache.org/learn/books/wia.png");
+		Time lastModified = Connections.getLastModified(url);
+		assertThat(lastModified, is(notNullValue()));
+		assertThat(lastModified.getMilliseconds(), is(not(0L)));
+	}
+
