@@ -1,0 +1,11 @@
+	@Test
+	public void allowsRenderWithRequiredRoleAndNoDeniedRole()
+	{
+		AnnotationsRoleAuthorizationStrategy strategy = new AnnotationsRoleAuthorizationStrategy(
+				roles("role1"));
+		// use mock to not need Application in the thread
+		TestComponent_Render component = Mockito
+				.mock(TestComponent_Render.class);
+		assertTrue(strategy.isActionAuthorized(component, Component.RENDER));
+	}
+
