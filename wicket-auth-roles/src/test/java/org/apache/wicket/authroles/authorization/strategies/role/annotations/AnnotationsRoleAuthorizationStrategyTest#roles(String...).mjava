@@ -1,0 +1,19 @@
+	/**
+	 * Create a test role checking strategy that is simply given a list of roles
+	 * and returns true if that list contains any of the asked-for roles.
+	 *
+	 * @param availableRoles rules that this role checker should have
+	 * @return test role checking strategy
+	 */
+	private IRoleCheckingStrategy roles(final String... availableRoles)
+	{
+		return new IRoleCheckingStrategy()
+		{
+			@Override
+			public boolean hasAnyRole(Roles requiredRoles)
+			{
+				return requiredRoles.hasAnyRole(new Roles(availableRoles));
+			}
+		};
+	}
+
