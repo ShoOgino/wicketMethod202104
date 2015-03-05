@@ -1,0 +1,16 @@
+	private static ClassLoader resolveClassLoader()
+	{
+		ClassLoader classLoader = null;
+		if (Application.exists())
+		{
+			classLoader = Application.get().getApplicationSettings()
+					.getClassResolver().getClassLoader();
+		}
+
+		if (classLoader == null) {
+			classLoader = Thread.currentThread().getContextClassLoader();
+		}
+
+		return classLoader;
+	}
+
