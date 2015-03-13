@@ -1,0 +1,69 @@
+	/**
+	 * Writes the data
+	 *
+	 * @param attributes
+	 *            the attributes to get the output stream of the response
+	 */
+	@Override
+	public void writeData(Attributes attributes) throws IOException
+	{
+		try
+		{
+			InputStream inputStream = resourceStream.getInputStream();
+			OutputStream outputStream = attributes.getResponse().getOutputStream();
+			byte[] buffer = new byte[getBufferSize()];
+
+			if (startbyte != null || endbyte != null)
+			{
+				// skipping the first bytes which are
+				// requested to be skipped by the client
+				if (startbyte != null)
+				{
+					inputStream.skip(startbyte);
+				}
+
+				// If there are no end bytes given read the whole stream till the end
+				if (endbyte == null)
+				{
+					endbyte = resourceStream.length().bytes();
+				}
+
+				long totalBytes = 0;
+				int actualReadBytes;
+
+				while ((actualReadBytes = inputStream.read(buffer)) != -1)
+				{
+					totalBytes = totalBytes + buffer.length;
+					long lowerBuffer = endbyte - totalBytes;
+					if (lowerBuffer <= 0)
+					{
+						buffer = resizeArray(buffer, actualReadBytes);
+						outputStream.write(buffer);
+						break;
+					}
+					else
+					{
+						outputStream.write(buffer);
+					}
+				}
+			}
+			else
+			{
+				Streams.copy(inputStream, outputStream, getBufferSize());
+			}
+		}
+		catch (ResponseIOException e)
+		{
+			// the client has closed the connection and
+			// doesn't read the stream further on
+			// (in tomcats
+			// org.apache.catalina.connector.ClientAbortException)
+			// we ignore this case
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException(
+				"A problem occurred while writing the buffer to the output stream.", e);
+		}
+	}
+
