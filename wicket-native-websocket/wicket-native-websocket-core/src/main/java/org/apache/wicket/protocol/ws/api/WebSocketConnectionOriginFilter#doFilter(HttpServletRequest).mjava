@@ -1,0 +1,9 @@
+    @Override
+    public void doFilter(HttpServletRequest servletRequest) {
+        if (webSocketSettings.isHijackingProtectionEnabled()) {
+            String oUrl = getOriginUrl(servletRequest);
+            if (invalid(oUrl))
+                throw new ConnectionRejectedException();
+        }
+    }
+

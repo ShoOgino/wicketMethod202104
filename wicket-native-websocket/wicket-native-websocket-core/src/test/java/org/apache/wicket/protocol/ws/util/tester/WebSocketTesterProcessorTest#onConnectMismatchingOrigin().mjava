@@ -1,0 +1,13 @@
+    @Test
+    public void onConnectMismatchingOrigin() throws Exception {
+        // Given header 'Origin' does not match the host origin
+        configureRequest(true, new String[] { "http://www.example.com" }, new String[] { "http://ww2.example.com" });
+
+        // When we open a connection
+        TestWebSocketProcessor processor = new TestProcessor(tester.getRequest(), tester.getApplication());
+        processor.onOpen(new Object());
+
+        // Then it fails
+        assertEquals(true, TestWebSocketResource.ON_ABORT_CALLED.get());
+    }
+

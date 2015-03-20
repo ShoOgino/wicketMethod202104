@@ -1,0 +1,13 @@
+    @Test
+    public void onConnectMatchingOrigin() throws Exception {
+        // Given header 'Origin' matches the host origin
+        configureRequest(true, new String[] { "http://www.example.com" }, new String[] { "http://www.example.com" });
+
+        // When we open a connection
+        TestWebSocketProcessor processor = new TestProcessor(tester.getRequest(), tester.getApplication());
+        processor.onOpen(new Object());
+
+        // Then it succeeds
+        assertEquals(false, TestWebSocketResource.ON_ABORT_CALLED.get());
+    }
+
