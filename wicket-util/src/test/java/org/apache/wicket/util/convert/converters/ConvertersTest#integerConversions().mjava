@@ -27,9 +27,20 @@
 		{
 			// This is correct
 		}
+
 		try
 		{
-			converter.convertToObject("" + ((long)Integer.MAX_VALUE + 1), Locale.US);
+			converter.convertToObject("1.0", Locale.US);
+			fail("Conversion should have thrown an exception");
+		}
+		catch (ConversionException e)
+		{
+			// This is correct
+		}
+
+		try
+		{
+			converter.convertToObject("1" + Integer.MAX_VALUE, Locale.US);
 			fail("Conversion should have thrown an exception");
 		}
 		catch (ConversionException e)

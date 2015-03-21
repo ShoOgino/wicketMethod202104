@@ -1,6 +1,28 @@
 	/**
 	 * @param locale
+	 *            The locale
 	 * @return Returns the numberFormat.
 	 */
-	public abstract NumberFormat getNumberFormat(Locale locale);
+	public NumberFormat getNumberFormat(final Locale locale)
+	{
+		NumberFormat numberFormat = numberFormats.get(locale);
+		if (numberFormat == null)
+		{
+			numberFormat = newNumberFormat(locale);
+
+			if (numberFormat instanceof DecimalFormat)
+			{
+				// always try to parse BigDecimals
+				((DecimalFormat)numberFormat).setParseBigDecimal(true);
+			}
+
+			NumberFormat tmpNumberFormat = numberFormats.putIfAbsent(locale, numberFormat);
+			if (tmpNumberFormat != null)
+			{
+				numberFormat = tmpNumberFormat;
+			}
+		}
+		// return a clone because NumberFormat.get..Instance use a pool
+		return (NumberFormat)numberFormat.clone();
+	}
 
