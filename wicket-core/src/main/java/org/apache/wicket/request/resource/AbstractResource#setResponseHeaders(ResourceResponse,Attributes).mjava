@@ -1,8 +1,14 @@
 	/**
-	 * @param data
+	 * Sets the response header of resource response to the response received from the attributes
+	 *
+	 * @param resourceResponse
+	 *            the resource response to get the header fields from
 	 * @param attributes
+	 *            the attributes to get the response from to which the header information are going
+	 *            to be applied
 	 */
-	protected void setResponseHeaders(final ResourceResponse data, final Attributes attributes)
+	protected void setResponseHeaders(final ResourceResponse resourceResponse,
+		final Attributes attributes)
 	{
 		Response response = attributes.getResponse();
 		if (response instanceof WebResponse)
@@ -10,38 +16,36 @@
 			WebResponse webResponse = (WebResponse)response;
 
 			// 1. Last Modified
-			Time lastModified = data.getLastModified();
+			Time lastModified = resourceResponse.getLastModified();
 			if (lastModified != null)
 			{
 				webResponse.setLastModifiedTime(lastModified);
 			}
 
 			// 2. Caching
-			configureCache(data, attributes);
+			configureCache(resourceResponse, attributes);
 
-			if (data.getErrorCode() != null)
+			if (resourceResponse.getErrorCode() != null)
 			{
-				webResponse.sendError(data.getErrorCode(), data.getErrorMessage());
+				webResponse.sendError(resourceResponse.getErrorCode(),
+					resourceResponse.getErrorMessage());
 				return;
 			}
 
-			if (data.getStatusCode() != null)
+			if (resourceResponse.getStatusCode() != null)
 			{
-				webResponse.setStatus(data.getStatusCode());
+				webResponse.setStatus(resourceResponse.getStatusCode());
 			}
-			
-			if (!data.dataNeedsToBeWritten(attributes))
+
+			if (!resourceResponse.dataNeedsToBeWritten(attributes))
 			{
 				webResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 				return;
 			}
 
-			String fileName = data.getFileName();
-			ContentDisposition disposition = data.getContentDisposition();
-			String mimeType = data.getContentType();
-			long contentLength = data.getContentLength();
-
 			// 3. Content Disposition
+			String fileName = resourceResponse.getFileName();
+			ContentDisposition disposition = resourceResponse.getContentDisposition();
 			if (ContentDisposition.ATTACHMENT == disposition)
 			{
 				webResponse.setAttachmentHeader(fileName);
@@ -52,10 +56,11 @@
 			}
 
 			// 4. Mime Type (+ encoding)
+			String mimeType = resourceResponse.getContentType();
 			if (mimeType != null)
 			{
-				final String encoding = data.getTextEncoding();
-				
+				final String encoding = resourceResponse.getTextEncoding();
+
 				if (encoding == null)
 				{
 					webResponse.setContentType(mimeType);
@@ -66,14 +71,46 @@
 				}
 			}
 
-			// 5. Content Length
-			if (contentLength != -1)
+			// 5. Accept Range
+			ContentRangeType acceptRange = resourceResponse.getAcceptRange();
+			if (acceptRange != null)
+			{
+				webResponse.setAcceptRange(acceptRange.getTypeName());
+			}
+
+			long contentLength = resourceResponse.getContentLength();
+			boolean contentRangeApplied = false;
+
+			// 6. Content Range
+			// for more information take a look here:
+			// http://stackoverflow.com/questions/8293687/sample-http-range-request-session
+			// if the content range header has been set directly
+			// to the resource response use it otherwise calculate it
+			String contentRange = resourceResponse.getContentRange();
+			if (contentRange != null)
+			{
+				webResponse.setContentRange(contentRange);
+			}
+			else
+			{
+				// content length has to be set otherwise the content range header can not be
+				// calculated - accept range must be set to bytes - others are not supported at the
+				// moment
+				if (contentLength != -1 && ContentRangeType.BYTES.equals(acceptRange))
+				{
+					contentRangeApplied = setResponseContentRangeHeaderFields(webResponse,
+						attributes, contentLength);
+				}
+			}
+
+			// 7. Content Length
+			if (contentLength != -1 && !contentRangeApplied)
 			{
 				webResponse.setContentLength(contentLength);
 			}
 
 			// add custom headers and values
-			final HttpHeaderCollection headers = data.getHeaders();
+			final HttpHeaderCollection headers = resourceResponse.getHeaders();
 
 			for (String name : headers.getHeaderNames())
 			{

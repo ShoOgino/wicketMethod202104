@@ -5,6 +5,9 @@
 	@Override
 	public void respond(final Attributes attributes)
 	{
+		// Sets the request attributes
+		setRequestMetaData(attributes);
+
 		// Get a "new" ResourceResponse to write a response
 		ResourceResponse data = newResourceResponse(attributes);
 
@@ -23,8 +26,8 @@
 		// set response header
 		setResponseHeaders(data, attributes);
 
-		if (!data.dataNeedsToBeWritten(attributes) || data.getErrorCode() != null
-				|| needsBody(data.getStatusCode()) == false)
+		if (!data.dataNeedsToBeWritten(attributes) || data.getErrorCode() != null ||
+			needsBody(data.getStatusCode()) == false)
 		{
 			return;
 		}

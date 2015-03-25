@@ -4,9 +4,9 @@
 		checkComponentTag(tag, "source");
 		super.onComponentTag(tag);
 
-		if (mediaStreamingResourceReference != null)
+		if (resourceReference != null)
 		{
-			CharSequence url = RequestCycle.get().urlFor(mediaStreamingResourceReference, pageParameters);
+			CharSequence url = RequestCycle.get().urlFor(resourceReference, pageParameters);
 			tag.put("src", url);
 		} else if (url != null)
 		{
@@ -19,9 +19,12 @@
 			{
 				tag.put("type", type);
 			}
-			else if (mediaStreamingResourceReference != null)
+			else if (resourceReference != null)
 			{
-				tag.put("type", mediaStreamingResourceReference.getType());
+				PackageResource resource = resourceReference.getResource();
+				IResourceStream resourceStream = resource.getResourceStream();
+				String contentType = resourceStream.getContentType();
+				tag.put("type", contentType);
 			}
 		}
 

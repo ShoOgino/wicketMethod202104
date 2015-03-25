@@ -1,0 +1,30 @@
+	protected void setRequestRangeMetaData(WebRequest webRequest)
+	{
+		String rangeHeader = webRequest.getHeader("range");
+
+		// The content range header is only be calculated if a range is given
+		if (!Strings.isEmpty(rangeHeader) &&
+				rangeHeader.contains(ContentRangeType.BYTES.getTypeName()))
+		{
+			// fixing white spaces
+			rangeHeader = rangeHeader.replaceAll(" ", "");
+
+			String range = rangeHeader.substring(rangeHeader.indexOf('=') + 1,
+					rangeHeader.length());
+
+			String[] rangeParts = Strings.split(range, '-');
+
+			String startByteString = rangeParts[0];
+			String endByteString = rangeParts[1];
+
+			Long startbyte = startByteString != null && !startByteString.trim().equals("")
+					? Long.parseLong(startByteString) : 0;
+			Long endbyte = endByteString != null && !endByteString.trim().equals("")
+					? Long.parseLong(endByteString) : -1;
+
+			// Make the content range information available for the whole request cycle
+			RequestCycle.get().setMetaData(CONTENT_RANGE_STARTBYTE, startbyte);
+			RequestCycle.get().setMetaData(CONTENT_RANGE_ENDBYTE, endbyte);
+		}
+	}
+

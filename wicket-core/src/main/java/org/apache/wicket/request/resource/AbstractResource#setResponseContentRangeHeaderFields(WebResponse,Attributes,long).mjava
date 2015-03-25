@@ -1,0 +1,43 @@
+	/**
+	 * Sets the content range header fields to the given web response
+	 *
+	 * @param webResponse
+	 *            the web response to apply the content range information to
+	 * @param attributes
+	 *            the attributes to get the request from
+	 * @param contentLength
+	 *            the content length of the response
+	 * @return if the content range header information has been applied
+	 */
+	protected boolean setResponseContentRangeHeaderFields(WebResponse webResponse,
+		Attributes attributes, long contentLength)
+	{
+		boolean contentRangeApplied = false;
+		if (attributes.getRequest() instanceof WebRequest)
+		{
+			Long startbyte = RequestCycle.get().getMetaData(CONTENT_RANGE_STARTBYTE);
+			Long endbyte = RequestCycle.get().getMetaData(CONTENT_RANGE_ENDBYTE);
+
+			if (startbyte != null && endbyte != null)
+			{
+				// if end byte hasn't been set
+				if (endbyte == -1)
+				{
+					endbyte = contentLength - 1;
+				}
+
+				// Change the status code to 206 partial content
+				webResponse.setStatus(206);
+				// currently only bytes are supported.
+				webResponse.setContentRange(ContentRangeType.BYTES.getTypeName() + " " + startbyte +
+					'-' + endbyte + '/' + contentLength);
+				// content length must be overridden by the recalculated one
+				webResponse.setContentLength((endbyte - startbyte) + 1);
+
+				// content range has been applied do not set the content length again!
+				contentRangeApplied = true;
+			}
+		}
+		return contentRangeApplied;
+	}
+

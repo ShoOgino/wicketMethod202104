@@ -3,13 +3,14 @@
 	 *
 	 * @param attributes
 	 *            the attributes to get the output stream of the response
+	 * @throws IOException
+	 *             if something went wrong while writing the data to the output stream
 	 */
 	@Override
 	public void writeData(Attributes attributes) throws IOException
 	{
 		try
 		{
-			InputStream inputStream = resourceStream.getInputStream();
 			OutputStream outputStream = attributes.getResponse().getOutputStream();
 			byte[] buffer = new byte[getBufferSize()];
 
@@ -23,9 +24,9 @@
 				}
 
 				// If there are no end bytes given read the whole stream till the end
-				if (endbyte == null)
+				if (endbyte == null || Long.valueOf(-1).equals(endbyte))
 				{
-					endbyte = resourceStream.length().bytes();
+					endbyte = contentLength;
 				}
 
 				long totalBytes = 0;
@@ -59,11 +60,6 @@
 			// (in tomcats
 			// org.apache.catalina.connector.ClientAbortException)
 			// we ignore this case
-		}
-		catch (Exception e)
-		{
-			throw new WicketRuntimeException(
-				"A problem occurred while writing the buffer to the output stream.", e);
 		}
 	}
 
