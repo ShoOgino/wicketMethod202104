@@ -29,22 +29,31 @@
 					endbyte = contentLength;
 				}
 
-				long totalBytes = 0;
-				int actualReadBytes;
+				// The read bytes in the current buffer
+				int readBytes;
 
-				while ((actualReadBytes = inputStream.read(buffer)) != -1)
+				// The total bytes read
+				long totalBytes = 0;
+
+				while ((readBytes = inputStream.read(buffer)) != -1)
 				{
-					totalBytes = totalBytes + buffer.length;
-					long lowerBuffer = endbyte - totalBytes;
-					if (lowerBuffer <= 0)
+					totalBytes += readBytes;
+
+					// Check if the end byte is reached
+					if (endbyte - totalBytes < 0)
 					{
-						buffer = resizeArray(buffer, actualReadBytes);
-						outputStream.write(buffer);
+						// calculate the bytes left to be read in the current buffer
+						// can be casted to int, because the the previous chunks are
+						// subtracted - so it can't exceed buffer size
+						int leftBytesToBeRead = (int)(totalBytes - startbyte) -
+							(int)(totalBytes - endbyte);
+						outputStream.write(buffer, 0, leftBytesToBeRead);
 						break;
 					}
 					else
 					{
-						outputStream.write(buffer);
+						// If the end byte is not reached read the full buffer
+						outputStream.write(buffer, 0, readBytes);
 					}
 				}
 			}
