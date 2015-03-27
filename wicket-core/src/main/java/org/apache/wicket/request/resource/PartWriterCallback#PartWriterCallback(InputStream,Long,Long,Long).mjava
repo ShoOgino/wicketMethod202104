@@ -4,12 +4,12 @@
 	 * Reads a part of the given input stream. If the startbyte parameter is not null the number of
 	 * bytes are skipped till the stream is read. If the endbyte is not null the stream is read till
 	 * endbyte, else to the end of the whole stream. If startbyte and endbyte is null the whole
-	 * stream is read.
+	 * stream is copied.
 	 *
 	 * @param inputStream
-	 *            the input stream to be read
-	 * @param the
-	 *            content length
+	 *            the input stream to read from
+	 * @param contentLength
+	 *            content length of the input stream. Ignored if <em>endByte</em> is specified
 	 * @param startbyte
 	 *            the start position to read from (if not null the number of bytes are skipped till
 	 *            the stream is read)
@@ -21,7 +21,7 @@
 		Long endbyte)
 	{
 		this.inputStream = inputStream;
-		this.contentLength = contentLength;
+		this.contentLength = Args.notNull(contentLength, "contentLength");
 		this.startbyte = startbyte;
 		this.endbyte = endbyte;
 	}
