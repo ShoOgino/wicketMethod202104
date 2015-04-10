@@ -1,9 +1,15 @@
-    @Override
-    public void doFilter(HttpServletRequest servletRequest) {
-        if (webSocketSettings.isHijackingProtectionEnabled()) {
-            String oUrl = getOriginUrl(servletRequest);
-            if (invalid(oUrl))
-                throw new ConnectionRejectedException(POLICY_VIOLATION, ORIGIN_MISMATCH);
-        }
-    }
+	@Override
+	public ConnectionRejected doFilter(HttpServletRequest servletRequest)
+	{
+		if (allowedDomains != null && !allowedDomains.isEmpty())
+		{
+			String oUrl = getOriginUrl(servletRequest);
+			if (invalid(oUrl, allowedDomains))
+			{
+				return new ConnectionRejected(POLICY_VIOLATION_ERROR_CODE, ORIGIN_MISMATCH);
+			}
+		}
+
+		return null;
+	}
 

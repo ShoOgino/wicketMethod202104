@@ -1,7 +1,20 @@
-    private String getOriginUrl(HttpServletRequest servletRequest) {
-        ArrayList<String> origins = Collections.list(servletRequest.getHeaders("Origin"));
-        if (origins.size() != 1)
-            return null;
-        return origins.get(0);
-    }
+	private String getOriginUrl(final HttpServletRequest servletRequest)
+	{
+		Enumeration<String> originHeaderValues = servletRequest.getHeaders("Origin");
+		List<String> origins;
+		if (originHeaderValues != null)
+		{
+			origins = Collections.list(originHeaderValues);
+		}
+		else
+		{
+			origins = Collections.emptyList();
+		}
+
+		if (origins.size() != 1)
+		{
+			return null;
+		}
+		return origins.get(0);
+	}
 
