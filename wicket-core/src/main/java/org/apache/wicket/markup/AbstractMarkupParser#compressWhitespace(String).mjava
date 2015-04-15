@@ -22,8 +22,8 @@
 			boolean matched = m.find();
 			String nonPre = matched ? rawMarkup.substring(lastend, m.start())
 				: rawMarkup.substring(lastend);
-			nonPre = nonPre.replaceAll("[ \\t]+", " ");
-			nonPre = nonPre.replaceAll("( ?[\\r\\n] ?)+", "\n");
+			nonPre = SPACE_OR_TAB_PATTERN.matcher(nonPre).replaceAll(" ");
+			nonPre = NEW_LINE_PATTERN.matcher(nonPre).replaceAll("\n");
 
 			// Don't create a StringBuilder if we don't actually need one.
 			// This optimizes the trivial common case where there is no <pre>
