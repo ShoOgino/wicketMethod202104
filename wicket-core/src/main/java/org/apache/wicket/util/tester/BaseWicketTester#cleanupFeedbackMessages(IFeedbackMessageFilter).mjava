@@ -4,12 +4,13 @@
 	 * @param filter
 	 *            filter used to cleanup messages, accepted messages will be removed
 	 */
-	private void cleanupFeedbackMessages(IFeedbackMessageFilter filter)
+	protected void cleanupFeedbackMessages(IFeedbackMessageFilter filter)
 	{
-		application.getApplicationSettings().setFeedbackMessageCleanupFilter(filter);
+		ApplicationSettings applicationSettings = application.getApplicationSettings();
+		IFeedbackMessageFilter old = applicationSettings.getFeedbackMessageCleanupFilter();
+		applicationSettings.setFeedbackMessageCleanupFilter(filter);
 		getLastRenderedPage().detach();
 		getSession().detach();
-		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
-			IFeedbackMessageFilter.NONE);
+		applicationSettings.setFeedbackMessageCleanupFilter(old);
 	}
 

@@ -1,0 +1,14 @@
+	@Override
+	protected WicketTester newWicketTester(WebApplication app)
+	{
+		return new WicketTester(app)
+		{
+			@Override
+			public void clearFeedbackMessages()
+			{
+				// preserve the configured filter
+				cleanupFeedbackMessages(getApplication().getApplicationSettings().getFeedbackMessageCleanupFilter());
+			}
+		};
+	}
+
