@@ -2,7 +2,10 @@
 	public boolean isResourceAuthorized(IResource resource, PageParameters pageParameters)
 	{
 		Class<? extends IResource> resourceClass = resource.getClass();
-		return checkResource(resourceClass.getAnnotation(AuthorizeResource.class)) || checkResource(
+		boolean allowedByResourceItself = isResourceAnnotationSatisfied(
+				resourceClass.getAnnotation(AuthorizeResource.class));
+		boolean allowedByPackage = isResourceAnnotationSatisfied(
 				resourceClass.getPackage().getAnnotation(AuthorizeResource.class));
+		return allowedByResourceItself && allowedByPackage;
 	}
 

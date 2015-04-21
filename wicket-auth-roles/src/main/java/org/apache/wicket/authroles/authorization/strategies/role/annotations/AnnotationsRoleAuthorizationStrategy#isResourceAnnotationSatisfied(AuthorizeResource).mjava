@@ -1,0 +1,14 @@
+	private boolean isResourceAnnotationSatisfied(AuthorizeResource annotation)
+	{
+		if (annotation != null)
+		{
+			// we have an annotation => we must check for the required roles
+			return hasAny(new Roles(annotation.value()));
+		}
+		else
+		{
+			// no annotation => no required roles => this resource can be accessed
+			return true;
+		}
+	}
+
