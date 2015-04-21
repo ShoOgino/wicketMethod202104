@@ -11,7 +11,8 @@
 			public void component(final Component component, final IVisit<Void> visit)
 			{
 				Form<?> form = (Form<?>)component;
-				if (form.isEnabledInHierarchy() && isVisibleInHierarchy())
+				if (form.isEnabledInHierarchy() && form.isVisibleInHierarchy() &&
+					form.wantSubmitOnParentFormSubmit())
 				{
 					form.setFlag(FLAG_SUBMITTED, true);
 					return;
