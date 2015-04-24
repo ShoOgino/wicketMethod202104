@@ -5,6 +5,12 @@
 	 */
 	private WebResponse getWebResponse()
 	{
-		return (WebResponse)RequestCycle.get().getOriginalResponse();
+		RequestCycle cycle = RequestCycle.get();
+		Response response = cycle.getResponse();
+		if (!(response instanceof WebResponse))
+		{
+			response = cycle.getOriginalResponse();
+		}
+		return (WebResponse)response;
 	}
 
