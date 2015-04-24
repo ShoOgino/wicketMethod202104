@@ -10,7 +10,7 @@
 		String className = System.getProperty("Wicket_HeaderRenderStrategy");
 		if (className != null)
 		{
-			Class<?> clazz = null;
+			Class<?> clazz;
 			try
 			{
 				clazz = Application.get()
@@ -23,15 +23,7 @@
 					return (IHeaderRenderStrategy)clazz.newInstance();
 				}
 			}
-			catch (ClassNotFoundException ex)
-			{
-				// ignore
-			}
-			catch (InstantiationException ex)
-			{
-				// ignore
-			}
-			catch (IllegalAccessException ex)
+			catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex)
 			{
 				// ignore
 			}
