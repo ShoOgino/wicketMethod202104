@@ -1,0 +1,15 @@
+	/**
+	 * 
+	 * 
+	 * @return The client's navigator.cookieEnabled property.
+	 */
+	public boolean isNavigatorCookieEnabled()
+	{
+		if (!navigatorCookieEnabled && RequestCycle.get() != null)
+		{
+			Collection<Cookie> cookies = ((WebRequest)RequestCycle.get().getRequest()).getCookies();
+			navigatorCookieEnabled = cookies != null && cookies.size() > 0;
+		}
+		return navigatorCookieEnabled;
+	}
+
