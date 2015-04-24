@@ -17,24 +17,13 @@
 		if (clientInfo == null)
 		{
 			RequestCycle requestCycle = RequestCycle.get();
+			clientInfo = new WebClientInfo(requestCycle);
 
 			if (getApplication().getRequestCycleSettings().getGatherExtendedBrowserInfo())
 			{
-				if (getMetaData(BROWSER_WAS_POLLED_KEY) == null)
-				{
-					// we haven't done the redirect yet; record that we will be
-					// doing that now and redirect
-					setMetaData(BROWSER_WAS_POLLED_KEY, Boolean.TRUE);
-
-					WebPage browserInfoPage = newBrowserInfoPage();
-					throw new RestartResponseAtInterceptPageException(browserInfoPage);
-				}
-				// if we get here, the redirect already has been done; clear
-				// the meta data entry; we don't need it any longer is the client
-				// info object will be cached too
-				setMetaData(BROWSER_WAS_POLLED_KEY, null);
+				WebPage browserInfoPage = newBrowserInfoPage();
+				throw new RestartResponseAtInterceptPageException(browserInfoPage);
 			}
-			clientInfo = new WebClientInfo(requestCycle);
 		}
 		return (WebClientInfo)clientInfo;
 	}
