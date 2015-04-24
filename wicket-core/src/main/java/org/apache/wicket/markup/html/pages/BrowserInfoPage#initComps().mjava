@@ -3,7 +3,16 @@
 	 */
 	private void initComps()
 	{
-		final ContinueLink link = new ContinueLink("link");
+		IModel<ClientProperties> properties = new AbstractReadOnlyModel<ClientProperties>()
+		{
+			@Override
+			public ClientProperties getObject()
+			{
+				return WebSession.get().getClientInfo().getProperties();
+			}
+		};
+
+		final ContinueLink link = new ContinueLink("link", properties);
 		add(link);
 
 		WebComponent meta = new WebComponent("meta");
@@ -19,15 +28,6 @@
 		}));
 		add(meta);
 
-		IModel<ClientProperties> properties = new AbstractReadOnlyModel<ClientProperties>()
-		{
-			@Override
-			public ClientProperties getObject()
-			{
-				return WebSession.get().getClientInfo().getProperties();
-			}
-		};
-
 		browserInfoForm = new BrowserInfoForm("postback", properties)
 		{
 			private static final long serialVersionUID = 1L;
@@ -35,6 +35,8 @@
 			@Override
 			protected void afterSubmit()
 			{
+				getModelObject().setJavaScriptEnabled(true);
+
 				continueToOriginalDestination();
 			}
 		};
