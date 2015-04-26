@@ -12,21 +12,17 @@
 			}
 		};
 
-		final ContinueLink link = new ContinueLink("link", properties);
-		add(link);
+		// hide the formerly used meta-tag from markup
+		// TODO remove in Wicket 8
+		add(new WebMarkupContainer("meta") {
+			protected void onAfterRender() {
+				super.onAfterRender();
 
-		WebComponent meta = new WebComponent("meta");
-		meta.add(AttributeModifier.replace("content", new AbstractReadOnlyModel<String>()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getObject()
-			{
-				return "0; url=" + link.getURL();
+				log.warn("remove the meta tag with wicket:id=\"meta\" from the markup of your BrowserInfoPage subclass");
 			}
-		}));
-		add(meta);
+		}.setVisible(false));
+
+		add(new ContinueLink("link", properties));
 
 		browserInfoForm = new BrowserInfoForm("postback", properties)
 		{
@@ -38,6 +34,9 @@
 				getModelObject().setJavaScriptEnabled(true);
 
 				continueToOriginalDestination();
+
+				// switch to home page if no original destination was intercepted
+				setResponsePage(getApplication().getHomePage());
 			}
 		};
 		add(browserInfoForm);
