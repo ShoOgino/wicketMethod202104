@@ -1,0 +1,18 @@
+	@Test
+	public void noHeadNoBody()
+	{
+		final AtomicBoolean reported = new AtomicBoolean(false);
+
+		NoHeadNoBodyPage page = new NoHeadNoBodyPage()
+		{
+			@Override
+			protected void reportMissingHead(CharSequence collectedHeaderOutput)
+			{
+				reported.set(true);
+			}
+		};
+
+		tester.startPage(page);
+		assertThat(reported.get(), is(true));
+	}
+
