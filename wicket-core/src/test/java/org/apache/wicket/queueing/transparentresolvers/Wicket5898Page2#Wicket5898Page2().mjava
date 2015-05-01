@@ -1,0 +1,32 @@
+	/**
+	 * Constructor.
+	 */
+	public Wicket5898Page2()
+	{
+		final Label label = new Label("label", "Label");
+		label.setOutputMarkupId(true);
+		add(label);
+
+		// Adding a TransparentWebMarkupContainer to the outer TransparentWebMarkupContainer causes
+		// a StackOverflowException
+		add(new TransparentWebMarkupContainer("group"));
+
+		// if you add this TransparentWebMarkupContainer as first component in
+		// the page (i.e. move line 48 to line 38), the test passes
+		add(new TransparentWebMarkupContainer("twmc"));
+
+		// a non-AJAX click on this link passes the test case, an AJAX request
+		// fails with a StackOverflowError
+		add(new AjaxFallbackLink<Void>("link")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				if (target != null)
+					target.add(label);
+			}
+		});
+	}
+

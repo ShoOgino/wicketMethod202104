@@ -1,0 +1,33 @@
+	/**
+	 * Constructor
+	 */
+	public Wicket5898Page()
+	{
+		final Label label = new Label("label", "Label");
+		label.setOutputMarkupId(true);
+		add(label);
+
+		// The src attribute of the image tag inside this WebMarkupContainer is
+		// essential in triggering this bug. This causes Wicket to insert an
+		// autocomponent (also a TransparentWebMarkupContainer)
+		add(new WebMarkupContainer("group"));
+
+		// if you add this TransparentWebMarkupContainer as first component in
+		// the page (i.e. move line 50 to line 39), the test passes
+		add(new TransparentWebMarkupContainer("twmc"));
+
+		// a non-AJAX click on this link passes the test case, an AJAX request
+		// fails with a StackOverflowError
+		add(new AjaxFallbackLink<Void>("link")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				if (target != null)
+					target.add(label);
+			}
+		});
+	}
+

@@ -1,0 +1,20 @@
+	/**
+	 * Tests the WICKET-5898 issue of triggering a StackOverflowError when a component inside nested
+	 * TransparentWebMarkupContainers is updated. This particular test case is caused by Wicket's
+	 * insertion of a TransparentWebMarkupContainer automatically due to a {@code src} attribute
+	 * that might need rewriting.
+	 */
+	@Test
+	@Ignore("This test fails, should be enabled to trigger WICKET-5898")
+	public void ajaxRequestForComponentInTransparentWebMarkupContainerShouldntCauseStackOverflow()
+	{
+		tester.startPage(Wicket5898Page.class);
+
+		// the page renders normally using normal web requests
+		tester.assertRenderedPage(Wicket5898Page.class);
+
+		// without WICKET-5898 fixed the statement below causes a StackOverflowError
+		tester.clickLink("link", true);
+		tester.assertComponentOnAjaxResponse("label");
+	}
+

@@ -1,0 +1,17 @@
+	/**
+	 * This test should pass, it is just here to validate that the page renders initially, and using
+	 * a normal, non-AJAX request cycle.
+	 */
+	@Test
+	public void normalRequestDoesntCauseStackOverflow()
+	{
+		tester.startPage(Wicket5898Page.class);
+
+		// the page renders normally using normal web requests
+		tester.assertRenderedPage(Wicket5898Page.class);
+
+		// the page renders normally when clicking on a link without using AJAX
+		tester.clickLink("link", false);
+		tester.assertRenderedPage(Wicket5898Page.class);
+	}
+
