@@ -79,6 +79,16 @@
 			submitAjaxFormSubmitBehavior(link,
 				(AjaxFormSubmitBehavior)WicketTesterHelper.findAjaxEventBehavior(link, "click"));
 		}
+		// if the link is an IAjaxLink, use it (do check if AJAX is expected)
+		else if (linkComponent instanceof IAjaxLink && isAjax)
+		{
+			List<AjaxEventBehavior> behaviors = WicketTesterHelper.findAjaxEventBehaviors(
+				linkComponent, "click");
+			for (AjaxEventBehavior behavior : behaviors)
+			{
+				executeBehavior(behavior);
+			}
+		}
 		/*
 		 * If the link is a submitlink then we pretend to have clicked it
 		 */
