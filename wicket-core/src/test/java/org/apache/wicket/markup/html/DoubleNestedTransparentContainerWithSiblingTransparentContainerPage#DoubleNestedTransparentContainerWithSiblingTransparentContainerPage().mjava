@@ -1,0 +1,38 @@
+	/**
+	 * Constructor.
+	 */
+	public DoubleNestedTransparentContainerWithSiblingTransparentContainerPage()
+	{
+		final Label label = new Label("label", "Label");
+		label.setOutputMarkupId(true);
+		add(label);
+
+		// Adding a TransparentWebMarkupContainer to the outer TransparentWebMarkupContainer causes
+		// a StackOverflowException
+		add(new TransparentWebMarkupContainer("group"));
+
+		// Adding a web markup container to the outer TWMC, and having a TWMC inside the web markup
+		// container causes a StackOverflowError as well.
+		WebMarkupContainer wmc = new WebMarkupContainer("wmc");
+		add(wmc);
+		wmc.add(new TransparentWebMarkupContainer("sibling-twmc"));
+
+		// if you add this TransparentWebMarkupContainer as first component in
+		// the page (i.e. move line 48 to line 38), the test passes
+		add(new TransparentWebMarkupContainer("twmc"));
+
+		// a non-AJAX click on this link passes the test case, an AJAX request
+		// fails with a StackOverflowError
+		add(new AjaxFallbackLink<Void>("link")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				if (target != null)
+					target.add(label);
+			}
+		});
+	}
+
