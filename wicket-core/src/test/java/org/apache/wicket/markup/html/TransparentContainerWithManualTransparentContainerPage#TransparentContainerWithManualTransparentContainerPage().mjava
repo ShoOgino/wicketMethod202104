@@ -1,0 +1,56 @@
+	/**
+	 * Constructor.
+	 */
+	public TransparentContainerWithManualTransparentContainerPage()
+	{
+		final Label label = new Label("label", "Label");
+		label.setOutputMarkupId(true);
+		add(label);
+
+		// adding a TWMC to this link in itself is harmless, but when you have two of these
+		// constructions on your page, it causes a StackOverflowError.
+		AjaxLink<Void> group1 = new AjaxLink<Void>("group1")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget t)
+			{
+			}
+		};
+		add(group1);
+		group1.add(new TransparentWebMarkupContainer("twmc_group_1"));
+
+		// This is the second TWMC inside a container construct that triggers the
+		// StackOverflowError.
+		AjaxLink<Void> group2 = new AjaxLink<Void>("group2")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget t)
+			{
+			}
+		};
+		add(group2);
+		group2.add(new TransparentWebMarkupContainer("twmc_group_2"));
+
+		// a non-AJAX click on this link passes the test case, an AJAX request
+		// fails with a StackOverflowError
+		add(new AjaxFallbackLink<Void>("link")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				if (target != null)
+					target.add(label);
+			}
+		});
+
+		// if you add this TransparentWebMarkupContainer as first component in
+		// the page, the test passes
+		add(new TransparentWebMarkupContainer("twmc"));
+	}
+

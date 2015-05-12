@@ -1,0 +1,51 @@
+	/**
+	 * Constructor.
+	 */
+	public TransparentContainerWithAutoTransparentContainerPage()
+	{
+		final Label label = new Label("label", "Label");
+		label.setOutputMarkupId(true);
+		add(label);
+
+		// Letting Wicket auto-add a TransparentWebMarkupContainer to the AJAX link (due to relative
+		// URL rewriting) causes a StackOverflowException
+		add(new AjaxLink<Void>("group1")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget t)
+			{
+			}
+		});
+
+		// But you need two auto-added TWMCs to trigger the StackOverflowError
+		add(new AjaxLink<Void>("group2")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget t)
+			{
+			}
+		});
+
+		// a non-AJAX click on this link passes the test case, an AJAX request
+		// fails with a StackOverflowError
+		add(new AjaxFallbackLink<Void>("link")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				if (target != null)
+					target.add(label);
+			}
+		});
+
+		// if you add this TransparentWebMarkupContainer as first component in
+		// the page, the test passes
+		add(new TransparentWebMarkupContainer("twmc"));
+	}
+
