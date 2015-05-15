@@ -5,11 +5,6 @@
 	 * not be obtained from resource bundles that are held relative to a particular component or
 	 * page. However, for application that use only global resources then this parameter may be
 	 * null.
-	 * <p>
-	 * The model parameter is also optional and only needs to be supplied if value substitutions are
-	 * to take place on either the resource key or the actual resource strings.
-	 * <p>
-	 * The parameters parameter is also optional and is used for substitutions.
 	 * 
 	 * @param resourceKey
 	 *            The resource key for this string resource
@@ -17,12 +12,13 @@
 	 *            The component that the resource is relative to
 	 * @param model
 	 *            The model to use for property substitutions
-	 * @param parameters
-	 *            The parameters to substitute using a Java MessageFormat object
 	 */
-	public StringResourceModel(final String resourceKey, final Component component,
-		final IModel<?> model, final Object... parameters)
+	public StringResourceModel(final String resourceKey, final Component component, IModel<?> model)
 	{
-		this(resourceKey, component, model, null, parameters);
+		Args.notNull(resourceKey, "resource key");
+
+		this.resourceKey = resourceKey;
+		this.component = component;
+		this.model = model;
 	}
 
