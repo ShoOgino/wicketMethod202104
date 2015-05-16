@@ -1,0 +1,21 @@
+	/**
+	 * Returns an id using a request-relative counter. This can be
+	 * useful for autocomponent tags that needs to get tag id.
+	 * 
+	 * @return
+	 * 		the request-relative id
+	 */
+	protected long getRequestUniqueId()
+	{
+		AtomicLong counter = RequestCycle.get().getMetaData(REQUEST_COUNTER_KEY);
+		
+		if (counter == null)
+		{
+			counter = new AtomicLong();
+			
+			RequestCycle.get().setMetaData(REQUEST_COUNTER_KEY, counter);
+		}
+		
+		return counter.getAndIncrement();
+	}
+
