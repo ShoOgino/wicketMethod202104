@@ -1,0 +1,19 @@
+	@Test
+	public void autocomponetsNumberDoesntChange()
+	{
+		AutoComponentsPage autoComponentsPage = new AutoComponentsPage();
+		tester.startPage(autoComponentsPage);
+		
+		int childrenNumber = tester.getLastRenderedPage().size();
+		
+		//clean markup cache and render the same page instance again
+		IMarkupCache markupCache = tester.getApplication().getMarkupSettings().getMarkupFactory().getMarkupCache();
+		
+		markupCache.clear();
+		tester.startPage(autoComponentsPage);
+		
+		//the number of child components must not have been changed
+		assertEquals(childrenNumber, tester.getLastRenderedPage().size());
+		
+	}
+
