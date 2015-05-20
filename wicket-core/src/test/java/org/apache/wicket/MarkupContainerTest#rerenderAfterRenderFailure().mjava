@@ -1,0 +1,18 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5911
+	 */
+	@Test
+	public void rerenderAfterRenderFailure()
+	{
+		FirstRenderFailsPage page = new FirstRenderFailsPage();
+		try {
+			tester.startPage(page);
+		} catch (WicketRuntimeException expected) {
+		}
+
+		tester.startPage(page);
+
+		// rendering flags where properly reset, so second rendering works properly
+		assertEquals(2, page.beforeRenderCalls);
+	}
+
