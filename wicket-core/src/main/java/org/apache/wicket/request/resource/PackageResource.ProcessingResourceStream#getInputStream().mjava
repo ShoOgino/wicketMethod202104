@@ -1,19 +1,23 @@
 		@Override
 		public InputStream getInputStream() throws ResourceStreamNotFoundException
 		{
-			byte[] bytes;
+			byte[] bytes = null;
 			InputStream inputStream = super.getInputStream();
-			try
+
+			if (readBuffered)
 			{
-				bytes = IOUtils.toByteArray(inputStream);
-			}
-			catch (IOException iox)
-			{
-				throw new WicketRuntimeException(iox);
-			}
-			finally
-			{
-				IOUtils.closeQuietly(this);
+				try
+				{
+					bytes = IOUtils.toByteArray(inputStream);
+				}
+				catch (IOException iox)
+				{
+					throw new WicketRuntimeException(iox);
+				}
+				finally
+				{
+					IOUtils.closeQuietly(this);
+				}
 			}
 
 			RequestCycle cycle = RequestCycle.get();
@@ -27,7 +31,14 @@
 				// use empty request and response in case of non-http thread. WICKET-5532
 				attributes = new Attributes(new MockWebRequest(Url.parse("")), new StringResponse());
 			}
-			byte[] processedBytes = processResponse(attributes, bytes);
-			return new ByteArrayInputStream(processedBytes);
+			if (bytes != null)
+			{
+				byte[] processedBytes = processResponse(attributes, bytes);
+				return new ByteArrayInputStream(processedBytes);
+			}
+			else
+			{
+				return inputStream;
+			}
 		}
 

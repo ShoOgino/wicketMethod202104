@@ -11,17 +11,17 @@
 		if (CSS_EXTENSION.equals(extension))
 		{
 			resource = new CssPackageResource(getScope(), getName(), getLocale(), getStyle(),
-				getVariation());
+				getVariation()).readBuffered(readBuffered);
 		}
 		else if (JAVASCRIPT_EXTENSION.equals(extension))
 		{
-			resource = new JavaScriptPackageResource(getScope(), getName(), getLocale(), getStyle(),
-				getVariation());
+			resource = new JavaScriptPackageResource(getScope(), getName(), getLocale(),
+				getStyle(), getVariation()).readBuffered(readBuffered);
 		}
 		else
 		{
 			resource = new PackageResource(getScope(), getName(), getLocale(), getStyle(),
-				getVariation());
+				getVariation()).readBuffered(readBuffered);
 		}
 
 		removeCompressFlagIfUnnecessary(resource);

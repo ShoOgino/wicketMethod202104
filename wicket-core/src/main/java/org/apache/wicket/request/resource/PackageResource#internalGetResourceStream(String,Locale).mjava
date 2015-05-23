@@ -1,9 +1,10 @@
 	private IResourceStream internalGetResourceStream(final String style, final Locale locale)
 	{
 		IResourceStreamLocator resourceStreamLocator = Application.get()
-				.getResourceSettings()
-				.getResourceStreamLocator();
-		IResourceStream resourceStream = resourceStreamLocator.locate(getScope(), absolutePath, style, variation, locale, null, false);
+			.getResourceSettings()
+			.getResourceStreamLocator();
+		IResourceStream resourceStream = resourceStreamLocator.locate(getScope(), absolutePath,
+			style, variation, locale, null, false);
 
 		String realPath = absolutePath;
 		if (resourceStream instanceof IFixedLocationResourceStream)
@@ -27,8 +28,8 @@
 		if (accept(realPath) == false)
 		{
 			throw new PackageResourceBlockedException(
-							"Access denied to (static) package resource " + absolutePath +
-									". See IPackageResourceGuard");
+				"Access denied to (static) package resource " + absolutePath +
+					". See IPackageResourceGuard");
 		}
 
 		if (resourceStream != null)
