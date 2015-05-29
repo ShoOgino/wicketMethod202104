@@ -4,8 +4,11 @@
 	@Override
 	public final T getObject()
 	{
-		if (!attached)
+		if (attached == AttachingState.DETACHED)
 		{
+			// prevent infinite attachment loops
+			attached = AttachingState.ATTACHING;
+
 			transientModelObject = load();
 
 			if (log.isDebugEnabled())
@@ -14,7 +17,7 @@
 					", requestCycle " + RequestCycle.get());
 			}
 
-			attached = true;
+			attached = AttachingState.ATTACHED;
 			onAttach();
 		}
 		return transientModelObject;
