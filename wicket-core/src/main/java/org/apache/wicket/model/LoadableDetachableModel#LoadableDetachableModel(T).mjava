@@ -1,6 +1,7 @@
 	/**
 	 * This constructor is used if you already have the object retrieved and want to wrap it with a
-	 * detachable model.
+	 * detachable model. Constructs the model in attached state. Calls to {@link #getObject()} will
+	 * return {@code object} until {@link #detach()} is called.
 	 * 
 	 * @param object
 	 *            retrieved instance of the detachable object
@@ -8,6 +9,6 @@
 	public LoadableDetachableModel(T object)
 	{
 		this.transientModelObject = object;
-		attached = AttachingState.ATTACHED;
+		state = InternalState.ATTACHED;
 	}
 

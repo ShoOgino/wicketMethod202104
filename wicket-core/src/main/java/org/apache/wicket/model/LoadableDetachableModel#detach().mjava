@@ -4,7 +4,7 @@
 	@Override
 	public void detach()
 	{
-		if (attached == AttachingState.ATTACHED)
+		if (state == InternalState.ATTACHED)
 		{
 			try
 			{
@@ -12,7 +12,7 @@
 			}
 			finally
 			{
-				attached = AttachingState.DETACHED;
+				state = InternalState.DETACHED;
 				transientModelObject = null;
 
 				log.debug("removed transient object for {}, requestCycle {}", this,
