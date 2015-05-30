@@ -1,0 +1,15 @@
+	/** Serialization helper */
+	@SuppressWarnings("unchecked")
+	private <T> LoadableDetachableModel<T> deserialize(byte[] serialized) throws IOException,
+		ClassNotFoundException
+	{
+		LoadableDetachableModel<T> deserialized = null;
+
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(serialized);
+			ObjectInputStream ois = new ObjectInputStream(bais);)
+		{
+			deserialized = (LoadableDetachableModel<T>)ois.readObject();
+		}
+		return deserialized;
+	}
+
