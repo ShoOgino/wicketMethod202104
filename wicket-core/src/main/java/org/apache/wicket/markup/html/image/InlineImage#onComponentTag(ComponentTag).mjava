@@ -1,0 +1,24 @@
+	/**
+	 * Renders the complete image tag with the base64 encoded content.
+	 */
+	@Override
+	protected void onComponentTag(ComponentTag tag)
+	{
+		super.onComponentTag(tag);
+
+		checkComponentTag(tag, "img");
+
+		try
+		{
+			tag.put("src", ImageUtil.createBase64EncodedImage(packageResourceReference, false));
+		}
+		catch (ResourceStreamNotFoundException e)
+		{
+			throw new WicketRuntimeException("Couldn't find the resource stream", e);
+		}
+		catch (IOException e)
+		{
+			throw new WicketRuntimeException("Error while reading the resource stream", e);
+		}
+	}
+
