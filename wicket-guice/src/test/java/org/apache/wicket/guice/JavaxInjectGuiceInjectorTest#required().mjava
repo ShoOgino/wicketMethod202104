@@ -8,15 +8,10 @@
 	@Test
 	public void required()
 	{
-		JavaxInjectTestComponent component = newTestComponent("id");
-
-		// get the lazy proxy
-		IAjaxCallListener nonExisting = component.getNonExisting();
-
 		try
 		{
-			// call any method on the lazy proxy
-			nonExisting.getAfterHandler(null);
+			JavaxInjectTestComponent component = new MyJavaxInjectWithNonExistingTestComponent();
+			// Throws exception because component.getNonExisting() cannot be injected
 			fail("Fields annotated with @javax.inject.Inject are required!");
 		}
 		catch (ConfigurationException cx)
