@@ -1,0 +1,13 @@
+	/** Tests when the default action is changed to SUPPRESS when origins conflict. */
+	@Test
+	public void conflictingOriginsSuppressed()
+	{
+		tester.addRequestHeader("Origin", "http://example.com/");
+		csrfListener.setConflictingOriginAction(CsrfAction.SUPPRESS);
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestSuppressed();
+		tester.assertRenderedPage(FirstPage.class);
+	}
+

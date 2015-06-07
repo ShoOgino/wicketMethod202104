@@ -1,0 +1,21 @@
+	/**
+	 * Handles the case where an origin was checked and matched the request origin. Default action
+	 * is to allow the whitelisted origin.
+	 *
+	 * @param request
+	 *            the request
+	 * @param origin
+	 *            the contents of the {@code Origin} HTTP header
+	 * @param page
+	 *            the page that is targeted with this request
+	 */
+	private void matchingOrigin(HttpServletRequest request, String origin, IRequestablePage page)
+	{
+		onMatchingOrigin(request, origin, page);
+		if (log.isDebugEnabled())
+		{
+			log.debug("CSRF Origin {} matched requested resource, allowed for page {}", origin,
+				page.getClass().getName());
+		}
+	}
+

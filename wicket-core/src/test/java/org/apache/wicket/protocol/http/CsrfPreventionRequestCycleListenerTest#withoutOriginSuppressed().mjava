@@ -1,0 +1,10 @@
+	/** Tests the alternative action of suppressing a request without Origin header */
+	@Test
+	public void withoutOriginSuppressed()
+	{
+		csrfListener.setNoOriginAction(CsrfAction.SUPPRESS);
+		tester.clickLink("link");
+		tester.assertRenderedPage(FirstPage.class);
+		assertConflictingOriginsRequestSuppressed();
+	}
+

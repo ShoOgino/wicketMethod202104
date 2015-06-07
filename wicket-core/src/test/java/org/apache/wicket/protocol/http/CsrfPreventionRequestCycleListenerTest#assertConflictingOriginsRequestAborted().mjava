@@ -1,0 +1,14 @@
+	/**
+	 * Asserts that the origins were checked, found conflicting, had an action "ABORTED" and returns
+	 * a HTTP error.
+	 */
+	private void assertConflictingOriginsRequestAborted()
+	{
+		if (!aborted)
+			throw new AssertionError("Request was not aborted");
+
+		assertThat("Response error code", tester.getLastResponse().getStatus(), is(errorCode));
+		assertThat("Response error message", tester.getLastResponse().getErrorMessage(),
+			is(errorMessage));
+	}
+

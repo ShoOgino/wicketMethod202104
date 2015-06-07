@@ -1,0 +1,22 @@
+	/**
+	 * Sets up the test cases. Installs the CSRF listener and renders the FirstPage.
+	 */
+	@Before
+	public void startWithFirstPageRender()
+	{
+		WebApplication application = tester.getApplication();
+
+		csrfListener = new MockCsrfPreventionRequestCycleListener();
+		setErrorCode(errorCode);
+		setErrorMessage(errorMessage);
+		application.getRequestCycleListeners().add(csrfListener);
+
+		// Rendering a page is allowed, regardless of Origin (this allows external links into your
+		// website to function)
+
+		tester.addRequestHeader("Origin", "https://google.com/");
+
+		tester.startPage(FirstPage.class);
+		tester.assertRenderedPage(FirstPage.class);
+	}
+

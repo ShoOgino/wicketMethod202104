@@ -1,0 +1,13 @@
+	/** Tests when the default action is changed to ALLOW when origins conflict. */
+	@Test
+	public void conflictingOriginsAllowed()
+	{
+		csrfListener.setConflictingOriginAction(CsrfAction.ALLOW);
+		tester.addRequestHeader("Origin", "http://example.com/");
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestAllowed();
+		tester.assertRenderedPage(SecondPage.class);
+	}
+

@@ -1,0 +1,58 @@
+	/**
+	 * Creates a RFC-6454 comparable origin from the {@code origin} string.
+	 *
+	 * @param origin
+	 *            the contents of the Origin HTTP header
+	 * @return only the scheme://host[:port] part, or {@code null} when the origin string is not
+	 *         compliant
+	 */
+	private String getOriginHeaderOrigin(String origin)
+	{
+		// the request comes from a privacy sensitive context, flag as non-local origin. If
+		// alternative action is required, an implementor can override any of the onAborted,
+		// onSuppressed or onAllowed and implement such needed action.
+
+		if ("null".equals(origin))
+			return null;
+
+		StringBuilder target = new StringBuilder();
+
+		try
+		{
+			URI originUri = new URI(origin);
+			String scheme = originUri.getScheme();
+			if (scheme == null)
+			{
+				return null;
+			}
+			else
+			{
+				scheme = scheme.toLowerCase(Locale.ENGLISH);
+			}
+
+			target.append(scheme);
+			target.append("://");
+
+			String host = originUri.getHost();
+			if (host == null)
+			{
+				return null;
+			}
+			target.append(host);
+
+			int port = originUri.getPort();
+			if (port != -1 && "http".equals(scheme) && port != 80 || "https".equals(scheme) &&
+				port != 443)
+			{
+				target.append(':');
+				target.append(port);
+			}
+			return target.toString();
+		}
+		catch (URISyntaxException e)
+		{
+			log.debug("Invalid Origin header provided: {}, marked conflicting", origin);
+			return null;
+		}
+	}
+

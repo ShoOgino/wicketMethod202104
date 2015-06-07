@@ -1,0 +1,11 @@
+	/** Tests that disabling the CSRF listener doesn't check Origin headers. */
+	@Test
+	public void disabledListenerDoesntCheckMismatchedOrigin()
+	{
+		csrfEnabled = false;
+		tester.addRequestHeader("Origin", "http://malicioussite.com/");
+		tester.clickLink("link");
+		assertOriginsNotChecked();
+		tester.assertRenderedPage(SecondPage.class);
+	}
+

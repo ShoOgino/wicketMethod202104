@@ -1,0 +1,24 @@
+	/**
+	 * Checks whether the {@code Origin} HTTP header of the request matches where the request came
+	 * from.
+	 *
+	 * @param containerRequest
+	 *            the current container request
+	 * @param originHeader
+	 *            the contents of the {@code Origin} HTTP header
+	 * @return {@code true} when the origin of the request matches the {@code Origin} HTTP header
+	 */
+	private boolean isLocalOrigin(HttpServletRequest containerRequest, String originHeader)
+	{
+		// Make comparable strings from Origin and Location
+		String origin = getOriginHeaderOrigin(originHeader);
+		if (origin == null)
+			return false;
+
+		String request = getLocationHeaderOrigin(containerRequest);
+		if (request == null)
+			return false;
+
+		return origin.equalsIgnoreCase(request);
+	}
+

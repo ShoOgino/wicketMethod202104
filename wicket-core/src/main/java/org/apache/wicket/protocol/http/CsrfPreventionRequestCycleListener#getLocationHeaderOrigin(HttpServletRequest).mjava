@@ -1,0 +1,41 @@
+	/**
+	 * Creates a RFC-6454 comparable origin from the {@code request} requested resource.
+	 *
+	 * @param request
+	 *            the incoming request
+	 * @return only the scheme://host[:port] part, or {@code null} when the origin string is not
+	 *         compliant
+	 */
+	private String getLocationHeaderOrigin(HttpServletRequest request)
+	{
+		// Build scheme://host:port from request
+		StringBuilder target = new StringBuilder();
+		String scheme = request.getScheme();
+		if (scheme == null)
+		{
+			return null;
+		}
+		else
+		{
+			scheme = scheme.toLowerCase(Locale.ENGLISH);
+		}
+		target.append(scheme);
+		target.append("://");
+
+		String host = request.getServerName();
+		if (host == null)
+		{
+			return null;
+		}
+		target.append(host);
+
+		int port = request.getServerPort();
+		if ("http".equals(scheme) && port != 80 || "https".equals(scheme) && port != 443)
+		{
+			target.append(':');
+			target.append(port);
+		}
+
+		return target.toString();
+	}
+

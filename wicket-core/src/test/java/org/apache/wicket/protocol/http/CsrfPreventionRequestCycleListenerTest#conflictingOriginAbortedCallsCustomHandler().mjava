@@ -1,0 +1,31 @@
+	/** Tests overriding the onAborted method for a conflicting origin. */
+	@Test
+	public void conflictingOriginAbortedCallsCustomHandler()
+	{
+		// redirect to third page to ensure we are not suppressed to the first page, nor that the
+		// request was not aborted and the second page was rendered erroneously
+
+		Runnable thirdPageRedirect = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				throw new RestartResponseException(new ThirdPage());
+			}
+		};
+		setAbortHandler(thirdPageRedirect);
+
+		tester.addRequestHeader("Origin", "http://example.com/");
+		csrfListener.setConflictingOriginAction(CsrfAction.ABORT);
+
+		tester.clickLink("link");
+
+		// have to check manually, as the assert checks the error code (which is not set due to our
+		// custom handler)
+
+		if (!aborted)
+			throw new AssertionError("Request was not aborted");
+
+		tester.assertRenderedPage(ThirdPage.class);
+	}
+

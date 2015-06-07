@@ -1,0 +1,21 @@
+	/** Tests whether AJAX Links are checked through the CSRF listener */
+	@Test
+	public void simulatedCsrfAttackIsSuppressed()
+	{
+		csrfListener.setConflictingOriginAction(CsrfAction.SUPPRESS);
+
+		// first render a page in the user's session
+		tester.addRequestHeader("Origin", "http://localhost");
+		tester.startPage(ThirdPage.class);
+
+		assertOriginsNotChecked();
+		tester.assertRenderedPage(ThirdPage.class);
+
+		// then click on a link from another external page
+		tester.addRequestHeader("Origin", "http://attacker.com/");
+		tester.clickLink("link", true);
+
+		assertConflictingOriginsRequestSuppressed();
+		tester.assertRenderedPage(ThirdPage.class);
+	}
+

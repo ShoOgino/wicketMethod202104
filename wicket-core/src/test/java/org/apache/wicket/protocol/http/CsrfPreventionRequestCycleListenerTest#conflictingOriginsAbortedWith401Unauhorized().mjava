@@ -1,0 +1,15 @@
+	/** Tests custom error code/message when the default action is ABORT. */
+	@Test
+	public void conflictingOriginsAbortedWith401Unauhorized()
+	{
+		setErrorCode(401);
+		setErrorMessage("NOT AUTHORIZED");
+
+		tester.addRequestHeader("Origin", "http://example.com/");
+		csrfListener.setNoOriginAction(CsrfAction.ABORT);
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestAborted();
+	}
+
