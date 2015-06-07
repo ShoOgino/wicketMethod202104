@@ -1,0 +1,26 @@
+	/** Tests overriding the onSuppressed method for a conflicting origin. */
+	@Test
+	public void conflictingOriginSuppressedCallsCustomHandler()
+	{
+		// redirect to third page to ensure we are not suppressed to the first page, nor that the
+		// request was not suppressed and the second page was rendered erroneously
+
+		Runnable thirdPageRedirect = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				throw new RestartResponseException(new ThirdPage());
+			}
+		};
+		setSuppressHandler(thirdPageRedirect);
+		csrfListener.setConflictingOriginAction(CsrfAction.SUPPRESS);
+
+		tester.addRequestHeader("Origin", "http://example.com/");
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestSuppressed();
+		tester.assertRenderedPage(ThirdPage.class);
+	}
+

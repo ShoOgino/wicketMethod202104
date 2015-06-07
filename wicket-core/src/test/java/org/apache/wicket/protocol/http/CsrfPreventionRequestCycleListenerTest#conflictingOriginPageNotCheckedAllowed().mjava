@@ -1,0 +1,19 @@
+	/**
+	 * Tests when the listener is disabled for a specific page (by overriding
+	 * {@link CsrfPreventionRequestCycleListener#isChecked(IRequestablePage)})
+	 */
+	@Test
+	public void conflictingOriginPageNotCheckedAllowed()
+	{
+		tester.addRequestHeader("Origin", "http://example.com/");
+		csrfListener.setConflictingOriginAction(CsrfAction.ABORT);
+
+		// disable the check for this page
+		checkPage = false;
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestAllowed();
+		tester.assertRenderedPage(SecondPage.class);
+	}
+

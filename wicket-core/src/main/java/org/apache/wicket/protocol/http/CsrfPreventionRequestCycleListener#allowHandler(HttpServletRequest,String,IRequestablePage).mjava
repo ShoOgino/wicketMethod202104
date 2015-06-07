@@ -1,0 +1,19 @@
+	/**
+	 * Handles the case where an Origin HTTP header was not present or did not match the request
+	 * origin, and the corresponding action ({@link #noOriginAction} or
+	 * {@link #conflictingOriginAction}) is set to {@code ALLOW}.
+	 * 
+	 * @param request
+	 *            the request
+	 * @param origin
+	 *            the contents of the {@code Origin} HTTP header, may be {@code null} or empty
+	 * @param page
+	 *            the page that is targeted with this request
+	 */
+	private void allowHandler(HttpServletRequest request, String origin, IRequestablePage page)
+	{
+		onAllowed(request, origin, page);
+		log.info("Possible CSRF attack, request URL: {}, Origin: {}, action: allowed",
+			request.getRequestURL(), origin);
+	}
+

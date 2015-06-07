@@ -1,0 +1,12 @@
+	/** Tests whether a different scheme, but same port and hostname is considered a conflict. */
+	@Test
+	public void differentSchemeOriginAborted()
+	{
+		tester.addRequestHeader("Origin", "https://localhost");
+		csrfListener.setConflictingOriginAction(CsrfAction.ABORT);
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestAborted();
+	}
+

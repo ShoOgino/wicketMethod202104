@@ -1,0 +1,13 @@
+	/** Tests when the Origin header matches the request. */
+	@Test
+	public void matchingOriginsAllowed()
+	{
+		csrfListener.setConflictingOriginAction(CsrfAction.ALLOW);
+		tester.addRequestHeader("Origin", "http://localhost/");
+
+		tester.clickLink("link");
+
+		assertOriginsMatched();
+		tester.assertRenderedPage(SecondPage.class);
+	}
+

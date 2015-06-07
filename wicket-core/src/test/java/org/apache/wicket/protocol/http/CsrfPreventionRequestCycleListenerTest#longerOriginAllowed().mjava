@@ -1,0 +1,13 @@
+	/** Tests whether only the hostname is considered when matching the Origin header. */
+	@Test
+	public void longerOriginAllowed()
+	{
+		tester.addRequestHeader("Origin", "http://localhost/supercalifragilisticexpialidocious");
+		csrfListener.setConflictingOriginAction(CsrfAction.ABORT);
+
+		tester.clickLink("link");
+
+		assertOriginsMatched();
+		tester.assertRenderedPage(SecondPage.class);
+	}
+

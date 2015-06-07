@@ -1,0 +1,39 @@
+	@Override
+	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
+	{
+		if (!isEnabled())
+		{
+			log.trace("CSRF listener is disabled, no checks performed");
+			return;
+		}
+
+		// check if the request is targeted at a page
+		if (isChecked(handler))
+		{
+			IPageRequestHandler prh = (IPageRequestHandler)handler;
+			IRequestablePage targetedPage = prh.getPage();
+			HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest()
+				.getContainerRequest();
+			String origin = containerRequest.getHeader("Origin");
+
+			// Check if the page should be CSRF protected
+			if (isChecked(targetedPage))
+			{
+				// if so check the Origin HTTP header
+				checkOrigin(containerRequest, origin, targetedPage);
+			}
+			else
+			{
+				log.debug("Targeted page {} was opted out of the CSRF origin checks, allowed",
+					targetedPage.getClass().getName());
+				allowHandler(containerRequest, origin, targetedPage);
+			}
+		}
+		else
+		{
+			if (log.isTraceEnabled())
+				log.trace("Resolved handler {} doesn't target a page, no CSRF check performed",
+					handler.getClass().getName());
+		}
+	}
+

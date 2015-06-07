@@ -1,0 +1,35 @@
+	/**
+	 * Checks whether the domain part of the {@code Origin} HTTP header is whitelisted.
+	 * 
+	 * @param origin
+	 *            the {@code Origin} HTTP header
+	 * @return {@code true} when the origin domain was whitelisted
+	 */
+	private boolean isWhitelistedOrigin(final String origin)
+	{
+		try
+		{
+			final URI originUri = new URI(origin);
+			final String originHost = originUri.getHost();
+			if (Strings.isEmpty(originHost))
+				return false;
+			for (String whitelistedOrigin : acceptedOrigins)
+			{
+				if (originHost.equalsIgnoreCase(whitelistedOrigin) ||
+					originHost.endsWith("." + whitelistedOrigin))
+				{
+					log.trace("Origin {} matched whitelisted origin {}, request accepted", origin,
+						whitelistedOrigin);
+					return true;
+				}
+			}
+		}
+		catch (URISyntaxException e)
+		{
+			log.debug("Origin: {} not parseable as an URI. Whitelisted-origin check skipped.",
+				origin);
+		}
+
+		return false;
+	}
+
