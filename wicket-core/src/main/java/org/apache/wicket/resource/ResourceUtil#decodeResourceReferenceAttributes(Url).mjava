@@ -1,0 +1,24 @@
+	/**
+	 * Reads resource reference attributes (style, locale, variation) encoded in the given URL. 
+	 * 
+	 * @param url
+	 * 			the url containing the resource attributes
+	 * @return the encoded attributes
+	 * 
+	 * @see ResourceReference.UrlAttributes
+	 */
+	public static ResourceReference.UrlAttributes decodeResourceReferenceAttributes(Url url)
+	{
+		Args.notNull(url, "url");
+	
+		if (url.getQueryParameters().size() > 0)
+		{
+			Url.QueryParameter param = url.getQueryParameters().get(0);
+			if (Strings.isEmpty(param.getValue()))
+			{
+				return decodeResourceReferenceAttributes(param.getName());
+			}
+		}
+		return new ResourceReference.UrlAttributes(null, null, null);
+	}
+
