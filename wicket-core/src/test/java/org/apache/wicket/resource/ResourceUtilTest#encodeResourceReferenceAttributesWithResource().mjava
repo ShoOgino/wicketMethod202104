@@ -1,0 +1,39 @@
+	@Test
+	public void encodeResourceReferenceAttributesWithResource() throws Exception
+	{
+		ResourceReference resourceReference = Mockito.mock(ResourceReference.class);
+
+		//test with all null attributes
+		UrlAttributes attributes = new UrlAttributes(null, null, null);
+
+		String urlString = "www.funny.url";
+		Url url = Url.parse(urlString);
+
+		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
+		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
+
+		assertEquals(urlString, url.toString());
+
+		Mockito.reset(resourceReference);
+
+		//test with locale, style and variation
+		attributes = new UrlAttributes(Locale.CANADA_FRENCH, "style", "variation");
+
+		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
+		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
+
+		assertEquals(urlString + "?fr_CA-style-variation", url.toString());
+
+		Mockito.reset(resourceReference);
+
+		//test with just variation
+		attributes = new UrlAttributes(null, null, "variation");
+		url = Url.parse(urlString);
+
+		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
+		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
+
+		assertEquals(urlString + "?--variation", url.toString());
+
+	}
+

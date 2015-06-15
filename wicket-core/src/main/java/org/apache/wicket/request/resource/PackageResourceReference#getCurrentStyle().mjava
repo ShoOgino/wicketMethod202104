@@ -1,5 +1,17 @@
 	private String getCurrentStyle()
 	{
-		return getStyle() != null ? getStyle() : Session.get().getStyle();
+		final String style = getStyle();
+
+		if (style != null)
+		{
+			return style;
+		}
+
+		if (Session.exists())
+		{
+			return Session.get().getStyle();
+		}
+
+		return style;
 	}
 
