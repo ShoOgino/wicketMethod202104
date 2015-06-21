@@ -1,0 +1,19 @@
+    @Override
+    protected void init() {
+        super.init();
+
+        // Enable CDI
+        BeanManager bm;
+        try {
+            bm = (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
+        } catch (NamingException e) {
+            throw new IllegalStateException("Unable to obtain CDI BeanManager", e);
+        }
+
+        // Configure CDI, disabling Conversations as we aren't using them
+        new CdiConfiguration(bm).setPropagation(NONE).configure(this);
+        
+        // Mount the InsertContact page at /insert
+        mountPage("/insert", InsertContact.class);
+    }
+

@@ -1,0 +1,26 @@
+	/**
+	 * 
+	 * @see org.apache.wicket.util.file.IResourceFinder#find(Class, String)
+	 */
+	public IResourceStream find(final Class<?> clazz, final String pathname)
+	{
+
+		if (pathname.startsWith(WEB_INF) == false)
+		{
+			try
+			{
+				final URL url = servletContext.getResource(pathname.replaceFirst(basePath, ""));
+				if (url != null)
+				{
+					return new UrlResourceStream(url);
+				}
+			}
+			catch (Exception ex)
+			{
+				// ignore, file couldn't be found
+			}
+		}
+
+		return null;
+	}
+

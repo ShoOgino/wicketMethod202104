@@ -1,0 +1,35 @@
+	@Deployment
+	public static WebArchive deployment() {
+		// Create webapp files from src/main/webapp. (WEB AS NORMAL)
+		GenericArchive webapp = ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class).importDirectory(WEBAPP_SRC).as(GenericArchive.class);
+		
+		// Create webapptest files from src/test/webapp. (TEST)
+		GenericArchive webappTest = ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class).importDirectory(WEBAPP_TEST_SRC).as(GenericArchive.class);
+		
+		// Some configurations to create a manifest.mf.
+		ByteArrayAsset resource = new ByteArrayAsset("Dependencies: org.jboss.msc".getBytes());
+		
+		// Create libs from POM.XML.
+		File[] asFile = Maven.configureResolver()
+				// I'm not using internet directly, I have a Nexus Repository that handles the libs for me.
+				.workOffline().withMavenCentralRepo(false)
+				// Load everything from pom, that is compile and runtime, as a file and transitivity to don't loose anything and cause exceptions.
+				.loadPomFromFile("./pom.xml").importCompileAndRuntimeDependencies()
+				.resolve().withTransitivity().asFile();
+		
+		// Create the WAR.
+		return ShrinkWrap.create(WebArchive.class, "wicket-servletContext.war")
+						 // Add packages and/or classes.
+						 .addPackages(true, TestWicketJavaEEApplication.class.getPackage())
+						 // Add the persistence.xml
+						 .addAsResource("META-INF/persistence.xml")
+						 // Add a manifest.
+						 .addAsManifestResource(resource, "MANIFEST.MF")
+						 // Add WEBAPP files.
+						 .merge(webapp,"/",Filters.exclude(".*\\web.xml"))
+						 // Add WEBAPP TEST files.
+						 .merge(webappTest,"/",Filters.includeAll())
+						 // Add LIBS from POM.XML.
+						 .addAsLibraries(asFile);
+	}
+
