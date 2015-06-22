@@ -10,7 +10,7 @@
 	{
 		final ResourceResponse resourceResponse = new ResourceResponse();
 
-		final IResourceStream resourceStream = getResourceStream();
+		final IResourceStream resourceStream = getCacheableResourceStream();
 
 		// bail out if resource stream could not be found
 		if (resourceStream == null)
@@ -52,7 +52,7 @@
 				if (readBuffered)
 				{
 					bytes = IOUtils.toByteArray(inputStream);
-					resourceResponse.setContentLength(new Long(bytes.length));
+					resourceResponse.setContentLength(bytes.length);
 				}
 				else
 				{
