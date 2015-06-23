@@ -1,0 +1,22 @@
+	/**
+	 * Test with new application.
+	 */
+	@Test
+	public void testNewApplication() {
+		try {
+			setWicketTester(new WicketTester(new TestWicketJavaEEApplication()));
+			assertNotNull(getWicketTester().getApplication());
+			log.info("Using mock servletcontext.");
+			log.info("WebApplication MOCK after wicketTester Name: " + getWicketTester().getApplication().getName());
+			log.info("ServletContext MOCK after wicketTester Name: " + getWicketTester().getServletContext().getServletContextName());
+			log.info("Server info: " + getWicketTester().getServletContext().getServerInfo());
+			assertEquals("Wicket Mock Test Environment v1.0", getWicketTester().getServletContext().getServerInfo());
+		} catch (IllegalStateException e) {
+			// I don't know what or if could cause this.
+			fail("Cannot use a mock ServletContext.");
+		}
+		
+		// USING MOCK.
+		findResourcesServletContext();
+	}
+

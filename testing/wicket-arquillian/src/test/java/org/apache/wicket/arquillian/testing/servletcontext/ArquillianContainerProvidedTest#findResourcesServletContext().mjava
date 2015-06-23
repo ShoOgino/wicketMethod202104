@@ -3,18 +3,18 @@
 	 * 
 	 * @param servletContext
 	 */
-	private void testFindResourcesServletContext(ServletContext servletContext) {
+	private void findResourcesServletContext() {
 		try {
 			// Doing the same thing that ResourceWebApplicationPath does.
-			URL resource = servletContext.getResource("/pages/InsertContact.html");
+			URL resource = getWicketTester().getServletContext().getResource("/pages/InsertContact.html");
 			if(resource == null) {
 				throw new MalformedURLException("Resource /pages/InsertContact.html not found.");
 			}
-			log.info("RESOURCE FOUND " + resource.getFile());
+			log.info("Resource found " + resource.getFile());
 			assertTrue(resource.getFile().contains("/pages/InsertContact.html"));
 		} catch (Exception e) {
 			assertEquals("Resource /pages/InsertContact.html not found.", e.getMessage());
-			log.error("RESOURCE CANNOT BE FOUND.", e);
+			log.error("Resource cannot be found.", e);
 		}
 	}
 

@@ -1,0 +1,97 @@
+	/**
+	 * Creates a <code>WicketTester</code>.
+	 * 
+	 * @param application
+	 *            a <code>WicketTester</code> <code>WebApplication</code> object
+	 * @param servletCtx
+	 *            the servlet context used as backend
+	 * @param init
+	 *            force the application to be initialized (default = true)
+	 */
+	public BaseWicketTester(final WebApplication application, final ServletContext servletCtx, boolean init)
+	{
+		// Assert the application is not null.
+		if(!init)
+		{
+			Assert.assertNotNull("WebApplication cannot be null",application);
+		}
+		
+		servletContext = servletCtx != null ? servletCtx
+			// If it's provided from the container it's not necessary to mock. 
+			: !init && application.getServletContext() != null ? application.getServletContext()
+			: new MockServletContext(application, null);
+		
+		// If using Arquillian and it's configured in a web.xml it'll be provided. If not, mock it.
+		if(application.getWicketFilter() == null)
+		{
+			final FilterConfig filterConfig = new TestFilterConfig();
+			WicketFilter filter = new WicketFilter()
+			{
+				@Override
+				public FilterConfig getFilterConfig()
+				{
+					return filterConfig;
+				}
+			};
+			application.setWicketFilter(filter);
+		}
+
+		httpSession = new MockHttpSession(servletContext);
+
+		ThreadContext.detach();
+
+		this.application = application;
+
+		// If it's provided from the container it's not necessary to set again.
+		if(init)
+		{
+			// FIXME some tests are leaking applications by not calling destroy on them or overriding
+			// teardown() without calling super, for now we work around by making each name unique
+			application.setName("WicketTesterApplication-" + UUID.randomUUID());
+		}
+		
+		ThreadContext.setApplication(application);
+
+		// If it's provided from the container it's not necessary to set again and init.
+		if(init)
+		{
+			application.setServletContext(servletContext);
+			// initialize the application
+			application.initApplication();
+		}
+
+		// We don't expect any changes during testing. In addition we avoid creating
+		// ModificationWatcher threads tests.
+		application.getResourceSettings().setResourcePollFrequency(getResourcePollFrequency());
+
+		// reconfigure application for the test environment
+		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
+			application.getPageRendererProvider()));
+		application.setRequestCycleProvider(new TestRequestCycleProvider(
+			application.getRequestCycleProvider()));
+
+		// set a feedback message filter that will not remove any messages
+		originalFeedbackMessageCleanupFilter = application.getApplicationSettings()
+			.getFeedbackMessageCleanupFilter();
+		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
+			IFeedbackMessageFilter.NONE);
+		IPageManagerProvider pageManagerProvider = newTestPageManagerProvider();
+		if (pageManagerProvider != null)
+		{
+			application.setPageManagerProvider(pageManagerProvider);
+		}
+
+		// create a new session when the old one is invalidated
+		application.getSessionStore().registerUnboundListener(new UnboundListener()
+		{
+			@Override
+			public void sessionUnbound(String sessionId)
+			{
+				newSession();
+			}
+		});
+
+		// prepare session
+		setupNextRequestCycle();
+	}
+

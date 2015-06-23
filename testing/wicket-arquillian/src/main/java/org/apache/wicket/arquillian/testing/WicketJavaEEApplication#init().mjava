@@ -10,8 +10,10 @@
             throw new IllegalStateException("Unable to obtain CDI BeanManager", e);
         }
 
+        initResourceFinder();
+        
         // Configure CDI, disabling Conversations as we aren't using them
-        new CdiConfiguration(bm).setPropagation(NONE).configure(this);
+        new CdiConfiguration(bm).setPropagation(ConversationPropagation.NONE).configure(this);
         
         // Mount the InsertContact page at /insert
         mountPage("/insert", InsertContact.class);
