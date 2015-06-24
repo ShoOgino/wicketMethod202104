@@ -16,34 +16,15 @@
 				{
 					boolean optional = injectAnnotation != null && injectAnnotation.optional();
 					Annotation bindingAnnotation = findBindingAnnotation(field.getAnnotations());
-					final GuiceProxyTargetLocator locator = new GuiceProxyTargetLocator(field, bindingAnnotation, optional);
+					final IProxyTargetLocator locator = new GuiceProxyTargetLocator(field, bindingAnnotation, optional);
 
-					Object cachedValue = cache.get(locator);
-					if (cachedValue != null)
+					if (wrapInProxies)
 					{
-						return cachedValue;
-					}
-
-					target = locator.locateProxyTarget();
-					if (target == null)
-					{
-						// Optional without a binding, return null
+						target = LazyInitProxyFactory.createProxy(field.getType(), locator);
 					}
 					else
 					{
-						if (wrapInProxies)
-						{
-							target = LazyInitProxyFactory.createProxy(field.getType(), locator);
-						}
-					}
-
-					if (locator.isSingletonScope())
-					{
-						Object tmpTarget = cache.putIfAbsent(locator, target == null ? NULL_SENTINEL : target);
-						if (tmpTarget != null)
-						{
-							target = tmpTarget;
-						}
+						target = locator.locateProxyTarget();
 					}
 
 					if (!field.isAccessible())
@@ -54,12 +35,12 @@
 				catch (MoreThanOneBindingException e)
 				{
 					throw new RuntimeException(
-						"Can't have more than one BindingAnnotation on field " + field.getName() +
-							" of class " + fieldOwner.getClass().getName());
+							"Can't have more than one BindingAnnotation on field " + field.getName() +
+									" of class " + fieldOwner.getClass().getName());
 				}
 			}
 		}
 
-		return target == NULL_SENTINEL ? null : target;
+		return target;
 	}
 
