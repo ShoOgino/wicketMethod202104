@@ -1,0 +1,27 @@
+	private Key<?> newGuiceKey()
+	{
+		final Type type;
+		try
+		{
+			Class<?> clazz = WicketObjects.resolveClass(className);
+			final Field field = clazz.getDeclaredField(fieldName);
+			type = field.getGenericType();
+		}
+		catch (Exception e)
+		{
+			throw new WicketRuntimeException("Error accessing member: " + fieldName +
+				" of class: " + className, e);
+		}
+
+		// using TypeLiteral to retrieve the key gives us automatic support for
+		// Providers and other injectable TypeLiterals
+		if (bindingAnnotation == null)
+		{
+			return Key.get(TypeLiteral.get(type));
+		}
+		else
+		{
+			return Key.get(TypeLiteral.get(type), bindingAnnotation);
+		}
+	}
+
