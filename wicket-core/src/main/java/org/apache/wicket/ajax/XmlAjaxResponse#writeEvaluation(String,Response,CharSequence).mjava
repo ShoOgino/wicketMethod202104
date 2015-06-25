@@ -7,24 +7,16 @@
 	*/
 	private void writeEvaluation(final String invocation, final Response response, final CharSequence js)
 	{
-		boolean encoded = false;
 		CharSequence javascript = js;
 
 		// encode the response if needed
 		if (needsEncoding(js))
 		{
-			encoded = true;
 			javascript = encode(js);
 		}
 
 		response.write("<");
 		response.write(invocation);
-		if (encoded)
-		{
-			response.write(" encoding=\"");
-			response.write(getEncodingName());
-			response.write("\"");
-		}
 		response.write(">");
 
 		response.write("<![CDATA[");
