@@ -18,7 +18,7 @@
 
 		FileUploadBase fileUpload = newFileUpload(encoding);
 
-		final List<FileItem> items;
+		List<FileItem> items;
 
 		if (wantUploadProgressUpdates())
 		{
@@ -45,6 +45,10 @@
 		else
 		{
 			items = fileUpload.parseRequest(new ServletRequestContext(request));
+			if (items.isEmpty())
+			{
+				items = readParts(request);
+			}
 		}
 
 		// Loop through items
