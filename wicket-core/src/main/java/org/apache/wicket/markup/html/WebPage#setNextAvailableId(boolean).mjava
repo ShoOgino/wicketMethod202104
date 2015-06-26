@@ -1,0 +1,19 @@
+	/**
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT CALL OR OVERRIDE.
+	 * 
+	 * Don't increment page version during AJAX requests. 
+	 * Do it only if page is new.
+	 */
+	@Override
+	protected final void setNextAvailableId(boolean isInitialization)
+	{
+		Request request = getRequest();
+		if (request instanceof WebRequest && ((WebRequest)request).isAjax()
+			&& !isInitialization)
+		{
+			return;
+		}
+		
+		super.setNextAvailableId(isInitialization);
+	}
+

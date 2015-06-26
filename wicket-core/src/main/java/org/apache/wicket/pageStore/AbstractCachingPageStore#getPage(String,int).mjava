@@ -1,3 +1,4 @@
+	@SuppressWarnings("unchecked")
 	@Override
 	public IManageablePage getPage(final String sessionId, final int pageId)
 	{
@@ -10,7 +11,9 @@
 		byte[] data = getPageData(sessionId, pageId);
 		if (data != null)
 		{
-			return deserializePage(data);
+			IManageablePage page = deserializePage(data);
+			pagesCache.storePage(sessionId, pageId,  (P) page);
+			return page;
 		}
 		return null;
 	}
