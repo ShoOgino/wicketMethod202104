@@ -7,20 +7,12 @@
 	*/
 	private void writeEvaluation(final String invocation, final Response response, final CharSequence js)
 	{
-		CharSequence javascript = js;
-
-		// encode the response if needed
-		if (needsEncoding(js))
-		{
-			javascript = encode(js);
-		}
-
 		response.write("<");
 		response.write(invocation);
 		response.write(">");
 
 		response.write("<![CDATA[");
-		response.write(javascript);
+		response.write(encode(js));
 		response.write("]]>");
 
 		response.write("</");

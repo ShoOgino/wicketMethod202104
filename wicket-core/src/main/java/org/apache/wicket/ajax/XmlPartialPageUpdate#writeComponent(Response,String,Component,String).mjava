@@ -4,7 +4,7 @@
 		if (component.getRenderBodyOnly() == true)
 		{
 			throw new IllegalStateException(
-					"Ajax render cannot be called on component that has setRenderBodyOnly enabled. Component: " +
+					"A partial update is not possible for a component that has renderBodyOnly enabled. Component: " +
 							component.toString());
 		}
 
@@ -73,7 +73,7 @@
 		response.write("<component id=\"");
 		response.write(markupId);
 		response.write("\" ><![CDATA[");
-		response.write(encodingBodyResponse.getContents());
+		response.write(encode(encodingBodyResponse.getContents()));
 		response.write("]]></component>");
 
 		encodingBodyResponse.reset();
