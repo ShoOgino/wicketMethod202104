@@ -10,13 +10,12 @@
 	{
 		writeHeader(response, encoding);
 
-		// invoke onbeforerespond event on listeners
-		fireOnBeforeRespondListeners();
+		onBeforeRespond(response);
 
 		// process added components
 		writeComponents(response, encoding);
 
-		fireOnAfterRespondListeners(response);
+		onAfterRespond(response);
 
 		// queue up prepend javascripts. unlike other steps these are executed out of order so that
 		// components can contribute them from inside their onbeforerender methods.

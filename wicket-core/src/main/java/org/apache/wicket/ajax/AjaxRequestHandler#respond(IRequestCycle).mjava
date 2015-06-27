@@ -32,13 +32,13 @@
 		final String encoding = app.getRequestCycleSettings().getResponseRequestEncoding();
 
 		// Set content type based on markup type for page
-		responseObject.setContentType(response, encoding);
+		update.setContentType(response, encoding);
 
 		// Make sure it is not cached by a client
 		response.disableCaching();
 
 		final StringResponse bodyResponse = new StringResponse();
-		responseObject.writeTo(bodyResponse, encoding);
+		update.writeTo(bodyResponse, encoding);
 		CharSequence filteredResponse = invokeResponseFilters(bodyResponse);
 		response.write(filteredResponse);
 	}
