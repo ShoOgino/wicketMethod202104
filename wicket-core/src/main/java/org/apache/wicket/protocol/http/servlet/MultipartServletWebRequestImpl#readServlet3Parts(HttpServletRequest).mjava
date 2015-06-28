@@ -1,0 +1,32 @@
+	/**
+	 * Reads the uploads' parts by using Servlet 3.0 APIs.
+	 *
+	 * <strong>Note</strong>: By using Servlet 3.0 APIs the application won't be able to use
+	 * upload progress updates.
+	 *
+	 * @param request
+	 *              The http request with the upload data
+	 * @return A list of {@link FileItem}s
+	 * @throws FileUploadException
+	 */
+	private List<FileItem> readServlet3Parts(HttpServletRequest request) throws FileUploadException
+	{
+		List<FileItem> itemsFromParts = new ArrayList<>();
+		try
+		{
+			Collection<Part> parts = request.getParts();
+			if (parts != null)
+			{
+				for (Part part : parts)
+				{
+					FileItem fileItem = new ServletPartFileItem(part);
+					itemsFromParts.add(fileItem);
+				}
+			}
+		} catch (IOException | ServletException e)
+		{
+			throw new FileUploadException("An error occurred while reading the upload parts", e);
+		}
+		return itemsFromParts;
+	}
+

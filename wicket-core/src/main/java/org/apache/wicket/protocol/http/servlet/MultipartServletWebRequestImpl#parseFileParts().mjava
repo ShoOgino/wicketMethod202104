@@ -44,10 +44,13 @@
 		}
 		else
 		{
+			// try to parse the file uploads by using Apache Commons FileUpload APIs
+			// because they are feature richer (e.g. progress updates, cleaner)
 			items = fileUpload.parseRequest(new ServletRequestContext(request));
 			if (items.isEmpty())
 			{
-				items = readParts(request);
+				// fallback to Servlet 3.0 APIs
+				items = readServlet3Parts(request);
 			}
 		}
 
