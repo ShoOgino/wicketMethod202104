@@ -1,0 +1,33 @@
+	/**
+	 * Tests support for uploading files with Servlet 3.0 multipart upload
+	 * https://issues.apache.org/jira/browse/WICKET-5924
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void uploadServlet30Multipart() throws Exception
+	{
+		MockPageWithFormAndUploadField page = tester.startPage(MockPageWithFormAndUploadField.class);
+
+		MockHttpServletRequest httpServletRequest = tester.getRequest();
+		FormTester formTester = tester.newFormTester(MockPageWithFormAndUploadField.FORM_ID);
+		Servlet3Part part = new Servlet3Part(page.fileUploadField.getInputName());
+		httpServletRequest.setPart(MockPageWithFormAndUploadField.FILE_UPLOAD_ID, part);
+		formTester.submit();
+
+		page = (MockPageWithFormAndUploadField) tester.getLastRenderedPage();
+		FileUpload fileUpload = page.getFileUpload();
+		assertArrayEquals(Servlet3Part.DATA, fileUpload.getBytes());
+		assertEquals(Servlet3Part.class.getSimpleName(), fileUpload.getClientFileName());
+		assertEquals(Servlet3Part.CONTENT_TYPE, fileUpload.getContentType());
+		assertArrayEquals(Servlet3Part.DATA, IOUtils.toByteArray(fileUpload.getInputStream()));
+
+		assertThat(part.written.get(), is(nullValue()));
+		fileUpload.writeToTempFile();
+		assertThat(part.written.get(), is(notNullValue()));
+
+		assertThat(part.deleted.get(), is(false));
+		fileUpload.delete();
+		assertThat(part.deleted.get(), is(true));
+	}
+
