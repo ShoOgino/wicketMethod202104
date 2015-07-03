@@ -13,14 +13,10 @@
 	 *            the component tag
 	 * @return A BookmarkablePageLink<?> to handle the href
 	 */
-	private Component resolveAutomaticLink(final PathInfo pathInfo, final String id,
-		final ComponentTag tag)
+	private Component resolveAutomaticLink(final PathInfo pathInfo, final ComponentTag tag)
 	{
 		final MarkupContainer container = pathInfo.getContainer();
-		final Page page = container.getPage();
-
-		// Make the id (page-)unique
-		final String autoId = id + Integer.toString(page.getAutoIndex());
+		final String componentId = tag.getId();
 
 		// get the tag name, which is something like 'a' or 'script'
 		final String tagName = tag.getName();
@@ -37,7 +33,7 @@
 		Component autoComponent = null;
 		if (autolinkResolverDelegate != null)
 		{
-			autoComponent = autolinkResolverDelegate.newAutoComponent(autoId, pathInfo);
+			autoComponent = autolinkResolverDelegate.newAutoComponent(componentId, pathInfo);
 		}
 
 		if (autoComponent == null)
@@ -45,7 +41,7 @@
 			// resolving didn't have the desired result or there was no delegate
 			// found; fallback on the default resolving which is a simple
 			// component that leaves the tag unchanged
-			autoComponent = new AutolinkExternalLink(autoId, pathInfo.reference);
+			autoComponent = new AutolinkExternalLink(componentId, pathInfo.reference);
 		}
 
 		return autoComponent;
