@@ -1,0 +1,18 @@
+	/**
+	 * @param page The page to unmark as dirty, so it won't be stored
+	 *                at the end of the request cycle
+	 */
+	protected void untouch(final IManageablePage page)
+	{
+		Iterator<IManageablePage> iterator = touchedPages.iterator();
+		while (iterator.hasNext())
+		{
+			IManageablePage touchedPage = iterator.next();
+			if (touchedPage.getPageId() == page.getPageId())
+			{
+				iterator.remove();
+				break;
+			}
+		}
+	}
+
