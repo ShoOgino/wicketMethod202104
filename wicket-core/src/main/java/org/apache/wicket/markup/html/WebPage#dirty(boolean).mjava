@@ -1,0 +1,15 @@
+	/**
+	 * Prevents page from get dirty inside an AJAX request.
+	 */
+	@Override
+	public final void dirty(boolean isInitialization)
+	{
+		Request request = getRequest();
+		if (isInitialization == false && request instanceof WebRequest &&
+			((WebRequest)request).isAjax())
+		{
+			return;
+		}
+		super.dirty(isInitialization);
+	}
+
