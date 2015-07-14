@@ -8,11 +8,11 @@
 	private void renderHeadForInnerSiblings(HtmlHeaderContainer container)
 	{
 		MarkupStream stream = new MarkupStream(getMarkup());
-		
+
 		while (stream.hasMore())
 		{
 			MarkupElement childOpenTag = stream.nextOpenTag();
-			
+
 			if ((childOpenTag instanceof ComponentTag) && !stream.atCloseTag())
 			{
 				// Get element as tag
@@ -22,20 +22,20 @@
 				final String id = tag.getId();
 
 				Component component = null;
-				
+
 				if (get(id) == null)
 				{
 					component = ComponentResolvers.resolveByComponentHierarchy(this, stream, tag);					
 				}
-				
+
 				if (component != null)
 				{
 					component.internalRenderHead(container);
-				}		
-				
+				}
+
 				//consider just direct children
 				stream.skipToMatchingCloseTag(tag);
-			}			
+			}
 		}
 	}
 
