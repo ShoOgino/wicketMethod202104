@@ -1,0 +1,41 @@
+	/**
+	 * Renders head for embedded component, i.e. those who are not added 
+	 * directly to this container but have the markup inside it.
+	 * 
+	 * @param container
+	 * 				The HtmlHeaderContainer
+	 */
+	private void renderHeadForInnerSiblings(HtmlHeaderContainer container)
+	{
+		MarkupStream stream = new MarkupStream(getMarkup());
+
+		while (stream.hasMore())
+		{
+			MarkupElement childOpenTag = stream.nextOpenTag();
+
+			if ((childOpenTag instanceof ComponentTag) && !stream.atCloseTag())
+			{
+				// Get element as tag
+				final ComponentTag tag = (ComponentTag)childOpenTag;
+
+				// Get component id
+				final String id = tag.getId();
+
+				Component component = null;
+
+				if (get(id) == null)
+				{
+					component = ComponentResolvers.resolveByComponentHierarchy(this, stream, tag);					
+				}
+
+				if (component != null)
+				{
+					component.internalRenderHead(container);
+				}
+
+				//consider just direct children
+				stream.skipToMatchingCloseTag(tag);
+			}
+		}
+	}
+

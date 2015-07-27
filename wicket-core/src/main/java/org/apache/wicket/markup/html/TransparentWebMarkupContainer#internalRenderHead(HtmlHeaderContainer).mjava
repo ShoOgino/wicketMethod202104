@@ -1,0 +1,17 @@
+	@Override
+	public void internalRenderHead(HtmlHeaderContainer container)
+	{
+		/*
+		 * https://issues.apache.org/jira/browse/WICKET-5941
+		 * 
+		 * if this component is updated via AJAX and is the root
+		 * one, then render head also for embedded components.
+		 */
+		if (isAjaxRequest() && !isParentRendering())
+		{
+			renderHeadForInnerSiblings(container);
+		}
+
+		super.internalRenderHead(container);
+	}
+

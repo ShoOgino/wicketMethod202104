@@ -1,0 +1,18 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-5941
+	 * 
+	 * Headers not rendered for components inside TransparentWebMarkupContainer on ajax update
+	 */
+	@Test
+	public void updateEmbeddedAjaxComponent() throws Exception
+	{
+		tester.startPage(TestEmbeddedAjaxComponet.class);
+		tester.clickLink("ajaxLink", true);
+		
+		TagTester scriptTag = TagTester.createTagByAttribute(
+			tester.getLastResponseAsString(), "header-contribution");
+		
+		//check if our response contains headers
+		assertNotNull(scriptTag);
+	}
+
