@@ -8,18 +8,17 @@
 
 		FileResourceStream frs = new FileResourceStream(new File("."));
 
-		when(
-				resourceStreamLocator.locate(String.class, "path", "style", "variation", null,
-						"extension", true)).thenReturn(frs);
+		when(resourceStreamLocator.locate(String.class, "path", "style", "variation", null,
+			"extension", true)).thenReturn(frs);
 
 		CachingResourceStreamLocator cachingLocator = new CachingResourceStreamLocator(
-				resourceStreamLocator);
+			resourceStreamLocator);
 
 		cachingLocator.locate(String.class, "path", "style", "variation", null, "extension", true);
 		cachingLocator.locate(String.class, "path", "style", "variation", null, "extension", true);
 
 		// there is a file resource with that Key so expect just one call to the delegate
 		verify(resourceStreamLocator, times(1)).locate(String.class, "path", "style", "variation",
-				null, "extension", true);
+			null, "extension", true);
 	}
 

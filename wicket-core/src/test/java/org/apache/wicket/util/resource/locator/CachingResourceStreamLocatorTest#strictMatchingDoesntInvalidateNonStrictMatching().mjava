@@ -1,0 +1,30 @@
+	/**
+	 * Tests strict before non-strict matching with a specific locale.
+	 */
+	@Test
+	public void strictMatchingDoesntInvalidateNonStrictMatching()
+	{
+		IResourceStreamLocator resourceStreamLocator = new ResourceStreamLocator(
+			new ClassPathResourceFinder(""));
+		CachingResourceStreamLocator cachingLocator = new CachingResourceStreamLocator(
+			resourceStreamLocator);
+
+		String style = null;
+		String variation = null;
+		Locale locale = new Locale("nl", "NL");
+		String extension = null;
+
+		String filename = "org/apache/wicket/ajax/res/js/wicket-ajax-jquery-debug.js";
+
+		// a strict lookup of a localized resource should not find the non-localized resource
+		IResourceStream strictLocate = cachingLocator.locate(AbstractDefaultAjaxBehavior.class,
+			filename, style, variation, locale, extension, true);
+		assertThat(strictLocate, is(nullValue()));
+
+		// but a non-strict lookup with a locale should fall back to the non-localized resource
+		IResourceStream nonStrictLocate = cachingLocator.locate(AbstractDefaultAjaxBehavior.class,
+			filename, style, variation, locale, extension, false);
+
+		assertThat(nonStrictLocate, is(not(nullValue())));
+	}
+
