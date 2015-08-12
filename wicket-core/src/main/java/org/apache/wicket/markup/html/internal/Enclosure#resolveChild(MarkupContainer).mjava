@@ -1,0 +1,27 @@
+	/**
+	 * Searches for the controlling child component looking also 
+	 * through transparent components.
+	 * 
+	 * @param container
+	 * 			the current container
+	 * @return the controlling child component, null if no one is found 
+	 */
+	private Component resolveChild(MarkupContainer container)
+	{
+		Component childController = container.get(childId);
+		
+		Iterator<Component> children = container.iterator();
+		
+		while (children.hasNext() && childController == null)
+		{
+			Component transparentChild = children.next();
+			
+			if(transparentChild instanceof TransparentWebMarkupContainer)
+			{
+				childController = resolveChild((MarkupContainer)transparentChild);
+			}
+		}
+		
+		return childController;
+	}
+
