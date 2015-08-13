@@ -1,0 +1,34 @@
+	public RerenderAjaxPage(final PageParameters parameters)
+	{
+		super(parameters);
+
+		// the page needs a component that is refreshed using AJAX, so a feedback panel will do
+		// nicely
+		feedback = new FeedbackPanel("feedback");
+		add(feedback.setOutputMarkupPlaceholderTag(true));
+
+		Form<Void> form = new Form<Void>("form");
+		add(form);
+		TextField<String> username = new TextField<String>("username", Model.of(""));
+
+		// make it so we can never ever have a successful submit
+		username.add(StringValidator.minimumLength(Integer.MAX_VALUE));
+		form.add(username.setRequired(true));
+
+		// add an AJAX event to the text field so we can trigger the WICKET-5960 AJAX render bug
+		username.add(new AjaxFormValidatingBehavior("blur")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target)
+			{
+				super.onError(target);
+
+				// add the component to the AJAX envelope so that we trigger a
+				// PartialHtmlHeaderContainer to be set on the page.
+				target.add(feedback);
+			}
+		});
+	}
+
