@@ -8,26 +8,34 @@
 	 */
 	public void writeTo(final Response response, final String encoding)
 	{
-		writeHeader(response, encoding);
+		try {
+			writeHeader(response, encoding);
 
-		onBeforeRespond(response);
+			onBeforeRespond(response);
 
-		// process added components
-		writeComponents(response, encoding);
+			// process added components
+			writeComponents(response, encoding);
 
-		onAfterRespond(response);
+			onAfterRespond(response);
 
-		// queue up prepend javascripts. unlike other steps these are executed out of order so that
-		// components can contribute them from inside their onbeforerender methods.
-		writePriorityEvaluations(response, prependJavaScripts);
+			// queue up prepend javascripts. unlike other steps these are executed out of order so that
+			// components can contribute them from inside their onbeforerender methods.
+			writePriorityEvaluations(response, prependJavaScripts);
 
-		// execute the dom ready javascripts as first javascripts
-		// after component replacement
-		List<CharSequence> evaluationScripts = new ArrayList<>();
-		evaluationScripts.addAll(domReadyJavaScripts);
-		evaluationScripts.addAll(appendJavaScripts);
-		writeNormalEvaluations(response, evaluationScripts);
+			// execute the dom ready javascripts as first javascripts
+			// after component replacement
+			List<CharSequence> evaluationScripts = new ArrayList<>();
+			evaluationScripts.addAll(domReadyJavaScripts);
+			evaluationScripts.addAll(appendJavaScripts);
+			writeNormalEvaluations(response, evaluationScripts);
 
-		writeFooter(response, encoding);
+			writeFooter(response, encoding);
+		} finally {
+			if (header != null) {
+				// restore a normal header
+				page.replace(new HtmlHeaderContainer(HtmlHeaderSectionHandler.HEADER_ID));
+				header = null;
+			}
+		}
 	}
 
