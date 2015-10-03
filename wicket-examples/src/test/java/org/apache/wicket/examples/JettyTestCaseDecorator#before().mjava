@@ -9,8 +9,14 @@
 		System.setProperty("wicket.configuration", "deployment");
 
 		server = new Server(0);
-		SelectChannelConnector connector = new SelectChannelConnector();
-		server.setConnectors(new Connector[] { connector });
+
+		HttpConfiguration http_config = new HttpConfiguration();
+		http_config.setSecureScheme("https");
+		http_config.setSecurePort(8443);
+		http_config.setOutputBufferSize(32768);
+
+		ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
+		server.addConnector(http);
 
 		WebAppContext web = new WebAppContext();
 		if (contextPath == null)
@@ -35,6 +41,6 @@
 		server.setHandler(web);
 
 		server.start();
-		localPort = connector.getLocalPort();
+		localPort = http.getLocalPort();
 	}
 
