@@ -1,0 +1,24 @@
+	@Test
+	public void caching()
+	{
+		// given
+		Person person = mock(Person.class);
+		when(person.getName()).thenReturn("The person's name");
+		IModel<String> personNameModel = new SupplierCachingModel<>(person::getName);
+
+		// when
+
+		// once
+		personNameModel.getObject();
+		personNameModel.getObject();
+
+		personNameModel.detach();
+		// twice
+		personNameModel.getObject();
+		personNameModel.getObject();
+		personNameModel.getObject();
+
+		// then
+		verify(person, times(2)).getName();
+	}
+
