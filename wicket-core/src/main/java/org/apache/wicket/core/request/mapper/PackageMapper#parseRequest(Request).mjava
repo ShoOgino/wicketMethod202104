@@ -7,8 +7,20 @@
 			// try to extract page and component information from URL
 			PageComponentInfo info = getPageComponentInfo(url);
 
+			final List<String> segments = url.getSegments();
+			if (segments.size() <= mountSegments.length)
+			{
+				return null;
+			}
+
 			// load the page class
-			String name = url.getSegments().get(mountSegments.length);
+			String name = segments.get(mountSegments.length);
+
+			if (Strings.isEmpty(name))
+			{
+				return null;
+			}
+
 			String className = cleanClassName(name);
 
 			if (isValidClassName(className) == false)
