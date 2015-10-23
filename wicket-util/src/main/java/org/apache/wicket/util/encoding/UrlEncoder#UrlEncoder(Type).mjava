@@ -54,7 +54,6 @@
 		 * query =( pchar / "/" / "?" )
 		 */
 
-		this.type = type;
 		// unreserved
 		dontNeedEncoding = new BitSet(256);
 		int i;
@@ -125,18 +124,6 @@
 				dontNeedEncoding.set('+');
 				// don't encode semicolon because it is used in ;jsessionid=
 				dontNeedEncoding.set(';');
-				break;
-
-			// same as path, but '/' will not be encoded
-			case FULL_PATH :
-				// encode ' ' with a % instead of + in path portion
-
-				// path component sub-delim values we do not need to escape
-				dontNeedEncoding.set('&');
-				dontNeedEncoding.set('=');
-				dontNeedEncoding.set('+');
-
-				dontNeedEncoding.set('/');
 				break;
 		}
 	}
