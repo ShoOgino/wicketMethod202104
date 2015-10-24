@@ -1,8 +1,5 @@
-	/**
-	 * Test date locale conversions.
-	 */
 	@Test
-	public void dateConverter()
+	public void validDateConverters()
 	{
 		DateConverter converter = new DateConverter();
 
@@ -18,24 +15,5 @@
 
 		assertEquals("10/24/02", converter.convertToString(date, Locale.US));
 		assertEquals(date, converter.convertToObject("10/24/02", Locale.US));
-
-		try
-		{
-			converter.convertToObject("whatever", Locale.US);
-			fail("Conversion should have thrown an exception");
-		}
-		catch (ConversionException e)
-		{
-			// this is correct
-		}
-		try
-		{
-			converter.convertToObject("10/24/02whatever", Locale.US);
-			fail("Conversion should have thrown an exception");
-		}
-		catch (ConversionException e)
-		{
-			// this is correct
-		}
 	}
 
