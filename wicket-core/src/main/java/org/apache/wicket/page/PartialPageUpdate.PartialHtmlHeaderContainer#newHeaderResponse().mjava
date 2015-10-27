@@ -5,6 +5,10 @@
 		@Override
 		protected IHeaderResponse newHeaderResponse()
 		{
-	        return PartialPageUpdate.this.getHeaderResponse();
+			if (pageUpdate == null) {
+				throw new IllegalStateException("disconnected from pageUpdate after serialization");
+			}
+
+	        return pageUpdate.getHeaderResponse();
 		}
 
