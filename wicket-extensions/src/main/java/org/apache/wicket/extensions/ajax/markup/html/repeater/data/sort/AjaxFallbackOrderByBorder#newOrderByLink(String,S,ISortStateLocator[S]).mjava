@@ -1,0 +1,24 @@
+	@Override
+	protected OrderByLink<S> newOrderByLink(String id, S property,
+		ISortStateLocator<S> stateLocator)
+	{
+		return new AjaxFallbackOrderByLink<S>("orderByLink", property, stateLocator, ajaxCallListener)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSortChanged()
+			{
+				AjaxFallbackOrderByBorder.this.onSortChanged();
+			}
+
+			@Override
+			public void onClick(final AjaxRequestTarget target)
+			{
+				AjaxFallbackOrderByBorder.this.onAjaxClick(target);
+
+			}
+		};
+	}
+

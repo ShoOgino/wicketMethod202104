@@ -9,27 +9,8 @@
 	public AjaxFallbackOrderByBorder(final String id, final S sortProperty,
 		final ISortStateLocator<S> stateLocator, final IAjaxCallListener ajaxCallListener)
 	{
-		super(id);
-		AjaxFallbackOrderByLink<S> link = new AjaxFallbackOrderByLink<S>("orderByLink", sortProperty,
-			stateLocator, ajaxCallListener)
-		{
+		super(id, sortProperty, stateLocator);
 
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSortChanged()
-			{
-				AjaxFallbackOrderByBorder.this.onSortChanged();
-			}
-
-			@Override
-			public void onClick(final AjaxRequestTarget target)
-			{
-				AjaxFallbackOrderByBorder.this.onAjaxClick(target);
-
-			}
-		};
-		addToBorder(link);
-		link.add(getBodyContainer());
+		this.ajaxCallListener = ajaxCallListener;
 	}
 
