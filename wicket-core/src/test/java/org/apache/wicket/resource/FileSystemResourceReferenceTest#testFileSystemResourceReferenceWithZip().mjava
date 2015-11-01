@@ -1,0 +1,44 @@
+	/**
+	 * Test ZIP files
+	 * 
+	 * @throws IOException
+	 *             if the ZIP file or the file content can't be read
+	 * @throws URISyntaxException
+	 *             if the URI is not readable
+	 */
+	@Test
+	public void testFileSystemResourceReferenceWithZip() throws IOException, URISyntaxException
+	{
+		InputStream inputStream = null;
+		try
+		{
+			URL resource = FileSystemResourceReferenceTest.class.getResource("FileSystemResourceReferenceTest.zip");
+			Path path = FileSystemResourceReference.getPath(URI.create("jar:" + resource.toURI() +
+				"!/folderInZip/FileSystemResourceReference.txt"));
+			final FileSystemResource fileSystemResource = new FileSystemResource(path);
+			FileSystemResourceReference fileSystemResourceReference = new FileSystemResourceReference(
+				"test", path)
+			{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected FileSystemResource getFileSystemResource()
+				{
+					return fileSystemResource;
+				}
+			};
+			// Size
+			Assert.assertEquals(fileSystemResource.getSize(), 39);
+
+			// Content
+			inputStream = fileSystemResource.getInputStream();
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			IOUtils.copy(inputStream, outputStream);
+			Assert.assertEquals("FileSystemResourceReference.zip content", outputStream.toString());
+		}
+		finally
+		{
+			IOUtils.closeQuietly(inputStream);
+		}
+	}
+

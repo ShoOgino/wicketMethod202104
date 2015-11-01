@@ -1,0 +1,37 @@
+	/**
+	 * Test mime types
+	 * 
+	 * @throws IOException
+	 *             if the file or the mime type can't be read
+	 * @throws URISyntaxException
+	 *             if the URI is not readable
+	 */
+	@Test
+	public void testMimeTypeEqual() throws IOException, URISyntaxException
+	{
+		URL resource = FileSystemResourceReferenceTest.class.getResource("FileSystemResourceReference.txt");
+		Path path = FileSystemResourceReference.getPath(resource.toURI());
+		final FileSystemResource fileSystemResource = new FileSystemResource(path)
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			protected String getMimeType() throws IOException
+			{
+				return "test/mime1";
+			}
+		};
+		FileSystemResourceReference fileSystemResourceReference = new FileSystemResourceReference(
+			"test", path)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected FileSystemResource getFileSystemResource()
+			{
+				return fileSystemResource;
+			}
+		};
+		Assert.assertEquals("test/mime1", fileSystemResource.getMimeType());
+	}
+

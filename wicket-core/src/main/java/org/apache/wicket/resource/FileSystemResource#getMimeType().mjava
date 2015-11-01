@@ -1,0 +1,22 @@
+	/**
+	 * Gets the mime type to be used for the response it first uses the URL connection to get the
+	 * mime type and after this the FileTypeDetector SPI is used.
+	 * 
+	 * @return the mime type to be used for the response
+	 * @throws IOException
+	 *             if the mime type could'nt be resoulved
+	 */
+	protected String getMimeType() throws IOException
+	{
+		String mimeType = null;
+		if (Application.exists())
+		{
+			mimeType = Application.get().getMimeType(path.getFileName().toString());
+		}
+		if (mimeType == null)
+		{
+			mimeType = Files.probeContentType(path);
+		}
+		return mimeType;
+	}
+
