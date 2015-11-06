@@ -1,0 +1,59 @@
+	/**
+	 * Removes the child component identified by {@code childId} from the list of children.
+	 * 
+	 * Will change the internal list or map to a single component when the number of children hits
+	 * 1, but not change the internal map to a list when the threshold is reached (the memory was
+	 * already claimed, so there's little to be gained other than wasting CPU cycles for the
+	 * conversion).
+	 * 
+	 * @param childId
+	 *            the id of the child component to remove
+	 */
+	private void children_remove(String childId)
+	{
+		if (children instanceof Component)
+		{
+			Component oldChild = children();
+			if (oldChild.getId().equals(childId))
+			{
+				children = null;
+				removals_add(oldChild, null);
+			}
+		}
+		else if (children instanceof List)
+		{
+			List<Component> childrenList = children();
+			Iterator<Component> it = childrenList.iterator();
+			Component prevChild = null;
+			while (it.hasNext())
+			{
+				Component child = it.next();
+				if (child.getId().equals(childId))
+				{
+					it.remove();
+					removals_add(child, prevChild);
+					if (childrenList.size() == 1)
+					{
+						children = childrenList.get(0);
+					}
+					return;
+				}
+				prevChild = child;
+			}
+		}
+		else if (children instanceof LinkedMap)
+		{
+			LinkedMap<String, Component> childrenMap = children();
+			if (childrenMap.containsKey(childId))
+			{
+				String prevSiblingId = childrenMap.previousKey(childId);
+				Component oldChild = childrenMap.remove(childId);
+				removals_add(oldChild, childrenMap.get(prevSiblingId));
+				if (childrenMap.size() == 1)
+				{
+					children = childrenMap.values().iterator().next();
+				}
+			}
+		}
+	}
+

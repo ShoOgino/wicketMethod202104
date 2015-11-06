@@ -1,41 +1,114 @@
 	/**
+	 * Gives an iterator that allow you to iterate through the children of this markup container in
+	 * the order the children were added. The iterator supports additions and removals from the list
+	 * of children during iteration.
+	 * 
 	 * @return Iterator that iterates through children in the order they were added
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public Iterator<Component> iterator()
 	{
-		return new Iterator<Component>()
+		/**
+		 * Iterator that knows how to change between a single child, list of children and map of
+		 * children. Keeps track when the iterator was last sync'd with the markup container's
+		 * tracking of changes to the list of children.
+		 */
+		class MarkupChildIterator implements Iterator<Component>
 		{
-			Component currentComponent = null;
-			Iterator<Component> internalIterator = copyChildren().iterator();
+			private int indexInRemovalsSinceLastUpdate = removals_size();
+			private int expectedModCounter = -1;
+			private Component currentComponent = null;
+			private Iterator<Component> internalIterator = null;
 
 			@Override
 			public boolean hasNext()
 			{
+				refreshInternalIteratorIfNeeded();
 				return internalIterator.hasNext();
 			}
 
 			@Override
 			public Component next()
 			{
+				refreshInternalIteratorIfNeeded();
 				return currentComponent = internalIterator.next();
 			}
 
 			@Override
 			public void remove()
 			{
-				if (children instanceof Component)
+				MarkupContainer.this.remove(currentComponent);
+				refreshInternalIteratorIfNeeded();
+			}
+
+			private void refreshInternalIteratorIfNeeded()
+			{
+				if (modCounter != 0 && expectedModCounter >= modCounter)
+					return;
+
+				if (children == null)
 				{
-					children = null;
+					internalIterator = Collections.emptyIterator();
+				}
+				else if (children instanceof Component)
+				{
+					internalIterator = Collections.singleton((Component)children).iterator();
+				}
+				else if (children instanceof List)
+				{
+					List<Component> childrenList = children();
+					internalIterator = childrenList.iterator();
 				}
 				else
 				{
-					internalIterator.remove();
+					Map<String, Component> childrenMap = children();
+					internalIterator = childrenMap.values().iterator();
 				}
-				checkHierarchyChange(currentComponent);
-				removedComponent(currentComponent);
+
+				// since we now have a new iterator, we need to set it to the last known position
+				currentComponent = findLastExistingChildAlreadyReturned(currentComponent);
+				expectedModCounter = modCounter;
+				indexInRemovalsSinceLastUpdate = removals_size();
+
+				if (currentComponent != null)
+				{
+					// move the new internal iterator to the place of the last processed component
+					while (internalIterator.hasNext() &&
+						internalIterator.next() != currentComponent)
+						// noop
+						;
+				}
+			}
+
+			private Component findLastExistingChildAlreadyReturned(Component target)
+			{
+				while (true)
+				{
+					if (target == null)
+						return null;
+
+					RemovedChild removedChild = null;
+					for (int i = indexInRemovalsSinceLastUpdate; i < removals_size(); i++)
+					{
+						RemovedChild curRemovedChild = removals_get(i);
+						if (curRemovedChild.removedChild == target ||
+							curRemovedChild.removedChild == null)
+						{
+							removedChild = curRemovedChild;
+							break;
+						}
+					}
+					if (removedChild == null)
+					{
+						return target;
+					}
+					else
+					{
+						target = removedChild.previousSibling;
+					}
+				}
 			}
 		};
+		return new MarkupChildIterator();
 	}
 

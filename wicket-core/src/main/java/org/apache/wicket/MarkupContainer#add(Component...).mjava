@@ -1,15 +1,15 @@
 	/**
-	 * Adds a child component to this container.
+	 * Adds the child component(s) to this container.
 	 * 
-	 * @param childs
+	 * @param children
 	 *            The child(ren) to add.
 	 * @throws IllegalArgumentException
 	 *             Thrown if a child with the same id is replaced by the add operation.
 	 * @return This
 	 */
-	public MarkupContainer add(final Component... childs)
+	public MarkupContainer add(final Component... children)
 	{
-		for (Component child : childs)
+		for (Component child : children)
 		{
 			Args.notNull(child, "child");
 
@@ -47,16 +47,9 @@
 				log.debug("Add " + child.getId() + " to " + this);
 			}
 
-			// remove child from existing parent
-			parent = child.getParent();
-			if (parent != null)
-			{
-				parent.remove(child);
-			}
-
-			// Add the child to my children 
-			Component previousChild = put(child);
-			if (previousChild != null)
+			// Add the child to my children
+			Component previousChild = children_put(child);
+			if (previousChild != null && previousChild != child)
 			{
 				throw new IllegalArgumentException(
 					exceptionMessage("A child '" + previousChild.getClass().getSimpleName() +

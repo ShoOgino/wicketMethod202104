@@ -1,0 +1,22 @@
+	/**
+	 * Tests the case when one child is removed from a list the iterator still works after a detach.
+	 */
+	@Test
+	public void detachWithOneIteratorTwoChildren()
+	{
+		WebMarkupContainer wmc = new WebMarkupContainer("id");
+		addNChildren(wmc, 2);
+
+		Iterator<Component> iterator1 = wmc.iterator();
+
+		iterator1.next();
+		iterator1.remove();
+
+		assertThat(iterator1.hasNext(), is(true));
+
+		wmc.detach();
+
+		assertThat(iterator1.hasNext(), is(true));
+		assertThat(iterator1.next(), is(not(nullValue())));
+	}
+

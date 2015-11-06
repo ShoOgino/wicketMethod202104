@@ -1,0 +1,102 @@
+	/**
+	 * Puts the {@code child} component into the list of children of this markup container. If a
+	 * component existed with the same {@code child.getId()} it is replaced and the old component is
+	 * returned.
+	 * 
+	 * When a component is replaced, the internal structure of the children is not modified, so we
+	 * don't have to update the internal {@link #modCounter} in those circumstances. When a
+	 * component is added, we do have to increase the {@link #modCounter} to notify iterators of
+	 * this change.
+	 * 
+	 * @param child
+	 *            The child
+	 * @return Any component that was replaced
+	 */
+	private Component children_put(final Component child)
+	{
+		if (children == null)
+		{
+			children = child;
+
+			// it is an addtion, so we need to notify the iterators of this change.
+			modCounter++;
+
+			return null;
+		}
+
+		if (children instanceof Component)
+		{
+			/* first see if the child replaces the existing child */
+			Component oldChild = children();
+			if (oldChild.getId().equals(child.getId()))
+			{
+				children = child;
+				return oldChild;
+			}
+			else
+			{
+				/*
+				 * the put doesn't replace the existing child, so we need to increase the children
+				 * storage to a list and add the existing and new child to it
+				 */
+				Component originalChild = children();
+				List<Component> newChildren = new ArrayList<>(INITIAL_CHILD_LIST_CAPACITY);
+				newChildren.add(originalChild);
+				newChildren.add(child);
+				children = newChildren;
+
+				// it is an addtion, so we need to notify the iterators of this change.
+				modCounter++;
+				return null;
+			}
+		}
+
+		if (children instanceof List)
+		{
+			List<Component> childrenList = children();
+
+			// first see if the child replaces an existing child
+			for (int i = 0; i < childrenList.size(); i++)
+			{
+				Component curChild = childrenList.get(i);
+				if (curChild.getId().equals(child.getId()))
+				{
+					return childrenList.set(i, child);
+				}
+			}
+
+			// it is an addtion, so we need to notify the iterators of this change.
+			modCounter++;
+
+			/*
+			 * If it still fits in the allotted number of items of a List, just add it, otherwise
+			 * change the internal data structure to a Map for speedier lookups.
+			 */
+			if (childrenList.size() < MAPIFY_THRESHOLD)
+			{
+				childrenList.add(child);
+			}
+			else
+			{
+				Map<String, Component> newChildren = new LinkedMap<>(MAPIFY_THRESHOLD * 2);
+				for (Component curChild : childrenList)
+				{
+					newChildren.put(curChild.getId(), curChild);
+				}
+				newChildren.put(child.getId(), child);
+				children = newChildren;
+			}
+			return null;
+		}
+
+		Map<String, Component> childrenMap = children();
+		Component oldChild = childrenMap.put(child.getId(), child);
+
+		if (oldChild == null)
+		{
+			// it is an addtion, so we need to notify the iterators of this change.
+			modCounter++;
+		}
+		return oldChild;
+	}
+

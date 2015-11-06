@@ -1,0 +1,23 @@
+	/**
+	 * Asserts that the children property of the {@code wmc} is of a particular {@code type}.
+	 * 
+	 * @param wmc
+	 *            the web markup container whose children property is to be checked
+	 * @param type
+	 *            the expected type
+	 */
+	private void assertChildrenType(WebMarkupContainer wmc, Class<?> type)
+	{
+		try
+		{
+			Field childrenField = MarkupContainer.class.getDeclaredField("children");
+			childrenField.setAccessible(true);
+			Object field = childrenField.get(wmc);
+			assertThat(field, is(instanceOf(type)));
+		}
+		catch (Exception e)
+		{
+			throw new AssertionError("Unable to read children", e);
+		}
+	}
+
