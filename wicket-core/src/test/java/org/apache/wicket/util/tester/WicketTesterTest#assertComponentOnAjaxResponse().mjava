@@ -1,0 +1,49 @@
+	/**
+	 *
+	 */
+	@Test
+	public void assertComponentOnAjaxResponse()
+	{
+		final Page page = new MockPageWithLink();
+		AjaxLink<Void> ajaxLink = new AjaxLink<Void>(MockPageWithLink.LINK_ID)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				// Replace the link with a normal Link
+				Link<Void> link = new Link<Void>(MockPageWithLink.LINK_ID)
+				{
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick()
+					{
+					}
+				};
+				link.setOutputMarkupId(true);
+
+				page.replace(link);
+
+				target.add(link);
+			}
+		};
+		ajaxLink.setOutputMarkupId(true);
+
+		page.add(ajaxLink);
+
+		tester.startPage(page);
+
+		// Click the link
+		tester.clickLink(MockPageWithLink.LINK_ID);
+
+		// The link must be a Link :)
+		tester.assertComponent(MockPageWithLink.LINK_ID, Link.class);
+
+		// This must not fail
+		tester.assertComponentOnAjaxResponse(MockPageWithLink.LINK_ID);
+
+		tester.dumpPage();
+	}
+

@@ -1,0 +1,12 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4610
+	 */
+	@Test
+	public void redirectToAbsoluteUrlTest()
+	{
+		tester.setFollowRedirects(false);
+		tester.startPage(AlwaysRedirectPage.class);
+		tester.assertRedirectUrl("http://localhost:4333/");
+		assertEquals(HttpServletResponse.SC_FOUND, tester.getLastResponse().getStatus());
+	}
+

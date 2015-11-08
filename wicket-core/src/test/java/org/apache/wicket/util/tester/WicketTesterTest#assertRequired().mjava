@@ -1,0 +1,38 @@
+	/**
+	 * WICKET-3152
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void assertRequired() throws Exception
+	{
+		tester.startPage(CreateBook.class);
+		tester.assertRenderedPage(CreateBook.class);
+
+		// test #1: "id" is required by default
+		tester.assertRequired("createForm:id");
+
+		FormComponent<?> bookId = (FormComponent<?>)tester.getComponentFromLastRenderedPage("createForm:id");
+		try
+		{
+			// test #2: set it manually to not required
+			bookId.setRequired(false);
+			tester.assertRequired("createForm:id");
+			fail("Book ID component must not be required anymore!");
+		}
+		catch (AssertionError ex)
+		{
+			;
+		}
+
+		try
+		{
+			// test #3: "createForm" is not a FormComponent
+			tester.assertRequired("createForm");
+		}
+		catch (AssertionError ex)
+		{
+			;
+		}
+	}
+

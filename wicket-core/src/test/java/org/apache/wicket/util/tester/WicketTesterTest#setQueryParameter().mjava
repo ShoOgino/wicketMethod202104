@@ -1,0 +1,15 @@
+	/**
+	 * Asserting that parameters set by user in request make part of the processed request
+	 * parameters
+	 */
+	@Test
+	public void setQueryParameter()
+	{
+		tester.getRequest().setParameter("p1", "v1");
+
+		tester.startPage(MockPageParametersAware.class);
+
+		MockPageParametersAware page = (MockPageParametersAware)tester.getLastRenderedPage();
+		assertEquals("v1", page.getLastQueryParameters().getParameterValue("p1").toString());
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * WICKET-3164
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void clickLink_ajaxLink_notEnabled() throws Exception
+	{
+		tester.startPage(LinkPage.class);
+		tester.assertRenderedPage(LinkPage.class);
+
+		tester.getComponentFromLastRenderedPage("ajaxLinkWithSetResponsePageClass").setEnabled(
+			false);
+		try
+		{
+			tester.clickLink("ajaxLinkWithSetResponsePageClass");
+			throw new RuntimeException("Disabled link should not be clickable.");
+		}
+		catch (AssertionError ex)
+		{
+			;
+		}
+	}
+

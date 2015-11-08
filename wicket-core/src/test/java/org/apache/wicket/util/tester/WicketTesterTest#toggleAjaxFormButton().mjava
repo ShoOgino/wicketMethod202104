@@ -1,0 +1,22 @@
+	/**
+	 * Toggle submit button to enabled when text field validates.
+	 */
+	@Test
+	public void toggleAjaxFormButton()
+	{
+		tester.startPage(new MockAjaxFormPage());
+		Button submit = getSubmitButton();
+		assertFalse(submit.isEnabled());
+		FormTester form = tester.newFormTester("form");
+
+		form.setValue("text", "XX");
+		setTextFieldAndAssertSubmit(false);
+		tester.clearFeedbackMessages();
+
+		form.setValue("text", "XXXYYYXXX");
+		setTextFieldAndAssertSubmit(true);
+
+		form.setValue("text", "");
+		setTextFieldAndAssertSubmit(false);
+	}
+

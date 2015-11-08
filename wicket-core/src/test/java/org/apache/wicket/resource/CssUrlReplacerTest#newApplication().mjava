@@ -7,7 +7,6 @@
 			protected void init()
 			{
 				super.init();
-
 				getResourceSettings().setCachingStrategy(
 					new FilenameWithVersionResourceCachingStrategy("=VER=",
 						new MessageDigestResourceVersion())
@@ -19,6 +18,14 @@
 						}
 					});
 			}
+			
+			@Override
+			public Session newSession(Request request, Response response) {
+				Session newSession = super.newSession(request, response);
+				newSession.setLocale(Locale.ROOT);
+				return newSession;
+			}
+			
 		};
 	}
 

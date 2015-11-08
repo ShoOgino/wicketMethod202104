@@ -1,0 +1,22 @@
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void createBook_validateFail() throws Exception
+	{
+		Session.get().setLocale(Locale.US); // fix locale
+		tester.startPage(CreateBook.class);
+
+		FormTester formTester = tester.newFormTester("createForm");
+
+		formTester.setValue("id", "");
+		formTester.setValue("name", "");
+		formTester.submit();
+
+		tester.assertRenderedPage(CreateBook.class);
+
+		// assert error message from validation
+		tester.assertErrorMessages("id is required", "name is required");
+	}
+
