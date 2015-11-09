@@ -1,7 +1,16 @@
 	@Override
 	public Border remove(final String id)
 	{
-		getBodyContainer().remove(id);
+		if (body.getId().equals(id))
+		{
+			// in this case we do not want to redirect to body
+			// container but to border's old remove.
+			super.remove(id);
+		}
+		else
+		{
+			getBodyContainer().remove(id);
+		}
 		return this;
 	}
 

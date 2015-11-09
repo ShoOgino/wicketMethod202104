@@ -1,7 +1,19 @@
 	@Override
 	public Border addOrReplace(final Component... children)
 	{
-		getBodyContainer().addOrReplace(children);
+		for (Component component : children)
+		{
+			if (component == body)
+			{
+				// in this case we do not want to redirect to body
+				// container but to border's old remove.
+				super.addOrReplace(component);
+			}
+			else 
+			{
+				getBodyContainer().addOrReplace(component);				
+			}
+		}
 		return this;
 	}
 

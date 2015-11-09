@@ -1,7 +1,16 @@
 	@Override
 	public Border replace(final Component replacement)
 	{
-		getBodyContainer().replace(replacement);
+		if (body.getId().equals(replacement.getId()))
+		{
+			// in this case we do not want to redirect to body
+			// container but to border's old remove.
+			replaceInBorder(replacement);
+		}
+		else
+		{
+			getBodyContainer().replace(replacement);
+		}
 		return this;
 	}
 
