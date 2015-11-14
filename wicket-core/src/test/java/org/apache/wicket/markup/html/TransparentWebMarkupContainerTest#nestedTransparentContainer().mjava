@@ -1,0 +1,13 @@
+	@Test
+	public void nestedTransparentContainer() throws Exception
+	{
+		tester.startPage(TestEmbeddedTransparentMarkupContainer.class);
+		tester.assertRenderedPage(TestEmbeddedTransparentMarkupContainer.class);
+		
+		final Page page = tester.getLastRenderedPage();
+		final Component label = page.get("label");
+		
+		assertEquals(TestEmbeddedTransparentMarkupContainer.LABEL_MARKUP,
+			label.getMarkup().toString(true));
+	}
+

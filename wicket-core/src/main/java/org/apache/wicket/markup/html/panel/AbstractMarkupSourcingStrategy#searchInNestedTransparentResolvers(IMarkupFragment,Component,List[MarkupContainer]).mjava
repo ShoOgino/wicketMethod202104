@@ -1,0 +1,68 @@
+	/**
+	 * 
+	 * Search for the markup of a child that might be nested inside
+	 * transparent siblings. For example:
+	 * 
+	 * <pre>
+	 * &lt;div wicket:id=&quot;outerTransparent&quot;&gt;
+	 *	&lt;div wicket:id=&quot;innerTransparent&quot;&gt;
+	 *	 &lt;span wicket:id=&quot;childComponent&quot;&gt;&lt;/span&gt;
+	 *	&lt;/div&gt;
+	 * &lt;/div&gt;
+	 * </pre>
+	 * 
+	 * @param
+	 * 		  containerMarkup
+	 * 			  the markup of the parent container.
+	 * @param child
+	 *            The component to find the markup for.
+	 * @param componentResolvers
+	 * 			  the transparent siblings           
+	 *
+	 * @return the markup fragment for the child, or {@code null}.
+	 */
+	protected IMarkupFragment searchInNestedTransparentResolvers(IMarkupFragment containerMarkup, Component child, 
+		List<MarkupContainer> componentResolvers)
+	{
+		IMarkupFragment childMarkupFound = null;
+		
+		for (MarkupContainer componentResolver : componentResolvers)
+		{
+			IMarkupFragment resolverMarkup = containerMarkup.find(componentResolver.getId());
+			IMarkupFragment childMarkup = resolverMarkup != null ? resolverMarkup.find(child.getId()) : null;
+			
+			if (childMarkup != null)
+			{
+		    	IComponentResolver resolverContainer = (IComponentResolver)componentResolver;
+				MarkupStream stream = new MarkupStream(childMarkup);
+				ComponentTag tag = stream.getTag();
+				
+				Component resolvedComponent = componentResolver.get(tag.getId());
+				if (resolvedComponent == null)
+				{
+					resolvedComponent = resolverContainer.resolve(componentResolver, stream, tag);
+				}
+				
+				if (child == resolvedComponent)
+				{
+					childMarkupFound = childMarkup;
+				}
+			}
+			else if (resolverMarkup != null)
+			{
+				List<MarkupContainer> otherResolvers = new ArrayList<>(componentResolvers);
+				
+				otherResolvers.remove(componentResolver);
+				
+				childMarkupFound = searchInNestedTransparentResolvers(resolverMarkup, child, otherResolvers);
+			}
+
+		    if (childMarkupFound != null)
+			{
+				break;
+			}
+		}
+		
+		return childMarkupFound;
+	}
+
