@@ -25,14 +25,18 @@
 
 			if (Strings.isEmpty(wicketIdValue))
 			{
-				// Make it a Wicket component. Otherwise it would be RawMarkup
+				// Make it a Wicket component.
 				tag.setId(namespace + "_" + tag.getName() + getRequestUniqueId());
 				tag.setModified(true);
 
-				if (tag.isClose() == false)
+				if (isRaw(tag)) 
+				{
+					tag.setFlag(ComponentTag.RENDER_RAW, true);
+				}
+				else if (tag.isClose() == false)
 				{
 					tag.setAutoComponentTag(true);
-				}
+				}				
 			}
 
 			// If the tag is not a well-known wicket namespace tag
