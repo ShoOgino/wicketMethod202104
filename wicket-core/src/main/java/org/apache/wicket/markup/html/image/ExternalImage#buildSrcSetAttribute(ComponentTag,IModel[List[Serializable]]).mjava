@@ -3,32 +3,28 @@
 	 *
 	 * @param tag
 	 *            the component tag
-	 * @param srcSetModels
+	 * @param srcSetModel
 	 *            the models containing the src set URLs
 	 */
 	protected void buildSrcSetAttribute(final ComponentTag tag,
-		IModel<List<Serializable>> srcSetModels)
+		IModel<List<Serializable>> srcSetModel)
 	{
 		int srcSetPosition = 0;
-		List<Serializable> srcSetItems = srcSetModels.getObject();
-		if (srcSetItems != null)
+		List<Serializable> srcSetItems = srcSetModel.getObject();
+		for (Serializable srcSet : srcSetItems)
 		{
-			for (Serializable srcSetModel : srcSetItems)
-			{
-				String srcset = tag.getAttribute("srcset");
-				String xValue = "";
+			String srcset = tag.getAttribute("srcset");
+			String xValue = "";
 
-				// If there are xValues set process them in the applied order to the srcset
-				// attribute.
-				if (xValues != null)
-				{
-					xValue = xValues.size() > srcSetPosition && xValues.get(srcSetPosition) != null
-						? " " + xValues.get(srcSetPosition)
-						: "";
-				}
-				tag.put("srcset", (srcset != null ? srcset + ", " : "") + srcSetModel + xValue);
-				srcSetPosition++;
+			// If there are xValues set process them in the applied order to the srcset
+			// attribute.
+			if (xValues != null)
+			{
+				xValue = xValues.size() > srcSetPosition && xValues.get(srcSetPosition) != null
+					? " " + xValues.get(srcSetPosition) : "";
 			}
+			tag.put("srcset", (srcset != null ? srcset + ", " : "") + srcSet + xValue);
+			srcSetPosition++;
 		}
 	}
 
