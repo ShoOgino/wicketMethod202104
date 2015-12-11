@@ -11,8 +11,8 @@
 	 * @throws URISyntaxException
 	 *             if the URI has no valid syntax
 	 */
-	public static Path getPath(URI uri, Map<String, String> env) throws IOException,
-		URISyntaxException
+	public static Path getPath(URI uri, Map<String, String> env)
+		throws IOException, URISyntaxException
 	{
 		String uriString = uri.toString();
 		int indexOfExclamationMark = uriString.indexOf('!');
@@ -25,13 +25,14 @@
 
 		synchronized (FILE_SYSTEM_META_DATA_KEY)
 		{
-			Map<URI, FileSystem> metaData = Application.get()
+			Map<String, FileSystem> metaData = Application.get()
 				.getMetaData(FILE_SYSTEM_META_DATA_KEY);
 			if (metaData == null)
 			{
-				metaData = new HashMap<URI, FileSystem>();
+				metaData = new HashMap<String, FileSystem>();
 				Application.get().setMetaData(FILE_SYSTEM_META_DATA_KEY, metaData);
 			}
+			fileSystem = metaData.get(zipFile);
 			if (fileSystem == null)
 			{
 				if (env == null)
@@ -41,10 +42,11 @@
 					env.put("encoding", "UTF-8");
 				}
 				fileSystem = FileSystems.newFileSystem(new URI(zipFile), env);
-				metaData.put(uri, fileSystem);
+				metaData.put(zipFile, fileSystem);
 			}
 		}
 		String fileName = uriString.substring(uriString.indexOf('!') + 1);
+
 		return fileSystem.getPath(fileName);
 	}
 
