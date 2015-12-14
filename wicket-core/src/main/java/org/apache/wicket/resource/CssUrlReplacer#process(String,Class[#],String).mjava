@@ -4,6 +4,13 @@
 	@Override
 	public String process(String input, Class<?> scope, String name)
 	{
+		// filter out the excluded css files
+		for (String excludeName : excludes)
+		{
+			if(name.endsWith(excludeName)){
+				return input;
+			}
+		}
 		RequestCycle cycle = RequestCycle.get();
 		Url cssUrl = Url.parse(name);
 		Matcher matcher = URL_PATTERN.matcher(input);
@@ -30,8 +37,8 @@
 				cssUrlCopy.resolveRelative(imageCandidateUrl);
 
 				// if the image should be processed as URL or base64 embedded
-				if (cssUrlCopy.getQueryString() != null &&
-					cssUrlCopy.getQueryString().contains(EMBED_BASE64))
+				if (cssUrlCopy.getQueryString() != null
+					&& cssUrlCopy.getQueryString().contains(EMBED_BASE64))
 				{
 					embedded = true;
 					PackageResourceReference imageReference = new PackageResourceReference(scope,
@@ -54,8 +61,8 @@
 				}
 
 			}
-			matcher.appendReplacement(output, embedded ? "url(" + processedUrl + ")" : "url('" +
-				processedUrl + "')");
+			matcher.appendReplacement(output,
+				embedded ? "url(" + processedUrl + ")" : "url('" + processedUrl + "')");
 		}
 		matcher.appendTail(output);
 		return output.toString();
