@@ -67,9 +67,9 @@
 				for (Map.Entry<String, Object> attr : labelAttrs.entrySet())
 				{
 					extraLabelAttributes.append(' ')
-							.append(attr.getKey())
+							.append(Strings.escapeMarkup(attr.getKey()))
 							.append("=\"")
-							.append(attr.getValue())
+							.append(Strings.escapeMarkup(attr.getValue().toString()))
 							.append('"');
 				}
 			}
@@ -79,7 +79,7 @@
 				case BEFORE:
 
 					buffer.append("<label for=\"")
-							.append(idAttr)
+							.append(Strings.escapeMarkup(idAttr))
 							.append('"')
 							.append(extraLabelAttributes)
 							.append('>')
@@ -108,9 +108,9 @@
 				.append((isSelected(choice, index, selected) ? " checked=\"checked\"" : ""))
 				.append((enabled ? "" : " disabled=\"disabled\""))
 				.append(" value=\"")
-				.append(id)
+				.append(Strings.escapeMarkup(id))
 				.append("\" id=\"")
-				.append(idAttr)
+				.append(Strings.escapeMarkup(idAttr))
 				.append('"');
 
 			// Should a roundtrip be made (have onSelectionChanged called)
@@ -134,7 +134,7 @@
 						.append(url)
 						.append((url.toString().indexOf('?') > -1 ? '&' : '?') + getInputName())
 						.append('=')
-						.append(id)
+						.append(Strings.escapeMarkup(id))
 						.append("';\"");
 				}
 			}
@@ -147,9 +147,9 @@
 					for (Map.Entry<String, Object> attr : attrs.entrySet())
 					{
 						buffer.append(' ')
-							.append(attr.getKey())
+							.append(Strings.escapeMarkup(attr.getKey()))
 							.append("=\"")
-							.append(attr.getValue())
+							.append(Strings.escapeMarkup(attr.getValue().toString()))
 							.append('"');
 					}
 				}
@@ -175,7 +175,7 @@
 			{
 				case AFTER:
 					buffer.append("<label for=\"")
-							.append(idAttr)
+							.append(Strings.escapeMarkup(idAttr))
 							.append('"')
 							.append(extraLabelAttributes)
 							.append('>')
