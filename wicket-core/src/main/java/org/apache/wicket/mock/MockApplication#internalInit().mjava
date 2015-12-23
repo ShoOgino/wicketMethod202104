@@ -4,8 +4,8 @@
 		super.internalInit();
 
 		// set page and session store providers
-		setSessionStoreProvider(new MockSessionStoreProvider());
-		setPageManagerProvider(new MockPageManagerProvider());
+		setSessionStoreProvider(() -> new MockSessionStore());
+		setPageManagerProvider((pageManagerContext) -> new MockPageManager());
 
 		// for test cases we usually want stable resource names
 		getResourceSettings().setCachingStrategy(NoOpResourceCachingStrategy.INSTANCE);

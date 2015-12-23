@@ -1,12 +1,5 @@
-	private IProvider<IResourceCachingStrategy> getResourceCachingStrategy()
+	private Supplier<IResourceCachingStrategy> getResourceCachingStrategy()
 	{
-		return new IProvider<IResourceCachingStrategy>()
-		{
-			@Override
-			public IResourceCachingStrategy get()
-			{
-				return application.getResourceSettings().getCachingStrategy();
-			}
-		};
+		return () -> application.getResourceSettings().getCachingStrategy();
 	}
 

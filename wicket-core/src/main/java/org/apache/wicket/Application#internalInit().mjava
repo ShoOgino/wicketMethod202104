@@ -40,8 +40,8 @@
 
 		pageFactory = newPageFactory();
 
-		requestCycleProvider = new DefaultRequestCycleProvider();
-		exceptionMapperProvider = new DefaultExceptionMapperProvider();
+		requestCycleProvider = (context) -> new RequestCycle(context);
+		exceptionMapperProvider = () -> new DefaultExceptionMapper();
 
 		// add a request cycle listener that logs each request for the requestlogger.
 		getRequestCycleListeners().add(new RequestLoggerRequestCycleListener());
