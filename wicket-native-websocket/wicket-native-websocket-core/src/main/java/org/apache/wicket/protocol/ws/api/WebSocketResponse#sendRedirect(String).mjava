@@ -1,6 +1,10 @@
 	@Override
 	public void sendRedirect(String url)
 	{
-		throw new UnsupportedOperationException();
+		isRedirect = true;
+		url = encodeRedirectURL(url);
+
+		String ajaxRedirect = "<ajax-response><redirect><![CDATA[" + url + "]]></redirect></ajax-response>";
+		write(ajaxRedirect);
 	}
 
