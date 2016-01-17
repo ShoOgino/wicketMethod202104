@@ -1,0 +1,18 @@
+    /**
+     * @return all form components that are assigned to this {@link FormGroup}
+     */
+    List<FormComponent<?>> findFormComponents()
+    {
+        final List<FormComponent<?>> components = new ArrayList<>();
+        getBodyContainer().visitChildren(FormComponent.class, new IVisitor<FormComponent, Void>()
+        {
+            @Override
+            public void component(FormComponent formComponent, IVisit<Void> visit)
+            {
+                components.add(formComponent);
+            }
+        });
+
+        return components;
+    }
+

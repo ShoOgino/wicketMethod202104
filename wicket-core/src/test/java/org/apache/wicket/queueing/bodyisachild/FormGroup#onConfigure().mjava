@@ -1,0 +1,31 @@
+    @Override
+    protected void onConfigure()
+    {
+        super.onConfigure();
+
+        // set all components visible
+        help.setVisible(true);
+        label.setVisible(true);
+        feedback.setVisible(true);
+
+        // clear feedback message and current state
+        stateClassName = "";
+        feedback.setDefaultModelObject("");
+
+        final List<FormComponent<?>> formComponents = findFormComponents();
+        for (final FormComponent<?> fc : formComponents)
+        {
+            final FeedbackMessages messages = fc.getFeedbackMessages();
+
+            if (!messages.isEmpty())
+            {
+                final FeedbackMessage worstMessage = getWorstMessage(messages);
+                worstMessage.markRendered();
+
+                feedback.setDefaultModelObject(worstMessage.getMessage());
+
+                break; // render worst message of first found child component with feedback message
+            }
+        }
+    }
+
