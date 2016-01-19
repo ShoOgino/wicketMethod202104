@@ -43,6 +43,14 @@
 				return null; // don't know
 			}
 		}
+		
+		//if is a label tag, ignore it
+		if (tag.isAutoComponentTag() 
+			&& tag.getId().startsWith(AutoLabelResolver.LABEL_ATTR))
+		{
+			return DequeueTagAction.IGNORE;
+		}
+		
 		return DequeueTagAction.DEQUEUE;
 	}
 
