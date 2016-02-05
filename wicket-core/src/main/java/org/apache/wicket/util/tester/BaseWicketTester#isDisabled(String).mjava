@@ -7,12 +7,7 @@
 	 */
 	public Result isDisabled(final String path)
 	{
-		Component component = getComponentFromLastRenderedPage(path);
-		if (component == null)
-		{
-			fail("path: '" + path + "' does no exist for page: " +
-				Classes.simpleName(getLastRenderedPage().getClass()));
-		}
+		Component component = assertExists(path);
 
 		return isFalse("component '" + path + "' is enabled", component.isEnabledInHierarchy());
 	}

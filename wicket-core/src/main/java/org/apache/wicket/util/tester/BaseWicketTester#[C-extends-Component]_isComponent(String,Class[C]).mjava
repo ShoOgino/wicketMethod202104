@@ -11,11 +11,7 @@
 	 */
 	public <C extends Component> Result isComponent(String path, Class<C> expectedComponentClass)
 	{
-		Component component = getComponentFromLastRenderedPage(path);
-		if (component == null)
-		{
-			return Result.fail("Component not found: " + path);
-		}
+		Component component = assertExists(path);
 
 		return isTrue("component '" + Classes.simpleName(component.getClass()) + "' is not type:" +
 			Classes.simpleName(expectedComponentClass),
