@@ -1,9 +1,14 @@
 	@Override
 	public void modify(FormComponent<?> component, ComponentTag tag, Size annotation)
 	{
-		if ("input".equalsIgnoreCase(tag.getName()))
+		if (hasLengthAttribute(tag.getName()))
 		{
 			tag.put("maxlength", annotation.max());
+
+			if (annotation.min() > 0)
+			{
+				tag.put("minlength", annotation.min());
+			}
 		}
 	}
 
