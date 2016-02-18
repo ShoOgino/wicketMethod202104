@@ -25,13 +25,20 @@
 				// the container does not yet have a child with this id, see if we can
 				// dequeue
 				child = dequeue.findComponentToDequeue(tag);
-
+				
+				//if tag has an autocomponent factory let's use it
+				if (child == null && tag.getAutoComponentFactory() != null)
+				{
+					IAutoComponentFactory autoComponentFactory = tag.getAutoComponentFactory();
+					child = autoComponentFactory.newComponent(this, tag);
+				}
+				
 				if (child != null)
 				{
 					addDequeuedComponent(child, tag);
 				}
 			}
-
+			
 			if (tag.isOpen() && !tag.hasNoCloseTag())
             {
 			    dequeueChild(child, tag, dequeue);
