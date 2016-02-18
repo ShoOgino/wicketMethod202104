@@ -1,6 +1,15 @@
 	@Override
 	public int getCompatibilityScore(Request request)
 	{
-		return 0; // pages always have priority over resources
+		int score = super.getCompatibilityScore(request);
+		if (score > 0)
+		{
+			score--; // pages always have priority over resources
+		}
+		else
+		{
+			score = -1;
+		}
+		return score;
 	}
 

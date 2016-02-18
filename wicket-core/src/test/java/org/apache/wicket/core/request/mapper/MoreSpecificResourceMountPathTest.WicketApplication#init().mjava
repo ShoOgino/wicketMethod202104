@@ -1,0 +1,26 @@
+		@Override
+		public void init() 
+		{
+			super.init();
+
+			String path = "/ajax/owners"; // shared by both references
+			
+			mountResource(path, new ResourceReference(OWNERS_LISTER) 
+			{
+				@Override
+				public IResource getResource() 
+				{
+					return new DummyResource(PARAM_NAME);
+				}
+			});
+
+			mountResource(path + "/${" + PARAM_ID + "}", new ResourceReference(OWNER_BY_ID_LOADER) 
+			{
+				@Override
+				public IResource getResource() 
+				{
+					return new DummyResource(PARAM_ID);
+				}
+			});
+		}
+
