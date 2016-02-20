@@ -5,11 +5,16 @@
 		if (pageTable != null)
 		{
 			pageTable.storePage(pageId, pageAsBytes);
+			if (LOG.isDebugEnabled())
+			{
+				LOG.debug("Stored '{}' bytes for page '{}' in session '{}'",
+						new Object[]{pageAsBytes.length, pageId, sessionId});
+			}
 			evictionStrategy.evict(pageTable);
 		}
 		else
 		{
-			log.error("Cannot store the data for page with id '{}' in session with id '{}'",
+			LOG.error("Cannot store the data for page with id '{}' in session with id '{}'",
 				pageId, sessionId);
 		}
 	}
