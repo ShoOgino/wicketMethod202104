@@ -1,0 +1,13 @@
+	@Test
+	public void timeNotNullTest() {
+		TestTimePage page = new TestTimePage(LocalTime.of(6, 15));
+		tester.startPage(page);
+		FormTester formTester = tester.newFormTester("form", false);
+		formTester.setValue("field:hours", "8");
+		formTester.submit();
+		LocalTime t = page.field.getModelObject();
+		assertNotNull(t);
+		assertEquals(8, t.getHour());
+		assertEquals(15, t.getMinute());
+	}
+

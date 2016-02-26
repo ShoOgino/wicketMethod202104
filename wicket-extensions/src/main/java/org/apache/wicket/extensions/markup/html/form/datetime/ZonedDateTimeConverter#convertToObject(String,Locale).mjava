@@ -1,0 +1,33 @@
+	@Override
+	public ZonedDateTime convertToObject(String value, Locale locale)
+	{
+		if (Strings.isEmpty(value))
+		{
+			return null;
+		}
+
+		DateTimeFormatter format = getFormat(locale);
+		Args.notNull(format, "format");
+
+		if (applyTimeZoneDifference)
+		{
+			ZoneId zoneId = getClientTimeZone();
+
+			// set time zone for client
+			format = format.withZone(getTimeZone());
+
+			ZonedDateTime dateTime = convertToObject(value, format, locale);
+			// apply the server time zone to the parsed value
+			if (zoneId != null)
+			{
+				dateTime = dateTime.withZoneSameInstant(zoneId);
+			}
+
+			return dateTime;
+		}
+		else
+		{
+			return convertToObject(value, format, locale);
+		}
+	}
+

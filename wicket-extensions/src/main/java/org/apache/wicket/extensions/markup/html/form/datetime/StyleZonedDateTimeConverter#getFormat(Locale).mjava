@@ -1,0 +1,25 @@
+	/**
+	 * @return formatter The formatter for the current conversion
+	 */
+	@Override
+	public DateTimeFormatter getFormat(Locale locale)
+	{
+		DateTimeFormatter df = null;
+		if (dateStyle == null && timeStyle == null) {
+			return df;
+		}
+		if (timeStyle == null)
+		{
+			df = DateTimeFormatter.ofLocalizedDate(dateStyle);
+		}
+		else if (dateStyle == null)
+		{
+			df = DateTimeFormatter.ofLocalizedTime(timeStyle);
+		}
+		else
+		{
+			df = DateTimeFormatter.ofLocalizedDateTime(dateStyle, timeStyle);
+		}
+		return df.withLocale(locale);
+	}
+

@@ -1,0 +1,23 @@
+	@Override
+	public void convertInput()
+	{
+		Integer hours = hoursField.getConvertedInput();
+		Integer minutes = minutesField.getConvertedInput();
+		AM_PM amOrPmInput = amOrPmChoice.getConvertedInput();
+
+		LocalTime localTime = null;
+		if (hours != null && minutes != null)
+		{
+			// Use the input to create a LocalTime object
+			localTime = LocalTime.of(hours, minutes);
+
+			// Adjust for halfday if needed
+			if (use12HourFormat())
+			{
+				int halfday = (amOrPmInput == AM_PM.PM ? 1 : 0);
+				localTime = localTime.with(ChronoField.AMPM_OF_DAY, halfday);
+			}
+		}
+		setConvertedInput(localTime);
+	}
+

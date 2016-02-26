@@ -1,0 +1,17 @@
+	@Override
+	public String convertToString(ZonedDateTime dateTime, Locale locale)
+	{
+		DateTimeFormatter format = getFormat(locale);
+
+		if (applyTimeZoneDifference)
+		{
+			ZoneId zoneId = getClientTimeZone();
+			if (zoneId != null)
+			{
+				// apply time zone to formatter
+				format = format.withZone(zoneId);
+			}
+		}
+		return format.format(dateTime);
+	}
+
