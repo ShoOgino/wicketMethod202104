@@ -26,6 +26,12 @@
 			ClosedMessage message = connectedPayload.getMessage();
 			onClose(message);
 		}
+		else if (payload instanceof WebSocketErrorPayload)
+		{
+			WebSocketErrorPayload errorPayload = (WebSocketErrorPayload) payload;
+			ErrorMessage message = errorPayload.getMessage();
+			onError(webSocketHandler, message);
+		}
 		else if (payload instanceof WebSocketAbortedPayload)
 		{
 			WebSocketAbortedPayload abortedPayload = (WebSocketAbortedPayload) payload;
