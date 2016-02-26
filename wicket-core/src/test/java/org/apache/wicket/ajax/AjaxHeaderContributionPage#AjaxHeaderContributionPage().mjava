@@ -14,13 +14,15 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target)
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
 			{
-				target.prependJavaScript("prepend();");
-				target.add(test1);
-				target.add(test2);
-				target.add(test3);
-				target.appendJavaScript("append();");
+				targetOptional.ifPresent(target -> {
+					target.prependJavaScript("prepend();");
+					target.add(test1);
+					target.add(test2);
+					target.add(test3);
+					target.appendJavaScript("append();");
+				});
 			}
 		});
 	}

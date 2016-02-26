@@ -8,7 +8,7 @@
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void onClick(final AjaxRequestTarget target)
+				public void onClick(Optional<AjaxRequestTarget> targetOptional)
 				{
 					LoopItem item = (LoopItem)getParent();
 
@@ -16,13 +16,11 @@
 					// of our rating component, so other components can also get
 					// updated in case of an AJAX event.
 
-					onRated(item.getIndex() + 1, target);
+					onRated(item.getIndex() + 1, targetOptional);
 
 					// if we process an AJAX event, update this panel
-					if (target != null)
-					{
-						target.add(RatingPanel.this.get("rater"));
-					}
+					targetOptional.ifPresent(target -> target.add(RatingPanel.this.get("rater")));
+
 				}
 
 				@Override

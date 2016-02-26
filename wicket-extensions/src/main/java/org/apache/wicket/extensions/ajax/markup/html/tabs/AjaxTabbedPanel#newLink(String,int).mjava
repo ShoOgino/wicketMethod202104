@@ -3,20 +3,15 @@
 	{
 		return new AjaxFallbackLink<Void>(linkId)
 		{
-
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(final AjaxRequestTarget target)
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
 			{
 				setSelectedTab(index);
-				if (target != null)
-				{
-					target.add(AjaxTabbedPanel.this);
-				}
-				onAjaxUpdate(target);
+				targetOptional.ifPresent(target -> target.add(AjaxTabbedPanel.this));
+				onAjaxUpdate(targetOptional);
 			}
-
 		};
 	}
 

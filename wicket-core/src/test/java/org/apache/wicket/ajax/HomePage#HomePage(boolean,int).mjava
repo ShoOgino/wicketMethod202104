@@ -14,7 +14,7 @@
 
 		};
 		add(form);
-		form.add(new TextField<String>("textfield", new Model<String>()));
+		form.add(new TextField<>("textfield", new Model<>()));
 		form.add(new Button("submit"));
 
 		final WebMarkupContainer listViewContainer = new WebMarkupContainer("listViewContainer");
@@ -28,7 +28,7 @@
 				@Override
 				public List<Object> getObject()
 				{
-					List<Object> objects = new LinkedList<Object>();
+					List<Object> objects = new LinkedList<>();
 					for (int i = 0; i < rows; i++)
 					{
 						objects.add(new Object());
@@ -48,11 +48,11 @@
 		form.add(new AjaxFallbackButton("addButton", form)
 		{
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+			protected void onSubmit(Optional<AjaxRequestTarget> targetOptional, Form<?> form)
 			{
 				rows++;
 				listView.removeAll();
-				target.add(listViewContainer);
+				targetOptional.ifPresent(target -> target.add(listViewContainer));
 			}
 
 			@Override

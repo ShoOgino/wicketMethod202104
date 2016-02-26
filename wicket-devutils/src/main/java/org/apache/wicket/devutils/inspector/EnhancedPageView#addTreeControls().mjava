@@ -26,12 +26,10 @@
 		{
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onClick(AjaxRequestTarget target)
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
 			{
 				expandState.expandAll();
-				if (target != null)
-					target.add(componentTree);
+				targetOptional.ifPresent(target -> target.add(componentTree));
 			}
 		});
 		add(new AjaxFallbackLink<Void>("collapseAll")
@@ -39,11 +37,10 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target)
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
 			{
 				expandState.collapseAll();
-				if (target != null)
-					target.add(componentTree);
+				targetOptional.ifPresent(target -> target.add(componentTree));
 			}
 		});
 	}

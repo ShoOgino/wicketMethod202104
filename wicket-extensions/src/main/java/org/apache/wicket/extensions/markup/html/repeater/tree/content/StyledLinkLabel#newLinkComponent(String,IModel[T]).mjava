@@ -2,10 +2,10 @@
 	 * Hook method to create a new link component.
 	 * 
 	 * This default implementation returns an {@link AjaxFallbackLink} which invokes
-	 * {@link #onClick(AjaxRequestTarget)} only if {@link #isClickable()} returns <code>true</code>.
+	 * {@link #onClick(Optional<AjaxRequestTarget>)} only if {@link #isClickable()} returns <code>true</code>.
 	 * 
 	 * @see #isClickable()
-	 * @see #onClick(AjaxRequestTarget)
+	 * @see #onClick(Optional<AjaxRequestTarget>)
 	 */
 	protected MarkupContainer newLinkComponent(String id, IModel<T> model)
 	{
@@ -20,9 +20,9 @@
 			}
 
 			@Override
-			public void onClick(AjaxRequestTarget target)
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
 			{
-				StyledLinkLabel.this.onClick(target);
+				StyledLinkLabel.this.onClick(targetOptional);
 			}
 		};
 	}

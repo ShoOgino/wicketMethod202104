@@ -2,10 +2,9 @@
 	 * For an update of a node the complete row item is added to the ART.
 	 */
 	@Override
-	public void updateNode(T t, final IPartialPageRequestHandler target)
+	public void updateNode(T t, final Optional<? extends IPartialPageRequestHandler> targetOptional)
 	{
-		if (target != null)
-		{
+		targetOptional.ifPresent(target -> {
 			final IModel<T> model = getProvider().model(t);
 			visitChildren(Item.class, new IVisitor<Item<T>, Void>()
 			{
@@ -25,6 +24,6 @@
 				}
 			});
 			model.detach();
-		}
+		});
 	}
 

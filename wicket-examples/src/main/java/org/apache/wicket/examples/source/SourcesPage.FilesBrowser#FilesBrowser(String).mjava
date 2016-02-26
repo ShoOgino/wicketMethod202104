@@ -16,15 +16,14 @@
 						item.getModel())
 					{
 						@Override
-						public void onClick(AjaxRequestTarget target)
+						public void onClick(Optional<AjaxRequestTarget> targetOptional)
 						{
 							setName(getDefaultModelObjectAsString());
 
-							if (target != null)
-							{
+							targetOptional.ifPresent(target -> {
 								target.add(codePanel);
 								target.add(filename);
-							}
+							});
 						}
 
 						@Override

@@ -1,0 +1,21 @@
+		void onRemoveCompletedTodos(Optional<AjaxRequestTarget> targetOptional)
+		{
+			List<TodoItem> ready = new ArrayList<>();
+			for (TodoItem todo : items)
+			{
+				if (todo.isChecked())
+				{
+					ready.add(todo);
+				}
+			}
+			items.removeAll(ready);
+
+			targetOptional.ifPresent(target -> {
+				// repaint our panel
+				target.add(this);
+
+				// repaint the listview as there was a new item added.
+				target.add(showItems);
+			});
+		}
+
