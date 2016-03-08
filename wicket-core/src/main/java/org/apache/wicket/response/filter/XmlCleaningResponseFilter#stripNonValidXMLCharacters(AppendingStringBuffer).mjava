@@ -11,6 +11,10 @@
 	 */
 	public AppendingStringBuffer stripNonValidXMLCharacters(AppendingStringBuffer input)
 	{
+		if (input == null) {
+			return new AppendingStringBuffer();
+		}
+
 		char[] chars = input.getValue();
 		AppendingStringBuffer out = null;
 		boolean isDebugEnabled = LOG.isDebugEnabled();
@@ -33,7 +37,7 @@
 					if (isDebugEnabled)
 					{
 						LOG.debug("An invalid character '{}' found at position '{}' in '{}'",
-								new Object[] {String.format("0x%X", codePoint), i, new String(chars)});
+								String.format("0x%X", codePoint), i, new String(chars));
 					}
 				}
 				else if (isDebugEnabled)
