@@ -1,0 +1,25 @@
+	/**
+	 * Collects data how often a request has been made against the webapp and counts the time how
+	 * long the request remains
+	 * 
+	 * @param joinPoint
+	 *            the joinPoint to be proceed
+	 * @return returns the boolean of the processRequest method
+	 * 
+	 * @throws Throwable
+	 *             might occure while invoking process request
+	 */
+	@Around("execution(* org.apache.wicket.protocol.http.WicketFilter.processRequest(..))")
+	public Object aroundRequestProcessed(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		Context context = context("core/application/request");
+		try
+		{
+			return joinPoint.proceed();
+		}
+		finally
+		{
+			stopQuietly(context);
+		}
+	}
+
