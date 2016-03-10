@@ -1,0 +1,16 @@
+	/**
+	 * Collects data how often components are created
+	 * 
+	 * @param joinPoint
+	 *            the join point (component) which is created
+	 * @return the object returned from the joinPoint
+	 * @throws Throwable
+	 *             might occur while invoking process request
+	 */
+	@Around("execution(org.apache.wicket.Component.new(..))")
+	public Object aroundNew(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		mark("core/component/create/" + joinPoint.getTarget().getClass().getName());
+		return joinPoint.proceed();
+	}
+
