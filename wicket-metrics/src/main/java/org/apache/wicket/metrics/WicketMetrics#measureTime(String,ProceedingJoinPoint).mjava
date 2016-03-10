@@ -1,0 +1,24 @@
+	/**
+	 * Simply measure the time for a {@literal @}around
+	 * 
+	 * @param name
+	 *            the name of the timer context
+	 * @param joinPoint
+	 *            the joinPoint to be proceed
+	 * @return the value of the join point
+	 * @throws Throwable
+	 *             if there is an exception while execution
+	 */
+	public Object measureTime(String name, ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		Context context = context(name);
+		try
+		{
+			return joinPoint.proceed();
+		}
+		finally
+		{
+			stopQuietly(context);
+		}
+	}
+

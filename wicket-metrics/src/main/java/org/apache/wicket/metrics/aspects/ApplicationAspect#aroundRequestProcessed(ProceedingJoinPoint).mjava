@@ -12,14 +12,6 @@
 	@Around("execution(* org.apache.wicket.protocol.http.WicketFilter.processRequest(..))")
 	public Object aroundRequestProcessed(ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		Context context = context("core/application/request");
-		try
-		{
-			return joinPoint.proceed();
-		}
-		finally
-		{
-			stopQuietly(context);
-		}
+		return measureTime("core/application/request", joinPoint);
 	}
 
