@@ -11,14 +11,22 @@
 	 */
 	public Object measureTime(String name, ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		Context context = context(name);
-		try
+		if (WicketMetrics.enabled)
+		{
+			Context context = getMetricRegistry().timer(PREFIX + name + renderClassName(joinPoint))
+				.time();
+			try
+			{
+				return joinPoint.proceed();
+			}
+			finally
+			{
+				stopQuietly(context);
+			}
+		}
+		else
 		{
 			return joinPoint.proceed();
-		}
-		finally
-		{
-			stopQuietly(context);
 		}
 	}
 

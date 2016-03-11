@@ -3,14 +3,13 @@
 	 * 
 	 * @param joinPoint
 	 *            the join point (component) which is created
-	 * @return the object returned from the joinPoint
+	 * @return the object returned from the join point
 	 * @throws Throwable
-	 *             might occur while invoking process request
+	 *             might occur while constructing a new component
 	 */
 	@Around("execution(org.apache.wicket.Component.new(..))")
 	public Object aroundNew(ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		return measureTime("core/component/create/" + joinPoint.getTarget().getClass().getName(),
-			joinPoint);
+		return measureTime("core/component/create", joinPoint);
 	}
 

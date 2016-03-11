@@ -1,0 +1,15 @@
+	/**
+	 * Collects data how often components calls onDetach
+	 * 
+	 * @param joinPoint
+	 *            the join point (component) which is calling detach
+	 * @return the object returned from the join point
+	 * @throws Throwable
+	 *             might occur while invoking onDetach
+	 */
+	@Around("execution(* org.apache.wicket.Component.onDetach(..))")
+	public Object arroundOnDetach(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return mark("core/component/detach", joinPoint);
+	}
+

@@ -1,0 +1,16 @@
+	/**
+	 * Collects data how often components calls onInitialize
+	 * 
+	 * @param joinPoint
+	 *            the join point (component) which is initialized
+	 * @return the object returned from the join point
+	 * 
+	 * @throws Throwable
+	 *             might occur while invoking onInitialize
+	 */
+	@Around("execution(* org.apache.wicket.Component.onInitialize(..))")
+	public Object aroundOnInitialize(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return measureTime("core/component/initialize", joinPoint);
+	}
+

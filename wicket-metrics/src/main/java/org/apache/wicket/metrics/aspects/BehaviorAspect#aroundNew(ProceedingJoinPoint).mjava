@@ -1,0 +1,15 @@
+	/**
+	 * Collects data how often a behavior is created
+	 * 
+	 * @param joinPoint
+	 *            the join point (behavior) which is created
+	 * @return the result of constructor
+	 * @throws Throwable
+	 *             might occur while creating a new behavior
+	 */
+	@Around("execution(org.apache.wicket.behavior.Behavior.new(..))")
+	public Object aroundNew(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return mark("core/behavior/create", joinPoint);
+	}
+

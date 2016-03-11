@@ -1,16 +1,15 @@
 	/**
-	 * Collects data how often components are created
+	 * Collects data how often a resource reference is created
 	 * 
 	 * @param joinPoint
-	 *            the join point (component) which is created
-	 * @return the object returned from the joinPoint
+	 *            the join point (resource reference) which is created
+	 * @return the result of constructor
 	 * @throws Throwable
-	 *             might occur while invoking process request
+	 *             might occur while creating a new resource reference
 	 */
 	@Around("execution(org.apache.wicket.request.resource.ResourceReference.new(..))")
 	public Object aroundNew(ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		mark("core/resourceReference/create/" + joinPoint.getTarget().getClass().getName());
-		return joinPoint.proceed();
+		return mark("core/resource/create", joinPoint);
 	}
 

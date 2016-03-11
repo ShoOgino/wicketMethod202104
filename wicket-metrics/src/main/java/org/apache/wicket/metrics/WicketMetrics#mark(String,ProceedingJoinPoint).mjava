@@ -1,0 +1,23 @@
+	/**
+	 * Marks the meter with the given name
+	 * 
+	 * @param name
+	 *            the name of the meter to be marked
+	 * @param joinPoint
+	 *            the join point
+	 * @return the result of the proceeded join point
+	 * @throws Throwable
+	 */
+	public Object mark(String name, ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		if (WicketMetrics.enabled)
+		{
+			getMetricRegistry().meter(PREFIX + name + renderClassName(joinPoint)).mark();
+		}
+		if (joinPoint != null)
+		{
+			return joinPoint.proceed();
+		}
+		return null;
+	}
+

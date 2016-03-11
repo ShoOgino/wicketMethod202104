@@ -1,0 +1,16 @@
+	/**
+	 * Collects data how often components calls onConfigure
+	 * 
+	 * @param joinPoint
+	 *            the join point (component) which is configured
+	 * @return the object returned from the join point
+	 * 
+	 * @throws Throwable
+	 *             might occur while invoking onConfigure
+	 */
+	@Around("execution(* org.apache.wicket.Component.onConfigure(..))")
+	public Object aroundOnConfigure(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return measureTime("core/component/configure", joinPoint);
+	}
+
