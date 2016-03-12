@@ -1,0 +1,14 @@
+	public static AjaxClientInfoBehavior onClientInfo(WicketBiConsumer<AjaxRequestTarget, WebClientInfo> onClientInfo)
+	{
+		Args.notNull(onClientInfo, "onClientInfo");
+
+		return new AjaxClientInfoBehavior()
+		{
+			@Override
+			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo)
+			{
+				onClientInfo.accept(target, clientInfo);
+			}
+		};
+	}
+
