@@ -1,14 +1,5 @@
 	public static AbstractAjaxTimerBehavior onSelfUpdate(Duration interval, WicketConsumer<AjaxRequestTarget> onTimer)
 	{
-		Args.notNull(onTimer, "onTimer");
-
-		return new AjaxSelfUpdatingTimerBehavior(interval)
-		{
-			@Override
-			protected void onPostProcessTarget(AjaxRequestTarget target)
-			{
-				onTimer.accept(target);
-			}
-		};
+		return Lambdas.onSelfUpdate(interval, onTimer);
 	}
 

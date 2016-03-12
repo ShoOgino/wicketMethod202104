@@ -1,14 +1,5 @@
 	public static AjaxEventBehavior onEvent(String eventName, WicketConsumer<AjaxRequestTarget> onEvent)
 	{
-		Args.notNull(onEvent, "onEvent");
-
-		return new AjaxEventBehavior(eventName)
-		{
-			@Override
-			protected void onEvent(AjaxRequestTarget target)
-			{
-				onEvent.accept(target);
-			}
-		};
+		return Lambdas.onEvent(eventName, onEvent);
 	}
 

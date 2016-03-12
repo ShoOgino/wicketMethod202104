@@ -1,0 +1,14 @@
+	public static AjaxFormSubmitBehavior onSubmit(String eventName, WicketConsumer<AjaxRequestTarget> onSubmit)
+	{
+		Args.notNull(onSubmit, "onSubmit");
+
+		return new AjaxFormSubmitBehavior(eventName)
+		{
+			@Override
+			protected void onSubmit(AjaxRequestTarget target)
+			{
+				onSubmit.accept(target);
+			}
+		};
+	}
+

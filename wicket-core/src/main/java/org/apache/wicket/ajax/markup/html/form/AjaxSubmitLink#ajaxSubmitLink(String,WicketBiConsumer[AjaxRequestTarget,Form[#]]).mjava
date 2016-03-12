@@ -1,14 +1,5 @@
 	public static AjaxSubmitLink ajaxSubmitLink(String id, WicketBiConsumer<AjaxRequestTarget, Form<?>> onSubmit)
 	{
-		Args.notNull(onSubmit, "onSubmit");
-
-		return new AjaxSubmitLink(id)
-		{
-			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form)
-			{
-				onSubmit.accept(target, form);
-			}
-		};
+		return Lambdas.ajaxSubmitLink(id, onSubmit);
 	}
 

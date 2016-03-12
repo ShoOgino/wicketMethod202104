@@ -1,20 +1,5 @@
 	public static AjaxFormChoiceComponentUpdatingBehavior onUpdateChoice(WicketConsumer<AjaxRequestTarget> onUpdateChoice,
 	                                                         WicketBiConsumer<AjaxRequestTarget, RuntimeException> onError) {
-		Args.notNull(onUpdateChoice, "onUpdateChoice");
-		Args.notNull(onError, "onError");
-		return new AjaxFormChoiceComponentUpdatingBehavior()
-		{
-			@Override
-			protected void onUpdate(AjaxRequestTarget target)
-			{
-				onUpdateChoice.accept(target);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, RuntimeException e)
-			{
-				onError.accept(target, e);
-			}
-		};
+		return Lambdas.onUpdateChoice(onUpdateChoice, onError);
 	}
 
