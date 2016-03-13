@@ -3,11 +3,14 @@
 	 * 
 	 * @return the metric registry
 	 */
-	public static MetricRegistry getMetricRegistry()
+	private MetricRegistry getMetricRegistry()
 	{
+		Application application = Application.get();
+		MetricRegistry metricRegistry = application.getMetaData(METRIC_REGISTRY);
 		if (metricRegistry == null)
 		{
 			metricRegistry = new MetricRegistry();
+			application.setMetaData(METRIC_REGISTRY, metricRegistry);
 		}
 		return metricRegistry;
 	}

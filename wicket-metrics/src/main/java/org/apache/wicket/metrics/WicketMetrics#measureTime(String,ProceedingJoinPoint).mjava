@@ -11,10 +11,13 @@
 	 */
 	public Object measureTime(String name, ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		if (WicketMetrics.enabled)
+		WicketMetricsSettings settings = getSettings();
+		MetricRegistry registry = getMetricRegistry();
+		
+		if (settings.isEnabled())
 		{
-			Context context = getMetricRegistry().timer(PREFIX + name + renderClassName(joinPoint))
-				.time();
+			Context context = registry
+				.timer(settings.getPrefix() + name + renderClassName(joinPoint)).time();
 			try
 			{
 				return joinPoint.proceed();

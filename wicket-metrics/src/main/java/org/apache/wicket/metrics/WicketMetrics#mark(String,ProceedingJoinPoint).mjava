@@ -10,9 +10,12 @@
 	 */
 	public Object mark(String name, ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		if (WicketMetrics.enabled)
+		WicketMetricsSettings settings = getSettings();
+		MetricRegistry registry = getMetricRegistry();
+		
+		if (settings.isEnabled())
 		{
-			getMetricRegistry().meter(PREFIX + name + renderClassName(joinPoint)).mark();
+			registry.meter(settings.getPrefix() + name + renderClassName(joinPoint)).mark();
 		}
 		if (joinPoint != null)
 		{
