@@ -1,13 +1,13 @@
 	private void setupPanel()
 	{
 		// create the form and add the fields and submit button
-		Form form = new Form("childForm", getDefaultModel())
+		Form<ChildModel> form = new Form<ChildModel>("childForm", getModel())
 		{
 			@Override
 			protected void onValidateModelObjects()
 			{
 				super.onValidateModelObjects();
-				((ChildModel)getModelObject()).setChildValidated(true);
+				getModelObject().setChildValidated(true);
 			}
 		};
 
@@ -26,7 +26,7 @@
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
-				((ChildModel)getPanelInstance().getDefaultModelObject()).submittedCalled(target);
+				getPanelInstance().getModelObject().submittedCalled(target);
 			}
 		});
 	}
