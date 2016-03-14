@@ -1,0 +1,32 @@
+	/**
+	 * Factory method for generating a model that will generated the displayed value.
+	 *
+	 * @param rowModel
+	 * @return model
+	 */
+	@Override
+	public IModel<?> getDataModel(IModel<T> rowModel)
+	{
+		IModel<Object> dataModel = new IModel<Object>()
+		{
+			@Override
+			public Object getObject()
+			{
+				T before = rowModel.getObject();
+				
+				if (before == null) {
+					return null;
+				} else {
+					return function.apply(before);
+				}
+			}
+			
+			@Override
+			public void detach()
+			{
+				rowModel.detach();
+			}
+		};
+		return dataModel;
+	}
+
