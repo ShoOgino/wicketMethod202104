@@ -1,0 +1,15 @@
+	/**
+	 * Collects data how often a resource reference is created
+	 * 
+	 * @param joinPoint
+	 *            the join point (resource reference) which is created
+	 * @return the result of constructor
+	 * @throws Throwable
+	 *             might occur while creating a new resource reference
+	 */
+	@Around("execution(org.apache.wicket.request.resource.ResourceReference.new(..))")
+	public Object aroundNew(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return mark("core/resource/reference/create", joinPoint);
+	}
+

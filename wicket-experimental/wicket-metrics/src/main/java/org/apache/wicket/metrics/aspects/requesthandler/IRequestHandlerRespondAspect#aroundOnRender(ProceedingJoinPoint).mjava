@@ -1,0 +1,15 @@
+	/**
+	 * Collects data how often a request handler processes its response
+	 * 
+	 * @param joinPoint
+	 *            the join point (request handler) which processes the response
+	 * @return the object returned from the join point
+	 * @throws Throwable
+	 *             might occur while respond
+	 */
+	@Around("execution(* org.apache.wicket.request.IRequestHandler.respond(..))")
+	public Object aroundOnRender(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return measureTime("core/requesthandler/respond", joinPoint);
+	}
+

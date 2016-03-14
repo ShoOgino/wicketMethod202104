@@ -1,0 +1,15 @@
+	/**
+	 * Collects data how often a request handler calls detach
+	 * 
+	 * @param joinPoint
+	 *            the join point (request handler) which processes the response
+	 * @return the object returned from the join point
+	 * @throws Throwable
+	 *             might occur while detach
+	 */
+	@Around("execution(* org.apache.wicket.model.LoadableDetachableModel.load())")
+	public Object aroundOnRender(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		return measureTime("core/model/loadabledetachablemodel/load", joinPoint);
+	}
+
