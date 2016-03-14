@@ -1,0 +1,19 @@
+	/**
+	 * Factory methods for Model which uses type inference to make code shorter. Equivalent to
+	 * <code>new LoadableDetachableModel<TypeOfObject>(getter)</code>.
+	 *
+	 * @param <T>
+	 * @return Model that contains <code>object</code>
+	 */
+	public static <T> IModel<T> loadableDetachable(WicketSupplier<T> getter)
+	{
+		return new LoadableDetachableModel<T>()
+		{
+			@Override
+			protected T load()
+			{
+				return getter.get();
+			}
+		};
+	}
+

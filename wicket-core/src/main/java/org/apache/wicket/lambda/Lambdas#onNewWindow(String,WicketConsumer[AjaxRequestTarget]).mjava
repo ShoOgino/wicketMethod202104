@@ -1,0 +1,19 @@
+	public static AjaxNewWindowNotifyingBehavior onNewWindow(String windowName, WicketConsumer<AjaxRequestTarget> onNewWindow)
+	{
+		Args.notNull(onNewWindow, "onNewWindow");
+
+		if (Strings.isEmpty(windowName))
+		{
+			windowName = UUID.randomUUID().toString();
+		}
+
+		return new AjaxNewWindowNotifyingBehavior(windowName)
+		{
+			@Override
+			protected void onNewWindow(AjaxRequestTarget target)
+			{
+				onNewWindow.accept(target);
+			}
+		};
+	}
+

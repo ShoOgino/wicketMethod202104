@@ -1,0 +1,14 @@
+	public static <T> AjaxLink<T> ajaxLink(String id, WicketConsumer<AjaxRequestTarget> onClick)
+	{
+		Args.notNull(onClick, "onClick");
+
+		return new AjaxLink<T>(id)
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				onClick.accept(target);
+			}
+		};
+	}
+

@@ -1,0 +1,14 @@
+	public static IndicatingAjaxButton onSubmit(String id, WicketBiConsumer<AjaxRequestTarget, Form<?>> onSubmit)
+	{
+		Args.notNull(onSubmit, "onSubmit");
+
+		return new IndicatingAjaxButton(id)
+		{
+			@Override
+			public void onSubmit(AjaxRequestTarget target, Form<?> form)
+			{
+				onSubmit.accept(target, form);
+			}
+		};
+	}
+

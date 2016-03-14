@@ -1,0 +1,14 @@
+	public static AjaxCheckBox ajaxCheckBox(String id, WicketConsumer<AjaxRequestTarget> onUpdate)
+	{
+		Args.notNull(onUpdate, "onUpdate");
+
+		return new AjaxCheckBox(id)
+		{
+			@Override
+			public void onUpdate(AjaxRequestTarget target)
+			{
+				onUpdate.accept(target);
+			}
+		};
+	}
+
