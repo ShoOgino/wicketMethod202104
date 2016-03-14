@@ -5,9 +5,8 @@
 	protected FormComponent<T> newEditor(final MarkupContainer parent, final String componentId,
 		final IModel<T> model)
 	{
-		IModel<List<? extends T>> choiceModel = new AbstractReadOnlyModel<List<? extends T>>()
+		IModel<List<? extends T>> choiceModel = new IModel<List<? extends T>>()
 		{
-
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -15,7 +14,6 @@
 			{
 				return choices.getObject();
 			}
-
 		};
 
 		DropDownChoice<T> editor = new DropDownChoice<T>(componentId, model, choiceModel, renderer)

@@ -42,9 +42,9 @@
 				getResourceSettings().getResourceFinders().add(new Path(resourceFolder));
 			}
 		}
-		setPageRendererProvider((handler) -> new WebPageRenderer(handler));
-		setSessionStoreProvider(() -> new HttpSessionStore());
-		setAjaxRequestTargetProvider((page) -> new AjaxRequestHandler(page));
+		setPageRendererProvider(WebPageRenderer::new);
+		setSessionStoreProvider(HttpSessionStore::new);
+		setAjaxRequestTargetProvider(AjaxRequestHandler::new);
 
 		getAjaxRequestTargetListeners().add(new AjaxEnclosureListener());
 
