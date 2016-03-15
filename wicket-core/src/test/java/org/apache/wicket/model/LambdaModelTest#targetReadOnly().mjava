@@ -1,0 +1,9 @@
+	@Test(expected=UnsupportedOperationException.class)
+	public void targetReadOnly()
+	{
+		IModel<Person> target = Model.of(new Person());
+
+		IModel<String> personNameModel = LambdaModel.of(target, Person::getName);
+		check(personNameModel);
+	}
+
