@@ -10,14 +10,8 @@
 	 */
 	public final IConverter<?> set(final Class<?> c, final IConverter<?> converter)
 	{
-		if (converter == null)
-		{
-			throw new IllegalArgumentException("CoverterLocator cannot be null");
-		}
-		if (c == null)
-		{
-			throw new IllegalArgumentException("Class cannot be null");
-		}
+		Args.notNull(c, "Class");
+		Args.notNull(converter, "converter");
 		return classToConverter.put(c.getName(), converter);
 	}
 
