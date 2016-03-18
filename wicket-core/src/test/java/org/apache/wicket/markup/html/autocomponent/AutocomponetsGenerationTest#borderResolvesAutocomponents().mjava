@@ -1,0 +1,20 @@
+	/*
+	 * Test for https://issues.apache.org/jira/browse/WICKET-6116
+	 */
+	@Test
+	public void borderResolvesAutocomponents() throws Exception
+	{
+		AutoComponentsBorder border = new AutoComponentsBorder("id");
+		
+		ComponentRenderer.renderComponent(border);
+		
+		//we expect to have a body container and an autocomponent for <img> tag
+		assertEquals(2, border.size());
+		
+		//let's render the same border again
+		ComponentRenderer.renderComponent(border);
+		
+		//the number of child components must not have been changed
+		assertEquals(2, border.size());
+	}
+
