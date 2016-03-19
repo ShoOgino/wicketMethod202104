@@ -15,29 +15,6 @@
 				" must extend IRequestListener");
 		}
 
-		// Get interface methods
-		final Method[] methods = listenerInterfaceClass.getMethods();
-
-		// If there is only one method
-		if (methods.length == 1)
-		{
-			// and that method takes no parameters
-			if (methods[0].getParameterTypes().length == 0)
-			{
-				method = methods[0];
-			}
-			else
-			{
-				throw new IllegalArgumentException("Method " + methods[0] + " in interface " +
-					listenerInterfaceClass + " cannot take any arguments");
-			}
-		}
-		else
-		{
-			throw new IllegalArgumentException("Interface " + listenerInterfaceClass +
-				" can have only one method");
-		}
-
 		// Save short class name
 		name = Classes.simpleName(listenerInterfaceClass);
 

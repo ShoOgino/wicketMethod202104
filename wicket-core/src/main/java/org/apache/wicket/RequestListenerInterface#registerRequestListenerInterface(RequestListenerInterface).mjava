@@ -15,16 +15,7 @@
 		// Check that a different interface method with the same name has not
 		// already been registered
 		final RequestListenerInterface existingInterface = RequestListenerInterface.forName(requestListenerInterface.getName());
-		if (existingInterface != null)
-		{
-			if (existingInterface.getMethod().equals(requestListenerInterface.getMethod()) == false)
-			{
-				throw new IllegalStateException("Cannot register listener interface " +
-				requestListenerInterface +
-				" because it conflicts with the already registered interface " + existingInterface);
-			}
-		}
-		else
+		if (existingInterface == null)
 		{
 			// Save this interface method by the non-qualified class name
 			interfaces.put(requestListenerInterface.getName(), requestListenerInterface);
