@@ -38,7 +38,6 @@
 		RedirectPolicy policy = isStateless
 			? RedirectPolicy.NEVER_REDIRECT
 			: RedirectPolicy.AUTO_REDIRECT;
-		final IPageProvider pageProvider = new PageProvider(page);
 
 		final boolean canCallListenerInterfaceAfterExpiry = component != null
 				? component.canCallListenerInterfaceAfterExpiry()
@@ -57,9 +56,9 @@
 			if (LOG.isDebugEnabled())
 			{
 				LOG.debug(
-					"A ListenerInterface '{}' assigned to '{}' is executed on an expired stateful page. "
+					"A ListenerInterface assigned to '{}' is executed on an expired stateful page. "
 						+ "Scheduling re-create of the page and ignoring the listener interface...",
-					listenerInterface, getComponentPath());
+					getComponentPath());
 			}
 
 			if (isAjax)
@@ -68,19 +67,10 @@
 			}
 
 			requestCycle.scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(
-				pageProvider, policy));
+				new PageProvider(page), policy));
 			return;
 		}
 
-		if (isAjax == false && listenerInterface.isRenderPageAfterInvocation())
-		{
-			// schedule page render after current request handler is done. this can be
-			// overridden during invocation of listener
-			// method (i.e. by calling RequestCycle#setResponsePage)
-			requestCycle.scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(
-				pageProvider, policy));
-		}
-
-		invokeListener();
+		invokeListener(requestCycle, policy, isAjax);
 	}
 

@@ -1,20 +1,26 @@
 	/**
-	 * Builds and processes a request suitable for invoking a listener. The <code>Component</code>
-	 * must implement any of the known <code>IListener</code> interfaces.
+	 * Simulates processing URL that invokes specified {@link RequestListenerInterface} on
+	 * component.
+	 * 
+	 * After the listener interface is invoked the page containing the component will be rendered
+	 * (with an optional redirect - depending on {@link RenderStrategy}).
 	 * 
 	 * @param component
-	 *            the listener to invoke
+	 * @param listener
 	 */
 	public void executeListener(final Component component)
 	{
 		Args.notNull(component, "component");
 
-		for (RequestListenerInterface iface : RequestListenerInterface.getRegisteredInterfaces())
-		{
-			if (iface.getListenerInterfaceClass().isAssignableFrom(component.getClass()))
-			{
-				executeListener(component, iface);
-			}
-		}
+		// there are two ways to do this. RequestCycle could be forced to call the handler
+		// directly but constructing and parsing the URL increases the chance of triggering bugs
+		IRequestHandler handler = new ListenerInterfaceRequestHandler(new PageAndComponentProvider(
+			component.getPage(), component));
+
+		Url url = urlFor(handler);
+		request.setUrl(url);
+
+		// Process the request
+		processRequest(request, null);
 	}
 

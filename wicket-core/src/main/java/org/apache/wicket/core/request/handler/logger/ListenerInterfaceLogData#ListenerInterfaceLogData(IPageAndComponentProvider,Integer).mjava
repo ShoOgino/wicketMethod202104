@@ -5,8 +5,7 @@
 	 * @param listenerInterface
 	 * @param behaviorIndex
 	 */
-	public ListenerInterfaceLogData(IPageAndComponentProvider pageAndComponentProvider,
-		RequestListenerInterface listenerInterface, Integer behaviorIndex)
+	public ListenerInterfaceLogData(IPageAndComponentProvider pageAndComponentProvider, Integer behaviorIndex)
 	{
 		super(pageAndComponentProvider);
 		componentClass = tryToGetComponentClass(pageAndComponentProvider);
@@ -29,15 +28,12 @@
 		{
 			behaviorClass = null;
 		}
-		interfaceName = listenerInterface.getName();
-		if (listenerInterface.getListenerInterfaceClass().equals(IFormSubmitListener.class))
+		
+		final Component formSubmitter = tryToGetFormSubmittingComponent(pageAndComponentProvider);
+		if (formSubmitter != null)
 		{
-			final Component formSubmitter = tryToGetFormSubmittingComponent(pageAndComponentProvider);
-			if (formSubmitter != null)
-			{
-				submittingComponentClass = formSubmitter.getClass();
-				submittingComponentPath = formSubmitter.getPageRelativePath();
-			}
+			submittingComponentClass = formSubmitter.getClass();
+			submittingComponentPath = formSubmitter.getPageRelativePath();
 		}
 	}
 

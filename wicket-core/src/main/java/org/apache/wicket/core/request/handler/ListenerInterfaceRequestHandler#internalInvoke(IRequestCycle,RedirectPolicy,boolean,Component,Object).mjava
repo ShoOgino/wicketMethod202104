@@ -1,0 +1,27 @@
+	private void internalInvoke(final IRequestCycle requestCycle, RedirectPolicy policy, boolean ajax, final Component component, final Object target)
+	{
+		// save a reference to the page because the component can be removed
+		// during the invocation of the listener and thus lose its parent
+		Page page = component.getPage();
+
+		// initialization is required for stateless pages
+		if (!page.isInitialized())
+		{
+			page.internalInitialize();
+		}
+
+		IRequestListener requestListener = (IRequestListener)target;
+		
+		if (requestListener.includeRenderCount() && !ajax)
+		{
+			// schedule page render after current request handler is done. this can be
+			// overridden during invocation of listener
+			// method (i.e. by calling RequestCycle#setResponsePage)
+			requestCycle.scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(
+				new PageProvider(page), policy));
+		}
+
+
+		requestListener.onRequest();
+	}
+

@@ -7,14 +7,14 @@
 		// non-existing component on fresh page is ignored
 		PageAndComponentProvider freshPage = new PageAndComponentProvider(DummyPage.class, null,
 			"foo");
-		new ListenerInterfaceRequestHandler(freshPage, IOnChangeListener.INTERFACE).respond(tester
+		new ListenerInterfaceRequestHandler(freshPage).respond(tester
 			.getRequestCycle());
 
 		// non-existing component on old page fails
 		PageAndComponentProvider oldPage = new PageAndComponentProvider(new DummyPage(), "foo");
 		try
 		{
-			new ListenerInterfaceRequestHandler(oldPage, IOnChangeListener.INTERFACE)
+			new ListenerInterfaceRequestHandler(oldPage)
 				.respond(tester.getRequestCycle());
 			fail();
 		}

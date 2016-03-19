@@ -1,8 +1,7 @@
 	/**
 	 * Create a suitable request handler depending whether the page is stateless or bookmarkable.
 	 */
-	private IRequestHandler createRequestHandler(RequestListenerInterface listener,
-		PageParameters parameters, Integer id)
+	private IRequestHandler createRequestHandler(PageParameters parameters, Integer id)
 	{
 		Page page = getPage();
 
@@ -12,11 +11,11 @@
 			|| (getApplication().getPageSettings().getRecreateBookmarkablePagesAfterExpiry()
 				&& page.isBookmarkable() && page.wasCreatedBookmarkable()))
 		{
-			return new BookmarkableListenerInterfaceRequestHandler(provider, listener, id);
+			return new BookmarkableListenerInterfaceRequestHandler(provider, id);
 		}
 		else
 		{
-			return new ListenerInterfaceRequestHandler(provider, listener, id);
+			return new ListenerInterfaceRequestHandler(provider, id);
 		}
 	}
 

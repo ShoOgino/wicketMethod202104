@@ -1,0 +1,26 @@
+	/**
+	 * Invokes a given interface on a component.
+	 * 
+	 * @param rcomponent
+	 *            The component
+	 * 
+	 * @throws ListenerInvocationNotAllowedException
+	 *             when listener invocation attempted on a component that does not allow it
+	 */
+	private final void invoke(final IRequestCycle requestCycle, RedirectPolicy policy, boolean ajax, final IRequestableComponent rcomponent)
+	{
+		// we are in Wicket core land
+		final Component component = (Component)rcomponent;
+
+		if (!component.canCallListenerInterface(null))
+		{
+			// just return so that we have a silent fail and just re-render the
+			// page
+			LOG.info("component not enabled or visible; ignoring call. Component: " + component);
+			throw new ListenerInvocationNotAllowedException(component, null,
+				"Component rejected interface invocation");
+		}
+
+		internalInvoke(requestCycle, policy, ajax, component, component);
+	}
+

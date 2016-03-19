@@ -1,0 +1,25 @@
+	/**
+	 * Invokes a given interface on a component's behavior.
+	 * 
+	 * @param rcomponent
+	 *            The component
+	 * @param behavior
+	 * @throws ListenerInvocationNotAllowedException
+	 *             when listener invocation attempted on a component that does not allow it
+	 */
+	private final void invoke(final IRequestCycle requestCycle, RedirectPolicy policy, boolean ajax, final IRequestableComponent rcomponent, final Behavior behavior)
+	{
+		// we are in Wicket core land
+		final Component component = (Component)rcomponent;
+
+		if (!behavior.canCallListenerInterface(component, null))
+		{
+			LOG.warn("behavior not enabled; ignore call. Behavior {} at component {}", behavior,
+				component);
+			throw new ListenerInvocationNotAllowedException(component, behavior,
+				"Behavior rejected interface invocation. ");
+		}
+
+		internalInvoke(requestCycle, policy, ajax, component, behavior);
+	}
+
