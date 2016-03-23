@@ -6,13 +6,14 @@
 	public SystemMapper(final Application application)
 	{
 		this.application = application;
-		add(new PageInstanceMapper());
-		add(new BookmarkableMapper());
-		add(new HomePageMapper(new HomePageProvider(application)));
-		add(new ResourceReferenceMapper(new PageParametersEncoder(),
+
+		add(newPageInstanceMapper());
+		add(newBookmarkableMapper());
+		add(newHomePageMapper(new HomePageProvider(application)));
+		add(newResourceReferenceMapper(new PageParametersEncoder(),
 			new ParentFolderPlaceholderProvider(application), getResourceCachingStrategy()));
-		add(new UrlResourceReferenceMapper());
+		add(newUrlResourceReferenceMapper());
 		add(RestartResponseAtInterceptPageException.MAPPER);
-		add(new BufferedResponseMapper());
+		add(newBufferedResponseMapper());
 	}
 
