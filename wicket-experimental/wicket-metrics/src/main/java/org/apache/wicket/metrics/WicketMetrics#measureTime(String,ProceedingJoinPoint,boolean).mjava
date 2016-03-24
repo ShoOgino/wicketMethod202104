@@ -1,0 +1,41 @@
+	/**
+	 * Simply measure the time for a {@literal @}around
+	 * 
+	 * @param name
+	 *            the name of the timer context
+	 * @param joinPoint
+	 *            the joinPoint to be proceed
+	 * @param renderClass
+	 *            if the class name should be rendered behind the metric path
+	 * 
+	 * @return the value of the join point
+	 * @throws Throwable
+	 *             if there is an exception while execution
+	 */
+	public Object measureTime(String name, ProceedingJoinPoint joinPoint, boolean renderClass)
+		throws Throwable
+	{
+		WicketMetricsSettings settings = getSettings();
+		MetricRegistry registry = getMetricRegistry();
+
+		if (settings.isEnabled())
+		{
+			Context context = registry
+				.timer(
+					settings.getPrefix() + name + (renderClass ? renderClassName(joinPoint) : ""))
+				.time();
+			try
+			{
+				return joinPoint.proceed();
+			}
+			finally
+			{
+				stopQuietly(context);
+			}
+		}
+		else
+		{
+			return joinPoint.proceed();
+		}
+	}
+

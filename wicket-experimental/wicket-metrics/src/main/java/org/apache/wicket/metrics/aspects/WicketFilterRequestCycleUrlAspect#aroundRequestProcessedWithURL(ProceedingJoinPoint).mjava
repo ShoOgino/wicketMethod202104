@@ -1,0 +1,31 @@
+	/**
+	 * Collects data how often a request has been made against the webapp and counts the time how
+	 * long the request took. Measures the information with the request url
+	 * 
+	 * @param joinPoint
+	 *            the joinPoint to be proceed
+	 * @return returns the boolean of the processRequest method
+	 * 
+	 * @throws Throwable
+	 *             might occur while invoking process request
+	 */
+	@Around("execution(* org.apache.wicket.protocol.http.WicketFilter.processRequestCycle(..))")
+	public Object aroundRequestProcessedWithURL(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		Object[] args = joinPoint.getArgs();
+		if (args.length >= 3)
+		{
+			Object requestAsObject = args[2];
+			if (requestAsObject != null && requestAsObject instanceof HttpServletRequest)
+			{
+				HttpServletRequest httpServletRequest = (HttpServletRequest)requestAsObject;
+				String requestUrl = httpServletRequest.getRequestURL().toString();
+				String replacedUrl = requestUrl.replace('/', '_');
+				replacedUrl = replacedUrl.replace('.', '_');
+				replacedUrl = replacedUrl.replaceAll(";jsessionid=.*?(?=\\?|$)", "");
+				return measureTime("core/application/request/" + replacedUrl, joinPoint, false);
+			}
+		}
+		return joinPoint.proceed();
+	}
+

@@ -3,15 +3,30 @@
 	 * 
 	 * @return the metric registry
 	 */
-	private static synchronized MetricRegistry getMetricRegistry()
+	public static synchronized MetricRegistry getMetricRegistry()
 	{
-		Application application = Application.get();
-		MetricRegistry metricRegistry = application.getMetaData(METRIC_REGISTRY);
-		if (metricRegistry == null)
+		if (!applicationResolved)
 		{
-			metricRegistry = new MetricRegistry();
-			application.setMetaData(METRIC_REGISTRY, metricRegistry);
+			application = getApplication();
+			applicationResolved = true;
 		}
-		return metricRegistry;
+		if (application != null && System.getProperty(METRICS_STATIC_REGISTRATION) == null)
+		{
+			MetricRegistry metricRegistry = application.getMetaData(METRIC_REGISTRY);
+			if (metricRegistry == null)
+			{
+				metricRegistry = new MetricRegistry();
+				application.setMetaData(METRIC_REGISTRY, metricRegistry);
+			}
+			return metricRegistry;
+		}
+		else
+		{
+			if (WicketMetrics.metricRegistry == null)
+			{
+				WicketMetrics.metricRegistry = new MetricRegistry();
+			}
+			return WicketMetrics.metricRegistry;
+		}
 	}
 

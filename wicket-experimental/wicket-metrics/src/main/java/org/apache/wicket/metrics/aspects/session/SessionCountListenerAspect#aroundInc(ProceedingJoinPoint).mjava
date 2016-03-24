@@ -1,0 +1,17 @@
+	/**
+	 * Measures if a session is going to be activated
+	 * 
+	 * @param joinPoint
+	 *            the join point
+	 * @return void
+	 * @throws Throwable
+	 *             if an error occurred 
+	 */
+	@Around("execution(* org.apache.wicket.metrics.aspects.session.SessionCountListener.inc(..))")
+	public Object aroundInc(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		Object count = joinPoint.proceed();
+		counter("core/session/count", null, CounterOperation.INC, 1L);
+		return count;
+	}
+

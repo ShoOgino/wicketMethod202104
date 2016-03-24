@@ -1,0 +1,40 @@
+	/**
+	 * Creates a histogram of the given arguments
+	 * 
+	 * @param name
+	 *            the name of the meter to be marked
+	 * @param joinPoint
+	 *            the join point
+	 * @param counterOperation
+	 *            the operation
+	 * @param value
+	 *            the value to update the counter
+	 * @return the result of the proceeded join point
+	 * @throws Throwable
+	 */
+	public Object counter(String name, ProceedingJoinPoint joinPoint,
+		CounterOperation counterOperation, Long value) throws Throwable
+	{
+		WicketMetricsSettings settings = getSettings();
+		MetricRegistry registry = getMetricRegistry();
+
+		if (settings.isEnabled())
+		{
+			Counter counter = registry
+				.counter(settings.getPrefix() + name + renderClassName(joinPoint));
+			if (counterOperation == CounterOperation.INC)
+			{
+				counter.inc(value);
+			}
+			else
+			{
+				counter.dec(value);
+			}
+		}
+		if (joinPoint != null)
+		{
+			return joinPoint.proceed();
+		}
+		return null;
+	}
+

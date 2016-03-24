@@ -1,0 +1,17 @@
+	/**
+	 * Measures if a session is going to be destroyed
+	 * 
+	 * @param joinPoint
+	 *            the join point
+	 * @return void
+	 * @throws Throwable
+	 *             if an error occurred
+	 */
+	@Around("execution(* org.apache.wicket.metrics.aspects.session.SessionCountListener.dec(..))")
+	public Object aroundDec(ProceedingJoinPoint joinPoint) throws Throwable
+	{
+		Object count = joinPoint.proceed();
+		counter("core/session/count", null, CounterOperation.DEC, 1L);
+		return count;
+	}
+

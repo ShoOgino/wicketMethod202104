@@ -5,31 +5,15 @@
 	 *            the name of the timer context
 	 * @param joinPoint
 	 *            the joinPoint to be proceed
+	 * 
 	 * @return the value of the join point
 	 * @throws Throwable
 	 *             if there is an exception while execution
+	 * @see #org.apache.wicket.metrics.WicketMetrics.measureTime(String, ProceedingJoinPoint,
+	 *      boolean)
 	 */
 	public Object measureTime(String name, ProceedingJoinPoint joinPoint) throws Throwable
 	{
-		WicketMetricsSettings settings = getSettings();
-		MetricRegistry registry = getMetricRegistry();
-
-		if (settings.isEnabled())
-		{
-			Context context = registry
-				.timer(settings.getPrefix() + name + renderClassName(joinPoint)).time();
-			try
-			{
-				return joinPoint.proceed();
-			}
-			finally
-			{
-				stopQuietly(context);
-			}
-		}
-		else
-		{
-			return joinPoint.proceed();
-		}
+		return this.measureTime(name, joinPoint, true);
 	}
 

@@ -3,15 +3,30 @@
 	 * 
 	 * @return the wicket metrics settings
 	 */
-	private static synchronized WicketMetricsSettings getSettings()
+	public static synchronized WicketMetricsSettings getSettings()
 	{
-		Application application = Application.get();
-		WicketMetricsSettings metricRegistry = application.getMetaData(METRIC_SETTINGS);
-		if (metricRegistry == null)
+		if (!applicationResolved)
 		{
-			metricRegistry = new WicketMetricsSettings();
-			application.setMetaData(METRIC_SETTINGS, metricRegistry);
+			application = getApplication();
+			applicationResolved = true;
 		}
-		return metricRegistry;
+		if (application != null && System.getProperty(METRICS_STATIC_REGISTRATION) == null)
+		{
+			WicketMetricsSettings wicketMetricsSettings = application.getMetaData(METRIC_SETTINGS);
+			if (wicketMetricsSettings == null)
+			{
+				wicketMetricsSettings = new WicketMetricsSettings();
+				application.setMetaData(METRIC_SETTINGS, wicketMetricsSettings);
+			}
+			return wicketMetricsSettings;
+		}
+		else
+		{
+			if (wicketMetricsSettings == null)
+			{
+				wicketMetricsSettings = new WicketMetricsSettings();
+			}
+			return wicketMetricsSettings;
+		}
 	}
 
