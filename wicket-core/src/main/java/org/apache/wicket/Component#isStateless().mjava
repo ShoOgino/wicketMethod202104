@@ -7,13 +7,9 @@
 	 */
 	public final boolean isStateless()
 	{
-		if (
-		// the component is either invisible or disabled
-		(isVisibleInHierarchy() && isEnabledInHierarchy()) == false &&
-
-		// and it can't call listener interfaces
-			canCallListenerInterface(null) == false)
+		if ((isVisibleInHierarchy() && isEnabledInHierarchy()) == false && canCallListenerInterface() == false)
 		{
+			// the component is either invisible or disabled and it can't call listener interfaces
 			// then pretend the component is stateless
 			return true;
 		}
