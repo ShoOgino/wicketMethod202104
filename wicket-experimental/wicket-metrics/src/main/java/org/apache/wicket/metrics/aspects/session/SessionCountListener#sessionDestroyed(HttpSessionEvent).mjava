@@ -1,6 +1,11 @@
 	@Override
 	public void sessionDestroyed(HttpSessionEvent event)
 	{
-		dec(event);
+		ServletContext servletContext = event.getSession().getServletContext();
+		MetricRegistry metricRegistry = (MetricRegistry) servletContext.getAttribute(METRICS_SERVLET_REGISTRY);
+		if (metricRegistry != null)
+		{
+			dec(event, metricRegistry);
+		}
 	}
 

@@ -1,0 +1,11 @@
+	@Override
+	public void init(Application application)
+	{
+		WebApplication webApplication = (WebApplication) application;
+		MetricRegistry metricRegistry = new MetricRegistry();
+		application.setMetaData(WicketMetrics.METRIC_REGISTRY, metricRegistry);
+
+		ServletContext servletContext = webApplication.getServletContext();
+		servletContext.setAttribute(METRICS_SERVLET_REGISTRY, metricRegistry);
+	}
+
