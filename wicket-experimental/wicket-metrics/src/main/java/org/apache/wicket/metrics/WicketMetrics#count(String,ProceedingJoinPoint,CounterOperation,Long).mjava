@@ -1,5 +1,5 @@
 	/**
-	 * Creates a histogram of the given arguments
+	 * Creates a count of the given arguments
 	 * 
 	 * @param name
 	 *            the name of the meter to be marked
@@ -12,7 +12,7 @@
 	 * @return the result of the proceeded join point
 	 * @throws Throwable
 	 */
-	public Object counter(String name, ProceedingJoinPoint joinPoint,
+	public Object count(String name, ProceedingJoinPoint joinPoint,
 		CounterOperation counterOperation, Long value) throws Throwable
 	{
 		WicketMetricsSettings settings = getSettings();
@@ -31,10 +31,6 @@
 				counter.dec(value);
 			}
 		}
-		if (joinPoint != null)
-		{
-			return joinPoint.proceed();
-		}
-		return null;
+		return proceedSilent(joinPoint);
 	}
 

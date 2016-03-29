@@ -5,28 +5,17 @@
 	 */
 	public static synchronized MetricRegistry getMetricRegistry()
 	{
-		if (!applicationResolved)
+		Application application = Application.get(getFilterName());
+		if (application == null)
 		{
-			application = getApplication();
-			applicationResolved = true;
+			throw new WicketRuntimeException(APPLICATION_ERROR);
 		}
-		if (application != null && System.getProperty(METRICS_STATIC_REGISTRATION) == null)
+		MetricRegistry metricRegistry = application.getMetaData(METRIC_REGISTRY);
+		if (metricRegistry == null)
 		{
-			MetricRegistry metricRegistry = application.getMetaData(METRIC_REGISTRY);
-			if (metricRegistry == null)
-			{
-				metricRegistry = new MetricRegistry();
-				application.setMetaData(METRIC_REGISTRY, metricRegistry);
-			}
-			return metricRegistry;
+			metricRegistry = new MetricRegistry();
+			application.setMetaData(METRIC_REGISTRY, metricRegistry);
 		}
-		else
-		{
-			if (WicketMetrics.metricRegistry == null)
-			{
-				WicketMetrics.metricRegistry = new MetricRegistry();
-			}
-			return WicketMetrics.metricRegistry;
-		}
+		return metricRegistry;
 	}
 
