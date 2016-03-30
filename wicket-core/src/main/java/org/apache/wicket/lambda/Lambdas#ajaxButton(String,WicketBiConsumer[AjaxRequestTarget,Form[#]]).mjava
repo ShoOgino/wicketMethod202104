@@ -1,9 +1,22 @@
-	public static AjaxButton ajaxButton(String id, WicketBiConsumer<AjaxRequestTarget, Form<?>> onSubmit)
+	/**
+	 * Creates an {@link AjaxButton} based on lambda expressions
+	 * 
+	 * @param id
+	 *            the id of the ajax button
+	 * @param onSubmit
+	 *            the {@link WicketBiConsumer} which accepts the {@link AjaxRequestTarget} and the
+	 *            {@link Form}
+	 * @return the {@link AjaxButton}
+	 */
+	public static AjaxButton ajaxButton(String id,
+		WicketBiConsumer<AjaxRequestTarget, Form<?>> onSubmit)
 	{
 		Args.notNull(onSubmit, "onSubmit");
 
 		return new AjaxButton(id)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{

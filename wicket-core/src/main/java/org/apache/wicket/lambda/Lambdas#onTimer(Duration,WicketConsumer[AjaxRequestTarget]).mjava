@@ -1,9 +1,21 @@
-	public static AbstractAjaxTimerBehavior onTimer(Duration interval, WicketConsumer<AjaxRequestTarget> onTimer)
+	/**
+	 * Creates an {@link AbstractAjaxTimerBehavior} based on lambda expressions
+	 * 
+	 * @param interval
+	 *            the interval of the timer
+	 * @param onTimer
+	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
+	 * @return the {@link AbstractAjaxTimerBehavior}
+	 */
+	public static AbstractAjaxTimerBehavior onTimer(Duration interval,
+		WicketConsumer<AjaxRequestTarget> onTimer)
 	{
 		Args.notNull(onTimer, "onTimer");
 
 		return new AbstractAjaxTimerBehavior(interval)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onTimer(AjaxRequestTarget target)
 			{

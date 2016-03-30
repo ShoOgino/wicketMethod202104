@@ -1,9 +1,21 @@
-	public static AjaxEventBehavior onEvent(String eventName, WicketConsumer<AjaxRequestTarget> onEvent)
+	/**
+	 * Creates an {@link AjaxEventBehavior} based on lambda expressions
+	 * 
+	 * @param eventName
+	 *            the event name
+	 * @param onEvent
+	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
+	 * @return the {@link AjaxEventBehavior}
+	 */
+	public static AjaxEventBehavior onEvent(String eventName,
+		WicketConsumer<AjaxRequestTarget> onEvent)
 	{
 		Args.notNull(onEvent, "onEvent");
 
 		return new AjaxEventBehavior(eventName)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onEvent(AjaxRequestTarget target)
 			{
