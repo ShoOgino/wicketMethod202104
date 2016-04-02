@@ -6,26 +6,12 @@
 	 * @param onNewWindow
 	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
 	 * @return the {@link AjaxNewWindowNotifyingBehavior}
+	 * 
+	 * @see AjaxNewWindowNotifyingBehavior#onNewWindow(String, WicketConsumer)
 	 */
 	public static AjaxNewWindowNotifyingBehavior onNewWindow(String windowName,
 		WicketConsumer<AjaxRequestTarget> onNewWindow)
 	{
-		Args.notNull(onNewWindow, "onNewWindow");
-
-		if (Strings.isEmpty(windowName))
-		{
-			windowName = UUID.randomUUID().toString();
-		}
-
-		return new AjaxNewWindowNotifyingBehavior(windowName)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onNewWindow(AjaxRequestTarget target)
-			{
-				onNewWindow.accept(target);
-			}
-		};
+		return AjaxNewWindowNotifyingBehavior.onNewWindow(windowName, onNewWindow);
 	}
 

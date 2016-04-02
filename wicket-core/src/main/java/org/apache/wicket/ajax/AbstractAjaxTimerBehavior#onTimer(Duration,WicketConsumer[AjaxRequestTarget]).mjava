@@ -9,6 +9,17 @@
 	 */
 	public static AbstractAjaxTimerBehavior onTimer(Duration interval, WicketConsumer<AjaxRequestTarget> onTimer)
 	{
-		return Lambdas.onTimer(interval, onTimer);
+		Args.notNull(onTimer, "onTimer");
+
+		return new AbstractAjaxTimerBehavior(interval)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target)
+			{
+				onTimer.accept(target);
+			}
+		};
 	}
 

@@ -12,6 +12,24 @@
 	public static AjaxFormSubmitBehavior onSubmit(String eventName,
 	                                              WicketConsumer<AjaxRequestTarget> onSubmit,
 	                                              WicketConsumer<AjaxRequestTarget> onError) {
-		return Lambdas.onSubmit(eventName, onSubmit, onError);
+		Args.notNull(onSubmit, "onSubmit");
+		Args.notNull(onError, "onError");
+
+		return new AjaxFormSubmitBehavior(eventName)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target)
+			{
+				onSubmit.accept(target);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target)
+			{
+				onError.accept(target);
+			}
+		};
 	}
 

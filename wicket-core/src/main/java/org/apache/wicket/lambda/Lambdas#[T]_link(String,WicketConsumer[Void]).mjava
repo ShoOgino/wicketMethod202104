@@ -6,20 +6,11 @@
 	 * @param onClick
 	 *            the {@link WicketConsumer} which accepts the {@link Void}
 	 * @return the {@link Link}
+	 * 
+	 * @see Link#onClick(String, WicketConsumer)
 	 */
 	public static <T> Link<T> link(String id, WicketConsumer<Void> onClick)
 	{
-		Args.notNull(onClick, "onClick");
-
-		return new Link<T>(id)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick()
-			{
-				onClick.accept((Void)null);
-			}
-		};
+		return Link.onClick(id, onClick);
 	}
 

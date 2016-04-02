@@ -6,21 +6,12 @@
 	 * @param onUpdate
 	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
 	 * @return the {@link AjaxFormComponentUpdatingBehavior}
+	 * 
+	 * @see AjaxFormComponentUpdatingBehavior#onUpdate(String, WicketConsumer) 
 	 */
 	public static AjaxFormComponentUpdatingBehavior onUpdate(String eventName,
 		WicketConsumer<AjaxRequestTarget> onUpdate)
 	{
-		Args.notNull(onUpdate, "onUpdate");
-
-		return new AjaxFormComponentUpdatingBehavior(eventName)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target)
-			{
-				onUpdate.accept(target);
-			}
-		};
+		return AjaxFormComponentUpdatingBehavior.onUpdate(eventName, onUpdate);
 	}
 

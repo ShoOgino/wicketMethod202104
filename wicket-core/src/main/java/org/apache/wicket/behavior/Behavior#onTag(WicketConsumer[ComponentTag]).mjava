@@ -10,11 +10,19 @@
 	 * @param onTagConsumer
 	 *              the {@link WicketConsumer} that accepts the {@link ComponentTag}
 	 * @return The created behavior
-	 * 
-	 * @see Behavior#onTag(WicketConsumer)
 	 */
 	public static Behavior onTag(WicketConsumer<ComponentTag> onTagConsumer)
 	{
-		return Behavior.onTag(onTagConsumer);
+		Args.notNull(onTagConsumer, "onTagConsumer");
+
+		return new Behavior()
+		{
+			@Override
+			public void onComponentTag(Component component, ComponentTag tag)
+			{
+				super.onComponentTag(component, tag);
+				onTagConsumer.accept(tag);
+			}
+		};
 	}
 

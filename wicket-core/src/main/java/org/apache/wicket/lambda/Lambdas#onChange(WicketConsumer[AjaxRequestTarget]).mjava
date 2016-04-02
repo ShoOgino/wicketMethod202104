@@ -4,20 +4,11 @@
 	 * @param onChange
 	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
 	 * @return the {@link OnChangeAjaxBehavior}
+	 * 
+	 * @see OnChangeAjaxBehavior#onChange(WicketConsumer)
 	 */
 	public static OnChangeAjaxBehavior onChange(WicketConsumer<AjaxRequestTarget> onChange)
 	{
-		Args.notNull(onChange, "onChange");
-
-		return new OnChangeAjaxBehavior()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target)
-			{
-				onChange.accept(target);
-			}
-		};
+		return OnChangeAjaxBehavior.onChange(onChange);
 	}
 

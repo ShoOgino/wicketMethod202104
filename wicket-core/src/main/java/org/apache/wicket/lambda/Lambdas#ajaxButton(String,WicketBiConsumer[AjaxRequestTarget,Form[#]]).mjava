@@ -7,21 +7,12 @@
 	 *            the {@link WicketBiConsumer} which accepts the {@link AjaxRequestTarget} and the
 	 *            {@link Form}
 	 * @return the {@link AjaxButton}
+	 * 
+	 * @see AjaxButton#onSubmit(String, WicketBiConsumer)
 	 */
 	public static AjaxButton ajaxButton(String id,
 		WicketBiConsumer<AjaxRequestTarget, Form<?>> onSubmit)
 	{
-		Args.notNull(onSubmit, "onSubmit");
-
-		return new AjaxButton(id)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form)
-			{
-				onSubmit.accept(target, form);
-			}
-		};
+		return AjaxButton.onSubmit(id, onSubmit);
 	}
 

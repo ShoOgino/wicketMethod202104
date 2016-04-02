@@ -6,21 +6,12 @@
 	 * @param onEvent
 	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
 	 * @return the {@link AjaxEventBehavior}
+	 *
+	 * @see AjaxEventBehavior#onEvent(org.apache.wicket.Component, org.apache.wicket.event.IEvent)
 	 */
 	public static AjaxEventBehavior onEvent(String eventName,
 		WicketConsumer<AjaxRequestTarget> onEvent)
 	{
-		Args.notNull(onEvent, "onEvent");
-
-		return new AjaxEventBehavior(eventName)
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target)
-			{
-				onEvent.accept(target);
-			}
-		};
+		return AjaxEventBehavior.onEvent(eventName, onEvent);
 	}
 
