@@ -1,18 +1,16 @@
 	@Test
-	public void onTagTest()
+	public void onAttributeTest()
 	{
 		WebMarkupContainer component = new WebMarkupContainer(MockPageWithOneComponent.COMPONENT_ID);
 		MockPageWithOneComponent page = new MockPageWithOneComponent();
 		page.add(component);
 		String value = "value";
 		String key = "key";
-		component.add(onTag(tag -> tag.put(key, value)));
-		component.add(onAttribute("class", oldValue -> "zzz"));
+		component.add(onAttribute(key, oldValue -> value));
 
 		tester.startPage(page);
 
 		TagTester tagTester = tester.getTagByWicketId(MockPageWithOneComponent.COMPONENT_ID);
 		assertThat(tagTester.getAttribute(key), is(equalTo(value)));
-		assertThat(tagTester.getAttribute("class"), is(equalTo("zzz")));
 	}
 
