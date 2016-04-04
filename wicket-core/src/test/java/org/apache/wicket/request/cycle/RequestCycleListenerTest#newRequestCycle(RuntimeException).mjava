@@ -1,4 +1,4 @@
-	private RequestCycle newRequestCycle(final boolean throwExceptionInRespond)
+	private RequestCycle newRequestCycle(final RuntimeException exception)
 	{
 		final Response originalResponse = newResponse();
 		Request request = new MockWebRequest(Url.parse("http://wicket.apache.org"));
@@ -7,9 +7,9 @@
 			@Override
 			public void respond(IRequestCycle requestCycle)
 			{
-				if (throwExceptionInRespond)
+				if (exception != null)
 				{
-					throw new RuntimeException("testing purposes only");
+					throw exception;
 				}
 				responses++;
 			}

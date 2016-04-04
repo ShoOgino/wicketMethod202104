@@ -6,7 +6,7 @@
 	{
 		// this test is a little flaky because it depends on the ordering of listeners which is not
 		// guaranteed
-		RequestCycle cycle = newRequestCycle(false);
+		RequestCycle cycle = newRequestCycle((RuntimeException)null);
 		IncrementingListener incrementingListener = new IncrementingListener()
 		{
 			@Override
@@ -21,8 +21,7 @@
 		cycle.getListeners().add(incrementingListener);
 		cycle.processRequestAndDetach();
 
-		incrementingListener.assertValues(3, 3, 0, 3);
+		incrementingListener.assertValues(3, 3, 3, 3, 0, 3);
 		assertValues(0, 1, 1);
-		assertEquals(3, incrementingListener.resolutions);
 	}
 
