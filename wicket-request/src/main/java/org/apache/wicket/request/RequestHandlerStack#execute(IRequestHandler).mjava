@@ -1,5 +1,9 @@
 	/**
-	 * @param handler
+	 * Execute the given handler.
+	 *
+	 * @param handler handler to be executed
+	 * @return handler to be executed next
+	 * @throws ReplaceHandlerException if another handler should replace the given handler for execution
 	 */
 	public IRequestHandler execute(final IRequestHandler handler)
 	{
@@ -7,23 +11,6 @@
 		try
 		{
 			respond(handler);
-		}
-		catch (RuntimeException exception)
-		{
-			ReplaceHandlerException replacer = Exceptions.findCause(exception,
-				ReplaceHandlerException.class);
-
-			if (replacer == null)
-			{
-				throw exception;
-			}
-
-			if (replacer.removeAll)
-			{
-				scheduledAfterCurrent = null;
-			}
-			
-			throw replacer;
 		}
 		finally
 		{
