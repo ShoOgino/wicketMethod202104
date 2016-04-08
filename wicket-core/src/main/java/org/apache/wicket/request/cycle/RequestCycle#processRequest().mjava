@@ -12,16 +12,18 @@
 			listeners.onBeginRequest(this);
 			onBeginRequest();
 			IRequestHandler handler = resolveRequestHandler();
-			if (handler != null)
+			if (handler == null)
+			{
+				// Did not find any suitable handler, thus not executing the request
+				log.debug(
+					"No suitable handler found for URL {}, falling back to container to process this request",
+					request.getUrl());
+			}
+			else
 			{
 				execute(handler);
 				return true;
 			}
-
-			// Did not find any suitable handler, thus not executing the request
-			log.debug(
-				"No suitable handler found for URL {}, falling back to container to process this request",
-				request.getUrl());
 		}
 		catch (Exception exception)
 		{
@@ -40,6 +42,7 @@
 		{
 			set(null);
 		}
+
 		return false;
 	}
 
