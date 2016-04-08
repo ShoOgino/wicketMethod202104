@@ -3,13 +3,13 @@
 	 */
 	public void detach()
 	{
-		if (!requestHandlers.isEmpty())
+		if (active != null)
 		{
-			// All requests handlers should be inactive at this point
-			log.warn("Some of the request handlers are still active.");
+			// no request handler should be active at this point
+			log.warn("request handler is still active.");
 
-			inactiveRequestHandlers.addAll(requestHandlers);
-			requestHandlers.clear();
+			inactiveRequestHandlers.add(active);
+			active = null;
 		}
 
 		for (IRequestHandler handler : inactiveRequestHandlers)

@@ -7,14 +7,14 @@
 	 */
 	public IRequestHandler execute(final IRequestHandler handler)
 	{
-		requestHandlers.add(handler);
+		active = handler;
 		try
 		{
 			respond(handler);
 		}
 		finally
 		{
-			requestHandlers.poll();
+			active = null;
 			inactiveRequestHandlers.add(handler);
 		}
 
