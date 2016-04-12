@@ -6,11 +6,12 @@
 	 *            spring application context
 	 * @param clazz
 	 *            bean class
+	 * @param fieldName 
 	 * @throws IllegalStateException
 	 * @return spring name of the bean
 	 */
 	private String getBeanNameOfClass(final ApplicationContext ctx, final Class<?> clazz,
-		final Class<?> generic)
+		final Class<?> generic, String fieldName)
 	{
 		// get the list of all possible matching beans
 		List<String> names = new ArrayList<>(
@@ -55,6 +56,14 @@
 				{
 					return primaries.get(0);
 				}
+			}
+			
+			//use field name to find a match
+			int nameIndex = names.indexOf(fieldName);
+			
+			if (nameIndex > -1)
+			{
+				return names.get(nameIndex);
 			}
 			
 			if (generic != null)
