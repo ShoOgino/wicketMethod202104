@@ -7,7 +7,11 @@
 	 */
 	public boolean isAjax()
 	{
-		return Strings.isTrue(getHeader(HEADER_AJAX)) ||
-			Strings.isTrue(getQueryParameters().getParameterValue(PARAM_AJAX).toString());
+		try {
+			return Strings.isTrue(getHeader(HEADER_AJAX)) ||
+				Strings.isTrue(getQueryParameters().getParameterValue(PARAM_AJAX).toString());
+		} catch (StringValueConversionException invalidValue) {
+			return false;
+		}
 	}
 
