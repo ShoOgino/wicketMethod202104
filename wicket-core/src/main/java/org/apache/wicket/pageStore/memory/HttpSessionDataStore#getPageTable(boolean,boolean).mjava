@@ -1,4 +1,4 @@
-	private PageTable getPageTable(boolean create)
+	private PageTable getPageTable(boolean create, boolean rewriteToSession)
 	{
 		PageTable pageTable = null;
 		if (Session.exists())
@@ -7,6 +7,8 @@
 			if (pageTable == null && create)
 			{
 				pageTable = new PageTable();
+				pageManagerContext.setSessionAttribute(PAGE_TABLE_KEY, pageTable);
+			} else if (rewriteToSession) {
 				pageManagerContext.setSessionAttribute(PAGE_TABLE_KEY, pageTable);
 			}
 		}
