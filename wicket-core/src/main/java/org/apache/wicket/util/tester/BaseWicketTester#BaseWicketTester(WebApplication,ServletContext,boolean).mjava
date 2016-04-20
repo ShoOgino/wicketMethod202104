@@ -77,14 +77,7 @@
 		}
 
 		// create a new session when the old one is invalidated
-		application.getSessionStore().registerUnboundListener(new UnboundListener()
-		{
-			@Override
-			public void sessionUnbound(String sessionId)
-			{
-				newSession();
-			}
-		});
+		application.getSessionStore().registerUnboundListener(sessionId -> newSession());
 
 		// prepare session
 		setupNextRequestCycle();
