@@ -23,13 +23,13 @@
 		}
 		catch (Exception e)
 		{
-			if (retryCount <= 0)
+			if (retryCount > 0)
 			{
-				log.error("Exception retry count exceeded", e);
+				executeExceptionRequestHandler(exception, retryCount - 1);
 			}
 			else
 			{
-				executeExceptionRequestHandler(exception, retryCount - 1);
+				log.error("Exception retry count exceeded", e);
 			}
 		}
 	}
