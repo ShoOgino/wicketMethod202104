@@ -1,0 +1,22 @@
+	/**
+	 * Returns a IModel applying the {@link WicketFunction} contained
+	 * inside the given model to the object contained inside this model.
+	 *
+	 * @param <R> the type of the new contained object
+	 * @param mapper an {@link IModel} containing a function to be applied
+	 * to the contained model object.
+	 * @return a new IModel
+	 */
+	default <R> IModel<R> apply(IModel<WicketFunction<T, R>> mapper) {
+		return (IModel<R>) () -> {
+			T object = IModel.this.getObject();
+			WicketFunction<T, R> f = mapper.getObject();
+			if (object == null || f == null) {
+				return null;
+			}
+			else {
+				return f.apply(object);
+			}
+		};
+	}
+

@@ -1,0 +1,19 @@
+	/**
+	 * Returns a IModel, returning either the contained object
+	 * or invoking the given supplier to get a default value.
+	 *
+	 * @param other a supplier to be used as a default
+	 * @return a new IModel
+	 */
+	default IModel<T> orElseGet(WicketSupplier<T> other) {
+		return (IModel<T>) () -> {
+			T object = IModel.this.getObject();
+			if (object == null) {
+				return other.get();
+			}
+			else {
+				return object;
+			}
+		};
+	}
+
