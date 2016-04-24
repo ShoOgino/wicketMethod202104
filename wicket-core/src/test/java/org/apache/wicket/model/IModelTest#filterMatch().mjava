@@ -1,0 +1,13 @@
+	@Test
+	public void filterMatch()
+	{
+		Person person = new Person();
+		String name = "john";
+		person.setName(name);
+
+		IModel<Person> johnModel = IModel.of(person)
+				.filter((p) -> p.getName().equals(name));
+
+		assertThat(johnModel.getObject(), is(person));
+	}
+
