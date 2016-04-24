@@ -1,0 +1,31 @@
+	/**
+	 * Returns a IModel applying the given combining function to the contained object of this and
+	 * the given other model, if they are not null.
+	 *
+	 * @param <R>
+	 *            the resulting type
+	 * @param <U>
+	 *            the other models type
+	 * @param combine
+	 *            a function combining this and the others object to a result.
+	 * @param other
+	 *            another model to be combined with this one
+	 * @return a new IModel
+	 */
+	default <R, U> IModel<R> mapWith(WicketBiFunction<? super T, ? super U, R> combine,
+		IModel<U> other)
+	{
+		return (IModel<R>)() -> {
+			T t = IModel.this.getObject();
+			U u = other.getObject();
+			if (t != null && u != null)
+			{
+				return combine.apply(t, u);
+			}
+			else
+			{
+				return null;
+			}
+		};
+	}
+
