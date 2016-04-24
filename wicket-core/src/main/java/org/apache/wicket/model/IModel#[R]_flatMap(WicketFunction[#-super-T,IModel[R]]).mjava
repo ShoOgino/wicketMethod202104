@@ -1,53 +1,54 @@
 	/**
-	 * Returns a IModel applying the given mapper to the contained
-	 * object, if it is not NULL.
+	 * Returns a IModel applying the given mapper to the contained object, if it is not NULL.
 	 *
-	 * @param <R> the new type of the contained object
-	 * @param mapper a mapper, to be applied to the contained object
+	 * @param <R>
+	 *            the new type of the contained object
+	 * @param mapper
+	 *            a mapper, to be applied to the contained object
 	 * @return a new IModel
 	 */
-	default <R> IModel<R> flatMap(WicketFunction<? super T, IModel<R>> mapper) 
-    {
-        return new IModel<R>() 
-        {
+	default <R> IModel<R> flatMap(WicketFunction<? super T, IModel<R>> mapper)
+	{
+		return new IModel<R>()
+		{
 
-            @Override
-            public R getObject() 
-            {
-                T object = IModel.this.getObject();
-                if (object != null)
-                {
-                    return mapper.apply(object).getObject();
-                }
-                else
-                {
-                    return null;
-                }
-            }
+			@Override
+			public R getObject()
+			{
+				T object = IModel.this.getObject();
+				if (object != null)
+				{
+					return mapper.apply(object).getObject();
+				}
+				else
+				{
+					return null;
+				}
+			}
 
-            @Override
-            public void setObject(R object) 
-            {
-                T modelObject = IModel.this.getObject();
-                if (modelObject != null)
-                {
-                    mapper.apply(modelObject).setObject(object);
-                }
-            }
+			@Override
+			public void setObject(R object)
+			{
+				T modelObject = IModel.this.getObject();
+				if (modelObject != null)
+				{
+					mapper.apply(modelObject).setObject(object);
+				}
+			}
 
-            @Override
-            public void detach() 
-            {
-                T object = IModel.this.getObject();
-                if (object != null)
-                {
-                    IModel<R> model = mapper.apply(object);
-                    if (model != null)
-                    {
-                        model.detach();
-                    }
-                }
-            }
-        };
+			@Override
+			public void detach()
+			{
+				T object = IModel.this.getObject();
+				if (object != null)
+				{
+					IModel<R> model = mapper.apply(object);
+					if (model != null)
+					{
+						model.detach();
+					}
+				}
+			}
+		};
 	}
 

@@ -1,22 +1,21 @@
 	/**
-	 * Returns a IModel checking whether the predicate holds for the
-	 * contained object, if it is not null. If the predicate doesn't evaluate
-	 * to true, the contained object will be null.
+	 * Returns a IModel checking whether the predicate holds for the contained object, if it is not
+	 * null. If the predicate doesn't evaluate to true, the contained object will be null.
 	 *
-	 * @param predicate a predicate to be used for testing the contained object
+	 * @param predicate
+	 *            a predicate to be used for testing the contained object
 	 * @return a new IModel
 	 */
-	default IModel<T> filter(WicketFunction<? super T, Boolean> predicate) 
-    {
-		return (IModel<T>) () -> 
-        {
+	default IModel<T> filter(WicketFunction<? super T, Boolean> predicate)
+	{
+		return (IModel<T>)() -> {
 			T object = IModel.this.getObject();
-			if (object != null && predicate.apply(object)) 
-            {
+			if (object != null && predicate.apply(object))
+			{
 				return object;
 			}
-			else 
-            {
+			else
+			{
 				return null;
 			}
 		};
