@@ -6,25 +6,23 @@
 	 *            the resulting type
 	 * @param <U>
 	 *            the other models type
-	 * @param combine
+	 * @param combiner
 	 *            a function combining this and the others object to a result.
 	 * @param other
 	 *            another model to be combined with this one
 	 * @return a new IModel
 	 */
-	default <R, U> IModel<R> mapWith(WicketBiFunction<? super T, ? super U, R> combine,
+	default <R, U> IModel<R> mapWith(WicketBiFunction<? super T, ? super U, R> combiner,
 		IModel<U> other)
 	{
+		Args.notNull(combiner, "combiner");
+		Args.notNull(other, "other");
 		return (IModel<R>)() -> {
 			T t = IModel.this.getObject();
-			U u = null;
-			if (other != null)
-			{
-				u = other.getObject();
-			}
+			U u = other.getObject();
 			if (t != null && u != null)
 			{
-				return combine.apply(t, u);
+				return combiner.apply(t, u);
 			}
 			else
 			{

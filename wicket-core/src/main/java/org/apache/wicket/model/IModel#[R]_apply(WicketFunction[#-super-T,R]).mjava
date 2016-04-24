@@ -11,9 +11,10 @@
 	 */
 	default <R> IModel<R> apply(WicketFunction<? super T, R> mapper)
 	{
+		Args.notNull(mapper, "mapper");
 		return (IModel<R>)() -> {
 			T object = IModel.this.getObject();
-			if (object == null || mapper == null)
+			if (object == null)
 			{
 				return null;
 			}

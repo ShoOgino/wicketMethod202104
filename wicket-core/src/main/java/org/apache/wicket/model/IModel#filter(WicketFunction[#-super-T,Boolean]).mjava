@@ -8,6 +8,7 @@
 	 */
 	default IModel<T> filter(WicketFunction<? super T, Boolean> predicate)
 	{
+		Args.notNull(predicate, "predicate");
 		return (IModel<T>)() -> {
 			T object = IModel.this.getObject();
 			if (object != null && predicate.apply(object))
