@@ -9,14 +9,18 @@
 	 * @param other another model to be combined with this one
 	 * @return a new IModel
 	 */
-	default <R, U> IModel<R> mapWith(WicketBiFunction<? super T, ? super U, R> combine, IModel<U> other) {
-		return (IModel<R>) () -> {
+	default <R, U> IModel<R> mapWith(WicketBiFunction<? super T, ? super U, R> combine, IModel<U> other) 
+    {
+		return (IModel<R>) () -> 
+        {
 			T t = IModel.this.getObject();
 			U u = other.getObject();
-			if (t != null && u != null) {
+			if (t != null && u != null) 
+            {
 				return combine.apply(t, u);
 			}
-			else {
+			else 
+            {
 				return null;
 			}
 		};

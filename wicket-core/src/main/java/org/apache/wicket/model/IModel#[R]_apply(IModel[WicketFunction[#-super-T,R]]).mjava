@@ -7,14 +7,18 @@
 	 * to the contained model object.
 	 * @return a new IModel
 	 */
-	default <R> IModel<R> apply(IModel<WicketFunction<? super T, R>> mapper) {
-		return (IModel<R>) () -> {
+	default <R> IModel<R> apply(IModel<WicketFunction<? super T, R>> mapper) 
+    {
+		return (IModel<R>) () -> 
+        {
 			T object = IModel.this.getObject();
 			WicketFunction<? super T, R> f = mapper.getObject();
-			if (object == null || f == null) {
+			if (object == null || f == null) 
+            {
 				return null;
 			}
-			else {
+			else 
+            {
 				return f.apply(object);
 			}
 		};
