@@ -1,0 +1,11 @@
+	@Test
+	public void withMap()
+	{
+		IModel<String> janeModel = IModel.of("Jane");
+		WicketBiFunction<Person, String, String> function =
+				(WicketBiFunction<Person, String, String>) (person1, nth) ->
+						person1.getName() + " is in relationship with " + nth;
+		IModel<String> relationShipModel = IModel.of(person).mapWith(function, janeModel);
+		assertThat(relationShipModel.getObject(), is(equalTo("John is in relationship with Jane")));
+	}
+
