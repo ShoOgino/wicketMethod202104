@@ -1,0 +1,10 @@
+	@Test
+	public void orElseGet()
+	{
+		person.setName(null);
+		String defaultName = "Default name";
+		IModel<String> defaultNameModel = IModel.of(person).map(Person::getName).orElseGet(() -> defaultName);
+
+		assertThat(defaultNameModel.getObject(), is(equalTo(defaultName)));
+	}
+
