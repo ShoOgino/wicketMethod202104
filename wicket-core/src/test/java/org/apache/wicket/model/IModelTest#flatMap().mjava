@@ -1,0 +1,18 @@
+	@Ignore
+	@Test
+	public void flatMap()
+	{
+		IModel<String> heirModel = IModel.of(person).flatMap(person1 -> new Model<String>() {
+			@Override
+			public String getObject()
+			{
+				return person1.getName() + " is my parent";
+			}
+		});
+		assertThat(heirModel.getObject(), is(equalTo("John is my parent")));
+
+		String newValue = "New Value";
+		heirModel.setObject(newValue);
+		assertThat(heirModel.getObject(), is(equalTo(newValue)));
+	}
+
