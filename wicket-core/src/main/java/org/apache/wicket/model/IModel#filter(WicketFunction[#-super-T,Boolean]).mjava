@@ -6,7 +6,7 @@
 	 * @param predicate a predicate to be used for testing the contained object
 	 * @return a new IModel
 	 */
-	default IModel<T> filter(WicketFunction<T, Boolean> predicate) {
+	default IModel<T> filter(WicketFunction<? super T, Boolean> predicate) {
 		return (IModel<T>) () -> {
 			T object = IModel.this.getObject();
 			if (object != null && predicate.apply(object)) {
