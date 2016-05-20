@@ -4,10 +4,16 @@
 	 * @param key
 	 * @param value
 	 */
-	private void appendAssignment(final AppendingStringBuffer buffer, final CharSequence key,
-		final CharSequence value)
+	private void appendAssignment(final AppendingStringBuffer buffer, final CharSequence key, CharSequence value)
 	{
 		buffer.append(key).append("=\"");
+		
+		if (value != null)
+		{
+			value = Strings.replaceAll(value, "\"", "\\\"");
+			value = Strings.replaceAll(value, "\n", "\\n");
+		}
+		
 		buffer.append(value);
 		buffer.append("\";\n");
 	}
