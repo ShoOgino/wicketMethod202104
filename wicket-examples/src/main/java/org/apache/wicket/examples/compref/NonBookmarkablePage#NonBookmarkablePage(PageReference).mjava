@@ -1,0 +1,20 @@
+	/**
+	 * Constructor.
+	 * 
+	 * @param referer
+	 *            the refering page
+	 */
+	public NonBookmarkablePage(final PageReference referer)
+	{
+		if (referer == null)
+		{
+			throw new IllegalArgumentException("Argument referer must not be null");
+		}
+
+		// Add a link to navigate back to the refering page. We now use the
+		// PageLink
+		// constructor with the Page instance argument, because we already have
+		// a page instance at our disposal
+		add(Link.onClick("navigateBackLink", () -> setResponsePage(referer.getPage())));
+	}
+
