@@ -13,9 +13,6 @@
 		{
 			private static final long serialVersionUID = 1L;
 
-			/**
-			 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-			 */
 			@Override
 			protected void onSubmit()
 			{
@@ -37,22 +34,13 @@
 		add(form);
 
 		// create a textfield to demo non-file content
-		form.add(text = new TextField<>("text", new Model<String>()));
+		form.add(text = new TextField<>("text", Model.of()));
 		text.add(StringValidator.minimumLength(2));
 
 		// create the file upload field
 		form.add(file = new FileUploadField("file"));
 
-		form.add(new Label("max", new IModel<String>()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getObject()
-			{
-				return form.getMaxSize().toString();
-			}
-		}));
+		form.add(new Label("max", form::getMaxSize));
 
 		form.add(new UploadProgressBar("progress", form, file));
 
