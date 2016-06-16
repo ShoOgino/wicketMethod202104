@@ -4,11 +4,10 @@
 	 * @param id
 	 *            the id of ajax submit link
 	 * @param onSubmit
-	 *            the {@link WicketBiConsumer} which accepts the {@link AjaxRequestTarget} and the
-	 *            {@link Form}
+	 *            the {@link WicketBiConsumer} which accepts the {@link AjaxSubmitLink\ and the {@link AjaxRequestTarget}
 	 * @return the {@link AjaxSubmitLink}
 	 */
-	public static AjaxSubmitLink onSubmit(String id, WicketBiConsumer<AjaxRequestTarget, Form<?>> onSubmit)
+	public static AjaxSubmitLink onSubmit(String id, WicketBiConsumer<AjaxSubmitLink, AjaxRequestTarget> onSubmit)
 	{
 		Args.notNull(onSubmit, "onSubmit");
 
@@ -19,7 +18,7 @@
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
-				onSubmit.accept(target, form);
+				onSubmit.accept(this, target);
 			}
 		};
 	}
