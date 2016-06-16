@@ -7,7 +7,7 @@
 	 *            the {@link WicketConsumer} which accepts the {@link AjaxRequestTarget}
 	 * @return the {@link AjaxCheckBox}
 	 */
-	public static AjaxCheckBox onUpdate(String id, WicketConsumer<AjaxRequestTarget> onUpdate)
+	public static AjaxCheckBox onUpdate(String id, WicketBiConsumer<AjaxCheckBox, AjaxRequestTarget> onUpdate)
 	{
 		Args.notNull(onUpdate, "onUpdate");
 
@@ -18,7 +18,7 @@
 			@Override
 			public void onUpdate(AjaxRequestTarget target)
 			{
-				onUpdate.accept(target);
+				onUpdate.accept(this, target);
 			}
 		};
 	}
