@@ -7,14 +7,7 @@
 		add(new Label("guessesRemaining", new PropertyModel<>(getGame(), "guessesRemaining")));
 
 		// Components for displaying the current word
-		add(new Label("word", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				return getGame().getWord().asString(true);
-			}
-		}));
+		add(new Label("word", () -> getGame().getWord().asString(true)));
 
 		// Show the game's letters
 		add(new ListView<Letter>("letters", getGame().getLetters())
@@ -69,8 +62,6 @@
 
 				// append id attribute to link for unit tests
 				link.add(AttributeModifier.replace("id", "letter_" + letter.asString()));
-
-
 			}
 		});
 	}

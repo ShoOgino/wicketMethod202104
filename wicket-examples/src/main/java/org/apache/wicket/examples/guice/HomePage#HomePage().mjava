@@ -3,17 +3,7 @@
 	 */
 	public HomePage()
 	{
-		add(new Link<Void>("link")
-		{
-			/**
-			 * @see org.apache.wicket.markup.html.link.Link#onClick()
-			 */
-			@Override
-			public void onClick()
-			{
-				labelValue = service.getHelloWorldText();
-			}
-		});
-		add(new Label("message", (IModel<String>) () -> labelValue));
+		add(Link.onClick("link", (link) -> labelValue = service.getHelloWorldText()));
+		add(new Label("message", () -> labelValue));
 	}
 

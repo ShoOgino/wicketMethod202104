@@ -13,15 +13,10 @@
 			add(new LocaleDropDownChoice("localeSelect"));
 
 			// Link to return to default locale
-			add(new Link<Void>("defaultLocaleLink")
-			{
-				@Override
-				public void onClick()
-				{
-					WebRequest request = (WebRequest)getRequest();
-					setLocale(request.getLocale());
-				}
-			});
+			add(Link.onClick("defaultLocaleLink", (link) -> {
+				WebRequest request = (WebRequest)getRequest();
+				setLocale(request.getLocale());
+			}));
 
 			add(new TextField<String>("stringProperty").setRequired(true).setLabel(
 				new Model<>("String")));
@@ -100,7 +95,6 @@
 			// TextField using a mask converter
 			add(new TextField<UsPhoneNumber>("phoneNumberUS", UsPhoneNumber.class)
 			{
-
 				@Override
 				public <C> IConverter<C> getConverter(final Class<C> type)
 				{
@@ -121,14 +115,9 @@
 
 			add(new Button("saveButton"));
 
-			add(new Button("resetButton")
-			{
-				@Override
-				public void onSubmit()
-				{
-					// just set a new instance of the page
-					setResponsePage(FormInput.class);
-				}
-			}.setDefaultFormProcessing(false));
+			add(Button.onSubmit("resetButton", (btn) -> {
+				// just set a new instance of the page
+				setResponsePage(FormInput.class);
+			}).setDefaultFormProcessing(false));
 		}
 

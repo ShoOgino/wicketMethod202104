@@ -7,15 +7,10 @@
 			new CssResourceReference(HomePage.class, "footer.css"),
 			new CssResourceReference(HomePage.class, "header.css"));
 
-		setHeaderResponseDecorator(new IHeaderResponseDecorator()
-		{
-			@Override
-			public IHeaderResponse decorate(IHeaderResponse response)
-			{
-				// use this header resource decorator to load all JavaScript resources in the page
-				// footer (after </body>)
-				return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
-			}
+		setHeaderResponseDecorator(response -> {
+			// use this header resource decorator to load all JavaScript resources in the page
+			// footer (after </body>)
+			return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
 		});
 	}
 
