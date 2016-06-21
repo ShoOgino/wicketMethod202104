@@ -1,6 +1,7 @@
 	/**
 	 * Returns an id using the request-relative counter associated with the 
-	 * underlying {@link org.apache.wicket.markup.MarkupResourceStream}. 
+	 * underlying {@link org.apache.wicket.markup.MarkupResourceStream}'s owner container 
+	 * (see {@link org.apache.wicket.markup.MarkupResourceStream#getContainerInfo()}). 
 	 * This can be useful for autocomponent tags that need to get a tag id.
 	 * 
 	 * @return
@@ -10,7 +11,8 @@
 	{
 		RequestCycle requestCycle = RequestCycle.get();
 		Map<String, AtomicInteger> markupUniqueCounters = requestCycle.getMetaData(REQUEST_COUNTER_KEY);
-		String cacheKey = getMarkupResourceStream().getCacheKey();
+		ContainerInfo containerInfo = getMarkupResourceStream().getContainerInfo();
+		String cacheKey = containerInfo != null ? containerInfo.getContainerClass().getCanonicalName() : null;
 		
 		if (markupUniqueCounters == null)
 		{
