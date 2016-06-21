@@ -2,27 +2,28 @@
 	 * Finds a IRequestHandler which is either the currently executing handler or is scheduled to be
 	 * executed.
 	 * 
-	 * @return the found IRequestHandler or {@code null}
+	 * @return the found IRequestHandler or {@link Optional#empty()}
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends IRequestHandler> T find(final Class<T> type)
+	public <T extends IRequestHandler> Optional<T> find(final Class<T> type)
 	{
 		if (type == null)
 		{
-			return null;
+			return Optional.empty();
 		}
 
 		IRequestHandler result = getActiveRequestHandler();
-
-		if (result == null || type.isAssignableFrom(result.getClass()) == false)
+		if (type.isInstance(result))
 		{
-			result = getRequestHandlerScheduledAfterCurrent();
-			if (result == null || type.isAssignableFrom(result.getClass()) == false)
-			{
-				result = null;
-			}
+			return (Optional<T>)Optional.of(result);
+		}
+		
+		result = getRequestHandlerScheduledAfterCurrent();
+		if (type.isInstance(result))
+		{
+			return (Optional<T>)Optional.of(result);
 		}
 
-		return (T)result;
+		return Optional.empty();
 	}
 

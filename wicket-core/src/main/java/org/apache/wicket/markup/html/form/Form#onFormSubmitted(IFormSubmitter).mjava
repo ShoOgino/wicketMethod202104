@@ -81,9 +81,7 @@
 		}
 
 		// update auto labels if we are inside an ajax request
-		final AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
-		if (target != null)
-		{
+		getRequestCycle().find(AjaxRequestTarget.class).ifPresent(target -> {
 			visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>()
 			{
 				@Override
@@ -92,6 +90,6 @@
 					component.updateAutoLabels(target);
 				}
 			});
-		}
+		});
 	}
 
