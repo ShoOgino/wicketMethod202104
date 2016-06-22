@@ -1,9 +1,11 @@
 	@Override
 	public Component findComponentToDequeue(ComponentTag tag)
 	{
-		if ((tag instanceof WicketTag) && ((WicketTag)tag).isBodyTag())
+		if (canDequeueBody(tag))
 		{
-			return getBodyContainer();
+			//synch the tag id with the one of the body component
+			tag.setId(body.getId());
+			return body;
 		}
 		return super.findComponentToDequeue(tag);
 	}
