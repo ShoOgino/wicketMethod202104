@@ -1,4 +1,4 @@
-	public static <T> IndicatingAjaxLink<T> indicatingAjaxLink(String id, WicketConsumer<AjaxRequestTarget> onClick)
+	public static <T> IndicatingAjaxLink<T> onClick(String id, WicketBiConsumer<AjaxLink<T>, AjaxRequestTarget> onClick)
 	{
 		Args.notNull(onClick, "onClick");
 
@@ -7,7 +7,7 @@
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
-				onClick.accept(target);
+				onClick.accept(this, target);
 			}
 		};
 	}
