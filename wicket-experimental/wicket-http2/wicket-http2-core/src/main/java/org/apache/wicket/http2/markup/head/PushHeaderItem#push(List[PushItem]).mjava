@@ -1,0 +1,58 @@
+	/**
+	 * Creates a URL and pushes the resource to the client - this is only supported if http2 is
+	 * enabled
+	 * 
+	 * @param pushItems
+	 *            a list of items to be pushed to the client
+	 * @return the current push header item
+	 */
+	@SuppressWarnings("unchecked")
+	public PushHeaderItem push(List<PushItem> pushItems)
+	{
+		RequestCycle requestCycle = RequestCycle.get();
+		if (isHttp2(getContainerRequest(requestCycle.getRequest())))
+			for (PushItem pushItem : pushItems)
+			{
+				Object object = pushItem.getObject();
+				PageParameters parameters = pushItem.getPageParameters();
+
+				if (object == null)
+				{
+					throw new WicketRuntimeException(
+					    "Please provide an object to the items to be pushed, so that the url can be created for the given resource.");
+				}
+
+				CharSequence url = null;
+				if (object instanceof ResourceReference)
+				{
+					url = requestCycle.urlFor((ResourceReference)object, parameters);
+				}
+				else if (object instanceof Class)
+				{
+					url = requestCycle.urlFor((Class<? extends Page>)object, parameters);
+				}
+				else if (object instanceof IRequestHandler)
+				{
+					url = requestCycle.urlFor((IRequestHandler)object);
+				}
+				else
+				{
+					Url encoded = new PageParametersEncoder().encodePageParameters(parameters);
+					String queryString = encoded.getQueryString();
+					url = object.toString() + (queryString != null ? "?" + queryString : "");
+				}
+
+				if (url.toString().equals("."))
+				{
+					url = "/";
+				}
+				else if (url.toString().startsWith("."))
+				{
+					url = url.toString().substring(1);
+				}
+
+				urls.add(url.toString());
+			}
+		return this;
+	}
+
