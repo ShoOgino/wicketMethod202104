@@ -8,6 +8,7 @@
 		// Check if the protocol is http/2 or http/2.0 to only push the resources in this case
 		if (isHttp2(request))
 		{
+			// Receives the vendor specific push builder
 			Http2Settings http2Settings = Http2Settings.Holder.get(Application.get());
 			PushBuilder pushBuilder = http2Settings.getPushBuilder();
 			pushBuilder.push(request, urls.toArray(new String[urls.size()]));
