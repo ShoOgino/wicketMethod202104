@@ -1,0 +1,33 @@
+		/**
+		 * @param clz
+		 * @param expression
+		 * @return introspected field
+		 */
+		private Field findField(final Class<?> clz, final String expression)
+		{
+			Field field = null;
+			try
+			{
+				field = clz.getField(expression);
+			}
+			catch (Exception e)
+			{
+				Class<?> tmp = clz;
+				while (tmp != null && tmp != Object.class)
+				{
+					Field[] fields = tmp.getDeclaredFields();
+					for (Field aField : fields)
+					{
+						if (aField.getName().equals(expression))
+						{
+							aField.setAccessible(true);
+							return aField;
+						}
+					}
+					tmp = tmp.getSuperclass();
+				}
+				log.debug("Cannot find field " + clz + "." + expression);
+			}
+			return field;
+		}
+

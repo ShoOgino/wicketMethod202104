@@ -1,16 +1,7 @@
-	private static IGetAndSet getGetAndSetter(String exp, final Class<?> clz)
-	{
-		IClassCache classesToGetAndSetters = getClassesToGetAndSetters();
-		Map<String, IGetAndSet> getAndSetters = classesToGetAndSetters.get(clz);
-		if (getAndSetters == null)
-		{
-			getAndSetters = new ConcurrentHashMap<String, IGetAndSet>(8);
-			classesToGetAndSetters.put(clz, getAndSetters);
-		}
-
-		IGetAndSet getAndSetter = getAndSetters.get(exp);
-		if (getAndSetter == null)
-		{
+		@Override
+		public IGetAndSet getAndSet(Class<?> clz, String exp) {
+			IGetAndSet getAndSet;
+			
 			Method method = null;
 			Field field;
 			if (exp.startsWith("["))
@@ -36,7 +27,7 @@
 					try
 					{
 						int index = Integer.parseInt(exp);
-						getAndSetter = new ListGetSet(index);
+						getAndSet = new ListGetAndSet(index);
 					}
 					catch (NumberFormatException ex)
 					{
@@ -45,7 +36,7 @@
 						method = findMethod(clz, exp);
 						if (method != null)
 						{
-							getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(
+							getAndSet = new MethodGetAndSet(method, MethodGetAndSet.findSetter(
 								method, clz), null);
 						}
 						else
@@ -53,7 +44,7 @@
 							field = findField(clz, exp);
 							if (field != null)
 							{
-								getAndSetter = new FieldGetAndSetter(field);
+								getAndSet = new FieldGetAndSet(field);
 							}
 							else
 							{
@@ -68,20 +59,20 @@
 				}
 				else if (Map.class.isAssignableFrom(clz))
 				{
-					getAndSetter = new MapGetSet(exp);
+					getAndSet = new MapGetAndSet(exp);
 				}
 				else if (clz.isArray())
 				{
 					try
 					{
 						int index = Integer.parseInt(exp);
-						getAndSetter = new ArrayGetSet(clz.getComponentType(), index);
+						getAndSet = new ArrayGetAndSet(clz.getComponentType(), index);
 					}
 					catch (NumberFormatException ex)
 					{
 						if (exp.equals("length") || exp.equals("size"))
 						{
-							getAndSetter = new ArrayLengthGetSet();
+							getAndSet = new ArrayLengthGetAndSet();
 						}
 						else
 						{
@@ -111,7 +102,7 @@
 									String name = Character.toUpperCase(propertyName.charAt(0)) +
 										propertyName.substring(1);
 									method = clz.getMethod(GET + name, new Class[] { int.class });
-									getAndSetter = new ArrayPropertyGetSet(method, parsedIndex);
+									getAndSet = new IndexedPropertyGetAndSet(method, parsedIndex);
 								}
 								catch (Exception e)
 								{
@@ -131,24 +122,23 @@
 						}
 						else
 						{
-							getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(
+							getAndSet = new MethodGetAndSet(method, MethodGetAndSet.findSetter(
 								method, clz), null);
 						}
 					}
 					else
 					{
-						getAndSetter = new FieldGetAndSetter(field);
+						getAndSet = new FieldGetAndSet(field);
 					}
 				}
 			}
 			else
 			{
 				field = findField(clz, exp);
-				getAndSetter = new MethodGetAndSet(method, MethodGetAndSet.findSetter(method, clz),
+				getAndSet = new MethodGetAndSet(method, MethodGetAndSet.findSetter(method, clz),
 					field);
 			}
-			getAndSetters.put(exp, getAndSetter);
+			
+			return getAndSet;
 		}
-		return getAndSetter;
-	}
 

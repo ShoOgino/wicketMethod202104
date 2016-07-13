@@ -6,10 +6,9 @@
 	 * @param object
 	 * @param tryToCreateNull
 	 * @param clz
-	 * @return {@link ObjectAndGetSetter}
+	 * @return {@link ObjectWithGetAndSet}
 	 */
-	private static ObjectAndGetSetter getObjectAndGetSetter(final String expression,
-		final Object object, final int tryToCreateNull, Class<?> clz)
+	private static ObjectWithGetAndSet getObjectWithGetAndSet(final String expression, final Object object, final int tryToCreateNull, Class<?> clz)
 	{
 		String expressionBracketsSeperated = Strings.replaceAll(expression, "[", ".[").toString();
 		int index = getNextDotIndex(expressionBracketsSeperated, 0);
@@ -32,52 +31,50 @@
 				break;
 			}
 
-			IGetAndSet getAndSetter = null;
+			IGetAndSet getAndSet = null;
 			try
 			{
-				getAndSetter = getGetAndSetter(exp, clz);
+				getAndSet = getGetAndSet(exp, clz);
 			}
 			catch (WicketRuntimeException ex)
 			{
-				// expression by it self can't be found. try to find a
-				// setPropertyByIndex(int,value) method
-				index = getNextDotIndex(expressionBracketsSeperated, index + 1);
-				if (index != -1)
-				{
-					String indexExpression = expressionBracketsSeperated.substring(lastIndex, index);
-					getAndSetter = getGetAndSetter(indexExpression, clz);
-				}
-				else
+				// expression by itself can't be found. try combined with the following
+				// expression (e.g. for a indexed property);
+				int temp = getNextDotIndex(expressionBracketsSeperated, index + 1);
+				if (temp == -1)
 				{
 					exp = expressionBracketsSeperated.substring(lastIndex);
 					break;
+				} else {
+					index = temp;
+					continue;
 				}
 			}
-			Object newValue = null;
+			Object nextValue = null;
 			if (value != null)
 			{
-				newValue = getAndSetter.getValue(value);
+				nextValue = getAndSet.getValue(value);
 			}
-			if (newValue == null)
+			if (nextValue == null)
 			{
 				if (tryToCreateNull == CREATE_NEW_VALUE)
 				{
-					newValue = getAndSetter.newValue(value);
-					if (newValue == null)
+					nextValue = getAndSet.newValue(value);
+					if (nextValue == null)
 					{
 						return null;
 					}
 				}
 				else if (tryToCreateNull == RESOLVE_CLASS)
 				{
-					clz = getAndSetter.getTargetClass();
+					clz = getAndSet.getTargetClass();
 				}
 				else
 				{
 					return null;
 				}
 			}
-			value = newValue;
+			value = nextValue;
 			if (value != null)
 			{
 				// value can be null if we are in the RESOLVE_CLASS
@@ -92,7 +89,7 @@
 				break;
 			}
 		}
-		IGetAndSet getAndSetter = getGetAndSetter(exp, clz);
-		return new ObjectAndGetSetter(getAndSetter, value);
+		IGetAndSet getAndSet = getGetAndSet(exp, clz);
+		return new ObjectWithGetAndSet(getAndSet, value);
 	}
 
