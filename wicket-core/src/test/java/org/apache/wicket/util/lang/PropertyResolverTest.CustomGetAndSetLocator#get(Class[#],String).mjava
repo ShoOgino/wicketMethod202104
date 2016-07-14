@@ -1,0 +1,11 @@
+		@Override
+		public IGetAndSet get(Class<?> clz, String exp) {
+			// first try default properties
+			IGetAndSet getAndSet = locator.get(clz, exp);
+			if (getAndSet == null && Document.class.isAssignableFrom(clz)) {
+				// fall back to document properties
+				getAndSet = new DocumentPropertyGetAndSet(exp);
+			}
+			return getAndSet;
+		}
+

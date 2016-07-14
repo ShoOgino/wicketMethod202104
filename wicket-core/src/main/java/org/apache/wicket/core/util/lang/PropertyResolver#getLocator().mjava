@@ -1,10 +1,10 @@
 	/**
-	 * Get the current {@link IGetAndSetLocator}.
+	 * Get the current {@link IPropertyLocator}.
 	 * 
 	 * @return locator for the current {@link Application} or a general one if no current application is present
 	 * @see Application#get()
 	 */
-	public static IGetAndSetLocator getLocator()
+	public static IPropertyLocator getLocator()
 	{
 		Object key;
 		if (Application.exists())
@@ -15,10 +15,10 @@
 		{
 			key = PropertyResolver.class;
 		}
-		IGetAndSetLocator result = applicationToLocators.get(key);
+		IPropertyLocator result = applicationToLocators.get(key);
 		if (result == null)
 		{
-			IGetAndSetLocator tmpResult = applicationToLocators.putIfAbsent(key, result = new CachingGetAndSetLocator(new DefaultGetAndSetLocator()));
+			IPropertyLocator tmpResult = applicationToLocators.putIfAbsent(key, result = new CachingGetAndSetLocator(new DefaultGetAndSetLocator()));
 			if (tmpResult != null)
 			{
 				result = tmpResult;

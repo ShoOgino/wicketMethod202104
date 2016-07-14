@@ -1,8 +1,8 @@
 	/**
-	 * Sets the {@link IGetAndSetLocator} for the given application.
+	 * Sets the {@link IPropertyLocator} for the given application.
 	 *
 	 * If the Application is null then it will be the default if no application is found. So if you
-	 * want to be sure that your {@link IGetAndSetLocator} is handled in all situations then call this
+	 * want to be sure that your {@link IPropertyLocator} is handled in all situations then call this
 	 * method twice with your implementations. One time for the application and the second time with
 	 * null.
 	 *
@@ -13,12 +13,12 @@
 	@Deprecated
 	public static void setClassCache(final Application application, final IClassCache classCache)
 	{
-		setLocator(application, new IGetAndSetLocator() {
+		setLocator(application, new IPropertyLocator() {
 			
 			private DefaultGetAndSetLocator locator = new DefaultGetAndSetLocator();
 			
 			@Override
-			public IGetAndSet getAndSet(Class<?> clz, String name) {
+			public IGetAndSet get(Class<?> clz, String name) {
 				Map<String, IGetAndSet> map = classCache.get(clz);
 				if (map == null) {
 					map = new ConcurrentHashMap<String, IGetAndSet>(8);
@@ -27,7 +27,7 @@
 				
 				IGetAndSet getAndSetter = map.get(name);
 				if (getAndSetter == null) {
-					getAndSetter = locator.getAndSet(clz, name);
+					getAndSetter = locator.get(clz, name);
 					map.put(name, getAndSetter);
 				}
 				
