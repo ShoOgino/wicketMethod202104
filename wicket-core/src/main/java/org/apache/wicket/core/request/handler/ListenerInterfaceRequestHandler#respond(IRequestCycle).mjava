@@ -1,6 +1,3 @@
-	/**
-	 * @see org.apache.wicket.request.IRequestHandler#respond(org.apache.wicket.request.IRequestCycle)
-	 */
 	@Override
 	public void respond(final IRequestCycle requestCycle)
 	{
@@ -39,9 +36,7 @@
 			? RedirectPolicy.NEVER_REDIRECT
 			: RedirectPolicy.AUTO_REDIRECT;
 
-		final boolean canCallListenerInterfaceAfterExpiry = component != null
-				? component.canCallListenerInterfaceAfterExpiry()
-				: false;
+		final boolean canCallListenerInterfaceAfterExpiry = component != null && component.canCallListenerInterfaceAfterExpiry();
 
 		if (!canCallListenerInterfaceAfterExpiry && freshPage && (isStateless == false || component == null))
 		{
