@@ -15,90 +15,11 @@
 	 */
 	public static TagTester createTagByAttribute(String markup, String attribute, String value)
 	{
-		TagTester tester = null;
-
-		if (Strings.isEmpty(markup) == false && Strings.isEmpty(attribute) == false &&
-			Strings.isEmpty(value) == false)
+		List<TagTester> tester = createTagsByAttribute(markup, attribute, value, true);
+		if ((tester == null) || (tester.size() == 0))
 		{
-			try
-			{
-				// remove the CDATA and
-				// the id attribute of the component because it is often the same as the element's id
-				markup = AJAX_COMPONENT_CDATA_OPEN.matcher(markup).replaceAll("<component>");
-				markup = AJAX_COMPONENT_CDATA_CLOSE.matcher(markup).replaceAll("</component>");
-
-				XmlPullParser parser = new XmlPullParser();
-				parser.parse(markup);
-
-				XmlTag elm;
-				XmlTag openTag = null;
-				XmlTag closeTag = null;
-				int level = 0;
-				while ((elm = parser.nextTag()) != null && closeTag == null)
-				{
-					XmlTag xmlTag = elm;
-
-					if (openTag == null)
-					{
-						IValueMap attributeMap = xmlTag.getAttributes();
-
-						for (Map.Entry<String, Object> entry : attributeMap.entrySet())
-						{
-							String attr = entry.getKey();
-							if (attr.equals(attribute) && value.equals(entry.getValue()))
-							{
-								if (xmlTag.isOpen())
-								{
-									openTag = xmlTag;
-								}
-								else if (xmlTag.isOpenClose())
-								{
-									openTag = xmlTag;
-									closeTag = xmlTag;
-								}
-							}
-						}
-					}
-					else
-					{
-						if (xmlTag.isOpen() && xmlTag.getName().equals(openTag.getName()))
-						{
-							level++;
-						}
-
-						if (xmlTag.isClose())
-						{
-							if (xmlTag.getName().equals(openTag.getName()))
-							{
-								if (level == 0)
-								{
-									closeTag = xmlTag;
-									closeTag.setOpenTag(openTag);
-								}
-								else
-								{
-									level--;
-								}
-							}
-						}
-					}
-				}
-
-				if (openTag != null && closeTag != null)
-				{
-					tester = new TagTester(parser, openTag, closeTag);
-				}
-				else if (openTag != null)
-				{
-					tester = new TagTester(parser, openTag, openTag);
-				}
-			}
-			catch (Exception e)
-			{
-				throw new WicketRuntimeException(e);
-			}
+			return null;
 		}
-
-		return tester;
+		return tester.get(0);
 	}
 

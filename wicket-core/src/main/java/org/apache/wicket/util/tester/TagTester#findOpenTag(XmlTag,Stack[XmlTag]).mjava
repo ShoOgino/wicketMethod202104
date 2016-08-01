@@ -1,0 +1,23 @@
+	/**
+	 * find the correct openTag to the given closeTag and remove all unclosed openTags between both
+	 * in given array {@code stack}
+	 * 
+	 * @param closeTag
+	 *            tag to search for corresponding openTag
+	 * @param stack
+	 *            array of unclosed openTags
+	 * @return corresponding openTag or {@code null}
+	 */
+	private static XmlTag findOpenTag(XmlTag closeTag, Stack<XmlTag> stack)
+	{
+		while (stack.size() > 0)
+		{
+			XmlTag popped = stack.pop();
+			if (popped.getName().equals(closeTag.getName()))
+			{
+				return popped;
+			}
+		}
+		return null;
+	}
+

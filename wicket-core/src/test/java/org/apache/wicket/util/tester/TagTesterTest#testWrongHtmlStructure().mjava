@@ -1,0 +1,12 @@
+    /**
+     * WICKET-6220
+     */
+    @Test
+    public void testWrongHtmlStructure() {
+        List<TagTester> tags = TagTester.createTagsByAttribute(WRONG_MARKUP, "wicket:id", "p", false);
+        assertEquals(1, tags.size());
+        assertEquals("span", tags.get(0).getName());
+        assertEquals("p2", tags.get(0).getAttribute("id"));
+        assertEquals("<img wicket:id=\"img\" src=\"bild2.jpg\"><hr wicket:id=\"hr\" id=\"hr2\"/>", tags.get(0).getValue());
+    }
+
