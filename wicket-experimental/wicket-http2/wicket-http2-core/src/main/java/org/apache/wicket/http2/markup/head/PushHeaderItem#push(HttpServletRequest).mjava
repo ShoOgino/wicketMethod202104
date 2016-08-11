@@ -1,0 +1,14 @@
+	/**
+	 * Pushed all URLs of this header item to the client
+	 * 
+	 * @param request
+	 *            the request to push the URLs to
+	 */
+	private void push(HttpServletRequest request)
+	{
+		// Receives the vendor specific push builder
+		Http2Settings http2Settings = Http2Settings.Holder.get(Application.get());
+		PushBuilder pushBuilder = http2Settings.getPushBuilder();
+		pushBuilder.push(request, urls.toArray(new String[urls.size()]));
+	}
+

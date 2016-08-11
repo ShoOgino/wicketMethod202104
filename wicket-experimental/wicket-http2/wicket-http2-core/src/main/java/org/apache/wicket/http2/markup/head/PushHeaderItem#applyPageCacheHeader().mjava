@@ -1,0 +1,14 @@
+	/**
+	 * Applies the cache header item to the response
+	 */
+	private void applyPageCacheHeader()
+	{
+		Time pageModificationTime = getPageModificationTime();
+		// check modification of page html
+		pageWebResponse.setLastModifiedTime(pageModificationTime);
+		pageWebResponse.setDateHeader("Expires", pageModificationTime);
+		pageWebResponse.setHeader("Cache-Control",
+			"max-age=31536000, public, must-revalidate, proxy-revalidate");
+		pageWebResponse.setHeader("Pragma", "public");
+	}
+
