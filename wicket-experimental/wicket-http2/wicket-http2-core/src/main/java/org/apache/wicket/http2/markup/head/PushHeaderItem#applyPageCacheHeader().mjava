@@ -1,14 +1,21 @@
 	/**
 	 * Applies the cache header item to the response
 	 */
-	private void applyPageCacheHeader()
+	protected void applyPageCacheHeader()
 	{
-		Time pageModificationTime = getPageModificationTime();
 		// check modification of page html
+		Time pageModificationTime = getPageModificationTime();
+		// The date of the page is now
+		pageWebResponse.setDateHeader("Date", Time.now());
+		// Set the modification time so that the browser sends a "If-Modified-Since" header which
+		// can be compared
 		pageWebResponse.setLastModifiedTime(pageModificationTime);
-		pageWebResponse.setDateHeader("Expires", pageModificationTime);
+		// Make the resource stale so that it gets revalidated even if a cache entry is set
+		// (see http://stackoverflow.com/questions/11357430/http-expires-header-values-0-and-1)
+		pageWebResponse.setHeader("Expires", "-1");
+		// Set a cache but set it to max-age=0 / must-revalidate so that the request to the page is
+		// done
 		pageWebResponse.setHeader("Cache-Control",
-			"max-age=31536000, public, must-revalidate, proxy-revalidate");
-		pageWebResponse.setHeader("Pragma", "public");
+			"max-age=0, public, must-revalidate, proxy-revalidate");
 	}
 

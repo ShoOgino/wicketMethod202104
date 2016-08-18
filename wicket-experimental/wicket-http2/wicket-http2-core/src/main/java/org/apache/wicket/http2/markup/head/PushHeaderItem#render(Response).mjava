@@ -6,7 +6,7 @@
 	{
 		// applies the caching header to the actual page request
 		applyPageCacheHeader();
-		
+
 		HttpServletRequest request = getContainerRequest(RequestCycle.get().getRequest());
 		// Check if the protocol is http/2 or http/2.0 to only push the resources in this case
 		if (isHttp2(request))
@@ -16,26 +16,32 @@
 				Time pageModificationTime = getPageModificationTime();
 				String ifModifiedSinceHeader = pageWebRequest.getHeader("If-Modified-Since");
 
+				// Check if the if-modified-since header is set - if not push all resources
 				if (ifModifiedSinceHeader != null)
 				{
-					Time ifModifiedSinceFromRequestTime = Time
-						.valueOf(headerDateFormat.parse(ifModifiedSinceHeader));
+					// Get the time of the if-modified-since header
+					Time ifModifiedSinceFromRequestTime = Time.valueOf(Date.from(LocalDateTime
+						.parse(ifModifiedSinceHeader, headerDateFormat).toInstant(ZoneOffset.UTC)));
+
 					// If the client modification time is before the page modification time -
 					// don't push
 					if (ifModifiedSinceFromRequestTime.before(pageModificationTime))
 					{
+						// Push only if the "if-modified-since" time is before the page modification
 						push(request);
 					}
 				}
 				else
 				{
-
+					// Push the resources if the "if-modified-since" is not available
+					push(request);
 				}
 			}
-			catch (ParseException e)
+			catch (DateTimeParseException e)
 			{
-				// If the If-Modified-Since time can't be parsed - the push handling is going to be
-				// skipped
+				// If the "if-modified-since" time can't be parsed - the push handling is going to
+				// be processed
+				push(request);
 			}
 		}
 	}

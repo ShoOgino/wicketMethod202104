@@ -1,9 +1,21 @@
 	/**
-	 * Gets the time the page of this header item has been modified
+	 * Gets the time the page of this header item has been modified. The default implementation is
+	 * to get the last modification date of the HTML file of the corresponding page, but it can be
+	 * overridden to apply a custom behavior. For example place in a properties-file into the class
+	 * path which contains the compile time. <br>
+	 * Example: <code>
+	 * <pre>
+	 * protected Time getPageModificationTime(){
+	 * 	Time time = getPageModificationTime();
+	 * 	// read properties file with build time and place it into a second time variable
+	 * 	return time.before(buildTime) ? buildTime : time;
+	 * }
+	 * </pre>
+	 * </code>
 	 * 
 	 * @return the time the page of this header item has been modified
 	 */
-	private Time getPageModificationTime()
+	protected Time getPageModificationTime()
 	{
 		URL resource = page.getClass().getResource(page.getClass().getSimpleName() + ".html");
 		if (resource == null)
