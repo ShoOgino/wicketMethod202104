@@ -9,14 +9,19 @@
 	 * 
 	 * @see Form#validate()
 	 */
-	public final void onFormSubmitted(IFormSubmitter submitter)
+	public final void onFormSubmitted(final IFormSubmitter submitter)
 	{
-		markFormsSubmitted();
-
+		final IFormSubmitter actualSubmitter =  submitter != null ? submitter :
+			findActualSubmitter();
+		//find the actual form to process
+		final Form<?> formToProcess = findFormToProcess(actualSubmitter);
+		
+		formToProcess.markFormsSubmitted();
+		
 		if (handleMultiPart())
 		{
 			// Tells FormComponents that a new user input has come
-			inputChanged();
+			formToProcess.inputChanged();
 
 			String url = getRequest().getRequestParameters()
 				.getParameterValue(getHiddenFieldId())
@@ -27,49 +32,19 @@
 			}
 			else
 			{
-				// First, see if the processing was triggered by a Wicket IFormSubmittingComponent
-				if (submitter == null)
-				{
-					submitter = findSubmittingButton();
-
-					if (submitter instanceof IFormSubmittingComponent)
-					{
-						IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)submitter;
-						Component component = (Component)submitter;
-
-						if (!component.isVisibleInHierarchy())
-						{
-							throw new WicketRuntimeException("Submit Button " +
-								submittingComponent.getInputName() + " (path=" +
-								component.getPageRelativePath() + ") is not visible");
-						}
-
-						if (!component.isEnabledInHierarchy())
-						{
-							throw new WicketRuntimeException("Submit Button " +
-								submittingComponent.getInputName() + " (path=" +
-								component.getPageRelativePath() + ") is not enabled");
-						}
-					}
-				}
-
 				// When processing was triggered by a Wicket IFormSubmittingComponent and that
 				// component indicates it wants to be called immediately
 				// (without processing), call the IFormSubmittingComponent.onSubmit* methods right
 				// away.
-				if (submitter != null && !submitter.getDefaultFormProcessing())
+				if (actualSubmitter != null && !actualSubmitter.getDefaultFormProcessing())
 				{
-					submitter.onSubmit();
-					submitter.onAfterSubmit();
+					actualSubmitter.onSubmit();
+					actualSubmitter.onAfterSubmit();
 				}
 				else
 				{
-					// the submit request might be for one of the nested forms, so let's
-					// find the right one:
-					final Form<?> formToProcess = findFormToProcess(submitter);
-
 					// process the form for this request
-					formToProcess.process(submitter);
+					formToProcess.process(actualSubmitter);
 				}
 			}
 		}
@@ -77,7 +52,7 @@
 		// onError
 		else if (hasError())
 		{
-			callOnError(submitter);
+			callOnError(actualSubmitter);
 		}
 
 		// update auto labels if we are inside an ajax request
