@@ -5,6 +5,12 @@
 	@Override
 	public Component resolve(MarkupContainer container, MarkupStream markupStream, ComponentTag tag)
 	{
+		if (tag instanceof WicketTag && ((WicketTag)tag).isFragmentTag())
+		{
+			// even having a wicket:id it isn't a component's markup
+			return null;
+		}
+
 		Component resolvedComponent = getParent().get(tag.getId());
 		if (resolvedComponent != null && getPage().wasRendered(resolvedComponent))
 		{
