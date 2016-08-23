@@ -38,19 +38,34 @@
 		try
 		{
 			// Render open tag
-			if (getRenderBodyOnly())
+			boolean renderBodyOnly = getRenderBodyOnly();
+			if (renderBodyOnly)
 			{
+				ExceptionSettings.NotRenderableErrorStrategy notRenderableErrorStrategy = ExceptionSettings.NotRenderableErrorStrategy.LOG_WARNING;
+				if (Application.exists())
+				{
+					notRenderableErrorStrategy = getApplication().getExceptionSettings().getNotRenderableErrorStrategy();
+				}
+
 				if (getFlag(FLAG_OUTPUT_MARKUP_ID))
 				{
-					log.warn(String.format(
-						"Markup id set on a component that renders its body only. "
-							+ "Markup id: %s, component id: %s.", getMarkupId(), getId()));
+					String message = String.format("Markup id set on a component that renders its body only. " +
+					                               "Markup id: %s, component id: %s.", getMarkupId(), getId());
+					if (notRenderableErrorStrategy == ExceptionSettings.NotRenderableErrorStrategy.THROW_EXCEPTION)
+					{
+						throw new IllegalStateException(message);
+					}
+					log.warn(message);
 				}
 				if (getFlag(FLAG_PLACEHOLDER))
 				{
-					log.warn(String.format(
-						"Placeholder tag set on a component that renders its body only. "
-							+ "Component id: %s.", getId()));
+					String message = String.format("Placeholder tag set on a component that renders its body only. " +
+					                               "Component id: %s.", getId());
+					if (notRenderableErrorStrategy == ExceptionSettings.NotRenderableErrorStrategy.THROW_EXCEPTION)
+					{
+						throw new IllegalStateException(message);
+					}
+					log.warn(message);
 				}
 			}
 			else
@@ -69,9 +84,9 @@
 				// Render close tag
 				if (openTag.isOpen())
 				{
-					renderClosingComponentTag(markupStream, tag, getRenderBodyOnly());
+					renderClosingComponentTag(markupStream, tag, renderBodyOnly);
 				}
-				else if (getRenderBodyOnly() == false)
+				else if (renderBodyOnly == false)
 				{
 					if (needToRenderTag(openTag))
 					{
