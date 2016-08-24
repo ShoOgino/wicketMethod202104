@@ -1,0 +1,12 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6230
+	 */
+	@Test
+	public void renderUrlWithManyDotsAtTheBeginning1()
+	{
+		UrlRenderer renderer = new UrlRenderer(new MockWebRequest(Url.parse("a")));
+
+		String renderedUrl = renderer.renderUrl(Url.parse("...abc"));
+		assertEquals("./...abc", renderedUrl);
+	}
+
