@@ -8,9 +8,10 @@
 	 */
 	private void registerLastHandler(RequestCycle cycle, IRequestHandler handler)
 	{
-		if (handler instanceof IPageRequestHandler)
+		final IPageRequestHandler pageRequestHandler = findPageRequestHandler(handler);
+		if (pageRequestHandler != null)
 		{
-			cycle.setMetaData(LAST_HANDLER_KEY, (IPageRequestHandler) handler);
+			cycle.setMetaData(LAST_HANDLER_KEY, pageRequestHandler);
 		}
 	}
 

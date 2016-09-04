@@ -8,9 +8,13 @@
 	 */
 	private void registerFirstHandler(RequestCycle cycle, IRequestHandler handler)
 	{
-		if (handler instanceof IPageRequestHandler && getFirstHandler(cycle) == null)
+		if (getFirstHandler(cycle) == null)
 		{
-			cycle.setMetaData(FIRST_HANDLER_KEY, (IPageRequestHandler)handler);
+			final IPageRequestHandler pageRequestHandler = findPageRequestHandler(handler);
+			if (pageRequestHandler != null)
+			{
+				cycle.setMetaData(FIRST_HANDLER_KEY, pageRequestHandler);
+			}
 		}
 	}
 

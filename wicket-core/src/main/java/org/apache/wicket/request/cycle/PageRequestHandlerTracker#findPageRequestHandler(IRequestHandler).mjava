@@ -1,0 +1,19 @@
+	/**
+	 * Looking for IPageRequestHandler 
+	 * 
+	 * @param handler
+	 * @return IPageRequestHandler if exist otherwise null
+	 */
+	private IPageRequestHandler findPageRequestHandler(IRequestHandler handler)
+	{
+		if (handler instanceof IPageRequestHandler)
+		{
+			return (IPageRequestHandler)handler;
+		}
+	    if (handler instanceof IRequestHandlerDelegate)
+	    {
+	    	return findPageRequestHandler(((IRequestHandlerDelegate)handler).getDelegateHandler());
+	    }
+	    return null;
+	}
+
