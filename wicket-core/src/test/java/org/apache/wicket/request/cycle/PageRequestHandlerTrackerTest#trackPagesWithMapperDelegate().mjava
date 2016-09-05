@@ -1,0 +1,12 @@
+	/**
+	 * Uses PageRequestHandlerTracker to check last IRequestHandler encapsulated in IRequestHandlerDelegate 
+	 */
+	@Test
+	public void trackPagesWithMapperDelegate()
+	{
+		IRequestMapper mapper = tester.getApplication().getRootRequestMapper();
+		tester.getApplication().setRootRequestMapper(new MapperDelegate(mapper));
+		tester.startPage(new PageA());
+		tester.getApplication().setRootRequestMapper(mapper);
+	}
+
