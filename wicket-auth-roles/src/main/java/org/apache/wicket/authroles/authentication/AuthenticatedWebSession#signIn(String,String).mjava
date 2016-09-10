@@ -8,11 +8,15 @@
 	 */
 	public final boolean signIn(final String username, final String password)
 	{
-		signedIn = authenticate(username, password);
-		if (signedIn)
+		if (signedIn.compareAndSet(false, true))
 		{
-			bind();
+			boolean authenticated = authenticate(username, password);
+			if (authenticated)
+			{
+				bind();
+			}
+			signedIn.set(authenticated);
 		}
-		return signedIn;
+		return signedIn.get();
 	}
 
