@@ -1,14 +1,17 @@
 	@Test
 	public void shouldAutoLinkLocalizedResources()
 	{
-		Locale.setDefault(Locale.US);
+		PageWithAutoLinkedLocalResource instance = new PageWithAutoLinkedLocalResource();
 
-		WicketTester tester = new WicketTester();
+		tester.getSession().setLocale(DEFAULT_LOCALE);
 
-		tester.getSession().setLocale(Locale.CANADA);
+		tester.startPage(instance);
 
-		tester.startPage(PageWithAutoLinkedLocalResource.class);
+		tester.getSession().setLocale(EXISTENT_RESOURCE_LOCALE);
 
-		assertThat(tester.getLastResponseAsString(), CoreMatchers.containsString("en_CA"));
+		tester.startPage(instance);
+
+		assertThat(tester.getLastResponseAsString(),
+			containsString(EXISTENT_RESOURCE_LOCALE.getCountry()));
 	}
 

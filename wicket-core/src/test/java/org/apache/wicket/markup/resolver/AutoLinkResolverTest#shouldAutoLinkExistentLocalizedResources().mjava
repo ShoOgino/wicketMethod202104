@@ -1,0 +1,17 @@
+	@Test
+	public void shouldAutoLinkExistentLocalizedResources()
+	{
+		tester.getSession().setLocale(NON_EXISTENT_RESOURCE_LOCALE);
+
+		tester.startPage(PageWithAutoLinkedLocalResource.class);
+
+		tester.getSession().setLocale(EXISTENT_RESOURCE_LOCALE);
+
+		// works if the page is recreated only
+		// TODO: render existent resource's URL if previously not shown by this page instance?
+		tester.startPage(PageWithAutoLinkedLocalResource.class);
+
+		assertThat(tester.getLastResponseAsString(),
+			containsString(EXISTENT_RESOURCE_LOCALE.getCountry()));
+	}
+
