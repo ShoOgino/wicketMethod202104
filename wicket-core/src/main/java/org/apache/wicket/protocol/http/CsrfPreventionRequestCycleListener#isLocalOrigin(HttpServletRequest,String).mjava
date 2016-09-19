@@ -8,14 +8,14 @@
 	 *            the contents of the {@code Origin} HTTP header
 	 * @return {@code true} when the origin of the request matches the {@code Origin} HTTP header
 	 */
-	private boolean isLocalOrigin(HttpServletRequest containerRequest, String originHeader)
+	protected boolean isLocalOrigin(HttpServletRequest containerRequest, String originHeader)
 	{
 		// Make comparable strings from Origin and Location
-		String origin = getOriginHeaderOrigin(originHeader);
+		String origin = normalizeUri(originHeader);
 		if (origin == null)
 			return false;
 
-		String request = getLocationHeaderOrigin(containerRequest);
+		String request = getTargetUriFromRequest(containerRequest);
 		if (request == null)
 			return false;
 

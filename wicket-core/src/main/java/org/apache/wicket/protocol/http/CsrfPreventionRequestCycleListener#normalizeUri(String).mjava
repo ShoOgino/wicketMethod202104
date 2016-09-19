@@ -1,25 +1,25 @@
 	/**
-	 * Creates a RFC-6454 comparable origin from the {@code origin} string.
+	 * Creates a RFC-6454 comparable URI from the {@code uri} string.
 	 *
-	 * @param origin
-	 *            the contents of the Origin HTTP header
-	 * @return only the scheme://host[:port] part, or {@code null} when the origin string is not
+	 * @param uri
+	 *            the contents of the Origin or Referer HTTP header
+	 * @return only the scheme://host[:port] part, or {@code null} when the URI string is not
 	 *         compliant
 	 */
-	private String getOriginHeaderOrigin(String origin)
+	protected final String normalizeUri(String uri)
 	{
 		// the request comes from a privacy sensitive context, flag as non-local origin. If
 		// alternative action is required, an implementor can override any of the onAborted,
 		// onSuppressed or onAllowed and implement such needed action.
 
-		if ("null".equals(origin))
+		if (Strings.isEmpty(uri) || "null".equals(uri))
 			return null;
 
 		StringBuilder target = new StringBuilder();
 
 		try
 		{
-			URI originUri = new URI(origin);
+			URI originUri = new URI(uri);
 			String scheme = originUri.getScheme();
 			if (scheme == null)
 			{
@@ -54,7 +54,7 @@
 		}
 		catch (URISyntaxException e)
 		{
-			log.debug("Invalid Origin header provided: {}, marked conflicting", origin);
+			log.debug("Invalid URI provided: {}, marked conflicting", uri);
 			return null;
 		}
 	}

@@ -7,6 +7,8 @@
 			return;
 		}
 
+		handler = unwrap(handler);
+
 		// check if the request is targeted at a page
 		if (isChecked(handler))
 		{
@@ -14,25 +16,26 @@
 			IRequestablePage targetedPage = prh.getPage();
 			HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest()
 				.getContainerRequest();
-			String origin = containerRequest.getHeader("Origin");
+			String sourceUri = getSourceUri(containerRequest);
 
 			// Check if the page should be CSRF protected
 			if (isChecked(targetedPage))
 			{
 				// if so check the Origin HTTP header
-				checkOrigin(containerRequest, origin, targetedPage);
+				checkRequest(containerRequest, sourceUri, targetedPage);
 			}
 			else
 			{
 				log.debug("Targeted page {} was opted out of the CSRF origin checks, allowed",
 					targetedPage.getClass().getName());
-				allowHandler(containerRequest, origin, targetedPage);
+				allowHandler(containerRequest, sourceUri, targetedPage);
 			}
 		}
 		else
 		{
 			if (log.isTraceEnabled())
-				log.trace("Resolved handler {} doesn't target a page, no CSRF check performed",
+				log.trace(
+					"Resolved handler {} doesn't target an action on a page, no CSRF check performed",
 					handler.getClass().getName());
 		}
 	}
