@@ -8,10 +8,18 @@
 		{
 			private static final long serialVersionUID = 1L;
 
+			private boolean detachCalled = false;
+
 			@Override
 			protected Integer load()
 			{
 				throw new RuntimeException();
+			}
+
+			@Override
+			protected void onDetach()
+			{
+				detachCalled = true;
 			}
 		}
 
@@ -25,7 +33,9 @@
 		}
 		catch (RuntimeException e)
 		{
-			assertThat(ldm.isAttached(), is(false));
 		}
+		ldm.detach();
+		assertThat(ldm.isAttached(), is(false));
+		assertThat(ldm.detachCalled, is(true));
 	}
 
