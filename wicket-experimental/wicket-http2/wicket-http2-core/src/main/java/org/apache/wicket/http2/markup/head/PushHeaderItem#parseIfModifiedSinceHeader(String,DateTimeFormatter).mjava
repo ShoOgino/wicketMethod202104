@@ -1,0 +1,24 @@
+	/**
+	 * Parses the given if modified since header with the date time formatter
+	 * 
+	 * @param ifModifiedSinceHeader
+	 *            the if modified since header string
+	 * @param dateTimeFormatter
+	 *            the formatter to parse the header string with
+	 * @return the time or null
+	 */
+	private Time parseIfModifiedSinceHeader(String ifModifiedSinceHeader,
+		DateTimeFormatter dateTimeFormatter)
+	{
+		try
+		{
+			return Time.valueOf(Date.from(LocalDateTime
+				.parse(ifModifiedSinceHeader, dateTimeFormatter).toInstant(ZoneOffset.UTC)));
+		}
+		catch (DateTimeParseException e)
+		{
+			// NOOP
+		}
+		return null;
+	}
+
