@@ -12,7 +12,7 @@
 		final AuthorizeInstantiation classAnnotation = componentClass.getAnnotation(AuthorizeInstantiation.class);
 		if (classAnnotation != null)
 		{
-			authorized = hasAny(new Roles(classAnnotation.value()));
+			authorized = check(classAnnotation);
 		}
 		else
 		{
@@ -23,7 +23,22 @@
 				final AuthorizeInstantiation packageAnnotation = componentPackage.getAnnotation(AuthorizeInstantiation.class);
 				if (packageAnnotation != null)
 				{
-					authorized = hasAny(new Roles(packageAnnotation.value()));
+					authorized = check(packageAnnotation);
+				}
+			}
+		}
+
+		// Check for multiple instantiations
+		final AuthorizeInstantiations authorizeInstantiationsAnnotation = componentClass
+			.getAnnotation(AuthorizeInstantiations.class);
+		if (authorizeInstantiationsAnnotation != null)
+		{
+			for (final AuthorizeInstantiation authorizeInstantiationAnnotation : authorizeInstantiationsAnnotation
+				.ruleset())
+			{
+				if (!check(authorizeInstantiationAnnotation))
+				{
+					authorized = false;
 				}
 			}
 		}
