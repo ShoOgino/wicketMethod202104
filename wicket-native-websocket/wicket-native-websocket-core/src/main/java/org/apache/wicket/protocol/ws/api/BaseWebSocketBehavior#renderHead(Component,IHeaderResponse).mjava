@@ -24,17 +24,21 @@
 			variables.put("pageId", false);
 		}
 
-		CharSequence baseUrl = getBaseUrl(component);
+		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(component.getApplication());
+
+		CharSequence baseUrl = getBaseUrl(webSocketSettings);
 		Args.notEmpty(baseUrl, "baseUrl");
 		variables.put("baseUrl", baseUrl);
 
-		String contextPath = getContextPath(component);
+		CharSequence contextPath = getContextPath(webSocketSettings);
+		Args.notEmpty(contextPath, "contextPath");
 		variables.put("contextPath", contextPath);
 
 		// preserve the application name for JSR356 based impl
 		variables.put("applicationName", component.getApplication().getName());
 
-		CharSequence filterPrefix = getFilterPrefix(component);
+		CharSequence filterPrefix = getFilterPrefix(webSocketSettings);
+		Args.notEmpty(filterPrefix, "filterPrefix");
 		variables.put("filterPrefix", filterPrefix);
 
 		String webSocketSetupScript = webSocketSetupTemplate.asString(variables);
