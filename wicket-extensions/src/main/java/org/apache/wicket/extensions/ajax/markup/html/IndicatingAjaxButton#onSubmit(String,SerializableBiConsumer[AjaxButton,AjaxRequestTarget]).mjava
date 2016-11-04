@@ -1,0 +1,15 @@
+	public static IndicatingAjaxButton onSubmit(String id,
+		SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onSubmit)
+	{
+		Args.notNull(onSubmit, "onSubmit");
+
+		return new IndicatingAjaxButton(id)
+		{
+			@Override
+			public void onSubmit(AjaxRequestTarget target)
+			{
+				onSubmit.accept(this, target);
+			}
+		};
+	}
+

@@ -1,0 +1,36 @@
+	/**
+	 * Creates an {@link AjaxSubmitLink} based on lambda expressions
+	 *
+	 * @param id
+	 *            the id of ajax submit link
+	 * @param onSubmit
+	 *            the consumer of the submitted link and an {@link AjaxRequestTarget}
+	 * @param onError
+	 *            the consumer of the link in error and an {@link AjaxRequestTarget}
+	 * @return the {@link AjaxSubmitLink}
+	 */
+	public static AjaxSubmitLink onSubmit(String id,
+		SerializableBiConsumer<AjaxSubmitLink, AjaxRequestTarget> onSubmit,
+		SerializableBiConsumer<AjaxSubmitLink, AjaxRequestTarget> onError)
+	{
+		Args.notNull(onSubmit, "onSubmit");
+		Args.notNull(onError, "onError");
+
+		return new AjaxSubmitLink(id)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onSubmit(AjaxRequestTarget target)
+			{
+				onSubmit.accept(this, target);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target)
+			{
+				onError.accept(this, target);
+			}
+		};
+	}
+

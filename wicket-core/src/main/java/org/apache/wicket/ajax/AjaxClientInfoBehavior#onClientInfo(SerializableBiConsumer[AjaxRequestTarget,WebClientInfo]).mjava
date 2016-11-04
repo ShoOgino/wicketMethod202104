@@ -1,0 +1,25 @@
+	/**
+	 * Creates an {@link AjaxClientInfoBehavior} based on lambda expressions
+	 *
+	 * @param onClientInfo
+	 *            the {@code SerializableBiConsumer} which accepts the {@link AjaxRequestTarget} and the
+	 *            {@link WebClientInfo}
+	 * @return the {@link AjaxClientInfoBehavior}
+	 */
+	public static AjaxClientInfoBehavior onClientInfo(SerializableBiConsumer<AjaxRequestTarget, WebClientInfo> onClientInfo)
+	{
+		Args.notNull(onClientInfo, "onClientInfo");
+
+		return new AjaxClientInfoBehavior()
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo)
+			{
+				onClientInfo.accept(target, clientInfo);
+			}
+		};
+	}
+

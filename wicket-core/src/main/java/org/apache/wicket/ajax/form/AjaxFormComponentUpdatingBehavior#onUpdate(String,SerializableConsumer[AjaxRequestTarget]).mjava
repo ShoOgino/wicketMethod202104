@@ -1,0 +1,26 @@
+	/**
+	 * Creates an {@link AjaxFormComponentUpdatingBehavior} based on lambda expressions
+	 * 
+	 * @param eventName
+	 *            the event name
+	 * @param onUpdate
+	 *            the {@code SerializableConsumer} which accepts the {@link AjaxRequestTarget}
+	 * @return the {@link AjaxFormComponentUpdatingBehavior}
+	 */
+	public static AjaxFormComponentUpdatingBehavior onUpdate(String eventName,
+		SerializableConsumer<AjaxRequestTarget> onUpdate)
+	{
+		Args.notNull(onUpdate, "onUpdate");
+
+		return new AjaxFormComponentUpdatingBehavior(eventName)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				onUpdate.accept(target);
+			}
+		};
+	}
+

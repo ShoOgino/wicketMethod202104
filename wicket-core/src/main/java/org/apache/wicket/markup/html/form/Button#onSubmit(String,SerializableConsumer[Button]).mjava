@@ -1,0 +1,25 @@
+	/**
+	 * Creates a {@link Button} based on lambda expressions
+	 * 
+	 * @param id
+	 *            the id of the button
+	 * @param onSubmit
+	 *            the {@code SerializableConsumer} which accepts the {@link Button}
+	 * @return the {@link Button}
+	 */
+	public static Button onSubmit(String id, SerializableConsumer<Button> onSubmit)
+	{
+		Args.notNull(onSubmit, "onSubmit");
+
+		return new Button(id)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onSubmit()
+			{
+				onSubmit.accept(this);
+			}
+		};
+	}
+

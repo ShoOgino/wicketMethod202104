@@ -1,0 +1,15 @@
+	public static <T> IndicatingAjaxLink<T> onClick(String id,
+		SerializableBiConsumer<AjaxLink<T>, AjaxRequestTarget> onClick)
+	{
+		Args.notNull(onClick, "onClick");
+
+		return new IndicatingAjaxLink<T>(id)
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				onClick.accept(this, target);
+			}
+		};
+	}
+

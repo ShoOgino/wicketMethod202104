@@ -1,0 +1,23 @@
+	/**
+	 * Creates an {@link AjaxFormChoiceComponentUpdatingBehavior} based on lambda expressions
+	 * 
+	 * @param onUpdateChoice
+	 *            the {@code SerializableConsumer} which accepts the {@link AjaxRequestTarget}
+	 * @return the {@link AjaxFormChoiceComponentUpdatingBehavior}
+	 */
+	public static AjaxFormChoiceComponentUpdatingBehavior onUpdateChoice(
+		SerializableConsumer<AjaxRequestTarget> onUpdateChoice)
+	{
+		Args.notNull(onUpdateChoice, "onUpdateChoice");
+		return new AjaxFormChoiceComponentUpdatingBehavior()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				onUpdateChoice.accept(target);
+			}
+		};
+	}
+
