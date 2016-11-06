@@ -3,6 +3,7 @@
 	public void withoutOriginSuppressed()
 	{
 		csrfListener.setNoOriginAction(CsrfAction.SUPPRESS);
+		tester.addRequestHeader(WebRequest.HEADER_ORIGIN, null);
 		tester.clickLink("link");
 		tester.assertRenderedPage(FirstPage.class);
 		assertConflictingOriginsRequestSuppressed();

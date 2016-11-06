@@ -2,7 +2,9 @@
 	@Test
 	public void withoutOriginAllowed()
 	{
+		csrfListener.setNoOriginAction(CsrfAction.ALLOW);
+		tester.addRequestHeader(WebRequest.HEADER_ORIGIN, null);
 		tester.clickLink("link");
-		assertConflictingOriginsRequestAborted();
+		assertConflictingOriginsRequestAllowed();
 	}
 
