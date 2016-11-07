@@ -1,11 +1,11 @@
 	/** 
-	 * https://issues.apache.org/jira/browse/WICKET-5691
+	 * https://issues.apache.org/jira/browse/WICKET-6270
 	 */
 	@Test
-	public void testEmptyField() throws Exception
+	public void testEmptyFieldAsBrowserSendsIt() throws Exception
 	{
 		tester.startPage(TestValidationPage.class);
-		
+
 		FileUploadField uploadField = (FileUploadField)tester.getComponentFromLastRenderedPage("form:upload");
 		uploadField.add(new IValidator<List<FileUpload>>() {
 			@Override
@@ -16,8 +16,9 @@
 			}
 		});
 		FormTester formtester = tester.newFormTester("form");
+		formtester.setFile("upload", null, "text/xml");
 		formtester.submit();
-		
+
 		tester.assertNoErrorMessage();
 	}
 

@@ -61,7 +61,9 @@
 						out.write("; name=\"".getBytes());
 						out.write(fieldName.getBytes());
 						out.write("\"; filename=\"".getBytes());
-						out.write(uf.getFile().getName().getBytes());
+						if (uf.getFile() != null) {
+							out.write(uf.getFile().getName().getBytes());
+						}
 						out.write("\"".getBytes());
 						out.write(crlf.getBytes());
 						out.write("Content-Type: ".getBytes());
@@ -69,16 +71,18 @@
 						out.write(crlf.getBytes());
 						out.write(crlf.getBytes());
 
-						// Load the file and put it into the the inputstream
-						FileInputStream fis = new FileInputStream(uf.getFile());
+						if (uf.getFile() != null) {
+							// Load the file and put it into the the inputstream
+							FileInputStream fis = new FileInputStream(uf.getFile());
 
-						try
-						{
-							IOUtils.copy(fis, out);
-						}
-						finally
-						{
-							fis.close();
+							try
+							{
+								IOUtils.copy(fis, out);
+							}
+							finally
+							{
+								fis.close();
+							}
 						}
 						out.write(crlf.getBytes());
 					}

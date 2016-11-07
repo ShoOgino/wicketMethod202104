@@ -28,7 +28,10 @@
 			{
 				for (FileItem item : fileItems)
 				{
-					fileUploads.add(new FileUpload(item));
+					// WICKET-6270 detect empty field by missing file name
+					if (Strings.isEmpty(item.getName()) == false) {
+						fileUploads.add(new FileUpload(item));
+					}
 				}
 			}
 		}
