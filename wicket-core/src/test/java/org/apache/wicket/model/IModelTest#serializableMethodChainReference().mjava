@@ -1,0 +1,12 @@
+	@Test
+	public void serializableMethodChainReference()
+	{
+		IModel<Account> accountModel = LoadableDetachableModel.of(Account::new);
+		IModel<Person> personModel = accountModel.map(Account::getPerson);
+		IModel<String> nameModel = personModel.map(Person::getName);
+
+		IModel<String> clone = WicketObjects.cloneObject(nameModel);
+		assertThat(clone, is(not(nullValue())));
+		assertThat(clone.getObject(), is("Some Name"));
+	}
+

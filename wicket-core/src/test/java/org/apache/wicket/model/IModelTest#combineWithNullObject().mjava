@@ -2,9 +2,8 @@
 	public void combineWithNullObject()
 	{
 		IModel<String> janeModel = Model.of((String)null);
-		SerializableBiFunction<Person, String, String> function =
-				(SerializableBiFunction<Person, String, String>) (person1, other) ->
-						person1.getName() + " is in relationship with " + other;
+		SerializableBiFunction<Person, String, String> function = (SerializableBiFunction<Person, String, String>)(
+			person1, other) -> person1.getName() + " is in relationship with " + other;
 		IModel<String> relationShipModel = Model.of(person).combineWith(janeModel, function);
 		assertThat(relationShipModel.getObject(), is(nullValue()));
 	}
