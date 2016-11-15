@@ -25,10 +25,15 @@
 					// sleep for a while to simulate work
 					TimeUnit.SECONDS.sleep(1);
 				}
-				catch (Exception x)
+				catch (InterruptedException x)
 				{
-					x.printStackTrace();
-					return;
+					Thread.currentThread().interrupt();
+					break;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					break;
 				}
 			}
 		}

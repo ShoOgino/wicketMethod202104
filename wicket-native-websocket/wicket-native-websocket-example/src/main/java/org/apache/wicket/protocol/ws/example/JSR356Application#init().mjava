@@ -1,15 +1,14 @@
-	/**
-	 * @see org.apache.wicket.Application#init()
-	 */
 	@Override
 	public void init()
 	{
 		super.init();
 
+        scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+		setRootRequestMapper(new HttpsMapper(getRootRequestMapper(), new HttpsConfig(8080, 8443)));
+
 		mountPage("/behavior", WebSocketBehaviorDemoPage.class);
 		mountPage("/resource", WebSocketResourceDemoPage.class);
-
-		setRootRequestMapper(new HttpsMapper(getRootRequestMapper(), new HttpsConfig()));
 
 		getSharedResources().add(ChartWebSocketResource.NAME, new ChartWebSocketResource());
 	}

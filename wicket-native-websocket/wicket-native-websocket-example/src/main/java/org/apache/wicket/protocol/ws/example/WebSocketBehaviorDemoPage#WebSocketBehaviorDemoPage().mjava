@@ -1,0 +1,26 @@
+	public WebSocketBehaviorDemoPage()
+	{
+		WebSocketChart chartPanel = new WebSocketChart("chartPanel");
+		chartPanel.add(new WebSocketBehavior()
+		{
+			@Override
+			protected void onConnect(ConnectedMessage message)
+			{
+				super.onConnect(message);
+
+				ScheduledExecutorService service = JSR356Application.get().getScheduledExecutorService();
+				ChartUpdater.start(message, service);
+			}
+		});
+		add(chartPanel);
+
+		add(new WebSocketBehavior()
+		{
+			@Override
+			protected void onMessage(WebSocketRequestHandler handler, TextMessage message)
+			{
+				super.onMessage(handler, message);
+			}
+		});
+	}
+
