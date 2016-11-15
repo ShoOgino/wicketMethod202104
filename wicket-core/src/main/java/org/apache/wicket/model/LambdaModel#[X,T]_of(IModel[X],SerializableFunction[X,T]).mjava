@@ -25,20 +25,20 @@
 		Args.notNull(target, "target");
 		Args.notNull(getter, "getter");
 
-		return new LambdaModel<T>(() -> {
-			X x = target.getObject();
-			if (x == null)
-			{
-				return null;
-			}
-			return getter.apply(x);
-		},
-
-			(t) -> {
-				throw new UnsupportedOperationException("setObject(Object) not supported");
-			})
+		return new LambdaModel<T>()
 		{
 			private static final long serialVersionUID = 1L;
+
+			@Override
+			public T getObject()
+			{
+				X x = target.getObject();
+				if (x == null)
+				{
+					return null;
+				}
+				return getter.apply(x);
+			}
 
 			@Override
 			public void detach()

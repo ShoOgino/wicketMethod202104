@@ -18,6 +18,24 @@
 	 */
 	public static <T> IModel<T> of(SerializableSupplier<T> getter, SerializableConsumer<T> setter)
 	{
-		return new LambdaModel<>(getter, setter);
+		Args.notNull(getter, "getter");
+		Args.notNull(setter, "setter");
+
+		return new LambdaModel<T>()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public T getObject()
+			{
+				return getter.get();
+			}
+
+			@Override
+			public void setObject(T t)
+			{
+				setter.accept(t);
+			}
+		};
 	}
 

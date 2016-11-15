@@ -30,24 +30,30 @@
 		Args.notNull(getter, "getter");
 		Args.notNull(setter, "setter");
 
-		return new LambdaModel<T>(() -> {
-			X x = target.getObject();
-			if (x == null)
-			{
-				return null;
-			}
-			return getter.apply(x);
-		},
+		return new LambdaModel<T>()
+		{
+			private static final long serialVersionUID = 1L;
 
-			(t) -> {
+			@Override
+			public T getObject()
+			{
+				X x = target.getObject();
+				if (x == null)
+				{
+					return null;
+				}
+				return getter.apply(x);
+			}
+
+			@Override
+			public void setObject(T t)
+			{
 				X x = target.getObject();
 				if (x != null)
 				{
 					setter.accept(x, t);
 				}
-			})
-		{
-			private static final long serialVersionUID = 1L;
+			}
 
 			@Override
 			public void detach()
