@@ -1,0 +1,30 @@
+	@Test
+	public void stream()
+	{
+		LoginPage loginPage = new LoginPage();
+		Optional<Component> first = loginPage.stream()
+			.filter(c -> c.getId().equals("form"))
+			.findFirst();
+		assertThat(first.isPresent(), is(false));
+
+		loginPage.add(new Form<>("form"));
+		Optional<Component> second = loginPage.stream()
+			.filter(c -> c.getId().equals("form"))
+			.findFirst();
+		assertThat(second.isPresent(), is(true));
+
+		loginPage.add(new WebMarkupContainer("wmc"));
+
+		Optional<Form> form = loginPage.stream()
+			.filter(Form.class::isInstance)
+			.map(Form.class::cast)
+			.findFirst();
+		assertThat(form.isPresent(), is(true));
+
+		Optional<WebMarkupContainer> wmc = loginPage.stream()
+			.filter(WebMarkupContainer.class::isInstance)
+			.map(WebMarkupContainer.class::cast)
+			.findFirst();
+		assertThat(wmc.isPresent(), is(true));
+	}
+
