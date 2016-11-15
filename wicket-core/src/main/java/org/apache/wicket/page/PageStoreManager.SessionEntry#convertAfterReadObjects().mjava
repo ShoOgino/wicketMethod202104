@@ -9,10 +9,14 @@
 				sessionCache = new ArrayList<>();
 			}
 
-			for (Object o : afterReadObject)
+			final IPageStore pageStore = getPageStore();
+			if (pageStore != null)
 			{
-				IManageablePage page = getPageStore().convertToPage(o);
-				addPage(page);
+				for (Object o : afterReadObject)
+				{
+					IManageablePage page = pageStore.convertToPage(o);
+					addPage(page);
+				}
 			}
 
 			afterReadObject = null;

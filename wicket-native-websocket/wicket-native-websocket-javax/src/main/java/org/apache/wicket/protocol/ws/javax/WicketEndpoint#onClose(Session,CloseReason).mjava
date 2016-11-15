@@ -3,6 +3,9 @@
 	{
 		super.onClose(session, closeReason);
 
-		javaxWebSocketProcessor.onClose(closeReason.getCloseCode().getCode(), closeReason.getReasonPhrase());
+		if (isApplicationAlive())
+		{
+			javaxWebSocketProcessor.onClose(closeReason.getCloseCode().getCode(), closeReason.getReasonPhrase());
+		}
 	}
 
