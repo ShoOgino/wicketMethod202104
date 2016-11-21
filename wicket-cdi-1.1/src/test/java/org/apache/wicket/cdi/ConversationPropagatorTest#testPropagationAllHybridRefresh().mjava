@@ -1,0 +1,19 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6257
+	 */
+	@Test
+	public void testPropagationAllHybridRefresh()
+	{
+		configure(new CdiConfiguration().setPropagation(ConversationPropagation.ALL));
+		tester.getApplication().getRootRequestMapperAsCompound().add(new MountedMapper("segment/${pageType}", TestConversationPage.class));
+
+		tester.startPage(TestConversationPage.class, new PageParameters().add("pageType", "hybrid"));
+
+		String pageId = tester.getLastRenderedPage().getId();
+		String cid = conversation.getId();
+
+		tester.executeUrl("segment/hybrid?"+pageId+"&cid="+cid);
+
+		assertThat(tester.getLastRenderedPage().getId(), CoreMatchers.is(pageId));
+	}
+
