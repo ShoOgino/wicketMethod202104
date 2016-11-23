@@ -4,9 +4,12 @@
 	@Before
 	public void before()
 	{
-		defaultLocale = Locale.getDefault(Locale.Category.FORMAT);
+		originalFormatLocale = Locale.getDefault(Locale.Category.FORMAT);
+		originalDefaultLocale = Locale.getDefault();
 
-		// these tests run in US locale.
+		// these tests run in US locale for formatting and German default locale - they should still work with split
+		// locale.
+		Locale.setDefault(Locale.GERMANY);
 		Locale.setDefault(Locale.Category.FORMAT, Locale.US);
 	}
 
