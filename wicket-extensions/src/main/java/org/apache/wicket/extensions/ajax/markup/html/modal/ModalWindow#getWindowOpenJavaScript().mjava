@@ -57,7 +57,7 @@
 		}
 		else
 		{
-			settings.put("element", new JsonFunction("document.getElementById(\"" + getContentMarkupId() + "\")"));
+			settings.put("element", new JSONFunction("document.getElementById(\"" + getContentMarkupId() + "\")"));
 		}
 
 		if (getCookieName() != null)
@@ -92,7 +92,7 @@
 		if (windowClosedCallback != null)
 		{
 			WindowClosedBehavior behavior = getBehaviors(WindowClosedBehavior.class).get(0);
-			settings.put("onClose", new JsonFunction("function() { " + behavior.getCallbackScript() + " }"));
+			settings.put("onClose", new JSONFunction("function() { " + behavior.getCallbackScript() + " }"));
 
 			haveCloseCallback = true;
 		}
@@ -102,7 +102,7 @@
 		if ((closeButtonCallback != null) || (haveCloseCallback == false))
 		{
 			CloseButtonBehavior behavior = getBehaviors(CloseButtonBehavior.class).get(0);
-			settings.put("onCloseButton", new JsonFunction("function() { " + behavior.getCallbackScript() + "; return false; }"));
+			settings.put("onCloseButton", new JSONFunction("function() { " + behavior.getCallbackScript() + "; return false; }"));
 		}
 
 		postProcessSettings(settings);
