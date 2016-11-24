@@ -3,15 +3,19 @@
 	{
 		StringBuilder b = new StringBuilder();
 
-		Field[] fields = ClientProperties.class.getDeclaredFields();
+		Class<?> clazz = getClass();
+		while (clazz != Object.class) {
+			Field[] fields = clazz.getDeclaredFields();
 
-		for (Field field : fields)
-		{
-			// Ignore these fields
-			if (field.getName().equals("serialVersionUID") == false &&
-				field.getName().startsWith("class$") == false &&
-				field.getName().startsWith("timeZone") == false)
+			for (Field field : fields)
 			{
+				// Ignore these fields
+				if (Modifier.isStatic(field.getModifiers()) ||
+					Modifier.isTransient(field.getModifiers())  ||
+					field.isSynthetic())
+				{
+					continue;
+				}
 
 				field.setAccessible(true);
 
@@ -45,8 +49,9 @@
 					b.append('\n');
 				}
 			}
-		}
 
+			clazz = clazz.getSuperclass();
+		}
 		return b.toString();
 	}
 

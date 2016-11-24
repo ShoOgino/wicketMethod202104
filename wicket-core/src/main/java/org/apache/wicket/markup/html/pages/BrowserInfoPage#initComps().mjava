@@ -3,16 +3,24 @@
 	 */
 	private void initComps()
 	{
-		IModel<ClientProperties> properties = new IModel<ClientProperties>()
+		IModel<WebClientInfo> info = new LoadableDetachableModel<WebClientInfo>() {
+			@Override
+			protected WebClientInfo load()
+			{
+				return newWebClientInfo(getRequestCycle());
+			}			
+		};
+
+		IModel<ClientProperties> properties = new LoadableDetachableModel<ClientProperties>()
 		{
 			@Override
-			public ClientProperties getObject()
+			protected ClientProperties load()
 			{
-				return WebSession.get().getClientInfo().getProperties();
+				return info.getObject().getProperties();
 			}
 		};
 
-		add(new ContinueLink("link", properties));
+		add(new ContinueLink("link", info));
 
 		browserInfoForm = new BrowserInfoForm("postback", properties)
 		{
@@ -22,6 +30,8 @@
 			protected void afterSubmit()
 			{
 				getModelObject().setJavaScriptEnabled(true);
+
+				WebSession.get().setClientInfo(info.getObject());
 
 				continueToOriginalDestination();
 

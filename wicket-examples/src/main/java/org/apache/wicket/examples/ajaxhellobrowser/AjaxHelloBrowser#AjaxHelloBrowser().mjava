@@ -39,11 +39,33 @@
 		clientTime.setOutputMarkupPlaceholderTag(true);
 		clientTime.setVisible(false);
 
-		add(AjaxClientInfoBehavior.onClientInfo((AjaxRequestTarget target, WebClientInfo info) -> {
-			clientInfo.setVisible(true);
-			clientTime.setVisible(true);
-			target.add(clientInfo, clientTime);
-		}));
+		add(new AjaxClientInfoBehavior() {
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response)
+			{
+				super.renderHead(component, response);
+
+				String script = "Wicket.BrowserInfo.collectExtraInfo = function(info) { info.extendedProperty = 'This property was read extra.'; };";
+
+				response.render(JavaScriptHeaderItem.forScript(script, "extended-client-info"));
+			}
+
+			@Override
+			protected WebClientInfo newWebClientInfo(RequestCycle requestCycle)
+			{
+				return new WebClientInfo(requestCycle, new ExtendedClientProperties());
+			}
+
+			@Override
+			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo webClientInfo)
+			{
+				clientInfo.setVisible(true);
+				clientTime.setVisible(true);
+
+				target.add(clientInfo, clientTime);
+			}
+		});
 
 		add(clientInfo, clientTime);
 	}
