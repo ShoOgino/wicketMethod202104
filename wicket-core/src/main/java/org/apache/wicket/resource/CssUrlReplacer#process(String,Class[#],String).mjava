@@ -30,6 +30,11 @@
 			{
 				processedUrl = imageCandidateUrl.toString();
 			}
+			else if (imageCandidateUrl.isDataUrl())
+			{
+				embedded = true;
+				processedUrl = imageCandidateUrl.toString();
+			}
 			else
 			{
 				// relativize against the url for the containing CSS file
@@ -61,6 +66,8 @@
 				}
 
 			}
+
+			// embedded data urls don't need single quotes, but regular urls do:
 			matcher.appendReplacement(output,
 				embedded ? "url(" + processedUrl + ")" : "url('" + processedUrl + "')");
 		}
