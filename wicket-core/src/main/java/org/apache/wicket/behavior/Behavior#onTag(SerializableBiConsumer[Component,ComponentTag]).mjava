@@ -11,7 +11,7 @@
 	 *            the {@code SerializableConsumer} that accepts the {@link ComponentTag}
 	 * @return The created behavior
 	 */
-	public static Behavior onTag(SerializableConsumer<ComponentTag> onTagConsumer)
+	public static Behavior onTag(SerializableBiConsumer<Component, ComponentTag> onTagConsumer)
 	{
 		Args.notNull(onTagConsumer, "onTagConsumer");
 
@@ -20,7 +20,7 @@
 			@Override
 			public void onComponentTag(Component component, ComponentTag tag)
 			{
-				onTagConsumer.accept(tag);
+				onTagConsumer.accept(component, tag);
 			}
 		};
 	}
