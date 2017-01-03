@@ -1,0 +1,11 @@
+	@Override
+	protected void respond(AjaxRequestTarget target)
+	{
+		String result = getComponent().getRequest().getRequestParameters().getParameterValue("result").toOptionalString();
+		if ("success".equals(result)) {
+			onDownloadSuccess(target);
+		} else if ("failed".equals(result)) {
+			onDownloadFailed(target);
+		}
+	}
+

@@ -1,0 +1,45 @@
+	private void initDownloadReference()
+	{
+		ResourceReference reference = new ResourceReference("referenceToResource") {
+			@Override
+			public IResource getResource()
+			{
+				return new StaticResource();
+			}
+		};
+		
+		final AjaxDownload download = new AjaxDownload(reference) {
+			
+			@Override
+			protected void onBeforeDownload(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(true);
+				target.add(downloadingContainer);
+			}
+
+			@Override
+			protected void onDownloadSuccess(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+			}
+			
+			@Override
+			protected void onDownloadFailed(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+			}
+		};
+		add(download);
+		
+		add(new AjaxLink<Void>("downloadReference")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				download.initiate(target);
+			}
+		});
+	}
+

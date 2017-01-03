@@ -1,0 +1,12 @@
+		@Override
+		public void onResourceRequested()
+		{
+			final RequestCycle requestCycle = RequestCycle.get();
+			final Response response = requestCycle.getResponse();
+			((WebResponse) response).addCookie(cookie(getName()));
+
+			Attributes a = new Attributes(requestCycle.getRequest(), response, null);
+
+			resource.respond(a);
+		}
+

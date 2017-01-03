@@ -1,0 +1,49 @@
+	/**
+	 * Call this method to initiate the download.
+	 * 
+	 * @param target
+	 *            the initiating Ajax target
+	 */
+	public void initiate(AjaxRequestTarget target)
+	{
+		if (getComponent() == null)
+		{
+			throw new WicketRuntimeException("not bound to a component");
+		}
+
+		((WebResponse)RequestCycle.get().getResponse()).clearCookie(cookie(getName()));
+
+		CharSequence url;
+		if (resourceBehavior == null)
+		{
+			if (resourceReference.canBeRegistered())
+			{
+				getComponent().getApplication().getResourceReferenceRegistry()
+					.registerResourceReference(resourceReference);
+			}
+
+			PageParameters parameters = new PageParameters();
+			if (resourceParameters != null)
+			{
+				parameters.mergeWith(resourceParameters);
+			}
+			parameters.set(RESOURCE_PARAMETER_NAME, getName());
+
+			url = getComponent().getRequestCycle()
+				.urlFor(new ResourceReferenceRequestHandler(resourceReference, parameters));
+		}
+		else
+		{
+			url = resourceBehavior.getUrl();
+		}
+
+		JSONObject settings = new JSONObject();
+		settings.put("attributes", new JsonFunction(renderAjaxAttributes(getComponent())));
+		settings.put("name", getName());
+		settings.put("url", url);
+
+		target.appendJavaScript(String.format("Wicket.AjaxDownload.initiate(%s);", settings));
+
+		onBeforeDownload(target);
+	}
+
