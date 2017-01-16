@@ -18,14 +18,21 @@
 			((IQueueRegion)child).dequeue();			
 		}
 		
+		if (childType == ChildToDequeueType.BORDER) 
+		{
+			Border childContainer = (Border)child;
+			// propagate dequeuing to border's body
+            MarkupContainer body = childContainer.getBodyContainer();
+			
+			dequeueChildrenContainer(dequeue, body);
+		}
+		
 		if (childType == ChildToDequeueType.MARKUP_CONTAINER)
 		{
 			// propagate dequeuing to containers
 			MarkupContainer childContainer = (MarkupContainer)child;
 			
-			dequeue.pushContainer(childContainer);
-			childContainer.dequeue(dequeue);
-			dequeue.popContainer();			
+			dequeueChildrenContainer(dequeue, childContainer);			
 		}
 		
 		if (childType == ChildToDequeueType.NULL || 
