@@ -3,7 +3,7 @@
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		System.setProperty("wicket.configuration", "development");
 
@@ -54,6 +54,9 @@
 		bb.setServer(server);
 		bb.setContextPath("/");
 		bb.setWar("src/main/webapp");
+
+		ServerContainer serverContainer = WebSocketServerContainerInitializer.configureContext(bb);
+		serverContainer.addEndpoint(new WicketServerEndpointConfig());
 
 		// uncomment next line if you want to test with JSESSIONID encoded in the urls
 		// ((AbstractSessionManager)
