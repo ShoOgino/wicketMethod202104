@@ -1,16 +1,7 @@
 	@Test
 	public void testNonBookmarkablePage()
 	{
-		boolean hit = false;
-		try
-		{
-			tester.getApplication().getComponentPostOnBeforeRenderListeners().add(checker);
-			tester.startPage(StatelessPage.class);
-		}
-		catch (IllegalArgumentException ex)
-		{
-			hit = true;
-		}
+		boolean hit = isHitBookmarkablePage(checker);
 		assertTrue("Expected exception", hit);
 	}
 

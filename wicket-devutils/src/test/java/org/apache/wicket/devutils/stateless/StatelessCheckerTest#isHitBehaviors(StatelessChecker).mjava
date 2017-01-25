@@ -1,0 +1,16 @@
+	private boolean isHitBehaviors(StatelessChecker checker) {
+		boolean hit = false;
+		try
+		{
+			tester.getApplication().getComponentPostOnBeforeRenderListeners().add(checker);
+			tester.startComponentInPage(new StatelessLabel("foo").add(new StatefulBehavior()));
+		}
+		catch (WicketRuntimeException ex)
+		{
+			if(ex.getCause() instanceof IllegalStateException) {
+				hit = true;
+			}
+		}
+		return hit;
+	}
+

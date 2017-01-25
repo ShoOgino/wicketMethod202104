@@ -35,7 +35,6 @@
 				}
 			};
 
-			final String msg = "'" + component + "' claims to be stateless but isn't.";
 			if (component.isStateless() == false)
 			{
 				StringList statefulBehaviors = new StringList();
@@ -55,16 +54,17 @@
 				{
 				    reason = " Stateful behaviors: " + statefulBehaviors.join();
 				}
-				throw new IllegalStateException(msg + reason);
+				failBehaviors(component, reason);
 			}
 
 			if (component instanceof MarkupContainer)
 			{
+				MarkupContainer container = ((MarkupContainer)component);
 				// Traverse children
-				final Object o = ((MarkupContainer)component).visitChildren(visitor);
+				final Object o = container.visitChildren(visitor);
 				if (o != null)
 				{
-					throw new IllegalArgumentException(msg + " Offending component: " + o);
+					failMarkupContainer(container, " Offending component: " + o);
 				}
 			}
 
@@ -73,12 +73,11 @@
 				final Page p = (Page)component;
 				if (!p.isBookmarkable())
 				{
-					throw new IllegalArgumentException(msg +
-						" Only bookmarkable pages can be stateless");
+					failPage(p, " Only bookmarkable pages can be stateless");
 				}
 				if (!p.isPageStateless())
 				{
-					throw new IllegalArgumentException(msg + " for unknown reason");
+					failPage(p, " for unknown reason");
 				}
 			}
 		}
