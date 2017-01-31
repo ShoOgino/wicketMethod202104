@@ -11,7 +11,8 @@
 	public ILinkParser addLinkRenderStrategy(final String pattern,
 		final ILinkRenderStrategy renderStrategy)
 	{
-		renderStrategies.put(pattern, renderStrategy);
+		final Pattern compiledPattern = Pattern.compile(pattern, Pattern.DOTALL);
+		renderStrategies.put(compiledPattern, renderStrategy);
 		return this;
 	}
 
