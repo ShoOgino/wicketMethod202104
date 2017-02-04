@@ -1,0 +1,22 @@
+		Provision resolvePageInstance(Integer pageId, Class<? extends IRequestablePage> pageClass,
+			PageParameters pageParameters, Integer renderCount)
+		{
+
+			if (pageId != null)
+			{
+				IRequestablePage stored = pageSource.getPageInstance(pageId);
+				if (stored != null && (pageClass == null || pageClass.equals(stored.getClass())))
+				{
+
+					page = stored;
+
+					if (renderCount != null && page.getRenderCount() != renderCount)
+						throw new StalePageException(page);
+				}
+			}
+
+			failedToFindStoreddPage = page == null;
+
+			return this;
+		}
+

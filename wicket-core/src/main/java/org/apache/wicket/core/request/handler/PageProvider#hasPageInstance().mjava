@@ -1,18 +1,12 @@
 	/**
-	 * Checks whether or not the provider has a page instance. This page instance might have been
-	 * passed to this page provider directly or it may have been instantiated or retrieved from the
-	 * page store.
-	 * 
-	 * @return {@code true} iff page instance has been created or retrieved
+	 * @return if provides an identified page
 	 */
 	@Override
 	public final boolean hasPageInstance()
 	{
-		if (pageInstance == null && pageId != null)
-		{
-			// attempt to load a stored page instance from the page store
-			getStoredPage(pageId);
-		}
-		return pageInstance != null;
+		if (pageId != null || provision != null)
+			return getProvision().didResolvePage();
+		else
+			return false;
 	}
 

@@ -1,23 +1,9 @@
 	/**
-	 * The page instance is new only if there is no cached instance or the data stores doesn't have
-	 * a page with that id with the same {@linkplain #pageClass}.
-	 * 
-	 * @see IPageProvider#isNewPageInstance()
+	 * @return don't resolve a page, but can create a new one
 	 */
 	@Override
 	public boolean isNewPageInstance()
 	{
-		boolean isNew = pageInstance == null;
-		if (isNew && pageId != null)
-		{
-			IRequestablePage storedPageInstance = getStoredPage(pageId);
-			if (storedPageInstance != null)
-			{
-				pageInstance = storedPageInstance;
-				isNew = false;
-			}
-		}
-
-		return isNew;
+		return !hasPageInstance();
 	}
 
