@@ -1,11 +1,18 @@
 	/**
-	 * @return if provides an identified page
+	 * If this provider returns existing page, regardless if it was already created by PageProvider
+	 * itself or is or can be found in the data store. The only guarantee is that by calling
+	 * {@link PageProvider#getPageInstance()} this provider will return an existing instance and no
+	 * page will be created.
+	 * 
+	 * @return if provides an existing page
 	 */
 	@Override
 	public final boolean hasPageInstance()
 	{
-		if (pageId != null || provision != null)
-			return getProvision().didResolvePage();
+		if (provision.wasResolved() || pageId != null)
+		{
+			return getResolvedProvision().didResolveToPage();
+		}
 		else
 			return false;
 	}

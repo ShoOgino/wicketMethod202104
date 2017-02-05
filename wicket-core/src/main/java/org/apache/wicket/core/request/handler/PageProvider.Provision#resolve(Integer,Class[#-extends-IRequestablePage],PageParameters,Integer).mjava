@@ -1,10 +1,10 @@
-		Provision resolvePageInstance(Integer pageId, Class<? extends IRequestablePage> pageClass,
+		Provision resolve(Integer pageId, Class<? extends IRequestablePage> pageClass,
 			PageParameters pageParameters, Integer renderCount)
 		{
 
 			if (pageId != null)
 			{
-				IRequestablePage stored = pageSource.getPageInstance(pageId);
+				IRequestablePage stored = getPageSource().getPageInstance(pageId);
 				if (stored != null && (pageClass == null || pageClass.equals(stored.getClass())))
 				{
 
@@ -13,9 +13,12 @@
 					if (renderCount != null && page.getRenderCount() != renderCount)
 						throw new StalePageException(page);
 				}
+
+				failedToFindStoredPage = page == null;
 			}
 
-			failedToFindStoreddPage = page == null;
+
+			resolved = true;
 
 			return this;
 		}

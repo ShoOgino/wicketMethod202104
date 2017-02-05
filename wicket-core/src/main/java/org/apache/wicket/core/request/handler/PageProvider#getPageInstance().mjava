@@ -4,10 +4,12 @@
 	@Override
 	public IRequestablePage getPageInstance()
 	{
-		if (!getProvision().didResolvePage() && !getProvision().doesProvideNewPage())
+		Provision resolvedProvision = getResolvedProvision();
+
+		if (!resolvedProvision.didResolveToPage() && !resolvedProvision.doesProvideNewPage())
 		{
-			throw new PageExpiredException("Page with id '" + pageId + "' has expired.");
+			throw new IllegalStateException("The configured page provider can't resolve a page.");
 		}
-		return getProvision().get();
+		return resolvedProvision.getPage();
 	}
 

@@ -8,10 +8,10 @@
 	@Override
 	public final boolean isPageInstanceFresh()
 	{
-		if (this.provision == null)
+		if (!this.provision.wasResolved())
 		{
 			throw new IllegalStateException("Page instance not yet resolved");
 		}
-		return getProvision().doesProvideNewPage();
+		return getResolvedProvision().doesProvideNewPage();
 	}
 
