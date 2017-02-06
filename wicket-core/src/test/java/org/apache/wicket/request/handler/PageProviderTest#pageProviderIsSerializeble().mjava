@@ -1,0 +1,17 @@
+	@Test
+	public void pageProviderIsSerializeble() throws Exception
+	{
+		TestMapperContext mapperContext = new TestMapperContext();
+		Page page = new TestPage();
+		mapperContext.getPageManager().touchPage(page);
+		mapperContext.getPageManager().commitRequest();
+
+		PageProvider pageProvider = new PageProvider(page.getPageId(), page.getRenderCount());
+		JavaSerializer javaSerializer = new JavaSerializer("app");
+		byte[] serialized = javaSerializer.serialize(pageProvider);
+		PageProvider deserialized = (PageProvider)javaSerializer.deserialize(serialized);
+		deserialized.setPageSource(mapperContext);
+
+		assertThat(deserialized.getPageInstance(), is(page));
+	}
+
