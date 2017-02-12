@@ -1,0 +1,24 @@
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.wicket.pageStore.IPageStore#destroy()
+	 */
+	@Override
+	public void destroy()
+	{
+		if (pageSavingThread.isAlive())
+		{
+			pageSavingThread.interrupt();
+			try
+			{
+				pageSavingThread.join();
+			}
+			catch (InterruptedException e)
+			{
+				log.error(e.getMessage(), e);
+			}
+		}
+
+		pageStore.destroy();
+	}
+

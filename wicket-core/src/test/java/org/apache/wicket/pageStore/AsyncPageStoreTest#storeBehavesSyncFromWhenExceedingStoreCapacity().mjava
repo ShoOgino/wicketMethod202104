@@ -1,0 +1,41 @@
+	/**
+	 * Store behaves sync from when number of pages handled exceeds the given async-storage
+	 * capacity. It works async until the number of pages reaches the limit (capacity).
+	 * 
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void storeBehavesSyncFromWhenExceedingStoreCapacity() throws InterruptedException
+	{
+		int sessions = 2;
+		int pages = 5;
+		long writeMillis = 2000;
+		long readMillis = 1500;
+		int asyncPageStoreCapacity = pages; // only up to the first round of
+											// pages
+
+		List<Metrics> results = runTest(sessions, pages, writeMillis, readMillis,
+			asyncPageStoreCapacity);
+
+		for (Metrics metrics : results)
+			System.out.println(metrics);
+
+		int sync = 0;
+
+		for (int i = 0; i < results.size(); i++)
+		{
+			Metrics metrics = results.get(i);
+
+			assertEquals(metrics.storedPage.sessionId, metrics.restoredPage.sessionId);
+			assertEquals(metrics.storedPage.getPageId(), metrics.restoredPage.getPageId());
+
+			if (!metrics.storedPage.equals(metrics.restoredPage))
+			{
+				assertTrue(metrics.storingMillis >= metrics.storedPage.writeMillis);
+				sync++;
+			}
+		}
+
+		assertTrue(sync > 0);
+	}
+
