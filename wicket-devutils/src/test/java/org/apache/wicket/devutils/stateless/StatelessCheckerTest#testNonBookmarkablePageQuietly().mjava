@@ -1,7 +1,17 @@
 	@Test
 	public void testNonBookmarkablePageQuietly()
 	{
-		boolean hit = isHitBookmarkablePage(checkerQuietly);
+		boolean hit1 = false;
+		try
+		{
+			tester.getApplication().getComponentPostOnBeforeRenderListeners().add(checkerQuietly);
+			tester.startPage(StatelessPage.class);
+		}
+		catch (StatelessCheckFailureException ex)
+		{
+			hit1 = true;
+		}
+		boolean hit = hit1;
 		assertFalse("Expected exception", hit);
 	}
 

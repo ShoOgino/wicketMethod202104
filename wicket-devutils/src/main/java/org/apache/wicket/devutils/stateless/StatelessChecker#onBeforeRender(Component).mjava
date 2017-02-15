@@ -54,7 +54,7 @@
 				{
 				    reason = " Stateful behaviors: " + statefulBehaviors.join();
 				}
-				failBehaviors(component, reason);
+				fail(new StatelessCheckFailureException(component, reason));
 			}
 
 			if (component instanceof MarkupContainer)
@@ -64,7 +64,7 @@
 				final Object o = container.visitChildren(visitor);
 				if (o != null)
 				{
-					failMarkupContainer(container, " Offending component: " + o);
+					fail(new StatelessCheckFailureException(container, " Offending component: " + o));
 				}
 			}
 
@@ -73,11 +73,11 @@
 				final Page p = (Page)component;
 				if (!p.isBookmarkable())
 				{
-					failPage(p, " Only bookmarkable pages can be stateless");
+					fail(new StatelessCheckFailureException(p, " Only bookmarkable pages can be stateless"));
 				}
 				if (!p.isPageStateless())
 				{
-					failPage(p, " for unknown reason");
+					fail(new StatelessCheckFailureException(p, " for unknown reason"));
 				}
 			}
 		}
