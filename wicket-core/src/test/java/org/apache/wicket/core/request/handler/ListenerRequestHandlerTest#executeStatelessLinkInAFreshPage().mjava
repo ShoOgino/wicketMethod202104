@@ -1,0 +1,12 @@
+	@Test
+	public void executeStatelessLinkInAFreshPage()
+	{
+		tester.startPage(StatelessPage.class);
+
+		tester.clickLink("statelessLink");
+
+		StatelessPage page = (StatelessPage)tester.getLastRenderedPage();
+		assertThat(page.invoked, is(true));
+		assertThat(page.executedInAnFreshPage, is(true));
+	}
+

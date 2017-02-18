@@ -1,0 +1,13 @@
+	@Test
+	public void executeStatelessLinkInAFreshPageAtASegment()
+	{
+		tester.getApplication().getRootRequestMapperAsCompound() .add(new MountedMapper("/segment", TemporarilyStateful.class));
+		tester.startPage(TemporarilyStateful.class);
+
+		tester.clickLink("statelessLink");
+
+		TemporarilyStateful page = (TemporarilyStateful)tester.getLastRenderedPage();
+		assertThat(page.invoked, is(true));
+		assertThat(page.executedInAnFreshPage, is(true));
+	}
+
