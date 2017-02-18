@@ -1,7 +1,14 @@
 	@Test
 	public void testStatefulBehaviors()
 	{
-		boolean hit = isHitBehaviors(checker);
-		assertTrue("Expected exception", hit);
+		try
+		{
+			startComponentInPage(checker, new StatelessLabel("foo").add(new StatefulBehavior()));
+			fail("Expected tester.startComponentInPage() to fail with StatelessCheckFailureException");
+		}
+		catch (StatelessCheckFailureException ex)
+		{
+			assertStatefulBehaviors(ex);
+		}
 	}
 

@@ -1,6 +1,14 @@
 	@Test
-	public void testStatefulMarkupContainer() {
-		boolean hit = isHitMarkupContainer(checker);
-		assertTrue("Expected exception", hit);
+	public void testStatefulMarkupContainer()
+	{
+		try
+		{
+			startComponentInPage(checker, new StatefulMarkupContainer("foo"));
+			fail("Expected tester.startComponentInPage() to fail with StatelessCheckFailureException");
+		}
+		catch (StatelessCheckFailureException ex)
+		{
+			assertStatefulMarkupContainer(ex);
+		}
 	}
 

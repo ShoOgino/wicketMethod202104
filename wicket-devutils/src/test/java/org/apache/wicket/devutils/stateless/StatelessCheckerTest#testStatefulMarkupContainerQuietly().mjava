@@ -1,6 +1,9 @@
 	@Test
-	public void testStatefulMarkupContainerQuietly() {
-		boolean hit = isHitMarkupContainer(checkerQuietly);
-		assertFalse("Expected exception", hit);
+	public void testStatefulMarkupContainerQuietly()
+	{
+		startComponentInPage(checkerQuietly, new StatefulMarkupContainer("foo"));
+		StatelessCheckFailureException ex = checkerQuietly.getFailureException();
+		assertStatefulMarkupContainer(ex);
+
 	}
 

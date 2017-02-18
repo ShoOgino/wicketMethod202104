@@ -1,7 +1,8 @@
 	@Test
 	public void testStatefulBehaviorsQuietly()
 	{
-		boolean hit = isHitBehaviors(checkerQuietly);
-		assertFalse("Expected exception", hit);
+		startComponentInPage(checkerQuietly, new StatelessLabel("foo").add(new StatefulBehavior()));
+		StatelessCheckFailureException ex = checkerQuietly.getFailureException();
+		assertStatefulBehaviors(ex);
 	}
 
