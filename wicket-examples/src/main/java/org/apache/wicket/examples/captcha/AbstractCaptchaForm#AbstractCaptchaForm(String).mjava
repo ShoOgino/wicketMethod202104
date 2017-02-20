@@ -38,10 +38,14 @@
 		captchaImage.setOutputMarkupId(true);
 		form.add(captchaImage);
 
-		AjaxLink<Void> changeCaptchaLink = AjaxLink.onClick("changeLink", target -> {
-			captchaImageResource.invalidate();
-			target.add(captchaImage);
-		});
+		AjaxLink<Void> changeCaptchaLink = new AjaxLink<Void>("changeLink") {
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				captchaImageResource.invalidate();
+				target.add(captchaImage);
+			}
+		};
 		form.add(changeCaptchaLink);
 
 		form.add(new RequiredTextField<String>("text",
