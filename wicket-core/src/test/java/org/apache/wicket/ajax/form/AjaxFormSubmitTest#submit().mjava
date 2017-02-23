@@ -1,0 +1,25 @@
+	@Test
+	public void submit()
+	{
+		AjaxFormSubmitTestPage page = new AjaxFormSubmitTestPage(true);
+
+		tester.startPage(page);
+		tester.assertRenderedPage(page.getClass());
+		FormTester form = tester.newFormTester("form");
+		form.setValue("txt1", "txt1");
+		form.setValue("txt2", "txt2");
+		// mark the button as the one being pressed. there is a 'p::' infront of name because wicket
+		// escapes "submit" input names as they break browsers
+		tester.getRequest().getPostParameters().setParameterValue("p::submit", "x");
+		tester.submitForm(form.getForm());
+		tester.assertRenderedPage(page.getClass());
+		assertTrue((page.getFormSubmitted() & AjaxFormSubmitTestPage.FORM_SUBMIT) > 0);
+		assertFalse((page.getFormSubmitted() & AjaxFormSubmitTestPage.FORM_ERROR) > 0);
+		assertTrue((page.getFormSubmitted() & AjaxFormSubmitTestPage.BUTTON_SUBMIT) > 0);
+		assertFalse((page.getFormSubmitted() & AjaxFormSubmitTestPage.BUTTON_ERROR) > 0);
+		assertEquals("txt1", tester.getComponentFromLastRenderedPage("form:txt1")
+			.getDefaultModelObject());
+		assertEquals("txt2", tester.getComponentFromLastRenderedPage("form:txt2")
+			.getDefaultModelObject());
+	}
+

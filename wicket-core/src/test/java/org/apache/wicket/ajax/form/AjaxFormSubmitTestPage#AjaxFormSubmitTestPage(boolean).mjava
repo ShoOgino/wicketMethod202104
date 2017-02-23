@@ -1,0 +1,48 @@
+	/**
+	 * Construct.
+	 */
+	public AjaxFormSubmitTestPage(boolean defaultProcessing)
+	{
+		super(new CompoundPropertyModel<ValueMap>(new ValueMap("txt1=foo,txt2=bar")));
+		Form<?> form = new Form<Void>("form")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit()
+			{
+				formSubmitted = formSubmitted | FORM_SUBMIT;
+			}
+			
+			@Override
+			protected void onError()
+			{
+				formSubmitted = formSubmitted | FORM_ERROR;
+			}
+		};
+		add(form);
+		form.add(new TextField<String>("txt1").setRequired(true));
+		form.add(new TextField<String>("txt2").setRequired(true));
+		form.add(new AjaxFallbackButton("submit", form)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(Optional<AjaxRequestTarget> target)
+			{
+				assertEquals(target.isPresent(), getRequestCycle().find(AjaxRequestTarget.class).isPresent());
+				formSubmitted = formSubmitted | BUTTON_SUBMIT;
+			}
+			
+			protected void onError(Optional<AjaxRequestTarget> target) {
+				assertEquals(target.isPresent(), getRequestCycle().find(AjaxRequestTarget.class).isPresent());
+				
+				formSubmitted = formSubmitted | BUTTON_ERROR;
+			}
+			
+			protected void onAfterSubmit(Optional<AjaxRequestTarget> target) {
+				assertEquals(target.isPresent(), getRequestCycle().find(AjaxRequestTarget.class).isPresent());
+			}
+		}.setDefaultFormProcessing(defaultProcessing));
+	}
+
