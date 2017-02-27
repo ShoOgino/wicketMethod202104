@@ -8,15 +8,17 @@
 	{
 		Args.notNull(request, "request");
 
-		final String requestUri = DispatchedRequestUtils.getRequestUri(request, "javax.servlet.forward.request_uri", filterPrefix);
-		final String servletPath = (String)request.getAttribute("javax.servlet.forward.servlet_path");
-		final String contextPath = (String)request.getAttribute("javax.servlet.forward.context_path");
-		final String queryString = (String)request.getAttribute("javax.servlet.forward.query_string");
+		final String requestUri = DispatchedRequestUtils.getRequestUri(request, RequestDispatcher.FORWARD_REQUEST_URI, filterPrefix);
+		final String servletPath = (String)request.getAttribute(RequestDispatcher.FORWARD_SERVLET_PATH);
+		final String contextPath = (String)request.getAttribute(RequestDispatcher.FORWARD_CONTEXT_PATH);
+		final String queryString = (String)request.getAttribute(RequestDispatcher.FORWARD_QUERY_STRING);
+		final String pathInfo = (String)request.getAttribute(RequestDispatcher.FORWARD_PATH_INFO);
 
 		if (!Strings.isEmpty(requestUri) || !Strings.isEmpty(servletPath) ||
-			!Strings.isEmpty(contextPath) || !Strings.isEmpty(queryString))
+			!Strings.isEmpty(contextPath) || !Strings.isEmpty(queryString) ||
+			!Strings.isEmpty(pathInfo))
 		{
-			return new ForwardAttributes(requestUri, servletPath, contextPath, queryString);
+			return new ForwardAttributes(requestUri, servletPath, contextPath, queryString, pathInfo);
 		}
 		return null;
 	}
