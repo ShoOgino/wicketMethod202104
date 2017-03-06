@@ -1,0 +1,32 @@
+	/**
+	 * This toolbar is only visible if there are rows in the data set and if there are exportable columns in the
+	 * data table and if there are data exporters added to the toolbar.
+	 */
+	protected void calculateVisibility()
+	{
+		final boolean isVisible;
+		if (dataExporters.isEmpty())
+		{
+			isVisible = false;
+		}
+		else if (getTable().getRowCount() == 0)
+		{
+			isVisible = false;
+		}
+		else
+		{
+			boolean foundExportableColumn = false;
+			for (IColumn<?, ?> col : getTable().getColumns())
+			{
+				if (col instanceof IExportableColumn)
+				{
+					foundExportableColumn = true;
+					break;
+				}
+			}
+			isVisible = foundExportableColumn;
+		}
+
+		setVisible(isVisible);
+	}
+
