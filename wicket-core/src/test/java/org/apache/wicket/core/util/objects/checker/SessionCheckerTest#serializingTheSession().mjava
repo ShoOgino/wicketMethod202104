@@ -18,12 +18,14 @@
 			}
 		};
 
-		WebMarkupContainer container = new WebMarkupContainer("container");
+		MockPageWithOneComponent page = new MockPageWithOneComponent();
+		WebMarkupContainer container = new WebMarkupContainer(MockPageWithOneComponent.COMPONENT_ID);
+		page.add(container);
 		// WICKET-6196 force container#children to be an array
 		container.add(new Label("id1"));
 		container.add(new ComponentWithAReferenceToTheSession("id2"));
 		
-		byte[] serialized = serializer.serialize(container);
+		byte[] serialized = serializer.serialize(page);
 		assertNull("The produced byte[] must be null if there was an error", serialized);
 	}
 

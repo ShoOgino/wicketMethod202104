@@ -1,13 +1,9 @@
 	/**
 	 * https://issues.apache.org/jira/browse/WICKET-4812
-	 *
-	 * Tests that the serialization fails when a checking ObjectOutputStream is
-	 * used with NotDetachedModelChecker and there is a non-detached LoadableDetachableModel
-	 * in the object tree.
+	 * https://issues.apache.org/jira/browse/WICKET-6334
 	 */
 	@Test
-	public void notDetachedModel()
-	{
+	public void whenSerializingPage_thenItsComponentsShouldBeChecked() {
 		JavaSerializer serializer = new JavaSerializer("JavaSerializerTest")
 		{
 			@Override
@@ -18,10 +14,10 @@
 			}
 		};
 
-		IModel<String> model = new NotDetachedModel();
-		model.getObject();
-		WebComponent component = new WebComponent("id", model);
-		byte[] serialized = serializer.serialize(component);
+		MockPageWithOneComponent page = new MockPageWithOneComponent();
+		page.add(new ComponentWithAttachedModel(MockPageWithOneComponent.COMPONENT_ID));
+
+		final byte[] serialized = serializer.serialize(page);
 		assertNull("The produced byte[] must be null if there was an error", serialized);
 	}
 
