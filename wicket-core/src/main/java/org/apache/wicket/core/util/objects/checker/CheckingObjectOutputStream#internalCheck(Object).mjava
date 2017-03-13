@@ -5,17 +5,14 @@
 		nameStack.add(simpleName);
 		traceStack.add(new TraceSlot(obj, fieldDescription));
 
-		if (obj instanceof IManageablePage || (traceStack.size() > 1 && traceStack.get(0).object instanceof IManageablePage))
+		for (IObjectChecker checker : checkers)
 		{
-			for (IObjectChecker checker : checkers)
+			IObjectChecker.Result result = checker.check(obj);
+			if (result.status == IObjectChecker.Result.Status.FAILURE)
 			{
-				IObjectChecker.Result result = checker.check(obj);
-				if (result.status == IObjectChecker.Result.Status.FAILURE)
-				{
-					String prettyPrintMessage = toPrettyPrintedStack(Classes.name(cls));
-					String exceptionMessage = result.reason + '\n' + prettyPrintMessage;
-					throw new ObjectCheckException(exceptionMessage, result.cause);
-				}
+				String prettyPrintMessage = toPrettyPrintedStack(Classes.name(cls));
+				String exceptionMessage = result.reason + '\n' + prettyPrintMessage;
+				throw new ObjectCheckException(exceptionMessage, result.cause);
 			}
 		}
 

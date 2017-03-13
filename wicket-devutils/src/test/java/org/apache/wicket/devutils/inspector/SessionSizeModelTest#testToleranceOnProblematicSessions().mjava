@@ -4,11 +4,6 @@
 	@Test
 	public void testToleranceOnProblematicSessions()
 	{
-		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage(containsString("A problem occurred while serializing an object. " +
-				"Please check the earlier logs for more details. Problematic object: " +
-				"org.apache.wicket.devutils.inspector.SessionSizeModelTest$TestSession"));
-
 		new WicketTester(new MockApplication()
 		{
 			@Override
@@ -18,6 +13,6 @@
 			}
 		});
 		SessionSizeModel model = new SessionSizeModel();
-		model.getObject();
+		assertEquals(null, model.getObject());
 	}
 
