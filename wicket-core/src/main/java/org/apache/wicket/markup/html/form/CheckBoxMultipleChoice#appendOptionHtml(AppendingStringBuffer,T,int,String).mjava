@@ -52,19 +52,43 @@
 			final CharSequence escaped = (getEscapeModelStrings() ? Strings.escapeMarkup(display)
 					: display);
 
+			// Allows user to add attributes to the <label..> tag
+			IValueMap labelAttrs = getAdditionalAttributesForLabel(index, choice);
+			StringBuilder extraLabelAttributes = new StringBuilder();
+			if (labelAttrs != null)
+			{
+				for (Map.Entry<String, Object> attr : labelAttrs.entrySet())
+				{
+					extraLabelAttributes.append(' ')
+							.append(Strings.escapeMarkup(attr.getKey()))
+							.append("=\"")
+							.append(Strings.escapeMarkup(attr.getValue().toString()))
+							.append('"');
+				}
+			}
+
 			switch (labelPosition)
 			{
 				case BEFORE:
-					buffer.append("<label for=\"");
-					buffer.append(Strings.escapeMarkup(idAttr));
-					buffer.append("\">").append(escaped).append("</label>");
-					break;
-				case WRAP_AFTER:
-					buffer.append("<label>");
+					buffer.append("<label for=\"")
+					.append(Strings.escapeMarkup(idAttr))
+					.append('"')
+					.append(extraLabelAttributes)
+					.append('>')
+					.append(escaped)
+					.append("</label>");
 					break;
 				case WRAP_BEFORE:
-					buffer.append("<label>");
-					buffer.append(escaped).append(' ');
+					buffer.append("<label")
+					.append(extraLabelAttributes)
+					.append('>')
+					.append(escaped)
+					.append(' ');
+					break;
+				case WRAP_AFTER:
+					buffer.append("<label")
+					.append(extraLabelAttributes)
+					.append('>');
 					break;
 			}
 
@@ -125,12 +149,18 @@
 					buffer.append("</label>");
 					break;
 				case WRAP_AFTER:
-					buffer.append(' ').append(escaped).append("</label>");
+					buffer.append(' ')
+						.append(escaped)
+						.append("</label>");
 					break;
 				case AFTER:
-					buffer.append("<label for=\"");
-					buffer.append(Strings.escapeMarkup(idAttr));
-					buffer.append("\">").append(escaped).append("</label>");
+					buffer.append("<label for=\"")
+						.append(Strings.escapeMarkup(idAttr))
+						.append('"')
+						.append(extraLabelAttributes)
+						.append('>')
+						.append(escaped)
+						.append("</label>");
 					break;
 			}
 
