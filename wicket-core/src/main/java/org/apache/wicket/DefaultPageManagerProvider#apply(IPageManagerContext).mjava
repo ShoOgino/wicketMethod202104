@@ -12,6 +12,13 @@
 		}
 
 		IPageStore pageStore = newPageStore(dataStore);
+		
+		if (pageStore.canBeAsynchronous())
+		{
+			int capacity = storeSettings.getAsynchronousQueueCapacity();
+			pageStore = new AsynchronousPageStore(pageStore, capacity);
+		}
+		
 		return new PageStoreManager(application.getName(), pageStore, pageManagerContext);
 
 	}
