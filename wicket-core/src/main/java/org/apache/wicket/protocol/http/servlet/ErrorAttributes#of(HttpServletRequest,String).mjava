@@ -7,13 +7,13 @@
 	public static ErrorAttributes of(HttpServletRequest request, String filterPrefix)
 	{
 		Args.notNull(request, "request");
-		Integer code = (Integer)request.getAttribute("javax.servlet.error.status_code");
-		String message = (String)request.getAttribute("javax.servlet.error.message");
-		String uri = DispatchedRequestUtils.getRequestUri(request, "javax.servlet.error.request_uri", filterPrefix);
-		String servlet = (String)request.getAttribute("javax.servlet.error.servlet_name");
+		Integer code = (Integer)request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+		String message = (String)request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+		String uri = DispatchedRequestUtils.getRequestUri(request, RequestDispatcher.ERROR_REQUEST_URI, filterPrefix);
+		String servlet = (String)request.getAttribute(RequestDispatcher.ERROR_SERVLET_NAME);
 		@SuppressWarnings("unchecked")
-		Class<? extends Throwable> type = (Class<? extends Throwable>)request.getAttribute("javax.servlet.error.exception_type");
-		Throwable ex = (Throwable)request.getAttribute("javax.servlet.error.exception");
+		Class<? extends Throwable> type = (Class<? extends Throwable>)request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
+		Throwable ex = (Throwable)request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
 
 		if (!Strings.isEmpty(uri) || code != null || ex != null)
 		{

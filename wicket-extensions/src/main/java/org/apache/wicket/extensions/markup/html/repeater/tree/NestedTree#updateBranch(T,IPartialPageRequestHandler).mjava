@@ -1,0 +1,28 @@
+	/**
+	 * Overridden to update the corresponding {@link BranchItem} only.
+	 * 
+	 * @param node
+	 *            node to update
+	 * @param target
+	 *            request target must not be @code null}
+	 */
+	@Override
+	public void updateBranch(T t, IPartialPageRequestHandler target)
+	{
+		final IModel<T> model = getProvider().model(t);
+		visitChildren(BranchItem.class, new IVisitor<BranchItem<T>, Void>()
+		{
+			@Override
+			public void component(BranchItem<T> branch, IVisit<Void> visit)
+			{
+				if (model.equals(branch.getModel()))
+				{
+					// BranchItem always outputs its markupId
+					target.add(branch);
+					visit.stop();
+				}
+			}
+		});
+		model.detach();
+	}
+

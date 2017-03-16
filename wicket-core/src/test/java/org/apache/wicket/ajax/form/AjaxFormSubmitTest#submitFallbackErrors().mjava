@@ -1,0 +1,26 @@
+	/**
+	 * Test ajax fallback with errors.
+	 * 
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-6324">WICKET-6324</a>
+	 */
+	@Test
+	public void submitFallbackErrors()
+	{
+		AjaxFormSubmitTestPage page = new AjaxFormSubmitTestPage(true);
+
+		tester.startPage(page);
+		tester.assertRenderedPage(page.getClass());
+		FormTester form = tester.newFormTester("form");
+		form.setValue("txt1", "");
+		form.setValue("txt2", "");
+		// mark the button as the one being pressed. there is a 'p::' infront of name because wicket
+		// escapes "submit" input names as they break browsers
+		tester.getRequest().getPostParameters().setParameterValue("p::submit", "x");
+		tester.submitForm(form.getForm());
+		tester.assertRenderedPage(page.getClass());
+		assertFalse((page.getFormSubmitted() & AjaxFormSubmitTestPage.FORM_SUBMIT) > 0);
+		assertTrue((page.getFormSubmitted() & AjaxFormSubmitTestPage.FORM_ERROR) > 0);
+		assertFalse((page.getFormSubmitted() & AjaxFormSubmitTestPage.BUTTON_SUBMIT) > 0);
+		assertTrue((page.getFormSubmitted() & AjaxFormSubmitTestPage.BUTTON_ERROR) > 0);
+	}
+
