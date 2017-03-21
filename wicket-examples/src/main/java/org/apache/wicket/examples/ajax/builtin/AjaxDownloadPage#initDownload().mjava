@@ -1,20 +1,7 @@
 	private void initDownload()
 	{
-		IResource resource = new ResourceStreamResource() {
-			protected IResourceStream getResourceStream() {
-				// simulate delay
-				try
-				{
-					TimeUnit.MILLISECONDS.sleep(5000);
-				}
-				catch (InterruptedException e)
-				{
-				}
-				
-				return new StringResourceStream("downloaded via ajax");
-			};
-			
-		}.setFileName("File-from-IResource.txt").setContentDisposition(ContentDisposition.ATTACHMENT).setCacheDuration(Duration.NONE);
+		IResource resource = new ExampleResource("downloaded via ajax")
+			.setContentDisposition(ContentDisposition.ATTACHMENT);
 		
 		final AjaxDownload download = new AjaxDownload(resource) {
 			
@@ -37,6 +24,8 @@
 			{
 				downloadingContainer.setVisible(false);
 				target.add(downloadingContainer);
+				
+				target.appendJavaScript("alert('Download failed');");
 			}
 		};
 		add(download);

@@ -1,23 +1,10 @@
-	private void initDownloadFailure()
+	private void initDownloadInSameWindow()
 	{
-		IResource resource = new ResourceStreamResource() {
-			protected IResourceStream getResourceStream() {
-				// simulate delay
-				try
-				{
-					TimeUnit.MILLISECONDS.sleep(2000);
-				}
-				catch (InterruptedException e)
-				{
-				}
-				
-				throw new AbortWithHttpErrorCodeException(500);
-			};
-			
-		}.setFileName("file").setContentDisposition(ContentDisposition.ATTACHMENT).setCacheDuration(Duration.NONE);
-		
+		IResource resource = new ExampleResource("downloaded via ajax in same browser window")
+			.setContentDisposition(ContentDisposition.ATTACHMENT);
+
 		final AjaxDownload download = new AjaxDownload(resource) {
-			
+
 			@Override
 			protected void onBeforeDownload(AjaxRequestTarget target)
 			{
@@ -31,7 +18,7 @@
 				downloadingContainer.setVisible(false);
 				target.add(downloadingContainer);
 			}
-			
+
 			@Override
 			protected void onDownloadFailed(AjaxRequestTarget target)
 			{
@@ -40,10 +27,18 @@
 				
 				target.appendJavaScript("alert('Download failed');");
 			}
+
+			@Override
+			protected void onDownloadCompleted(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+			}
 		};
+		download.setLocation(AjaxDownload.Location.SameWindow);
 		add(download);
-		
-		add(new AjaxLink<Void>("downloadFailure")
+
+		add(new AjaxLink<Void>("downloadInSameWindow")
 		{
 			@Override
 			public void onClick(AjaxRequestTarget target)
