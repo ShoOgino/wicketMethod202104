@@ -1,0 +1,43 @@
+	private void initDownloadInIframe()
+	{
+		IResource resource = new ExampleResource("downloaded via ajax in iframe")
+			.setContentDisposition(ContentDisposition.ATTACHMENT);
+		
+		final AjaxDownload download = new AjaxDownload(resource) {
+			
+			@Override
+			protected void onBeforeDownload(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(true);
+				target.add(downloadingContainer);
+			}
+
+			@Override
+			protected void onDownloadSuccess(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+			}
+			
+			@Override
+			protected void onDownloadFailed(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+				
+				target.appendJavaScript("alert('Download failed');");
+			}
+		};
+		download.setLocation(Location.IFrame);
+		add(download);
+		
+		add(new AjaxLink<Void>("downloadIframe")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				download.initiate(target);
+			}
+		});
+	}
+
