@@ -18,59 +18,49 @@
 			// Tells FormComponents that a new user input has come
 			inputChanged();
 
-			String url = getRequest().getRequestParameters()
-				.getParameterValue(getHiddenFieldId())
-				.toString();
-			if (!Strings.isEmpty(url))
+			// First, see if the processing was triggered by a Wicket IFormSubmittingComponent
+			if (submitter == null)
 			{
-				dispatchEvent(getPage(), url);
+				submitter = findSubmittingButton();
+
+				if (submitter instanceof IFormSubmittingComponent)
+				{
+					IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)submitter;
+					Component component = (Component)submitter;
+
+					if (!component.isVisibleInHierarchy())
+					{
+						throw new WicketRuntimeException("Submit Button " +
+							submittingComponent.getInputName() + " (path=" +
+							component.getPageRelativePath() + ") is not visible");
+					}
+
+					if (!component.isEnabledInHierarchy())
+					{
+						throw new WicketRuntimeException("Submit Button " +
+							submittingComponent.getInputName() + " (path=" +
+							component.getPageRelativePath() + ") is not enabled");
+					}
+				}
+			}
+
+			// When processing was triggered by a Wicket IFormSubmittingComponent and that
+			// component indicates it wants to be called immediately
+			// (without processing), call the IFormSubmittingComponent.onSubmit* methods right
+			// away.
+			if (submitter != null && !submitter.getDefaultFormProcessing())
+			{
+				submitter.onSubmit();
+				submitter.onAfterSubmit();
 			}
 			else
 			{
-				// First, see if the processing was triggered by a Wicket IFormSubmittingComponent
-				if (submitter == null)
-				{
-					submitter = findSubmittingButton();
+				// the submit request might be for one of the nested forms, so let's
+				// find the right one:
+				final Form<?> formToProcess = findFormToProcess(submitter);
 
-					if (submitter instanceof IFormSubmittingComponent)
-					{
-						IFormSubmittingComponent submittingComponent = (IFormSubmittingComponent)submitter;
-						Component component = (Component)submitter;
-
-						if (!component.isVisibleInHierarchy())
-						{
-							throw new WicketRuntimeException("Submit Button " +
-								submittingComponent.getInputName() + " (path=" +
-								component.getPageRelativePath() + ") is not visible");
-						}
-
-						if (!component.isEnabledInHierarchy())
-						{
-							throw new WicketRuntimeException("Submit Button " +
-								submittingComponent.getInputName() + " (path=" +
-								component.getPageRelativePath() + ") is not enabled");
-						}
-					}
-				}
-
-				// When processing was triggered by a Wicket IFormSubmittingComponent and that
-				// component indicates it wants to be called immediately
-				// (without processing), call the IFormSubmittingComponent.onSubmit* methods right
-				// away.
-				if (submitter != null && !submitter.getDefaultFormProcessing())
-				{
-					submitter.onSubmit();
-					submitter.onAfterSubmit();
-				}
-				else
-				{
-					// the submit request might be for one of the nested forms, so let's
-					// find the right one:
-					final Form<?> formToProcess = findFormToProcess(submitter);
-
-					// process the form for this request
-					formToProcess.process(submitter);
-				}
+				// process the form for this request
+				formToProcess.process(submitter);
 			}
 		}
 		// If multi part did fail check if an error is registered and call

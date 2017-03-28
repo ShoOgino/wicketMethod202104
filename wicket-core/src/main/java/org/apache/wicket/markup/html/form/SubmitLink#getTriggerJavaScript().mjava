@@ -4,37 +4,16 @@
 	 * 
 	 * @return The JavaScript to be executed when the link is clicked.
 	 */
-	protected String getTriggerJavaScript()
+	protected CharSequence getTriggerJavaScript()
 	{
 		if (getForm() != null)
 		{
 			// find the root form - the one we are really going to submit
 			Form<?> root = getForm().getRootForm();
-			StringBuilder sb = new StringBuilder(100);
-			sb.append("var e=document.getElementById('");
-			sb.append(root.getHiddenFieldId());
-			sb.append("'); e.name=\'");
-			sb.append(getInputName());
-			sb.append("'; e.value='x';");
-			sb.append("var f=document.getElementById('");
-			sb.append(root.getMarkupId());
-			sb.append("');");
-			if (shouldInvokeJavaScriptFormOnsubmit())
-			{
-				if (getForm() != root)
-				{
-					sb.append("var ff=document.getElementById('");
-					sb.append(getForm().getMarkupId());
-					sb.append("');");
-				}
-				else
-				{
-					sb.append("var ff=f;");
-				}
-				sb.append("if (typeof ff.onsubmit === 'function') { if (ff.onsubmit()==false) return false; }");
-			}
-			sb.append("f.submit();e.value='';e.name='';return false;");
-			return sb.toString();
+
+			CharSequence url = urlForListener(new PageParameters());
+
+			return root.getJsForListenerUrl(url);
 		}
 		else
 		{

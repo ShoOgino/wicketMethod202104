@@ -4,8 +4,44 @@
 	@Override
 	public final void onRequest()
 	{
-		convertInput();
-		updateModel();
-		onSelectionChanged(getModelObject());
+		Form<?> form = getForm();
+		if (form == null) {
+			convertInput();
+			updateModel();
+			onSelectionChanged(getModelObject());
+		} else {
+			form.getRootForm().onFormSubmitted(new IFormSubmitter()
+			{
+				@Override
+				public void onSubmit()
+				{
+					convertInput();
+					updateModel();
+					onSelectionChanged(getModelObject());
+				}
+				
+				@Override
+				public void onError()
+				{
+				}
+				
+				@Override
+				public void onAfterSubmit()
+				{
+				}
+				
+				@Override
+				public Form<?> getForm()
+				{
+					return DropDownChoice.this.getForm();
+				}
+				
+				@Override
+				public boolean getDefaultFormProcessing()
+				{
+					return false;
+				}
+			});
+		}
 	}
 

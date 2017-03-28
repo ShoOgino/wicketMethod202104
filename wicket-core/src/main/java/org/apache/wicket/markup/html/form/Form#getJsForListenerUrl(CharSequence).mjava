@@ -1,0 +1,16 @@
+	/**
+	 * Generate a piece of JavaScript that submits the form to the given URL.
+	 * 
+	 * Warning: This code should only be called in the rendering phase for form components inside
+	 * the form because it uses the css/javascript id of the form which can be stored in the markup.
+	 * 
+	 * @param url
+	 *            The listener url to be submitted to
+	 * @return the javascript code that submits the form.
+	 */
+	public final CharSequence getJsForListenerUrl(CharSequence url)
+	{
+		Form<?> root = getRootForm();
+		return String.format("var f = document.getElementById('%s'); f.action='%s';f.submit();", root.getMarkupId(), url);
+	}
+
