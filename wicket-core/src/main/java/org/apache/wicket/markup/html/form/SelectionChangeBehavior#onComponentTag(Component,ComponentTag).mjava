@@ -4,9 +4,10 @@
 		CharSequence url = component.urlForListener(this, new PageParameters());
 
 		String event = getJSEvent();
-		
-		String condition = String.format("if (event.target.name !== '%s') return; ", formComponent.getInputName());
-		
+
+		String condition = String.format("if (event.target.name !== '%s') return; ",
+			formComponent.getInputName());
+
 		Form<?> form = component.findParent(Form.class);
 		if (form != null)
 		{
@@ -15,9 +16,9 @@
 		else
 		{
 			char separator = url.toString().indexOf('?') > -1 ? '&' : '?';
-				
-			tag.put(event,
-				condition + String.format("window.location.href='%s%s%s=' + %s;", url, separator, formComponent.getInputName(), getJSValue()));
+
+			tag.put(event, condition + String.format("window.location.href='%s%s%s=' + %s;", url,
+				separator, formComponent.getInputName(), getJSValue()));
 		}
 	}
 

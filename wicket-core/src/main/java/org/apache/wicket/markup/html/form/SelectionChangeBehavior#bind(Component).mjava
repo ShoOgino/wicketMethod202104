@@ -1,8 +1,20 @@
 	@Override
-	public void bind(Component component)
+	public final void bind(final Component hostComponent)
 	{
-		this.formComponent = (FormComponent<?>)component;
-		
+		Args.notNull(hostComponent, "hostComponent");
+
+		if (formComponent != null)
+		{
+			throw new IllegalStateException("this kind of handler cannot be attached to " +
+				"multiple components; it is already attached to component " + formComponent +
+				", but component " + hostComponent + " wants to be attached too");
+		}
+
+		this.formComponent = (FormComponent<?>)hostComponent;
+
 		formComponent.setRenderBodyOnly(false);
+
+		// call the callback
+		onBind();
 	}
 
