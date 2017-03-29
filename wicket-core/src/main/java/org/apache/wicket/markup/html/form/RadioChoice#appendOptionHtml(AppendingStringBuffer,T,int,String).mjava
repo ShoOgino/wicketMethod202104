@@ -113,32 +113,6 @@
 				.append(Strings.escapeMarkup(idAttr))
 				.append('"');
 
-			// Should a roundtrip be made (have onSelectionChanged called)
-			// when the option is clicked?
-			if (wantOnSelectionChangedNotifications())
-			{
-				CharSequence url = urlForListener(new PageParameters());
-
-				Form<?> form = findParent(Form.class);
-				if (form != null)
-				{
-					buffer.append(" onclick=\"")
-						.append(form.getJsForListenerUrl(url))
-						.append(";\"");
-				}
-				else
-				{
-					// NOTE: do not encode the url as that would give
-					// invalid JavaScript
-					buffer.append(" onclick=\"window.location.href='")
-						.append(url)
-						.append((url.toString().indexOf('?') > -1 ? '&' : '?') + getInputName())
-						.append('=')
-						.append(Strings.escapeMarkup(id))
-						.append("';\"");
-				}
-			}
-
 			// Allows user to add attributes to the <input..> tag
 			{
 				IValueMap attrs = getAdditionalAttributes(index, choice);

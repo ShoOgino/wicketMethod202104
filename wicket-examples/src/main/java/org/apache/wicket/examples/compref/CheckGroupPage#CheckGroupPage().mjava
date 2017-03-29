@@ -4,18 +4,9 @@
 	public CheckGroupPage()
 	{
 		final CheckGroup<Person> group = new CheckGroup<>("group", new ArrayList<Person>());
-		Form<Void> form = new Form<Void>("form")
-		{
-			@Override
-			protected void onSubmit()
-			{
-				info("selected person(s): " + group.getDefaultModelObjectAsString());
-			}
-		};
+		group.add(new SelectionChangeBehavior());
 
-		add(form);
-		form.add(group);
-		group.add(new CheckGroupSelector("groupselector"));
+		add(group);
 		ListView<Person> persons = new ListView<Person>("persons",
 			ComponentReferenceApplication.getPersons())
 		{

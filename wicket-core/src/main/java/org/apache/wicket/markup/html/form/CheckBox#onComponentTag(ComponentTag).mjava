@@ -29,28 +29,6 @@
 		// type="checkbox" value=""] will always submit as false
 		tag.remove("value");
 
-		// Should a roundtrip be made (have onSelectionChanged called) when the
-		// checkbox is clicked?
-		if (wantOnSelectionChangedNotifications())
-		{
-			CharSequence url = urlForListener(new PageParameters());
-
-			Form<?> form = findParent(Form.class);
-			if (form != null)
-			{
-				tag.put("onclick", form.getJsForListenerUrl(url));
-			}
-			else
-			{
-				// NOTE: do not encode the url as that would give invalid
-				// JavaScript
-				tag.put("onclick", "window.location.href='" + url +
-					(url.toString().indexOf('?') > -1 ? "&" : "?") + getInputName() +
-					"=' + this.checked;");
-			}
-
-		}
-
 		super.onComponentTag(tag);
 	}
 

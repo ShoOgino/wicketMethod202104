@@ -1,23 +1,16 @@
-	/**
-	 * Called when a selection changes.
-	 */
 	@Override
 	public final void onRequest()
 	{
-		Form<?> form = getForm();
+		Form<?> form = formComponent.findParent(Form.class);
 		if (form == null) {
-			convertInput();
-			updateModel();
-			onSelectionChanged(getModelObject());
+			process();
 		} else {
-			form.onFormSubmitted(new IFormSubmitter()
+			form.getRootForm().onFormSubmitted(new IFormSubmitter()
 			{
 				@Override
 				public void onSubmit()
 				{
-					convertInput();
-					updateModel();
-					onSelectionChanged(getModelObject());
+					process();
 				}
 				
 				@Override
@@ -33,7 +26,7 @@
 				@Override
 				public Form<?> getForm()
 				{
-					return RadioGroup.this.getForm();
+					return formComponent.getForm();
 				}
 				
 				@Override

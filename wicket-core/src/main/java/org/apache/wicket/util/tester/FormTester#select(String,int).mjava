@@ -21,29 +21,9 @@
 		ChoiceSelector choiceSelector = choiceSelectorFactory.create(component);
 		choiceSelector.doSelect(index);
 
-		try
-		{
-			Method wantOnSelectionChangedNotificationsMethod = component.getClass()
-				.getDeclaredMethod("wantOnSelectionChangedNotifications");
-
-			try
-			{
-				wantOnSelectionChangedNotificationsMethod.setAccessible(true);
-				boolean wantOnSelectionChangedNotifications = (Boolean)wantOnSelectionChangedNotificationsMethod.invoke(component);
-				if (wantOnSelectionChangedNotifications)
-				{
-					tester.invokeListener(component);
-				}
-			}
-			catch (final Exception x)
-			{
-				throw new RuntimeException(x);
-			}
-
-		}
-		catch (final NoSuchMethodException ignored)
-		{
-			// this form component has no auto page reload mechanism
+		List<SelectionChangeBehavior> behaviors = component.getBehaviors(SelectionChangeBehavior.class);
+		if (behaviors.isEmpty() == false) {
+			tester.invokeListener(component, behaviors.get(0));
 		}
 
 		return this;

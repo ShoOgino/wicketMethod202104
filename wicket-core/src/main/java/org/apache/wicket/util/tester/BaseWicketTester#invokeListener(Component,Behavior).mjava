@@ -1,0 +1,23 @@
+	/**
+	 * Simulates invoking an {@link IRequestListener} on a component. As opposed to the
+	 * {@link #executeListener(Component)} method, current request/response objects will be used
+	 * 
+	 * After the listener is invoked the page containing the component will be rendered
+	 * (with an optional redirect - depending on {@link RenderStrategy}).
+	 * 
+	 * @param component
+	 * @param listener
+	 */
+	public void invokeListener(Component component, final Behavior behavior)
+	{
+		Args.notNull(component, "component");
+		Args.notNull(behavior, "behavior");
+
+		// there are two ways to do this. RequestCycle could be forced to call the handler
+		// directly but constructing and parsing the URL increases the chance of triggering bugs
+		IRequestHandler handler = new ListenerRequestHandler(new PageAndComponentProvider(
+			component.getPage(), component), component.getBehaviorId(behavior));
+
+		processRequest(handler);
+	}
+
