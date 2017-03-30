@@ -3,22 +3,29 @@
 	 */
 	private void process()
 	{
-		formComponent.validate();
-		if (formComponent.isValid())
+		try
 		{
-			if (getUpdateModel())
+			formComponent.validate();
+			if (formComponent.isValid())
 			{
-				formComponent.valid();
-				formComponent.updateModel();
+				if (getUpdateModel())
+				{
+					formComponent.valid();
+					formComponent.updateModel();
+				}
+	
+				onUpdate();
 			}
-
-			onUpdate();
+			else
+			{
+				formComponent.invalid();
+				
+				onError(null);
+			}
 		}
-		else
+		catch (RuntimeException e)
 		{
-			formComponent.invalid();
+			onError(e);
 		}
-		
-		onUpdate();
 	}
 

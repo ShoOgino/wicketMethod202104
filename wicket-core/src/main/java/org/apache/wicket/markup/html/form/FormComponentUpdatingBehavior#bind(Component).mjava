@@ -1,16 +1,22 @@
 	@Override
-	public final void bind(final Component hostComponent)
+	public final void bind(final Component component)
 	{
-		Args.notNull(hostComponent, "hostComponent");
+		Args.notNull(component, "component");
+
+		if (!(component instanceof FormComponent))
+		{
+			throw new WicketRuntimeException("Behavior " + getClass().getName()
+				+ " can only be added to an instance of a FormComponent");
+		}
 
 		if (formComponent != null)
 		{
 			throw new IllegalStateException("this kind of handler cannot be attached to " +
 				"multiple components; it is already attached to component " + formComponent +
-				", but component " + hostComponent + " wants to be attached too");
+				", but component " + component + " wants to be attached too");
 		}
 
-		this.formComponent = (FormComponent<?>)hostComponent;
+		this.formComponent = (FormComponent<?>)component;
 
 		formComponent.setRenderBodyOnly(false);
 
