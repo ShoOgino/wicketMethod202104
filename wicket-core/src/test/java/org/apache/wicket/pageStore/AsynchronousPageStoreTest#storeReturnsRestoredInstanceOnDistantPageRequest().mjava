@@ -27,8 +27,10 @@
 
 		Thread.sleep(1500);
 
-		asyncPageStore.getPage(sessionId, pageId);
+		IManageablePage pageBack = asyncPageStore.getPage(sessionId, pageId);
 
 		verify(pageStore, times(1)).getPage(sessionId, pageId);
+
+		assertNotEquals(page, pageBack);
 	}
 
