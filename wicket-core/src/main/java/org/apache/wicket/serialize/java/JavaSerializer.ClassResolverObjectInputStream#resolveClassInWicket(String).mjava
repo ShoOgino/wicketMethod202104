@@ -1,0 +1,30 @@
+		/*
+		 * Resolves a class from Wicket's ClassResolver
+		 */
+		private Class<?> resolveClassInWicket(String className) throws ClassNotFoundException
+		{
+			Class<?> candidate;
+			try
+			{
+				Application application = Application.get();
+				ApplicationSettings applicationSettings = application.getApplicationSettings();
+				IClassResolver classResolver = applicationSettings.getClassResolver();
+
+				candidate = classResolver.resolveClass(className);
+			}
+			catch (WicketRuntimeException ex)
+			{
+				if (ex.getCause() instanceof ClassNotFoundException)
+				{
+					throw (ClassNotFoundException)ex.getCause();
+				}
+				else
+				{
+					ClassNotFoundException wrapperCnf = new ClassNotFoundException();
+					wrapperCnf.initCause(ex);
+					throw wrapperCnf;
+				}
+			}
+			return candidate;
+		}
+

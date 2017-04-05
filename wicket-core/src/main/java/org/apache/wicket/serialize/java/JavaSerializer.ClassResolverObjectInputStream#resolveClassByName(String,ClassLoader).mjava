@@ -1,0 +1,20 @@
+		/*
+		 * resolves a class by name, first using the default Class.forName, but looking in the
+		 * Wicket ClassResolvers as well.
+		 */
+		private Class<?> resolveClassByName(String className, ClassLoader latestUserDefined)
+			throws ClassNotFoundException
+		{
+			try
+			{
+				return Class.forName(className, false, latestUserDefined);
+			}
+			catch (ClassNotFoundException cnfEx)
+			{
+				Class<?> ret = resolveClassInWicket(className);
+				if (ret == null)
+					throw cnfEx;
+				return ret;
+			}
+		}
+
