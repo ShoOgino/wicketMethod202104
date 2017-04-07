@@ -1,0 +1,17 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6349
+	 */
+	@Test
+	public void statelessPagesAreAlwaysRecreated()
+	{
+		tester.getApplication().getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
+		tester.startPage(StatelessAjaxFallbackLinkDoNotRecreatePage.class);
+
+		final Page page = tester.getLastRenderedPage();
+		assertTrue(page.isStateless());
+
+		tester.clickLink("incrementLink");
+
+		tester.assertRenderedPage(StatelessAjaxFallbackLinkDoNotRecreatePage.class);
+	}
+

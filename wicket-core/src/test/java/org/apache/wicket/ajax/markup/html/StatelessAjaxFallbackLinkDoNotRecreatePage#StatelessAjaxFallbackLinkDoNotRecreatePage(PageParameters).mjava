@@ -1,0 +1,45 @@
+  /**
+   * Constructor that is invoked when page is invoked without a session.
+   *
+   * @param parameters
+   *          Page parameters
+   */
+  public StatelessAjaxFallbackLinkDoNotRecreatePage(final PageParameters parameters)
+  {
+    super(parameters);
+    setStatelessHint(true);
+
+    final Label incrementLabel = new Label("incrementLabel", new AbstractReadOnlyModel<Integer>()
+    {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public Integer getObject()
+      {
+        final String counter = getParameter(parameters, COUNTER_PARAM);
+        return counter != null ? Integer.parseInt(counter) : 0;
+      }
+    });
+    final Link<?> incrementLink = new AjaxFallbackLink<Void>("incrementLink")
+    {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public void onClick(final Optional<AjaxRequestTarget> targetOptional)
+      {
+        Integer counter = (Integer) incrementLabel.getDefaultModelObject();
+        updateParams(getPageParameters(), counter);
+        targetOptional.ifPresent(target -> target.add(incrementLabel, this));
+      }
+
+      @Override
+      protected boolean getStatelessHint()
+      {
+        return true;
+      }
+    };
+
+    add(incrementLink);
+    add(incrementLabel.setOutputMarkupId(true));
+  }
+
