@@ -1,0 +1,23 @@
+		/**
+		 * @param s
+		 * @throws IOException
+		 */
+		private void writeObject(java.io.ObjectOutputStream s) throws IOException
+		{
+			log.debug("serializing page {} for {}ms (session {})", getPageId(), writeMillis,
+				sessionId);
+			try
+			{
+				Thread.sleep(writeMillis);
+			}
+			catch (InterruptedException e)
+			{
+				throw new RuntimeException(e);
+			}
+
+			s.writeInt(pageId);
+			s.writeLong(writeMillis);
+			s.writeLong(readMillis);
+			s.writeObject(sessionId);
+		}
+

@@ -1,0 +1,24 @@
+		@Override
+		public void run()
+		{
+			while (!Thread.interrupted())
+			{
+				Entry entry = null;
+				try
+				{
+					entry = entries.poll(POLL_WAIT, TimeUnit.MILLISECONDS);
+				}
+				catch (InterruptedException e)
+				{
+					Thread.currentThread().interrupt();
+				}
+
+				if (entry != null)
+				{
+					log.debug("Saving asynchronously: {}...", entry);
+					pageStore.storePage(entry.sessionId, entry.page);
+					entryMap.remove(getKey(entry));
+				}
+			}
+		}
+

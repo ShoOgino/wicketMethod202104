@@ -1,0 +1,20 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param pageStore
+	 *            the wrapped {@link IPageStore} that actually saved the page
+	 * @param capacity
+	 *            the capacity of the queue that delays the saving
+	 */
+	public AsynchronousPageStore(final IPageStore pageStore, final int capacity)
+	{
+		this.pageStore = pageStore;
+		entries = new LinkedBlockingQueue<Entry>(capacity);
+		entryMap = new ConcurrentHashMap<String, Entry>();
+
+		PageSavingRunnable savingRunnable = new PageSavingRunnable(pageStore, entries, entryMap);
+		pageSavingThread = new Thread(savingRunnable, "AsyncPageStore-PageSavingThread");
+		pageSavingThread.setDaemon(true);
+		pageSavingThread.start();
+	}
+

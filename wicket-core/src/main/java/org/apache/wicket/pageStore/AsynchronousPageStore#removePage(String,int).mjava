@@ -1,0 +1,20 @@
+	/**
+	 * @see org.apache.wicket.pageStore.IPageStore#removePage(java.lang.String, int)
+	 */
+	@Override
+	public void removePage(String sessionId, int pageId)
+	{
+		String key = getKey(sessionId, pageId);
+		if (key != null)
+		{
+			Entry entry = entryMap.remove(key);
+			if (entry != null)
+			{
+				entries.remove(entry);
+			}
+		}
+
+		pageStore.removePage(sessionId, pageId);
+
+	}
+
