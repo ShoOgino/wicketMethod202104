@@ -1,7 +1,3 @@
-	/**
-	 * @see org.apache.wicket.pageStore.IPageStore#storePage(java.lang.String,
-	 *      org.apache.wicket.page.IManageablePage)
-	 */
 	@Override
 	public void storePage(String sessionId, IManageablePage page)
 	{
@@ -21,15 +17,14 @@
 				log.debug("Storing synchronously page with id '{}' in session '{}'",
 					page.getPageId(), sessionId);
 				entryMap.remove(key);
-				pageStore.storePage(sessionId, page);
+				delegate.storePage(sessionId, page);
 			}
 		}
 		catch (InterruptedException e)
 		{
 			log.error(e.getMessage(), e);
 			entryMap.remove(key);
-			pageStore.storePage(sessionId, page);
+			delegate.storePage(sessionId, page);
 		}
-
 	}
 

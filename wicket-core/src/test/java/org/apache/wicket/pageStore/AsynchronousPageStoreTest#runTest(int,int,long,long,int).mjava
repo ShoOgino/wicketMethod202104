@@ -1,5 +1,5 @@
 	private List<Metrics> runTest(int sessions, int pages, long writeMillis, long readMillis,
-		int asyncPageStoreCapacity) throws InterruptedException
+	                              int asyncPageStoreCapacity) throws InterruptedException
 	{
 
 		List<Metrics> results = new ArrayList<>();
@@ -10,7 +10,7 @@
 		ISerializer serializer = new DeflatedJavaSerializer("applicationKey");
 
 		IDataStore dataStore = new DiskDataStore("applicationName", new File("./target"),
-			Bytes.bytes(10000l));
+				Bytes.bytes(10000l));
 
 		// IPageStore pageStore = new DummyPageStore(new File("target/store")) {
 		IPageStore pageStore = new DefaultPageStore(serializer, dataStore, 0)
@@ -39,7 +39,7 @@
 
 				stopwatch.reset();
 				DummyPage page = new DummyPage(pageId, around(writeMillis), around(readMillis),
-					sessionId);
+						sessionId);
 				stopwatch.start();
 				asyncPageStore.storePage(sessionId, page);
 				metrics.storedPage = page;
@@ -48,7 +48,7 @@
 				stopwatch.reset();
 				stopwatch.start();
 				metrics.restoredPage = DummyPage.class
-					.cast(asyncPageStore.getPage(sessionId, pageId));
+						.cast(asyncPageStore.getPage(sessionId, pageId));
 				metrics.restoringMillis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
 
 				results.add(metrics);

@@ -1,19 +1,19 @@
 	/**
 	 * Construct.
 	 * 
-	 * @param pageStore
+	 * @param delegate
 	 *            the wrapped {@link IPageStore} that actually saved the page
 	 * @param capacity
 	 *            the capacity of the queue that delays the saving
 	 */
-	public AsynchronousPageStore(final IPageStore pageStore, final int capacity)
+	public AsynchronousPageStore(final IPageStore delegate, final int capacity)
 	{
-		this.pageStore = pageStore;
-		entries = new LinkedBlockingQueue<Entry>(capacity);
-		entryMap = new ConcurrentHashMap<String, Entry>();
+		this.delegate = Args.notNull(delegate, "delegate");
+		entries = new LinkedBlockingQueue<>(capacity);
+		entryMap = new ConcurrentHashMap<>();
 
-		PageSavingRunnable savingRunnable = new PageSavingRunnable(pageStore, entries, entryMap);
-		pageSavingThread = new Thread(savingRunnable, "AsyncPageStore-PageSavingThread");
+		PageSavingRunnable savingRunnable = new PageSavingRunnable(delegate, entries, entryMap);
+		pageSavingThread = new Thread(savingRunnable, "Wicket-AsyncPageStore-PageSavingThread");
 		pageSavingThread.setDaemon(true);
 		pageSavingThread.start();
 	}
