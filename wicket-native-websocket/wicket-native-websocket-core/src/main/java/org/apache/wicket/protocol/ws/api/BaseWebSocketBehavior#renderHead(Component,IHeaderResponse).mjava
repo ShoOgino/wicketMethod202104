@@ -11,6 +11,7 @@
 
 		Map<String, Object> variables = Generics.newHashMap();
 
+
 		// set falsy JS values for the non-used parameter
 		if (Strings.isEmpty(resourceName))
 		{
@@ -40,6 +41,9 @@
 		CharSequence filterPrefix = getFilterPrefix(webSocketSettings);
 		Args.notNull(filterPrefix, "filterPrefix");
 		variables.put("filterPrefix", filterPrefix);
+
+		final CharSequence sessionId = getSessionId(component);
+		variables.put("sessionId", sessionId);
 
 		String webSocketSetupScript = webSocketSetupTemplate.asString(variables);
 

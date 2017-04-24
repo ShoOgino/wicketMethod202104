@@ -1,0 +1,28 @@
+	/**
+	 * @param component
+	 *          The component this behavior is bound to
+	 * @return The http session id if it is tracked in the url, otherwise empty string
+	 */
+	protected CharSequence getSessionId(final Component component)
+	{
+		String sessionId = "";
+		final WebApplication application = (WebApplication) component.getApplication();
+		final Set<SessionTrackingMode> effectiveSessionTrackingModes = application.getServletContext().getEffectiveSessionTrackingModes();
+		Object containerRequest = component.getRequest().getContainerRequest();
+		if (effectiveSessionTrackingModes.size() == 1 && SessionTrackingMode.URL.equals(effectiveSessionTrackingModes.iterator().next()))
+		{
+			sessionId = component.getSession().getId();
+		}
+		else if (containerRequest instanceof HttpServletRequest)
+		{
+			CookieUtils cookieUtils = new CookieUtils();
+			final Cookie jsessionid = cookieUtils.getCookie("JSESSIONID");
+			HttpServletRequest httpServletRequest = (HttpServletRequest) containerRequest;
+			if (jsessionid == null || httpServletRequest.isRequestedSessionIdValid() == false)
+			{
+				sessionId = component.getSession().getId();
+			}
+		}
+		return sessionId;
+	}
+
