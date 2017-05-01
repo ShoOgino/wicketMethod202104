@@ -5,13 +5,11 @@
 		 */
 		private SessionEntry getSessionEntry(boolean create)
 		{
-			String attributeName = getAttributeName();
-			SessionEntry entry = (SessionEntry)getSessionAttribute(attributeName);
+			SessionEntry entry = (SessionEntry)getSessionAttribute(getAttributeName());
 			if (entry == null && create)
 			{
 				bind();
 				entry = new SessionEntry(applicationName, getSessionId());
-				setSessionAttribute(attributeName, entry);
 			}
 			return entry;
 		}
