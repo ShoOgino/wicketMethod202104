@@ -1,9 +1,23 @@
-	/**
-	 * @see java.lang.Iterable#iterator()
-	 */
 	@Override
 	public Iterator<MarkupElement> iterator()
 	{
-		return getRootMarkup().iterator(startIndex, size);
+		return new Iterator<MarkupElement>() {
+			int index = 0;
+
+			@Override
+			public boolean hasNext() {
+				return index < size;
+			}
+
+			@Override
+			public MarkupElement next() {
+				return get(index++);
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Cannot remove");
+			}
+		};
 	}
 
