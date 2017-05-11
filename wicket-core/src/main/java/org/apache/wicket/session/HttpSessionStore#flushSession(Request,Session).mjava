@@ -1,14 +1,14 @@
 	@Override
 	public void flushSession(Request request, Session session)
 	{
-		if (getAttribute(request, Session.SESSION_ATTRIBUTE_NAME) != session)
+		if (getWicketSession(request) != session)
 		{
 			// this session is not yet bound, bind it
 			bind(request, session);
 		}
 		else
 		{
-			setAttribute(request, Session.SESSION_ATTRIBUTE_NAME, session);
+			setWicketSession(request, session);
 		}
 	}
 

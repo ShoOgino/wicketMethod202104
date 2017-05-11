@@ -1,7 +1,7 @@
 	@Override
 	public final void bind(final Request request, final Session newSession)
 	{
-		if (getAttribute(request, Session.SESSION_ATTRIBUTE_NAME) != newSession)
+		if (getWicketSession(request) != newSession)
 		{
 			// call template method
 			onBind(request, newSession);
@@ -20,7 +20,7 @@
 					new SessionBindingListener(applicationKey, newSession));
 
 				// register the session object itself
-				setAttribute(request, Session.SESSION_ATTRIBUTE_NAME, newSession);
+				setWicketSession(request, newSession);
 			}
 		}
 	}
