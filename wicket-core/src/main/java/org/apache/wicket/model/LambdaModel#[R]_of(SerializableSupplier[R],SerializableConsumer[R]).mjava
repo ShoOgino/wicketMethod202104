@@ -13,28 +13,28 @@
 	 *            used to set value
 	 * @return model
 	 *
-	 * @param <T>
+	 * @param <R>
 	 *            model object type
 	 */
-	public static <T> IModel<T> of(SerializableSupplier<T> getter, SerializableConsumer<T> setter)
+	public static <R> IModel<R> of(SerializableSupplier<R> getter, SerializableConsumer<R> setter)
 	{
 		Args.notNull(getter, "getter");
 		Args.notNull(setter, "setter");
 
-		return new LambdaModel<T>()
+		return new LambdaModel<R>()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public T getObject()
+			public R getObject()
 			{
 				return getter.get();
 			}
 
 			@Override
-			public void setObject(T t)
+			public void setObject(R r)
 			{
-				setter.accept(t);
+				setter.accept(r);
 			}
 		};
 	}
