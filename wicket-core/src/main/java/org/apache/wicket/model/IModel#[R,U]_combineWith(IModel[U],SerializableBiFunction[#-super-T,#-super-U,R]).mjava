@@ -17,16 +17,26 @@
 	{
 		Args.notNull(combiner, "combiner");
 		Args.notNull(other, "other");
-		return (IModel<R>)() -> {
-			T t = IModel.this.getObject();
-			U u = other.getObject();
-			if (t != null && u != null)
+		return new IModel<R>() {
+			@Override
+			public R getObject()
 			{
-				return combiner.apply(t, u);
+				T t = IModel.this.getObject();
+				U u = other.getObject();
+				if (t != null && u != null)
+				{
+					return combiner.apply(t, u);
+				} else
+				{
+					return null;
+				}
 			}
-			else
+
+			@Override
+			public void detach()
 			{
-				return null;
+				other.detach();
+				IModel.this.detach();
 			}
 		};
 	}

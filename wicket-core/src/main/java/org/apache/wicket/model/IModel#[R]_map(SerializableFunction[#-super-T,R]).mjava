@@ -10,15 +10,24 @@
 	default <R> IModel<R> map(SerializableFunction<? super T, R> mapper)
 	{
 		Args.notNull(mapper, "mapper");
-		return (IModel<R>)() -> {
-			T object = IModel.this.getObject();
-			if (object == null)
+		return new IModel<R>() {
+			@Override
+			public R getObject()
 			{
-				return null;
+				T object = IModel.this.getObject();
+				if (object == null)
+				{
+					return null;
+				} else
+				{
+					return mapper.apply(object);
+				}
 			}
-			else
+
+			@Override
+			public void detach()
 			{
-				return mapper.apply(object);
+				IModel.this.detach();
 			}
 		};
 	}

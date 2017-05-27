@@ -9,15 +9,26 @@
 	default IModel<T> filter(SerializablePredicate<? super T> predicate)
 	{
 		Args.notNull(predicate, "predicate");
-		return (IModel<T>)() -> {
-			T object = IModel.this.getObject();
-			if (object != null && predicate.test(object))
+		return new IModel<T>()
+		{
+			@Override
+			public T getObject()
 			{
-				return object;
+				T object = IModel.this.getObject();
+				if (object != null && predicate.test(object))
+				{
+					return object;
+				}
+				else
+				{
+					return null;
+				}
 			}
-			else
+
+			@Override
+			public void detach()
 			{
-				return null;
+				IModel.this.detach();
 			}
 		};
 	}

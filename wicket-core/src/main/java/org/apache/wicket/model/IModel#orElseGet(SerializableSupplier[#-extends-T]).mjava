@@ -9,15 +9,24 @@
 	default IModel<T> orElseGet(SerializableSupplier<? extends T> other)
 	{
 		Args.notNull(other, "other");
-		return (IModel<T>)() -> {
-			T object = IModel.this.getObject();
-			if (object == null)
+		return new IModel<T>() {
+			@Override
+			public T getObject()
 			{
-				return other.get();
+				T object = IModel.this.getObject();
+				if (object == null)
+				{
+					return other.get();
+				} else
+				{
+					return object;
+				}
 			}
-			else
+
+			@Override
+			public void detach()
 			{
-				return object;
+				IModel.this.detach();
 			}
 		};
 	}
