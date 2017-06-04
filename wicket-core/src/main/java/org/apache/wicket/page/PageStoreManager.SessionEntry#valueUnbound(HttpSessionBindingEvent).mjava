@@ -1,6 +1,12 @@
 		@Override
 		public void valueUnbound(HttpSessionBindingEvent event)
 		{
+			if (updating.compareAndSet(true, false))
+			{
+				// The entry has been updated. Do not remove the data
+				return;
+			}
+
 			// WICKET-5164 use the original sessionId
 			IPageStore store = getPageStore();
 			// store might be null if destroyed already
