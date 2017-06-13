@@ -39,7 +39,7 @@
 
 		if (value == null)
 		{
-			return handleMissingKey(key, locale, style, component, value);
+			return null;
 		}
 		
 		StringBuffer output = new StringBuffer();
@@ -52,8 +52,10 @@
 				? loadNestedStringResource(component, nestedKey, locale, style, variation)
 				: loadNestedStringResource(clazz, nestedKey, locale, style, variation);
 
-			replacedPlaceHolder = handleMissingKey(nestedKey, locale, style, component,
-				replacedPlaceHolder);
+			if (replacedPlaceHolder == null)
+			{
+				return null;
+			}
 			matcher.appendReplacement(output, replacedPlaceHolder);
 		}
 		matcher.appendTail(output);
