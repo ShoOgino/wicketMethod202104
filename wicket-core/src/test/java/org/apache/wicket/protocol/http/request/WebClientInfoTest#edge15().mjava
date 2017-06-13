@@ -1,38 +1,37 @@
 	/**
-	 * Test FF 4.x user-agent strings
+	 * Test Microsoft Edge user-agent strings
 	 */
 	@Test
-	public void firefox40()
+	public void edge15()
 	{
 		List<String> userAgents = Arrays.asList(
-			"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:2.0b8pre) Gecko/20101213 Firefox/4.0b8pre",
-			"Mozilla/5.0 (Windows; U; Windows NT 6.1; ru; rv:1.9.2.3) Gecko/20100401 Firefox/4.0 (.NET CLR 3.5.30729)");
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063");
 
 		for (String userAgent : userAgents)
 		{
 			WebClientInfo webClientInfo = new WebClientInfo(requestCycleMock, userAgent);
 
 			assertThat(userAgent, webClientInfo.getProperties().getBrowserVersionMajor(),
-				is(equalTo(4)));
+			           is(equalTo(15)));
 			assertThat(userAgent, webClientInfo.getProperties().getBrowserVersionMinor(),
-				is(equalTo(0)));
+			           is(equalTo(15063)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserMozillaFirefox(),
-				is(equalTo(true)));
+			           is(equalTo(false)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserMozilla(),
-				is(equalTo(true)));
+			           is(equalTo(false)));
 
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserOpera(),
-				is(equalTo(false)));
+			           is(equalTo(false)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserChrome(),
-				is(equalTo(false)));
+			           is(equalTo(false)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserKonqueror(),
-				is(equalTo(false)));
+			           is(equalTo(false)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserSafari(),
-				is(equalTo(false)));
+			           is(equalTo(false)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserInternetExplorer(),
-				is(equalTo(false)));
+			           is(equalTo(false)));
 			assertThat(userAgent, webClientInfo.getProperties().isBrowserEdge(),
-				is(equalTo(false)));
+			           is(equalTo(true)));
 		}
 	}
 
