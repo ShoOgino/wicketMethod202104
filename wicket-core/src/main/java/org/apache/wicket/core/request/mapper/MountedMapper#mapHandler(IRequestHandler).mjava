@@ -20,7 +20,8 @@
 				PageInfo pageInfo = getPageInfo(handler);
 				ComponentInfo componentInfo = new ComponentInfo(renderCount, componentPath, handler.getBehaviorIndex());
 				PageComponentInfo pageComponentInfo = new PageComponentInfo(pageInfo, componentInfo);
-				PageParameters parameters = new PageParameters(page.getPageParameters());
+				PageParameters parameters = newPageParameters();
+				parameters.mergeWith(page.getPageParameters());
 				UrlInfo urlInfo = new UrlInfo(pageComponentInfo, page.getClass(),
 					parameters.mergeWith(handler.getPageParameters()));
 				url = buildUrl(urlInfo);

@@ -8,6 +8,7 @@
 		for (int curMatchSize : matchedParameters)
 			total += curMatchSize;
 		PageParameters pageParameters = extractPageParameters(request, total, pageParametersEncoder);
+		pageParameters.setLocale(resolveLocale());
 
 		int skippedParameters = 0;
 		for (int pathSegmentIndex = 0; pathSegmentIndex < pathSegments.size(); pathSegmentIndex++)
@@ -19,7 +20,7 @@
 			{
 				if (pageParameters == null)
 				{
-					pageParameters = new PageParameters();
+					pageParameters = newPageParameters();
 				}
 
 				int curSegmentIndex = matchSegment + curPathSegment.getSegmentIndex();
