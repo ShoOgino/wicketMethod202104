@@ -1,0 +1,29 @@
+	/**
+	 * Override {@link #resolveLocale()} to return the result of this method if you want to use
+	 * the user's session or request locale for parsing numbers from the page parameters
+	 *
+	 * @return the Session or Request's locale to use for parsing any numbers in the request parameters
+	 */
+	protected Locale resolveUserLocale()
+	{
+		Locale locale = super.resolveLocale();
+		if (Session.exists())
+		{
+			locale = Session.get().getLocale();
+		}
+		else
+		{
+			RequestCycle requestCycle = RequestCycle.get();
+			if (requestCycle != null)
+			{
+				Request request = requestCycle.getRequest();
+				if (request != null)
+				{
+					locale = request.getLocale();
+				}
+			}
+		}
+
+		return locale;
+	}
+

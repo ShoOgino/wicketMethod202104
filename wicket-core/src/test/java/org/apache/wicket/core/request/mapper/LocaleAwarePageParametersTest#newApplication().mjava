@@ -1,0 +1,32 @@
+	@Override
+	protected WebApplication newApplication()
+	{
+		return new MockApplication()
+		{
+			@Override
+			protected void init()
+			{
+				super.init();
+
+				mountPage("unaware", LocaleUnawarePageParametersPage.class);
+				mount(new MountedMapper("aware", LocaleAwarePageParametersPage.class)
+				      {
+					      @Override
+					      protected Locale resolveLocale()
+					      {
+						      return resolveUserLocale();
+					      }
+				      }
+				);
+			}
+
+			@Override
+			public Session newSession(Request request, Response response)
+			{
+				final Session session = super.newSession(request, response);
+				session.setLocale(Locale.GERMANY);
+				return session;
+			}
+		};
+	}
+
