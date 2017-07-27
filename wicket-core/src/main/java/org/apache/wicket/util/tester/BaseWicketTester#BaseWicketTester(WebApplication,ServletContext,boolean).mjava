@@ -1,6 +1,6 @@
 	/**
 	 * Creates a <code>WicketTester</code>.
-	 * 
+	 *
 	 * @param application
 	 *            a <code>WicketTester</code> <code>WebApplication</code> object
 	 * @param servletCtx
@@ -16,10 +16,10 @@
 		}
 
 		servletContext = servletCtx != null ? servletCtx
-			// If it's provided from the container it's not necessary to mock. 
-			: !init && application.getServletContext() != null ? application.getServletContext()
-			: new MockServletContext(application, null);
-		
+				// If it's provided from the container it's not necessary to mock.
+				: !init && application.getServletContext() != null ? application.getServletContext()
+				: new MockServletContext(application, null);
+
 		// If using Arquillian and it's configured in a web.xml it'll be provided. If not, mock it.
 		if(application.getWicketFilter() == null)
 		{
@@ -49,7 +49,7 @@
 			{
 				application.setName("WicketTesterApplication-" + UUID.randomUUID());
 			}
-			
+
 			application.setServletContext(servletContext);
 			// initialize the application
 			application.initApplication();
@@ -61,15 +61,15 @@
 
 		// reconfigure application for the test environment
 		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
-			application.getPageRendererProvider()));
+				application.getPageRendererProvider()));
 		application.setRequestCycleProvider(new TestRequestCycleProvider(
-			application.getRequestCycleProvider()));
+				application.getRequestCycleProvider()));
 
 		// set a feedback message filter that will not remove any messages
 		originalFeedbackMessageCleanupFilter = application.getApplicationSettings()
-			.getFeedbackMessageCleanupFilter();
+				.getFeedbackMessageCleanupFilter();
 		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
-			IFeedbackMessageFilter.NONE);
+				IFeedbackMessageFilter.NONE);
 		IPageManagerProvider pageManagerProvider = newTestPageManagerProvider();
 		if (pageManagerProvider != null)
 		{
