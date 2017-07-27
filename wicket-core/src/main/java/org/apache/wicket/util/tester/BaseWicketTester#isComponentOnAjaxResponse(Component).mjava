@@ -66,6 +66,22 @@
 		boolean isComponentInAjaxResponse = ajaxResponse.matches("(?s).*<component id=\"" +
 			markupId + "\"[^>]*?>.*");
 		failMessage = "Component wasn't found in the AJAX response. " + componentInfo;
-		return isTrue(failMessage, isComponentInAjaxResponse);
+		result = isTrue(failMessage, isComponentInAjaxResponse);
+
+		// Check if the component has been included as part of an enclosure render
+		Enclosure enclosure = getLastRenderedPage().visitChildren(Enclosure.class, (Enclosure enc, IVisit<Enclosure> visit) -> {
+			if (AjaxEnclosureListener.isControllerOfEnclosure(component, enc)){
+				visit.stop(enc);
+			}
+		});
+
+		if (enclosure != null){
+			failMessage = "Component's enclosure was not found in the AJAX response. " + enclosure.toString();
+			boolean isEnclosureInAjaxResponse = !isComponentOnAjaxResponse(enclosure).wasFailed();
+			return isTrue(failMessage, isEnclosureInAjaxResponse);
+		} else {
+			return result;
+		}
+
 	}
 
