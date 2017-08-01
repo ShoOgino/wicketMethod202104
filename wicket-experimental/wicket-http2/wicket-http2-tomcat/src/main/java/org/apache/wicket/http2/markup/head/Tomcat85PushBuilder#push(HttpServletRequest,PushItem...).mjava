@@ -1,5 +1,5 @@
 	@Override
-	public void push(HttpServletRequest httpServletRequest, String... paths)
+	public void push(HttpServletRequest httpServletRequest, PushItem... pushItems)
 	{
 		Request request = RequestCycle.get().getRequest();
 		HttpServletRequest httpRequest = (HttpServletRequest) request.getContainerRequest();
@@ -7,9 +7,19 @@
 		org.apache.catalina.servlet4preview.http.PushBuilder pushBuilder = tomcatRequest.newPushBuilder();
 		if (pushBuilder != null)
 		{
-			for (String path : paths)
+			for (PushItem pushItem : pushItems)
 			{
-				pushBuilder.path(path).push();
+				pushBuilder.path(pushItem.getUrl());
+				pushItem.getHeaders().entrySet().stream().forEach(pushHeader -> {
+					String key = pushHeader.getKey();
+					PushItemHeaderValue value = pushHeader.getValue();
+					if(value.getOperation() == HeaderOperation.ADD){
+						pushBuilder.addHeader(key, value.getValue());
+					}else{
+						pushBuilder.setHeader(key, value.getValue());
+					}
+				});
+				pushBuilder.push();
 			}
 		}
 		else
