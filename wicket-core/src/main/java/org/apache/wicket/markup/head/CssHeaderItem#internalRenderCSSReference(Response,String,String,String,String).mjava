@@ -1,9 +1,9 @@
 	protected final void internalRenderCSSReference(Response response, String url, String media,
-		String condition)
+		String condition, String rel)
 	{
 		Args.notEmpty(url, "url");
-		
-		boolean hasCondition = Strings.isEmpty(condition) == false; 
+
+		boolean hasCondition = Strings.isEmpty(condition) == false;
 		if (hasCondition)
 		{
 			if (RequestCycle.get().find(IPartialPageRequestHandler.class).isPresent())
@@ -19,7 +19,7 @@
 			response.write("]>");
 		}
 
-		CssUtils.writeLinkUrl(response, url, media, getId());
+		CssUtils.writeLinkUrl(response, url, media, getId(), rel);
 
 		if (hasCondition)
 		{
