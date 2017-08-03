@@ -16,9 +16,9 @@
 		}
 
 		servletContext = servletCtx != null ? servletCtx
-				// If it's provided from the container it's not necessary to mock.
-				: !init && application.getServletContext() != null ? application.getServletContext()
-				: new MockServletContext(application, null);
+			// If it's provided from the container it's not necessary to mock.
+			: !init && application.getServletContext() != null ? application.getServletContext()
+			: new MockServletContext(application, null);
 
 		// If using Arquillian and it's configured in a web.xml it'll be provided. If not, mock it.
 		if(application.getWicketFilter() == null)
@@ -61,15 +61,15 @@
 
 		// reconfigure application for the test environment
 		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
-				application.getPageRendererProvider()));
+			application.getPageRendererProvider()));
 		application.setRequestCycleProvider(new TestRequestCycleProvider(
-				application.getRequestCycleProvider()));
+			application.getRequestCycleProvider()));
 
 		// set a feedback message filter that will not remove any messages
 		originalFeedbackMessageCleanupFilter = application.getApplicationSettings()
-				.getFeedbackMessageCleanupFilter();
+			.getFeedbackMessageCleanupFilter();
 		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
-				IFeedbackMessageFilter.NONE);
+			IFeedbackMessageFilter.NONE);
 		IPageManagerProvider pageManagerProvider = newTestPageManagerProvider();
 		if (pageManagerProvider != null)
 		{
