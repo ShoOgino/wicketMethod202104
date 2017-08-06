@@ -27,13 +27,17 @@
 				{
 					url = requestCycle.urlFor((ResourceReference)object, parameters);
 				}
-				else if (object instanceof Class)
+				else if (Page.class.isAssignableFrom(object.getClass()))
 				{
 					url = requestCycle.urlFor((Class<? extends Page>)object, parameters);
 				}
 				else if (object instanceof IRequestHandler)
 				{
 					url = requestCycle.urlFor((IRequestHandler)object);
+				}
+				else if (pushItem.getUrl() != null)
+				{
+					url = pushItem.getUrl();
 				}
 				else
 				{
@@ -51,7 +55,32 @@
 					url = url.toString().substring(1);
 				}
 
-				urls.add(url.toString());
+				// The context path and the filter have to be applied to the URL, because otherwise
+				// the resource is not pushed correctly
+				StringBuilder partialUrl = new StringBuilder();
+				String contextPath = WebApplication.get().getServletContext().getContextPath();
+				partialUrl.append(contextPath);
+				if (!"/".equals(contextPath))
+				{
+					partialUrl.append('/');
+				}
+				String filterPath = WebApplication.get().getWicketFilter().getFilterPath();
+				if ("/".equals(filterPath))
+				{
+					filterPath = "";
+				}
+				else if (filterPath.endsWith("/"))
+				{
+					filterPath = filterPath.substring(0, filterPath.length() - 1);
+				}
+				partialUrl.append(filterPath);
+				partialUrl.append(url.toString());
+
+				// Set the url the resource is going to be pushed with
+				pushItem.setUrl(partialUrl.toString());
+
+				// Apply the push item to be used during the push process
+				this.pushItems.add(pushItem);
 			}
 		return this;
 	}
