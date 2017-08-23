@@ -1,0 +1,17 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6455
+	 */
+	@Test
+	public void innerFormSubmit()
+	{
+		tester.startPage(NestedFormTestPage.class);
+		
+		NestedFormTestPage homePage = (NestedFormTestPage)tester.getLastRenderedPage();
+		assertFalse(homePage.innerFormSubmitted);
+		
+		FormTester formTester = tester.newFormTester("outer:inner");
+		formTester.submit("submit");
+		
+		assertTrue(homePage.innerFormSubmitted);
+	}
+
