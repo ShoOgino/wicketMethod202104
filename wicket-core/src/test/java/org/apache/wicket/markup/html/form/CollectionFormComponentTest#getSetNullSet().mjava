@@ -1,0 +1,30 @@
+	@Test
+	public void getSetNullSet()
+	{
+		final AtomicBoolean setCalled = new AtomicBoolean();
+
+		Object object = new Object()
+		{
+			private Set<String> internal = null;
+
+			public Set<String> getStrings()
+			{
+				return internal;
+			}
+
+			public void setStrings(Set<String> strings)
+			{
+				this.internal = strings;
+
+				setCalled.set(true);
+			}
+		};
+
+		Choice choice = new Choice(object);
+		choice.setConvertedInput(Arrays.asList("A", "B"));
+		FormComponent.updateCollectionModel(choice);
+
+		assertEquals(true, setCalled.get());
+		assertEquals("[A, B]", choice.getDefaultModelObjectAsString());
+	}
+
