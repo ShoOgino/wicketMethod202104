@@ -1,0 +1,33 @@
+	/**
+	 * Tests that when a controller of an enclosure is added to the ajax target, its header
+	 * contributions reach the response
+	 *
+	 * WICKET-6459
+	 *
+	 */
+	@Test
+	public void testAjaxAndEnclosures() throws Exception
+	{
+
+		tester.startPage(SimplePage3.class);
+		tester.assertRenderedPage(SimplePage3.class);
+		tester.clickLink("ajaxLink", true);
+
+		String lastResponse = tester.getLastResponseAsString();
+
+		String headerContribution = lastResponse.split("<header-contribution")[1].split("</header-contribution")[0];
+
+		Pattern headerStylesheetLinkExtractor = Pattern.compile("<link.*/>");
+		Matcher headerStyleSheetLinkMatcher = headerStylesheetLinkExtractor.matcher(headerContribution);
+
+		List<String> headerStylesheetLinks = new ArrayList<>();
+
+		while (headerStyleSheetLinkMatcher.find()){
+			headerStylesheetLinks.add(headerStyleSheetLinkMatcher.group());
+		}
+
+		assertTrue(headerStylesheetLinks.contains("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../enclosedInInline.css\" />"));
+		assertTrue(headerStylesheetLinks.contains("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../enclosed.css\" />"));
+
+	}
+
