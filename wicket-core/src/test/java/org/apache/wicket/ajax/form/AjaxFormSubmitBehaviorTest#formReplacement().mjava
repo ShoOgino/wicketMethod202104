@@ -1,0 +1,14 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6462
+	 * 
+	 * onSubmit must be called once.
+	 */
+	@Test
+	public void formReplacement() 
+	{
+		PanelEdit panelEdit = tester.startComponentInPage(PanelEdit.class);
+		FormTester formTester = tester.newFormTester(panelEdit.getId() + ":form");
+		//AjaxFormSubmitBehavior onSubmit must not be called when form is removed
+		formTester.submit("submit");
+	}
+

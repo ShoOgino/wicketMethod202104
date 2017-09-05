@@ -1,26 +1,20 @@
 		public NestedFormTestPage() 
 		{
-			Form<?> outer = new Form("outer");
-			replace(outer);
-			
-			Form<?> inner = new Form("inner")
-			{
+			Form<?> inner = new Form("inner") {
 				@Override
-				protected boolean wantSubmitOnParentFormSubmit() 
-				{
+				protected boolean wantSubmitOnParentFormSubmit() {
 					return false;
 				}
 				
 				@Override
-				protected void onSubmit() 
-				{
+				protected void onSubmit() {
 					super.onSubmit();
-					innerFormSubmitted = true;
+					innerSubmitted = true;
 				}
 			};
 			
-			outer.add(inner);
-			
 			inner.add(new AjaxButton("submit", inner) {});
+			
+			get("outer:inner").replaceWith(inner);
 		}
 
