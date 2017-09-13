@@ -1,9 +1,9 @@
 		@Override
 		public void valueUnbound(HttpSessionBindingEvent event)
 		{
-			if (updating.compareAndSet(true, false))
+			if (storingTouchedPages.get())
 			{
-				// The entry has been updated. Do not remove the data
+				// triggered by #storeTouchedPages(), so do not remove the data
 				return;
 			}
 
