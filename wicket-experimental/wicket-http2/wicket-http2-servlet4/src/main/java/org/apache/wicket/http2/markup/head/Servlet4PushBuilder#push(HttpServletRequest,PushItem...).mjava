@@ -1,0 +1,30 @@
+	@Override
+	public void push(HttpServletRequest httpServletRequest, PushItem... pushItems)
+	{
+		Request request = RequestCycle.get().getRequest();
+		HttpServletRequest httpRequest = (HttpServletRequest) request.getContainerRequest();
+		javax.servlet.http.PushBuilder pushBuilder = httpRequest.newPushBuilder();
+		if (pushBuilder != null)
+		{
+			for (PushItem pushItem : pushItems)
+			{
+				pushBuilder.path(pushItem.getUrl());
+				pushItem.getHeaders().entrySet().stream().forEach(pushHeader -> {
+					String key = pushHeader.getKey();
+					PushItemHeaderValue value = pushHeader.getValue();
+					if(value.getOperation() == HeaderOperation.ADD){
+						pushBuilder.addHeader(key, value.getValue());
+					}else{
+						pushBuilder.setHeader(key, value.getValue());
+					}
+				});
+				pushBuilder.push();	
+			}
+		}
+		else
+		{
+			LOG.warn("Attempted to use HTTP2 Push but it is not supported for the current request: {}!",
+					httpRequest);
+		}
+	}
+
