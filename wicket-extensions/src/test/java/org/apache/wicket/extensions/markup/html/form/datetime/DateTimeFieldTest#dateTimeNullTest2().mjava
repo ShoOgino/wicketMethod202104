@@ -1,0 +1,12 @@
+	@Test
+	public void dateTimeNullTest2() {
+		TestDateTimePage page = new TestDateTimePage(null);
+		tester.startPage(page);
+		FormTester formTester = tester.newFormTester("form", false);
+		formTester.setValue("field:time:hours", "6");
+		formTester.setValue("field:time:minutes", "15");
+		formTester.select("field:time:amOrPmChoice", 0);
+		formTester.submit();
+		assertNull(page.field.getModelObject());
+	}
+
