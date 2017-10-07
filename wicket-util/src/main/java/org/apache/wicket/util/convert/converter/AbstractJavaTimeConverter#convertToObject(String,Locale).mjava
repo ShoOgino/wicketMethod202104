@@ -7,7 +7,14 @@
 		}
 
 		DateTimeFormatter dateTimeFormatter = getDateTimeFormatter(locale);
-		TemporalAccessor temporalAccessor = dateTimeFormatter.parse(value);
+		
+		TemporalAccessor temporalAccessor;
+		try {
+			temporalAccessor = dateTimeFormatter.parse(value);
+		} catch (DateTimeParseException ex) {
+			throw newConversionException("Cannot parse '" + value, value, locale);
+		}
+		
 		return createTemporal(temporalAccessor);
 	}
 
