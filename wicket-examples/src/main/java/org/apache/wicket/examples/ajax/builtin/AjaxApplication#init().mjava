@@ -10,6 +10,17 @@
 		getRequestCycleSettings().addResponseFilter(new AjaxServerAndClientTimeFilter());
 
 		getDebugSettings().setAjaxDebugModeEnabled(true);
+		
+		getComponentInitializationListeners().add(new IComponentInitializationListener()
+		{
+			@Override
+			public void onInitialize(Component component)
+			{
+				if (component instanceof WebPage) {
+					component.add(new AjaxNewWindowNotifyingBehavior());
+				}
+			}
+		});
 
 		mountPage("autocomplete", AutoCompletePage.class);
 		mountPage("choice", ChoicePage.class);

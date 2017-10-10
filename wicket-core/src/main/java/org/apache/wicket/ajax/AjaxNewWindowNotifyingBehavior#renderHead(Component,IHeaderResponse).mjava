@@ -1,13 +1,12 @@
+	/**
+	 * Overridden to initiate a request once the page was rendered.
+	 */
 	@Override
 	public void renderHead(Component component, IHeaderResponse response)
 	{
 		super.renderHead(component, response);
 
-		if (hasBeenRendered == false)
-		{
-			hasBeenRendered = true;
-			response.render(OnDomReadyHeaderItem.forScript(String.format("window.name='%s'", windowName)));
-		}
-		response.render(OnLoadHeaderItem.forScript("setTimeout(function() {" + getCallbackScript().toString() + "}, 30);"));
+		response.render(OnLoadHeaderItem
+			.forScript("setTimeout(function() {" + getCallbackScript().toString() + "}, 30);"));
 	}
 

@@ -1,9 +1,24 @@
 	@Override
 	protected void respond(AjaxRequestTarget target)
 	{
-		StringValue uuidParam = getComponent().getRequest().getRequestParameters().getParameterValue(PARAM_WINDOW_NAME);
+		String windowName = getComponent().getRequest().getRequestParameters()
+			.getParameterValue(PARAM_WINDOW_NAME).toString();
 
-		if (windowName.equals(uuidParam.toString()) == false)
+		if (boundName == null)
+		{
+			// not bound to any window yet
+
+			if (Strings.isEmpty(windowName))
+			{
+				// create new name
+				windowName = newWindowName();
+				target.appendJavaScript(String.format("window.name = '%s';", windowName));
+			}
+
+			// now bound to window
+			boundName = windowName;
+		}
+		else if (boundName.equals(windowName) == false)
 		{
 			onNewWindow(target);
 		}

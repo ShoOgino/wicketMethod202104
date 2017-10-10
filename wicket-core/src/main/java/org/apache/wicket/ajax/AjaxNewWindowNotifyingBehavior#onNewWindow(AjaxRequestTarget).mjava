@@ -1,9 +1,16 @@
 	/**
-	 * A callback method when a new window/tab is opened for a page instance
-	 * which is already opened in another window/tab.
+	 * A callback method when a new window/tab is opened for a page instance which is already opened
+	 * in another window/tab.
+	 * <p>
+	 * Default implementation redirects to a new page instance with identical page parameters.
 	 *
 	 * @param target
-	 *      the current ajax request handler
+	 *            the current request handler
 	 */
-	protected abstract void onNewWindow(AjaxRequestTarget target);
+	protected void onNewWindow(AjaxRequestTarget target)
+	{
+		Page page = getComponent().getPage();
+
+		getComponent().setResponsePage(page.getClass(), page.getPageParameters());
+	}
 
