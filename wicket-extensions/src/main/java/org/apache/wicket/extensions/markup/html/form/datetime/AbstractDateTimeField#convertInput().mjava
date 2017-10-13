@@ -11,26 +11,35 @@
 	@Override
 	public void convertInput()
 	{
-		try
-		{
-			// Get the converted input values
-			LocalDate date = dateField.getConvertedInput();
-			LocalTime time = timeField.getConvertedInput();
+		// Get the converted input values
+		LocalDate date = localDateField.getConvertedInput();
+		LocalTime time = timeField.getConvertedInput();
 
-			if (date == null || time == null)
-			{
-				setConvertedInput(null);
-			}
-			else
-			{
-				// Use the input to create proper date-time
-				setConvertedInput(performConvert(date, time));
-			}
-		}
-		catch (RuntimeException e)
+		T temporal;
+		if (date == null && time == null)
 		{
-			AbstractDateTimeField.this.error(e.getMessage());
-			invalid();
+			temporal = null;
 		}
+		else
+		{
+			if (date == null)
+			{
+				error(newValidationError(new ConversionException("Cannot create temporal without date").setTargetType(getType())));
+				return;
+			}
+			if (time == null)
+			{
+				time = getDefaultTime();
+				if (time == null) {
+					error(newValidationError(new ConversionException("Cannot create temporal without time").setTargetType(getType())));
+					return;
+				}
+			}
+			
+			// Use the input to create proper date-time
+			temporal = createTemporal(date, time);
+		}
+		
+		setConvertedInput(temporal);
 	}
 

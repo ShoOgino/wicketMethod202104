@@ -9,6 +9,14 @@
 	 */
 	protected TimeField newTimeField(String id, IModel<LocalTime> timeFieldModel)
 	{
-		return TimeField.forShortStyle(id, timeFieldModel);
+		return new TimeField(id, timeFieldModel) {
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+				
+				tag.append("class", getString(TIME_CSS_CLASS_KEY), " ");
+			}
+		};
 	}
 

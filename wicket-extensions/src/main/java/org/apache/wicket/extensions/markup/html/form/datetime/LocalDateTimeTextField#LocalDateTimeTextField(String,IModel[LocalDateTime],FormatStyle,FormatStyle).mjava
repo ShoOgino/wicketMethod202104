@@ -1,0 +1,30 @@
+	/**
+	 * Construct with a style.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            the model
+	 * @param timeStyle
+	 *            the style to use
+	 */
+	public LocalDateTimeTextField(String id, IModel<LocalDateTime> model, FormatStyle dateStyle, FormatStyle timeStyle)
+	{
+		super(id, model, LocalDateTime.class);
+
+		this.converter = new TextFormatConverter() {
+			
+			@Override
+			public DateTimeFormatter getDateTimeFormatter(Locale locale)
+			{
+				return DateTimeFormatter.ofLocalizedDateTime(dateStyle, timeStyle).withLocale(locale);
+			}
+
+			@Override
+			public String getTextFormat(Locale locale)
+			{
+				return DateTimeFormatterBuilder.getLocalizedDateTimePattern(dateStyle, timeStyle, IsoChronology.INSTANCE, locale);
+			}
+		};
+	}
+

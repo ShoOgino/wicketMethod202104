@@ -1,0 +1,14 @@
+	@Override
+	public LocalDateTime getObject()
+	{
+		ZonedDateTime zonedDateTime = model.getObject();
+		if (zonedDateTime == null)
+		{
+			return null;
+		}
+		else
+		{
+			return zonedDateTime.withZoneSameInstant(getClientTimeZone()).toLocalDateTime();
+		}
+	}
+

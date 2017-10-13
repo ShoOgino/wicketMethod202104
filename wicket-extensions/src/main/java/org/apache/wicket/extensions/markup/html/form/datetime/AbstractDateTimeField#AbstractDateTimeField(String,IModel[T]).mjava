@@ -8,8 +8,19 @@
 	{
 		super(id, model);
 
-		// Create and add the date TextField
-		add(dateField = newDateField(DATE, new DateModel()));
-		add(timeField = newTimeField(TIME, new TimeModel()));
+		add(new Label("timeSeparator", new ResourceModel("AbstractDateTimeField.timeSeparator"))
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onConfigure()
+			{
+				super.onConfigure();
+
+				timeField.configure();
+				
+				setVisible(timeField.isVisible());
+			}
+		});
 	}
 

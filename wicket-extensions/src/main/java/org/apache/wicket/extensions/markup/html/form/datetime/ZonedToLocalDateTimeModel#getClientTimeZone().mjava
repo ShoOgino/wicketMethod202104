@@ -1,0 +1,17 @@
+	/**
+	 * What is the {@link ZoneId} of the client.
+	 * 
+	 * @see RequestCycleSettings#getGatherExtendedBrowserInfo()
+	 * @see ZoneId#systemDefault()
+	 */
+	protected ZoneId getClientTimeZone()
+	{
+		ClientInfo info = Session.get().getClientInfo();
+		if (info instanceof WebClientInfo)
+		{
+			TimeZone timeZone = ((WebClientInfo)info).getProperties().getTimeZone();
+			return timeZone != null ? timeZone.toZoneId() : null;
+		}
+		return ZoneId.systemDefault();
+	}
+

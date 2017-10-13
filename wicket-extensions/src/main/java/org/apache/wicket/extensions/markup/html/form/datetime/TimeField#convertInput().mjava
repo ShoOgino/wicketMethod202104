@@ -5,8 +5,12 @@
 		Integer minutes = minutesField.getConvertedInput();
 		AM_PM amOrPmInput = amOrPmChoice.getConvertedInput();
 
-		LocalTime localTime = null;
-		if (hours != null && minutes != null)
+		LocalTime localTime;
+		if (hours == null && minutes == null)
+		{
+			localTime = null;
+		}
+		else if (hours != null && minutes != null)
 		{
 			// Use the input to create a LocalTime object
 			localTime = LocalTime.of(hours, minutes);
@@ -18,6 +22,12 @@
 				localTime = localTime.with(ChronoField.AMPM_OF_DAY, halfday);
 			}
 		}
+		else
+		{
+			error(newValidationError(new ConversionException("Cannot parse time").setTargetType(getType())));
+			return;
+		}
+
 		setConvertedInput(localTime);
 	}
 

@@ -1,14 +1,22 @@
 	/**
-	 * create a new {@link DateField} instance to be added to this panel.
+	 * create a new {@link LocalDateTextField} instance to be added to this panel.
 	 * 
 	 * @param id
 	 *            the component id
 	 * @param dateFieldModel
-	 *            model that should be used by the {@link DateField}
+	 *            model that should be used by the {@link LocalDateTextField}
 	 * @return a new date text field instance
 	 */
-	protected DateField newDateField(String id, IModel<LocalDate> dateFieldModel)
+	protected LocalDateTextField newDateField(String id, IModel<LocalDate> dateFieldModel)
 	{
-		return DateField.forShortStyle(id, dateFieldModel);
+		return new LocalDateTextField(id, dateFieldModel, FormatStyle.SHORT) {
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+				
+				tag.append("class", getString(DATE_CSS_CLASS_KEY), " ");
+			}
+		};
 	}
 

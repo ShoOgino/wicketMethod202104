@@ -1,0 +1,31 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            the component's model
+	 */
+	public TimeField(String id, IModel<LocalTime> model)
+	{
+		super(id, model);
+
+		// Sets the type that will be used when updating the model for this component.
+		setType(LocalTime.class);
+
+		add(new Label("hoursSeparator", new ResourceModel("TimeField.hoursSeparator"))
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onConfigure()
+			{
+				super.onConfigure();
+
+				minutesField.configure();
+
+				setVisible(minutesField.isVisible());
+			}
+		});
+	}
+

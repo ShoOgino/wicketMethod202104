@@ -29,13 +29,21 @@
 			@Override
 			protected String[] getInputTypes()
 			{
-				return new String[] {"number"};
+				return new String[] { "number" };
+			}
+
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+
+				tag.append("class", getString(MINUTES_CSS_CLASS_KEY), " ");
+
+				tag.put("min", 0);
+				tag.put("max", 59);
 			}
 		};
-		minutesField.add(AttributeModifier.append("min", 0));
-		minutesField.add(AttributeModifier.append("max", 59));
 		minutesField.add(new RangeValidator<>(0, 59));
-		minutesField.setLabel(new Model<>(MINUTES));
 		return minutesField;
 	}
 

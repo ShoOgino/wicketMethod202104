@@ -1,0 +1,30 @@
+	/**
+	 * Construct with a pattern.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            the model
+	 * @param pattern
+	 *            the pattern to use
+	 */
+	public LocalTimeTextField(String id, IModel<LocalTime> model, String timePattern)
+	{
+		super(id, model, LocalTime.class);
+
+		this.converter = new TextFormatConverter() {
+			
+			@Override
+			public DateTimeFormatter getDateTimeFormatter(Locale locale)
+			{
+				return DateTimeFormatter.ofPattern(timePattern).withLocale(locale);
+			}
+
+			@Override
+			public String getTextFormat(Locale locale)
+			{
+				return timePattern;
+			}
+		};
+	}
+

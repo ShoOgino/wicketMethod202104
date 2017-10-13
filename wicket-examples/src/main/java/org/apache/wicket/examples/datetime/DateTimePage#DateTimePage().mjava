@@ -3,38 +3,102 @@
 	 */
 	public DateTimePage()
 	{
-		add(TimeField.forShortStyle("time1", Model.of(LocalTime.of(22, 15))));
-		add(TimeField.forTimeStyle("time2", Model.of(LocalTime.of(22, 15)), "F"));
-		add(new TimeField("time3", Model.of(LocalTime.of(22, 15)), new StyleTimeConverter("S")) {
+		Form<String> form = new Form<>("form");
+		this.add(form);
+
+		form.add(new ZoneDropDownChoice("zoneSelect"));
+
+		// Dropdown for selecting locale
+		form.add(new LocaleDropDownChoice("localeSelect"));
+
+		// Link to return to default locale
+		form.add(new Link<Void>("defaultLocaleLink")
+		{
+			public void onClick()
+			{
+				WebRequest request = (WebRequest)getRequest();
+				getSession().setLocale(request.getLocale());
+			}
+		});
+
+		form.add(new TimeField("time1", new PropertyModel<>(this, "time1"))
+		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected boolean use12HourFormat() {
+			protected boolean use12HourFormat()
+			{
+				return true;
+			}
+		});
+
+		form.add(new TimeField("time2", new PropertyModel<>(this, "time2"))
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected boolean use12HourFormat()
+			{
 				return false;
 			}
 		});
-		final DateTimeField datetime1 = new DateTimeField("datetime1", Model.of(LocalDateTime.now()));
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
-		Form<String> form = new Form<>("form");
-		add(form.add(datetime1)
-				.add(feedback.setOutputMarkupId(true))
-				.add(new AjaxButton("submit")
+
+		final LocalDateTimeField datetimeField0 = new LocalDateTimeField("datetime0",
+			new PropertyModel<>(this, "dateTime0"))
+		{
+			@Override
+			protected LocalTime getDefaultTime()
+			{
+				return LocalTime.of(0, 0);
+			}
+		};
+		form.add(datetimeField0);
+
+		IModel<ZonedDateTime> zonedDateTime1 = new PropertyModel<>(this, "dateTime1");
+		final LocalDateTimeField datetimeField1 = new LocalDateTimeField("datetime1",
+			new ZonedToLocalDateTimeModel(zonedDateTime1)
+			{
+				@Override
+				protected ZoneId getClientTimeZone()
 				{
-					private static final long serialVersionUID = 1L;
+					return clientZone;
+				}
 
-					@Override
-					protected void onSubmit(AjaxRequestTarget target)
-					{
-						form.info(String.format("DateTime was just submitted: %s", datetime1.getModelObject()));
-						target.add(feedback);
-					}
+				@Override
+				protected ZoneId getTargetTimeZone()
+				{
+					return targetZone;
+				}
+			});
+		form.add(datetimeField1);
+		form.add(new Label("datetime1-label", zonedDateTime1));
 
-					@Override
-					protected void onError(AjaxRequestTarget target)
-					{
-						target.add(feedback);
-					}
-				})
-			);
+		IModel<ZonedDateTime> zonedDateTime2 = new PropertyModel<>(this, "dateTime2");
+		LocalDateTimeTextField datetime2 = new LocalDateTimeTextField("datetime2",
+			new ZonedToLocalDateTimeModel(zonedDateTime2)
+			{
+				@Override
+				protected ZoneId getClientTimeZone()
+				{
+					return clientZone;
+				}
+
+				@Override
+				protected ZoneId getTargetTimeZone()
+				{
+					return targetZone;
+				}
+			}, FormatStyle.SHORT, FormatStyle.SHORT);
+		form.add(datetime2);
+		form.add(new Label("datetime2-label", zonedDateTime2));
+
+		final ZonedDateTimeField datetimeField3 = new ZonedDateTimeField("datetime3",
+			new PropertyModel<>(this, "dateTime3"));
+		form.add(datetimeField3);
+
+		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		form.add(feedback);
+
+		form.add(new Button("submit"));
 	}
 

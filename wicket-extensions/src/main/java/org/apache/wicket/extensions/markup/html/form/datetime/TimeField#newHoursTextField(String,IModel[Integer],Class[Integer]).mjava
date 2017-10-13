@@ -9,7 +9,9 @@
 	 *            the type of the text field
 	 * @return a new text field instance
 	 */
-	protected TextField<Integer> newHoursTextField(final String id, IModel<Integer> model, Class<Integer> type) {
+	protected TextField<Integer> newHoursTextField(final String id, IModel<Integer> model,
+		Class<Integer> type)
+	{
 		TextField<Integer> hoursTextField = new TextField<Integer>(id, model, type)
 		{
 			private static final long serialVersionUID = 1L;
@@ -17,13 +19,22 @@
 			@Override
 			protected String[] getInputTypes()
 			{
-				return new String[] {"number"};
+				return new String[] { "number" };
+			}
+
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+
+				tag.append("class", getString(HOURS_CSS_CLASS_KEY), " ");
+
+				tag.put("min", use12HourFormat() ? 1 : 0);
+				tag.put("max", use12HourFormat() ? 12 : 23);
 			}
 		};
-		hoursTextField.add(AttributeModifier.append("min", getMaximumHours() == 24 ? 0 : 1));
-		hoursTextField.add(AttributeModifier.append("max", getMaximumHours() == 24 ? 23 : 12));
-		hoursTextField.add(getMaximumHours() == 24 ? RangeValidator.range(0, 23) : RangeValidator.range(1, 12));
-		hoursTextField.setLabel(new Model<>(HOURS));
+		hoursTextField
+			.add(use12HourFormat() ? RangeValidator.range(1, 12) : RangeValidator.range(0, 23));
 		return hoursTextField;
 	}
 
