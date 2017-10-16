@@ -1,0 +1,14 @@
+	@Test
+	public void timeEmpty()
+	{
+		LocalDate date = LocalDate.of(2017, 02, 13);
+		TestPage page = new TestPage(null);
+		tester.startPage(page);
+		FormTester formTester = tester.newFormTester("form", false);
+		formTester.setValue("field:date",
+			new LocalDateConverter().convertToString(date, Locale.forLanguageTag("en-US")));
+		formTester.submit();
+		tester.assertNoErrorMessage();
+		assertEquals(LocalDateTime.of(date, LocalTime.of(12, 0)), page.field.getModelObject());
+	}
+
