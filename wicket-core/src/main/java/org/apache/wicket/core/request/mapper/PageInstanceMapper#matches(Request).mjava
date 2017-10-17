@@ -16,7 +16,12 @@
 		Url baseUrl = request.getClientUrl();
 		String namespace = getContext().getNamespace();
 		String pageIdentifier = getContext().getPageIdentifier();
-
+		
+		if (hasSegmentsAfterPageIdentifier(url, pageIdentifier))
+		{
+			return false;
+		}
+		
 		if (urlStartsWith(url, namespace, pageIdentifier))
 		{
 			matches = true;
