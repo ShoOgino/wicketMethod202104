@@ -8,5 +8,18 @@
 
 		String parameter = "return {'" + PARAM_WINDOW_NAME + "': window.name}";
 		attributes.getDynamicExtraParameters().add(parameter);
+
+		if (boundName != null)
+		{
+			// already bound, send request only when changed
+			attributes.getAjaxCallListeners().add(new AjaxCallListener()
+			{
+				@Override
+				public CharSequence getPrecondition(Component component)
+				{
+					return String.format("return (window.name !== '%s');", boundName);
+				}
+			});
+		}
 	}
 
