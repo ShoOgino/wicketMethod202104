@@ -1,0 +1,29 @@
+	private void addBlockingPanels()
+	{
+		blockingRepeater.removeAll();
+
+		for (int i = 0; i < 5; i++)
+			blockingRepeater.add(new AjaxLazyLoadPanel<Label>(blockingRepeater.newChildId())
+			{
+				private static final long serialVersionUID = 1L;
+
+				private int seconds = r.nextInt(5);
+
+				@Override
+				public Label getLazyLoadComponent(String markupId)
+				{
+					try
+					{
+						Thread.sleep(seconds * 1000);
+					}
+					catch (InterruptedException e)
+					{
+					}
+					return new Label(markupId,
+						"Lazy loaded after blocking the Wicket thread for " + seconds + " seconds");
+				}
+			});
+		
+		getRequestCycle().find(AjaxRequestTarget.class).ifPresent(t -> t.add(blocking));
+	}
+

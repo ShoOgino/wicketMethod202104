@@ -1,13 +1,16 @@
 	/**
+	 * Create a loading component shown instead of the actual content until it is {@link #isContentReady()}.
+	 * 
 	 * @param markupId
 	 *            The components markupid.
-	 * @return The component to show while the real component is being created.
+	 * @return The component to show while the real content isn't ready yet
 	 */
 	public Component getLoadingComponent(final String markupId)
 	{
 		IRequestHandler handler = new ResourceReferenceRequestHandler(
 			AbstractDefaultAjaxBehavior.INDICATOR);
-		return new Label(markupId, "<img alt=\"Loading...\" src=\"" +
-			RequestCycle.get().urlFor(handler) + "\"/>").setEscapeModelStrings(false);
+		return new Label(markupId,
+			"<img alt=\"Loading...\" src=\"" + RequestCycle.get().urlFor(handler) + "\"/>")
+				.setEscapeModelStrings(false);
 	}
 

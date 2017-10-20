@@ -1,6 +1,8 @@
 	@Override
 	protected void onUnbind()
 	{
-		getComponent().getRequestCycle().find(IPartialPageRequestHandler.class).ifPresent(target -> clearTimeout(target.getHeaderResponse()));
+		Component component = getComponent();
+		
+		component.getRequestCycle().find(IPartialPageRequestHandler.class).ifPresent(target -> clearTimeout(component, target.getHeaderResponse()));
 	}
 
