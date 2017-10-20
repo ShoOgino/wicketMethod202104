@@ -1,6 +1,13 @@
 	@Override
-	public IRequestablePage getPageInstance()
+	public IRequestablePage getPageInstance() throws PageExpiredException
 	{
-		return getProvision().getPage();
+		IRequestablePage page = getProvision().getPage();
+		
+		if (page == null && wasExpired()) 
+		{
+			throw new PageExpiredException("Page with id '" + pageId + "' has expired.");
+		}
+		
+		return page;
 	}
 
