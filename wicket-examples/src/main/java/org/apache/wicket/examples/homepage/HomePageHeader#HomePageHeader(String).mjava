@@ -1,0 +1,31 @@
+	public HomePageHeader(String id) 
+	{
+		super(id);
+		
+		add(new Label("version", () -> 
+		{
+			/*
+			 * Read the specification version from the wicket-core MANIFEST.MF file.
+			 */
+			Package p = Application.class.getPackage();
+
+			String version = p.getSpecificationVersion();
+
+			if (version == null || version.length() == 0)
+			{
+				return "Missing Version";
+			}
+			else
+			{
+				return version;
+			}
+		}));
+		
+		ExternalLink externalLink = new ExternalLink("headerhomelink",
+			Model.of(WebApplication.get().getServletContext().getContextPath()));
+		
+		externalLink.add(new Image("headerimage", new PackageResourceReference(WicketExamplePage.class, "logo-apachewicket-examples-white.svg")));
+		
+		add(externalLink);
+	}
+
