@@ -1,0 +1,24 @@
+	private List<ConstraintDescriptor<?>> findNotNullConstraints(List<Class<? extends Annotation>> notNullAnnotationTypes)
+	{
+		BeanValidationContext config = BeanValidationConfiguration.get();
+		Validator validator = config.getValidator();
+		Property property = getProperty();
+
+		List<ConstraintDescriptor<?>> constraints = new ArrayList<>();
+
+		Iterator<ConstraintDescriptor<?>> it = new ConstraintIterator(validator, property);
+
+		while (it.hasNext())
+		{
+			ConstraintDescriptor<?> desc = it.next();
+			Annotation annotation = desc.getAnnotation();
+			Class<? extends Annotation> annotationType = annotation.annotationType();
+			if (notNullAnnotationTypes.contains(annotationType))
+			{
+				constraints.add(desc);
+			}
+		}
+
+		return constraints;
+	}
+
