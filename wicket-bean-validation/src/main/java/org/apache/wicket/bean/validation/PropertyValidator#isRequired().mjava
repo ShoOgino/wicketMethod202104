@@ -1,23 +1,23 @@
 	boolean isRequired()
 	{
-		List<NotNull> constraints = findNotNullConstraints();
+		List<ConstraintDescriptor<?>> constraints = findNotNullConstraints(NOT_NULL_ANNOTATIONS);
 
 		if (constraints.isEmpty())
 		{
 			return false;
 		}
 
-		HashSet<Class<?>> validatorGroups = new HashSet<Class<?>>();
+		Set<Class<?>> validatorGroups = new HashSet<>();
 		validatorGroups.addAll(Arrays.asList(getGroups()));
 
-		for (NotNull constraint : constraints)
+		for (ConstraintDescriptor<?> constraint : constraints)
 		{
 			if (canApplyToDefaultGroup(constraint) && validatorGroups.isEmpty())
 			{
 				return true;
 			}
 
-			for (Class<?> constraintGroup : constraint.groups())
+			for (Class<?> constraintGroup : constraint.getGroups())
 			{
 				if (validatorGroups.contains(constraintGroup))
 				{
