@@ -1,0 +1,24 @@
+	/**
+	 * Get the result from the given supplier inside a bound {@link ThreadContext}.
+	 * 
+	 * @param supplier
+	 *            supplier
+	 * @return result of {@link Supplier#get()}
+	 */
+	private <T> T inThreadContext(Supplier<T> supplier)
+	{
+		ThreadContext oldContext = ThreadContext.detach();
+
+		try
+		{
+			ThreadContext.setApplication(application);
+
+			return supplier.get();
+		}
+		finally
+		{
+
+			ThreadContext.restore(oldContext);
+		}
+	}
+

@@ -1,0 +1,21 @@
+	/**
+	 * A renderer using the given application.
+	 * <p>
+	 * If the application was not yet initialized - e.g. it is not reused from an already running
+	 * web container - it will be initialized.
+	 * 
+	 * @param application the application to render components in
+	 * 
+	 * @see Application#initApplication()
+	 */
+	public ComponentRenderer(Application application)
+	{
+		this.application = application;
+
+		if (application.getName() == null)
+		{
+			// not yet initialized
+			inThreadContext(this::initApplication);
+		}
+	}
+

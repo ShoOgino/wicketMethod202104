@@ -1,0 +1,28 @@
+	/**
+	 * A renderer using a default mocked application, which
+	 * <ul>
+	 * <li>never shares anything in a session</li>
+	 * <li>never serializes anything</li>
+	 * </ul>
+	 */
+	public ComponentRenderer()
+	{
+		this(new MockApplication()
+		{
+			@Override
+			public RuntimeConfigurationType getConfigurationType()
+			{
+				return RuntimeConfigurationType.DEPLOYMENT;
+			}
+
+			@Override
+			protected void init()
+			{
+				super.init();
+
+				setSessionStoreProvider(() -> new NeverSessionStore());
+				getFrameworkSettings().setSerializer(new NeverSerializer());
+			}
+		});
+	}
+
