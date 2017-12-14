@@ -11,19 +11,36 @@
 	{
 		componentsFrozen = true;
 
-		// process component markup
-		for (Map.Entry<String, Component> stringComponentEntry : markupIdToComponent.entrySet())
-		{
-			final Component component = stringComponentEntry.getValue();
-
-			if (!containsAncestorFor(component))
+		List<Component> prepared = new ArrayList<>(markupIdToComponent.size());
+		
+		// prepare components
+		FeedbackDelay delay = new FeedbackDelay(RequestCycle.get());
+		try {
+			for (Component component : markupIdToComponent.values())
 			{
-				writeComponent(response, component.getAjaxRegionMarkupId(), component, encoding);
+				if (!containsAncestorFor(component))
+				{
+					prepareComponent(component);
+					prepared.add(component);
+				}
 			}
+
+			// .. now prepare all postponed feedbacks
+			delay.beforeRender();
+		} finally {
+			delay.release();
+		}
+
+		// write components
+		for (Component component : prepared)
+		{
+			writeComponent(response, component.getAjaxRegionMarkupId(), component, encoding);
 		}
 
 		if (header != null)
 		{
+			RequestCycle cycle = RequestCycle.get();
+			
 			// some header responses buffer all calls to render*** until close is called.
 			// when they are closed, they do something (i.e. aggregate all JS resource urls to a
 			// single url), and then "flush" (by writing to the real response) before closing.
@@ -31,14 +48,14 @@
 			// tag, which we do here:
 			headerRendering = true;
 			// save old response, set new
-			Response oldResponse = RequestCycle.get().setResponse(headerBuffer);
+			Response oldResponse = cycle.setResponse(headerBuffer);
 			headerBuffer.reset();
 
 			// now, close the response (which may render things)
 			header.getHeaderResponse().close();
 
 			// revert to old response
-			RequestCycle.get().setResponse(oldResponse);
+			cycle.setResponse(oldResponse);
 
 			// write the XML tags and we're done
 			writeHeaderContribution(response);
