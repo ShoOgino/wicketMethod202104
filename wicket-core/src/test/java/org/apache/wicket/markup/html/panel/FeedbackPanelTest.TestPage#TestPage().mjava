@@ -1,6 +1,21 @@
         public TestPage()
         {
-            feedbackPanel = new FeedbackPanel("feedback");
+            feedbackPanel = new FeedbackPanel("feedback") 
+            {
+            	/**
+            	 * Hide panel if there is no message to show
+            	 */
+            	@Override
+            	protected void onConfigure()
+            	{
+            		super.onConfigure();
+            		List<FeedbackMessage> messages = getFeedbackMessagesModel().getObject();
+            		
+            		setVisible(messages.size() > 0);
+            	}
+            };
+            
+            
             label = new Label("label");
             add(feedbackPanel, label);
         }
