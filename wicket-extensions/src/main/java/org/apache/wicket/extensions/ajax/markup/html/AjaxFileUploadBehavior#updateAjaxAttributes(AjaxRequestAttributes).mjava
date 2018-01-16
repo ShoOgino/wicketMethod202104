@@ -1,0 +1,15 @@
+	@Override
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+	{
+		super.updateAjaxAttributes(attributes);
+
+		attributes.setMultipart(true);
+		attributes.setMethod(Method.POST);
+		// default must be prevented, otherwise browser will consume the dataTransfer
+		attributes.setPreventDefault(true);
+
+		attributes.getDynamicExtraParameters().add(
+			String.format("return Wicket.DataTransfer.getFilesAsParamArray(attrs.event.originalEvent, '%s');", parameterName)
+		);
+	}
+

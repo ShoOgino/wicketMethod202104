@@ -1,0 +1,35 @@
+	@Override
+	protected void onEvent(AjaxRequestTarget target)
+	{
+		try
+		{
+			ServletWebRequest request = (ServletWebRequest)getComponent().getRequest();
+			final MultipartServletWebRequest multipartWebRequest = request.newMultipartWebRequest(
+				getMaxSize(), getComponent().getPage().getId());
+			multipartWebRequest.setFileMaxSize(getFileMaxSize());
+			multipartWebRequest.parseFileParts();
+
+			// TODO: Can't this be detected from header?
+			getComponent().getRequestCycle().setRequest(multipartWebRequest);
+			
+			ArrayList<FileUpload> fileUploads = new ArrayList<>();
+
+			// Get the item for the path
+			final List<FileItem> fileItems = multipartWebRequest.getFile(parameterName);
+
+			if (fileItems != null)
+			{
+				for (FileItem item : fileItems)
+				{
+					fileUploads.add(new FileUpload(item));
+				}
+			}
+			
+			onFileUpload(target, fileUploads);
+		}
+		catch (final FileUploadException fux)
+		{
+			onError(fux);
+		}
+	}
+
