@@ -2,10 +2,13 @@
 	public void renderHead(Component component, IHeaderResponse response)
 	{
 		super.renderHead(component, response);
-		
+
 		response.render(JavaScriptHeaderItem.forReference(JS));
-		
-		// default must be prevented for dragover event, otherwise browser will consume the dataTransfer
-		response.render(OnDomReadyHeaderItem.forScript(String.format("jQuery('#%s').on('dragover', function(e) { e.preventDefault(); });", component.getMarkupId())));
+
+		// default must be prevented for dragover event, otherwise browser will consume the
+		// dataTransfer
+		response.render(OnDomReadyHeaderItem.forScript(
+			String.format("jQuery('#%s').on('dragover', function(e) { e.preventDefault(); });",
+				component.getMarkupId())));
 	}
 

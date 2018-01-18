@@ -4,14 +4,14 @@
 		try
 		{
 			ServletWebRequest request = (ServletWebRequest)getComponent().getRequest();
-			final MultipartServletWebRequest multipartWebRequest = request.newMultipartWebRequest(
-				getMaxSize(), getComponent().getPage().getId());
+			final MultipartServletWebRequest multipartWebRequest = request
+				.newMultipartWebRequest(getMaxSize(), getComponent().getPage().getId());
 			multipartWebRequest.setFileMaxSize(getFileMaxSize());
 			multipartWebRequest.parseFileParts();
 
 			// TODO: Can't this be detected from header?
 			getComponent().getRequestCycle().setRequest(multipartWebRequest);
-			
+
 			ArrayList<FileUpload> fileUploads = new ArrayList<>();
 
 			// Get the item for the path
@@ -24,12 +24,12 @@
 					fileUploads.add(new FileUpload(item));
 				}
 			}
-			
+
 			onFileUpload(target, fileUploads);
 		}
 		catch (final FileUploadException fux)
 		{
-			onError(fux);
+			onError(target, fux);
 		}
 	}
 
