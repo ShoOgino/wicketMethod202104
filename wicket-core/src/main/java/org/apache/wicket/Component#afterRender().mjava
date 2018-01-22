@@ -1,20 +1,17 @@
 	/**
-	 * Called on every component after the page is rendered. It will call onAfterRender for it self
-	 * and its children.
+	 * Called on every component after the page is rendered. Calls hook {@link #onAfterRender()}.
 	 */
-	public final void afterRender()
+	final void afterRender()
 	{
+		setRequestFlag(RFLAG_PREPARED_FOR_RENDER, false);
+		
 		try
 		{
-			setFlag(FLAG_AFTER_RENDERING, true);
-
-			// always detach children because components can be attached
-			// independently of their parents
-			onAfterRenderChildren();
+			setRequestFlag(RFLAG_AFTER_RENDERING, true);
 
 			onAfterRender();
 			getApplication().getComponentOnAfterRenderListeners().onAfterRender(this);
-			if (getFlag(FLAG_AFTER_RENDERING))
+			if (getRequestFlag(RFLAG_AFTER_RENDERING))
 			{
 				throw new IllegalStateException(Component.class.getName() +
 					" has not been properly detached. Something in the hierarchy of " +
@@ -25,7 +22,7 @@
 		finally
 		{
 			// this flag must always be set to false.
-			markRendering(false);
+			setRequestFlag(RFLAG_RENDERING, false);
 		}
 	}
 

@@ -6,9 +6,17 @@
 		try
 		{
 			++renderCount;
-			render();
 
-			// stateless = null;
+			FeedbackDelay delay = new FeedbackDelay(getRequestCycle());
+			try {
+				beforeRender();
+				
+				delay.beforeRender();
+			} finally {
+				delay.release();
+			}
+
+			render();
 		}
 		finally
 		{

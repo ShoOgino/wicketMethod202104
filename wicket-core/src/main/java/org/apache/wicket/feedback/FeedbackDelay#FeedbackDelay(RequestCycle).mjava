@@ -1,0 +1,18 @@
+	/**
+	 * Delay all feedbacks for the given cycle.
+	 * <p>
+	 * All postponed feedbacks will be prepared for render with {@link #beforeRender()}.
+	 * 
+	 * @param cycle
+	 *            request cycle
+	 */
+	public FeedbackDelay(RequestCycle cycle) {
+		if (get(cycle).isPresent()) {
+			throw new WicketRuntimeException("feedbacks are already delayed");
+		}
+		
+		cycle.setMetaData(KEY, this);
+		
+		this.cycle = cycle;
+	}
+

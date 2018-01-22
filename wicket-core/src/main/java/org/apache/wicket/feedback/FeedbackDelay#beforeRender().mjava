@@ -1,0 +1,25 @@
+	/**
+	 * Prepares all postponed feedbacks for render.
+	 * 
+	 * @see IFeedback#beforeRender()
+	 */
+	public void beforeRender() {
+		cycle.setMetaData(KEY, null);
+		cycle = null;
+		
+		for (IFeedback feedback : feedbacks)
+		{
+			if (feedback instanceof Component) {
+				Component component = (Component)feedback;
+				
+				// render only if it is still in the page hierarchy (WICKET-4895)
+				if (component.findParent(Page.class) == null)
+				{
+					continue;
+				}			
+			}
+		
+			feedback.beforeRender();
+		}
+	}
+
