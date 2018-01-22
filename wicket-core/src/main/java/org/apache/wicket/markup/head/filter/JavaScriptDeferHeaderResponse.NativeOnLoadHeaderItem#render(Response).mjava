@@ -1,0 +1,11 @@
+		@Override
+		public void render(Response response)
+		{
+			CharSequence js = getJavaScript();
+			if (Strings.isEmpty(js) == false)
+			{
+				JavaScriptUtils.writeJavaScript(response,
+					"(function(){ var f = function() {" + js + ";};\nif ('complete' === document.readyState) f(); else window.addEventListener('load', f); })();");
+			}
+		}
+

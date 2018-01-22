@@ -14,7 +14,7 @@
 			@Override
 			public IHeaderResponse decorate(IHeaderResponse response)
 			{
-				return new DecoratingHeaderResponse(response)
+				return new ResourceAggregator(new DecoratingHeaderResponse(response)
 				{
 					@Override
 					public void render(HeaderItem item)
@@ -27,7 +27,7 @@
 						}
 						super.render(item);
 					}
-				};
+				});
 			}
 		});
 		tester.startPage(TestPage.class);
