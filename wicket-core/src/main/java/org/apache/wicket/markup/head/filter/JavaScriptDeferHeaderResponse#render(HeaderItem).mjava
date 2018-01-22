@@ -7,12 +7,12 @@
 
 		if (item instanceof AbstractJavaScriptReferenceHeaderItem) {
 			((AbstractJavaScriptReferenceHeaderItem)item).setDefer(true);
+		} else if (item instanceof JavaScriptContentHeaderItem) {
+			item = new NativeOnDomContentLoadedHeaderItem(((JavaScriptContentHeaderItem)item).getJavaScript());
 		} else if (item instanceof OnDomReadyHeaderItem) {
 			item = new NativeOnDomContentLoadedHeaderItem(((OnDomReadyHeaderItem)item).getJavaScript());
 		} else if (item instanceof OnLoadHeaderItem) {
 			item = new NativeOnLoadHeaderItem(((OnLoadHeaderItem)item).getJavaScript());
-		} else if (item instanceof JavaScriptContentHeaderItem) {
-			item = new NativeOnDomContentLoadedHeaderItem(((JavaScriptContentHeaderItem)item).getJavaScript());
 		}
 		
 		super.render(item);
