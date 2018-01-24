@@ -6,8 +6,12 @@
 	protected final String getJsTimeoutCall(final Duration updateInterval)
 	{
 		CharSequence js = getCallbackScript();
+		
+		Component component = getComponent();
+		// remember id for timer
+		timerId = component.getMarkupId() + "." + component.getBehaviorId(this);
 
 		return String.format("Wicket.Timer.set('%s', function(){%s}, %d);",
-				getComponent().getMarkupId(), js, updateInterval.getMilliseconds());
+			timerId, js, updateInterval.getMilliseconds());
 	}
 
