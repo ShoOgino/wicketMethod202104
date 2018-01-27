@@ -2,8 +2,7 @@
 	public void streamChildren()
 	{
 		LoginPage loginPage = new LoginPage();
-		Optional<Component> first = loginPage.stream()
-			.filter(c -> c.getId().equals("form"))
+		Optional<Component> first = loginPage.stream().filter(c -> c.getId().equals("form"))
 			.findFirst();
 		assertThat(first.isPresent(), is(false));
 
@@ -12,20 +11,13 @@
 
 		form.add(new TextField<>("field"));
 
-		assertThat(loginPage.streamChildren()
-			.filter(c -> c.getId().equals("form"))
-			.findFirst()
+		assertThat(loginPage.streamChildren().filter(c -> c.getId().equals("form")).findFirst()
 			.isPresent(), is(true));
 
-		assertThat(loginPage.streamChildren()
-			.filter(c -> c.getId().equals("field"))
-			.findFirst()
+		assertThat(loginPage.streamChildren().filter(c -> c.getId().equals("field")).findFirst()
 			.isPresent(), is(true));
 
-		assertThat(loginPage.streamChildren()
-			.filter(TextField.class::isInstance)
-			.filter(c -> c.getId().equals("field"))
-			.findFirst()
-			.isPresent(), is(true));
+		assertThat(loginPage.streamChildren().filter(TextField.class::isInstance)
+			.filter(c -> c.getId().equals("field")).findFirst().isPresent(), is(true));
 	}
 

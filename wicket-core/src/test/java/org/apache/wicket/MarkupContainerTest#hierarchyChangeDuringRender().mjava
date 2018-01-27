@@ -1,0 +1,17 @@
+	@Test
+	public void hierarchyChangeDuringRender()
+	{
+		HierarchyChangePage page = new HierarchyChangePage();
+		try
+		{
+			tester.startPage(page);
+			fail();
+		}
+		catch (WicketRuntimeException expected)
+		{
+			assertEquals(
+				"Cannot modify component hierarchy after render phase has started (page version cant change then anymore)",
+				expected.getMessage());
+		}
+	}
+
