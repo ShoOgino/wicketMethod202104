@@ -5,14 +5,7 @@
 	@Test
 	public void deferred() throws Exception
 	{
-		tester.getApplication().setHeaderResponseDecorator(new IHeaderResponseDecorator()
-		{
-			@Override
-			public IHeaderResponse decorate(IHeaderResponse response)
-			{
-				return new ResourceAggregator(new JavaScriptDeferHeaderResponse(response));
-			}
-		});
+		tester.getApplication().setHeaderResponseDecorator(response -> new ResourceAggregator(new JavaScriptDeferHeaderResponse(response)));
 		executeTest(DeferredPage.class, "DeferredPageExpected.html");
 	}
 
