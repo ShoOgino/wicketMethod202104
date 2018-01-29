@@ -6,6 +6,7 @@
 	 *            the name of the filter to get the bucket for
 	 * @return the content that was accepted by the filter with this name
 	 */
+	@SuppressWarnings("resource")
 	public final CharSequence getContent(String filterName)
 	{
 		if (filterName == null || !responseFilterMap.containsKey(filterName))
@@ -34,6 +35,8 @@
 				FilteringHeaderResponse.this.getRealResponse().markRendered(object);
 			}
 		};
+
+		headerRenderer = decorate(headerRenderer);
 
 		for (HeaderItem curItem : resp)
 		{
