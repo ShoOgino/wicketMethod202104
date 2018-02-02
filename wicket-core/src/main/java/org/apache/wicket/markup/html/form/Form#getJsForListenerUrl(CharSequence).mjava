@@ -11,6 +11,22 @@
 	public final CharSequence getJsForListenerUrl(CharSequence url)
 	{
 		Form<?> root = getRootForm();
-		return String.format("var f = document.getElementById('%s'); f.action='%s';f.submit();", root.getMarkupId(), url);
+
+		StringBuilder string = new StringBuilder();
+		string.append(String.format("var f = document.getElementById('%s');", root.getMarkupId()));
+
+		String action = url.toString();
+		if (root.encodeUrlInHiddenFields()) {
+			// parameter must be sent as hidden field, as it would be ignored in the action URL
+			int i = action.indexOf('?');
+			if (i != -1) {
+				string.append(String.format("f.getElementsByTagName('input')[0].name = '%s';", action.substring(i + 1)));
+				action = action.substring(0, i);
+			}
+		}
+
+		string.append(String.format("f.action='%s';", action));
+		string.append("f.submit();");
+		return string;
 	}
 
