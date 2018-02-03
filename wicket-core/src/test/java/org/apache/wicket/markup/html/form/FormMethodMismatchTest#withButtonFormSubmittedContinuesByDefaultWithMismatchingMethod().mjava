@@ -1,0 +1,17 @@
+    @Test
+    public void withButtonFormSubmittedContinuesByDefaultWithMismatchingMethod() {
+        final WicketTester tester = new WicketTester();
+        final boolean[] onSubmitCalled = new boolean[1];
+        final Form<Void> underTest = new Form<Void>("underTest") {
+            @Override
+            protected void onSubmit() {
+                onSubmitCalled[0] = true;
+            }
+        };
+        tester.startPage(new FormWithButtonPage(underTest));
+        final FormTester formTester = tester.newFormTester("underTest");
+        tester.getRequest().setMethod("GET");
+        formTester.submit("button");
+        assertTrue(onSubmitCalled[0]);
+    }
+
