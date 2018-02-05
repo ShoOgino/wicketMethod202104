@@ -11,14 +11,27 @@
 					"Cannot update component that does not have setOutputMarkupId property set to true. Component: " +
 						component.toString());
 			}
-			else if (component.getPage() != getPage())
+			Page page = component.findParent(Page.class);
+			if (page != getPage())
 			{
-				throw new IllegalArgumentException(
-					"Cannot update component because its page is not the same as " +
-					"the one this handler has been created for. Component: " +
-						component.toString());
+				String msg = "Cannot update component because its page is not the same as " +
+					"the one this handler has been created for. Component: " + component.toString();
+				IllegalArgumentException error = new IllegalArgumentException(msg);
+				if (Application.get().usesDevelopmentConfig())
+				{
+					throw error;
+				}
+				else
+				{
+					// log the error to the application log, but don't block the user of the
+					// application (which was the behavior in Wicket <= 7.
+					log.error(msg, error);
+				}
 			}
-			add(component, component.getMarkupId());
+			else
+			{
+				add(component, component.getMarkupId());
+			}
 		}
 	}
 

@@ -1,0 +1,28 @@
+	/**
+	 * When running in deployment mode Wicket should <b>not</b> trigger an exception signaling the
+	 * error on the developers part that a component that is not part of the page is being refreshed
+	 * in the AJAX response, resulting in a no-op (which is not the intended result). Instead Wicket
+	 * should signal the error in the log, but not prevent the user of the application to continue
+	 * (which happened in Wicket 7).
+	 */
+	@Test
+	public void responseTargetInDeploymentModeShouldNotFail()
+	{
+		configuration = RuntimeConfigurationType.DEPLOYMENT;
+
+		try
+		{
+			// this should not fail
+			ComponentNotOnPage page = tester.startPage(ComponentNotOnPage.class);
+			tester.clickLink("listview:0:link", true);
+			tester.startPage(page);
+		}
+		catch (Exception e)
+		{
+			Assert.fail("Unexpected exception: " + e);
+		}
+
+		// this shouldn't fail as well
+		tester.clickLink("refresher:refresh", true);
+	}
+

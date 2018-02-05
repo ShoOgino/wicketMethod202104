@@ -1,0 +1,32 @@
+	@Override
+	protected void onInitialize()
+	{
+		super.onInitialize();
+
+		add(new EmptyPanel("refresher"));
+
+		add(new ListView<Integer>("listview", Arrays.asList(1, 2, 3, 4, 5))
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Integer> item)
+			{
+				item.setOutputMarkupId(true);
+
+				item.add(new AjaxLink<Void>("link")
+				{
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target)
+					{
+						LastSelectedPanel lastSelected = new LastSelectedPanel("refresher", item);
+						ComponentNotOnPage.this.replace(lastSelected);
+						target.add(lastSelected);
+					}
+				});
+			}
+		});
+	}
+
