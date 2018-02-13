@@ -12,21 +12,25 @@
 	{
 		Form<?> root = getRootForm();
 
-		StringBuilder string = new StringBuilder();
-		string.append(String.format("var f = document.getElementById('%s');", root.getMarkupId()));
-
+		AppendingStringBuffer buffer = new AppendingStringBuffer();
+		
 		String action = url.toString();
 		if (root.encodeUrlInHiddenFields()) {
+			buffer.append(String.format("document.getElementById('%s').innerHTML = '", root.getHiddenFieldsId()));
+			
 			// parameter must be sent as hidden field, as it would be ignored in the action URL
 			int i = action.indexOf('?');
 			if (i != -1) {
-				string.append(String.format("f.getElementsByTagName('input')[0].name = '%s';", action.substring(i + 1)));
+				writeParamsAsHiddenFields(Strings.split(action.substring(i + 1), '&'), buffer);
+				
 				action = action.substring(0, i);
 			}
+			
+			buffer.append("';");
 		}
-
-		string.append(String.format("f.action='%s';", action));
-		string.append("f.submit();");
-		return string;
+		buffer.append(String.format("var f = document.getElementById('%s');", root.getMarkupId()));
+		buffer.append(String.format("f.action='%s';", action));
+		buffer.append("f.submit();");
+		return buffer;
 	}
 

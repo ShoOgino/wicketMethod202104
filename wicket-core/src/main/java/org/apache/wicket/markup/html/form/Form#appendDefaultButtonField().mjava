@@ -9,9 +9,8 @@
 	{
 		AppendingStringBuffer buffer = new AppendingStringBuffer();
 
-		// div that is not visible (but not display:none either)
-		buffer.append(HIDDEN_DIV_START);
-
+		getResponse().write("<div style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\">");
+		
 		// add an empty textfield (otherwise IE doesn't work)
 		buffer.append("<input type=\"text\" tabindex=\"-1\" autocomplete=\"off\"/>");
 
@@ -24,9 +23,8 @@
 		buffer.append("'); if (b!=null&amp;&amp;b.onclick!=null&amp;&amp;typeof(b.onclick) != 'undefined') {  var r = Wicket.bind(b.onclick, b)(); if (r != false) b.click(); } else { b.click(); };  return false;\" ");
 		buffer.append(" />");
 
-		// close div
-		buffer.append("</div>");
-
+		getResponse().write("</div>");
+		
 		getResponse().write(buffer);
 	}
 
