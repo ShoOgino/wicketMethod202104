@@ -1,0 +1,16 @@
+	@Test
+	public void immediatelyContentReady() {
+		
+		AjaxLazyLoadPanelPage page = new AjaxLazyLoadPanelPage();
+		page.contentReady = true;
+		
+		tester.startPage(page);
+		
+		// render the loading component at least once
+		tester.assertContainsNot("LOADED");
+
+		AjaxLazyLoadPanelTester.executeAjaxLazyLoadPanel(tester);
+		
+		tester.assertContains("LOADED");
+	}
+

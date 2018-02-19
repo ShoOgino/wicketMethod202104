@@ -1,0 +1,20 @@
+	@Test
+	public void lateContentReady() {
+		
+		AjaxLazyLoadPanelPage page = new AjaxLazyLoadPanelPage();
+		page.contentReady = false;
+		
+		tester.startPage(page);
+		
+		tester.assertContainsNot("LOADED");
+		
+		AjaxLazyLoadPanelTester.executeAjaxLazyLoadPanel(tester);
+
+		tester.assertContainsNot("LOADED");
+
+		page.contentReady = true;
+		AjaxLazyLoadPanelTester.executeAjaxLazyLoadPanel(tester);
+		
+		tester.assertContains("LOADED");
+	}
+
