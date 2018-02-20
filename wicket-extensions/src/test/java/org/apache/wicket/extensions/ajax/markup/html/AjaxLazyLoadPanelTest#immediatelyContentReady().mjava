@@ -6,11 +6,16 @@
 		
 		tester.startPage(page);
 		
-		// render the loading component at least once
+		// loading component rendered at least once, timer set
+		tester.assertContains("LOADING");
 		tester.assertContainsNot("LOADED");
+		tester.assertContains("Wicket.Timer.set\\(");
 
 		AjaxLazyLoadPanelTester.executeAjaxLazyLoadPanel(tester);
-		
+
+		// content, no timer needed any more
+		tester.assertContainsNot("LOADING");
 		tester.assertContains("LOADED");
+		tester.assertContainsNot("Wicket.Timer.set\\(");
 	}
 
