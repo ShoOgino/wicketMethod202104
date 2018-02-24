@@ -3,8 +3,9 @@
 	 *
 	 * @param component
 	 *      the component to prepare
+	 * @return wether the component was prepared
 	 */
-	protected void prepareComponent(Component component)
+	protected boolean prepareComponent(Component component)
 	{
 		if (component.getRenderBodyOnly() == true)
 		{
@@ -22,7 +23,7 @@
 			// dont throw an exception but just ignore this component, somehow
 			// it got removed from the page.
 			LOG.warn("Component '{}' not rendered because it was already removed from page", component);
-			return;
+			return false;
 		}
 
 		try
@@ -34,5 +35,7 @@
 			bodyBuffer.reset();
 			throw e;
 		}
+		
+		return true;
 	}
 

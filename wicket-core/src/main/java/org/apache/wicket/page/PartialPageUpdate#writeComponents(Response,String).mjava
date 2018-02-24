@@ -11,7 +11,7 @@
 	{
 		componentsFrozen = true;
 
-		List<Component> prepared = new ArrayList<>(markupIdToComponent.size());
+		List<Component> toBeWritten = new ArrayList<>(markupIdToComponent.size());
 		
 		// delay preparation of feedbacks after all other components
 		try (FeedbackDelay delay = new FeedbackDelay(RequestCycle.get())) {
@@ -19,8 +19,9 @@
 			{
 				if (!containsAncestorFor(component))
 				{
-					prepareComponent(component);
-					prepared.add(component);
+					if (prepareComponent(component)) {
+						toBeWritten.add(component);
+					}
 				}
 			}
 
@@ -29,7 +30,7 @@
 		}
 
 		// write components
-		for (Component component : prepared)
+		for (Component component : toBeWritten)
 		{
 			writeComponent(response, component.getAjaxRegionMarkupId(), component, encoding);
 		}
