@@ -1,0 +1,21 @@
+	/**
+	 * WICKET-6503 removed components are not written, but no exception raised either. 
+	 */
+	@Test
+	public void removedComponentAreNotWritten() throws Exception
+	{
+		PageForPartialUpdate page = new PageForPartialUpdate();
+		
+		tester.startPage(page);
+		
+		XmlPartialPageUpdate update = new XmlPartialPageUpdate(page);		
+		
+		update.add(new Label("notInPage"), "notInPage");
+		
+		MockWebResponse response = new MockWebResponse();
+		
+		update.writeTo(response, "UTF-8");
+		
+		assertFalse("notInPage not written", response.getTextResponse().toString().contains("notInPage"));
+	}
+
