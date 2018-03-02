@@ -1,0 +1,49 @@
+	@Test
+	public void testDynamicWizard()
+	{
+		DynamicWizardStep step1 = new DynamicWizardStep(null)
+		{
+			@Override
+			public boolean isLastStep()
+			{
+				return false;
+			}
+
+			@Override
+			public IDynamicWizardStep next()
+			{
+				return step4;
+			}
+		};
+			
+		step4 = new DynamicWizardStep(step1)
+		{
+			@Override
+			public boolean isLastStep()
+			{
+				return true;
+			}
+			
+			@Override
+			public IDynamicWizardStep next()
+			{
+				return null;
+			}
+		};
+		
+		DynamicWizardModel model = new DynamicWizardModel(step1);
+		
+		model.reset();
+		
+		assertSame(step1, model.getActiveStep());
+		assertTrue(model.isNextAvailable());
+		model.next();
+		assertSame(step4, model.getActiveStep());
+		assertFalse(model.isNextAvailable());
+		try {
+			model.next();
+			fail();
+		} catch (Exception expected) {
+		}
+	}
+
