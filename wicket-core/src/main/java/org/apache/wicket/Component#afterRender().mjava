@@ -7,17 +7,11 @@
 		
 		try
 		{
-			setRequestFlag(RFLAG_AFTER_RENDERING, true);
+			setRequestFlag(RFLAG_AFTER_RENDER_SUPER_CALL_VERIFIED, false);
 
 			onAfterRender();
 			getApplication().getComponentOnAfterRenderListeners().onAfterRender(this);
-			if (getRequestFlag(RFLAG_AFTER_RENDERING))
-			{
-				throw new IllegalStateException(Component.class.getName() +
-					" has not been properly detached. Something in the hierarchy of " +
-					getClass().getName() +
-					" has not called super.onAfterRender() in the override of onAfterRender() method");
-			}
+			verifySuperCall("onAfterRender", RFLAG_AFTER_RENDER_SUPER_CALL_VERIFIED);
 		}
 		finally
 		{

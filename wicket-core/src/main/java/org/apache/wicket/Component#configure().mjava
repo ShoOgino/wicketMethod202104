@@ -32,7 +32,11 @@
 		{
 			clearEnabledInHierarchyCache();
 			clearVisibleInHierarchyCache();
+			
+			setRequestFlag(RFLAG_ON_CONFIGURE_SUPER_CALL_VERIFIED, false);
 			onConfigure();
+			verifySuperCall("onConfigure", RFLAG_ON_CONFIGURE_SUPER_CALL_VERIFIED);
+			
 			for (Behavior behavior : getBehaviors())
 			{
 				if (isBehaviorAccepted(behavior))
