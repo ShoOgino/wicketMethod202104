@@ -5,7 +5,7 @@
 	{
 		List<IColumn<Contact, String>> columns = new ArrayList<>();
 
-		columns.add(new AbstractColumn<Contact, String>(new Model<>("Actions"))
+		columns.add(new AbstractColumn<Contact, String>(new ResourceModel("actions"))
 		{
 			@Override
 			public void populateItem(Item<ICellPopulator<Contact>> cellItem, String componentId,
@@ -15,7 +15,7 @@
 			}
 		});
 
-		columns.add(new PropertyColumn<Contact, String>(new Model<>("ID"), "id")
+		columns.add(new PropertyColumn<Contact, String>(new ResourceModel("id"), "id")
 		{
 			@Override
 			public String getCssClass()
@@ -24,9 +24,9 @@
 			}
 		});
 
-		columns.add(new LambdaColumn<>(Model.of("First Name"), "firstName", Contact::getFirstName));
+		columns.add(new LambdaColumn<>(new ResourceModel("firstName"), "firstName", Contact::getFirstName));
 
-		columns.add(new LambdaColumn<Contact, String>(new Model<>("Last Name"), "lastName", Contact::getLastName)
+		columns.add(new LambdaColumn<Contact, String>(new ResourceModel("lastName"), "lastName", Contact::getLastName)
 		{
 			@Override
 			public String getCssClass()
@@ -35,14 +35,35 @@
 			}
 		});
 
-		columns.add(new PropertyColumn<>(new Model<>("Home Phone"), "homePhone"));
-		columns.add(new PropertyColumn<>(new Model<>("Cell Phone"), "cellPhone"));
+		columns.add(new PropertyColumn<>(new ResourceModel("homePhone"), "homePhone"));
+		columns.add(new PropertyColumn<>(new ResourceModel("cellPhone"), "cellPhone"));
+		columns.add(new PropertyColumn<>(new ResourceModel("bornDate"), "bornDate"));
 
 		SortableContactDataProvider dataProvider = new SortableContactDataProvider();
 		DataTable<Contact, String> dataTable = new DefaultDataTable<>("table", columns,
 				dataProvider, 8);
 		
-		dataTable.addBottomToolbar(new ExportToolbar(dataTable).addDataExporter(new CSVDataExporter()));
+		dataTable.addBottomToolbar(new ExportToolbar(dataTable).addDataExporter(new CSVDataExporter() {
+			/**
+			 * Use converters of this page.
+			 * 
+			 * @see DataTablePage#createConverter(Class)
+			 */
+			@Override
+			protected IConverterLocator getConverterLocator()
+			{
+				return DataTablePage.this;
+			}
+			
+			/**
+			 * Wrap models on the page so resource properties get picked up. 
+			 */
+			@Override
+			protected <T> IModel<T> wrapModel(IModel<T> model)
+			{
+				return DataTablePage.this.wrap(model);
+			}
+		}));
 
 		add(dataTable);
 
@@ -60,6 +81,5 @@
 		colgroup.addCol(colgroup.new Col(AttributeModifier.append("style", "background-color: yellow")));
 		colgroup.addCol(colgroup.new Col(AttributeModifier.append("span", "2"),
 				AttributeModifier.append("style", "background-color: #CC6633")));
-		
 	}
 

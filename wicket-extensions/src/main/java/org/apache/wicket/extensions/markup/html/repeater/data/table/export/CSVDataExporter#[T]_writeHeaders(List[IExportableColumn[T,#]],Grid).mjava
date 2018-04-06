@@ -1,0 +1,14 @@
+	private <T> void writeHeaders(List<IExportableColumn<T, ?>> columns, Grid grid) throws IOException
+	{
+		if (isExportHeadersEnabled())
+		{
+			for (IExportableColumn<T, ?> col : columns)
+			{
+				IModel<String> displayModel = col.getDisplayModel();
+				String display = wrapModel(displayModel).getObject();
+				grid.cell(quoteValue(display));
+			}
+			grid.row();
+		}
+	}
+

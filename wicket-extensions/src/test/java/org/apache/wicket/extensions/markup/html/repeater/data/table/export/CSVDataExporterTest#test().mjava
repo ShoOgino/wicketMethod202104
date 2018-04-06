@@ -1,0 +1,21 @@
+	@Test
+	public void test() throws IOException
+	{
+		CSVDataExporter exporter = new CSVDataExporter();
+
+		IDataProvider<Contact> dataProvider = new ListDataProvider<Contact>(contacts);
+
+		List<IExportableColumn<Contact, ?>> columns = new ArrayList<>();
+		columns.add(new PropertyColumn<>(Model.of("firstName"), "firstName"));
+		columns.add(new PropertyColumn<>(Model.of("lastName"), "lastName"));
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+		exporter.exportData(dataProvider, columns, output);
+
+		assertEquals("\"firstName\",\"lastName\"\r\n" + //
+			"\"first0\",\"last\"\"0\"\r\n" + //
+			"\"first1\",\"last\"\"1\"\r\n" //
+			, new String(output.toByteArray(), exporter.getCharacterSet()));
+	}
+
