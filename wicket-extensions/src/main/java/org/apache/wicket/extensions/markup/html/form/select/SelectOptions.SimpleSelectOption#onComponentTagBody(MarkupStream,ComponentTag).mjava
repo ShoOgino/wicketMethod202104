@@ -4,6 +4,11 @@
 		@Override
 		public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag)
 		{
-			replaceComponentTagBody(markupStream, openTag, text);
+			CharSequence escaped = text;
+			if (getEscapeModelStrings()) {
+				escaped = Strings.escapeMarkup(text);
+			}
+			
+			replaceComponentTagBody(markupStream, openTag, escaped);
 		}
 
