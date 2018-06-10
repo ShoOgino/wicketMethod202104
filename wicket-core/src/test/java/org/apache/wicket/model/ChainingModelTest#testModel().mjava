@@ -1,0 +1,38 @@
+	@Test
+	public void testModel() {
+		class TestModel implements IModel<Integer>
+		{
+			boolean detached = false;
+			int value = 1;
+			
+			@Override
+			public Integer getObject()
+			{
+				return value;
+			}
+			
+			@Override
+			public void setObject(Integer object)
+			{
+				this.value = object;
+			}
+			
+			@Override
+			public void detach()
+			{
+				detached = true;
+			}
+		};
+		TestModel test = new TestModel();
+		
+		ChainingModel<Integer> model = new ChainingModel<>(test);
+		
+		assertEquals(Integer.valueOf(1), model.getObject());
+
+		model.setObject(2);
+		assertEquals(2, test.value);
+		
+		model.detach();
+		assertTrue(test.detached);
+	}
+

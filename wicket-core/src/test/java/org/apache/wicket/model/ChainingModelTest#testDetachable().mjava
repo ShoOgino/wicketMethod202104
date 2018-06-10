@@ -1,0 +1,25 @@
+	@Test
+	public void testDetachable() {
+		class TestDetachable implements IDetachable
+		{
+			boolean detached = false;
+			
+			@Override
+			public void detach()
+			{
+				detached = true;
+			}
+		};
+		TestDetachable test = new TestDetachable();
+		
+		ChainingModel<TestDetachable> model = new ChainingModel<>(test);
+		assertSame(test,  model.getObject());
+
+		test = new TestDetachable();
+		model.setObject(test);
+		assertSame(test,  model.getObject());
+
+		model.detach();
+		assertTrue(test.detached);
+	}
+
