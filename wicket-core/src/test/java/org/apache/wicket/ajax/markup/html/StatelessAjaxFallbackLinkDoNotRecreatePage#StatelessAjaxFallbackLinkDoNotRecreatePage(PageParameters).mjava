@@ -9,17 +9,12 @@
     super(parameters);
     setStatelessHint(true);
 
-    final Label incrementLabel = new Label("incrementLabel", new AbstractReadOnlyModel<Integer>()
-    {
-      private static final long serialVersionUID = 1L;
-
-      @Override
-      public Integer getObject()
-      {
-        final String counter = getParameter(parameters, COUNTER_PARAM);
-        return counter != null ? Integer.parseInt(counter) : 0;
-      }
-    });
+    final Label incrementLabel = new Label("incrementLabel", () ->
+	    {
+	        final String counter = getParameter(parameters, COUNTER_PARAM);
+	        return counter != null ? Integer.parseInt(counter) : 0;
+	    }
+    );
     final Link<?> incrementLink = new AjaxFallbackLink<Void>("incrementLink")
     {
       private static final long serialVersionUID = 1L;
