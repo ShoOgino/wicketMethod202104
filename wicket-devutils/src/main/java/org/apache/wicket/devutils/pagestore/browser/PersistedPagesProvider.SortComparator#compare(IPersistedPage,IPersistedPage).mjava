@@ -1,0 +1,16 @@
+		@Override
+		public int compare(IPersistedPage page0, IPersistedPage page1)
+		{
+			Object value0 = PropertyResolver.getValue(getSort().getProperty(), page0);
+			Object value1 = PropertyResolver.getValue(getSort().getProperty(), page1);
+
+			int c = Objects.compareWithConversion(value0, value1);
+
+			if (getSort().isAscending() == false)
+			{
+				c = c * -1;
+			}
+
+			return c;
+		}
+

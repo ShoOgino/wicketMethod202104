@@ -1,0 +1,16 @@
+	@Override
+	public IPageManager get()
+	{
+		IPageStore store = newPersistentStore();
+		
+		store = newSerializingStore(store);
+		
+		store = newAsynchronousStore(store);
+
+		store = newSessionStore(store);
+
+		store = newRequestStore(store);
+
+		return new PageManager(store);
+	}
+

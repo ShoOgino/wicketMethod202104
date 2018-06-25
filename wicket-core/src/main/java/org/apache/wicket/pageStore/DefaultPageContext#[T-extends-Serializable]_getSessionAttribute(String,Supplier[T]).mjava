@@ -1,0 +1,21 @@
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Serializable> T getSessionAttribute(String key, Supplier<T> defaultValue)
+	{
+		Session session = Session.get();
+
+		synchronized (session)
+		{
+			T value = (T)session.getAttribute(key);
+			if (value == null) {
+				value = defaultValue.get();
+				if (value != null) {
+					session.bind();
+					session.setAttribute(key, value);
+				}
+			}
+			
+			return value;
+		}
+	}
+

@@ -1,0 +1,13 @@
+		public IManageablePage getPage(IPageContext context, int id, IPageStore delegate)
+		{
+			for (String group : groups)
+			{
+				IManageablePage page = delegate.getPage(new GroupContext(context, this, group), id);
+				if (page != null)
+				{
+					return page;
+				}
+			}
+			return null;
+		}
+

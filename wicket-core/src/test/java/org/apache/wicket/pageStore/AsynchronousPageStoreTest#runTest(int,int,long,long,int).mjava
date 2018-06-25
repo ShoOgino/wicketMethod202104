@@ -6,23 +6,40 @@
 
 		final CountDownLatch lock = new CountDownLatch(pages * sessions);
 
-		// ISerializer serializer = new DummySerializer();
-		ISerializer serializer = new DeflatedJavaSerializer("applicationKey");
-
-		IDataStore dataStore = new DiskDataStore("applicationName", new File("./target"),
-				Bytes.bytes(10000l));
-
-		// IPageStore pageStore = new DummyPageStore(new File("target/store")) {
-		IPageStore pageStore = new DefaultPageStore(serializer, dataStore, 0)
-		{
-
+		IPageStore pageStore = new InMemoryPageStore("test", Integer.MAX_VALUE) {
 			@Override
-			public void storePage(String sessionId, IManageablePage page)
+			public void addPage(IPageContext context, IManageablePage page)
 			{
+				DummyPage dummyPage = (DummyPage) page;
 
-				super.storePage(sessionId, page);
-
+				super.addPage(context, dummyPage.clone());
+				
+				try
+				{
+					Thread.sleep(dummyPage.writeMillis);
+				}
+				catch (InterruptedException e)
+				{
+					throw new RuntimeException(e);
+				}
+				
 				lock.countDown();
+			}
+			
+			@Override
+			public IManageablePage getPage(IPageContext context, int id) {
+				DummyPage dummyPage = (DummyPage) super.getPage(context, id);
+				
+				try
+				{
+					Thread.sleep(dummyPage.readMillis);
+				}
+				catch (InterruptedException e)
+				{
+					throw new RuntimeException(e);
+				}
+				
+				return dummyPage;
 			}
 		};
 
@@ -35,20 +52,20 @@
 			for (int i = 1; i <= sessions; i++)
 			{
 				String sessionId = String.valueOf(i);
+				IPageContext context = new MockPageContext(sessionId);
 				Metrics metrics = new Metrics();
 
 				stopwatch.reset();
-				DummyPage page = new DummyPage(pageId, around(writeMillis), around(readMillis),
-						sessionId);
+				DummyPage page = new DummyPage(pageId, around(writeMillis), around(readMillis), sessionId);
 				stopwatch.start();
-				asyncPageStore.storePage(sessionId, page);
+				asyncPageStore.addPage(context, page);
 				metrics.storedPage = page;
 				metrics.storingMillis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
 
 				stopwatch.reset();
 				stopwatch.start();
 				metrics.restoredPage = DummyPage.class
-						.cast(asyncPageStore.getPage(sessionId, pageId));
+						.cast(asyncPageStore.getPage(context, pageId));
 				metrics.restoringMillis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
 
 				results.add(metrics);
@@ -57,6 +74,8 @@
 
 		lock.await(pages * sessions * (writeMillis + readMillis), TimeUnit.MILLISECONDS);
 
+		pageStore.destroy();
+		
 		return results;
 	}
 

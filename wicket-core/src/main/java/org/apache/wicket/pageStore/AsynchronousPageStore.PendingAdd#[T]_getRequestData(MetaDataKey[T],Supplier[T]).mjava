@@ -1,0 +1,14 @@
+		/**
+		 * Prevents access to request when called asynchronously.
+		 */
+		@Override
+		public <T> T getRequestData(MetaDataKey<T> key, Supplier<T> value)
+		{
+			if (asynchronous)
+			{
+				throw new WicketRuntimeException("request data not available asynchronuously");
+			}
+			
+			return context.getRequestData(key, value);
+		}
+

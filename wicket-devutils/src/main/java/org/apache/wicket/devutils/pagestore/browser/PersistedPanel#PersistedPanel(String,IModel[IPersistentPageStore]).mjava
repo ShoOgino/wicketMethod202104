@@ -1,0 +1,80 @@
+	/**
+	 * Construct.
+	 * 
+	 * @param id
+	 *            the component id
+	 */
+	public PersistedPanel(String id, IModel<IPersistentPageStore> store)
+	{
+		super(id, store);
+
+		final Label storeLabel = new Label("store", () -> {
+			IPersistentPageStore s = getModelObject();
+			
+			if (s == null) {
+				return "N/A";
+			}
+			
+			return String.format("%s - %s", s.getClass().getName(), s.getTotalSize());
+		});
+		storeLabel.setOutputMarkupId(true);
+		add(storeLabel);
+		
+		final DropDownChoice<String> sessionsSelector = createSessionsSelector("sessions");
+		sessionsSelector.setOutputMarkupId(true);
+		add(sessionsSelector);
+
+		final DataTable<IPersistedPage, String> table = createTable("table", sessionsSelector.getModel());
+		table.setOutputMarkupId(true);
+		add(table);
+
+		AjaxFallbackLink<Void> refreshLink = new AjaxFallbackLink<Void>("refresh")
+		{
+			@Override
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
+			{
+				targetOptional.ifPresent(target -> target.add(table));
+			}
+		};
+		add(refreshLink);
+
+		AjaxFallbackLink<Void> currentSessionLink = new AjaxFallbackLink<Void>("currentSessionLink")
+		{
+			@Override
+			public void onClick(Optional<AjaxRequestTarget> targetOptional)
+			{
+				sessionsSelector.setModelObject(getCurrentSessionIdentifier());
+				targetOptional.ifPresent(target -> target.add(sessionsSelector, table));
+			}
+
+			@Override
+			public boolean isVisible()
+			{
+				return PersistedPanel.this.getSession().isTemporary() == false;
+			}
+		};
+		currentSessionLink.setOutputMarkupPlaceholderTag(true);
+		add(currentSessionLink);
+
+		sessionsSelector.add(new AjaxFormComponentUpdatingBehavior("change")
+		{
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				target.add(storeLabel);
+				target.add(sessionsSelector);
+				target.add(table);
+			}
+		});
+
+		add(new AbstractAjaxTimerBehavior(Duration.seconds(5)) {
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target)
+			{
+				target.add(storeLabel);
+				target.add(table);
+			}
+		});
+	}
+

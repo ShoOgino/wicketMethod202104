@@ -1,0 +1,15 @@
+		@Override
+		public void valueUnbound(HttpSessionBindingEvent event)
+		{
+			AbstractPersistentPageStore store = STORES.get(storeKey);
+			if (store == null)
+			{
+				log.warn(
+					"Cannot remove data '{}' because disk store '{}' is no longer present.", sessionIdentifier, storeKey);
+			}
+			else
+			{
+				store.removeAllPersistedPages(sessionIdentifier);
+			}
+		}
+

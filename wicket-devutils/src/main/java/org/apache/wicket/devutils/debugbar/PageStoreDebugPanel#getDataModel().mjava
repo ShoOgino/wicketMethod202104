@@ -1,0 +1,16 @@
+	@Override
+	protected IModel<String> getDataModel()
+	{
+		return new IModel<String>()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getObject()
+			{
+				IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+				return String.format("Persisted pages: %s", store == null ? "N/A" : store.getTotalSize());
+			}
+		};
+	}
+

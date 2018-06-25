@@ -1,0 +1,17 @@
+	/**
+	 * Test default chain of stores.
+	 */
+	@Test
+	void chain()
+	{
+		IPageManager manager = new DefaultPageManagerProvider(tester.getApplication()).get();
+
+		RequestPageStore request = (RequestPageStore)manager.getPageStore();
+		InSessionPageStore session = (InSessionPageStore)request.getDelegate();
+		AsynchronousPageStore asynchronous = (AsynchronousPageStore)session.getDelegate();
+		SerializingPageStore serializing = (SerializingPageStore)asynchronous.getDelegate();
+		DiskPageStore disk = (DiskPageStore)serializing.getDelegate();
+		
+		assertNotNull(disk);
+	}
+

@@ -1,0 +1,18 @@
+	/**
+	 * Get the data on disk for the given session identifier.
+	 * 
+	 * @param sessionIdentifier identifier of session
+	 * @return matching data
+	 */
+	protected DiskData getDiskData(String sessionIdentifier, boolean create)
+	{
+		if (!create)
+		{
+			return diskDatas.get(sessionIdentifier);
+		}
+
+		DiskData data = new DiskData(this, sessionIdentifier);
+		DiskData existing = diskDatas.putIfAbsent(sessionIdentifier, data);
+		return existing != null ? existing : data;
+	}
+

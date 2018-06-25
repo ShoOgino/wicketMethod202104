@@ -1,0 +1,21 @@
+	@Override
+	protected IManageablePage getPersistedPage(String sessionIdentifier, int id)
+	{
+		DiskData diskData = getDiskData(sessionIdentifier, false);
+		if (diskData != null)
+		{
+			byte[] data = diskData.loadPage(id);
+			if (data != null)
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("Returning page with id '{}' in session with id '{}'", id, sessionIdentifier);
+				}
+				
+				return new SerializedPage(id, "unknown", data);
+			}
+		}
+		
+		return null;
+	}
+

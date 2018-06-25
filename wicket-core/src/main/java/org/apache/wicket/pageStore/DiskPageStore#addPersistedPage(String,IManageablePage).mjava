@@ -1,0 +1,19 @@
+	@Override
+	protected void addPersistedPage(String sessionIdentifier, IManageablePage page)
+	{
+		if (page instanceof SerializedPage == false)
+		{
+			throw new WicketRuntimeException("DiskPageStore works with serialized pages only");
+		}
+		SerializedPage serializedPage = (SerializedPage) page;
+
+		DiskData diskData = getDiskData(sessionIdentifier, true);
+
+		log.debug("Storing data for page with id '{}' in session with id '{}'", serializedPage.getPageId(), sessionIdentifier);
+
+		byte[] data = serializedPage.getData();
+		String type = serializedPage.getPageType();
+
+		diskData.savePage(serializedPage.getPageId(), type, data);
+	}
+

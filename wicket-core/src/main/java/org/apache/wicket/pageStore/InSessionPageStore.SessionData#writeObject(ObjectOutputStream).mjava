@@ -1,0 +1,27 @@
+		/**
+		 * Serialize pages before writing to output.
+		 */
+		private void writeObject(final ObjectOutputStream output) throws IOException
+		{
+			// handle non-serialized pages
+			for (int p = 0; p < pages.size(); p++)
+			{
+				IManageablePage page = pages.get(p);
+				
+				if ((page instanceof SerializedPage) == false)
+				{
+					if (serializer == null)
+					{
+						pages.remove(p);
+						p--;
+					}
+					else
+					{
+						pages.set(p, new SerializedPage(page.getPageId(), Classes.name(page.getClass()), serializer.serialize(page)));
+					}
+				}
+			}
+
+			output.defaultWriteObject();
+		}
+

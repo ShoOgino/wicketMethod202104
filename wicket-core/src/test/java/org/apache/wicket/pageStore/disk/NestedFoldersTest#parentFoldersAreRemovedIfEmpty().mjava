@@ -1,0 +1,27 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-4478
+	 *
+	 * Tests that the folder where a session data is put is partitioned, i.e. it is put in folders
+	 * which names are automatically calculated on the fly.
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void parentFoldersAreRemovedIfEmpty() throws IOException
+	{
+		NestedFolders folders = new NestedFolders(Files.createTempDirectory(null).toFile());
+
+		String sessionId = "abcdefg";
+		File sessionFolder = folders.get(sessionId, true);
+
+		assertEquals("abcdefg", sessionFolder.getName());
+		assertEquals("1279", sessionFolder.getParentFile().getName());
+		assertEquals("7141", sessionFolder.getParentFile().getParentFile().getName());
+		assertEquals(folders.getBase(), sessionFolder.getParentFile().getParentFile().getParentFile());
+
+		folders.remove(sessionId);
+
+		// assert that the 'sessionId' folder and the parents two levels up are removed
+		assertFalse(sessionFolder.getParentFile().getParentFile().exists());
+	}
+

@@ -1,0 +1,15 @@
+	@Override
+	public <T extends Serializable> T getSessionAttribute(String key, Supplier<T> defaultValue)
+	{
+		@SuppressWarnings("unchecked")
+		T value = (T)sessionAttributes.get(key);
+		if (value == null) {
+			value = defaultValue.get();
+			if (value != null) {
+				sessionAttributes.put(key, value);
+			}
+		}
+		
+		return value;
+	}
+

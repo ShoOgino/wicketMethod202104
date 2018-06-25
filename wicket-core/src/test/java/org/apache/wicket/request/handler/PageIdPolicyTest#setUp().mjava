@@ -1,0 +1,30 @@
+	@BeforeEach
+	void setUp() throws Exception
+	{
+		application = new MockApplication();
+		pageStore = new InMemoryPageStore("test", Integer.MAX_VALUE)
+		{
+			@Override
+			public void addPage(IPageContext context, IManageablePage page)
+			{
+				super.addPage(context, page);
+				storeCount++;
+			}
+		};
+		tester = new WicketTester(application)
+		{
+			@Override
+			protected IPageManagerProvider newTestPageManagerProvider()
+			{
+				return new IPageManagerProvider()
+				{
+					@Override
+					public IPageManager get()
+					{
+						return new PageManager(new RequestPageStore(pageStore));
+					}
+				};
+			}
+		};
+	}
+

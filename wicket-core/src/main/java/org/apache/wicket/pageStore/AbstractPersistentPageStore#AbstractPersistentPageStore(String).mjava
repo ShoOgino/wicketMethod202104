@@ -1,0 +1,12 @@
+	protected AbstractPersistentPageStore(String applicationName)
+	{
+		this.storeKey = Args.notNull(applicationName, "applicationName") + ":" + getClass().getSimpleName();
+
+		if (STORES.containsKey(storeKey))
+		{
+			throw new IllegalStateException(
+				"Store with key '" + storeKey + "' already exists.");
+		}
+		STORES.put(storeKey, this);
+	}
+

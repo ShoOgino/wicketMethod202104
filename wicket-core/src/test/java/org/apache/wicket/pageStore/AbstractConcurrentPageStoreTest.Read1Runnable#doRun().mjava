@@ -1,0 +1,32 @@
+		@Override
+		protected void doRun()
+		{
+			SerializedPage page;
+			while ((page = filesToRead1.poll()) != null || !saveDone.get())
+			{
+				if (page != null)
+				{
+					SerializedPage other = (SerializedPage)pageStore.getPage(getContext(page.getPageType()), page.getPageId());
+					if (Arrays.compare(page.getData(), other.getData()) != 0)
+					{
+						failures.incrementAndGet();
+						log.error("Detected error number: " + failures.get());
+					}
+					filesToRead2.add(page);
+					read1Count.incrementAndGet();
+					bytesRead.addAndGet(other.getData().length);
+				}
+
+				try
+				{
+					Thread.sleep(random.nextInt(SLEEP_MAX));
+				}
+				catch (InterruptedException e)
+				{
+					log.error(e.getMessage(), e);
+				}
+			}
+
+			read1Done.set(true);
+		}
+

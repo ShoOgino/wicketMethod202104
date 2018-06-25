@@ -1,0 +1,21 @@
+	@Override
+	public List<IPersistedPage> getPersistedPages(String sessionIdentifier)
+	{
+		MemoryData data = datas.get(sessionIdentifier);
+		if (data == null)
+		{
+			return new ArrayList<>();
+		}
+
+		synchronized (data)
+		{
+			return StreamSupport.stream(data.spliterator(), false)
+				.map(page -> {
+					String pageType = page instanceof SerializedPage ? ((SerializedPage)page).getPageType() : Classes.name(page.getClass());
+					
+					return new PersistedPage(page.getPageId(), pageType, getSize(page));
+				})
+				.collect(Collectors.toList());
+		}
+	}
+

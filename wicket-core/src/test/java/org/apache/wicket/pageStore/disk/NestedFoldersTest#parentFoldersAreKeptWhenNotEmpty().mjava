@@ -1,0 +1,25 @@
+	@Test
+	public void parentFoldersAreKeptWhenNotEmpty() throws IOException
+	{
+		NestedFolders folders = new NestedFolders(Files.createTempDirectory(null).toFile());
+
+		String sessionId = "hijklmn";
+		File sessionFolder = folders.get(sessionId, true);
+
+		assertEquals("hijklmn", sessionFolder.getName());
+		assertEquals("2326", sessionFolder.getParentFile().getName());
+		assertEquals("7548", sessionFolder.getParentFile().getParentFile().getName());
+		assertEquals(folders.getBase(), sessionFolder.getParentFile().getParentFile().getParentFile());
+
+		// create additional folder inside the nested folders
+		new File(sessionFolder.getParentFile().getParentFile(), "2345").mkdirs();
+		
+		folders.remove(sessionId);
+
+		// assert that the 'sessionId' folder and the parent one level up are removed
+		assertFalse(sessionFolder.getParentFile().exists());
+		// ... but the parent two levels up still exists
+		assertTrue(sessionFolder.getParentFile().getParentFile().exists());
+
+	}
+

@@ -7,30 +7,50 @@
 	@Test
 	void storeReturnsSameInstanceOnClosePageRequest() throws InterruptedException
 	{
+		final Semaphore semaphore = new Semaphore(0);
+		
+		IPageStore store = new NoopPageStore() {
+			
+			@Override
+			public synchronized void addPage(IPageContext context, IManageablePage page)
+			{
+				try
+				{
+					// wait until the page was get below
+					semaphore.acquire();
+				}
+				catch (InterruptedException e)
+				{
+				}
+				
+				super.addPage(context, page);
+			}
+			
+			@Override
+			public IManageablePage getPage(IPageContext context, int id)
+			{
+				fail();
+				return null;
+			}
+		};
 
-		ISerializer serializer = new DeflatedJavaSerializer("applicationKey");
-		// ISerializer serializer = new DummySerializer();
-
-		IDataStore dataStore = new DiskDataStore("applicationName", new File("./target"),
-				Bytes.bytes(10000l));
-
-		// IPageStore pageStore = new DummyPageStore(new File("target/store"));
-		IPageStore pageStore = spy(new DefaultPageStore(serializer, dataStore, 0));
-
-		IPageStore asyncPageStore = new AsynchronousPageStore(pageStore, 100);
+		IPageStore asyncPageStore = new AsynchronousPageStore(store, 100);
 
 		int pageId = 0;
+		
 		String sessionId = "sessionId";
+		
+		IPageContext context = new MockPageContext(sessionId);
 
-		DummyPage page = new DummyPage(pageId, 1000, 1000, sessionId);
-		asyncPageStore.storePage(sessionId, page);
+		SerializedPage page = new SerializedPage(pageId, "", new byte[0]);
+		asyncPageStore.addPage(context, page);
 
-		Thread.sleep(500);
+		IManageablePage pageBack = asyncPageStore.getPage(context, pageId);
 
-		IManageablePage pageBack = asyncPageStore.getPage(sessionId, pageId);
-
-		verify(pageStore, never()).getPage(sessionId, pageId);
+		semaphore.release();
 
 		assertEquals(page, pageBack);
+		
+		store.destroy();
 	}
 

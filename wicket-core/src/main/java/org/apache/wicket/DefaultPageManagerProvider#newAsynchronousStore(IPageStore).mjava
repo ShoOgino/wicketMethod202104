@@ -1,0 +1,18 @@
+	/**
+	 * Store pages asynchronously into the persistent store, if enabled in {@link StoreSettings#isAsynchronous()}.
+	 * 
+	 * @see AsynchronousPageStore
+	 */
+	protected IPageStore newAsynchronousStore(IPageStore pageStore)
+	{
+		StoreSettings storeSettings = application.getStoreSettings();
+
+		if (storeSettings.isAsynchronous())
+		{
+			int capacity = storeSettings.getAsynchronousQueueCapacity();
+			pageStore = new AsynchronousPageStore(pageStore, capacity);
+		}
+
+		return pageStore;
+	}
+

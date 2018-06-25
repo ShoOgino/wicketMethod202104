@@ -1,13 +1,19 @@
 	/**
 	 * Wraps a page manager with this synchronizer
 	 * 
-	 * @param pagemanager
+	 * @param manager
 	 * @return wrapped page manager
 	 */
-	public IPageManager adapt(IPageManager pagemanager)
+	public IPageManager adapt(final IPageManager manager)
 	{
-		return new PageManagerDecorator(pagemanager)
+		return new IPageManager()
 		{
+			@Override
+			public boolean supportsVersioning()
+			{
+				return manager.supportsVersioning();
+			}
+			
 			@Override
 			public IManageablePage getPage(int pageId)
 			{
@@ -15,7 +21,7 @@
 				try
 				{
 					lockPage(pageId);
-					page = super.getPage(pageId);
+					page = manager.getPage(pageId);
 				}
 				finally
 				{
@@ -28,13 +34,13 @@
 			}
 
 			@Override
-			public void removePage(final IManageablePage page) {
+			public void removePage(IManageablePage page)
+			{
 				if (page != null)
 				{
 					try
 					{
-						super.removePage(page);
-						untouchPage(page);
+						manager.removePage(page);
 					}
 					finally
 					{
@@ -44,23 +50,42 @@
 			}
 
 			@Override
-			public void touchPage(IManageablePage page)
+			public void addPage(IManageablePage page)
 			{
 				lockPage(page.getPageId());
-				super.touchPage(page);
+				
+				manager.addPage(page);
 			}
 
 			@Override
-			public void commitRequest()
+			public void removeAllPages()
+			{
+				manager.removeAllPages();
+			}
+			
+			@Override
+			public void detach()
 			{
 				try
 				{
-					super.commitRequest();
+					manager.detach();
 				}
 				finally
 				{
 					unlockAllPages();
 				}
+			}
+			
+			@Override
+			public IPageStore getPageStore()
+			{
+				return manager.getPageStore();
+			}
+			
+			@Override
+			public void destroy()
+			{
+				manager.destroy();
 			}
 		};
 	}

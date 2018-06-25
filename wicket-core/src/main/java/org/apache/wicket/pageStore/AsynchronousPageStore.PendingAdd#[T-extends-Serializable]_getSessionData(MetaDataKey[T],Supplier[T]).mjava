@@ -1,0 +1,27 @@
+		/**
+		 * Prevents changing of session data when called asynchronously.
+		 */
+		@Override
+		public <T extends Serializable> T getSessionData(MetaDataKey<T> key, Supplier<T> defaultValue)
+		{
+			T value;
+			
+			if (asynchronous)
+			{
+				value = context.getSessionData(key, () -> null);
+				if (value == null )
+				{
+					if (defaultValue.get() != null)
+					{
+						throw new WicketRuntimeException("session data can not be changed asynchronuously");
+					}
+				}
+			}
+			else
+			{
+				value = context.getSessionData(key, defaultValue);
+			}
+			
+			return value;
+		}
+

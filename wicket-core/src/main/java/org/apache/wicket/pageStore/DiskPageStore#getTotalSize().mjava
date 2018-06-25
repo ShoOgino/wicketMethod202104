@@ -1,0 +1,16 @@
+	@Override
+	public Bytes getTotalSize()
+	{
+		long size = 0;
+
+		synchronized (diskDatas)
+		{
+			for (DiskData diskData : diskDatas.values())
+			{
+				size = size + diskData.size();
+			}
+		}
+
+		return Bytes.bytes(size);
+	}
+

@@ -3,10 +3,10 @@
 	 */
 	public void cleanSessionCache()
 	{
-		getPageManager().getContext().setRequestData(null);
+		pageContext.clearRequest();
 		MockPage other = new MockPage();
 		other.setPageId(Integer.MAX_VALUE);
-		getPageManager().touchPage(other);
-		getPageManager().commitRequest();
+		getPageManager().addPage(other);
+		pageManager.detach();
 	}
 

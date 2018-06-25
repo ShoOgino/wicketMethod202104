@@ -1,0 +1,32 @@
+		@Override
+		protected void doRun()
+		{
+			SerializedPage page;
+
+			while ((page = pagesToSave.poll()) != null || saveCount.get() < FILES_COUNT)
+			{
+				if (page != null)
+				{
+					pageStore.addPage(getContext(page.getPageType()), page);
+
+					if (saveCount.get() % READ_MODULO == 0)
+					{
+						filesToRead1.add(page);
+					}
+					saveCount.incrementAndGet();
+					bytesWritten.addAndGet(page.getData().length);
+				}
+
+				try
+				{
+					Thread.sleep(random.nextInt(SLEEP_MAX));
+				}
+				catch (InterruptedException e)
+				{
+					log.error(e.getMessage(), e);
+				}
+			}
+
+			saveDone.set(true);
+		}
+

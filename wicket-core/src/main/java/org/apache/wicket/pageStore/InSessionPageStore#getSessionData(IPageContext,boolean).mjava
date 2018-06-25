@@ -1,0 +1,22 @@
+	private SessionData getSessionData(IPageContext context, boolean create)
+	{
+		SessionData data = context.getSessionData(KEY, () -> {
+			if (create)
+			{
+				return dataCreator.get();
+			}
+			else
+			{
+				return null;
+			}
+		});
+
+		if (data != null && serializer != null)
+		{
+			// data might be deserialized so initialize again
+			data.supportSessionSerialization(serializer);
+		}
+
+		return data;
+	}
+

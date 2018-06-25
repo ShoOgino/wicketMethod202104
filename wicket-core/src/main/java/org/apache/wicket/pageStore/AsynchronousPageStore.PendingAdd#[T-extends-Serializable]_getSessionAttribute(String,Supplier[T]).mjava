@@ -1,0 +1,33 @@
+		/**
+		 * Prevents changing of session attributes when called asynchronously.
+		 * <p>
+		 * All values accessed from {@link IPageStore#canBeAsynchronous(IPageContext)} are still
+		 * available.
+		 */
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends Serializable> T getSessionAttribute(String key, Supplier<T> defaultValue)
+		{
+			T value;
+			
+			if (asynchronous)
+			{
+				value = (T)attributeCache.get(key);
+				if (value == null )
+				{
+					if (defaultValue.get() != null)
+					{
+						throw new WicketRuntimeException("session attribute can not be changed asynchronuously");
+					}
+				}
+			} else {
+				value = context.getSessionAttribute(key, defaultValue);
+				if (value != null)
+				{
+					attributeCache.put(key, value);
+				}
+			}
+			
+			return value;
+		}
+

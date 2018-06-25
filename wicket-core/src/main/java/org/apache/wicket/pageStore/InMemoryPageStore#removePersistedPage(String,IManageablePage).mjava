@@ -1,0 +1,13 @@
+	@Override
+	protected void removePersistedPage(String sessionIdentifier, IManageablePage page)
+	{
+		MemoryData data = getMemoryData(sessionIdentifier, false);
+		if (data != null)
+		{
+			synchronized (data)
+			{
+				data.remove(page.getPageId());
+			}
+		}
+	}
+

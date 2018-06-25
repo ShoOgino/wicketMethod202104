@@ -1,0 +1,22 @@
+		public synchronized IManageablePage get(int id)
+		{
+			for (int p = 0; p < pages.size(); p++)
+			{
+				IManageablePage candidate = pages.get(p);
+
+				if (candidate.getPageId() == id)
+				{
+					if (candidate instanceof SerializedPage && serializer != null)
+					{
+						candidate = (IManageablePage)serializer.deserialize(((SerializedPage)candidate).getData());
+		
+						pages.set(p, candidate);
+					}
+					
+					return candidate;
+				}
+			}
+
+			return null;
+		}
+

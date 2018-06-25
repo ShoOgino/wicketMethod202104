@@ -1,0 +1,14 @@
+	@Override
+	public <T extends Serializable> T getSessionData(MetaDataKey<T> key, Supplier<T> defaultValue)
+	{
+		T value = key.get(sessionData);
+		if (value == null) {
+			value = defaultValue.get();
+			if (value != null) {
+				sessionData = key.set(sessionData, value);
+			}
+		}
+		
+		return value;
+	}
+

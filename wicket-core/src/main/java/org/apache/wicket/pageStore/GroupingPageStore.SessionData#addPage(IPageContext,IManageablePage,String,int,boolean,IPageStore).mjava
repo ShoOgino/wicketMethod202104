@@ -1,0 +1,26 @@
+		public synchronized void addPage(IPageContext context, IManageablePage page, String group, int maxGroups, boolean stableGroups, IPageStore delegate)
+		{
+			if (stableGroups == false)
+			{
+				// group might have changed, so remove page first from all groups
+				for (String other : groups)
+				{
+					delegate.removePage(new GroupContext(context, this, other), page);
+				}
+			}
+
+			// add as last
+			groups.remove(group);
+			groups.addLast(group);
+			
+			// delegate
+			delegate.addPage(new GroupContext(context, this, group), page);
+
+			while (groups.size() > maxGroups)
+			{
+				String first = groups.removeFirst();
+				
+				delegate.removeAllPages(new GroupContext(context, this, first));
+			}
+		}
+

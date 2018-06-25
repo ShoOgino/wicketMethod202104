@@ -15,21 +15,12 @@
 			@Override
 			protected IPageManagerProvider newTestPageManagerProvider()
 			{
-				return new IPageManagerProvider()
+				return () ->
 				{
-
-					@Override
-					public IPageManager apply(IPageManagerContext pageManagerContext)
-					{
-
-						final IDataStore dataStore = new InMemoryPageStore();
-						final AsynchronousDataStore asyncDS = new AsynchronousDataStore(dataStore,
-							100);
-						final DefaultPageStore pageStore = new DefaultPageStore(new JavaSerializer(
-							application.getApplicationKey()), asyncDS, 40);
-						return new PageStoreManager(application.getName(), pageStore,
-							pageManagerContext);
-					}
+					InMemoryPageStore inMemory = new InMemoryPageStore("test", Integer.MAX_VALUE);
+					SerializingPageStore serializing = new SerializingPageStore(inMemory, new JavaSerializer("test"));
+					final IPageStore store = new InSessionPageStore(serializing, Integer.MAX_VALUE);
+					return new PageManager(store);
 				};
 			}
 
