@@ -10,9 +10,13 @@
 			List<String> urls = getUrls();
 			for (String url : urls)
 			{
-
-				String modUrl = Strings.replaceAll(url, "${iteration}", String.valueOf(i))
-					.toString();
+				final int iteration = i;
+				String modUrl = new VariableInterpolator(url, false) {
+					@Override
+					protected String getValue(String variableName) {
+						return AbstractGetCommand.this.getValue(variableName, iteration);
+					}
+				}.toString();
 				doGet(runner.getClient(), modUrl);
 			}
 		}
