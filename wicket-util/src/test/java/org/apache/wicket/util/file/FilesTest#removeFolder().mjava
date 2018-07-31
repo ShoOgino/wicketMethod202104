@@ -1,15 +1,17 @@
 	/**
 	 * Tests for {@link Files#removeFolder(java.io.File)}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void removeFolder() throws Exception
 	{
-		assertFalse("'null' folders are not deleted.", Files.removeFolder(null));
+		assertFalse(Files.removeFolder(null), "'null' folders are not deleted.");
 
-		assertFalse("Non existing folders are not deleted.", Files.removeFolder(new File(
-			"/somethingThatDoesntExistsOnMostMachines-111111111111111111111111111111")));
+		assertFalse(
+			Files.removeFolder(new File(
+				"/somethingThatDoesntExistsOnMostMachines-111111111111111111111111111111")),
+			"Non existing folders are not deleted.");
 
 		java.io.File folder = new File(System.getProperty("java.io.tmpdir"), "wicket-test-folder");
 		Files.mkdirs(folder);
@@ -18,6 +20,6 @@
 		file.createNewFile();
 		assertTrue(file.exists());
 
-		assertTrue("Should be able to delete a folder.", Files.removeFolder(folder));
+		assertTrue(Files.removeFolder(folder), "Should be able to delete a folder.");
 	}
 

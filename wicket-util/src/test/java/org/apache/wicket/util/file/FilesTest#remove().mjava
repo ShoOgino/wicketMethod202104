@@ -6,29 +6,31 @@
 	@Test
 	public void remove() throws IOException
 	{
-		assertFalse("'null' files are not deleted.", Files.remove(null));
+		assertFalse(Files.remove(null), "'null' files are not deleted.");
 
-		assertFalse("Non existing files are not deleted.", Files.remove(new File(
-				"/somethingThatDoesntExistsOnMostMachines-111111111111111111111111111111")));
+		assertFalse(
+			Files.remove(new File(
+				"/somethingThatDoesntExistsOnMostMachines-111111111111111111111111111111")),
+			"Non existing files are not deleted.");
 
 		java.io.File file = getFile();
 		file.createNewFile();
-		assertTrue("The just created file should exist!", file.isFile());
+		assertTrue(file.isFile(), "The just created file should exist!");
 
 		boolean removed = Files.remove(file);
-		assertFalse("The just removed file should not exist!", file.exists());
-		assertTrue("Files.remove(file) should remove the file", removed);
+		assertFalse(file.exists(), "The just removed file should not exist!");
+		assertTrue(removed, "Files.remove(file) should remove the file");
 
 		// try to remove non-existing file
 		removed = Files.remove(file);
-		assertFalse("The just removed file should not exist!", file.exists());
-		assertFalse("Files.remove(file) should not remove the file", removed);
+		assertFalse(file.exists(), "The just removed file should not exist!");
+		assertFalse(removed, "Files.remove(file) should not remove the file");
 
 		// try to remove a folder
 		java.io.File folder = getFolder();
 		Files.mkdirs(folder);
 		assertTrue(folder.isDirectory());
-		assertFalse("Should not be able to delete a folder, even empty one.", Files.remove(folder));
-		assertTrue("Should not be able to delete a folder.", Files.removeFolder(folder));
+		assertFalse(Files.remove(folder), "Should not be able to delete a folder, even empty one.");
+		assertTrue(Files.removeFolder(folder), "Should not be able to delete a folder.");
 	}
 

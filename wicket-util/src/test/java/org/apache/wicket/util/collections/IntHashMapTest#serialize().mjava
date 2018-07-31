@@ -14,9 +14,9 @@
 		ByteArrayInputStream bais = new ByteArrayInputStream(serialized);
 		ObjectInputStream ois = new ObjectInputStream(bais);
 		IntHashMap<String> deserialized = (IntHashMap<String>) ois.readObject();
-		assertThat(deserialized, is(notNullValue()));
-		assertThat(deserialized.get(1), is(equalTo("one")));
-		assertThat(deserialized.get(2), is(equalTo("two")));
+		assertNotNull(deserialized);
+		assertEquals(deserialized.get(1), "one");
+		assertEquals(deserialized.get(2), "two");
 
 		// WICKET-5584
 		deserialized.put(3, "three");

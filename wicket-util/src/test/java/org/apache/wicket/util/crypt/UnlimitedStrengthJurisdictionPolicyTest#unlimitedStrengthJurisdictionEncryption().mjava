@@ -2,7 +2,7 @@
 	public void unlimitedStrengthJurisdictionEncryption() throws GeneralSecurityException
 	{
 		boolean unlimitedStrengthJurisdictionPolicyInstalled = SunJceCryptTest.isUnlimitedStrengthJurisdictionPolicyInstalled();
-		Assume.assumeThat(unlimitedStrengthJurisdictionPolicyInstalled, is(true));
+		Assumptions.assumeTrue(unlimitedStrengthJurisdictionPolicyInstalled);
 
 		AbstractCrypt crypt = new UnlimitedStrenghtJurisdictionPolicyCrypt();
 
@@ -13,9 +13,9 @@
 		byte[] encrypted2 = crypt.crypt(input2.getBytes(), Cipher.ENCRYPT_MODE);
 
 		byte[] decrypted = crypt.crypt(encrypted, Cipher.DECRYPT_MODE);
-		assertThat(new String(decrypted), is(equalTo(input1)));
+		assertEquals(new String(decrypted), input1);
 
 		byte[] decrypted2 = crypt.crypt(encrypted2, Cipher.DECRYPT_MODE);
-		assertThat(new String(decrypted2), is(equalTo(input2)));
+		assertEquals(new String(decrypted2),input2);
 	}
 
