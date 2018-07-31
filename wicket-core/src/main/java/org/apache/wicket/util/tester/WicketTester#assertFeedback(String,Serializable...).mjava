@@ -17,15 +17,15 @@
 		final List<FeedbackMessage> renderedMessages = model.getObject();
 		if (renderedMessages == null)
 		{
-			fail(
-				String.format("feedback panel at path [%s] returned null messages", path));
+			throw new AssertionFailedError(String.format("feedback panel at path [%s] returned null messages", path));
 		}
+
 		if (messages.length != renderedMessages.size())
 		{
-			fail(String.format(
-				"you expected '%d' messages for the feedback panel [%s], but there were actually '%d'",
-				messages.length, path, renderedMessages.size()));
+			throw new AssertionFailedError(String.format("you expected '%d' messages for the feedback panel [%s], but there were actually '%d'",
+					messages.length, path, renderedMessages.size()));
 		}
+
 		for (int i = 0; i < messages.length && i < renderedMessages.size(); i++)
 		{
 			final Serializable expected = messages[i];
