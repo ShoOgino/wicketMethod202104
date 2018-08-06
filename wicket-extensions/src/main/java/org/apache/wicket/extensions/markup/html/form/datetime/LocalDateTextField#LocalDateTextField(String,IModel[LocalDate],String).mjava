@@ -8,24 +8,8 @@
 	 * @param pattern
 	 *            the pattern to use
 	 */
-	public LocalDateTextField(String id, IModel<LocalDate> model, String datePattern)
+	public LocalDateTextField(String id, IModel<LocalDate> model, String pattern)
 	{
-		super(id, model, LocalDate.class);
-
-		this.converter = new TextFormatConverter() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public DateTimeFormatter getDateTimeFormatter(Locale locale)
-			{
-				return DateTimeFormatter.ofPattern(datePattern).withLocale(locale);
-			}
-
-			@Override
-			public String getTextFormat(Locale locale)
-			{
-				return datePattern;
-			}
-		};
+		this(id, model, pattern, pattern);
 	}
 

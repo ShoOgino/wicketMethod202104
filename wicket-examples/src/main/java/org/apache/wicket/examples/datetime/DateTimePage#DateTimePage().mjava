@@ -45,6 +45,9 @@
 			}
 		});
 
+		final LocalDateTextField dateField = new LocalDateTextField("date", new PropertyModel<>(this, "date"), "dd-MM-yyyy", "d-M-yyyy");
+		form.add(dateField);
+
 		final LocalDateTimeField datetimeField0 = new LocalDateTimeField("datetime0",
 			new PropertyModel<>(this, "dateTime0"))
 		{
@@ -80,7 +83,7 @@
 		form.add(new Label("datetime1-label", zonedDateTime1));
 
 		IModel<ZonedDateTime> zonedDateTime2 = new PropertyModel<>(this, "dateTime2");
-		LocalDateTimeTextField datetime2 = new LocalDateTimeTextField("datetime2",
+		LocalDateTimeTextField datetimeField2 = new LocalDateTimeTextField("datetime2",
 			new ZonedToLocalDateTimeModel(zonedDateTime2)
 			{
 				private static final long serialVersionUID = 1L;
@@ -97,7 +100,7 @@
 					return targetZone;
 				}
 			}, FormatStyle.SHORT, FormatStyle.SHORT);
-		form.add(datetime2);
+		form.add(datetimeField2);
 		form.add(new Label("datetime2-label", zonedDateTime2));
 
 		final ZonedDateTimeField datetimeField3 = new ZonedDateTimeField("datetime3",

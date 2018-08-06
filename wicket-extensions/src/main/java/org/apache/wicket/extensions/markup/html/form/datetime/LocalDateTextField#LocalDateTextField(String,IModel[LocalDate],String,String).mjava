@@ -1,0 +1,55 @@
+	/**
+	 * Construct with pattern for formatting and parsing.
+	 * 
+	 * @param id
+	 *            the component id
+	 * @param model
+	 *            the model
+	 * @param formatPattern
+	 *            the pattern to use for formatting
+	 * @param parsePattern
+	 *            the pattern to use for parsing
+	 */
+	public LocalDateTextField(String id, IModel<LocalDate> model, String formatPattern, String parsePattern)
+	{
+		super(id, model, LocalDate.class);
+
+		this.converter = new TextFormatConverter() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected DateTimeFormatter getDateTimeFormatter()
+			{
+				return DateTimeFormatter.ofPattern(formatPattern);
+			}
+
+			/**
+			 * Overwritten to support a custom parse pattern.
+			 */
+			@Override
+			public LocalDate convertToObject(final String value, Locale locale)
+			{
+				if (Strings.isEmpty(value))
+				{
+					return null;
+				}
+
+				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(parsePattern).withLocale(locale);
+				TemporalAccessor temporalAccessor;
+				try {
+					temporalAccessor = dateTimeFormatter.parse(value);
+				} catch (DateTimeParseException ex) {
+					throw newConversionException("Cannot parse '" + value, value, locale);
+				}
+				
+				return createTemporal(temporalAccessor);
+			}
+
+			@Override
+			public String getTextFormat(Locale locale)
+			{
+				return formatPattern;
+			}
+		};
+	}
+
