@@ -12,7 +12,7 @@
 		this.beanManager = beanManager;
 		this.nonContextualManager = nonContextualManager;
 
-		conversationContext = SeamConversationContextFactory.getContext(HttpServletRequest.class);
+		conversationContext =  Container.instance().deploymentManager().instance().select(HttpConversationContext.class).get(); 
 		if (conversationContext == null)
 		{
 			throw new IllegalStateException(
