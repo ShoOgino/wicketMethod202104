@@ -1,8 +1,10 @@
-	@Test(expected = IllegalStateException.class)
-	public void wicket_5114_throwExceptionWhenToStringFullContainsRelativePathSegment()
+	@Test
+	void wicket_5114_throwExceptionWhenToStringFullContainsRelativePathSegment()
 	{
-		Url url = Url.parse("/mountPoint/../whatever/");
-		url.setHost("wicketHost");
-		url.toString(StringMode.FULL);
+		assertThrows(IllegalStateException.class, () -> {
+			Url url = Url.parse("/mountPoint/../whatever/");
+			url.setHost("wicketHost");
+			url.toString(StringMode.FULL);
+		});
 	}
 
