@@ -1,5 +1,5 @@
-	@Test(expected = PageExpiredException.class)
-	public void cannotRecreatePageShouldThrowPEE()
+	@Test
+	void cannotRecreatePageShouldThrowPEE()
 	{
 		PageSettings pageSettings = tester.getApplication().getPageSettings();
 		pageSettings.setRecreateBookmarkablePagesAfterExpiry(false); // CANNOT recreate
@@ -10,6 +10,9 @@
 		tester.getSession().invalidateNow();
 
 		assertFalse(page.linkClicked.get());
-		tester.clickLink("link", false); // leads to PageExpiredException
+
+		assertThrows(PageExpiredException.class, () -> {
+			tester.clickLink("link", false);
+		});
 	}
 

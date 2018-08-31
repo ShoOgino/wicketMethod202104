@@ -1,9 +1,11 @@
 	/**
 	 * https://issues.apache.org/jira/browse/WICKET-5908
 	 */
-	@Test(expected = MarkupException.class)
-	public void doubleHeadTagPage()
+	@Test
+	void doubleHeadTagPage()
 	{
-		tester.startPage(DoubleHeadTagPage.class);
+		assertThrows(MarkupException.class, () -> {
+			tester.startPage(DoubleHeadTagPage.class);
+		});
 	}
 

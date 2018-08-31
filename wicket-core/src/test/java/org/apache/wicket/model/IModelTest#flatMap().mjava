@@ -1,12 +1,12 @@
 	@Test
-	public void flatMap()
+	void flatMap()
 	{
 		IModel<String> heirModel = Model.of(person)
 			.flatMap(john -> LambdaModel.of(() -> john.getName() + " is my parent", john::setName));
-		assertThat(heirModel.getObject(), is(equalTo("John is my parent")));
+		assertEquals("John is my parent", heirModel.getObject());
 
 		String newValue = "Matthias";
 		heirModel.setObject(newValue);
-		assertThat(heirModel.getObject(), is(equalTo("Matthias is my parent")));
+		assertEquals("Matthias is my parent", heirModel.getObject());
 	}
 

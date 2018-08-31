@@ -1,5 +1,5 @@
 	@Test
-	public void replacingTheFirstChildAfterIteratingDoesntIterateTheNewChild()
+	void replacingTheFirstChildAfterIteratingDoesntIterateTheNewChild()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 		Label label1 = new Label("label1", "Label1");
@@ -20,10 +20,10 @@
 		wmc.replace(newChild);
 
 		// the next child is still label 2
-		assertThat(iterator.next(), is(sameInstance(label2)));
+		assertSame(label2, iterator.next());
 
 		// and the new child is not iterated (was replaced before the current position of the
 		// iterator).
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 	}
 

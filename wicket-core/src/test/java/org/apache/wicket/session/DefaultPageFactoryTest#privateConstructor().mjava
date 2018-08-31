@@ -1,8 +1,12 @@
 	@Test
-	public void privateConstructor() {
-		expectedException.expect(WicketRuntimeException.class);
-		expectedException.expectMessage("Can't instantiate page using constructor 'private org.apache.wicket.session.DefaultPageFactoryTest$PrivateDefaultConstructorPage()'. This constructor is private!");
+	void privateConstructor()
+	{
+		Exception e = assertThrows(WicketRuntimeException.class, () -> {
+			pageFactory.newPage(PrivateDefaultConstructorPage.class);
+		});
 
-		pageFactory.newPage(PrivateDefaultConstructorPage.class);
+		assertEquals(
+			"Can't instantiate page using constructor 'private org.apache.wicket.session.DefaultPageFactoryTest$PrivateDefaultConstructorPage()'. This constructor is private!",
+			e.getMessage());
 	}
 

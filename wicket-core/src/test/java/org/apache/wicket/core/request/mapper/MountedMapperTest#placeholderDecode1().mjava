@@ -2,12 +2,12 @@
 	 *
 	 */
 	@Test
-	public void placeholderDecode1()
+	void placeholderDecode1()
 	{
 		Url url = Url.parse("some/p1/path/p2");
 		IRequestHandler handler = placeholderEncoder.mapRequest(getRequest(url));
 
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
 
 		assertEquals(0, page.getPageParameters().getIndexedCount());

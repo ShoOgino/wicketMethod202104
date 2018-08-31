@@ -3,9 +3,12 @@
 	 *
 	 * AjaxFallbackLink can be used only with <a>, <area> or <link> markup elements
 	 */
-	@Test(expected = MarkupException.class)
-	public void onlyAnchorAreaAndLink()
+	@Test
+	void onlyAnchorAreaAndLink()
 	{
-		tester.startPage(new OnlyAnchorAreaAndLinkPage());
+		assertThrows(MarkupException.class, () -> {
+			tester.startPage(new OnlyAnchorAreaAndLinkPage());
+
+		});
 	}
 

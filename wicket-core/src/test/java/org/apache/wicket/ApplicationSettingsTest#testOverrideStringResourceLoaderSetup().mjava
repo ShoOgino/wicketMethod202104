@@ -2,18 +2,18 @@
 	 * 
 	 */
 	@Test
-	public void testOverrideStringResourceLoaderSetup()
+	void testOverrideStringResourceLoaderSetup()
 	{
 		ResourceSettings settings = new ResourceSettings(new MockApplication());
 		settings.getStringResourceLoaders().clear();
-		settings.getStringResourceLoaders().add(
-			new BundleStringResourceLoader("org.apache.wicket.resource.DummyResources"));
+		settings.getStringResourceLoaders()
+			.add(new BundleStringResourceLoader("org.apache.wicket.resource.DummyResources"));
 		settings.getStringResourceLoaders().add(new ComponentStringResourceLoader());
 		List<IStringResourceLoader> loaders = settings.getStringResourceLoaders();
-		Assert.assertEquals("There should be 2 overridden loaders", 2, loaders.size());
-		Assert.assertTrue("First loader one should be the bundle one",
-			loaders.get(0) instanceof BundleStringResourceLoader);
-		Assert.assertTrue("Second loader should be the component one",
-			loaders.get(1) instanceof ComponentStringResourceLoader);
+		assertEquals(2, loaders.size(), "There should be 2 overridden loaders");
+		assertTrue(loaders.get(0) instanceof BundleStringResourceLoader,
+			"First loader one should be the bundle one");
+		assertTrue(loaders.get(1) instanceof ComponentStringResourceLoader,
+			"Second loader should be the component one");
 	}
 

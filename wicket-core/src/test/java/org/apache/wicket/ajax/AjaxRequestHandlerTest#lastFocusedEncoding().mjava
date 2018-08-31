@@ -2,16 +2,16 @@
 	 * WICKET-6568
 	 */
 	@Test
-	public void lastFocusedEncoding()
+	void lastFocusedEncoding()
 	{
 		FocusPage page = new FocusPage();
-		
+
 		tester.startPage(page);
 
 		// wicket-ajax-jquery encodes non ASCII id
 		String encoded = UrlEncoder.QUERY_INSTANCE.encode("€uro", Charset.forName("UTF-8"));
 		tester.getRequest().setHeader("Wicket-FocusedElementId", encoded);
-		
+
 		tester.executeAjaxEvent("link", "click");
 
 		assertEquals("€uro", page.lastFocusedElementId);

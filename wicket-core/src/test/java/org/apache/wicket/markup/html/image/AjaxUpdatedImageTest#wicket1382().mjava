@@ -3,23 +3,21 @@
 	 * attribute value
 	 */
 	@Test
-	public void wicket1382()
+	void wicket1382()
 	{
 		AjaxyImagesPage page = tester.startPage(AjaxyImagesPage.class);
 
 		TagTester tagTester = tester.getTagById(page.image.getMarkupId());
 		final String srcAttr = tagTester.getAttribute("src");
-		assertFalse(
-			"Image has not be rendered in Ajax request so it has no wicket:antiCache' parameter",
-			srcAttr.contains("antiCache"));
+		assertFalse(srcAttr.contains("antiCache"),
+			"Image has not be rendered in Ajax request so it has no wicket:antiCache' parameter");
 
 		// make an ajax call
 		tester.clickLink("link", true);
 		page = (AjaxyImagesPage)tester.getLastRenderedPage();
 		tagTester = tester.getTagById(page.image.getMarkupId());
 		final String srcAttr1 = tagTester.getAttribute("src");
-		assertTrue(
-			"Image has not be rendered in Ajax request so it has no wicket:antiCache' parameter",
-				srcAttr1.contains("antiCache"));
+		assertTrue(srcAttr1.contains("antiCache"),
+			"Image has not be rendered in Ajax request so it has no wicket:antiCache' parameter");
 	}
 

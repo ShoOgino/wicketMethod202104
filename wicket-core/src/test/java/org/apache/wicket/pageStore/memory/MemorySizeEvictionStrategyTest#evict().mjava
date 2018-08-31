@@ -1,6 +1,6 @@
 	/***/
 	@Test
-	public void evict()
+	void evict()
 	{
 		PageTable pageTable = new PageTable();
 
@@ -14,8 +14,8 @@
 		strategy.evict(pageTable);
 		assertEquals(0, pageTable.size());
 		long currentSize = WicketObjects.sizeof(pageTable);
-		assertTrue("Current size: |" + currentSize + "|, strategy size: |" + sizeOfEmptyPageTable +
-			"|", currentSize <= sizeOfEmptyPageTable);
+		assertTrue(currentSize <= sizeOfEmptyPageTable, "Current size: |" + currentSize + "|, strategy size: |" + sizeOfEmptyPageTable +
+				"|");
 
 		// evict to page table with size: empty + PAGE2
 		pageTable.storePage(PAGE2.length, PAGE2);
@@ -28,7 +28,6 @@
 		// bigger size than PAGE1
 		assertEquals(1, pageTable.size());
 		currentSize = WicketObjects.sizeof(pageTable);
-		assertTrue("Current size: |" + currentSize + "|, strategy size: |" + sizeOfWithPage2 + "|",
-			currentSize <= sizeOfWithPage2);
+		assertTrue(currentSize <= sizeOfWithPage2, "Current size: |" + currentSize + "|, strategy size: |" + sizeOfWithPage2 + "|");
 	}
 

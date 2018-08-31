@@ -2,15 +2,18 @@
 	 * https://issues.apache.org/jira/browse/WICKET-5560
 	 */
 	@Test
-	public void enforceMountsWithCryptoMapper()
+	void enforceMountsWithCryptoMapper()
 	{
 		WebApplication app = tester.getApplication();
 
-		IRequestHandler handler = new BookmarkablePageRequestHandler(new PageProvider(UnknownPage.class));
+		IRequestHandler handler = new BookmarkablePageRequestHandler(
+			new PageProvider(UnknownPage.class));
 
 		String plainTextNonMountedUrl = tester.urlFor(handler).toString();
 
-		assertTrue("Plain text non mounted url should start with wicket/bookmarkable/: " + plainTextNonMountedUrl, plainTextNonMountedUrl.startsWith("wicket/bookmarkable/"));
+		assertTrue(plainTextNonMountedUrl.startsWith("wicket/bookmarkable/"),
+			"Plain text non mounted url should start with wicket/bookmarkable/: " +
+				plainTextNonMountedUrl);
 
 		tester.executeUrl(plainTextNonMountedUrl);
 		tester.assertRenderedPage(UnknownPage.class);
@@ -24,7 +27,8 @@
 
 		String encryptedNonMountedUrl = tester.urlFor(handler).toString();
 
-		assertFalse("Encrypted URL should not start with wicket/bookmarkable/" + encryptedNonMountedUrl, encryptedNonMountedUrl.startsWith("wicket/bookmarkable/"));
+		assertFalse(encryptedNonMountedUrl.startsWith("wicket/bookmarkable/"),
+			"Encrypted URL should not start with wicket/bookmarkable/" + encryptedNonMountedUrl);
 
 		tester.executeUrl(plainTextNonMountedUrl);
 		assertNull(tester.getLastRenderedPage());

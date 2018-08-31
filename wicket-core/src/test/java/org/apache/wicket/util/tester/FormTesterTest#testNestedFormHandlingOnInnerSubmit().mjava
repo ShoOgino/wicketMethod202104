@@ -1,12 +1,12 @@
 	@Test
-	public void testNestedFormHandlingOnInnerSubmit() throws Exception
+	void testNestedFormHandlingOnInnerSubmit() throws Exception
 	{
 		NestedFormPage page = tester.startPage(NestedFormPage.class);
 		FormTester form = tester.newFormTester("outer:inner");
 		form.submit("submit");
-		assertFalse("should not directly submit inner form - browsers submit the outer form!",
-			page.url.contains("inner"));
-		assertFalse("outer form should not be processed", page.outerSubmitted);
-		assertTrue("inner form should be processed", page.innerSubmitted);
+		assertFalse(page.url.contains("inner"),
+			"should not directly submit inner form - browsers submit the outer form!");
+		assertFalse(page.outerSubmitted, "outer form should not be processed");
+		assertTrue(page.innerSubmitted, "inner form should be processed");
 	}
 

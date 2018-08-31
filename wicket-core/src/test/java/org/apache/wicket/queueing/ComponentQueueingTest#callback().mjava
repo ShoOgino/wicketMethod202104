@@ -1,6 +1,6 @@
 	/** dequeue, then rerender the page instance after a callback is executed */
 	@Test
-	public void callback()
+	void callback()
 	{
 		TestPage p = new TestPage();
 		p.setPageMarkup("<p wicket:id='a'><a wicket:id='l'><p wicket:id='b'></p></a></p>");
@@ -11,10 +11,10 @@
 		tester.startPage(p);
 
 		assertThat(p, hasPath(new Path(a, l, b)));
-		assertThat(l.isClicked(), is(false));
+		assertEquals(false, l.isClicked());
 
 		tester.clickLink(l);
 
-		assertThat(l.isClicked(), is(true));
+		assertEquals(true, l.isClicked());
 	}
 

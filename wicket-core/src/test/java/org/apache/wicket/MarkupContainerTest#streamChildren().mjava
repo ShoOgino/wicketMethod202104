@@ -1,23 +1,31 @@
 	@Test
-	public void streamChildren()
+	void streamChildren()
 	{
 		LoginPage loginPage = new LoginPage();
-		Optional<Component> first = loginPage.stream().filter(c -> c.getId().equals("form"))
+		Optional<Component> first = loginPage.stream()
+			.filter(c -> c.getId().equals("form"))
 			.findFirst();
-		assertThat(first.isPresent(), is(false));
+		assertEquals(false, first.isPresent());
 
 		Form<Object> form = new Form<>("form");
 		loginPage.add(form);
 
 		form.add(new TextField<>("field"));
 
-		assertThat(loginPage.streamChildren().filter(c -> c.getId().equals("form")).findFirst()
-			.isPresent(), is(true));
+		assertTrue(loginPage.streamChildren()
+			.filter(c -> c.getId().equals("form"))
+			.findFirst()
+			.isPresent());
 
-		assertThat(loginPage.streamChildren().filter(c -> c.getId().equals("field")).findFirst()
-			.isPresent(), is(true));
+		assertTrue(loginPage.streamChildren()
+			.filter(c -> c.getId().equals("field"))
+			.findFirst()
+			.isPresent());
 
-		assertThat(loginPage.streamChildren().filter(TextField.class::isInstance)
-			.filter(c -> c.getId().equals("field")).findFirst().isPresent(), is(true));
+		assertTrue(loginPage.streamChildren()
+			.filter(TextField.class::isInstance)
+			.filter(c -> c.getId().equals("field"))
+			.findFirst()
+			.isPresent());
 	}
 

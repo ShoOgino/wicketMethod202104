@@ -2,15 +2,15 @@
 	 * https://issues.apache.org/jira/browse/WICKET-6172
 	 */
 	@Test
-	public void getTagTestersForNonClosedTag()
+	void getTagTestersForNonClosedTag()
 	{
 		List<TagTester> testers = TagTester.createTagsByAttribute(NON_CLOSED_INPUT, "wicket:id", "wicketId", false);
-		assertThat(testers, is(notNullValue()));
-		assertThat(testers.size(), is(1));
+		assertNotNull(testers);
+		assertEquals(1, testers.size());
 
 		String type = testers.get(0).getAttribute("type");
-		assertThat(type, is(equalTo("text")));
+		assertEquals("text", type);
 
-		assertThat(testers.get(0).getValue(), is(nullValue()));
+		assertNull(testers.get(0).getValue());
 	}
 

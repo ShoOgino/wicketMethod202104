@@ -1,5 +1,5 @@
-	@Test(expected = WicketRuntimeException.class)
-	public void getNullCollectionFails()
+	@Test
+	void getNullCollectionFails()
 	{
 		Object object = new Object()
 		{
@@ -13,6 +13,9 @@
 
 		Choice choice = new Choice(object);
 		choice.setConvertedInput(Arrays.asList("A", "B"));
-		FormComponent.updateCollectionModel(choice);
+
+		assertThrows(WicketRuntimeException.class, () -> {
+			FormComponent.updateCollectionModel(choice);
+		});
 	}
 

@@ -1,5 +1,5 @@
 	@Test
-	public void shouldRedirectToTargetUrlCondition() {
+	void shouldRedirectToTargetUrlCondition() {
 
 		TestPageRenderer renderer = new TestPageRenderer(handler);
 
@@ -13,7 +13,7 @@
 		renderer.pageStateless = false;
 		renderer.sessionTemporary = false;
 
-		Assert.assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
+		assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
 			Url.parse("test2")));
 
 		// 	or
@@ -21,7 +21,7 @@
 		renderer.redirectPolicy = RedirectPolicy.AUTO_REDIRECT;
 		renderer.redirectToRender = true;
 
-		Assert.assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
+		assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
 			Url.parse("test2")));
 
 		//	or
@@ -29,7 +29,7 @@
 		renderer.redirectToRender = false;
 		renderer.ajax = true;
 
-		Assert.assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test"),
+		assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test"),
 			Url.parse("test")));
 
 		// 	or
@@ -40,14 +40,14 @@
 		renderer.ajax = false;
 		renderer.newPageInstance = true;
 
-		Assert.assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
+		assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
 			Url.parse("test2")));
 
 		renderer.newPageInstance = false;
 		renderer.sessionTemporary = true;
 		renderer.pageStateless = true;
 
-		Assert.assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
+		assertTrue(renderer.shouldRedirectToTargetUrl(requestCycle, Url.parse("test1"),
 			Url.parse("test2")));
 		// just redirect
 	}

@@ -2,9 +2,11 @@
 	 * WICKET-6461
 	 */
 	@Test
-	public void optionalPlaceholdersBeforeRequiredPlaceholder() throws Exception
+	void optionalPlaceholdersBeforeRequiredPlaceholder() throws Exception
 	{
-		final MountedMapper mapper = new MountedMapper("/params/#{optional1}/#{optional2}/${required}", MockPage.class) {
+		final MountedMapper mapper = new MountedMapper(
+			"/params/#{optional1}/#{optional2}/${required}", MockPage.class)
+		{
 			@Override
 			protected IMapperContext getContext()
 			{
@@ -17,24 +19,24 @@
 				return true;
 			}
 		};
-		
+
 		IRequestHandler handler = mapper.mapRequest(getRequest(Url.parse("params/required")));
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
 		PageParameters p = page.getPageParameters();
 		assertEquals(1, p.getNamedKeys().size());
 		assertEquals("required", p.get("required").toString());
-		
+
 		handler = mapper.mapRequest(getRequest(Url.parse("params/optional1/required")));
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		page = ((RenderPageRequestHandler)handler).getPage();
 		p = page.getPageParameters();
 		assertEquals(2, p.getNamedKeys().size());
 		assertEquals("required", p.get("required").toString());
 		assertEquals("optional1", p.get("optional1").toString());
-		
+
 		handler = mapper.mapRequest(getRequest(Url.parse("params/optional1/optional2/required")));
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		page = ((RenderPageRequestHandler)handler).getPage();
 		p = page.getPageParameters();
 		assertEquals(3, p.getNamedKeys().size());

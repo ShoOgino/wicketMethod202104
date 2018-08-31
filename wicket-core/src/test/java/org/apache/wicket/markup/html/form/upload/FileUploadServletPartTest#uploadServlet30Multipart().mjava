@@ -5,7 +5,7 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void uploadServlet30Multipart() throws Exception
+	void uploadServlet30Multipart() throws Exception
 	{
 		MockPageWithFormAndUploadField page = tester.startPage(MockPageWithFormAndUploadField.class);
 
@@ -22,12 +22,12 @@
 		assertEquals(Servlet3Part.CONTENT_TYPE, fileUpload.getContentType());
 		assertArrayEquals(Servlet3Part.DATA, IOUtils.toByteArray(fileUpload.getInputStream()));
 
-		assertThat(part.written.get(), is(nullValue()));
+		assertNull(part.written.get());
 		fileUpload.writeToTempFile();
-		assertThat(part.written.get(), is(notNullValue()));
+		assertNotNull(part.written.get());
 
-		assertThat(part.deleted.get(), is(false));
+		assertFalse(part.deleted.get());
 		fileUpload.delete();
-		assertThat(part.deleted.get(), is(true));
+		assertTrue(part.deleted.get());
 	}
 

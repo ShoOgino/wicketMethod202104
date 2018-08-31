@@ -1,4 +1,4 @@
-	private void checkNonStrictUsingJavaScriptResourceReference(String expectedResult)
+	private void checkNonStrictUsingJavaScriptResourceReference(TestCase test, String expected)
 	{
 		Locale locale = test.getLocale();
 		String style = test.getStyle();
@@ -8,7 +8,8 @@
 		JavaScriptResourceReference reference = new JavaScriptResourceReference(
 			ResourceReferenceLocatingTest.class, "b.js", locale, style, variation);
 		tester.startResourceReference(reference);
+
 		assertThat(test.toString(), tester.getLastResponseAsString().trim(),
-			is("// " + expectedResult));
+			is("// " + expected));
 	}
 

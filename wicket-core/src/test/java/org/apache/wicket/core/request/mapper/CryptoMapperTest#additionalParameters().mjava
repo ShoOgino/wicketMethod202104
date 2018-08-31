@@ -2,7 +2,7 @@
 	 * Additional parameters, WICKET-4923
 	 */
 	@Test
-	public void additionalParameters()
+	void additionalParameters()
 	{
 		MockPage page = new MockPage();
 		IRequestableComponent c = page.get("foo:bar");
@@ -16,11 +16,12 @@
 
 		IRequestHandler requestHandler = mapper.mapRequest(request);
 
-		assertThat(requestHandler, instanceOf(RequestSettingRequestHandler.class));
+		assertThat(requestHandler).isInstanceOf(RequestSettingRequestHandler.class);
 
-		assertEquals("foo", ((RequestSettingRequestHandler) requestHandler).getRequest()
-			.getUrl()
-			.getQueryParameterValue("q")
-			.toString());
+		assertEquals("foo",
+			((RequestSettingRequestHandler)requestHandler).getRequest()
+				.getUrl()
+				.getQueryParameterValue("q")
+				.toString());
 	}
 

@@ -2,7 +2,7 @@
 	 * testSubmitLinkBySubmittingForm()
 	 */
 	@Test
-	public void testSubmitLinkBySubmittingForm()
+	void testSubmitLinkBySubmittingForm()
 	{
 		tester.startPage(HomePage.class);
 		tester.assertRenderedPage(HomePage.class);
@@ -12,10 +12,9 @@
 		tester.getRequest().getPostParameters().setParameterValue("link", "");
 		tester.submitForm("form");
 		assertEquals("Hello", home.getText());
-		assertTrue("Form.onSubmit() has not been called!", home.isSubmitted());
-		assertTrue("SubmitLink.onSubmit() has not been called!",
-			home.isSubmittedViaLinkBefore());
-		assertTrue("SubmitLink.onAfterSubmit() has not been called!",
-			home.isSubmittedViaLinkAfter());
+		assertTrue(home.isSubmitted(), "Form.onSubmit() has not been called!");
+		assertTrue(home.isSubmittedViaLinkBefore(), "SubmitLink.onSubmit() has not been called!");
+		assertTrue(home.isSubmittedViaLinkAfter(),
+			"SubmitLink.onAfterSubmit() has not been called!");
 	}
 

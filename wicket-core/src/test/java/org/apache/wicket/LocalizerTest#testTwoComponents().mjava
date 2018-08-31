@@ -2,14 +2,12 @@
 	 * Unit test for bug number [1416582] Resource loading caches wrong.
 	 */
 	@Test
-	public void testTwoComponents()
+	void testTwoComponents()
 	{
 		Session.get().setLocale(Locale.ENGLISH);
 		MyMockPage page = new MyMockPage();
-		Application.get()
-			.getResourceSettings()
-			.getStringResourceLoaders()
-			.add(new ComponentStringResourceLoader());
+		Application.get().getResourceSettings().getStringResourceLoaders().add(
+			new ComponentStringResourceLoader());
 
 		Localizer localizer = Application.get().getResourceSettings().getLocalizer();
 		assertEquals("value 1", localizer.getString("null", page.drop1));
@@ -18,6 +16,5 @@
 		Session.get().setLocale(new Locale("nl"));
 		assertEquals("waarde 1", localizer.getString("null", page.drop1));
 		assertEquals("waarde 2", localizer.getString("null", page.drop2));
-
 	}
 

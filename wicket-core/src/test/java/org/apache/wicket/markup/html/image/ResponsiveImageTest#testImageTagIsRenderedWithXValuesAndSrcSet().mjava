@@ -1,11 +1,11 @@
 	@Test
-	public void testImageTagIsRenderedWithXValuesAndSrcSet()
+	void testImageTagIsRenderedWithXValuesAndSrcSet()
 	{
 		tester.startPage(ImageSrcSetTestPage.class);
 		String lastResponseAsString = tester.getLastResponse().getDocument();
 		TagTester imgTagTester = TagTester.createTagByAttribute(lastResponseAsString, "img");
-		Assert.assertTrue(imgTagTester.hasAttribute("src"));
-		Assert.assertTrue(imgTagTester.hasAttribute("srcset"));
+		assertTrue(imgTagTester.hasAttribute("src"));
+		assertTrue(imgTagTester.hasAttribute("srcset"));
 		String attribute = imgTagTester.getAttribute("srcset");
 		String[] srcSetElements = attribute.split(",");
 		int i = 0;
@@ -13,19 +13,19 @@
 		{
 			if (i == 0)
 			{
-				Assert.assertTrue(srcSetElement.endsWith("320w"));
+				assertTrue(srcSetElement.endsWith("320w"));
 			}
 			if (i == 1)
 			{
-				Assert.assertTrue(srcSetElement.endsWith("2x"));
+				assertTrue(srcSetElement.endsWith("2x"));
 			}
 			if (i == 2)
 			{
-				Assert.assertTrue(srcSetElement.endsWith("900w"));
+				assertTrue(srcSetElement.endsWith("900w"));
 			}
 			i++;
 		}
-		Assert.assertEquals("(min-width: 50em) 33vw,(min-width: 28em) 50vw,100vw",
+		assertEquals("(min-width: 50em) 33vw,(min-width: 28em) 50vw,100vw",
 			imgTagTester.getAttribute("sizes"));
 	}
 

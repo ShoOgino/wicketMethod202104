@@ -2,7 +2,7 @@
 	 * See https://issues.apache.org/jira/browse/WICKET-5698
 	 */
 	@Test
-	public void testUnmountComplex()
+	void testUnmountComplex()
 	{
 		CompoundRequestMapper nestedCompound = new CompoundRequestMapper();
 
@@ -22,32 +22,41 @@
 
 		tester.getApplication().unmount(MOUNT_PATH_1);
 
-		assertEquals("Compound size should be 2", 2, getCompoundRequestMapperSize(nestedCompound));
+		assertEquals(2, getCompoundRequestMapperSize(nestedCompound), "Compound size should be 2");
+		assertNull(tester.getApplication().getRootRequestMapper().mapRequest(
+			createMockRequest(MOUNT_PATH_1)), "Mount path 1 should not be mounted");
 
-		assertNull("Mount path 1 should not be mounted",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_1)));
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_2)) instanceof EmptyRequestHandler,
+			"Mount path 2 should match");
 
-		assertTrue("Mount path 2 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_2)) instanceof EmptyRequestHandler);
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_3)) instanceof EmptyRequestHandler,
+			"Mount path 3 should match");
 
-		assertTrue("Mount path 3 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_3)) instanceof EmptyRequestHandler);
-
-		assertTrue("Mount path 4 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_4)) instanceof EmptyRequestHandler);
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_4)) instanceof EmptyRequestHandler,
+			"Mount path 4 should match");
 
 		tester.getApplication().unmount(MOUNT_PATH_3);
 
-		assertNull("Mount path 1 should not be mounted",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_1)));
+		assertNull(tester.getApplication().getRootRequestMapper().mapRequest(
+			createMockRequest(MOUNT_PATH_1)), "Mount path 1 should not be mounted");
 
-		assertTrue("Mount path 2 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_2)) instanceof EmptyRequestHandler);
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_2)) instanceof EmptyRequestHandler,
+			"Mount path 2 should match");
 
-		assertNull("Mount path 3 should not be mounted",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_3)));
+		assertNull(tester.getApplication().getRootRequestMapper().mapRequest(
+			createMockRequest(MOUNT_PATH_3)), "Mount path 3 should not be mounted");
 
-		assertTrue("Mount path 4 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_4)) instanceof EmptyRequestHandler);
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_4)) instanceof EmptyRequestHandler,
+			"Mount path 4 should match");
 	}
 

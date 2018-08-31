@@ -15,7 +15,7 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void parsingOfAnnotatedServlet3FiltersWorks() throws Exception
+	void parsingOfAnnotatedServlet3FiltersWorks() throws Exception
 	{
 		FilterTestingConfig config = new FilterTestingConfig();
 		config.initParameters.clear();
@@ -25,10 +25,10 @@
 		// creates an Application
 		filter.init(config);
 
-		// get a reference to the application, so that @After is able to clean it up
+		// get a reference to the application, so that @AfterEach is able to clean it up
 		application = filter.getApplication();
 
 		// assert that the filter path is not /web/*/
-		assertThat(filter.getFilterPath(), is("web/"));
+		assertEquals("web/", filter.getFilterPath());
 	}
 

@@ -1,6 +1,6 @@
 	/** */
 	@Test
-	public void substitutedPropertyAndParameterResource()
+	void substitutedPropertyAndParameterResource()
 	{
 		StringResourceModel model = new StringResourceModel("weather.mixed", page).setModel(wsModel)
 			.setParameters(new PropertyModel<Double>(wsModel, "currentTemperature"),
@@ -11,10 +11,10 @@
 
 		ws.setCurrentTemperature(25.7);
 		String expected = format.format(new Object[] { 25.7, "\u00B0C" });
-		assertEquals("Text should be as expected", expected, model.getString());
+		assertEquals(expected, model.getString(), "Text should be as expected");
 
 		ws.setCurrentTemperature(11.5);
 		expected = format.format(new Object[] { 11.5, "\u00B0C" });
-		assertEquals("Text should be as expected", expected, model.getString());
+		assertEquals(expected, model.getString(), "Text should be as expected");
 	}
 

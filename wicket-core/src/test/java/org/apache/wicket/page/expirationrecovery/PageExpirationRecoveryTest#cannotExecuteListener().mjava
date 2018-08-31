@@ -1,5 +1,5 @@
 	@Test
-	public void cannotExecuteListener()
+	void cannotExecuteListener()
 	{
 		PageSettings pageSettings = tester.getApplication().getPageSettings();
 		pageSettings.setRecreateBookmarkablePagesAfterExpiry(true); // CAN recreate
@@ -14,33 +14,33 @@
 		tester.clickLink("link", false);
 		page = (ExpirationRecoveryPage) tester.getLastRenderedPage();
 		// the page is properly recreated
-		assertEquals("PageParameters should be preserved", parameters, page.getPageParameters());
+		assertEquals(parameters, page.getPageParameters(), "PageParameters should be preserved");
 		// but the listener interface is not executed
-		assertFalse("Link should not be clicked!", page.linkClicked.get());
+		assertFalse(page.linkClicked.get(), "Link should not be clicked!");
 
 
 		tester.getSession().invalidateNow();
 		assertFalse(page.ajaxLinkClicked.get());
 		tester.clickLink("alink", true);
 		page = (ExpirationRecoveryPage) tester.getLastRenderedPage();
-		assertFalse("AjaxLink should not be clicked!", page.ajaxLinkClicked.get());
-		assertEquals("PageParameters should be preserved", parameters, page.getPageParameters());
+		assertFalse(page.ajaxLinkClicked.get(), "AjaxLink should not be clicked!");
+		assertEquals(parameters, page.getPageParameters(), "PageParameters should be preserved");
 
 
 		tester.getSession().invalidateNow();
 		assertFalse(page.submitLinkSubmitted.get());
 		tester.clickLink("f:sl", false);
 		page = (ExpirationRecoveryPage) tester.getLastRenderedPage();
-		assertFalse("SubmitLink should not be submitted!", page.submitLinkSubmitted.get());
-		assertEquals("PageParameters should be preserved", parameters, page.getPageParameters());
+		assertFalse(page.submitLinkSubmitted.get(), "SubmitLink should not be submitted!");
+		assertEquals(parameters, page.getPageParameters(), "PageParameters should be preserved");
 
 
 		tester.getSession().invalidateNow();
 		assertFalse(page.ajaxSubmitLinkSubmitted.get());
 		tester.clickLink("f:asl", true);
 		page = (ExpirationRecoveryPage) tester.getLastRenderedPage();
-		assertFalse("AjaxSubmitLink should not be submitted", page.ajaxSubmitLinkSubmitted.get());
-		assertEquals("PageParameters should be preserved", parameters, page.getPageParameters());
+		assertFalse(page.ajaxSubmitLinkSubmitted.get(), "AjaxSubmitLink should not be submitted");
+		assertEquals(parameters, page.getPageParameters(), "PageParameters should be preserved");
 
 
 		tester.getSession().invalidateNow();
@@ -50,8 +50,8 @@
 		formTester.setValue("text", "newValue");
 		formTester.submit();
 		page = (ExpirationRecoveryPage) tester.getLastRenderedPage();
-		assertFalse("Form should not be submitted", page.formSubmitted.get());
-		assertEquals("TextField's value should not be modified", textOldValue, page.textModel.getObject());
-		assertEquals("PageParameters should be preserved", parameters, page.getPageParameters());
+		assertFalse(page.formSubmitted.get(), "Form should not be submitted");
+		assertEquals(textOldValue, page.textModel.getObject(), "TextField's value should not be modified");
+		assertEquals(parameters, page.getPageParameters(), "PageParameters should be preserved");
 	}
 

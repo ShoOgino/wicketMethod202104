@@ -1,5 +1,5 @@
 	@Test
-	public void mapRequest()
+	void mapRequest()
 	{
 		IRequestMapper delegate = mock(IRequestMapper.class);
 		HttpsMapper mapper = new HttpsMapper(delegate, new HttpsConfig());
@@ -13,8 +13,8 @@
 		IRequestHandler handler = new RenderPageRequestHandler(new PageProvider(SecurePage.class));
 		when(delegate.mapRequest(request)).thenReturn(handler);
 		IRequestHandler resolved = mapper.mapRequest(request);
-		assertThat(resolved, is(instanceOf(RedirectHandler.class)));
-		assertThat(((RedirectHandler)resolved).getUrl(), is("https://localhost/ctx?foo=bar"));
+		assertThat(resolved, instanceOf(RedirectHandler.class));
+		assertEquals("https://localhost/ctx?foo=bar", ((RedirectHandler)resolved).getUrl());
 
 		// http handler on http request, return the original handler
 		handler = new RenderPageRequestHandler(new PageProvider(InsecurePage.class));
@@ -22,6 +22,6 @@
 		when(delegate.mapRequest(request)).thenReturn(handler);
 		setupRequest(req, "http", "localhost", 80, "/ctx", "foo=bar");
 		resolved = mapper.mapRequest(request);
-		assertThat(resolved, is(sameInstance(handler)));
+		assertSame(handler, resolved);
 	}
 

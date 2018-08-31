@@ -1,5 +1,5 @@
 	@Test
-	public void removingComponentsDuringIterationDoesntFail()
+	void removingComponentsDuringIterationDoesntFail()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 
@@ -18,9 +18,9 @@
 		// start iterating the 5 children
 		Iterator<Component> iterator = wmc.iterator();
 
-		assertThat(iterator.next(), is(sameInstance(label1)));
-		assertThat(iterator.next(), is(sameInstance(label2)));
-		assertThat(iterator.next(), is(sameInstance(label3)));
+		assertSame(label1, iterator.next());
+		assertSame(label2, iterator.next());
+		assertSame(label3, iterator.next());
 
 		// remove the current, previous and next children
 		wmc.remove(label3);
@@ -28,9 +28,9 @@
 		wmc.remove(label4);
 
 		// ensure that the next iterated child is the 5th label
-		assertThat(iterator.next(), is(sameInstance(label5)));
+		assertSame(label5, iterator.next());
 
 		// and that there are no more children to iterate
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 	}
 

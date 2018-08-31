@@ -1,5 +1,5 @@
 	@Test
-	public void testExternalImageModel()
+	void testExternalImageModel()
 	{
 		tester.startPage(ExternalImageTestPage.class);
 		tester.getLastResponse().getDocument();
@@ -8,14 +8,14 @@
 		ExternalImage externalImage2 = (ExternalImage)externalImage2Component;
 
 		TagTester tagById = tester.getTagById("externalImage2");
-		 IModel<List<Serializable>> srcSet = externalImage2.getSrcSetModel();
-		for (Serializable model :srcSet.getObject())
+		IModel<List<Serializable>> srcSet = externalImage2.getSrcSetModel();
+		for (Serializable model : srcSet.getObject())
 		{
 			String attribute = tagById.getAttribute("srcset");
-			Assert.assertTrue(attribute.contains(model.toString()));
+			assertTrue(attribute.contains(model.toString()));
 		}
 
 		String attribute = tagById.getAttribute("src");
-		Assert.assertEquals(externalImage2.getDefaultModelObject(), attribute);
+		assertEquals(externalImage2.getDefaultModelObject(), attribute);
 	}
 

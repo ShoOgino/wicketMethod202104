@@ -6,10 +6,15 @@
 	 *
 	 * @throws Exception
 	 */
-	@Test(expected = MarkupException.class)
-	public void loadMarkupWithBodyInsideHead() throws Exception
+	@Test
+	void loadMarkupWithBodyInsideHead() throws Exception
 	{
 		CustomMarkupPage customMarkupPage = new CustomMarkupPage();
-		tester.startPage(customMarkupPage);
+
+		assertThrows(MarkupException.class, () -> {
+			tester.startPage(customMarkupPage);
+		});
+
+
 	}
 

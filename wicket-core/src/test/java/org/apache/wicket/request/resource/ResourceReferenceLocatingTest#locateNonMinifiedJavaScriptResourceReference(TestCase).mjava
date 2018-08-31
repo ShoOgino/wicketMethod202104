@@ -1,0 +1,12 @@
+	/**
+	 * Locate a resource without a minification requirement.
+	 */
+	@ParameterizedTest
+	@MethodSource("parameters")
+	void locateNonMinifiedJavaScriptResourceReference(TestCase testCase)
+	{
+		tester.getApplication().getResourceSettings().setUseMinifiedResources(false);
+
+		checkNonStrictUsingJavaScriptResourceReference(testCase, testCase.getNonMinifiedContents());
+	}
+

@@ -2,7 +2,7 @@
 	 * https://issues.apache.org/jira/browse/WICKET-6310
 	 */
 	@Test
-	public void whenSessionIsDestroyed_thenItShouldResetItsState()
+	void whenSessionIsDestroyed_thenItShouldResetItsState()
 	{
 		final Locale locale = Locale.ENGLISH;
 		MockWebRequest request = new MockWebRequest(Url.parse("/"))
@@ -18,20 +18,20 @@
 
 		// initially #invalidateNow() (and destroy()) are not called
 		verify(session, never()).invalidateNow();
-		assertThat(session.isSessionInvalidated(), is(false));
+		assertEquals(false, session.isSessionInvalidated());
 
 		// schedule invalidation
 		session.invalidate();
 
 		// the invalidation will happen on #detach(), so #destroy() is still not called
 		verify(session, never()).invalidateNow();
-		assertThat(session.isSessionInvalidated(), is(true));
+		assertEquals(true, session.isSessionInvalidated());
 
 		session.detach();
 
 		// the session has been detached so #destroy() has been called and 'sessionInvalidated' is reset
 		verify(session, times(1)).invalidateNow();
-		assertThat(session.isSessionInvalidated(), is(false));
+		assertEquals(false, session.isSessionInvalidated());
 
 		// no matter how many times #detach() is called #destroy() should not be called
 		session.detach();
@@ -39,7 +39,7 @@
 		session.detach();
 		session.detach();
 		verify(session, times(1)).invalidateNow();
-		assertThat(session.isSessionInvalidated(), is(false));
+		assertEquals(false, session.isSessionInvalidated());
 
 	}
 

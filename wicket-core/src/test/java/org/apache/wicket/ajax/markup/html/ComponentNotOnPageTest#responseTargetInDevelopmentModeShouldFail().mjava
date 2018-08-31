@@ -3,24 +3,15 @@
 	 * the developers part that a component that is not part of the page is being refreshed in the
 	 * AJAX response, resulting in a no-op (which is not the intended result).
 	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void responseTargetInDevelopmentModeShouldFail()
+	@Test
+	void responseTargetInDevelopmentModeShouldFail()
 	{
 		configuration = RuntimeConfigurationType.DEVELOPMENT;
 
-		try
-		{
-			// this should not fail
-			ComponentNotOnPage page = tester.startPage(ComponentNotOnPage.class);
-			tester.clickLink("listview:0:link", true);
-			tester.startPage(page);
-		}
-		catch (Exception e)
-		{
-			Assert.fail("Unexpected exception: " + e);
-		}
+		clickLinkFailOnError();
 
-		// this should fail
-		tester.clickLink("refresher:refresh", true);
+		assertThrows(IllegalArgumentException.class, () -> {
+			tester.clickLink("refresher:refresh", true);
+		});
 	}
 

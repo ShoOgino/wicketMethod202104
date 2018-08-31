@@ -1,5 +1,5 @@
 	@Test
-	public void addingNewChildAfterIterationHasStartedShouldIterateNewChild()
+	void addingNewChildAfterIterationHasStartedShouldIterateNewChild()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 
@@ -12,16 +12,16 @@
 		takeNChildren(iterator, 1);
 
 		// there are no more children to iterate
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 
 		// add the new child
 		Label newChild = new Label("label1", "Label1");
 		wmc.add(newChild);
 
-		assertThat(wmc.size(), is(2));
+		assertEquals(2, wmc.size());
 
 		// ensure that the newChild is up next (as it was added)
-		Assert.assertThat(iterator.next(), is(equalToObject(newChild)));
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(newChild, iterator.next());
+		assertEquals(false, iterator.hasNext());
 	}
 

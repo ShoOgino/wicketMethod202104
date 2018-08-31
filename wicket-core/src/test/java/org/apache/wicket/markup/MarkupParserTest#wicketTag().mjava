@@ -6,7 +6,7 @@
 	 * @throws IOException
 	 */
 	@Test
-	public void wicketTag() throws ParseException, ResourceStreamNotFoundException, IOException
+	void wicketTag() throws ParseException, ResourceStreamNotFoundException, IOException
 	{
 		new MarkupParser("<span wicket:id=\"test\"/>").parse();
 		new MarkupParser("<span wicket:id=\"test\">Body</span>").parse();
@@ -21,7 +21,7 @@
 		try
 		{
 			new MarkupParser("<wicket:remove/>").parse();
-			assertTrue("Should have thrown an exception", false);
+			assertTrue(false, "Should have thrown an exception");
 		}
 		catch (MarkupException ex)
 		{
@@ -44,9 +44,7 @@
 		try
 		{
 			new MarkupParser("<wicket:remove> <wicket:remove> </wicket:remove> </wicket:remove>").parse();
-			assertTrue(
-				"Should have thrown an exception: remove regions must not contain wicket-components",
-				false);
+			assertTrue(false, "Should have thrown an exception: remove regions must not contain wicket-components");
 		}
 		catch (MarkupException ex)
 		{

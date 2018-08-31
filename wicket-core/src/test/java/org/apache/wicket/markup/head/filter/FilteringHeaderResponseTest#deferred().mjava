@@ -3,9 +3,10 @@
 	 * inside a {@code document.addEventListener('DOMContentLoaded', function() {}; } hook.
 	 */
 	@Test
-	public void deferred() throws Exception
+	void deferred() throws Exception
 	{
-		tester.getApplication().setHeaderResponseDecorator(response -> new ResourceAggregator(new JavaScriptDeferHeaderResponse(response)));
+		tester.getApplication().setHeaderResponseDecorator(
+			response -> new ResourceAggregator(new JavaScriptDeferHeaderResponse(response)));
 		executeTest(DeferredPage.class, "DeferredPageExpected.html");
 	}
 

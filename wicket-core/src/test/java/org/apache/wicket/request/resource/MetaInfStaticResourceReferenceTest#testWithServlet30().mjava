@@ -5,7 +5,7 @@
 	 *             should not happen
 	 */
 	@Test
-	public void testWithServlet30() throws MalformedURLException
+	void testWithServlet30() throws MalformedURLException
 	{
 		MockApplication application = new MockApplication();
 		MockServletContext servletContext = new MockServletContext(application, "/");
@@ -19,11 +19,9 @@
 		Url packUrl = tester.getRequestCycle().mapUrlFor(packRes, null);
 		Url metaUrl = tester.getRequestCycle().mapUrlFor(metaRes, null);
 
-		Assert.assertNotNull(metaUrl);
-		Assert.assertNotNull(packUrl);
-		Assert.assertFalse(
-			"Meta and pack resource should not map to the same url under servlet 3.0.",
-			metaUrl.equals(packUrl));
+		assertNotNull(metaUrl);
+		assertNotNull(packUrl);
+		assertFalse(metaUrl.equals(packUrl), "Meta and pack resource should not map to the same url under servlet 3.0.");
 
 		String metaUrlStr = metaUrl.toString();
 		if (metaUrlStr.charAt(1) != '/')
@@ -34,7 +32,7 @@
 		// meta resource is served by the servlet container under 3.0
 		URL metaNetUrl = servletContext.getResource(metaUrlStr);
 
-		Assert.assertNotNull("Meta resource is not found by the 3.0 servlet container.", metaNetUrl);
+		assertNotNull(metaNetUrl, "Meta resource is not found by the 3.0 servlet container.");
 
 		MockWebRequest request = new MockWebRequest(packUrl);
 
@@ -43,6 +41,6 @@
 			.mapRequest(request);
 
 		// the pack resource is still served by wicket
-		Assert.assertNotNull(requestHandler);
+		assertNotNull(requestHandler);
 	}
 

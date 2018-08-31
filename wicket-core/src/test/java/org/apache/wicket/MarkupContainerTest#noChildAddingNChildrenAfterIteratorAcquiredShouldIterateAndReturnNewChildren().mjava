@@ -1,5 +1,5 @@
 	@Test
-	public void noChildAddingNChildrenAfterIteratorAcquiredShouldIterateAndReturnNewChildren()
+	void noChildAddingNChildrenAfterIteratorAcquiredShouldIterateAndReturnNewChildren()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 
@@ -7,16 +7,16 @@
 
 		addNChildren(wmc, NUMBER_OF_CHILDREN_FOR_A_MAP);
 
-		assertThat(wmc.size(), is(NUMBER_OF_CHILDREN_FOR_A_MAP));
+		assertEquals(NUMBER_OF_CHILDREN_FOR_A_MAP, wmc.size());
 
 		Label label1 = new Label("label1", "Label1");
 		wmc.add(label1);
 
-		Assert.assertThat(iterator.hasNext(), is(true));
+		assertEquals(true, iterator.hasNext());
 
 		takeNChildren(iterator, NUMBER_OF_CHILDREN_FOR_A_MAP);
 
-		Assert.assertThat(iterator.next(), is(equalToObject(label1)));
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(label1, iterator.next());
+		assertEquals(false, iterator.hasNext());
 	}
 

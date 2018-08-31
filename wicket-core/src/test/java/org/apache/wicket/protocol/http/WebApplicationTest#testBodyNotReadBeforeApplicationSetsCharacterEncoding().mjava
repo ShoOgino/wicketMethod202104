@@ -2,10 +2,12 @@
 	 * WICKET-6260
 	 */
 	@Test
-	public void testBodyNotReadBeforeApplicationSetsCharacterEncoding() throws Exception {
+	void testBodyNotReadBeforeApplicationSetsCharacterEncoding() throws Exception
+	{
 		WebApplication application = tester.getApplication();
 
-		HttpServletRequest request = new MockHttpServletRequest(application, null, null) {
+		HttpServletRequest request = new MockHttpServletRequest(application, null, null)
+		{
 			@Override
 			public Map<String, String[]> getParameterMap()
 			{
@@ -45,7 +47,7 @@
 		// character encoding not set yet
 		request.setCharacterEncoding(null);
 
-		application.createWebRequest(request , "/");
+		application.createWebRequest(request, "/");
 
 		assertEquals("UTF-8", request.getCharacterEncoding());
 	}

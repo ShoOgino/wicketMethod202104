@@ -1,5 +1,5 @@
 	@Test
-	public void iteratorShouldAllowRemovingComponentAfterIterationStarted1()
+	void iteratorShouldAllowRemovingComponentAfterIterationStarted1()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 		Label label1 = new Label("label1", "Label1");
@@ -11,11 +11,11 @@
 
 		Iterator<Component> iterator = wmc.iterator();
 
-		Assert.assertThat(iterator.next(), is(equalToObject(label1)));
+		assertEquals(label1, iterator.next());
 		wmc.remove(label1);
-		Assert.assertThat(iterator.next(), is(equalToObject(label2)));
-		Assert.assertThat(iterator.next(), is(equalToObject(label3)));
+		assertEquals(label2, iterator.next());
+		assertEquals(label3, iterator.next());
 
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 	}
 

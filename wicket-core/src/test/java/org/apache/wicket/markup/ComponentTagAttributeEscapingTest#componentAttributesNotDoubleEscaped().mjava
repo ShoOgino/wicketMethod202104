@@ -2,17 +2,18 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void componentAttributesNotDoubleEscaped() throws Exception
+	void componentAttributesNotDoubleEscaped() throws Exception
 	{
 		tester.startPage(ButtonValuePage.class);
 		String response = tester.getLastResponseAsString();
-//		System.out.println(response);
-		assertTrue("One of the pound entity representations is missing: &pound; or &#163;",
-			response.contains("\u00a3\u00a3"));
-		assertTrue("must not be double escaped", response.contains("Watch escaped value: &gt;&gt;"));
-		assertTrue("following the last assert logic, this one would true",
-			response.contains("alerting: &amp;"));
-		assertTrue("escape manually added attributes",
-			response.contains("some_attribute=\"a &amp; b\""));
+// System.out.println(response);
+		assertTrue(response.contains("\u00a3\u00a3"),
+			"One of the pound entity representations is missing: &pound; or &#163;");
+		assertTrue(response.contains("Watch escaped value: &gt;&gt;"),
+			"must not be double escaped");
+		assertTrue(response.contains("alerting: &amp;"),
+			"following the last assert logic, this one would true");
+		assertTrue(response.contains("some_attribute=\"a &amp; b\""),
+			"escape manually added attributes");
 	}
 

@@ -1,22 +1,25 @@
 	/**
 	 * https://issues.apache.org/jira/browse/WICKET-5057
+	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void createBucketOnTheFlyForFilteredHeaderItem() throws Exception
+	void createBucketOnTheFlyForFilteredHeaderItem() throws Exception
 	{
-		try (FilteringHeaderResponse headerResponse = new FilteringHeaderResponse(new HeaderResponse()
-		{
-			@Override
-			protected Response getRealResponse()
+		try (FilteringHeaderResponse headerResponse = new FilteringHeaderResponse(
+			new HeaderResponse()
 			{
-				return new StringResponse();
-			}
-		}, "headerBucketName", Collections.emptyList()))
+				@Override
+				protected Response getRealResponse()
+				{
+					return new StringResponse();
+				}
+			}, "headerBucketName", Collections.emptyList()))
 		{
 			String filterName = "filterName";
 			String headerContent = "content";
-			FilteredHeaderItem item = new FilteredHeaderItem(StringHeaderItem.forString(headerContent), filterName);
+			FilteredHeaderItem item = new FilteredHeaderItem(
+				StringHeaderItem.forString(headerContent), filterName);
 			headerResponse.render(item);
 			CharSequence realContent = headerResponse.getContent(filterName);
 			assertEquals(headerContent, realContent.toString());

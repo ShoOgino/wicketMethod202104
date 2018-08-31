@@ -3,14 +3,14 @@
 	 * wicket/bookmarkable/my.package.page?0-0.ILinkListener-link
 	 */
 	@Test
-	public void bookmarkablePageForceEncryptionOfRequestListener()
+	void bookmarkablePageForceEncryptionOfRequestListener()
 	{
 		PageAndComponentProvider provider = new PageAndComponentProvider(Page2.class, "link");
 		IRequestHandler requestHandler = new BookmarkableListenerRequestHandler(provider);
 		Url plainUrl = mapper.getDelegateMapper().mapHandler(requestHandler);
-		assertTrue("Plain text request listener URL for bookmarkable page does not start with: "
-			+ PLAIN_BOOKMARKABLE_URL + ": " + plainUrl.toString(),
-			plainUrl.toString().startsWith(PLAIN_BOOKMARKABLE_URL));
+		assertTrue(plainUrl.toString().startsWith(PLAIN_BOOKMARKABLE_URL),
+			"Plain text request listener URL for bookmarkable page does not start with: " +
+				PLAIN_BOOKMARKABLE_URL + ": " + plainUrl.toString());
 		assertNull(mapper.mapRequest(getRequest(plainUrl)));
 	}
 

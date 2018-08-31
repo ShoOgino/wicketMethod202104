@@ -1,8 +1,8 @@
 	/**
 	 * @throws Exception
 	 */
-	@Test(expected = ConversionException.class)
-	public void primitiveValue() throws Exception
+	@Test
+	void primitiveValue() throws Exception
 	{
 		Integer integer = (Integer)PropertyResolver.getValue("age", person);
 		assertTrue(integer == 0);
@@ -11,8 +11,8 @@
 		integer = (Integer)PropertyResolver.getValue("age", person);
 		assertTrue(integer == 10);
 
-		PropertyResolver.setValue("age", person, null, CONVERTER);
-		fail("primitive type can't be set to null");
-
+		assertThrows(ConversionException.class, () -> {
+			PropertyResolver.setValue("age", person, null, CONVERTER);
+		});
 	}
 

@@ -2,13 +2,13 @@
 	 * Test X-Forwarded-For ip address extraction.
 	 */
 	@Test
-	public void testExtractFromXForwardedForHeader()
+	void testExtractFromXForwardedForHeader()
 	{
 		String expected = "127.0.0.1";
 		when(webRequest.getHeader("X-Forwarded-For")).thenReturn(expected);
 		WebClientInfo clientInfo = new WebClientInfo(requestCycleMock, "No user agent");
 		String actual = clientInfo.getRemoteAddr(requestCycleMock);
-		assertThat(actual, is(equalTo(expected)));
+		assertEquals(expected, actual);
 		Mockito.verifyZeroInteractions(servletRequest);
 	}
 

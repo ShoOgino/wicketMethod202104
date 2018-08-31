@@ -2,7 +2,7 @@
 	 * https://issues.apache.org/jira/browse/WICKET-4572
 	 */
 	@Test
-	public void removeObsoleteIndices()
+	void removeObsoleteIndices()
 	{
 		int page0id = 0,
 			page1id = 1,
@@ -23,13 +23,13 @@
 		assertWindow(page1Window, page1id, page1Window.getFilePartOffset(), page1Window.getFilePartSize());
 
 		// Try to get a page which has been lost with the adding of page1
-		assertNull("Page0 must be lost when Page1 has been added.", manager.getPageWindow(page0id));
+		assertNull(manager.getPageWindow(page0id), "Page0 must be lost when Page1 has been added.");
 
 		manager.createPageWindow(page2id, maxSize);
 		PageWindow page2Window = manager.getPageWindow(page2id);
 		assertWindow(page2Window, page2id, page2Window.getFilePartOffset(), page2Window.getFilePartSize());
 
 		// Try to get a page which has been lost with the adding of page2
-		assertNull("Page1 must be lost when Page2 has been added.", manager.getPageWindow(page1id));
+		assertNull(manager.getPageWindow(page1id), "Page1 must be lost when Page2 has been added.");
 	}
 

@@ -1,5 +1,5 @@
 	@Test
-	public void withoutHeaderItems()
+	void withoutHeaderItems()
 	{
 		tester.startPage(PageWithoutHeaderItems.class);
 		String responseAsString = tester.getLastResponseAsString();
@@ -10,16 +10,16 @@
 		int idxTitleElement = responseAsString.indexOf("<title>Apache Wicket Quickstart</title>");
 		int idxMetaFromBasePage = responseAsString.indexOf("<meta name='fromBasePage' content='1'");
 
-		assertThat("<meta name=\"panel-wicket-head\"> should be rendered before <script src=wicket-ajax-jquery.js>",
-				idxMetaPanelWicketHead, lessThan(idxWicketAjaxJs));
+		assertThat(idxMetaPanelWicketHead).isLessThan(idxWicketAjaxJs).withFailMessage(
+			"<meta name=\"panel-wicket-head\"> should be rendered before <script src=wicket-ajax-jquery.js>");
 
-		assertThat("<script src=wicket-ajax-jquery.js> should be rendered before <meta charset>",
-				idxWicketAjaxJs, lessThan(idxMetaCharset));
+		assertThat(idxWicketAjaxJs).isLessThan(idxMetaCharset).withFailMessage(
+			"<script src=wicket-ajax-jquery.js> should be rendered before <meta charset>");
 
-		assertThat("<meta charset> should be rendered before the <title> element",
-				idxMetaCharset, lessThan(idxTitleElement));
+		assertThat(idxMetaCharset).isLessThan(idxTitleElement)
+			.withFailMessage("<meta charset> should be rendered before the <title> element");
 
-		assertThat("<title> should be rendered before the <meta name='fromBasePage'> element",
-				idxTitleElement, lessThan(idxMetaFromBasePage));
+		assertThat(idxTitleElement).isLessThan(idxMetaFromBasePage).withFailMessage(
+			"<title> should be rendered before the <meta name='fromBasePage'> element");
 	}
 

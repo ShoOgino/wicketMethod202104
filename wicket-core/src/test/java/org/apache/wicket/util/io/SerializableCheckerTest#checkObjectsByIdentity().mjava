@@ -7,14 +7,15 @@
 	 * @throws IOException
 	 */
 	@Test
-	public void checkObjectsByIdentity() throws IOException
+	void checkObjectsByIdentity() throws IOException
 	{
 		CountingChecker countingChecker = new CountingChecker();
-		CheckingObjectOutputStream outputStream = new CheckingObjectOutputStream(new ByteArrayOutputStream(), countingChecker);
+		CheckingObjectOutputStream outputStream = new CheckingObjectOutputStream(
+			new ByteArrayOutputStream(), countingChecker);
 		final IdentityTestType type = new IdentityTestType();
 		type.member = new SerializableTypeWithMember(type);
 		outputStream.writeObject(type);
 
-		assertThat(countingChecker.getCount(), is(2));
+		assertEquals(2, countingChecker.getCount());
 	}
 

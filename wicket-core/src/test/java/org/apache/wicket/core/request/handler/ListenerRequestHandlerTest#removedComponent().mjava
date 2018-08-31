@@ -2,20 +2,18 @@
 	 * WICKET-5466
 	 */
 	@Test
-	public void removedComponent()
+	void removedComponent()
 	{
 		// non-existing component on fresh page is ignored
 		PageAndComponentProvider freshPage = new PageAndComponentProvider(DummyPage.class, null,
 			"foo");
-		new ListenerRequestHandler(freshPage).respond(tester
-			.getRequestCycle());
+		new ListenerRequestHandler(freshPage).respond(tester.getRequestCycle());
 
 		// non-existing component on old page fails
 		PageAndComponentProvider oldPage = new PageAndComponentProvider(new DummyPage(), "foo");
 		try
 		{
-			new ListenerRequestHandler(oldPage)
-				.respond(tester.getRequestCycle());
+			new ListenerRequestHandler(oldPage).respond(tester.getRequestCycle());
 			fail();
 		}
 		catch (WicketRuntimeException ex)

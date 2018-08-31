@@ -1,13 +1,16 @@
 	/**
-	 * Tests that we do not allow unencrypted URLs to IRequestListeners on the home page, like: ?0-0.ILinkListener-link
+	 * Tests that we do not allow unencrypted URLs to IRequestListeners on the home page, like:
+	 * ?0-0.ILinkListener-link
 	 */
 	@Test
-	public void homePageForceEncryptionOfRequestListener()
+	void homePageForceEncryptionOfRequestListener()
 	{
-		PageAndComponentProvider provider = new PageAndComponentProvider(tester.getApplication().getHomePage(), "link");
+		PageAndComponentProvider provider = new PageAndComponentProvider(
+			tester.getApplication().getHomePage(), "link");
 		IRequestHandler requestHandler = new BookmarkableListenerRequestHandler(provider);
 		Url plainUrl = mapper.getDelegateMapper().mapHandler(requestHandler);
-		assertTrue("Plain URL for home page has segments: " + plainUrl.toString(), plainUrl.getSegments().isEmpty());
+		assertTrue(plainUrl.getSegments().isEmpty(),
+			"Plain URL for home page has segments: " + plainUrl.toString());
 		assertNull(mapper.mapRequest(getRequest(plainUrl)));
 	}
 

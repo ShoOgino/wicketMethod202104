@@ -13,11 +13,13 @@
 				return get(toggleableChildId).isVisible();
 			}
 		}).setOutputMarkupPlaceholderTag(true));
-		Assert.assertEquals("Ajax requires tag to remain in DOM even if not visible", true,
-			traditionalAjaxVisibilityToggleRequiresPlaceholder.getOutputMarkupPlaceholderTag());
+		assertEquals(true,
+			traditionalAjaxVisibilityToggleRequiresPlaceholder.getOutputMarkupPlaceholderTag(),
+			"Ajax requires tag to remain in DOM even if not visible");
 		{
-			traditionalAjaxVisibilityToggleRequiresPlaceholder.add((toggleable = new WebMarkupContainer(
-				toggleableChildId = "toggleable")).setOutputMarkupPlaceholderTag(true));
+			traditionalAjaxVisibilityToggleRequiresPlaceholder
+				.add((toggleable = new WebMarkupContainer(toggleableChildId = "toggleable"))
+					.setOutputMarkupPlaceholderTag(true));
 			add(link = new AjaxLink<Void>("link")
 			{
 				@Override

@@ -2,7 +2,7 @@
 	 * Tests that named and indexed parameters are properly (en|de)crypted
 	 */
 	@Test
-	public void pageParameters()
+	void pageParameters()
 	{
 		String expectedEncrypted = "L7ExSNbPC4sb6TPJDblCAopL53TWmZP5y7BQEaJSJAC05HXod5M5U7gT2yNT0lK5L6L09ZAOoZkGyUhseyPrC4S5tqUUrV6zipc4_Ni877FDOOoE5C_Cd7YCyK1xSScpVhno6LeBz2wiu5oWyf7hB1RKcv6zkhEBmbx8vU7K7-e4xe1_LO8Y3fhEjMSQyU9BVh7Uz4HKzkR2OxFo5LaDzQ/L7E59/yPr6a/5L6ae/OxF2c";
 
@@ -20,9 +20,9 @@
 		IRequestHandler requestHandler = mapper.mapRequest(request);
 		assertNotNull(requestHandler);
 		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
-		assertThat(requestHandler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(requestHandler).isInstanceOf(RenderPageRequestHandler.class);
 
-		RenderPageRequestHandler handler = (RenderPageRequestHandler) requestHandler;
+		RenderPageRequestHandler handler = (RenderPageRequestHandler)requestHandler;
 		assertEquals(Page2.class, handler.getPageClass());
 		PageParameters actualParameters = handler.getPageParameters();
 		assertEquals(expectedParameters, actualParameters);

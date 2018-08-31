@@ -2,11 +2,12 @@
 	 * Tests that PageComponentInfo parameters are encrypted on Mounted pages
 	 */
 	@Test
-	public void mountedPageRequestListenerParameter()
+	void mountedPageRequestListenerParameter()
 	{
 		final String componentPath = "link";
 
-		PageAndComponentProvider provider = new PageAndComponentProvider(Page1.class, componentPath);
+		PageAndComponentProvider provider = new PageAndComponentProvider(Page1.class,
+			componentPath);
 		IRequestHandler requestHandler = new ListenerRequestHandler(provider);
 
 		Url plainUrl = mapper.getDelegateMapper().mapHandler(requestHandler);
@@ -30,7 +31,7 @@
 			if (Strings.isEmpty(qp.getValue()))
 			{
 				PageComponentInfo pci = PageComponentInfo.parse(qp.getName());
-				assertNull("PageComponentInfo query parameter not encrypted", pci);
+				assertNull(pci, "PageComponentInfo query parameter not encrypted");
 			}
 		}
 
@@ -40,14 +41,15 @@
 
 		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
 
-		assertThat(requestHandler, instanceOf(ListenerRequestHandler.class));
+		assertThat(requestHandler).isInstanceOf(ListenerRequestHandler.class);
 
-		ListenerRequestHandler handler = (ListenerRequestHandler) requestHandler;
+		ListenerRequestHandler handler = (ListenerRequestHandler)requestHandler;
 		assertEquals(componentPath, handler.getComponentPath());
 		assertEquals(Page1.class, handler.getPageClass());
 
 		/*
-		 * We anticipate that sometimes multiple cryptomappers will be used. It should still work in these situations.
+		 * We anticipate that sometimes multiple cryptomappers will be used. It should still work in
+		 * these situations.
 		 */
 		requestHandler = new CryptoMapper(mapper, tester.getApplication())
 			.mapRequest(getRequest(encryptedUrl));
@@ -56,9 +58,9 @@
 
 		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
 
-		assertThat(requestHandler, instanceOf(ListenerRequestHandler.class));
+		assertThat(requestHandler).isInstanceOf(ListenerRequestHandler.class);
 
-		handler = (ListenerRequestHandler) requestHandler;
+		handler = (ListenerRequestHandler)requestHandler;
 		assertEquals(componentPath, handler.getComponentPath());
 		assertEquals(Page1.class, handler.getPageClass());
 	}

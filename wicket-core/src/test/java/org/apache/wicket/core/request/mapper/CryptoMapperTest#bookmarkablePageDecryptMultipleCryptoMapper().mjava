@@ -1,9 +1,9 @@
 	/**
-	 * Tests that encrypted URLs for bookmarkable pages are decrypted and passed to the wrapped mapper when there is more than
-	 * one cryptomapper installed.
+	 * Tests that encrypted URLs for bookmarkable pages are decrypted and passed to the wrapped
+	 * mapper when there is more than one cryptomapper installed.
 	 */
 	@Test
-	public void bookmarkablePageDecryptMultipleCryptoMapper()
+	void bookmarkablePageDecryptMultipleCryptoMapper()
 	{
 		Request request = getRequest(Url.parse(ENCRYPTED_BOOKMARKABLE_URL));
 
@@ -13,9 +13,9 @@
 		assertNotNull(requestHandler);
 		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
 
-		assertThat(requestHandler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(requestHandler).isInstanceOf(RenderPageRequestHandler.class);
 
-		RenderPageRequestHandler handler = (RenderPageRequestHandler) requestHandler;
+		RenderPageRequestHandler handler = (RenderPageRequestHandler)requestHandler;
 		assertEquals(Page2.class, handler.getPageClass());
 	}
 

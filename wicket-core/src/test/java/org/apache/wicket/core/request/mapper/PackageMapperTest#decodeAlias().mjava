@@ -2,12 +2,12 @@
 	 * https://issues.apache.org/jira/browse/WICKET-3941
 	 */
 	@Test
-	public void decodeAlias()
+	void decodeAlias()
 	{
 		Url url = Url.parse(MOUNT_PATH + '/' + ALIAS + "?15");
 		IRequestHandler handler = aliasEncoder.mapRequest(getRequest(url));
 
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
 		checkPage(page, 15);
 		assertEquals(PAGE_CLASS_NAME, page.getClass().getSimpleName());

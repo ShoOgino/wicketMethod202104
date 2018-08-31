@@ -1,8 +1,12 @@
 	@Test
-	public void nonDefaultConstructor() {
-		expectedException.expect(WicketRuntimeException.class);
-		expectedException.expectMessage("Unable to create page from class org.apache.wicket.session.DefaultPageFactoryTest$NonDefaultConstructorPage. Class does not have a visible default constructor.");
+	void nonDefaultConstructor()
+	{
+		Exception e = assertThrows(WicketRuntimeException.class, () -> {
+			pageFactory.newPage(NonDefaultConstructorPage.class);
+		});
 
-		pageFactory.newPage(NonDefaultConstructorPage.class);
+		assertEquals(
+			"Unable to create page from class org.apache.wicket.session.DefaultPageFactoryTest$NonDefaultConstructorPage. Class does not have a visible default constructor.",
+			e.getMessage());
 	}
 

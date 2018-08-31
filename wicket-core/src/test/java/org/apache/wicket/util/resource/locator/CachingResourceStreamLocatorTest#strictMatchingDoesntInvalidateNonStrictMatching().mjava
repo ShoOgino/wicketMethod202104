@@ -2,7 +2,7 @@
 	 * Tests strict before non-strict matching with a specific locale.
 	 */
 	@Test
-	public void strictMatchingDoesntInvalidateNonStrictMatching()
+	void strictMatchingDoesntInvalidateNonStrictMatching()
 	{
 		IResourceStreamLocator resourceStreamLocator = new ResourceStreamLocator(
 			new ClassPathResourceFinder(""));
@@ -19,12 +19,12 @@
 		// a strict lookup of a localized resource should not find the non-localized resource
 		IResourceStream strictLocate = cachingLocator.locate(AbstractDefaultAjaxBehavior.class,
 			filename, style, variation, locale, extension, true);
-		assertThat(strictLocate, is(nullValue()));
+		assertNull(strictLocate);
 
 		// but a non-strict lookup with a locale should fall back to the non-localized resource
 		IResourceStream nonStrictLocate = cachingLocator.locate(AbstractDefaultAjaxBehavior.class,
 			filename, style, variation, locale, extension, false);
 
-		assertThat(nonStrictLocate, is(not(nullValue())));
+		assertNotNull(nonStrictLocate);
 	}
 

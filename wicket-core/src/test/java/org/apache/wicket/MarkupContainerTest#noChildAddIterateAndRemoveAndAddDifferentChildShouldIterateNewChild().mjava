@@ -1,5 +1,5 @@
 	@Test
-	public void noChildAddIterateAndRemoveAndAddDifferentChildShouldIterateNewChild()
+	void noChildAddIterateAndRemoveAndAddDifferentChildShouldIterateNewChild()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 		Label label1 = new Label("label1", "Label1");
@@ -8,15 +8,15 @@
 		Iterator<Component> iterator = wmc.iterator();
 
 		wmc.add(label1);
-		Assert.assertThat(iterator.next(), is(equalToObject(label1)));
+		assertEquals(label1, iterator.next());
 
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 
 		wmc.remove(label1);
 
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 
 		wmc.add(label2);
-		Assert.assertThat(iterator.next(), is(equalToObject(label2)));
+		assertEquals(label2, iterator.next());
 	}
 
