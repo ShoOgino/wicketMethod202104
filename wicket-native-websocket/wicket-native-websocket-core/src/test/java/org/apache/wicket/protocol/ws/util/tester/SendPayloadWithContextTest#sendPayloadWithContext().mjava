@@ -8,12 +8,12 @@
 			@Override
 			protected void onOutMessage(String message)
 			{
-				assertThat(Boolean.parseBoolean(message), is(equalTo(Boolean.TRUE)));
+				assertTrue(Boolean.parseBoolean(message));
 			}
 		};
-		assertThat(context.get(), is(false));
+		assertFalse(context.get());
 		webSocketTester.sendMessage("trigger web socket communication");
-		assertThat(context.get(), is(false));
+		assertFalse(context.get());
 		webSocketTester.destroy();
 	}
 

@@ -2,15 +2,15 @@
 	 * https://issues.apache.org/jira/browse/WICKET-5505
 	 */
 	@Test
-	public void booleanHasFieldAndGetter()
+	void booleanHasFieldAndGetter()
 	{
 		DefaultPropertyResolver resolver = new DefaultPropertyResolver();
 
-		TextField<?> component = new TextField<>("id", new PropertyModel<BooleanBean>(
-			new BooleanBean(), "foo"));
+		TextField<?> component = new TextField<>("id",
+			new PropertyModel<BooleanBean>(new BooleanBean(), "foo"));
 		Property property = resolver.resolveProperty(component);
-		assertThat(property, not(nullValue()));
-		assertThat(property.getName(), is("foo"));
-		assertThat(property.getOwner().getName(), is(BooleanBean.class.getName()));
+		assertNotNull(property);
+		assertEquals("foo", property.getName());
+		assertEquals(BooleanBean.class.getName(), property.getOwner().getName());
 	}
 

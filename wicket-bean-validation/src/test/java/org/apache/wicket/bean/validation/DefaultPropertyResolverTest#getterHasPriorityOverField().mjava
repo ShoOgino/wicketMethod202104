@@ -2,14 +2,15 @@
 	 * https://issues.apache.org/jira/browse/WICKET-5506
 	 */
 	@Test
-	public void getterHasPriorityOverField()
+	void getterHasPriorityOverField()
 	{
 		DefaultPropertyResolver resolver = new DefaultPropertyResolver();
 
-		TextField<?> component = new TextField<>("id", new PropertyModel<Bean4>(new Bean4(), "foo"));
+		TextField<?> component = new TextField<>("id",
+			new PropertyModel<Bean4>(new Bean4(), "foo"));
 		Property property = resolver.resolveProperty(component);
-		assertThat(property, not(nullValue()));
-		assertThat(property.getName(), is("foo"));
-		assertThat(property.getOwner().getName(), is(Bean4.class.getName()));
+		assertNotNull(property);
+		assertEquals("foo", property.getName());
+		assertEquals(Bean4.class.getName(), property.getOwner().getName());
 	}
 
