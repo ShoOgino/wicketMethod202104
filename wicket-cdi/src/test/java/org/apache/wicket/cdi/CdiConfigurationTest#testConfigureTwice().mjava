@@ -1,7 +1,11 @@
-	@Test(expected = Exception.class)
+	@Test
 	public void testConfigureTwice()
 	{
 		configure(new CdiConfiguration());
-		new CdiConfiguration().configure(tester.getApplication());
+
+		assertThrows(Exception.class, () -> {
+			new CdiConfiguration().configure(tester.getApplication());
+		});
+
 	}
 

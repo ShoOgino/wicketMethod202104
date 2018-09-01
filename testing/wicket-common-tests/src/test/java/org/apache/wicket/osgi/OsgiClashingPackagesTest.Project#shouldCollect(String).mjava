@@ -1,19 +1,11 @@
 		private boolean shouldCollect(final String entryName)
 		{
-			if (
-				// ignore folder names. count just files/resources
-				entryName.endsWith("/") ||
+            return !entryName.endsWith("/") &&
 
-				// all modules have META-INF {MANIFEST.MF, Maven stuff, ..}
-				entryName.startsWith("META-INF/") ||
+                    // all modules have META-INF {MANIFEST.MF, Maven stuff, ..}
+                    !entryName.startsWith("META-INF/") &&
 
-				// ignore Wicket's IInitializer conf files
-				(entryName.startsWith("META-INF/wicket") && entryName.endsWith(".properties"))
-			)
-			{
-				return false;
-			}
-
-			return true;
-		}
+                    // ignore Wicket's IInitializer conf files
+                    (!entryName.startsWith("META-INF/wicket") || !entryName.endsWith(".properties"));
+        }
 

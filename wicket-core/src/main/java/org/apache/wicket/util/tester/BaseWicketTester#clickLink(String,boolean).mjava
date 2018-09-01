@@ -41,8 +41,8 @@
 					"not be invoked when AJAX (javascript) is disabled.");
 			}
 
-			List<AjaxEventBehavior> behaviors = WicketTesterHelper.findAjaxEventBehaviors(
-				linkComponent, "click");
+			List<AjaxEventBehavior> behaviors = WicketTesterHelper
+				.findAjaxEventBehaviors(linkComponent, "click");
 			for (AjaxEventBehavior behavior : behaviors)
 			{
 				executeBehavior(behavior);
@@ -68,10 +68,11 @@
 				(AjaxFormSubmitBehavior)WicketTesterHelper.findAjaxEventBehavior(link, "click"));
 		}
 		// if the link is an IAjaxLink, use it (do check if AJAX is expected)
-		else if (isAjax && (linkComponent instanceof IAjaxLink || linkComponent instanceof AjaxFallbackLink))
+		else if (isAjax &&
+			(linkComponent instanceof IAjaxLink || linkComponent instanceof AjaxFallbackLink))
 		{
-			List<AjaxEventBehavior> behaviors = WicketTesterHelper.findAjaxEventBehaviors(
-				linkComponent, "click");
+			List<AjaxEventBehavior> behaviors = WicketTesterHelper
+				.findAjaxEventBehaviors(linkComponent, "click");
 			for (AjaxEventBehavior behavior : behaviors)
 			{
 				executeBehavior(behavior);
@@ -92,7 +93,7 @@
 		}
 		else if (linkComponent instanceof ExternalLink)
 		{
-			ExternalLink externalLink = (ExternalLink) linkComponent;
+			ExternalLink externalLink = (ExternalLink)linkComponent;
 			String href = externalLink.getDefaultModelObjectAsString();
 			try
 			{
@@ -102,7 +103,8 @@
 			}
 			catch (IOException iox)
 			{
-				throw new WicketRuntimeException("An error occurred while redirecting to: " + href, iox);
+				throw new WicketRuntimeException("An error occurred while redirecting to: " + href,
+					iox);
 			}
 		}
 		// if the link is a normal link (or ResourceLink)
@@ -119,34 +121,34 @@
 				BookmarkablePageLink<?> bookmarkablePageLink = (BookmarkablePageLink<?>)link;
 				try
 				{
-					Method getParametersMethod = BookmarkablePageLink.class.getDeclaredMethod(
-						"getPageParameters", (Class<?>[])null);
+					Method getParametersMethod = BookmarkablePageLink.class
+						.getDeclaredMethod("getPageParameters", (Class<?>[])null);
 					getParametersMethod.setAccessible(true);
 
-					PageParameters parameters = (PageParameters)getParametersMethod.invoke(
-						bookmarkablePageLink, (Object[])null);
+					PageParameters parameters = (PageParameters)getParametersMethod
+						.invoke(bookmarkablePageLink, (Object[])null);
 
 					startPage(bookmarkablePageLink.getPageClass(), parameters);
 				}
 				catch (Exception e)
 				{
-					throw new WicketRuntimeException("Internal error in WicketTester. "
-						+ "Please report this in Wicket's Issue Tracker.", e);
+					throw new WicketRuntimeException("Internal error in WicketTester. " +
+						"Please report this in Wicket's Issue Tracker.", e);
 				}
 			}
 			else if (link instanceof ResourceLink)
 			{
 				try
 				{
-					Method getURL = ResourceLink.class.getDeclaredMethod("getURL", new Class[0]);
+					Method getURL = ResourceLink.class.getDeclaredMethod("getURL");
 					getURL.setAccessible(true);
 					CharSequence url = (CharSequence)getURL.invoke(link);
 					executeUrl(url.toString());
 				}
 				catch (Exception x)
 				{
-					throw new RuntimeException(
-						"An error occurred while clicking on a ResourceLink", x);
+					throw new RuntimeException("An error occurred while clicking on a ResourceLink",
+						x);
 				}
 			}
 			else

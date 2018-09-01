@@ -1,27 +1,36 @@
 	/**
 	 * Loading the TestWicketJavaEEApplication from src/test/webapp/WEB-INF/web.xml.
-	 * 
+	 *
 	 * @return
 	 */
-	protected WebApplication useServletContextContainer() {
+	protected WebApplication useServletContextContainer()
+	{
 		WebApplication webApplication = null;
-		try {
+		try
+		{
 			webApplication = TestWicketJavaEEApplication.get();
-		} catch (Exception e) {
-			log.error("If not using arquillian, maybe org.apache.wicket.Application has a message for you " + e.getMessage());
-			// I didn't test it, just supposing that i'm not using arquillian, so should show this message.
-			assertEquals("There is no application attached to current thread " + Thread.currentThread().getName(), e.getMessage());
 		}
-		
+		catch (Exception e)
+		{
+			log.error(
+				"If not using arquillian, maybe org.apache.wicket.Application has a message for you " +
+					e.getMessage());
+			// I didn't test it, just supposing that i'm not using arquillian, so should show this
+			// message.
+			assertEquals("There is no application attached to current thread " +
+				Thread.currentThread().getName(), e.getMessage());
+		}
+
 		assertNotNull(webApplication);
-		
+
 		log.info("WebApplication Name: " + webApplication.getName());
-		
+
 		ServletContext servletContext = webApplication.getServletContext();
 		assertNotNull(servletContext);
 		log.info("ServletContext Name: " + servletContext.getServletContextName());
-		assertEquals("Wicket Arquillian WildFly Quickstart: Wicket TEST WAR",servletContext.getServletContextName());
-		
+		assertEquals("Wicket Arquillian WildFly Quickstart: Wicket TEST WAR",
+			servletContext.getServletContextName());
+
 		log.info("Server info: " + servletContext.getServerInfo());
 		return webApplication;
 	}

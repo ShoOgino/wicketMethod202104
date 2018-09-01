@@ -1,24 +1,22 @@
 	/**
-	 * @throws Exception
 	 */
 	@Test
-	public void test_1() throws Exception
-	{
+	public void test_1() {
 		tester.startPage(DataTablePage.class);
 		tester.assertRenderedPage(DataTablePage.class);
 
 		String document = tester.getLastResponseAsString();
 		int index = document.indexOf("<thead");
-		assertTrue("Expected at least on <thead>", index != -1);
+		assertTrue(index != -1, "Expected at least on <thead>");
 		index = document.indexOf("<thead", index + 1);
-		assertTrue("There must be only one <thead>", index == -1);
+		assertTrue(index == -1, "There must be only one <thead>");
 
 		index = document.indexOf("<tbody");
-		assertTrue("Expected at least on <tbody>", index != -1);
+		assertTrue(index != -1, "Expected at least on <tbody>");
 		index = document.indexOf("<tbody", index + 1);
-		assertTrue("There must be only one <tbody>", index == -1);
+		assertTrue(index == -1, "There must be only one <tbody>");
 
 		index = document.indexOf("<caption", index + 1);
-		assertTrue("There must be not be <caption>", index == -1);
+		assertTrue(index == -1, "There must be not be <caption>");
 	}
 

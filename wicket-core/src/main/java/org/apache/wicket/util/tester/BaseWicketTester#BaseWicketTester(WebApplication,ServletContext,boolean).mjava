@@ -8,7 +8,8 @@
 	 * @param init
 	 *            force the application to be initialized (default = true)
 	 */
-	public BaseWicketTester(final WebApplication application, final ServletContext servletCtx, boolean init)
+	public BaseWicketTester(final WebApplication application, final ServletContext servletCtx,
+		boolean init)
 	{
 		if (!init)
 		{
@@ -18,10 +19,10 @@
 		servletContext = servletCtx != null ? servletCtx
 			// If it's provided from the container it's not necessary to mock.
 			: !init && application.getServletContext() != null ? application.getServletContext()
-			: new MockServletContext(application, null);
+				: new MockServletContext(application, null);
 
 		// If using Arquillian and it's configured in a web.xml it'll be provided. If not, mock it.
-		if(application.getWicketFilter() == null)
+		if (application.getWicketFilter() == null)
 		{
 			final FilterConfig filterConfig = new TestFilterConfig();
 			WicketFilter filter = new WicketFilter()
@@ -60,16 +61,16 @@
 		application.getResourceSettings().setResourcePollFrequency(getResourcePollFrequency());
 
 		// reconfigure application for the test environment
-		application.setPageRendererProvider(new LastPageRecordingPageRendererProvider(
-			application.getPageRendererProvider()));
-		application.setRequestCycleProvider(new TestRequestCycleProvider(
-			application.getRequestCycleProvider()));
+		application.setPageRendererProvider(
+			new LastPageRecordingPageRendererProvider(application.getPageRendererProvider()));
+		application.setRequestCycleProvider(
+			new TestRequestCycleProvider(application.getRequestCycleProvider()));
 
 		// set a feedback message filter that will not remove any messages
 		originalFeedbackMessageCleanupFilter = application.getApplicationSettings()
 			.getFeedbackMessageCleanupFilter();
-		application.getApplicationSettings().setFeedbackMessageCleanupFilter(
-			IFeedbackMessageFilter.NONE);
+		application.getApplicationSettings()
+			.setFeedbackMessageCleanupFilter(IFeedbackMessageFilter.NONE);
 		IPageManagerProvider pageManagerProvider = newTestPageManagerProvider();
 		if (pageManagerProvider != null)
 		{
