@@ -1,21 +1,10 @@
 	@Override
 	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
 	{
-		String cid = cycle.getRequest().getRequestParameters().getParameterValue(CID).toString();
-		Page page = getPage(handler);
-
-		if (cid == null && page != null)
+		if (activateForHandler(handler))
 		{
-			cid = page.getMetaData(CID_KEY);
+			logger.debug("Activating conversation {}", conversation.getId());
+			fireOnAfterConversationStarted(cycle);
 		}
-
-		Conversation current = getConversation(cycle);
-		if (current != null && !Objects.isEqual(current.getId(), cid))
-		{
-			logger.info("Conversation {} has expired for {}", cid, page);
-			throw new ConversationExpiredException(null, cid, page, handler);
-		}
-
-		activateConversationIfNeeded(cycle, handler, cid);
 	}
 

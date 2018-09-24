@@ -2,18 +2,14 @@
 	 * Configures the specified application
 	 * 
 	 * @param application
-	 * @return The CdiContainer
 	 */
-	public CdiContainer configure(Application application)
+	public void configure(Application application)
 	{
-		if (beanManager == null)
+		if (application.getMetaData(CDI_CONFIGURATION_KEY) != null)
 		{
-			throw new IllegalStateException(
-				"Configuration does not have a BeanManager instance configured");
+			throw new IllegalStateException("Cdi already configured for this application");
 		}
-
-		CdiContainer container = new CdiContainer(beanManager, nonContextualManager);
-		container.bind(application);
+		application.setMetaData(CDI_CONFIGURATION_KEY, this);
 
 		RequestCycleListenerCollection listeners = new RequestCycleListenerCollection();
 		application.getRequestCycleListeners().add(listeners);
@@ -21,44 +17,24 @@
 		// enable conversation propagation
 		if (getPropagation() != ConversationPropagation.NONE)
 		{
-			listeners.add(new ConversationPropagator(application, container, getPropagation(),
-				autoConversationManagement));
+			listeners.add(new ConversationPropagator(application, getPropagation()));
 			application.getComponentPreOnBeforeRenderListeners().add(
-				new ConversationExpiryChecker(container));
+					new AutoConversationManager(getPropagation()));
+			application.getComponentPreOnBeforeRenderListeners().add(
+					new ConversationExpiryChecker());
 		}
 
 		// enable detach event
-		listeners.add(new DetachEventEmitter(container));
+		listeners.add(new DetachEventEmitter());
 
-
-		// inject application instance
-		if (isInjectApplication())
-		{
-			container.getNonContextualManager().postConstruct(application);
-		}
+		NonContextual.of(application).postConstruct(application);
 
 		// enable injection of various framework components
-
-		if (isInjectSession())
-		{
-			application.getSessionListeners().add(new SessionInjector(container));
-		}
-
-		if (isInjectComponents())
-		{
-			application.getComponentInstantiationListeners().add(new ComponentInjector(container));
-		}
-
-		if (isInjectBehaviors())
-		{
-			application.getBehaviorInstantiationListeners().add(new BehaviorInjector(container));
-		}
+		application.getSessionListeners().add(new SessionInjector());
+		application.getComponentInstantiationListeners().add(new ComponentInjector());
+		application.getBehaviorInstantiationListeners().add(new BehaviorInjector());
 
 		// enable cleanup
-
-		application.getApplicationListeners().add(
-			new CdiShutdownCleaner(beanManager, isInjectApplication()));
-
-		return container;
+		application.getApplicationListeners().add(new CdiShutdownCleaner());
 	}
 
