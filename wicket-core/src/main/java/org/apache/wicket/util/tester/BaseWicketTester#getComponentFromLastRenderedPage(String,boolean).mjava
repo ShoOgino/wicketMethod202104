@@ -1,40 +1,6 @@
-	/**
-	 * Gets the component with the given path from last rendered page. This method fails in case the
-	 * component couldn't be found.
-	 *
-	 * @param path
-	 *            Path to component
-	 * @param wantVisibleInHierarchy
-	 *            if true component needs to be visible in hierarchy else {@code null} is returned
-	 * @return The component at the path
-	 * @see org.apache.wicket.MarkupContainer#get(String)
-	 */
 	public Component getComponentFromLastRenderedPage(String path,
-		final boolean wantVisibleInHierarchy)
+			boolean wantVisibleInHierarchy)
 	{
-		if (componentInPage != null && componentInPage.isInstantiated)
-		{
-			String componentIdPageId = componentInPage.component.getId() + ':';
-			if (path.startsWith(componentIdPageId) == false)
-			{
-				path = componentIdPageId + path;
-			}
-		}
-
-		Component component = getLastRenderedPage().get(path);
-		if (component == null)
-		{
-			fail("path: '" + path + "' does not exist for page: " +
-				Classes.simpleName(getLastRenderedPage().getClass()));
-			return null;
-		}
-
-		if (!wantVisibleInHierarchy || component.isVisibleInHierarchy())
-		{
-			return component;
-		}
-
-		// Not found or not visible
-		return null;
+		return getComponentFromLastRenderedPage(path, wantVisibleInHierarchy, true);
 	}
 
