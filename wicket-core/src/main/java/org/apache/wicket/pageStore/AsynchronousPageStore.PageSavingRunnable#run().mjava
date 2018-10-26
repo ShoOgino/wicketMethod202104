@@ -1,7 +1,7 @@
 		@Override
 		public void run()
 		{
-			while (!Thread.interrupted())
+			while (pageSavingThread != null)
 			{
 				Entry entry = null;
 				try
@@ -10,12 +10,12 @@
 				}
 				catch (InterruptedException e)
 				{
-					Thread.currentThread().interrupt();
+					log.debug("PageSavingRunnable:: Interrupted...");
 				}
 
-				if (entry != null)
+				if (entry != null && pageSavingThread != null)
 				{
-					log.debug("Saving asynchronously: {}...", entry);
+					log.debug("PageSavingRunnable:: Saving asynchronously: {}...", entry);
 					delegate.storePage(entry.sessionId, entry.page);
 					entryMap.remove(getKey(entry));
 				}

@@ -1,6 +1,6 @@
 	/**
 	 * Construct.
-	 * 
+	 *
 	 * @param delegate
 	 *            the wrapped {@link IPageStore} that actually saved the page
 	 * @param capacity
@@ -12,8 +12,7 @@
 		entries = new LinkedBlockingQueue<>(capacity);
 		entryMap = new ConcurrentHashMap<>();
 
-		PageSavingRunnable savingRunnable = new PageSavingRunnable(delegate, entries, entryMap);
-		pageSavingThread = new Thread(savingRunnable, "Wicket-AsyncPageStore-PageSavingThread");
+		pageSavingThread = new Thread(new PageSavingRunnable(), "Wicket-AsyncPageStore-PageSavingThread");
 		pageSavingThread.setDaemon(true);
 		pageSavingThread.start();
 	}

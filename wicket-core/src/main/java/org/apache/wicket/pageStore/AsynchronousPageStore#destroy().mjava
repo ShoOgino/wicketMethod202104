@@ -1,19 +1,19 @@
 	@Override
 	public void destroy()
 	{
-		if (pageSavingThread.isAlive())
+		final Thread thread = pageSavingThread;
+		pageSavingThread = null;
+		if (thread != null && thread.isAlive())
 		{
-			pageSavingThread.interrupt();
 			try
 			{
-				pageSavingThread.join();
+				thread.join();
 			}
 			catch (InterruptedException e)
 			{
 				log.error(e.getMessage(), e);
 			}
 		}
-
 		delegate.destroy();
 	}
 

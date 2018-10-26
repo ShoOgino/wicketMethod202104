@@ -1,6 +1,6 @@
 	/**
 	 * Construct.
-	 * 
+	 *
 	 * @param dataStore
 	 *            the wrapped {@link IDataStore} that actually saved the data
 	 * @param capacity
@@ -12,8 +12,7 @@
 		entries = new LinkedBlockingQueue<>(capacity);
 		entryMap = new ConcurrentHashMap<>();
 
-		PageSavingRunnable savingRunnable = new PageSavingRunnable(dataStore, entries, entryMap);
-		pageSavingThread = new Thread(savingRunnable, "Wicket-AsyncDataStore-PageSavingThread");
+		pageSavingThread = new Thread(new PageSavingRunnable(), "Wicket-AsyncDataStore-PageSavingThread");
 		pageSavingThread.setDaemon(true);
 		pageSavingThread.start();
 	}
