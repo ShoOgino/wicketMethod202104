@@ -1,0 +1,49 @@
+	protected AjaxFormSubmitBehavior newAjaxEventBehavior(Form<?> form, String event)
+	{
+		return new AjaxFormSubmitBehavior(form, event)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target)
+			{
+				AjaxFallbackButton.this.onSubmit(Optional.of(target));
+			}
+
+			@Override
+			protected void onAfterSubmit(AjaxRequestTarget target)
+			{
+				AjaxFallbackButton.this.onAfterSubmit(Optional.of(target));
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target)
+			{
+				AjaxFallbackButton.this.onError(Optional.of(target));
+			}
+
+			@Override
+			public boolean getDefaultProcessing()
+			{
+				return AjaxFallbackButton.this.getDefaultFormProcessing();
+			}
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+			{
+				super.updateAjaxAttributes(attributes);
+
+				// do not allow normal form submit to happen
+				attributes.setPreventDefault(true);
+
+				AjaxFallbackButton.this.updateAjaxAttributes(attributes);
+			}
+
+			@Override
+			public boolean getStatelessHint(Component component)
+			{
+				return AjaxFallbackButton.this.getStatelessHint();
+			}
+		};
+	}
+
