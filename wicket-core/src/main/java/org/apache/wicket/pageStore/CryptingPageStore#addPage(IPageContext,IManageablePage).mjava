@@ -1,0 +1,18 @@
+	@Override
+	public void addPage(IPageContext context, IManageablePage page)
+	{
+		if (page instanceof SerializedPage == false)
+		{
+			throw new WicketRuntimeException("CryptingPageStore works with serialized pages only");
+		}
+
+		SerializedPage serializedPage = (SerializedPage)page;
+
+		byte[] decrypted = serializedPage.getData();
+		byte[] encrypted = getSessionData(context).encrypt(decrypted);
+
+		page = new SerializedPage(page.getPageId(), serializedPage.getPageType(), encrypted);
+
+		getDelegate().addPage(context, page);
+	}
+

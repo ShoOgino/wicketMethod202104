@@ -1,0 +1,16 @@
+	public DefaultCrypter()
+	{
+		try
+		{
+			random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+
+			KeyGenerator generator = KeyGenerator.getInstance("AES");
+			generator.init(256, random);
+			key = generator.generateKey();
+		}
+		catch (GeneralSecurityException ex)
+		{
+			throw new WicketRuntimeException(ex);
+		}
+	}
+

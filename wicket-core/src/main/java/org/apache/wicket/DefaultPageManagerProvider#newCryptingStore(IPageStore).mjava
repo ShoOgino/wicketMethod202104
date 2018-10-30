@@ -1,0 +1,17 @@
+	/**
+	 * Crypt all pages, if enabled in {@link StoreSettings#isEncrypted()}.
+	 * 
+	 * @see CryptingPageStore
+	 */
+	protected IPageStore newCryptingStore(IPageStore pageStore)
+	{
+		StoreSettings storeSettings = application.getStoreSettings();
+		
+		if (storeSettings.isEncrypted())
+		{
+			pageStore = new CryptingPageStore(pageStore);
+		}
+
+		return pageStore;
+	}
+

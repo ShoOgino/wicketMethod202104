@@ -1,0 +1,30 @@
+	@Test
+	void testFail()
+	{
+		CryptingPageStore store = new CryptingPageStore(new MockPageStore());
+		JavaSerializer serializer = new JavaSerializer("test");
+
+		MockPageContext context = new MockPageContext();
+
+		int p = 42;
+
+		MockPage add = new MockPage(p);
+		SerializedPage serializedAdd = new SerializedPage(p, "foo", serializer.serialize(add));
+		store.addPage(context, serializedAdd);
+
+		// remove key from session
+		context.clearSession();
+
+		try
+		{
+			SerializedPage serializedGot = (SerializedPage)store.getPage(context, p);
+
+			MockPage got = (MockPage)serializer.deserialize(serializedGot.getData());
+			assertEquals(p, got.getPageId());
+		}
+		catch (WicketRuntimeException ex)
+		{
+			assertTrue(ex.getCause() instanceof GeneralSecurityException, "unable to decrypt with new key");
+		}
+	}
+

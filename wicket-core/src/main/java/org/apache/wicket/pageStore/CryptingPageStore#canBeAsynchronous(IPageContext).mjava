@@ -1,0 +1,13 @@
+	/**
+	 * Supports asynchronous add if the delegate supports it.
+	 */
+	@Override
+	public boolean canBeAsynchronous(IPageContext context)
+	{
+		// session data must be added here *before* any asynchronous calls
+		// when session is no longer available
+		getSessionData(context);
+
+		return getDelegate().canBeAsynchronous(context);
+	}
+
