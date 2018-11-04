@@ -1,0 +1,19 @@
+	@Test
+	public void changeSessionId() throws Exception
+	{
+		WicketTester tester = new WicketTester(new MockApplication());
+		MockHttpSession httpSession = (MockHttpSession)tester.getRequest().getSession();
+		Session session = tester.getSession();
+		
+		httpSession.setTemporary(false);
+		session.bind();
+		
+		String oldId = session.getId();
+		assertNotNull(oldId);
+		
+		session.changeSessionId();
+		String newId = session.getId();
+		
+		assertNotEquals(oldId, newId);
+	}
+
