@@ -2,12 +2,16 @@
 	 * @param id
 	 *            The component ID
 	 * @param boxes
-	 *            The CheckBoxes this selector will control.
+	 *            checkBoxes this selector will control
 	 */
 	public CheckBoxSelector(String id, CheckBox... boxes)
 	{
 		super(id);
 
-		checkBoxIdArrayLiteral = buildMarkupIdJSArrayLiteral(Arrays.asList(boxes));
+		for (CheckBox box : boxes)
+		{
+			connectedCheckBoxes.add(box);
+			box.add(cleanup);
+		}
 	}
 
