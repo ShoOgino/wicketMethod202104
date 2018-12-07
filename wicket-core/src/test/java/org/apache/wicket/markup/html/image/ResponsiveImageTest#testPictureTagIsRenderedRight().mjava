@@ -3,10 +3,10 @@
 	{
 		tester.startPage(ImagePictureTestPage.class);
 		String lastResponseAsString = tester.getLastResponse().getDocument();
-		TagTester pictureTagTester = TagTester.createTagByAttribute(lastResponseAsString, "picture");
+		TagTester pictureTagTester = TagTester.createTagByName(lastResponseAsString, "picture");
 		assertTrue(pictureTagTester.hasChildTag("img"));
 		assertTrue(pictureTagTester.hasChildTag("source"));
-		TagTester sourceTagTester = TagTester.createTagByAttribute(lastResponseAsString, "source");
+		TagTester sourceTagTester = TagTester.createTagByName(lastResponseAsString, "source");
 		assertTrue(sourceTagTester.hasAttribute("media"));
 		assertEquals("(min-width: 650px)", sourceTagTester.getAttribute("media"));
 		assertEquals("(min-width: 50em) 33vw", sourceTagTester.getAttribute("sizes"));
