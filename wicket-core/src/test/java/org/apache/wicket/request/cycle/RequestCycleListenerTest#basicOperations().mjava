@@ -11,7 +11,7 @@
 
 		incrementingListener.assertValues(0, 0, 0, 0, 0, 0);
 		assertValues(0, 0, 0);
-		cycle.processRequestAndDetach();
+		assertTrue(cycle.processRequestAndDetach());
 		// 0 exceptions mapped
 		incrementingListener.assertValues(1, 1, 1, 1, 0, 1);
 		// 0 exceptions mapped
@@ -20,7 +20,7 @@
 		// TEST WITH TWO LISTENERS
 		cycle = newRequestCycle((RuntimeException)null);
 		cycle.getListeners().add(incrementingListener);
-		cycle.processRequestAndDetach();
+		assertTrue(cycle.processRequestAndDetach());
 		// 0 exceptions mapped, all other 2 due to two listeners
 		incrementingListener.assertValues(2, 2, 2, 2, 0, 2);
 		// 0 exceptions mapped
@@ -30,7 +30,7 @@
 		// TEST WITH TWO LISTENERS AND AN EXCEPTION DURING RESPONSE
 		cycle = newRequestCycle(new RuntimeException("testing purposes only"));
 		cycle.getListeners().add(incrementingListener);
-		cycle.processRequestAndDetach();
+		assertFalse(cycle.processRequestAndDetach());
 		// 0 executed
 		incrementingListener.assertValues(2, 2, 2, 0, 2, 2);
 		// 1 exception mapped, 0 responded
@@ -67,7 +67,7 @@
 				throw new UnsupportedOperationException();
 			}
 		});
-		cycle.processRequestAndDetach();
+		assertTrue(cycle.processRequestAndDetach());
 		// 2 resolved, 1 executed, 0 exception mapped
 		incrementingListener.assertValues(1, 1, 2, 1, 0, 1);
 		// 0 exception mapped, 1 responded, 2 detached 
@@ -90,7 +90,7 @@
 				detaches++;
 			}
 		});
-		cycle.processRequestAndDetach();
+		assertTrue(cycle.processRequestAndDetach());
 		// 2 resolved, 2 executed, 0 exception mapped
 		incrementingListener.assertValues(1, 1, 3, 2, 0, 1);
 		// 0 exception mapped, 2 responded, 3 detached 

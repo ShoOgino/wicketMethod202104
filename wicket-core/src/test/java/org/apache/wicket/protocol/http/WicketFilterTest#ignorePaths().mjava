@@ -19,6 +19,14 @@
 		when(request.getContextPath()).thenReturn("/contextPath");
 		when(request.getMethod()).thenReturn("POST");
 		HttpServletResponse response = mock(HttpServletResponse.class);
+		when(response.encodeURL(ArgumentMatchers.anyString())).thenAnswer(new Answer<String>()
+		{
+			@Override
+			public String answer(InvocationOnMock invocation) throws Throwable
+			{
+				return (String)invocation.getArguments()[0];
+			}
+		});
 		when(response.encodeRedirectURL(ArgumentMatchers.anyString())).thenAnswer(new Answer<String>()
 		{
 			@Override
