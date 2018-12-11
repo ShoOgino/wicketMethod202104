@@ -1,0 +1,13 @@
+	@Test
+	public void consecutiveTemporaryBehaviorsAreRemoved() {
+		WebMarkupContainer container = new WebMarkupContainer("test");
+		TestTemporaryBehavior temp1 = new TestTemporaryBehavior();
+		TestTemporaryBehavior temp2 = new TestTemporaryBehavior();
+		container.add(temp1, temp2);
+		assertTrue(container.getBehaviors().contains(temp1));
+		assertTrue(container.getBehaviors().contains(temp2));
+		container.detach();
+		assertFalse(container.getBehaviors().contains(temp1));
+		assertFalse(container.getBehaviors().contains(temp2));
+	}
+
