@@ -49,7 +49,10 @@
 			}
 		}
 
-		assertComponentsNotFrozen();
+		if (componentsFrozen)
+		{
+			throw new IllegalStateException("A partial update of the page is being rendered, component " + component.toString() + " can no longer be added");
+		}
 
 		component.setMarkupId(markupId);
 		markupIdToComponent.put(markupId, component);

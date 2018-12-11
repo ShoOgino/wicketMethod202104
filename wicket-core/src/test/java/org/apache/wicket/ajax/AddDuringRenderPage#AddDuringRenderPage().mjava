@@ -1,0 +1,24 @@
+	public AddDuringRenderPage()
+	{
+		add(new AjaxLink<Void>("link")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				addToAjax = true;
+				
+				target.add(this);
+			}
+			
+			@Override
+			protected void onBeforeRender()
+			{
+				super.onBeforeRender();
+				
+				if (addToAjax) {
+					getRequestCycle().find(AjaxRequestHandler.class).get().add(this);
+				}
+			}
+		});
+	}
+
