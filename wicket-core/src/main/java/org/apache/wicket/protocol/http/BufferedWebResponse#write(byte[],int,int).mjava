@@ -1,16 +1,17 @@
 	@Override
 	public void write(byte[] array, int offset, int length)
 	{
-		if (charSequenceAction != null)
+		if (charSequenceBuilder != null)
 		{
 			throw new IllegalStateException(
 				"Can't call write(byte[]) after write(CharSequence) has been called.");
 		}
-		if (dataAction == null)
+		if (dataStream == null)
 		{
-			dataAction = new WriteDataAction();
-			actions.add(dataAction);
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			dataStream = stream;
+			actions.add(ActionType.DATA.action(res -> writeStream(res, stream)));
 		}
-		dataAction.append(array, offset, length);
+		dataStream.write(array, offset, length);
 	}
 
