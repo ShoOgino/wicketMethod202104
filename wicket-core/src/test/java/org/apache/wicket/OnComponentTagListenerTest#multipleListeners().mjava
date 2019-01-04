@@ -1,0 +1,19 @@
+	@Test
+	public void multipleListeners() {
+		TestListener listener1 = new TestListener();
+		TestListener listener2 = new TestListener();
+		tester.getApplication().getOnComponentTagListeners().add(listener1);
+		tester.getApplication().getOnComponentTagListeners().add(listener2);
+
+		TestPage page = new TestPage();
+		tester.startPage(page);
+
+		assertEquals(1, listener1.components.getCount("c1"));
+		assertEquals(1, listener1.components.getCount("c2"));
+		assertEquals(1, listener1.components.getCount("c3"));
+
+		assertEquals(1, listener2.components.getCount("c1"));
+		assertEquals(1, listener2.components.getCount("c2"));
+		assertEquals(1, listener2.components.getCount("c3"));
+	}
+

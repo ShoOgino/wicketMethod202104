@@ -1,0 +1,14 @@
+	@Test
+	public void visibility() {
+		TestListener listener = new TestListener();
+		tester.getApplication().getOnComponentTagListeners().add(listener);
+
+		TestPage page = new TestPage();
+		page.c1.setVisible(false);
+		tester.startPage(page);
+
+		assertEquals(0, listener.components.getCount("c1"));
+		assertEquals(0, listener.components.getCount("c2"));
+		assertEquals(1, listener.components.getCount("c3"));
+	}
+
