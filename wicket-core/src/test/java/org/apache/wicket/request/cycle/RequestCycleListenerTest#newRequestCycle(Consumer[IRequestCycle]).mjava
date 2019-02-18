@@ -1,4 +1,4 @@
-	private RequestCycle newRequestCycle(final RuntimeException exception)
+	private RequestCycle newRequestCycle(final Consumer<IRequestCycle> cycleConsumer)
 	{
 		final Response originalResponse = newResponse();
 		Request request = new MockWebRequest(Url.parse("http://wicket.apache.org"));
@@ -7,10 +7,8 @@
 			@Override
 			public void respond(IRequestCycle requestCycle)
 			{
-				if (exception != null)
-				{
-					throw exception;
-				}
+				cycleConsumer.accept(requestCycle);
+
 				responses++;
 			}
 

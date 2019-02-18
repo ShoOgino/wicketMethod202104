@@ -4,7 +4,7 @@
 	{
 		Application.get().getRequestCycleListeners().add(new RepeatListener());
 
-		RequestCycle cycle = newRequestCycle(new RuntimeException("testing purposes only"));
+		RequestCycle cycle = newRequestCycle(requestCycle -> { throw new RuntimeException("testing purposes only"); });
 		assertFalse(cycle.processRequestAndDetach());
 	}
 
