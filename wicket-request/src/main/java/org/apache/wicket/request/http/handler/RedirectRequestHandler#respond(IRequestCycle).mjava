@@ -27,7 +27,15 @@
 		else
 		{
 			response.setStatus(status);
-			response.setHeader("Location", location);
+
+			if (((WebRequest)requestCycle.getRequest()).isAjax())
+			{
+				response.setHeader("Ajax-Location", location);
+			}
+			else
+			{
+				response.setHeader("Location", location);
+			}
 		}
 	}
 
