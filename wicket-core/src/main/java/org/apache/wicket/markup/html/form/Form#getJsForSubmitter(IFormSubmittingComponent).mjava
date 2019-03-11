@@ -1,0 +1,34 @@
+	/**
+	 * Generate a piece of JavaScript that submits the form with the given {@link IFormSubmittingComponent}.
+	 * 
+	 * @param submitter
+	 *            the submitter
+	 * @return the javascript code that submits the form.
+	 * 
+	 * @see #findSubmitter()
+	 */
+	public final CharSequence getJsForSubmitter(IFormSubmittingComponent submitter)
+	{
+		Form<?> root = getRootForm();
+
+		String param = submitter.getInputName() + "=x";
+
+		AppendingStringBuffer buffer = new AppendingStringBuffer();
+		buffer.append(String.format("var f = document.getElementById('%s');", root.getMarkupId()));
+		if (root.encodeUrlInHiddenFields())
+		{
+			buffer.append(String.format("document.getElementById('%s').innerHTML += '", root.getHiddenFieldsId()));
+			
+			writeParamsAsHiddenFields(new String[] {param}, buffer);
+			
+			buffer.append("';");
+		}
+		else
+		{
+			String action = root.getActionUrl().toString();
+			buffer.append("f.action += '" + (action.indexOf('?') > -1 ? '&' : '?') + param + "';");
+		}
+		buffer.append("f.submit();");
+		return buffer;
+	}
+
