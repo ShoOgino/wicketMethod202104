@@ -2,14 +2,15 @@
 	{
 		IResource resource = new ExampleResource("downloaded via ajax")
 			.setContentDisposition(ContentDisposition.ATTACHMENT);
-		
+
 		final AjaxDownloadBehavior download = new AjaxDownloadBehavior(resource) {
-			
+			private static final long serialVersionUID = 1L;
+
 			@Override
-			protected void onBeforeDownload(AjaxRequestTarget target)
+			protected void onBeforeDownload(IPartialPageRequestHandler handler)
 			{
 				downloadingContainer.setVisible(true);
-				target.add(downloadingContainer);
+				handler.add(downloadingContainer);
 			}
 
 			@Override
@@ -18,20 +19,22 @@
 				downloadingContainer.setVisible(false);
 				target.add(downloadingContainer);
 			}
-			
+
 			@Override
 			protected void onDownloadFailed(AjaxRequestTarget target)
 			{
 				downloadingContainer.setVisible(false);
 				target.add(downloadingContainer);
-				
+
 				target.appendJavaScript("alert('Download failed');");
 			}
 		};
 		add(download);
-		
+
 		add(new AjaxLink<Void>("download")
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{

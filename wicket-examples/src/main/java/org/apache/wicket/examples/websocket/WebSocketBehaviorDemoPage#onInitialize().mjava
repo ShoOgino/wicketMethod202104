@@ -1,0 +1,78 @@
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+
+		ResourceStreamResource resource = new ResourceStreamResource()
+		{
+			private static final long serialVersionUID = 1L;
+			private int i = 42;
+
+			@Override
+			protected IResourceStream getResourceStream(IResource.Attributes attributes)
+			{
+				return new StringResourceStream("downloaded via ajax " + (i++) + " times");
+			}
+		}.setContentDisposition(ContentDisposition.ATTACHMENT)
+			.setFileName("File-from-IResource.txt")
+			.setCacheDuration(Duration.NONE);
+
+		final AjaxDownloadBehavior download = new AjaxDownloadBehavior(resource)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onBeforeDownload(IPartialPageRequestHandler handler)
+			{
+				downloadingContainer.setVisible(true);
+				handler.add(downloadingContainer);
+			}
+
+			@Override
+			protected void onDownloadSuccess(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+			}
+
+			@Override
+			protected void onDownloadFailed(AjaxRequestTarget target)
+			{
+				downloadingContainer.setVisible(false);
+				target.add(downloadingContainer);
+
+				target.appendJavaScript("alert('Download failed');");
+			}
+		};
+		add(download);
+		WebSocketChart chartPanel = new WebSocketChart("chartPanel");
+		chartPanel.add(new WebSocketBehavior()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onConnect(ConnectedMessage message)
+			{
+				super.onConnect(message);
+
+				ScheduledExecutorService service = JSR356Application.get().getScheduledExecutorService();
+				ChartUpdater.start(message, service);
+			}
+		});
+		add(downloadingContainer.setOutputMarkupPlaceholderTag(true).setVisible(false));
+		add(chartPanel);
+
+		add(new WebSocketBehavior()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onMessage(WebSocketRequestHandler handler, TextMessage message)
+			{
+				if ("start".equals(message.getText()))
+				{
+					download.initiate(handler);
+				}
+			}
+		});
+	}
+
