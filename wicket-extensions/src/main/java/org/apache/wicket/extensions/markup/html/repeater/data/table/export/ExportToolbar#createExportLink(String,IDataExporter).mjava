@@ -11,12 +11,22 @@
 	{
 		IResource resource = new ResourceStreamResource()
 		{
+			/**
+			 * Set fileName and cacheDuration lazily
+			 */
+			public void respond(Attributes attributes) {
+				setFileName(fileNameModel.getObject() + "." + dataExporter.getFileNameExtension());
+				setCacheDuration(ExportToolbar.this.getCacheDuration());
+				
+				super.respond(attributes);
+			}
+			
 			@Override
 			protected IResourceStream getResourceStream(Attributes attributes)
 			{
 				return new DataExportResourceStreamWriter(dataExporter, getTable());
 			}
-		}.setFileName(fileNameModel.getObject() + "." + dataExporter.getFileNameExtension());
+		};
 
 		return new ResourceLink<Void>(componentId, resource)
 			.setBody(dataExporter.getDataFormatNameModel());
