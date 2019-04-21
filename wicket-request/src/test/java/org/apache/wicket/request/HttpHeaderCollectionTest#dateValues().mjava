@@ -3,8 +3,8 @@
 	{
 		final HttpHeaderCollection headers = new HttpHeaderCollection();
 
-		final Instant time1 = Instant.ofEpochMilli(1000000);
-		final Instant time2 = Instant.ofEpochMilli(2000000);
+		final Time time1 = Time.millis(1000000);
+		final Time time2 = Time.millis(2000000);
 
 		headers.setDateHeader("date", time1);
 		headers.addDateHeader("date", time2);
@@ -42,7 +42,7 @@
 		headers.setHeader("date", "foobar");
 		try
 		{
-		    Instant date = headers.getDateHeader("date");
+			Time date = headers.getDateHeader("date");
 			fail();
 		}
 		catch (IllegalStateException e)

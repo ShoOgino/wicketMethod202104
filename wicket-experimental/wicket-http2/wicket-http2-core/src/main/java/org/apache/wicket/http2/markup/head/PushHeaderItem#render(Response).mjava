@@ -12,7 +12,7 @@
 		if (isHttp2(request))
 		{
 
-			Instant pageModificationTime = getPageModificationTime();
+			Time pageModificationTime = getPageModificationTime();
 			String ifModifiedSinceHeader = pageWebRequest.getHeader("If-Modified-Since");
 
 			// Check if the if-modified-since header is set - if not push all resources
@@ -20,7 +20,7 @@
 			{
 
 				// Try to parse RFC1123
-				Instant ifModifiedSinceFromRequestTime = parseIfModifiedSinceHeader(
+				Time ifModifiedSinceFromRequestTime = parseIfModifiedSinceHeader(
 					ifModifiedSinceHeader, headerDateFormat_RFC1123);
 
 				// Try to parse ASCTIME
@@ -40,7 +40,7 @@
 				// if the modified since header is before the page modification time or if it can't
 				// be parsed push it.
 				if (ifModifiedSinceFromRequestTime == null ||
-					ifModifiedSinceFromRequestTime.isBefore(pageModificationTime))
+					ifModifiedSinceFromRequestTime.before(pageModificationTime))
 				{
 					// Some browsers like IE 9-11 or Chrome 39 that does not send right headers
 					// receive the resource via push all the time

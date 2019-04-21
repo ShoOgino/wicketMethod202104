@@ -1,0 +1,40 @@
+	/**
+	 * Retrieves a <code>TimeOfDay</code> on a 12-hour clock.
+	 * 
+	 * @param hour
+	 *            the hour (1-12)
+	 * @param minute
+	 *            the minute (0-59)
+	 * @param second
+	 *            the second (0-59)
+	 * @param meridian
+	 *            AM or PM
+	 * @return the <code>TimeOfDay</code> value
+	 */
+	public static TimeOfDay time(final int hour, final int minute, final int second,
+		final Meridian meridian)
+	{
+		if (meridian == PM)
+		{
+			if (hour == 12)
+			{
+				return militaryTime(12, minute, second);
+			}
+			else
+			{
+				return militaryTime(hour + 12, minute, second);
+			}
+		}
+		else
+		{
+			if (hour == 12)
+			{
+				return militaryTime(0, minute, second);
+			}
+			else
+			{
+				return militaryTime(hour, minute, second);
+			}
+		}
+	}
+

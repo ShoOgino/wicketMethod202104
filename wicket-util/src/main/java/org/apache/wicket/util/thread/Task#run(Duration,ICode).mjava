@@ -20,19 +20,7 @@
 				public void run()
 				{
 					// Sleep until start time
-				    Duration untilStart = Duration.between(startTime, Instant.now());
-					
-				    if (!untilStart.isNegative()) 
-				    {                      
-				      try 
-				      {
-                        Thread.sleep(untilStart.toMillis());
-                      } catch (InterruptedException e) 
-				      {
-                        e.printStackTrace();
-                      }
-                    }
-					
+					startTime.fromNow().sleep();
 					final Logger log = getLog();
 
 					try
@@ -40,7 +28,7 @@
 						while (!stop)
 						{
 							// Get the start of the current period
-							final Instant startOfPeriod = Instant.now();
+							final Time startOfPeriod = Time.now();
 
 							if (log.isTraceEnabled())
 							{
@@ -65,15 +53,7 @@
 
 							// Sleep until the period is over (or not at all if it's
 							// already passed)
-							Instant nextExecution = startOfPeriod.plus(frequency);
-							
-							Duration timeToNextExecution = Duration.between(nextExecution, Instant.now());
-		                    
-		                    if (!timeToNextExecution.isNegative()) 
-		                    {                      
-		                      Thread.sleep(timeToNextExecution.toMillis());
-		                    }
-							
+							startOfPeriod.add(frequency).fromNow().sleep();
 						}
 					}
 					catch (Exception x)

@@ -1,6 +1,6 @@
 		public void load(AjaxRequestTarget target)
 		{
-			setUpdateInterval(Duration.ofMillis(Long.MAX_VALUE));
+			setUpdateInterval(Duration.MAXIMUM);
 			
 			getComponent().getPage().visitChildren(AjaxLazyLoadPanel.class, new IVisitor<AjaxLazyLoadPanel<?>, Void>()
 			{
@@ -13,13 +13,13 @@
 							throw new IllegalArgumentException("update interval must not ben null");
 						}
 						
-						setUpdateInterval(Comparators.min(getUpdateInterval(), updateInterval));
+						setUpdateInterval(Duration.min(getUpdateInterval(), updateInterval));
 					}						
 				}
 			});
 
 			// all panels have completed their replacements, we can stop the timer
-			if (Duration.ofMillis(Long.MAX_VALUE).equals(getUpdateInterval()))
+			if (Duration.MAXIMUM.equals(getUpdateInterval()))
 			{
 				stop(target);
 				

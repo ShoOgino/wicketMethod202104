@@ -10,7 +10,7 @@
 	{
 		final Thread thread = Thread.currentThread();
 		final PageLock lock = new PageLock(pageId, thread);
-		final Instant start = Instant.now();
+		final Time start = Time.now();
 
 		boolean locked = false;
 
@@ -20,7 +20,7 @@
 
 		Duration timeout = getTimeout(pageId);
 
-		while (!locked && elapsedSince(start).compareTo(timeout) < 0)
+		while (!locked && start.elapsedSince().lessThan(timeout))
 		{
 			if (isDebugEnabled)
 			{
@@ -59,7 +59,7 @@
 				logger.warn(
 					"Thread '{}' failed to acquire lock to page with id '{}', attempted for {} out of allowed {}." +
 							" The thread that holds the lock has name '{}'.",
-					thread.getName(), pageId, Duration.between(start, Instant.now()), timeout,
+					thread.getName(), pageId, start.elapsedSince(), timeout,
 							previous.thread.getName());
 				if (Application.exists())
 				{

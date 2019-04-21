@@ -1,0 +1,24 @@
+	/**
+	 * Converts a time <code>String</code> and <code>Calendar</code> to a <code>TimeOfDay</code>
+	 * instance.
+	 * 
+	 * @param calendar
+	 *            the <code>Calendar</code> to use when parsing time <code>String</code>
+	 * @param time
+	 *            a <code>String</code> in 'h.mma' format
+	 * @return the <code>TimeOfDay</code> on the given <code>Calendar</code>
+	 * @throws ParseException
+	 */
+	public static TimeOfDay valueOf(final Calendar calendar, final String time)
+		throws ParseException
+	{
+		synchronized (timeFormat)
+		{
+			synchronized (calendar)
+			{
+				timeFormat.setCalendar(calendar);
+				return new TimeOfDay(timeFormat.parse(time).getTime());
+			}
+		}
+	}
+
