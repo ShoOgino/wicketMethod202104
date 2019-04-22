@@ -1,0 +1,21 @@
+	/**
+	 * @see IValueMap#getAsTime(String, Time)
+	 */
+	@Override
+	public Instant getAsTime(final String key, final Instant defaultValue)
+	{
+		if (!containsKey(key))
+		{
+			return defaultValue;
+		}
+
+		try
+		{
+			return getInstant(key);
+		}
+		catch (StringValueConversionException ignored)
+		{
+			return defaultValue;
+		}
+	}
+

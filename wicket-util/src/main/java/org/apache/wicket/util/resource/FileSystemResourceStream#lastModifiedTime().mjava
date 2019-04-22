@@ -1,12 +1,12 @@
 	@Override
-	public Time lastModifiedTime()
+	public Instant lastModifiedTime()
 	{
 		try
 		{
 			BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
 			FileTime lastModifiedTime = attributes.lastModifiedTime();
 			long millis = lastModifiedTime.toMillis();
-			return Time.millis(millis);
+			return Instant.ofEpochMilli(millis);
 		}
 		catch (IOException e)
 		{

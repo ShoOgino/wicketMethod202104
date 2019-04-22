@@ -1,0 +1,27 @@
+	/**
+	 * Convert to {@link Instant}, returning default value if text is inconvertible.
+	 * 
+	 * @param defaultValue
+	 *            the default value
+	 * @return the converted text as a {@link Instant} or the default value if text is inconvertible.
+	 */
+	public final Instant toInstant(final Instant defaultValue)
+	{
+		if (text != null)
+		{
+			try
+			{
+				return toInstant();
+			}
+			catch (StringValueConversionException x)
+			{
+				if (LOG.isDebugEnabled())
+				{
+					LOG.debug(String.format("An error occurred while converting '%s' to an Instant: %s",
+						text, x.getMessage()), x);
+				}
+			}
+		}
+		return defaultValue;
+	}
+

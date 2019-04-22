@@ -7,8 +7,8 @@
 			Value value = (Value)eldest.getValue();
 			if (value != null)
 			{
-				Duration elapsedTime = Time.now().subtract(value.creationTime);
-				if (lifetime.lessThanOrEqual(elapsedTime))
+				Duration elapsedTime = Duration.between(value.creationTime, Instant.now());
+				if (lifetime.compareTo(elapsedTime) <= 0)
 				{
 					removedValue = value.response;
 					removed = true;
