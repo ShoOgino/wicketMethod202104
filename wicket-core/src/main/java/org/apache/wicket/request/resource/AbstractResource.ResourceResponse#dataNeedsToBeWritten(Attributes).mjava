@@ -11,18 +11,18 @@
 		public boolean dataNeedsToBeWritten(Attributes attributes)
 		{
 			WebRequest request = (WebRequest)attributes.getRequest();
-			Time ifModifiedSince = request.getIfModifiedSinceHeader();
+			Instant ifModifiedSince = request.getIfModifiedSinceHeader();
 
-			if (cacheDuration != Duration.NONE && ifModifiedSince != null && lastModified != null)
+			if (cacheDuration != Duration.ZERO && ifModifiedSince != null && lastModified != null)
 			{
 				// [Last-Modified] headers have a maximum precision of one second
 				// so we have to truncate the milliseconds part for a proper compare.
 				// that's stupid, since changes within one second will not be reliably
 				// detected by the client ... any hint or clarification to improve this
 				// situation will be appreciated...
-				Time roundedLastModified = Time.millis(lastModified.getMilliseconds() / 1000 * 1000);
+			    Instant roundedLastModified = lastModified.truncatedTo(ChronoUnit.SECONDS);
 
-				return ifModifiedSince.before(roundedLastModified);
+				return ifModifiedSince.isBefore(roundedLastModified);
 			}
 			else
 			{
