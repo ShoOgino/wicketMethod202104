@@ -1,5 +1,5 @@
 	@Test
-	void test()
+	void testAdd()
 	{
 		MockPageStore mockStore = new MockPageStore();
 		
@@ -7,9 +7,9 @@
 
 		RequestPageStore store = new RequestPageStore(mockStore);
 		
-		MockPage page1 = new MockPage(2);
-		MockPage page2 = new MockPage(3);
-		MockPage page3 = new MockPage(4);
+		MockPage page1 = new MockPage(1);
+		MockPage page2 = new MockPage(2);
+		MockPage page3 = new MockPage(3);
 		
 		store.addPage(context, page1);
 		store.addPage(context, page2);
@@ -23,8 +23,8 @@
 		
 		mockStore.getPages().clear();
 		
+		assertNull(store.getPage(context, 1), "no page in request store");
 		assertNull(store.getPage(context, 2), "no page in request store");
 		assertNull(store.getPage(context, 3), "no page in request store");
-		assertNull(store.getPage(context, 4), "no page in request store");
 	}
 
