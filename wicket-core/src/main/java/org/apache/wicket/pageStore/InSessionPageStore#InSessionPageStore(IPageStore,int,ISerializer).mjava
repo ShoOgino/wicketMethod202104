@@ -1,18 +1,18 @@
 	/**
-	 * Keep {@code maxPages} in each session.
+	 * Keep a cache of {@code maxPages} in each session.
 	 * <p>
-	 * If the container serializes sessions to disk, any non-{@code SerializedPage} added to this store
-	 * will be automatically serialized.   
+	 * If the container serializes sessions to disk, any non-{@code SerializedPage} added to this
+	 * store will be automatically serialized.
 	 * 
 	 * @param delegate
 	 *            store to delegate to
 	 * @param maxPages
 	 *            maximum pages to keep in session
 	 * @param serializer
-	 *            optional serializer of pages in the session
+	 *            optional serializer used only in case session serialization 
 	 */
 	public InSessionPageStore(IPageStore delegate, int maxPages, ISerializer serializer)
 	{
-		this(delegate, serializer, () -> new CountLimitedData(maxPages));
+		this(delegate, serializer, KEY_CACHE, () -> new CountLimitedData(maxPages));
 	}
 
