@@ -1,0 +1,14 @@
+	/**
+	 * Keep page up to {@code maxBytes} persistent in each session.
+	 * <p>
+	 * All pages added to this store <em>must</em> be {@code SerializedPage}s. You can achieve this
+	 * by letting a {@link SerializingPageStore} delegate to this store.
+	 * 
+	 * @param maxBytes
+	 *            maximum bytes to keep in session
+	 */
+	public InSessionPageStore(Bytes maxBytes)
+	{
+		this(new NoopPageStore(), null, KEY_PERSISTENT, () -> new SizeLimitedData(maxBytes));
+	}
+
