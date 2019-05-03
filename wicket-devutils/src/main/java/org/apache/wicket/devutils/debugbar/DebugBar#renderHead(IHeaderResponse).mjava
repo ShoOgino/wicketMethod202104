@@ -1,10 +1,12 @@
 	@Override
 	public void renderHead(final IHeaderResponse response)
 	{
+		CoreLibrariesContributor.contributeAjax(getApplication(), response);
+		
 		response.render(CssHeaderItem.forReference(new CssResourceReference(DebugBar.class,
 			"wicket-debugbar.css")));
 		response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
 			DebugBar.class, "wicket-debugbar.js")));
-		response.render(OnDomReadyHeaderItem.forScript("wicketDebugBarCheckState()"));
+		response.render(OnDomReadyHeaderItem.forScript("Wicket.debugBar();"));
 	}
 
