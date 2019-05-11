@@ -20,15 +20,28 @@
 				public void run()
 				{
 					// Sleep until start time
-					startTime.fromNow().sleep();
+					Duration untilStart = Duration.between(startTime, Instant.now());
+
 					final Logger log = getLog();
+
+					if (!untilStart.isNegative())
+					{
+						try
+						{
+							Thread.sleep(untilStart.toMillis());
+						}
+						catch (InterruptedException e)
+						{
+							log.error("An error occurred during sleeping phase.", e);
+						}
+					}
 
 					try
 					{
 						while (!stop)
 						{
 							// Get the start of the current period
-							final Time startOfPeriod = Time.now();
+							final Instant startOfPeriod = Instant.now();
 
 							if (log.isTraceEnabled())
 							{
@@ -53,7 +66,15 @@
 
 							// Sleep until the period is over (or not at all if it's
 							// already passed)
-							startOfPeriod.add(frequency).fromNow().sleep();
+							Instant nextExecution = startOfPeriod.plus(frequency);
+							
+							Duration timeToNextExecution = Duration.between(nextExecution, Instant.now());
+		                    
+							if (!timeToNextExecution.isNegative())
+							{
+								Thread.sleep(timeToNextExecution.toMillis());
+							}
+							
 						}
 					}
 					catch (Exception x)

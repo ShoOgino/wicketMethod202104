@@ -6,14 +6,14 @@
 	@Test
 	void failToReleaseUnderLoad() throws Exception
 	{
-		final Duration duration = Duration.seconds(20); /* seconds */
+		final Duration duration = Duration.ofSeconds(20); /* seconds */
 		final ConcurrentLinkedQueue<Exception> errors = new ConcurrentLinkedQueue<Exception>();
-		final long endTime = System.currentTimeMillis() + duration.getMilliseconds();
+		final long endTime = System.currentTimeMillis() + duration.toMillis();
 
 		// set the synchronizer timeout one second longer than the test runs to prevent
 		// starvation to become an issue
 		final PageAccessSynchronizer sync = new PageAccessSynchronizer(
-			duration.add(Duration.ONE_SECOND));
+			duration.plus(Duration.ofSeconds(1)));
 
 		final CountDownLatch latch = new CountDownLatch(100);
 		for (int count = 0; count < 100; count++)

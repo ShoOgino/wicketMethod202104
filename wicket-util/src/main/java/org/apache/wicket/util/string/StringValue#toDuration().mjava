@@ -7,6 +7,13 @@
 	 */
 	public final Duration toDuration() throws StringValueConversionException
 	{
-		return Duration.valueOf(text, locale);
+		try
+		{
+			return Duration.parse(text);
+		}
+		catch (Exception e)
+		{
+			throw new StringValueConversionException("Unable to convert '" + text + "' to a Duration value", e);
+		}
 	}
 
