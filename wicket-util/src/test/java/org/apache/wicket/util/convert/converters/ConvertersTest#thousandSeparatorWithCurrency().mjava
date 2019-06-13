@@ -14,12 +14,14 @@
 				return NumberFormat.getCurrencyInstance(locale);
 			}
 		};
+		final Locale locale = Locale.FRENCH;
+		final DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
+		char groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
+		String currencySymbol = decimalFormatSymbols.getCurrencySymbol();
 
-		// \u00A0 = nbsp
-		// \u00A4 = currency symbol (unspecified currency)
-		String string = "1\u00A0234,00\u00A0\u00A4";
+		String expected = format("1%s234,00\u00A0%s", groupingSeparator, currencySymbol);
 
-		assertEquals(string, fc.convertToString(1234f, Locale.FRENCH));
-		assertEquals(Float.valueOf(1234f), fc.convertToObject(string, Locale.FRENCH));
+		assertEquals(expected, fc.convertToString(1234f, locale));
+		assertEquals(Float.valueOf(1234f), fc.convertToObject(expected, locale));
 	}
 
