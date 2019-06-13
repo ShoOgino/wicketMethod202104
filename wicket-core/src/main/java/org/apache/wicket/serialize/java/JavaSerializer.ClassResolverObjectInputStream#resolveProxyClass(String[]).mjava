@@ -45,8 +45,10 @@
 				}
 				try
 				{
-					return Proxy.getProxyClass(
-						hasNonPublicInterface ? nonPublicLoader : latestLoader, classObjs);
+					final InvocationHandler invocationHandler = (proxy, method, args) -> null;
+					final Object proxyInstance = Proxy.newProxyInstance(
+							hasNonPublicInterface ? nonPublicLoader : latestLoader, classObjs, invocationHandler);
+					return proxyInstance.getClass();
 				}
 				catch (IllegalArgumentException e)
 				{
