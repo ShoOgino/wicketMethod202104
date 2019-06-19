@@ -1,0 +1,35 @@
+	/**
+	 * Append a component.
+	 * 
+	 * @param component
+	 *            the component
+	 * @param target
+	 *            optional target
+	 * @return the component
+	 * 
+	 * @param T component type
+	 */
+	public <T extends Component> T append(T component, AjaxRequestTarget target)
+	{
+		this.repeater.add(component);
+		
+		if (target != null)
+		{
+			IMarkupFragment markup = repeater.getMarkup();
+			
+			// append markup to be updated
+			MarkupStream stream = new MarkupStream(markup);
+			ComponentTag tag = stream.getTag().mutable();
+			tag.getXmlTag().setType(TagType.OPEN_CLOSE);
+			tag.getXmlTag().put("id", component.getMarkupId());
+
+			target.prependJavaScript(String.format("Wicket.DOM.add(Wicket.DOM.get('%s'), '%s');",
+				container.getMarkupId(), JavaScriptUtils.escapeQuotes(tag.toString())));
+			
+			// ... then update the appended component 
+			target.add(component);
+		}
+
+		return component;
+	}
+

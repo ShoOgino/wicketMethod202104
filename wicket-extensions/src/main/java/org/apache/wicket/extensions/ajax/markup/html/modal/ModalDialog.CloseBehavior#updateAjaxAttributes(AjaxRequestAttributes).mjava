@@ -1,0 +1,18 @@
+		@Override
+		protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+		{
+			super.updateAjaxAttributes(attributes);
+
+			// has to stop immediately to prevent an enclosing dialog to close too 
+			attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
+
+			attributes.getAjaxCallListeners().add(new AjaxCallListener()
+			{
+				@Override
+				public CharSequence getPrecondition(Component component)
+				{
+					return CloseBehavior.this.getPrecondition();
+				}
+			});
+		}
+

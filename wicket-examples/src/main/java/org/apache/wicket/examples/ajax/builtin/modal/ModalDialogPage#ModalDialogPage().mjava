@@ -1,0 +1,21 @@
+	public ModalDialogPage()
+	{
+
+		queue(new RadioGroup("stacked", new PropertyModel<>(this, "stacked"))
+			.setRenderBodyOnly(false).add(new AjaxFormChoiceComponentUpdatingBehavior()
+			{
+				@Override
+				protected void onUpdate(AjaxRequestTarget target)
+				{
+				}
+			}));
+
+		queue(new Radio<Boolean>("yes", Model.of(true)));
+		queue(new Radio<Boolean>("no", Model.of(false)));
+
+		queue(new ModalFragment("start"));
+
+		stackedDialogs = new AjaxListPanel("stackedDialogs");
+		queue(stackedDialogs);
+	}
+

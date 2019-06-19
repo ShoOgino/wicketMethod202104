@@ -1,0 +1,21 @@
+	/**
+	 * Delete a component.
+	 * 
+	 * @param target
+	 *            optional target
+	 * @return the component
+	 * @throws EmptyStackException if empty
+	 * 
+	 * @param T component type
+	 */
+	public <T extends Component> T delete(T component, AjaxRequestTarget target) {
+
+		this.repeater.remove(component);
+		if (target != null)
+		{
+			target.appendJavaScript(String.format("Wicket.DOM.remove(Wicket.DOM.get('%s'));", component.getMarkupId()));
+		}
+		
+		return (T)component;
+	}
+

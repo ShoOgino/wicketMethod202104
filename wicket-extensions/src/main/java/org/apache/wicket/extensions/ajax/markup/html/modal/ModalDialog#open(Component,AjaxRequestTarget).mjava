@@ -1,0 +1,28 @@
+	/**
+	 * Open the dialog with a content.
+	 * <p>
+	 * The content will be removed on close of the dialog.
+	 * 
+	 * @param content
+	 *            the content
+	 * @param target
+	 *            an optional Ajax target
+	 * @return this
+	 * 
+	 * @see #close(AjaxRequestTarget)
+	 */
+	public ModalDialog open(Component content, AjaxRequestTarget target)
+	{
+		setContent(content);
+		removeContentOnClose = true;
+		
+		overlay.setVisible(true);
+
+		if (target != null)
+		{
+			target.add(this);
+		}
+
+		return this;
+	}
+

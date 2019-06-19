@@ -1,0 +1,27 @@
+		private void openDialog(AjaxRequestTarget target)
+		{
+			ModalFragment fragment = new ModalFragment(ModalDialog.CONTENT_ID);
+			if (stacked)
+			{
+				// stack a new dialog
+				ModalDialog dialog = new ModalDialog(stackedDialogs.newChildId())
+				{
+					@Override
+					public ModalDialog close(AjaxRequestTarget target)
+					{
+						return stackedDialogs.delete(this, target);
+					}
+				};
+				dialog.add(new DefaultTheme());
+				dialog.trapFocus();
+				dialog.closeOnEscape();
+				dialog.setContent(fragment);
+				stackedDialogs.append(dialog, target).open(target);
+			}
+			else
+			{
+				// use the nested dialog
+				nestedDialog.open(fragment, target);
+			}
+		}
+
