@@ -7,9 +7,9 @@
 	 */
 	private String cookieToDebugString(final Cookie cookie)
 	{
+		final LocalDate localDate = Instant.ofEpochMilli(cookie.getMaxAge()).atZone(ZoneId.systemDefault()).toLocalDate();
 		return "[Cookie " + " name = " + cookie.getName() + ", value = " + cookie.getValue() +
 			", domain = " + cookie.getDomain() + ", path = " + cookie.getPath() + ", maxAge = " +
-			Instants.localDateFormatter.format(Instant.ofEpochMilli(cookie.getMaxAge())) + 
-			"(" + cookie.getMaxAge() + ")" + "]";
+			localDate + "(" + cookie.getMaxAge() + ")" + "]";
 	}
 
