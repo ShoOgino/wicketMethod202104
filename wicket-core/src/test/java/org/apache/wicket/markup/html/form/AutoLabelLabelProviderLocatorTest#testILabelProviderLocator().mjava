@@ -1,0 +1,42 @@
+	@Test
+	void testILabelProviderLocator()
+	{
+		List<IEditPanelProvider> providers = new ArrayList<>();
+
+		providers.add(new IEditPanelProvider()
+		{
+			@Override
+			public IModel<String> getLabelText()
+			{
+				return Model.of("Example1");
+			}
+
+			@Override
+			public Panel createEditPanel(String id)
+			{
+				return new ILabelProviderLocatorPanel1(id);
+			}
+		});
+
+		providers.add(new IEditPanelProvider()
+		{
+			@Override
+			public IModel<String> getLabelText()
+			{
+				return Model.of("Example2");
+			}
+
+			@Override
+			public Panel createEditPanel(String id)
+			{
+				return new ILabelProviderLocatorPanel2(id);
+			}
+		});
+
+		EditPage editPage = new EditPage(providers);
+		tester.startPage(editPage);
+		tester.assertRenderedPage(EditPage.class);
+		tester.assertContains("for=\"dummy_text\"><span wicket:id=\"label\">Example1</span>");
+		tester.assertContains("for=\"dummy_dummy1_text\"><span wicket:id=\"label\">Example2</span>");
+	}
+

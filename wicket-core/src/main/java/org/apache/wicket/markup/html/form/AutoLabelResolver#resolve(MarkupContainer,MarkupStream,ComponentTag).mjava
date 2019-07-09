@@ -7,18 +7,24 @@
 			return null;
 		}
 
-		final String id = tag.getAttribute(getWicketNamespace(markupStream) + WICKET_FOR).trim();
+		// retrieve the relative path to the component
+		final String path = tag.getAttribute(getWicketNamespace(markupStream) + WICKET_FOR).trim();
 
-		Component component = findRelatedComponent(container, id);
+		Component component = findRelatedComponent(container, path);
 		if (component == null)
 		{
-			throw new ComponentNotFoundException("Could not find form component with id '" + id +
+			throw new ComponentNotFoundException("Could not find form component with path '" + path +
 				"' while trying to resolve wicket:for attribute");
+		}
+		// check if component implements ILabelProviderLocator
+		if (component instanceof ILabelProviderLocator)
+		{
+			component = ((ILabelProviderLocator) component).getAutoLabelComponent();
 		}
 
 		if (!(component instanceof ILabelProvider))
 		{
-			throw new WicketRuntimeException("Component pointed to by wicket:for attribute '" + id +
+			throw new WicketRuntimeException("Component pointed to by wicket:for attribute '" + path +
 				"' does not implement " + ILabelProvider.class.getName());
 		}
 
