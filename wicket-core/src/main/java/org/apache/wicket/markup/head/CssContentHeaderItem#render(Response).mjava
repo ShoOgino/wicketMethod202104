@@ -9,7 +9,10 @@
 			response.write("]>");
 		}
 
-		CssUtils.writeCss(response, getCss(), getId());
+		AttributeMap attributes = new AttributeMap();
+		attributes.putAttribute(CssUtils.ATTR_ID, getId());
+		attributes.putAttribute(CssUtils.ATTR_CSP_NONCE, getNonce());
+		CssUtils.writeInlineStyle(response, getCss(), attributes);
 
 		if (hasCondition)
 		{

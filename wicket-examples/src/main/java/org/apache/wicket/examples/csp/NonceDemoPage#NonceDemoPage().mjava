@@ -1,0 +1,23 @@
+	public NonceDemoPage()
+	{
+		super();
+		add(new Label("testNonceScript", getString("testNonceScript")));
+		add(new Label("testNoNonceScript", getString("testNoNonceScript")));
+		final Label clickMeCount = new Label("clickMeCount", clickMeCountModel);
+		clickMeCount.setOutputMarkupId(true);
+		add(clickMeCount);
+		add(new AjaxLink<String>("clickMe")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				clickMeCountModel.setObject(clickMeCountModel.getObject() + 1);
+
+				// target.add (works even without unsafe-eval)
+				target.add(clickMeCount);
+				// append javascript (won't work without unsafe-eval)
+				target.appendJavaScript("document.querySelector(\".click-me-text\").innerHTML = \"replaced\";");
+			}
+		}.setOutputMarkupId(true));
+	}
+

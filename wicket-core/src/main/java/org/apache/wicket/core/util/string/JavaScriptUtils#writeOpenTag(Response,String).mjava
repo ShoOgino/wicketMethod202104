@@ -2,15 +2,14 @@
 	 * 
 	 * @param response
 	 * @param id
+	 * @deprecated please use {@link #writeOpenTag(Response, AttributeMap)}
 	 */
+	@Deprecated
 	public static void writeOpenTag(final Response response, String id)
 	{
-		response.write("<script type=\"text/javascript\" ");
-		if (id != null)
-		{
-			response.write("id=\"" + Strings.escapeMarkup(id) + "\"");
-		}
-		response.write(">");
-		response.write(SCRIPT_CONTENT_PREFIX);
+		AttributeMap attributes = new AttributeMap();
+		attributes.putAttribute(ATTR_TYPE, "text/javascript");
+		attributes.putAttribute(ATTR_ID, id);
+		writeOpenTag(response, attributes);
 	}
 

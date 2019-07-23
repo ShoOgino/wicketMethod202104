@@ -3,7 +3,10 @@
 	{
 		if (Strings.isEmpty(getJavaScript()) == false)
 		{
-			JavaScriptUtils.writeJavaScript(response, getCompleteJavaScript());
+			AttributeMap attributes = new AttributeMap();
+			attributes.putAttribute(JavaScriptUtils.ATTR_TYPE, "text/javascript");
+			attributes.putAttribute(JavaScriptUtils.ATTR_CSP_NONCE, getNonce());
+			JavaScriptUtils.writeInlineScript(response, getCompleteJavaScript(), attributes);
 		}
 	}
 

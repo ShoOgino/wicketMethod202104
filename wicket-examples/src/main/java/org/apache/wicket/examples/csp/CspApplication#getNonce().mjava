@@ -1,0 +1,13 @@
+	public static String getNonce()
+	{
+		Session session = Session.get();
+		session.bind();
+		String nonce = session.getMetaData(NONCE_KEY);
+		if (nonce == null)
+		{
+			nonce = generateNonce();
+			session.setMetaData(NONCE_KEY, nonce);
+		}
+		return nonce;
+	}
+

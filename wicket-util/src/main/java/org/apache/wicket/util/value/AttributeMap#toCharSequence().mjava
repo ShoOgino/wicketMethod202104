@@ -1,0 +1,27 @@
+	/**
+	 * Representation as encoded markup attributes.
+	 * 
+	 * @see Strings#escapeMarkup(CharSequence)
+	 */
+	public CharSequence toCharSequence()
+	{
+		final AppendingStringBuffer buffer = new AppendingStringBuffer();
+
+		for (String key : keySet())
+		{
+			if (key != null) {
+				buffer.append(' ');
+				buffer.append(Strings.escapeMarkup(key));
+				
+				CharSequence value = getCharSequence(key);
+				if (value != null) {
+					buffer.append("=\"");
+					buffer.append(Strings.escapeMarkup(value));
+					buffer.append('"');
+				}
+			}
+		}
+
+		return buffer;
+	}
+

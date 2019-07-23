@@ -1,0 +1,10 @@
+	@Override
+	protected void init()
+	{
+		super.init();
+
+		setHeaderResponseDecorator(response -> new ResourceAggregator(new CspNonceHeaderResponse(response, getNonce())));
+		
+		mountPage("noncedemo", NonceDemoPage.class);
+	}
+

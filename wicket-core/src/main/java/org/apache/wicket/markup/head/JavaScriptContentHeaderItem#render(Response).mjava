@@ -8,7 +8,11 @@
 			response.write(getCondition());
 			response.write("]>");
 		}
-		JavaScriptUtils.writeJavaScript(response, getJavaScript(), getId());
+		AttributeMap attributes = new AttributeMap();
+		attributes.putAttribute(JavaScriptUtils.ATTR_TYPE, "text/javascript");
+		attributes.putAttribute(JavaScriptUtils.ATTR_ID, getId());
+		attributes.putAttribute(JavaScriptUtils.ATTR_CSP_NONCE, getNonce());
+		JavaScriptUtils.writeInlineScript(response, getJavaScript(), attributes);
 
 		if (hasCondition)
 		{
