@@ -17,14 +17,17 @@
 
 		try
 		{
-			SerializedPage serializedGot = (SerializedPage)store.getPage(context, p);
+			SerializedPage serializedGot = (SerializedPage) store.getPage(context, p);
 
-			MockPage got = (MockPage)serializer.deserialize(serializedGot.getData());
+			MockPage got = (MockPage) serializer.deserialize(serializedGot.getData());
 			assertEquals(p, got.getPageId());
 		}
-		catch (WicketRuntimeException ex)
+		catch (RuntimeException ex)
 		{
-			assertTrue(ex.getCause() instanceof GeneralSecurityException, "unable to decrypt with new key");
+			assertTrue(
+				ex.getCause() instanceof GeneralSecurityException
+					|| ex.getCause() instanceof StreamCorruptedException,
+				"unable to decrypt with new key");
 		}
 	}
 
