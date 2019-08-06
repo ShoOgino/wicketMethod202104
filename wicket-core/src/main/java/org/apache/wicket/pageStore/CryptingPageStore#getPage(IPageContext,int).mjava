@@ -9,10 +9,10 @@
 			{
 				throw new WicketRuntimeException("CryptingPageStore expects serialized pages");
 			}
-			SerializedPage serializedPage = (SerializedPage)page;
+			SerializedPage serializedPage = (SerializedPage) page;
 
 			byte[] encrypted = serializedPage.getData();
-			byte[] decrypted = getSessionData(context).decrypt(encrypted);
+			byte[] decrypted = getSessionData(context).decrypt(encrypted, crypter);
 
 			page = new SerializedPage(page.getPageId(), serializedPage.getPageType(), decrypted);
 		}

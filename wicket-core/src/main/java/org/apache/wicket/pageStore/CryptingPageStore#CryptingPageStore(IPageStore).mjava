@@ -7,5 +7,14 @@
 	public CryptingPageStore(IPageStore delegate)
 	{
 		super(delegate);
+		try
+		{
+			random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+		}
+		catch (GeneralSecurityException ex)
+		{
+			throw new WicketRuntimeException(ex);
+		}
+		crypter = newCrypter();
 	}
 
