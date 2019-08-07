@@ -10,6 +10,28 @@
 		form.add(new AjaxEditableLabel("text2"));
 		form.add(new AjaxEditableMultiLineLabel("text3"));
 		form.add(new AjaxEditableChoiceLabel<>("site", SITES));
+		
+		form.add(new AjaxEditableLabel<Integer>("number") {
+			@Override
+			protected IConverter<?> createConverter(Class<?> type)
+			{
+				return new IConverter<Integer>() {
+					@Override
+					public Integer convertToObject(String value, Locale locale)
+						throws ConversionException
+					{
+						return Integer.parseInt(value);
+					}
+					
+					@Override
+					public String convertToString(Integer value, Locale locale)
+					{
+						return String.format("%010d", value);
+					}
+				};
+			}
+		});
+		
 
 		form.add(new Label("refresh-counter", () -> "" + refreshCounter));
 
