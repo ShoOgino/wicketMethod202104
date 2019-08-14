@@ -1,0 +1,25 @@
+	/**
+	 * WICKET-6558
+	 */
+	@Test
+	public void lockAfterDetach() throws Exception
+	{
+		WicketTester tester = new WicketTester(new MockApplication());
+
+		Session session = tester.getSession();
+
+		session.getPageManager();
+		
+		session.detach();
+
+		try
+		{
+			session.getPageManager();
+			fail();
+		}
+		catch (WicketRuntimeException ex)
+		{
+			assertEquals("The request has been processed. Access to pages is no longer allowed", ex.getMessage());
+		}
+	}
+

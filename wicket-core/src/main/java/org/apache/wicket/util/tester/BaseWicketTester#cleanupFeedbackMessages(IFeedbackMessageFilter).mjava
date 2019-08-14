@@ -6,11 +6,20 @@
 	 */
 	protected void cleanupFeedbackMessages(IFeedbackMessageFilter filter)
 	{
-		ApplicationSettings applicationSettings = application.getApplicationSettings();
-		IFeedbackMessageFilter old = applicationSettings.getFeedbackMessageCleanupFilter();
-		applicationSettings.setFeedbackMessageCleanupFilter(filter);
-		getLastRenderedPage().detach();
-		getSession().detach();
-		applicationSettings.setFeedbackMessageCleanupFilter(old);
+		
+		IVisitor<Component, Void> clearer = new IVisitor<Component, Void>()
+		{
+			@Override
+			public void component(Component component, IVisit<Void> visit)
+			{
+				if (component.hasFeedbackMessage()) {
+					component.getFeedbackMessages().clear(filter);
+				}
+			}
+		};
+		clearer.component(getLastRenderedPage(), null);
+		getLastRenderedPage().visitChildren(clearer);
+		
+		getSession().getFeedbackMessages().clear(filter);
 	}
 
