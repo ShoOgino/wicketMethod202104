@@ -1,0 +1,39 @@
+	/**
+	 * Reads the value(s) of the request parameter with name <em>inputName</em>
+	 * from either the query parameters for <em>GET</em> method or the request body
+	 * for <em>POST</em> method.
+	 *
+	 * @param inputName
+	 *      The name of the request parameter
+	 * @return The parameter's value(s)
+	 */
+	protected List<StringValue> getParameterValues(String inputName)
+	{
+		String method = Form.METHOD_POST;
+		final Form form = findParent(Form.class);
+		final Request request = getRequest();
+		if (getRequest().getContainerRequest() instanceof HttpServletRequest)
+		{
+			method = ((HttpServletRequest) getRequest().getContainerRequest()).getMethod();
+		}
+		else if (form != null)
+		{
+			method = form.getMethod();
+		}
+
+		final IRequestParameters parameters;
+		switch (method)
+		{
+			case Form.METHOD_POST:
+				parameters = request.getPostParameters();
+				break;
+			case Form.METHOD_GET:
+				parameters = request.getQueryParameters();
+				break;
+			default:
+				parameters = EmptyRequestParameters.INSTANCE;
+		}
+
+		return parameters.getParameterValues(inputName);
+	}
+
