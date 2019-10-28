@@ -13,21 +13,21 @@
 
 			onBeforeRespond(response);
 
+			// queue up prepend javascripts. unlike other steps these are executed out of order so that
+			// components can contribute them from inside their onbeforerender methods.
+			writeEvaluations(response, prependJavaScripts);
+
 			// process added components
 			writeComponents(response, encoding);
 
 			onAfterRespond(response);
-
-			// queue up prepend javascripts. unlike other steps these are executed out of order so that
-			// components can contribute them from inside their onbeforerender methods.
-			writePriorityEvaluations(response, prependJavaScripts);
 
 			// execute the dom ready javascripts as first javascripts
 			// after component replacement
 			List<CharSequence> evaluationScripts = new ArrayList<>();
 			evaluationScripts.addAll(domReadyJavaScripts);
 			evaluationScripts.addAll(appendJavaScripts);
-			writeNormalEvaluations(response, evaluationScripts);
+			writeEvaluations(response, evaluationScripts);
 
 			writeFooter(response, encoding);
 		} finally {
