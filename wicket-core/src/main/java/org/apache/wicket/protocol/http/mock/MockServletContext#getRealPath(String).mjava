@@ -8,24 +8,14 @@
 	@Override
 	public String getRealPath(String name)
 	{
-		if (webappRoot == null)
-		{
-			return null;
+		try {
+			URL url = getResource(name);
+			if (url != null) {
+				return url.getFile();
+			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
 		}
-
-		if (name.startsWith("/"))
-		{
-			name = name.substring(1);
-		}
-
-		File f = new File(webappRoot, name);
-		if (!f.exists())
-		{
-			return null;
-		}
-		else
-		{
-			return f.getPath();
-		}
+		return null;
 	}
 
