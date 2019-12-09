@@ -1,6 +1,6 @@
 	/**
-	 * Creates a {@link JavaScriptReferenceHeaderItem} for the given reference.
-	 *
+	 * Creates a new {@code JavaScriptReferenceHeaderItem}.
+	 * 
 	 * @param reference
 	 *            resource reference pointing to the javascript resource
 	 * @param pageParameters
@@ -13,13 +13,13 @@
 	 *            the page has been loaded.
 	 * @param charset
 	 *            a non null value specifies the charset attribute of the script tag
-	 * @param condition
-	 *            the condition to use for Internet Explorer conditional comments. E.g. "IE 7".
-	 * @return A newly created {@link JavaScriptReferenceHeaderItem} for the given reference.
 	 */
-	public static JavaScriptReferenceHeaderItem forReference(ResourceReference reference,
-		PageParameters pageParameters, String id, boolean defer, String charset, String condition)
+	public JavaScriptReferenceHeaderItem(ResourceReference reference,
+		PageParameters pageParameters, String id, boolean defer, String charset)
 	{
-		return new JavaScriptReferenceHeaderItem(reference, pageParameters, id, defer, charset, condition);
+		super(defer, charset);
+		this.reference = Args.notNull(reference, "reference");
+		this.pageParameters = pageParameters;
+		setId(id);
 	}
 

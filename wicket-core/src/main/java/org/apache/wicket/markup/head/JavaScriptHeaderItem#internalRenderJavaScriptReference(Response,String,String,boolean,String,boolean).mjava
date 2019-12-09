@@ -1,15 +1,7 @@
 	protected final void internalRenderJavaScriptReference(Response response, String url,
-		String id, boolean defer, String charset, String condition, boolean async)
+		String id, boolean defer, String charset, boolean async)
 	{
 		Args.notEmpty(url, "url");
-
-		boolean hasCondition = Strings.isEmpty(condition) == false;
-		if (hasCondition)
-		{
-			response.write("<!--[if ");
-			response.write(condition);
-			response.write("]>");
-		}
 
 		AttributeMap attributes = new AttributeMap();
 		attributes.putAttribute(JavaScriptUtils.ATTR_TYPE, "text/javascript");
@@ -21,10 +13,5 @@
 		attributes.putAttribute(JavaScriptUtils.ATTR_SCRIPT_SRC, url);
 		attributes.putAttribute(JavaScriptUtils.ATTR_CSP_NONCE, getNonce());
 		JavaScriptUtils.writeScript(response, attributes);
-
-		if (hasCondition)
-		{
-			response.write("<![endif]-->\n");
-		}
 	}
 
