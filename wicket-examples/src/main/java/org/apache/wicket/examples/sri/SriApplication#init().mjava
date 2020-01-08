@@ -3,23 +3,7 @@
 	{
 		super.init();
 
-		setHeaderResponseDecorator(
-			response -> new ResourceAggregator(new SubresourceHeaderResponse(response)
-			{
-				@Override
-				protected void configure(ISubresourceHeaderItem item)
-				{
-					if (item instanceof JavaScriptReferenceHeaderItem) {
-						ResourceReference reference = ((JavaScriptReferenceHeaderItem)item).getReference();
-						
-						if (reference.equals(IntegrityDemoPage.JS)) {
-							String algorithm = "sha384";
-							String value = "yDSj1gWA4teUdCx2/5M0RsK1jovKR0RdUeeLXKU1gRpNWevoQDGhjHEd1R6Jb+FQ";
-							item.setIntegrity(algorithm + "-" + value);
-						}
-					}
-				}
-			}));
+		setHeaderResponseDecorator(response -> new ResourceAggregator(integrity.wrap(response)));
 
 		mountPage("integritydemo", IntegrityDemoPage.class);
 	}

@@ -1,0 +1,23 @@
+	/**
+	 * Wrap the given response
+	 * 
+	 * @param response
+	 *            response to add SRI to
+	 * @return wrapper
+	 */
+	public IHeaderResponse wrap(IHeaderResponse response)
+	{
+		return new SubresourceHeaderResponse(response)
+		{
+			@Override
+			protected void configure(ISubresourceHeaderItem item)
+			{
+				String integrity = getIntegrity(item);
+				if (integrity != null)
+				{
+					item.setIntegrity(integrity);
+				}
+			}
+		};
+	}
+

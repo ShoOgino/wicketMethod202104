@@ -1,0 +1,18 @@
+	public String getIntegrity(ISubresourceHeaderItem item)
+	{
+		if (item instanceof IReferenceHeaderItem)
+		{
+			ResourceReference reference = ((IReferenceHeaderItem)item).getReference();
+
+			IResource resource = reference.getResource();
+			if (resource instanceof IStaticCacheableResource)
+			{
+				IStaticCacheableResource cacheableResource = (IStaticCacheableResource)resource;
+				
+				return getIntegrity(reference, cacheableResource);
+			}
+		}
+
+		return null;
+	}
+
