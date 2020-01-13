@@ -1,0 +1,16 @@
+	/**
+	 * Adds any value to a directive for the 'reporting-only' CSP header. Use
+	 * {@link #addReportingDirective(CSPDirective, CSPDirectiveSandboxValue...)} and
+	 * {@link #addReportingDirective(CSPDirective, CSPDirectiveSrcValue...)} for the default values
+	 * for the sandbox and -src directives.
+	 */
+	public CSPSettingRequestCycleListener addReportingDirective(CSPDirective directive,
+			String... values)
+	{
+		for (String value : values)
+		{
+			addDirective(directive, new FixedCSPDirective(value), CSPHeaderMode.REPORT_ONLY);
+		}
+		return this;
+	}
+

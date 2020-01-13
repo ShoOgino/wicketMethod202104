@@ -1,0 +1,23 @@
+	@Test
+	public void testCSPSandboxDirectiveSetCorrectly()
+	{
+		CSPSettingRequestCycleListener cspListener = new CSPSettingRequestCycleListener();
+		final int cspSandboxDirectiveValueCount = CSPDirectiveSandboxValue.values().length;
+		for (int i = 0; i < cspSandboxDirectiveValueCount; i++)
+		{
+			final CSPDirectiveSandboxValue cspDirectiveValue = CSPDirectiveSandboxValue.values()[i];
+			if (cspDirectiveValue.equals(CSPDirectiveSandboxValue.EMPTY))
+				continue;
+			
+			cspListener.addBlockingDirective(SANDBOX, cspDirectiveValue);
+			cspListener.addReportingDirective(SANDBOX, cspDirectiveValue);
+		}
+
+		StringBuffer headerErrors = checkHeaders(cspListener);
+
+		if (headerErrors.length() > 0)
+		{
+			Assertions.fail(headerErrors.toString());
+		}
+	}
+

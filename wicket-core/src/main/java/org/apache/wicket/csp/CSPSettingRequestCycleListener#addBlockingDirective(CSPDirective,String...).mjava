@@ -1,0 +1,16 @@
+	/**
+	 * Adds any value to a directive for the 'blocking' CSP header. Use
+	 * {@link #addBlockingDirective(CSPDirective, CSPDirectiveSandboxValue...)} and
+	 * {@link #addBlockingDirective(CSPDirective, CSPDirectiveSrcValue...)} for the default values
+	 * for the sandbox and -src directives.
+	 */
+	public CSPSettingRequestCycleListener addBlockingDirective(CSPDirective directive,
+			String... values)
+	{
+		for (String value : values)
+		{
+			addDirective(directive, new FixedCSPDirective(value), CSPHeaderMode.BLOCKING);
+		}
+		return this;
+	}
+

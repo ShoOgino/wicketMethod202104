@@ -1,0 +1,11 @@
+	public String getNonce(RequestCycle cycle)
+	{
+		String nonce = cycle.getMetaData(NONCE_KEY);
+		if (nonce == null)
+		{
+			nonce = Base64.getEncoder().encodeToString(randomSupplier.apply(12));
+			cycle.setMetaData(NONCE_KEY, nonce);
+		}
+		return nonce;
+	}
+

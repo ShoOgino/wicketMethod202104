@@ -1,0 +1,16 @@
+	@Override
+	public void render(HeaderItem item)
+	{
+		while (item instanceof IWrappedHeaderItem)
+		{
+			item = ((IWrappedHeaderItem) item).getWrapped();
+		}
+
+		if (item instanceof AbstractCspHeaderItem)
+		{
+			((AbstractCspHeaderItem) item).setNonce(listener.getNonce(RequestCycle.get()));
+		}
+
+		super.render(item);
+	}
+

@@ -1,0 +1,13 @@
+	/**
+	 * A value for any of the -src directives can be a number of predefined values (for most of them
+	 * you can use {@link CSPDirectiveSrcValue}) or a correct URI.
+	 */
+	@Test
+	public void testInvalidSrcInputIsRejected()
+	{
+		CSPSettingRequestCycleListener cspListener = new CSPSettingRequestCycleListener();
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			cspListener.addBlockingDirective(DEFAULT_SRC, "abc?^()-_\'xyz");
+		});
+	}
+

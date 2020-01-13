@@ -1,0 +1,19 @@
+	// FF 36+, IE (incl. Edge), Safari en Opera Mini hebben nog geen (volledige)
+	// support voor CSP, wat betekent dat ze CHILD-SRC niet kennen en FRAME-SRC
+	// verwachten. Daarom in de CSPSettingRCL een hack om alle CHILD-SRC's die geset
+	// worden ook als FRAME-SRC te setten.
+	// Zie http://caniuse.com/#feat=contentsecuritypolicy2
+	@Test
+	public void testChildSrcDirectiveAlsoSetsFrameSrcDirective()
+	{
+		CSPSettingRequestCycleListener cspListener = new CSPSettingRequestCycleListener();
+		cspListener.addBlockingDirective(CHILD_SRC, SELF);
+		cspListener.addReportingDirective(CHILD_SRC, SELF);
+		StringBuffer headerErrors = checkHeaders(cspListener);
+
+		if (headerErrors.length() > 0)
+		{
+			Assertions.fail(headerErrors.toString());
+		}
+	}
+
