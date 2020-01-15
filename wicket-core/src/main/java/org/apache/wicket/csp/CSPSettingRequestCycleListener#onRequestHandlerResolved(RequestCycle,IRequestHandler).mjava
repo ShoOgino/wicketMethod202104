@@ -2,19 +2,11 @@
 	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
 	{
 		WebResponse webResponse = (WebResponse) cycle.getResponse();
-		if (!reportingDirectives.isEmpty())
-		{
-			String reportHeaderValue = getCSPHeaderValue(reportingDirectives, cycle);
-			webResponse.setHeader(HEADER_CSP_REPORT, reportHeaderValue);
-			if (addLegacyHeaders)
-				webResponse.setHeader(HEADER_CSP_REPORT_IE, reportHeaderValue);
-		}
-		if (!blockingDirectives.isEmpty())
-		{
-			String blockHeaderValue = getCSPHeaderValue(blockingDirectives, cycle);
-			webResponse.setHeader(HEADER_CSP, blockHeaderValue);
-			if (addLegacyHeaders)
-				webResponse.setHeader(HEADER_CSP_IE, blockHeaderValue);
-		}
+		configs.values().stream().filter(CSPConfiguration::isSet).forEach(config -> {
+			String headerValue = config.renderHeaderValue(cycle);
+			webResponse.setHeader(config.getMode().getHeader(), headerValue);
+			if (config.isAddLegacyHeaders())
+				webResponse.setHeader(config.getMode().getLegacyHeader(), headerValue);
+		});
 	}
 

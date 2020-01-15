@@ -1,0 +1,13 @@
+		// @returns "key1 value1a value1b; key2 value2a; key3 value3a value3b value3c"
+		public String renderHeaderValue(RequestCycle cycle)
+		{
+			return directives.entrySet()
+				.stream()
+				.map(e -> e.getKey().getValue() + " "
+					+ e.getValue()
+						.stream()
+						.map(r -> r.render(CSPSettingRequestCycleListener.this, cycle))
+						.collect(Collectors.joining(" ")))
+				.collect(Collectors.joining("; "));
+		}
+
