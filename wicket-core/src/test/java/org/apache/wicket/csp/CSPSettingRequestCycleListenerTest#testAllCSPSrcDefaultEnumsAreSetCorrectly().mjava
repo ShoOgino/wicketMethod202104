@@ -1,12 +1,8 @@
 	@Test
 	public void testAllCSPSrcDefaultEnumsAreSetCorrectly() throws NoSuchAlgorithmException
 	{
-		SecureRandom random = SecureRandom.getInstanceStrong();
-		CSPSettingRequestCycleListener cspListener = new CSPSettingRequestCycleListener(length -> {
-			byte[] ret = new byte[length];
-			random.nextBytes(ret);
-			return ret;
-		});
+		CSPSettingRequestCycleListener cspListener =
+			new CSPSettingRequestCycleListener(getApplication());
 
 		final int cspDirectiveCount = CSPDirective.values().length;
 		final int cspDirectiveSrcValueCount = CSPDirectiveSrcValue.values().length;

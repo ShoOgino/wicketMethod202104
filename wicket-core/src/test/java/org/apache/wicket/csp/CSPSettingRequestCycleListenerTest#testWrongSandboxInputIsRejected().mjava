@@ -1,7 +1,8 @@
 	@Test
 	public void testWrongSandboxInputIsRejected()
 	{
-		CSPSettingRequestCycleListener cspListener = new CSPSettingRequestCycleListener();
+		CSPSettingRequestCycleListener cspListener =
+			new CSPSettingRequestCycleListener(getApplication());
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			cspListener.blocking().addDirective(SANDBOX, SELF);
 		});

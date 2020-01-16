@@ -5,7 +5,8 @@
 	@Test
 	public void testMultipleSrcInputWithStarIsRejected2()
 	{
-		CSPSettingRequestCycleListener cspListener = new CSPSettingRequestCycleListener();
+		CSPSettingRequestCycleListener cspListener =
+			new CSPSettingRequestCycleListener(getApplication());
 		cspListener.blocking().addDirective(DEFAULT_SRC, WILDCARD);
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			cspListener.blocking().addDirective(DEFAULT_SRC, SELF);

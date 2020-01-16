@@ -1,12 +1,17 @@
 	@Override
 	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
 	{
+		if (!mustProtect(handler))
+			return;
+		
 		WebResponse webResponse = (WebResponse) cycle.getResponse();
-		configs.values().stream().filter(CSPConfiguration::isSet).forEach(config -> {
-			String headerValue = config.renderHeaderValue(cycle);
-			webResponse.setHeader(config.getMode().getHeader(), headerValue);
+		configs.entrySet().stream().filter(entry -> entry.getValue().isSet()).forEach(entry -> {
+			CSPHeaderMode mode = entry.getKey();
+			CSPHeaderConfiguration config = entry.getValue();
+			String headerValue = config.renderHeaderValue(this, cycle);
+			webResponse.setHeader(mode.getHeader(), headerValue);
 			if (config.isAddLegacyHeaders())
-				webResponse.setHeader(config.getMode().getLegacyHeader(), headerValue);
+				webResponse.setHeader(mode.getLegacyHeader(), headerValue);
 		});
 	}
 

@@ -1,0 +1,22 @@
+	/**
+	 * Renders this {@code CSPHeaderConfiguration} into an HTTP header. The returned String will be
+	 * in the form {@code "key1 value1a value1b; key2 value2a; key3 value3a value3b value3c"}.
+	 * 
+	 * @param listener
+	 *            The {@link CSPSettingRequestCycleListener} that renders the header.
+	 * @param cycle
+	 *            The current {@link RequestCycle}.
+	 * @return the rendered header.
+	 */
+	public String renderHeaderValue(CSPSettingRequestCycleListener listener, RequestCycle cycle)
+	{
+		return directives.entrySet()
+			.stream()
+			.map(e -> e.getKey().getValue() + " "
+				+ e.getValue()
+					.stream()
+					.map(r -> r.render(listener, cycle))
+					.collect(Collectors.joining(" ")))
+			.collect(Collectors.joining("; "));
+	}
+
