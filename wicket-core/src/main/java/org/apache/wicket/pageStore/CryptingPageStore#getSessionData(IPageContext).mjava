@@ -1,5 +1,6 @@
 	private SessionData getSessionData(IPageContext context)
 	{
-		return context.getSessionData(KEY, () -> new SessionData(crypter.generateKey(random)));
+		return context.getSessionData(KEY, () -> new SessionData(crypter
+			.generateKey(application.getSecuritySettings().getRandomSupplier().getRandom())));
 	}
 

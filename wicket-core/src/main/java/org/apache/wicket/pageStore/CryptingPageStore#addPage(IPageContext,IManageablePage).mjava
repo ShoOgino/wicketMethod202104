@@ -9,7 +9,8 @@
 		SerializedPage serializedPage = (SerializedPage) page;
 
 		byte[] decrypted = serializedPage.getData();
-		byte[] encrypted = getSessionData(context).encrypt(decrypted, crypter, random);
+		byte[] encrypted = getSessionData(context).encrypt(decrypted, crypter,
+			application.getSecuritySettings().getRandomSupplier().getRandom());
 
 		page = new SerializedPage(page.getPageId(), serializedPage.getPageType(), encrypted);
 
