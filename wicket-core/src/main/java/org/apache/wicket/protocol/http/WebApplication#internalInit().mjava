@@ -48,6 +48,12 @@
 
 		getAjaxRequestTargetListeners().add(new AjaxEnclosureListener());
 
+		cspEnforcer = newCspEnforcer();
+		getRequestCycleListeners().add(getCsp());
+		getHeaderResponseDecorators()
+			.add(response -> new CspNonceHeaderResponseDecorator(response, getCsp()));
+		getCsp().blocking().unsafeInline();
+		
 		// Configure the app.
 		configure();
 	}

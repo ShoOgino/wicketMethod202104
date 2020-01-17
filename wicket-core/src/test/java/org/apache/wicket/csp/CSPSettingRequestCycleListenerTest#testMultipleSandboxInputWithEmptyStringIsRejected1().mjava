@@ -1,8 +1,8 @@
 	@Test
 	public void testMultipleSandboxInputWithEmptyStringIsRejected1()
 	{
-		CSPSettingRequestCycleListener cspListener =
-			new CSPSettingRequestCycleListener(tester.getApplication());
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
 		cspListener.blocking().addDirective(SANDBOX, ALLOW_FORMS);
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			cspListener.blocking().addDirective(SANDBOX, EMPTY);

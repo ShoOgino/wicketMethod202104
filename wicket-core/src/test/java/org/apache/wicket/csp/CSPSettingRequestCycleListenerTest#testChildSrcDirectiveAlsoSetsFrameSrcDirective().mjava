@@ -6,8 +6,8 @@
 	@Test
 	public void testChildSrcDirectiveAlsoSetsFrameSrcDirective()
 	{
-		CSPSettingRequestCycleListener cspListener =
-			new CSPSettingRequestCycleListener(tester.getApplication());
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
 		cspListener.blocking().addDirective(CHILD_SRC, SELF);
 		cspListener.reporting().addDirective(CHILD_SRC, SELF);
 		StringBuffer headerErrors = checkHeaders(cspListener);

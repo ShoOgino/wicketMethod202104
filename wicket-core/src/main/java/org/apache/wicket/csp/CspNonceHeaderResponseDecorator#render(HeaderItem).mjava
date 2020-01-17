@@ -1,14 +1,17 @@
 	@Override
 	public void render(HeaderItem item)
 	{
-		while (item instanceof IWrappedHeaderItem)
+		if (listener.isNonceEnabled())
 		{
-			item = ((IWrappedHeaderItem) item).getWrapped();
-		}
+			while (item instanceof IWrappedHeaderItem)
+			{
+				item = ((IWrappedHeaderItem) item).getWrapped();
+			}
 
-		if (item instanceof AbstractCspHeaderItem)
-		{
-			((AbstractCspHeaderItem) item).setNonce(listener.getNonce(RequestCycle.get()));
+			if (item instanceof AbstractCspHeaderItem)
+			{
+				((AbstractCspHeaderItem) item).setNonce(listener.getNonce(RequestCycle.get()));
+			}
 		}
 
 		super.render(item);
