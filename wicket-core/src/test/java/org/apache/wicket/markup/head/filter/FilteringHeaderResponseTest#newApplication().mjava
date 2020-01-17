@@ -1,0 +1,20 @@
+	@Override
+	protected WebApplication newApplication()
+	{
+		return new MockApplication()
+		{
+			@Override
+			protected ContentSecurityPolicyEnforcer newCspEnforcer()
+			{
+				return new ContentSecurityPolicyEnforcer(this)
+				{
+					@Override
+					public String getNonce(RequestCycle cycle)
+					{
+						return "NONCE";
+					}
+				};
+			}
+		};
+	}
+

@@ -4,9 +4,7 @@
 	@Test
 	void nonce() throws Exception
 	{
-		tester.getApplication()
-			.getHeaderResponseDecorators()
-			.add(response -> new CspNonceHeaderResponse(response, "NONCE"));
+		tester.getApplication().getCsp().blocking().strict();
 		executeTest(CspNoncePage.class, "CspNoncePageExpected.html");
 	}
 
