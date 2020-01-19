@@ -1,12 +1,25 @@
+	/**
+	 * Builds a strict, very secure CSP configuration with the following directives:
+	 * {@code default-src 'none';} {@code script-src 'strict-dynamic' 'nonce-XYZ';}
+	 * {@code style-src 'nonce-XYZ';} {@code img-src 'self';} {@code connect-src 'self';}
+	 * {@code font-src 'self';} {@code manifest-src 'self';} {@code child-src 'self';}
+	 * {@code frame-src 'self'}. This will allow most resources to be loaded from {@code 'self'}
+	 * (the current host). Scripts and styles are only allowed when rendered with the correct nonce.
+	 * Wicket will automatically add the nonces to the {@code script} and {@code link} (CSS)
+	 * elements and to the headers.
+	 * 
+	 * @return {@code this} for chaining.
+	 */
 	public CSPHeaderConfiguration strict()
 	{
 		return clear().addDirective(DEFAULT_SRC, NONE)
+				.addDirective(SCRIPT_SRC, STRICT_DYNAMIC, NONCE)
 			.addDirective(STYLE_SRC, NONCE)
-			.addDirective(SCRIPT_SRC, STRICT_DYNAMIC, NONCE)
 			.addDirective(IMG_SRC, SELF)
+			.addDirective(CONNECT_SRC, SELF)
 			.addDirective(FONT_SRC, SELF)
-			.addDirective(CHILD_SRC, SELF)
 			.addDirective(MANIFEST_SRC, SELF)
-			.addDirective(CONNECT_SRC, SELF);
+			.addDirective(CHILD_SRC, SELF)
+			;
 	}
 

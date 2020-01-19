@@ -2,16 +2,25 @@
 	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
 	{
 		if (!mustProtect(handler) || !(cycle.getResponse() instanceof WebResponse))
+		{
 			return;
-		
+		}
+
 		WebResponse webResponse = (WebResponse) cycle.getResponse();
+		if (!webResponse.isHeaderSupported())
+		{
+			return;
+		}
+
 		configs.entrySet().stream().filter(entry -> entry.getValue().isSet()).forEach(entry -> {
 			CSPHeaderMode mode = entry.getKey();
 			CSPHeaderConfiguration config = entry.getValue();
 			String headerValue = config.renderHeaderValue(this, cycle);
 			webResponse.setHeader(mode.getHeader(), headerValue);
 			if (config.isAddLegacyHeaders())
+			{
 				webResponse.setHeader(mode.getLegacyHeader(), headerValue);
+			}
 		});
 	}
 
