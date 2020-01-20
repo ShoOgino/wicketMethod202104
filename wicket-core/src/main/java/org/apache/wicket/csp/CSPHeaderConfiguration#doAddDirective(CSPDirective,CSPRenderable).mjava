@@ -1,9 +1,9 @@
-	@SuppressWarnings("deprecation")
 	private CSPHeaderConfiguration doAddDirective(CSPDirective directive, CSPRenderable value)
 	{
 		// Add backwards compatible frame-src
 		// see http://caniuse.com/#feat=contentsecuritypolicy2
-		if (CSPDirective.CHILD_SRC.equals(directive))
+		if (CSPDirective.CHILD_SRC.equals(directive)
+			&& !directives.containsKey(CSPDirective.FRAME_SRC))
 		{
 			doAddDirective(CSPDirective.FRAME_SRC, value);
 		}
