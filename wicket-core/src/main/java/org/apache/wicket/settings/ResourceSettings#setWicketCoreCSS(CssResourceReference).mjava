@@ -10,7 +10,12 @@
 	 */
 	public ResourceSettings setWicketCoreCSS(CssResourceReference wicketCoreCSS)
 	{
-		this.wicketCoreCSS = wicketCoreCSS;
+		if (wicketCoreCSS == null)
+		{
+			throw new NullPointerException(
+				"Cannot set the Wicket core CSS to null, use disableWicketCoreCSS() instead.");
+		}
+		this.wicketCoreCSS = Optional.of(wicketCoreCSS);
 		return this;
 	}
 

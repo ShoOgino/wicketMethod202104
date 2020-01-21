@@ -47,6 +47,14 @@
 		setAjaxRequestTargetProvider(AjaxRequestHandler::new);
 
 		getAjaxRequestTargetListeners().add(new AjaxEnclosureListener());
+		
+		getHeaderContributorListeners().add(head -> {
+			Optional<CssResourceReference> wicketCoreCSS = getResourceSettings().getWicketCoreCSS();
+			if (wicketCoreCSS.isPresent())
+			{
+				head.render(CssHeaderItem.forReference(wicketCoreCSS.get()));
+			}
+		});
 
 		// Configure the app.
 		configure();
