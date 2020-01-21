@@ -49,11 +49,9 @@
 		getAjaxRequestTargetListeners().add(new AjaxEnclosureListener());
 		
 		getHeaderContributorListeners().add(head -> {
-			Optional<CssResourceReference> wicketCoreCSS = getResourceSettings().getWicketCoreCSS();
-			if (wicketCoreCSS.isPresent())
-			{
-				head.render(CssHeaderItem.forReference(wicketCoreCSS.get()));
-			}
+			getResourceSettings().getWicketCoreCSS().ifPresent(wicketCoreCSS -> {
+				head.render(CssHeaderItem.forReference(wicketCoreCSS));
+			});
 		});
 
 		// Configure the app.
