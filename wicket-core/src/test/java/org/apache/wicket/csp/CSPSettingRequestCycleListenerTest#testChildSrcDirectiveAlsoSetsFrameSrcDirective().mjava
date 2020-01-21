@@ -1,8 +1,7 @@
-	// FF 36+, IE (incl. Edge), Safari en Opera Mini hebben nog geen (volledige)
-	// support voor CSP, wat betekent dat ze CHILD-SRC niet kennen en FRAME-SRC
-	// verwachten. Daarom in de CSPSettingRCL een hack om alle CHILD-SRC's die geset
-	// worden ook als FRAME-SRC te setten.
-	// Zie http://caniuse.com/#feat=contentsecuritypolicy2
+	/**
+	 * Not all browsers support child-src and still expect frame-src. This test asserts that
+	 * frame-src is added when child-src is added.
+	 */
 	@Test
 	public void testChildSrcDirectiveAlsoSetsFrameSrcDirective()
 	{
@@ -10,9 +9,9 @@
 			new ContentSecurityPolicyEnforcer(tester.getApplication());
 		cspListener.blocking().add(CHILD_SRC, SELF);
 		cspListener.reporting().add(CHILD_SRC, SELF);
-		StringBuffer headerErrors = checkHeaders(cspListener);
+		List<String> headerErrors = checkHeaders(cspListener);
 
-		if (headerErrors.length() > 0)
+		if (!headerErrors.isEmpty())
 		{
 			Assertions.fail(headerErrors.toString());
 		}
