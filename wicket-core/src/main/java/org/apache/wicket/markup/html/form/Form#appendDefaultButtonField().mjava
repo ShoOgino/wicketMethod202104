@@ -4,6 +4,8 @@
 	 * will do a form submit using this component. This method is overridable as what we do is best
 	 * effort only, and may not what you want in specific situations. So if you have specific
 	 * usability concerns, or want to follow another strategy, you may override this method.
+	 * 
+	 * @see #addDefaultSubmitButtonHandler(IHeaderResponse)
 	 */
 	protected void appendDefaultButtonField()
 	{
@@ -16,13 +18,10 @@
 		buffer.append("<input type=\"text\" tabindex=\"-1\" autocomplete=\"off\"/>");
 
 		// add the submitting component
-		final Component submittingComponent = (Component)defaultSubmittingComponent;
-		buffer.append("<input type=\"submit\" tabindex=\"-1\" name=\"");
-		buffer.append(defaultSubmittingComponent.getInputName());
-		buffer.append("\" onclick=\" var b=document.getElementById('");
-		buffer.append(submittingComponent.getMarkupId());
-		buffer.append("'); if (b!=null&amp;&amp;b.onclick!=null&amp;&amp;typeof(b.onclick) != 'undefined') {  var r = Wicket.bind(b.onclick, b)(); if (r != false) b.click(); } else { b.click(); };  return false;\" ");
-		buffer.append(" />");
+		buffer
+			.append(String.format("<input id=\"%s\" type=\"submit\" tabindex=\"-1\" name=\"%s\" />",
+				getHiddenFieldsId(HIDDEN_FIELDS_SUBMIT_IDX),
+				defaultSubmittingComponent.getInputName()));
 
 		// close div
 		buffer.append("</div>");
