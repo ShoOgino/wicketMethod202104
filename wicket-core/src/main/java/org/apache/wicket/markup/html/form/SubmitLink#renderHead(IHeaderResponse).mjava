@@ -1,0 +1,12 @@
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+
+		if (isEnabledInHierarchy())
+		{
+			response.render(OnDomReadyHeaderItem.forScript("Wicket.Event.add('" + getMarkupId()
+				+ "', 'click', function(event) { " + getTriggerJavaScript() + " });"));
+		}
+	}
+
