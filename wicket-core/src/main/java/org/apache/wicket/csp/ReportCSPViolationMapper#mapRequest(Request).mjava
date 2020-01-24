@@ -1,0 +1,40 @@
+	@Override
+	public IRequestHandler mapRequest(Request request)
+	{
+		if (requestMatches(request))
+		{
+			return new IRequestHandler()
+			{
+				@Override
+				public void respond(IRequestCycle requestCycle)
+				{
+					try
+					{
+						HttpServletRequest httpRequest =
+							((ServletWebRequest) requestCycle.getRequest()).getContainerRequest();
+						log.error(reportToString(httpRequest));
+					}
+					catch (IOException e)
+					{
+						throw new WicketRuntimeException(e);
+					}
+				}
+
+				private String reportToString(HttpServletRequest httpRequest) throws IOException
+				{
+					try (StringWriter sw = new StringWriter())
+					{
+						char[] buffer = new char[MAX_LOG_SIZE];
+						int n = 0;
+						if (-1 != (n = httpRequest.getReader().read(buffer)))
+						{
+							sw.write(buffer, 0, n);
+						}
+						return sw.toString();
+					}
+				}
+			};
+		}
+		return null;
+	}
+
