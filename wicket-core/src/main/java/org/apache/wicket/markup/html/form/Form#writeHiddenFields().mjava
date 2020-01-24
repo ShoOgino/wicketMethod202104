@@ -8,9 +8,9 @@
 		// and have to write the url parameters as hidden fields
 		if (encodeUrlInHiddenFields())
 		{
-			String cssClass = getString(CssUtils.key(Form.class, "hidden-fields"));
-
-			getResponse().write(String.format("<div id=\"%s\" style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\" class=\"%s\">", getHiddenFieldsId(), cssClass));
+			getResponse().write(String.format("<div id=\"%s\" class=\"%s\">",
+				getHiddenFieldsId(HIDDEN_FIELDS_PARAMS_IDX),
+				getString(CssUtils.key(Form.class, "hidden-fields"))));
 
 			AppendingStringBuffer buffer = new AppendingStringBuffer();				
 
@@ -27,14 +27,9 @@
 		}
 
 		// if a default submitting component was set, handle the rendering of that
-		if (defaultSubmittingComponent instanceof Component)
+		if (hasDefaultSubmittingComponent())
 		{
-			final Component submittingComponent = (Component)defaultSubmittingComponent;
-			if (submittingComponent.isVisibleInHierarchy() &&
-				submittingComponent.isEnabledInHierarchy())
-			{
-				appendDefaultButtonField();
-			}
+			appendDefaultButtonField();
 		}
 	}
 
