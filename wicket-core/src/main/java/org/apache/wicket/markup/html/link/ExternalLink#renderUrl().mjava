@@ -1,0 +1,23 @@
+	/**
+	 * @return the URL for this link
+	 */
+	private String renderUrl()
+	{
+		Object hrefValue = getDefaultModelObject();
+		if (hrefValue == null)
+		{
+			return null;
+		}
+
+		String url = hrefValue.toString();
+		if (contextRelative)
+		{
+			if (url.length() > 0 && url.charAt(0) == '/')
+			{
+				url = url.substring(1);
+			}
+			url = UrlUtils.rewriteToContextRelative(url, RequestCycle.get());
+		}
+		return url;
+	}
+

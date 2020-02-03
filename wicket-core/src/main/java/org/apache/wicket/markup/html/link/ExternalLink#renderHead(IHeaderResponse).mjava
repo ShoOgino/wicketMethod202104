@@ -1,0 +1,35 @@
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+
+		String url = renderUrl();
+		if (isEnabledInHierarchy() && url != null)
+		{
+			if (popupSettings != null)
+			{
+				popupSettings.setTarget("'" + url + "'");
+				response.render(OnEventHeaderItem.forComponent(this, "click",
+					popupSettings.getPopupJavaScript()));
+				return;
+			}
+
+			ComponentTag tag = getMarkupTag();
+			// finally, when the tag is not a normal link
+			if (!(tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link")
+				|| tag.getName().equalsIgnoreCase("area")
+				|| tag.getName().equalsIgnoreCase("script")
+				|| tag.getName().equalsIgnoreCase("style")))
+			{
+				// generate an onclick JS handler directly
+				// in firefox when the element is quickly clicked 3 times a second request is
+				// generated during page load. This check ensures that the click is ignored
+				response.render(OnEventHeaderItem.forComponent(this, "click",
+					"var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; "
+						+ "if (win == window) { window.location.href='" + url
+						+ "'; } ;return false"));
+				return;
+			}
+		}
+	}
+
