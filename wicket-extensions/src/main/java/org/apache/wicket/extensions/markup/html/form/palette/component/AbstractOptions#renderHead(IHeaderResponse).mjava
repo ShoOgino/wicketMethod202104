@@ -1,0 +1,11 @@
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+
+		// A piece of javascript to avoid serializing the options during AJAX serialization.
+		response.render(OnDomReadyHeaderItem.forScript(
+			"if (typeof(Wicket) != \"undefined\" && typeof(Wicket.Form) != \"undefined\")"
+				+ "    Wicket.Form.excludeFromAjaxSerialization." + getMarkupId() + "='true';"));
+	}
+
