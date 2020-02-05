@@ -10,10 +10,11 @@
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onComponentTag(final ComponentTag tag)
+			public void renderHead(IHeaderResponse response)
 			{
-				super.onComponentTag(tag);
-				tag.getAttributes().put("onclick", Palette.this.getDownOnClickJS());
+				super.renderHead(response);
+				response.render(
+					OnEventHeaderItem.forComponent(this, "click", Palette.this.getDownOnClickJS()));
 			}
 		};
 	}
