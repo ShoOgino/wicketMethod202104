@@ -8,15 +8,6 @@
 		public HighlitableDataItem(String id, int index, IModel<T> model)
 		{
 			super(id, index, model);
-			add(new AttributeModifier("style", "background-color:#80b6ed;")
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public boolean isEnabled(Component component)
-				{
-					return HighlitableDataItem.this.highlite;
-				}
-			});
+			add(AttributeModifier.append("class", () -> highlite ? "highlight" : null));
 		}
 
