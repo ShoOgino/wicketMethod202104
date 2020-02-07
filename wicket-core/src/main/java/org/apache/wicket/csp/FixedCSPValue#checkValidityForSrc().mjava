@@ -1,0 +1,26 @@
+	@Override
+	public void checkValidityForSrc()
+	{
+		String strValue = value;
+		if ("data:".equals(strValue) || "https:".equals(strValue))
+		{
+			return;
+		}
+
+		// strip off "*." so "*.example.com" becomes "example.com" and we can check if
+		// it is a valid uri
+		if (strValue.startsWith("*."))
+		{
+			strValue = strValue.substring(2);
+		}
+
+		try
+		{
+			new URI(strValue);
+		}
+		catch (URISyntaxException urise)
+		{
+			throw new IllegalArgumentException("Illegal URI for -src directive", urise);
+		}
+	}
+

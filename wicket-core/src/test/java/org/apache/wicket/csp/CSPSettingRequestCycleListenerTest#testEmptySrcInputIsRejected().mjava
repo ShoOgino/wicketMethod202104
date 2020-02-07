@@ -1,0 +1,10 @@
+	@Test
+	public void testEmptySrcInputIsRejected()
+	{
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			cspListener.blocking().add(DEFAULT_SRC, "");
+		});
+	}
+

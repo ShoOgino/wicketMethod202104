@@ -1,0 +1,24 @@
+	@Test
+	public void testCSPSandboxDirectiveSetCorrectly()
+	{
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
+		final int cspSandboxDirectiveValueCount = CSPDirectiveSandboxValue.values().length;
+		for (int i = 0; i < cspSandboxDirectiveValueCount; i++)
+		{
+			final CSPDirectiveSandboxValue cspDirectiveValue = CSPDirectiveSandboxValue.values()[i];
+			if (cspDirectiveValue.equals(CSPDirectiveSandboxValue.EMPTY))
+				continue;
+
+			cspListener.blocking().add(SANDBOX, cspDirectiveValue);
+			cspListener.reporting().add(SANDBOX, cspDirectiveValue);
+		}
+
+		List<String> headerErrors = checkHeaders(cspListener);
+
+		if (!headerErrors.isEmpty())
+		{
+			Assertions.fail(headerErrors.toString());
+		}
+	}
+

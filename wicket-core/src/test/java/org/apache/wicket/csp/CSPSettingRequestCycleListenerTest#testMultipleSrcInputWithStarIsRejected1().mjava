@@ -1,0 +1,15 @@
+	/**
+	 * If {@code *} (asterisk) is used for any of the -src directives, it must be the only value for
+	 * that directive.
+	 */
+	@Test
+	public void testMultipleSrcInputWithStarIsRejected1()
+	{
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
+		cspListener.blocking().add(DEFAULT_SRC, SELF);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			cspListener.blocking().add(DEFAULT_SRC, WILDCARD);
+		});
+	}
+

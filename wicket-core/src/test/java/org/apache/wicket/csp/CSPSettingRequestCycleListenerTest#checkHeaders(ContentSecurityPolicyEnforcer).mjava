@@ -1,0 +1,43 @@
+	private List<String> checkHeaders(ContentSecurityPolicyEnforcer cspListener)
+	{
+		List<String> headerErrors = new ArrayList<>();
+		wicketTester.getRequestCycle().getListeners().add(cspListener);
+		wicketTester.executeUrl("/");
+		String cspHeaderValue =
+			wicketTester.getLastResponse().getHeader(CSPHeaderMode.BLOCKING.getHeader());
+		String cspReportingHeaderValue =
+			wicketTester.getLastResponse().getHeader(CSPHeaderMode.REPORT_ONLY.getHeader());
+
+		if (cspHeaderValue == null)
+		{
+			headerErrors.add(String.format("Header %s expected but either not present or empty",
+				CSPHeaderMode.BLOCKING.getHeader()));
+		}
+		if (cspReportingHeaderValue == null)
+		{
+			headerErrors.add(String.format("Header %s expected but either not present or empty",
+				CSPHeaderMode.REPORT_ONLY.getHeader()));
+		}
+
+		if (!headerErrors.isEmpty())
+		{
+			return headerErrors;
+		}
+
+		List<String> headerValueErrors = new ArrayList<>();
+		List<String> blockingHeaderValueErrors = checkCSPHeaderValues(cspHeaderValue);
+		List<String> reportingHeaderValueErrors = checkCSPHeaderValues(cspReportingHeaderValue);
+
+		if (!blockingHeaderValueErrors.isEmpty())
+		{
+			headerValueErrors.add("Blocking-mode CSP header value issues: "
+				+ blockingHeaderValueErrors.stream().collect(Collectors.joining("; ")) + ".");
+		}
+		if (!reportingHeaderValueErrors.isEmpty())
+		{
+			headerValueErrors.add("Reporting-mode CSP header value issues: "
+				+ reportingHeaderValueErrors.stream().collect(Collectors.joining("; ")) + ".");
+		}
+		return headerValueErrors;
+	}
+

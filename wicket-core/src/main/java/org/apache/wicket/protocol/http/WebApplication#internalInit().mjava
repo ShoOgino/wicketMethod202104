@@ -33,6 +33,12 @@
 
 		getResourceSettings().setFileCleaner(new FileCleaner());
 
+		cspEnforcer = newCspEnforcer();
+		getRequestCycleListeners().add(getCsp());
+		getHeaderResponseDecorators()
+			.add(response -> new CSPNonceHeaderResponseDecorator(response, getCsp()));
+		mount(new ReportCSPViolationMapper(getCsp()));
+		
 		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT)
 		{
 			// Add optional sourceFolder for resources.

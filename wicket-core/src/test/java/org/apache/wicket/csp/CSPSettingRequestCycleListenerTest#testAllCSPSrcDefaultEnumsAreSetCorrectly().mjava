@@ -1,0 +1,30 @@
+	@Test
+	public void testAllCSPSrcDefaultEnumsAreSetCorrectly() throws NoSuchAlgorithmException
+	{
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
+
+		final int cspDirectiveCount = CSPDirective.values().length;
+		final int cspDirectiveSrcValueCount = CSPDirectiveSrcValue.values().length;
+		for (int i = 0; i < Math.max(cspDirectiveCount, cspDirectiveSrcValueCount); i++)
+		{
+			final CSPDirective cspDirective = CSPDirective.values()[i % cspDirectiveCount];
+			// FRAME-SRC wordt al gezet door de aanroep voor CHILD-SRC
+			if (!FRAME_SRC.equals(cspDirective) && cspDirective.getValue().endsWith("-src"))
+			{
+				final CSPDirectiveSrcValue cspDirectiveValue =
+					CSPDirectiveSrcValue.values()[i % cspDirectiveSrcValueCount];
+				cspListener.blocking().add(cspDirective, cspDirectiveValue);
+
+				cspListener.reporting().add(cspDirective, cspDirectiveValue);
+			}
+		}
+
+		List<String> headerErrors = checkHeaders(cspListener);
+
+		if (!headerErrors.isEmpty())
+		{
+			Assertions.fail(headerErrors.toString());
+		}
+	}
+

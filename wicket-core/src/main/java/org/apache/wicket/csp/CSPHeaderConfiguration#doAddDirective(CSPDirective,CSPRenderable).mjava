@@ -1,0 +1,15 @@
+	private CSPHeaderConfiguration doAddDirective(CSPDirective directive, CSPRenderable value)
+	{
+		// Add backwards compatible frame-src
+		// see http://caniuse.com/#feat=contentsecuritypolicy2
+		if (CSPDirective.CHILD_SRC.equals(directive)
+			&& !directives.containsKey(CSPDirective.FRAME_SRC))
+		{
+			doAddDirective(CSPDirective.FRAME_SRC, value);
+		}
+		List<CSPRenderable> values = directives.computeIfAbsent(directive, x -> new ArrayList<>());
+		directive.checkValueForDirective(value, values);
+		values.add(value);
+		return this;
+	}
+

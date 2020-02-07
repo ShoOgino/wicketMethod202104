@@ -1,0 +1,21 @@
+	@Override
+	public void render(HeaderItem item)
+	{
+		if (listener.isNonceEnabled())
+		{
+			HeaderItem checkitem = item;
+			while (checkitem instanceof IWrappedHeaderItem)
+			{
+				checkitem = ((IWrappedHeaderItem) checkitem).getWrapped();
+			}
+
+			if (checkitem instanceof AbstractCspHeaderItem)
+			{
+				((AbstractCspHeaderItem) checkitem).setNonce(listener.getNonce(RequestCycle.get(),
+					RequestCycle.get().getActiveRequestHandler()));
+			}
+		}
+
+		super.render(item);
+	}
+
