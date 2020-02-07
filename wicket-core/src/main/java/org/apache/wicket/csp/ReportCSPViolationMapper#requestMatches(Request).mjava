@@ -1,0 +1,21 @@
+	private boolean requestMatches(Request request)
+	{
+		if (request instanceof ServletWebRequest)
+		{
+			if (!((ServletWebRequest) request).getContainerRequest().getMethod().equals("POST"))
+			{
+				return false;
+			}
+			for (CSPHeaderConfiguration curConfig : csp.getConfiguration().values())
+			{
+				String mountPath = curConfig.getReportUriMountPath();
+				if (mountPath != null
+					&& urlStartsWith(request.getUrl(), getMountSegments(mountPath)))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+

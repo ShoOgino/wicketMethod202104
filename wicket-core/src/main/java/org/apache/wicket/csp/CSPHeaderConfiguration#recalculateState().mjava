@@ -1,0 +1,20 @@
+	private CSPHeaderConfiguration recalculateState()
+	{
+		nonceEnabled = directives.values()
+			.stream()
+			.flatMap(List::stream)
+			.anyMatch(value -> value == CSPDirectiveSrcValue.NONCE);
+
+		reportUriMountPath = null;
+		List<CSPRenderable> reportValues = directives.get(CSPDirective.REPORT_URI);
+		if (reportValues != null && !reportValues.isEmpty())
+		{
+			CSPRenderable reportUri = reportValues.get(0);
+			if (reportUri instanceof RelativeURICSPValue)
+			{
+				reportUriMountPath = reportUri.toString();
+			}
+		}
+		return this;
+	}
+

@@ -1,0 +1,63 @@
+	private List<String> checkCSPHeaderValues(String cspHeaderValue)
+	{
+		Set<String> directiveValues = Stream.of(CSPDirective.values())
+			.map(CSPDirective::getValue)
+			.collect(Collectors.toSet());
+		Set<String> directiveSrcValues = Stream.of(CSPDirectiveSrcValue.values())
+			.map(CSPDirectiveSrcValue::getValue)
+			.collect(Collectors.toSet());
+		Set<String> directiveSandboxValues = Stream.of(CSPDirectiveSandboxValue.values())
+			.map(CSPDirectiveSandboxValue::getValue)
+			.collect(Collectors.toSet());
+
+		final List<String> errors = new ArrayList<>();
+		String[] directives = cspHeaderValue.split(";");
+		boolean hasChildSrc = false, hasFrameSrc = false;
+		for (String directive : directives)
+		{
+			directive = directive.trim();
+			String[] values = directive.split("\\s");
+			String directiveName = values[0];
+			if (!directiveValues.contains(directiveName))
+			{
+				errors.add(
+					String.format("Directive %s is not a valid directive name", directiveName));
+			}
+			else
+			{
+				if (CSPDirective.fromValue(directiveName).equals(FRAME_SRC))
+				{
+					hasFrameSrc = true;
+				}
+				if (CSPDirective.fromValue(directiveName).equals(CHILD_SRC))
+				{
+					hasChildSrc = true;
+				}
+				for (int i = 1; i < values.length; i++)
+				{
+					final String trimmedValue = values[i].trim();
+					final boolean isValidDefaultSrcValue =
+						directiveSrcValues.contains(trimmedValue);
+					final boolean isValidDefaultSandboxValue =
+						directiveSandboxValues.contains(trimmedValue);
+					if (!(isValidDefaultSrcValue || isValidDefaultSandboxValue
+						|| isValidDirectiveValue(trimmedValue)))
+					{
+						errors.add(
+							String.format("Value %s is not a valid directive value", trimmedValue));
+					}
+				}
+			}
+		}
+
+		if (hasFrameSrc != hasChildSrc)
+		{
+			String presentDirective = hasFrameSrc ? FRAME_SRC.getValue() : CHILD_SRC.getValue();
+			String notPresentDirective = !hasFrameSrc ? FRAME_SRC.getValue() : CHILD_SRC.getValue();
+			errors.add(String.format("Directive %s present without directive %s for fallback",
+				presentDirective, notPresentDirective));
+		}
+
+		return errors;
+	}
+
