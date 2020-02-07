@@ -38,7 +38,6 @@
 		getHeaderResponseDecorators()
 			.add(response -> new CSPNonceHeaderResponseDecorator(response, getCsp()));
 		mount(new ReportCSPViolationMapper(getCsp()));
-		getCsp().blocking().unsafeInline();
 		
 		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT)
 		{
@@ -48,7 +47,6 @@
 			{
 				getResourceSettings().getResourceFinders().add(new Path(resourceFolder));
 			}
-			getCsp().blocking().reportBack();
 		}
 		setPageRendererProvider(WebPageRenderer::new);
 		setSessionStoreProvider(HttpSessionStore::new);
