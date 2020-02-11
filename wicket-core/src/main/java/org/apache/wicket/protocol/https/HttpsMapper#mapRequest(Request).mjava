@@ -4,6 +4,11 @@
 		IRequestHandler handler = delegate.mapRequest(request);
 
 		Scheme desired = getDesiredSchemeFor(handler);
+		if (Scheme.ANY.equals(desired))
+		{
+			return handler;
+		}
+		
 		Scheme current = getSchemeOf(request);
 		if (!desired.isCompatibleWith(current))
 		{
