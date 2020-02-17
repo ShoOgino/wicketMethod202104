@@ -21,5 +21,16 @@
 				.add(CSPDirective.STYLE_SRC,
 						"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
 				.add(CSPDirective.FONT_SRC, "https://maxcdn.bootstrapcdn.com");
+		
+		getRequestCycleListeners().add(new IRequestCycleListener()
+		{
+			@Override
+			public void onEndRequest(RequestCycle cycle)
+			{
+				((WebResponse) cycle.getResponse()).addHeader("Server-Timing",
+					"server;desc=\"Wicket rendering time\";dur="
+						+ (System.currentTimeMillis() - cycle.getStartTime()));
+			}
+		});
 	}
 
