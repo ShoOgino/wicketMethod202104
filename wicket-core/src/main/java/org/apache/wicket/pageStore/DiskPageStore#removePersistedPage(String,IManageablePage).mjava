@@ -1,0 +1,15 @@
+	@Override
+	protected void removePersistedPage(String sessionIdentifier, IManageablePage page)
+	{
+		DiskData diskData = getDiskData(sessionIdentifier, false);
+		if (diskData != null)
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("Removing page with id '{}' in session with id '{}'", page.getPageId(), sessionIdentifier);
+			}
+			
+			diskData.removeData(page.getPageId());
+		}
+	}
+

@@ -20,10 +20,11 @@
 
 				if (clazz != null)
 				{
-					return (IHeaderRenderStrategy)clazz.newInstance();
+					return (IHeaderRenderStrategy)clazz.getDeclaredConstructor().newInstance();
 				}
 			}
-			catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex)
+			catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| NoSuchMethodException | InvocationTargetException ex)
 			{
 				// ignore
 			}

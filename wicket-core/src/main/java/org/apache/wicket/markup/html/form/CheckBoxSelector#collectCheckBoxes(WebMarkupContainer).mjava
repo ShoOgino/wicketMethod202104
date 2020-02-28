@@ -1,0 +1,18 @@
+	/**
+	 * Utility method to collect all {@link CheckBox}es inside a container.
+	 * 
+	 * @param container
+	 *            container with checkBoxes
+	 * @return all contained checkBoxes
+	 */
+	public static final Iterable<CheckBox> collectCheckBoxes(WebMarkupContainer container)
+	{
+		List<CheckBox> checkBoxes = new ArrayList<>();
+
+		container.<CheckBox, Void> visitChildren(CheckBox.class, (child, visit) -> {
+			checkBoxes.add(child);
+		});
+
+		return checkBoxes;
+	}
+

@@ -1,5 +1,5 @@
 	@Test
-	public void iteratorShouldAllowReplacingComponentAfterIterationStarted()
+	void iteratorShouldAllowReplacingComponentAfterIterationStarted()
 	{
 		WebMarkupContainer wmc = new WebMarkupContainer("id");
 		Label label1;
@@ -10,11 +10,11 @@
 
 		Iterator<Component> iterator = wmc.iterator();
 
-		Assert.assertThat(iterator.next(), is(equalToObject(label1)));
-		Assert.assertThat(iterator.next(), is(equalToObject(label2)));
+		assertEquals(label1, iterator.next());
+		assertEquals(label2, iterator.next());
 
 		wmc.replace(label3 = new Label("label1", "Label3"));
 
-		Assert.assertThat(iterator.hasNext(), is(false));
+		assertEquals(false, iterator.hasNext());
 	}
 

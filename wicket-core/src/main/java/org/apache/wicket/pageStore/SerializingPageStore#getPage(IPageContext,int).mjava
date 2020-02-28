@@ -1,0 +1,12 @@
+	@Override
+	public IManageablePage getPage(IPageContext context, int id)
+	{
+		IManageablePage page = getDelegate().getPage(context, id);
+
+		if (page instanceof SerializedPage)
+		{
+			page = (IManageablePage)serializer.deserialize(((SerializedPage)page).getData());
+		}
+		return page;
+	}
+

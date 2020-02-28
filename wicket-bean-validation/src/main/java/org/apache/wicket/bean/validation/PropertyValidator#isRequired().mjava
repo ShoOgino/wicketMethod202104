@@ -1,27 +1,34 @@
-	boolean isRequired()
+	/**
+	 * Should this property make the owning component required.
+	 * 
+	 * @return <code>true</code> if required
+	 * 
+	 * @see BeanValidationContext#isRequiredConstraint(ConstraintDescriptor)
+	 */
+	protected boolean isRequired()
 	{
-		List<NotNull> constraints = findNotNullConstraints();
+		BeanValidationContext config = BeanValidationConfiguration.get();
 
-		if (constraints.isEmpty())
+		HashSet<Class<?>> groups = new HashSet<Class<?>>(Arrays.asList(getGroups()));
+
+		Iterator<ConstraintDescriptor<?>> it = new ConstraintIterator(config.getValidator(), getProperty());
+		while (it.hasNext())
 		{
-			return false;
-		}
-
-		HashSet<Class<?>> validatorGroups = new HashSet<Class<?>>();
-		validatorGroups.addAll(Arrays.asList(getGroups()));
-
-		for (NotNull constraint : constraints)
-		{
-			if (canApplyToDefaultGroup(constraint) && validatorGroups.isEmpty())
+			ConstraintDescriptor<?> constraint = it.next();
+			
+			if (config.isRequiredConstraint(constraint))
 			{
-				return true;
-			}
-
-			for (Class<?> constraintGroup : constraint.groups())
-			{
-				if (validatorGroups.contains(constraintGroup))
+				if (canApplyToDefaultGroup(constraint) && groups.size() == 0)
 				{
 					return true;
+				}
+		
+				for (Class<?> constraintGroup : constraint.getGroups())
+				{
+					if (groups.contains(constraintGroup))
+					{
+						return true;
+					}
 				}
 			}
 		}

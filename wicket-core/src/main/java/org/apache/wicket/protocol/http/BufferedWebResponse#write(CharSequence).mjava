@@ -1,17 +1,34 @@
 	@Override
 	public void write(CharSequence sequence)
 	{
-		if (dataAction != null)
+		if (dataStream != null)
 		{
 			throw new IllegalStateException(
 				"Can't call write(CharSequence) after write(byte[]) has been called.");
 		}
 
-		if (charSequenceAction == null)
+		if (charSequenceBuilder == null)
 		{
-			charSequenceAction = new WriteCharSequenceAction();
-			actions.add(charSequenceAction);
+			StringBuilder builder = new StringBuilder(4096);
+			charSequenceBuilder = builder;
+			actions.add(ActionType.DATA.action(res ->
+			{
+				AppendingStringBuffer responseBuffer = new AppendingStringBuffer(builder);
+
+				List<IResponseFilter> responseFilters = Application.get()
+						.getRequestCycleSettings()
+						.getResponseFilters();
+
+				if (responseFilters != null)
+				{
+					for (IResponseFilter filter : responseFilters)
+					{
+						responseBuffer = filter.filter(responseBuffer);
+					}
+				}
+				res.write(responseBuffer);
+			}));
 		}
-		charSequenceAction.append(sequence);
+		charSequenceBuilder.append(sequence);
 	}
 

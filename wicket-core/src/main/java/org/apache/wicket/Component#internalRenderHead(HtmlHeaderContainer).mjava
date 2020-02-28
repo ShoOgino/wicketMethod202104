@@ -1,5 +1,5 @@
 	/**
-	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT USE IT.
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT USE IT!
 	 * 
 	 * Print to the web response what ever the component wants to contribute to the head section.
 	 * Make sure that all attached behaviors are asked as well.
@@ -23,7 +23,8 @@
 			IHeaderResponse response = container.getHeaderResponse();
 
 			// Allow component to contribute
-			if (response.wasRendered(this) == false)
+			boolean wasRendered = response.wasRendered(this);
+			if (wasRendered == false)
 			{
 				StringResponse markupHeaderResponse = new StringResponse();
 				Response oldResponse = getResponse();
@@ -45,8 +46,6 @@
 				}
 				// Then let the component itself to contribute to the header
 				renderHead(response);
-
-				response.markRendered(this);
 			}
 
 			// Then ask all behaviors
@@ -61,6 +60,11 @@
 						response.markRendered(pair);
 					}
 				}
+			}
+			
+			if (wasRendered == false)
+			{
+				response.markRendered(this);
 			}
 		}
 	}

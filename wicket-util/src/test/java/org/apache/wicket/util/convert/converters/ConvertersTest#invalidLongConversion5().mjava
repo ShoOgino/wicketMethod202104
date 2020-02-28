@@ -1,4 +1,4 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidLongConversion5()
 	{
 		LongConverter converter = new LongConverter();
@@ -7,6 +7,8 @@
 		final String biggerThanLong = "9223372036854776832";
 		assertEquals(1,
 			new BigDecimal(biggerThanLong).compareTo(BigDecimal.valueOf(Long.MAX_VALUE)));
-		converter.convertToObject(biggerThanLong, Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject(biggerThanLong, Locale.US);
+		});
 	}
 

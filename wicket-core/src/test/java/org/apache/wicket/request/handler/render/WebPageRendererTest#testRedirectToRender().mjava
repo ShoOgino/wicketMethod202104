@@ -3,14 +3,14 @@
 	 * is configured then no matter what are the fromUrl and toUrl a redirect will happen
 	 */
 	@Test
-	public void testRedirectToRender()
+	void testRedirectToRender()
 	{
 
 		TestPageRenderer renderer = new TestPageRenderer(handler);
 		renderer.redirectToRender = true;
 
 		when(provider.getPageInstance()).thenThrow(
-			new AssertionFailedError("no page instance should be created"));
+			new AssertionError("no page instance should be created"));
 
 		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("a"));
 

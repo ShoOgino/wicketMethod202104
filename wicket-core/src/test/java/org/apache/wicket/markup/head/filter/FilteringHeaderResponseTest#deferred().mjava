@@ -1,0 +1,13 @@
+	/**
+	 * WICKET-6498 all JavaScript resources have an "defer" attribute, all other JavaScript is
+	 * inside a {@code document.addEventListener('DOMContentLoaded', function() {}; } hook.
+	 */
+	@Test
+	void deferred() throws Exception
+	{
+		tester.getApplication()
+			.getHeaderResponseDecorators()
+			.add(response -> new JavaScriptDeferHeaderResponse(response));
+		executeTest(DeferredPage.class, "DeferredPageExpected.html");
+	}
+

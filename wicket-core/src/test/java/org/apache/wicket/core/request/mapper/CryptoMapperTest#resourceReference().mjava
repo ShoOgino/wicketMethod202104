@@ -2,7 +2,7 @@
 	 * Relative ResourceReferences, WICKET-3514
 	 */
 	@Test
-	public void resourceReference()
+	void resourceReference()
 	{
 		PackageResourceReference resource = new PackageResourceReference(getClass(),
 			"crypt/crypt.txt");
@@ -14,8 +14,8 @@
 
 		assertNotNull(requestHandler);
 		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
-		assertThat(requestHandler, instanceOf(ResourceReferenceRequestHandler.class));
-		ResourceReferenceRequestHandler handler = (ResourceReferenceRequestHandler) requestHandler;
+		assertThat(requestHandler).isInstanceOf(ResourceReferenceRequestHandler.class);
+		ResourceReferenceRequestHandler handler = (ResourceReferenceRequestHandler)requestHandler;
 
 		assertEquals(getClass(), handler.getResourceReference().getScope());
 		assertEquals("crypt/crypt.txt", handler.getResourceReference().getName());

@@ -2,14 +2,14 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void testSerialization() throws Exception
+	void testSerialization() throws Exception
 	{
 		// a simple worker that acquires a lock on page 5
 		class Locker extends Thread
 		{
 			private final PageAccessSynchronizer sync;
 
-			public Locker(PageAccessSynchronizer sync)
+			Locker(PageAccessSynchronizer sync)
 			{
 				this.sync = sync;
 			}
@@ -22,7 +22,7 @@
 		}
 
 		// set up a synchronizer and lock page 5 with locker1
-		final Duration timeout = Duration.seconds(30);
+		final Duration timeout = Duration.ofSeconds(30);
 		final PageAccessSynchronizer sync = new PageAccessSynchronizer(timeout);
 		Locker locker1 = new Locker(sync);
 
@@ -38,6 +38,6 @@
 		// locker2
 		Locker locker2 = new Locker(sync2);
 		locker2.run();
-		assertTrue(Duration.milliseconds(System.currentTimeMillis() - start).lessThan(timeout));
+		assertTrue(Duration.ofMillis(System.currentTimeMillis() - start).compareTo(timeout) < 0);
 	}
 

@@ -66,5 +66,35 @@
 			}
 
 		});
+		
+		WebMarkupContainer drop = new WebMarkupContainer("drop");
+		drop.add(new AjaxFileDropBehavior() {
+			protected void onFileUpload(AjaxRequestTarget target, List<FileUpload> files) {
+			    
+				// display uploaded info
+				if (files == null || files.isEmpty())
+				{
+					info("No file uploaded");
+				}
+				else
+				{
+				    for (FileUpload file : files) {
+				    	info("File-Name: " + file.getClientFileName() + " File-Size: " +
+				    		Bytes.bytes(file.getSize()).toString());
+				    }
+				}
+				
+				target.add(feedback);
+			}
+			
+			@Override
+			protected void onError(AjaxRequestTarget target, FileUploadException fux)
+			{
+				info(fux.getMessage());
+				
+				target.add(feedback);				
+			}
+		});
+		add(drop);
 	}
 

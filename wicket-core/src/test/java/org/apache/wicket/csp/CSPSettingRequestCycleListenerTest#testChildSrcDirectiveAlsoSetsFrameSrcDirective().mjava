@@ -1,0 +1,19 @@
+	/**
+	 * Not all browsers support child-src and still expect frame-src. This test asserts that
+	 * frame-src is added when child-src is added.
+	 */
+	@Test
+	public void testChildSrcDirectiveAlsoSetsFrameSrcDirective()
+	{
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
+		cspListener.blocking().add(CHILD_SRC, SELF);
+		cspListener.reporting().add(CHILD_SRC, SELF);
+		List<String> headerErrors = checkHeaders(cspListener);
+
+		if (!headerErrors.isEmpty())
+		{
+			Assertions.fail(headerErrors.toString());
+		}
+	}
+

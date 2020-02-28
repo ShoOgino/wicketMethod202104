@@ -1,0 +1,21 @@
+	/**
+	 * 
+	 * @param session
+	 *            key
+	 * @return a list of the last N page windows
+	 */
+	@Override
+	public List<IPersistedPage> getPersistedPages(String sessionIdentifier)
+	{
+		List<IPersistedPage> pages = new ArrayList<>();
+
+		DiskData diskData = getDiskData(sessionIdentifier, false);
+		if (diskData != null)
+		{
+			PageWindowManager windowManager = diskData.getManager();
+
+			pages.addAll(windowManager.getFileWindows());
+		}
+		return pages;
+	}
+

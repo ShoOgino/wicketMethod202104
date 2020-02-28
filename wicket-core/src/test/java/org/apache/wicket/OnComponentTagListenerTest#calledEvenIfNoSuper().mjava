@@ -1,0 +1,28 @@
+	@Test
+	void calledEvenIfNoSuper() {
+
+		class DoesntCallSuper extends WebMarkupContainer {
+			private DoesntCallSuper(String id) {
+				super(id);
+			}
+
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				// missing call to super on purpose
+			}
+		}
+
+		TestListener listener = new TestListener();
+		tester.getApplication().getOnComponentTagListeners().add(listener);
+
+		TestPage page = new TestPage();
+		page.c3 = new DoesntCallSuper(page.c3.getId());
+		page.replace(page.c3);
+
+		tester.startPage(page);
+
+		assertEquals(1, listener.components.getCount("c1"));
+		assertEquals(1, listener.components.getCount("c2"));
+		assertEquals(1, listener.components.getCount("c3"));
+	}
+

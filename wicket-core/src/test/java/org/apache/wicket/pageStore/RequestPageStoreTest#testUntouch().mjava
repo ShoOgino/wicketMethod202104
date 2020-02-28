@@ -1,0 +1,24 @@
+	@Test
+	void testUntouch()
+	{
+		MockPageStore mockStore = new MockPageStore();
+		
+		MockPageContext context = new MockPageContext();
+
+		RequestPageStore store = new RequestPageStore(mockStore);
+		
+		MockPage page = new MockPage(1);
+		
+		store.addPage(context, page);
+		
+		store.revertPage(context, page);
+		
+		assertTrue(mockStore.getPages().isEmpty(), "no page delegated before detach");
+		
+		store.detach(context);
+		
+		assertEquals(0, mockStore.getPages().size(), "untouched page not delegated on detach");
+		
+		assertNull(store.getPage(context, 1), "no page in request store");
+	}
+

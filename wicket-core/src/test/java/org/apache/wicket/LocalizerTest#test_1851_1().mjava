@@ -2,14 +2,15 @@
 	 * See https://issues.apache.org/jira/browse/WICKET-1851
 	 */
 	@Test
-	public void test_1851_1()
+	void test_1851_1()
 	{
 		MyMockPage page = new MyMockPage();
 
 		tester.getApplication().getResourceSettings().setThrowExceptionOnMissingResource(false);
 		tester.getApplication().getResourceSettings().setUseDefaultOnMissingResource(false);
 
-		String option = localizer.getStringIgnoreSettings("dummy.null", page.drop1, null, "default");
+		String option = localizer.getStringIgnoreSettings("dummy.null", page.drop1, null,
+			"default");
 		assertEquals("default", option);
 
 		option = localizer.getStringIgnoreSettings("dummy.null", page.drop1, null, null);
@@ -35,7 +36,7 @@
 		try
 		{
 			localizer.getString("dummy.null", page.drop1, null, null);
-			assertTrue("Expected an exception to happen", false);
+			assertTrue(false, "Expected an exception to happen");
 		}
 		catch (MissingResourceException ex)
 		{

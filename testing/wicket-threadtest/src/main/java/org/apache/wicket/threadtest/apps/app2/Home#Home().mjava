@@ -3,17 +3,6 @@
 	 */
 	public Home()
 	{
-
-		IModel<String> model = new AbstractReadOnlyModel<String>()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getObject()
-			{
-				return Pool.getConnection().getData();
-			}
-		};
-		add(new Label("label", model));
+		add(new Label("label", () -> Pool.getConnection().getData()));
 	}
 

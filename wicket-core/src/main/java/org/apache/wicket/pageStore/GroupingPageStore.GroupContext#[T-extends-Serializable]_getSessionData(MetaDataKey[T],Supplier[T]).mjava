@@ -1,0 +1,18 @@
+		@Override
+		public <T extends Serializable> T getSessionData(MetaDataKey<T> key, Supplier<T> defaultValue)
+		{
+			synchronized (sessionData)
+			{
+				T data = sessionData.getMetaData(group, key);
+				if (data == null) {
+					data = defaultValue.get();
+					
+					if (data != null) {
+						sessionData.setMetaData(group, key, data);
+					}
+				}
+				
+				return data;
+			}
+		}
+

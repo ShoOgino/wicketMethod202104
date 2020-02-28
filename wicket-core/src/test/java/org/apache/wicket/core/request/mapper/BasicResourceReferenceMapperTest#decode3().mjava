@@ -2,16 +2,17 @@
 	 *
 	 */
 	@Test
-	public void decode3()
+	void decode3()
 	{
 		Url url = Url.parse("wicket/resource/" + CLASS_NAME + "/reference2/name2?en_EN");
 		IRequestHandler handler = encoder.mapRequest(getRequest(url));
-		assertThat(handler, instanceOf(ResourceReferenceRequestHandler.class));
+		assertThat(handler).isInstanceOf(ResourceReferenceRequestHandler.class);
+		assertThat(handler).isInstanceOf(ResourceReferenceRequestHandler.class);
 		ResourceReferenceRequestHandler h = (ResourceReferenceRequestHandler)handler;
 		assertEquals(resource2, h.getResource());
 		assertEquals(new Locale("en", "en"), h.getLocale());
-		assertEquals(null, h.getStyle());
-		assertEquals(null, h.getVariation());
+		assertNull(h.getStyle());
+		assertNull(h.getVariation());
 		assertEquals(0, h.getPageParameters().getIndexedCount());
 		assertEquals(0, h.getPageParameters().getNamedKeys().size());
 	}

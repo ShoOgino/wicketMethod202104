@@ -1,11 +1,15 @@
+	/**
+	 * Overridden to keep track of the currently rendered component.
+	 * 
+	 * @see Component#internalRenderHead(org.apache.wicket.markup.html.internal.HtmlHeaderContainer)
+	 */
 	@Override
 	public boolean wasRendered(Object object)
 	{
 		boolean ret = super.wasRendered(object);
-		if (!ret && object instanceof Component || object instanceof Behavior)
+		if (!ret && object instanceof Component)
 		{
-			renderBase = object;
-			indexInRenderBase = 0;
+			renderBase = (Component)object;
 		}
 		return ret;
 	}

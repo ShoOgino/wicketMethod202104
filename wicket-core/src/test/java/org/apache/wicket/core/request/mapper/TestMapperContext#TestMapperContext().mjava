@@ -4,9 +4,17 @@
 	public TestMapperContext()
 	{
 		appName = APP_NAME + count++;
-		dataStore = new InMemoryPageStore();
-		pageStore = new DefaultPageStore(new JavaSerializer(appName), dataStore, 4);
-		pageManagerContext = new DummyPageManagerContext();
-		pageManager = new PageStoreManager(appName, pageStore, pageManagerContext);
+		
+		pageContext = new MockPageContext();
+		
+		InMemoryPageStore inMemoryPageStore = new InMemoryPageStore(appName, Integer.MAX_VALUE);
+		pageStore = new InSessionPageStore(inMemoryPageStore, 4, new JavaSerializer(appName));
+		pageManager = new PageManager(new RequestPageStore(pageStore)) {
+			@Override
+			protected IPageContext createPageContext()
+			{
+				return pageContext;
+			}
+		};
 	}
 

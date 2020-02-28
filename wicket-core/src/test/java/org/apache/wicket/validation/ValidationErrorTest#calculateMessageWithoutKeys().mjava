@@ -1,10 +1,10 @@
 	@Test
-	public void calculateMessageWithoutKeys()
+	void calculateMessageWithoutKeys()
 	{
 		String message = "foo message";
 		ValidationError error = new ValidationError(message);
 		Serializable errorMessage = error.getErrorMessage(new TestMessageSource());
-		assertThat(errorMessage, Matchers.instanceOf(ValidationErrorFeedback.class));
+		assertThat(errorMessage).isInstanceOf(ValidationErrorFeedback.class);
 		ValidationErrorFeedback vef = (ValidationErrorFeedback) errorMessage;
 		assertEquals(message, vef.getMessage());
 	}

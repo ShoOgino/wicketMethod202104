@@ -1,0 +1,17 @@
+	private void generateSessionsAndPages()
+	{
+		for (int i = 0; i < SESSION_COUNT; ++i)
+		{
+			sessionCounter.put(UUID.randomUUID().toString(), new AtomicInteger(0));
+		}
+		for (int i = 0; i < FILES_COUNT; ++i)
+		{
+			String session = randomSessionId();
+			SerializedPage page = createPage(session, nextSessionId(session));
+			long now = System.nanoTime();
+			pagesToSave.add(page);
+			long duration = System.nanoTime() - now;
+			saveTime.addAndGet((int)duration);
+		}
+	}
+

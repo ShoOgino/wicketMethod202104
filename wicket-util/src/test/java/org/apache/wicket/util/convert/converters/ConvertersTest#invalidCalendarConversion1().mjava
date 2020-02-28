@@ -1,7 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidCalendarConversion1()
 	{
 		CalendarConverter converter = new CalendarConverter();
-		converter.convertToObject("whatever", Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("whatever", Locale.US);
+		});
 	}
 

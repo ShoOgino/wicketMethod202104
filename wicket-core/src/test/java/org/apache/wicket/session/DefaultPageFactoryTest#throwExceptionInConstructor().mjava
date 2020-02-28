@@ -1,9 +1,12 @@
 	@Test
-	public void throwExceptionInConstructor()
+	void throwExceptionInConstructor()
 	{
-		expectedException.expect(WicketRuntimeException.class);
-		expectedException.expectMessage("Can't instantiate page using constructor 'public org.apache.wicket.session.DefaultPageFactoryTest$ThrowExceptionInConstructorPage()'. An exception has been thrown during construction!");
+		Exception e = assertThrows(WicketRuntimeException.class, () -> {
+			pageFactory.newPage(ThrowExceptionInConstructorPage.class);
+		});
 
-		pageFactory.newPage(ThrowExceptionInConstructorPage.class);
+		assertEquals(
+			"Can't instantiate page using constructor 'public org.apache.wicket.session.DefaultPageFactoryTest$ThrowExceptionInConstructorPage()'. An exception has been thrown during construction!",
+			e.getMessage());
 	}
 

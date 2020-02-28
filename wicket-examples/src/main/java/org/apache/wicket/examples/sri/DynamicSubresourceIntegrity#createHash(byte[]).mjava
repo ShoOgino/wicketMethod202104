@@ -1,0 +1,16 @@
+	/**
+	 * Create the hash.
+	 * 
+	 * <pre>
+	 * openssl dgst -sha384 -binary xy.js | openssl base64 -A
+	 * </pre>
+	 */
+	protected String createHash(byte[] bytes) throws NoSuchAlgorithmException
+	{
+		MessageDigest digest = MessageDigest.getInstance("SHA-384");
+
+		Encoder encoder = Base64.getEncoder();
+
+		return encoder.encodeToString(digest.digest(bytes));
+	}
+

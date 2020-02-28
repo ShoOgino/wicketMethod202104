@@ -1,0 +1,17 @@
+	@Override
+	protected void addPersistedPage(String sessionIdentifier, IManageablePage page)
+	{
+		if (page instanceof SerializedPage == false)
+		{
+			throw new WicketRuntimeException("FilePageStore works with serialized pages only");
+		}
+		SerializedPage serializedPage = (SerializedPage) page;
+
+		String type = serializedPage.getPageType();
+		byte[] data = serializedPage.getData();
+
+		writeFile(sessionIdentifier, serializedPage.getPageId(), type, data);
+
+		checkMaxSize(sessionIdentifier);
+	}
+

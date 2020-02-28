@@ -1,17 +1,17 @@
 	/**
-	 * The tests resolves pages by id as if they were existed in the page store.
-	 * These pages have no page parameters (i.e. page.getPageParameters() == null).
+	 * The tests resolves pages by id as if they were existed in the page store. These pages have no
+	 * page parameters (i.e. page.getPageParameters() == null).
 	 *
-	 * The request that the encoder does also has no parameters (neither in the path
-	 * nor in the query string) so the resolved page is assumed to be valid.
+	 * The request that the encoder does also has no parameters (neither in the path nor in the
+	 * query string) so the resolved page is assumed to be valid.
 	 */
 	@Test
-	public void decode3()
+	void decode3()
 	{
 		Url url = Url.parse(MOUNT_PATH + '/' + PAGE_CLASS_NAME + "?15");
 		IRequestHandler handler = encoder.mapRequest(getRequest(url));
 
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
 		checkPage(page, 15);
 	}

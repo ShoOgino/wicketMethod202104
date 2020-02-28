@@ -6,11 +6,14 @@
 	{
 		detachFeedback();
 
-		if (sessionInvalidated)
+		pageAccessSynchronizer.get().unlockAllPages();
+		RequestCycle.get().setMetaData(PAGES_UNLOCKED, true);
+
+		if (isSessionInvalidated())
 		{
 			invalidateNow();
 		}
-		else
+		else if (!isTemporary())
 		{
 			// WICKET-5103 container might have changed id
 			updateId();

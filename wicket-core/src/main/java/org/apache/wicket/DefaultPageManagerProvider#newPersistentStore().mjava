@@ -1,0 +1,16 @@
+	/**
+	 * Keep persistent copies of all pages on disk.
+	 * 
+	 * @see DiskPageStore
+	 * @see StoreSettings#getMaxSizePerSession()
+	 * @see StoreSettings#getFileStoreFolder()
+	 */
+	protected IPageStore newPersistentStore()
+	{
+		StoreSettings storeSettings = application.getStoreSettings();
+		Bytes maxSizePerSession = storeSettings.getMaxSizePerSession();
+		File fileStoreFolder = storeSettings.getFileStoreFolder();
+
+		return new DiskPageStore(application.getName(), fileStoreFolder, maxSizePerSession);
+	}
+

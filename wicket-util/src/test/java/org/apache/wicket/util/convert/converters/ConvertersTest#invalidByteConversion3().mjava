@@ -1,7 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidByteConversion3()
 	{
 		ByteConverter converter = new ByteConverter();
-		converter.convertToObject("256", Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("256", Locale.US);
+		});
 	}
 

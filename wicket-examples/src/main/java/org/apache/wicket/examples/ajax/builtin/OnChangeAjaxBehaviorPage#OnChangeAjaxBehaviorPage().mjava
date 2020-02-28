@@ -6,8 +6,12 @@
 		Form<Void> form = new Form<>("form");
 		add(form);
 
-		final TextField<String> field = new TextField<>("field", new Model<>(""));
+		final TextField<String> field = new TextField<>("field", inputModel);
 		form.add(field);
+
+		final Label userInput = new Label("userInput", inputModel);
+		userInput.setOutputMarkupId(true);
+		form.add(userInput);
 
 		final Label label = new Label("selectedValue", new Model<>(""));
 		label.setOutputMarkupId(true);
@@ -19,7 +23,7 @@
 			protected void onUpdate(AjaxRequestTarget target)
 			{
 				label.setDefaultModelObject(getValue(field.getDefaultModelObjectAsString()));
-				target.add(label);
+				target.add(label, userInput);
 			}
 		};
 		field.add(onChangeAjaxBehavior);

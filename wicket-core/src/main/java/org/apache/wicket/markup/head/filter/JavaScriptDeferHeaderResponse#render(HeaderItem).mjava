@@ -1,0 +1,20 @@
+	@Override
+	public void render(HeaderItem item)
+	{
+		while (item instanceof IWrappedHeaderItem) {
+			item = ((IWrappedHeaderItem)item).getWrapped();
+		}
+
+		if (item instanceof AbstractJavaScriptReferenceHeaderItem) {
+			((AbstractJavaScriptReferenceHeaderItem)item).setDefer(true);
+		} else if (item instanceof JavaScriptContentHeaderItem) {
+			item = new NativeOnDomContentLoadedHeaderItem(((JavaScriptContentHeaderItem)item).getJavaScript());
+		} else if (item instanceof OnDomReadyHeaderItem) {
+			item = new NativeOnDomContentLoadedHeaderItem(((OnDomReadyHeaderItem)item).getJavaScript());
+		} else if (item instanceof OnLoadHeaderItem) {
+			item = new NativeOnLoadHeaderItem(((OnLoadHeaderItem)item).getJavaScript());
+		}
+		
+		super.render(item);
+	}
+

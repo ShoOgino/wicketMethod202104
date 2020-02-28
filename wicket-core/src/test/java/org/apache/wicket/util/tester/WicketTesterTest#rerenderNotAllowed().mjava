@@ -3,10 +3,11 @@
 	 * permission anymore
 	 */
 	@Test
-	public void rerenderNotAllowed()
+	void rerenderNotAllowed()
 	{
 		tester.setExposeExceptions(false);
-		class YesNoPageAuthorizationStrategy extends IAuthorizationStrategy.AllowAllAuthorizationStrategy
+		class YesNoPageAuthorizationStrategy
+			extends IAuthorizationStrategy.AllowAllAuthorizationStrategy
 		{
 			private boolean allowed = true;
 
@@ -33,8 +34,7 @@
 		tester.assertRenderedPage(DummyHomePage.class);
 		strategy.allowed = false;
 		tester.startPage(start);
-		tester.assertRenderedPage(tester.getApplication()
-			.getApplicationSettings()
-			.getAccessDeniedPage());
+		tester.assertRenderedPage(
+			tester.getApplication().getApplicationSettings().getAccessDeniedPage());
 	}
 

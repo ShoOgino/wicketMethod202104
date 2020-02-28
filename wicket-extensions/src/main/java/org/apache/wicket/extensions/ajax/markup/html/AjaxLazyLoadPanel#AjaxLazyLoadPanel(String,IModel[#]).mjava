@@ -9,42 +9,5 @@
 		super(id, model);
 
 		setOutputMarkupId(true);
-
-		add(new AbstractDefaultAjaxBehavior()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void respond(final AjaxRequestTarget target)
-			{
-				if (state < 2)
-				{
-					Component component = getLazyLoadComponent(LAZY_LOAD_COMPONENT_ID);
-					AjaxLazyLoadPanel.this.replace(component);
-					setState((byte) 2);
-					AjaxLazyLoadPanel.this.onComponentLoaded(component, target);
-				}
-				target.add(AjaxLazyLoadPanel.this);
-
-			}
-
-			@Override
-			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
-			{
-				super.updateAjaxAttributes(attributes);
-				AjaxLazyLoadPanel.this.updateAjaxAttributes(attributes);
-			}
-
-			@Override
-			public void renderHead(final Component component, final IHeaderResponse response)
-			{
-				super.renderHead(component, response);
-				if (state < 2)
-				{
-					CharSequence js = getCallbackScript(component);
-					handleCallbackScript(response, js, component);
-				}
-			}
-		});
 	}
 

@@ -1,0 +1,14 @@
+	@Override
+	public <T> T getRequestData(MetaDataKey<T> key, Supplier<T> defaultValue)
+	{
+		T value = key.get(requestData);
+		if (value == null) {
+			value = defaultValue.get();
+			if (value != null) {
+				requestData = key.set(requestData, value);
+			}
+		}
+
+		return value;
+	}
+

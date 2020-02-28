@@ -22,21 +22,13 @@
 					// Find the license type
 					String licenseType = licenseHeaderHandler.getLicenseType(file);
 
-					if (licenseType == null)
-					{
-						failString.append("NONE");
-					}
-					else
-					{
-						failString.append(licenseType);
-					}
-
+					failString.append(Objects.requireNonNullElse(licenseType, "NONE"));
 					failString.append(' ').append(filename).append(LINE_ENDING);
 				}
 			}
 
 			System.out.println(failString);
-			fail(failString.toString());
+			throw new AssertionError(failString.toString());
 		}
 	}
 

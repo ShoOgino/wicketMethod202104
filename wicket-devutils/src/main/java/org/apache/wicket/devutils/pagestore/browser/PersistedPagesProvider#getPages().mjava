@@ -1,0 +1,22 @@
+	private List<IPersistedPage> getPages()
+	{
+		if (pages == null)
+		{
+			pages = new ArrayList<>();
+
+			if (sessionId.getObject() != null)
+			{
+				String sessId = sessionId.getObject();
+
+				IPersistentPageStore persistentPagesStore = store.getObject();
+
+				if (persistentPagesStore != null)
+				{
+					pages.addAll(persistentPagesStore.getPersistedPages(sessId));
+				}
+			}
+		}
+
+		return pages;
+	}
+

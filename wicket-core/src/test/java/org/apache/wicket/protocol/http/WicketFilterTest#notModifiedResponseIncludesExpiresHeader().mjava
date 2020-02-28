@@ -4,7 +4,7 @@
 	 * @throws ParseException
 	 */
 	@Test
-	public void notModifiedResponseIncludesExpiresHeader() throws IOException, ServletException,
+	void notModifiedResponseIncludesExpiresHeader() throws IOException, ServletException,
 		ParseException
 	{
 		try
@@ -47,12 +47,10 @@
 			});
 			assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
 			String responseExpiresHeader = response.getHeader("Expires");
-			assertNotNull("Expires header must be set on not modified response",
-				responseExpiresHeader);
+			assertNotNull(responseExpiresHeader, "Expires header must be set on not modified response");
 
 			Date responseExpires = headerDateFormat.parse(responseExpiresHeader);
-			assertTrue("Expected later than current date but was " + responseExpires,
-				responseExpires.after(new Date()));
+			assertTrue(responseExpires.after(new Date()), "Expected later than current date but was " + responseExpires);
 		}
 		finally
 		{

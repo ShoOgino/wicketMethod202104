@@ -2,7 +2,7 @@
 	 * <a href="https://issues.apache.org/jira/browse/WICKET-4046">WICKET-4046</a>
 	 */
 	@Test
-	public void pageProviderDontDeserializeOnePageTwice()
+	void pageProviderDontDeserializeOnePageTwice()
 	{
 		int oldState = 0;
 		int newState = 1;
@@ -13,7 +13,7 @@
 		// storing test page
 		TestMapperContext mapperContext = new TestMapperContext();
 		mapperContext.getPageManager().touchPage(testPage);
-		mapperContext.getPageManager().commitRequest();
+		mapperContext.getPageManager().detach();
 
 		// by cleaning session cache we make sure of not being testing the same in-memory instance
 		mapperContext.cleanSessionCache();
@@ -21,14 +21,14 @@
 		PageProvider pageProvider = mapperContext.new TestPageProvider(testPage.getPageId(), 0);
 
 		// simulation an test call to isNewPageInstance
-		boolean isNewPageInstance = pageProvider.isNewPageInstance();
-		assertFalse("test page is already stored", isNewPageInstance);
+		boolean isNewPageInstance = !pageProvider.hasPageInstance();
+		assertFalse(isNewPageInstance, "test page is already stored");
 
 		// changing some sate
 		StatefullMockPage providedPage = (StatefullMockPage)pageProvider.getPageInstance();
 		providedPage.state = newState;
 		mapperContext.getPageManager().touchPage(providedPage);
-		mapperContext.getPageManager().commitRequest();
+		mapperContext.getPageManager().detach();
 
 
 		mapperContext.cleanSessionCache();

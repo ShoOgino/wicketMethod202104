@@ -2,7 +2,7 @@
 	 * Test basic unmounting from a compound mapper.
 	 */
 	@Test
-	public void testUnmountSimple()
+	void testUnmountSimple()
 	{
 		CompoundRequestMapper compound = new CompoundRequestMapper();
 
@@ -16,15 +16,19 @@
 
 		tester.getApplication().unmount(MOUNT_PATH_1);
 
-		assertEquals("Compound size should be 3", 3, getCompoundRequestMapperSize(compound));
+		assertEquals(3, getCompoundRequestMapperSize(compound), "Compound size should be 3");
 
-		assertNull("Mount path 1 should not be mounted",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_1)));
+		assertNull(tester.getApplication().getRootRequestMapper().mapRequest(
+			createMockRequest(MOUNT_PATH_1)), "Mount path 1 should not be mounted");
 
-		assertTrue("Mount path 2 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_2)) instanceof EmptyRequestHandler);
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_2)) instanceof EmptyRequestHandler,
+			"Mount path 2 should match");
 
-		assertTrue("Mount path 3 should match",
-			tester.getApplication().getRootRequestMapper().mapRequest(createMockRequest(MOUNT_PATH_3)) instanceof EmptyRequestHandler);
+		assertTrue(
+			tester.getApplication().getRootRequestMapper().mapRequest(
+				createMockRequest(MOUNT_PATH_3)) instanceof EmptyRequestHandler,
+			"Mount path 3 should match");
 	}
 

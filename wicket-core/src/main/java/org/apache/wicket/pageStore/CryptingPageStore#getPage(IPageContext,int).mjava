@@ -1,0 +1,22 @@
+	@Override
+	public IManageablePage getPage(IPageContext context, int id)
+	{
+		IManageablePage page = getDelegate().getPage(context, id);
+
+		if (page != null)
+		{
+			if (page instanceof SerializedPage == false)
+			{
+				throw new WicketRuntimeException("CryptingPageStore expects serialized pages");
+			}
+			SerializedPage serializedPage = (SerializedPage) page;
+
+			byte[] encrypted = serializedPage.getData();
+			byte[] decrypted = getSessionData(context).decrypt(encrypted, crypter);
+
+			page = new SerializedPage(page.getPageId(), serializedPage.getPageType(), decrypted);
+		}
+
+		return page;
+	}
+

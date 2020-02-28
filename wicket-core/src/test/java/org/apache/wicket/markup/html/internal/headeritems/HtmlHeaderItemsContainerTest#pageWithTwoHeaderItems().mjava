@@ -1,10 +1,13 @@
 	/**
 	 * Only one <wicket:header-items/> is allowed only in <head>
+	 *
 	 * @see org.apache.wicket.markup.parser.filter.HtmlHeaderSectionHandler
 	 */
-	@Test(expected = MarkupException.class)
-	public void pageWithTwoHeaderItems()
+	@Test
+	void pageWithTwoHeaderItems()
 	{
-		tester.startPage(PageWithTwoHeaderItems.class);
+		assertThrows(MarkupException.class, () -> {
+			tester.startPage(PageWithTwoHeaderItems.class);
+		});
 	}
 

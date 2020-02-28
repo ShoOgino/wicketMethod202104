@@ -2,14 +2,14 @@
 	 * In production mode return http status 404 when a resource is blocked
 	 */
 	@Test
-	public void packageResourceBlockedException()
+	void packageResourceBlockedException()
 	{
 		DefaultExceptionMapper mapper = new DefaultExceptionMapper();
 		PackageResource.PackageResourceBlockedException x =
 				new PackageResource.PackageResourceBlockedException("test");
 		IRequestHandler handler = mapper.map(x);
-		assertThat(handler, instanceOf(ErrorCodeRequestHandler.class));
+		assertThat(handler).isInstanceOf(ErrorCodeRequestHandler.class);
 		ErrorCodeRequestHandler errorCodeRequestHandler = (ErrorCodeRequestHandler) handler;
-		assertThat(errorCodeRequestHandler.getErrorCode(), is(HttpServletResponse.SC_NOT_FOUND));
+		assertEquals(HttpServletResponse.SC_NOT_FOUND, errorCodeRequestHandler.getErrorCode());
 	}
 

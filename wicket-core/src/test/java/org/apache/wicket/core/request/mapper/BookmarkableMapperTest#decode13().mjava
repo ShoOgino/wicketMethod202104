@@ -8,7 +8,7 @@
 	 * {@link org.apache.wicket.core.request.mapper.IMapperContext#getPageIdentifier()}
 	 */
 	@Test
-	public void decode13()
+	void decode13()
 	{
 		final Url url = Url.parse(context.getBookmarkableIdentifier() + "/" + PAGE_CLASS_NAME);
 
@@ -48,8 +48,7 @@
 		};
 
 		IRequestHandler handler = encoder.mapRequest(request);
-		assertNotNull("A handler should be resolved for relative url to a bookmarkable page url!",
-			handler);
+		assertNotNull(handler, "A handler should be resolved for relative url to a bookmarkable page url!");
 
 		IRequestablePage page = ((IPageRequestHandler)handler).getPage();
 		assertEquals(page.getClass().getName(), PAGE_CLASS_NAME);

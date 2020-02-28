@@ -1,0 +1,14 @@
+	@Test
+	void removeAllPages()
+	{
+		IPageContext context = new MockPageContext(sessionId);
+		
+		pageStore.addPage(context, new SerializedPage(pageId, pageData));
+
+		assertNotNull(pageStore.getPage(context, pageId));
+
+		pageStore.removeAllPages(context);
+
+		assertNull(pageStore.getPage(context, pageId));
+	}
+

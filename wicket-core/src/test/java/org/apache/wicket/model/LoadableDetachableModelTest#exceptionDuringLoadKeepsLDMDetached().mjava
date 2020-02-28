@@ -2,7 +2,7 @@
 	 * Checks whether the LDM can escape recursive calls.
 	 */
 	@Test
-	public void exceptionDuringLoadKeepsLDMDetached()
+	void exceptionDuringLoadKeepsLDMDetached()
 	{
 		class ExceptionalLoad extends LoadableDetachableModel<Integer>
 		{
@@ -25,17 +25,17 @@
 
 		ExceptionalLoad ldm = new ExceptionalLoad();
 
-		assertThat(ldm.isAttached(), is(false));
+		assertEquals(false, ldm.isAttached());
 		try
 		{
-			assertThat(ldm.getObject(), is(1));
+			assertThat(ldm.getObject()).isEqualTo(1);
 			fail("shouldn't get here");
 		}
 		catch (RuntimeException e)
 		{
 		}
 		ldm.detach();
-		assertThat(ldm.isAttached(), is(false));
-		assertThat(ldm.detachCalled, is(true));
+		assertEquals(false, ldm.isAttached());
+		assertEquals(true, ldm.detachCalled);
 	}
 

@@ -1,7 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidLongConversion1()
 	{
 		LongConverter converter = new LongConverter();
-		converter.convertToObject("whatever", Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("whatever", Locale.US);
+		});
 	}
 

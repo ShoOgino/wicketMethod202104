@@ -8,11 +8,12 @@
 	 */
 	public AsynchronousPageStore(final IPageStore delegate, final int capacity)
 	{
-		this.delegate = Args.notNull(delegate, "delegate");
-		entries = new LinkedBlockingQueue<>(capacity);
-		entryMap = new ConcurrentHashMap<>();
+		super(delegate);
+		
+		queue = new LinkedBlockingQueue<>(capacity);
+		queueMap = new ConcurrentHashMap<>();
 
-		PageSavingRunnable savingRunnable = new PageSavingRunnable(delegate, entries, entryMap);
+		PageAddingRunnable savingRunnable = new PageAddingRunnable(delegate, queue, queueMap);
 		pageSavingThread = new Thread(savingRunnable, "Wicket-AsyncPageStore-PageSavingThread");
 		pageSavingThread.setDaemon(true);
 		pageSavingThread.start();

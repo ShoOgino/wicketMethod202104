@@ -1,8 +1,8 @@
 	/**
 	 *
 	 */
-	@Test(expected = StalePageException.class)
-	public void decode8()
+	@Test
+	void decode8()
 	{
 		Url url = Url.parse("wicket/page?4-6.5-a-b-c");
 
@@ -10,6 +10,8 @@
 
 		IRequestHandler handler = encoder.mapRequest(getRequest(url));
 
-		((IPageRequestHandler)handler).getPage();
+		assertThrows(StalePageException.class, () -> {
+			((IPageRequestHandler)handler).getPage();
+		});
 	}
 

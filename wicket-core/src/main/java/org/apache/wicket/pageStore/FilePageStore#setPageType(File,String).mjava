@@ -1,0 +1,22 @@
+	/**
+	 * Set the type of page on the given file.
+	 * <p>
+	 * This is an optional operation that silently fails in case of an error. 
+	 * 
+	 * @param file
+	 * @param pageType
+	 */
+	protected void setPageType(File file, String pageType)
+	{
+		try
+		{
+			UserDefinedFileAttributeView view = java.nio.file.Files
+				.getFileAttributeView(file.toPath(), UserDefinedFileAttributeView.class);
+			view.write(ATTRIBUTE_PAGE_TYPE, Charset.defaultCharset().encode(pageType));
+		}
+		catch (IOException ex)
+		{
+			log.debug("cannot set pageType for {}", file, ex);
+		}
+	}
+

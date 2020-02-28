@@ -1,0 +1,13 @@
+	@Override
+	protected void removePersistedPage(String sessionIdentifier, IManageablePage page)
+	{
+		File file = getPageFile(sessionIdentifier, page.getPageId(), false);
+		if (file.exists())
+		{
+			if (!file.delete())
+			{
+				log.warn("cannot remove page data for session {} page {}", sessionIdentifier, page.getPageId());
+			}
+		}
+	}
+

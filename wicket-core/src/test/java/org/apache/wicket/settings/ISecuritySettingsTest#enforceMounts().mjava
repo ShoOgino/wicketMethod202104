@@ -2,7 +2,7 @@
 	 * https://issues.apache.org/jira/browse/WICKET-3849
 	 */
 	@Test
-	public void enforceMounts()
+	void enforceMounts()
 	{
 		MockPageWithLink pageWithLink = new MockPageWithLink();
 		pageWithLink.add(new Link<Void>(MockPageWithLink.LINK_ID)
@@ -12,8 +12,8 @@
 			@Override
 			public void onClick()
 			{
-				throw new RedirectToUrlException("/wicket/bookmarkable/" +
-					UnknownPage.class.getName());
+				throw new RedirectToUrlException(
+					"/wicket/bookmarkable/" + UnknownPage.class.getName());
 			}
 		});
 
@@ -27,16 +27,18 @@
 		tester.startPage(pageWithLink);
 		tester.assertRenderedPage(MockPageWithLink.class);
 		tester.clickLink(MockPageWithLink.LINK_ID);
-		Assert.assertNull(tester.getLastRenderedPage());
+		assertNull(tester.getLastRenderedPage());
 
 		/*
-		 * Test that mounts are enforced when the root compound mapper does not directly contain the mounted mapper.
+		 * Test that mounts are enforced when the root compound mapper does not directly contain the
+		 * mounted mapper.
 		 */
-		tester.getApplication().setRootRequestMapper(new HttpsMapper(tester.getApplication().getRootRequestMapper(), new HttpsConfig()));
+		tester.getApplication().setRootRequestMapper(
+			new HttpsMapper(tester.getApplication().getRootRequestMapper(), new HttpsConfig()));
 
 		tester.startPage(pageWithLink);
 		tester.assertRenderedPage(MockPageWithLink.class);
 		tester.clickLink(MockPageWithLink.LINK_ID);
-		Assert.assertNull(tester.getLastRenderedPage());
+		assertNull(tester.getLastRenderedPage());
 	}
 

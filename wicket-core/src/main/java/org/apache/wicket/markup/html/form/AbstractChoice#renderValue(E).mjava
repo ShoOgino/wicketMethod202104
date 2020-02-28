@@ -1,0 +1,34 @@
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	CharSequence renderValue(E choice)
+	{
+		Object objectValue = renderer.getDisplayValue(choice);
+		Class<?> objectClass = (objectValue == null ? null : objectValue.getClass());
+
+		String displayValue = "";
+		if (objectClass != null && objectClass != String.class)
+		{
+			IConverter converter = getConverter(objectClass);
+			displayValue = converter.convertToString(objectValue, getLocale());
+		}
+		else if (objectValue != null)
+		{
+			displayValue = objectValue.toString();
+		}
+		
+		if (localizeDisplayValues())
+		{
+			String localized = getLocalizer().getString(getId() + "." + displayValue, this, "");
+			if (Strings.isEmpty(localized)) {
+				localized = getLocalizer().getString(displayValue, this, displayValue);
+			}
+			displayValue = localized;
+		}
+		
+		if (getEscapeModelStrings())
+		{
+			return escapeOptionHtml(displayValue);
+		}
+		
+		return displayValue;
+	}
+

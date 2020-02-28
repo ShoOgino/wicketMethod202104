@@ -1,6 +1,5 @@
 	/** Loads the test cases from a spread sheet in semi-colon separated format. */
-	@Parameters(name = "{0}")
-	public static List<Object[]> parameters()
+	private static Stream<TestCase> parameters()
 	{
 		try (InputStream is = ResourceReferenceLocatingTest.class
 			.getResourceAsStream("ResourceReferenceLocatingTest.csv"))
@@ -8,15 +7,16 @@
 			String csv = Streams.readString(is);
 			StringReader sr = new StringReader(csv);
 			BufferedReader br = new BufferedReader(sr);
-			List<Object[]> result = new ArrayList<>();
+			List<TestCase> result = new ArrayList<>();
 
 			String line = br.readLine(); // read header line
 			while ((line = br.readLine()) != null)
 			{
 				if (!line.isEmpty())
-					result.add(new Object[] { TestCase.fromLine(line) });
+					result.add(TestCase.fromLine(line));
 			}
-			return result;
+
+			return result.stream();
 		}
 		catch (Exception e)
 		{

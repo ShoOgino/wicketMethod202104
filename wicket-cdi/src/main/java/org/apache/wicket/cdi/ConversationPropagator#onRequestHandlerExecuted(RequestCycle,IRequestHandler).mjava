@@ -1,29 +1,32 @@
 	@Override
 	public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler)
 	{
-		Conversation conversation = getConversation(cycle);
-
-		if (conversation == null)
+		// propagate current non-transient conversation to the newly scheduled
+		// page
+		try
 		{
+			if (conversation.isTransient())
+			{
+				return;
+			}
+		} catch (ContextNotActiveException cnax)
+		{
+			logger.debug("There is no active context for the requested scope!", cnax);
 			return;
 		}
 
-		Page page = getPage(handler);
-
-		if (page == null)
+		if (propagation.propagatesVia(handler, getPage(handler)))
 		{
-			return;
-		}
+			logger.debug(
+					"Propagating non-transient conversation {} via page parameters of handler {}",
+					conversation.getId(), handler);
 
-		// apply auto semantics
-
-		autoEndIfNecessary(page, handler, conversation);
-		autoBeginIfNecessary(page, handler, conversation);
-
-		if (propagation.propagatesViaPage(page, handler))
-		{
-			// propagate a conversation across non-bookmarkable page instances
-			setConversationOnPage(conversation, page);
+			PageParameters parameters = getPageParameters(handler);
+			if (parameters != null)
+			{
+				parameters.set(CID, conversation.getId());
+				markPageWithConversationId(handler, conversation.getId());
+			}
 		}
 	}
 

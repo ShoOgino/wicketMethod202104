@@ -1,0 +1,23 @@
+	/**
+	 * Get a nested folder for the given name.
+	 * 
+	 * @param name name 
+	 * @param create
+	 * @return
+	 */
+	public File get(String name, final boolean create)
+	{
+		name = name.replace('*', '_');
+		name = name.replace('/', '_');
+		name = name.replace(':', '_');
+
+		String path = createPathFrom(name);
+
+		File folder = new File(base, path);
+		if (create && folder.exists() == false)
+		{
+			Files.mkdirs(folder);
+		}
+		return folder;
+	}
+

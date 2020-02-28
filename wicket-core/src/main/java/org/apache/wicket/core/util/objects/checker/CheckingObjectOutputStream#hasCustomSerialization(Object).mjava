@@ -1,0 +1,26 @@
+	/**
+	 * Some classes use {@link ObjectOutputStream.PutField} in their implementation of
+	 * <em>private void writeObject(ObjectOutputStream s) throws IOException</em> and this
+	 * (sometimes) breaks the introspection done by this class, and even crashes the JVM!
+	 *
+	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-6704">WICKET-6704</a>
+	 * @param obj The object to check
+	 * @return {@code true} if the object type is one of these special ones
+	 */
+	private boolean hasCustomSerialization(Object obj) {
+		return obj instanceof PropertyChangeSupport ||
+				obj instanceof VetoableChangeSupport ||
+				obj instanceof Permission ||
+				obj instanceof Permissions ||
+				obj instanceof BitSet ||
+				obj instanceof ConcurrentHashMap ||
+				obj instanceof Vector ||
+				obj instanceof InetAddress ||
+				obj instanceof SocketAddress ||
+				obj instanceof Locale ||
+				obj instanceof Random ||
+				obj instanceof ThreadLocalRandom ||
+				obj instanceof StringBuffer ||
+				obj instanceof Subject;
+	}
+

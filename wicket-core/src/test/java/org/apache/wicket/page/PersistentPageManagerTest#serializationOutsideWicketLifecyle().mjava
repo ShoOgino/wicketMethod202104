@@ -8,50 +8,45 @@
 	 * @throws IOException
 	 */
 	@Test
-	public void serializationOutsideWicketLifecyle() throws IOException, ClassNotFoundException
+	void serializationOutsideWicketLifecyle() throws IOException, ClassNotFoundException
 	{
 		// make sure no leaked threadlocals are present
 		ThreadContext.detach();
 
 		// create IPageManager (with IPageStore) and store a page instance
-		IPageManager pageManager = newPersistentPageManager(APP_NAME);
+		final AtomicReference<Object> sessionData = new AtomicReference<Object>(null);
+		
+		IPageManager pageManager = createPageManager(APP_NAME, sessionData);
+
+		// add a page
 		TestPage toSerializePage = new TestPage();
 		pageManager.touchPage(toSerializePage);
-		pageManager.commitRequest();
+		pageManager.detach();
 
 		// get the stored SessionEntry
-		Serializable sessionEntry = pageManager.getContext().getSessionAttribute(null);
+		assertNotNull(sessionData.get());
 
 		// destroy the manager and the store
 		pageManager.destroy();
 
 		// simulate persisting of the http sessions initiated by the web container
-		byte[] serializedSessionEntry = new JavaSerializer(APP_NAME).serialize(sessionEntry);
-		assertNotNull("Wicket needs to be able to serialize the session entry",
-			serializedSessionEntry);
+		byte[] serializedSessionData = new JavaSerializer(APP_NAME).serialize(sessionData.get());
+		assertNotNull(serializedSessionData, "Wicket needs to be able to serialize the session entry");
+
+		// WicketFilter is not initialized so there is no Application available yet
+		assertFalse(Application.exists(), "Worker thread should be unaware of Wicket application");
 
 		// simulate loading of the persisted http session initiated by the web container
 		// when starting an application
-		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(
-			serializedSessionEntry));
-
-		// WicketFilter is not initialized so there is no Application available yet
-		Assert.assertFalse("Worker thread should be unaware of Wicket application",
-			Application.exists());
-
-		assertEquals(APP_NAME, in.readObject());
+		sessionData.set(new JavaSerializer(APP_NAME).deserialize(serializedSessionData));
 
 		// without available IPageStore the read SessionEntry holds
 		// the IManageablePage itself, not SerializedPage
-		Serializable loadedSessionEntry = (Serializable)in.readObject();
-		assertNotNull(
-			"Wicket needs to be able to deserialize the session entry regardless the application availability",
-			loadedSessionEntry);
+		assertNotNull(sessionData.get(), "Wicket needs to be able to deserialize the session entry regardless the application availability");
 
 		// provide new IPageStore which will read IManageablePage's or SerializedPage's
 		// from the SessionEntry's
-		IPageManager newPageManager = newPersistentPageManager(APP_NAME);
-		newPageManager.getContext().setSessionAttribute(null, loadedSessionEntry);
+		IPageManager newPageManager = createPageManager(APP_NAME, sessionData);
 
 		TestPage deserializedPage = (TestPage)newPageManager.getPage(toSerializePage.getPageId());
 		assertNotNull(deserializedPage);

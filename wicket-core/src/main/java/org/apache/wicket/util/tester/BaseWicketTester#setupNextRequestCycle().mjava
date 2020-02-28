@@ -1,6 +1,7 @@
 	private void setupNextRequestCycle()
 	{
-		request = new MockHttpServletRequest(application, httpSession, servletContext, servletRequestLocale());
+		request = new MockHttpServletRequest(application, httpSession, servletContext,
+			servletRequestLocale());
 		request.setURL(request.getContextPath() + request.getServletPath() + "/");
 
 		// assign protocol://host:port to next request unless the last request was ajax
@@ -21,7 +22,8 @@
 		// Preserve response cookies in redirects
 		// XXX: is this really needed ? Browsers wont do that, but some
 		// Wicket tests assert that a cookie is in the response,
-		// even after redirects (see org.apache.wicket.util.cookies.SetCookieAndRedirectTest.statefulPage())
+		// even after redirects (see
+		// org.apache.wicket.util.cookies.SetCookieAndRedirectTest.statefulPage())
 		// They should assert that the cookie is in the next *request*
 		if (lastResponse != null)
 		{

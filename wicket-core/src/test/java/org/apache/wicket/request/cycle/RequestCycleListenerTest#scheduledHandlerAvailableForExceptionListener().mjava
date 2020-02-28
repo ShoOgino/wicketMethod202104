@@ -1,0 +1,34 @@
+	@Test
+	void scheduledHandlerAvailableForExceptionListener()
+	{
+		IRequestHandler scheduledHandler = new EmptyRequestHandler();
+
+		Application.get().getRequestCycleListeners().add(new IRequestCycleListener()
+		{
+			@Override
+			public IRequestHandler onException(RequestCycle cycle, Exception ex)
+			{
+				// scheduled still scheduled
+				assertEquals(scheduledHandler, cycle.find(scheduledHandler.getClass()).get());
+				
+				return new IRequestHandler()
+				{
+					@Override
+					public void respond(IRequestCycle requestCycle)
+					{
+						// no longer scheduled
+						assertNull(((RequestCycle)requestCycle).getRequestHandlerScheduledAfterCurrent());
+					}
+				};
+			}
+		});
+
+		RequestCycle cycle = newRequestCycle(requestCycle ->
+		{
+			// schedule and fail immediately
+			requestCycle.scheduleRequestHandlerAfterCurrent(scheduledHandler);
+			throw new WicketRuntimeException();
+		});
+		assertTrue(cycle.processRequestAndDetach());
+	}
+

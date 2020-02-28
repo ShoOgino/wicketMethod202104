@@ -2,7 +2,7 @@
 	 * Tests that when all the conditions fail the redirect_to_buffer should be used as a fallback
 	 */
 	@Test
-	public void testRedirectToBufferIsFallback()
+	void testRedirectToBufferIsFallback()
 	{
 		final AtomicBoolean stored = new AtomicBoolean(false);
 
@@ -40,7 +40,7 @@
 		};
 
 		when(page.isPageStateless()).thenReturn(false);
-		when(provider.isNewPageInstance()).thenReturn(false);
+		when(!provider.hasPageInstance()).thenReturn(false);
 
 		// needed for earlier checks
 		when(urlRenderer.getBaseUrl()).thenReturn(Url.parse("url1"));
@@ -50,6 +50,6 @@
 
 		verify(response, never()).write(any(byte[].class));
 		verify(response).sendRedirect(isNull());
-		Assert.assertTrue(stored.get());
+		assertTrue(stored.get());
 	}
 

@@ -1,0 +1,29 @@
+	/**
+	 * Test serialization of {@link FileSystemResource}
+	 */
+	@Test
+	void testSerialization() throws IOException, URISyntaxException
+	{
+		InputStream inputStream = null;
+		try
+		{
+			URL resource = FileSystemResourceReferenceTest.class.getResource("FileSystemResourceReference.txt");
+			Path path = FileSystemResourceReference.getPath(resource.toURI());
+			final FileSystemResource fileSystemResource = new FileSystemResource(path);
+			final FileSystemResource cloned = WicketObjects.cloneObject(fileSystemResource);
+
+			assertEquals(cloned.getSize(), 54);
+
+			// Content
+			inputStream = cloned.getInputStream();
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			IOUtils.copy(inputStream, outputStream);
+			assertEquals("FileSystemResourceReference.zip content in normal file",
+					outputStream.toString());
+		}
+		finally
+		{
+			IOUtils.closeQuietly(inputStream);
+		}
+	}
+

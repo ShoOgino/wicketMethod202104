@@ -1,0 +1,38 @@
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private <T> void writeData(IDataProvider<T> dataProvider, List<IExportableColumn<T, ?>> columns, Grid grid) throws IOException
+	{
+		long numberOfRows = dataProvider.size();
+		Iterator<? extends T> rowIterator = dataProvider.iterator(0, numberOfRows);
+		while (rowIterator.hasNext())
+		{
+			T row = rowIterator.next();
+
+			for (IExportableColumn<T, ?> col : columns)
+			{
+				IModel<?> dataModel = col.getDataModel(dataProvider.model(row));
+				
+				Object value = wrapModel(dataModel).getObject();
+				if (value != null)
+				{
+					Class<?> c = value.getClass();
+
+					String s;
+
+					IConverter converter = getConverterLocator().getConverter(c);
+
+					if (converter == null)
+					{
+						s = value.toString();
+					}
+					else
+					{
+						s = converter.convertToString(value, Session.get().getLocale());
+					}
+
+					grid.cell(quoteValue(s));
+				}
+			}
+			grid.row();
+		}
+	}
+

@@ -1,8 +1,8 @@
 	/**
-	 * 
+	 *
 	 */
 	@Test
-	public void testGetStringUseModel()
+	void testGetStringUseModel()
 	{
 		Session.get().setLocale(Locale.GERMAN);
 
@@ -10,12 +10,14 @@
 		model.put("user", "juergen");
 		model.put("rating", 4.5);
 
-		Assert.assertEquals("Expected string should be returned", "juergen gives 4,5 stars",
-			localizer.getString("test.substitute", null, new PropertyModel<String>(model, null),
-				"DEFAULT {user}"));
+		assertEquals(
+			"juergen gives 4,5 stars", localizer.getString("test.substitute", null,
+				new PropertyModel<String>(model, null), "DEFAULT {user}"),
+			"Expected string should be returned");
 
-		Assert.assertEquals("Expected string should be returned", "DEFAULT juergen",
+		assertEquals("DEFAULT juergen",
 			localizer.getString("test.substituteDoesNotExist", null,
-				new PropertyModel<HashMap<String, Object>>(model, null), "DEFAULT ${user}"));
+				new PropertyModel<HashMap<String, Object>>(model, null), "DEFAULT ${user}"),
+			"Expected string should be returned");
 	}
 

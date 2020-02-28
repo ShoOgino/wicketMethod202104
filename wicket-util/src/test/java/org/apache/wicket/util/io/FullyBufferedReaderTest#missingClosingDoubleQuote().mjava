@@ -5,15 +5,17 @@
 	 * 
 	 * @throws ParseException
 	 */
-	@Test
-	public void missingClosingDoubleQuote() throws ParseException
-	{
-		thrown.expect(ParseException.class);
-		thrown.expectMessage("Opening/closing quote not found for quote at (line 1, column 9)");
 
+	@Test
+	public void missingClosingDoubleQuote()
+	{
 		String testTag = "<a href=\"blabla>";
 		FullyBufferedReader fullyBufferedReader = new FullyBufferedReader(testTag);
 
-		fullyBufferedReader.findOutOfQuotes('>', 0);
+		final ParseException e = assertThrows(ParseException.class, () -> {
+			fullyBufferedReader.findOutOfQuotes('>', 0);
+		});
+
+		assertEquals("Opening/closing quote not found for quote at (line 1, column 9)", e.getMessage());
 	}
 

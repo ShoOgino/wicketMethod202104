@@ -1,0 +1,16 @@
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+		// Add inline script with nonce
+		response.render(JavaScriptHeaderItem.forScript(
+				"$(function(){$(\".test-nonce-script\").html(\"Text injected by script with nonce: success\");});",
+				"test-nonce-script"
+		));
+		// Add inline css with nonce
+		response.render(CssHeaderItem.forCSS(
+				".injected-style--with-nonce{color: green; font-weight: bold;}",
+				"injected-style-with-nonce")
+		);
+	}
+

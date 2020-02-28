@@ -1,5 +1,5 @@
 	@Test
-	public void getChildByTagName()
+	void getChildByTagName()
 	{
 		TagTester tester = TagTester.createTagByAttribute(
 			"<div id=\"id\">" +
@@ -9,11 +9,11 @@
 					"</label>" +
 				"</div>" +
 			"</div>", "id", "id");
-		assertThat(tester.getChild("DIV"), is(notNullValue())); // case-insensitive
+		assertNotNull(tester.getChild("DIV")); // case-insensitive
 		TagTester divClassRadioTagTester = tester.getChild("div");
-		assertThat(divClassRadioTagTester, is(notNullValue()));
+		assertNotNull(divClassRadioTagTester);
 		TagTester labelTagTester = divClassRadioTagTester.getChild("label");
 		String labelMarkup = labelTagTester.getValue();
-		assertThat(labelMarkup, endsWith(" One"));
+		assertThat(labelMarkup).endsWith(" One");
 	}
 

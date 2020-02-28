@@ -4,7 +4,7 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void applicationAndSessionAreExported() throws Exception
+	void applicationAndSessionAreExported() throws Exception
 	{
 		// bind the session so it can be found in TestSessionFilter
 		tester.getSession().bind();
@@ -20,14 +20,14 @@
 				{
 					TestSessionFilter sessionFilter = new TestSessionFilter(tester);
 
-					Assert.assertFalse(Application.exists());
-					Assert.assertFalse(Session.exists());
+					assertFalse(Application.exists());
+					assertFalse(Session.exists());
 
 					sessionFilter.doFilter(tester.getRequest(), tester.getResponse(),
 						new TestFilterChain());
 
-					Assert.assertFalse(Application.exists());
-					Assert.assertFalse(Session.exists());
+					assertFalse(Application.exists());
+					assertFalse(Session.exists());
 
 				}
 				catch (Exception e)
@@ -50,8 +50,8 @@
 			}
 		});
 		testThread.start();
-		testThread.join(Duration.seconds(1).getMilliseconds());
+		testThread.join(Duration.ofSeconds(1).toMillis());
 
-		Assert.assertTrue(failMessage.toString(), passed.get());
+		assertTrue(passed.get(), failMessage.toString());
 	}
 

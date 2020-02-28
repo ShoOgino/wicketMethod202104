@@ -1,0 +1,22 @@
+	@Override
+	public void removeAllPages(IPageContext context)
+	{
+		String sessionId = context.getSessionId(false);
+		if (sessionId == null) {
+			return;
+		}
+		
+		Iterator<PendingAdd> iterator = queue.iterator();
+		while (iterator.hasNext())
+		{
+			PendingAdd add = iterator.next(); 
+		
+			if (add.sessionId.equals(sessionId))
+			{
+				iterator.remove();
+			}
+		}
+		
+		getDelegate().removeAllPages(context);
+	}
+

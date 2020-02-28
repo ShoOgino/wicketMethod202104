@@ -5,9 +5,9 @@
 			@Override
 			protected void onPush(WebSocketRequestHandler handler, IWebSocketPushMessage message)
 			{
-				Assert.assertThat(message, CoreMatchers.instanceOf(WebSocketTesterBehaviorTest.BroadcastMessage.class));
+				assertTrue(message instanceof WebSocketTesterBehaviorTest.BroadcastMessage);
 				WebSocketTesterBehaviorTest.BroadcastMessage broadcastMessage = (WebSocketTesterBehaviorTest.BroadcastMessage) message;
-				Assert.assertSame(expectedMessage, broadcastMessage);
+				assertSame(expectedMessage, broadcastMessage);
 
 				String pushedMessage = broadcastMessage.getText().toUpperCase();
 

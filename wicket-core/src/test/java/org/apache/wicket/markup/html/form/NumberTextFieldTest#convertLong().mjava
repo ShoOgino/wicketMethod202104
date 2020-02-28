@@ -2,13 +2,13 @@
 	 * WICKET-4884, WICKET-3591
 	 */
 	@Test
-	public void convertLong()
+	void convertLong()
 	{
 		TestPage<Long> testPage = new TestPage<Long>();
 		testPage.textField.setType(Long.class);
-		testPage.textField.setMinimum(new Long("0"));
-		testPage.textField.setMaximum(new Long("100"));
-		testPage.textField.setModelObject(new Long("0"));
+		testPage.textField.setMinimum(Long.valueOf("0"));
+		testPage.textField.setMaximum(Long.valueOf("100"));
+		testPage.textField.setModelObject(Long.valueOf("0"));
 		tester.startPage(testPage);
 
 		String response = tester.getLastResponseAsString();
@@ -17,6 +17,6 @@
 		FormTester formTester = tester.newFormTester(testPage.form.getId());
 		formTester.setValue(testPage.textField.getId(), "50");
 		formTester.submit();
-		assertEquals(new Long("50"), testPage.textField.getDefaultModelObject());
+		assertEquals(Long.valueOf("50"), testPage.textField.getDefaultModelObject());
 	}
 

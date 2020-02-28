@@ -1,9 +1,7 @@
 	/**
-	 * @throws Exception
 	 */
-	@Test(expected = ListenerInvocationNotAllowedException.class)
-	public void disabledParent() throws Exception
-	{
+	@Test
+	void disabledParent() {
 		TestPage page = new TestPage();
 		page.enabled = false;
 		tester.startPage(page);
@@ -14,6 +12,9 @@
 		assertFalse(check.isEnabledInHierarchy());
 
 		// nothing should change with a submit that changes no values
-		tester.newFormTester("container:form").submit();
+
+		assertThrows(ListenerInvocationNotAllowedException.class, () -> {
+			tester.newFormTester("container:form").submit();
+		});
 	}
 

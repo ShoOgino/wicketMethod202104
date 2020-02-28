@@ -6,12 +6,12 @@
 	 * the requested and the found page classes do not match.
 	 */
 	@Test
-	public void ignorePageFoundByIdIfItsClassDoesntMatch()
+	void ignorePageFoundByIdIfItsClassDoesntMatch()
 	{
 		TestMapperContext mapperContext = new TestMapperContext();
 		Page page = new TestPage();
 		mapperContext.getPageManager().touchPage(page);
-		mapperContext.getPageManager().commitRequest();
+		mapperContext.getPageManager().detach();
 
 		// by cleaning session cache we make sure of not being testing the same in-memory instance
 		mapperContext.cleanSessionCache();

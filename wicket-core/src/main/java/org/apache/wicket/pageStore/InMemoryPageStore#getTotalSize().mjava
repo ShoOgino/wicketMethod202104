@@ -1,0 +1,19 @@
+	@Override
+	public Bytes getTotalSize()
+	{
+		int size = 0;
+
+		for (MemoryData data : datas.values())
+		{
+			synchronized (data)
+			{
+				for (IManageablePage page : data)
+				{
+					size += getSize(page);
+				}
+			}
+		}
+
+		return Bytes.bytes(size);
+	}
+

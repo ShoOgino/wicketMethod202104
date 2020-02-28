@@ -1,14 +1,11 @@
-	/** {@inheritDoc} */
 	@Override
 	public void renderHead(IHeaderResponse response)
 	{
-		if (!isRootForm() && isMultiPart())
+		super.renderHead(response);
+
+		if (hasDefaultSubmittingComponent())
 		{
-			// register some metadata so we can later properly handle multipart ajax posts for
-			// embedded forms
-			registerJavaScriptNamespaces(response);
-			response.render(JavaScriptHeaderItem.forScript("Wicket.Forms[\"" + getMarkupId() +
-				"\"]={multipart:true};", Form.class.getName() + '.' + getMarkupId() + ".metadata"));
+			addDefaultSubmitButtonHandler(response);
 		}
 	}
 

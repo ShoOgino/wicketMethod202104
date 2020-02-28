@@ -1,0 +1,18 @@
+	/**
+	 * Custom format for date in export.
+	 */
+	@Override
+	protected IConverter<?> createConverter(Class<?> type)
+	{
+		if (type == Date.class) {
+			return new DateConverter() {
+				@Override
+				public DateFormat getDateFormat(Locale locale)
+				{
+					return (DateFormat) DateFormat.getDateInstance(DateFormat.LONG, locale).clone();
+				}
+			};
+		}
+		return null;
+	}
+

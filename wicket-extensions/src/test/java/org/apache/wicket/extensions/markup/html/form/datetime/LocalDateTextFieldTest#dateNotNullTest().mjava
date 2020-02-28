@@ -1,12 +1,11 @@
 	@Test
 	public void dateNotNullTest()
 	{
-		LocalDate date = LocalDate.of(2017, 02, 13);
+		LocalDate date = LocalDate.of(2017, 02, 03);
 		TestPage page = new TestPage(null);
 		tester.startPage(page);
 		FormTester formTester = tester.newFormTester("form", false);
-		formTester.setValue("field",
-			new LocalDateConverter().convertToString(date, Locale.forLanguageTag("en-US")));
+		formTester.setValue("field", "03-02-2017");
 		formTester.submit();
 		tester.assertNoErrorMessage();
 		LocalDate d = page.field.getModelObject();

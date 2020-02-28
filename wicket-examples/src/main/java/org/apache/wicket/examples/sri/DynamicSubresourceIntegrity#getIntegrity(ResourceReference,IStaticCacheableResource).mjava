@@ -1,0 +1,21 @@
+	private String getIntegrity(ResourceReference reference, IStaticCacheableResource cacheableResource)
+	{
+		String integrity = cache.get(cacheableResource.getCacheKey());
+		if (integrity == null)
+		{
+			Url baseUrl = getBaseUrl(reference);
+			try
+			{
+				byte[] bytes = getBytes(cacheableResource, baseUrl);
+
+				integrity = "sha384-" + createHash(bytes);
+				cache.put(cacheableResource.getCacheKey(), integrity);
+			}
+			catch (Exception ex)
+			{
+				log.error("cannot calculate integrity", ex);
+			}
+		}
+		return integrity;
+	}
+

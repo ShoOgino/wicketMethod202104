@@ -3,13 +3,15 @@
 		IResource resource = new ExampleResource("downloaded via ajax in a new browser window")
 			.setContentDisposition(ContentDisposition.INLINE);
 
-		final AjaxDownloadBehavior download = new AjaxDownloadBehavior(resource) {
+		final AjaxDownloadBehavior download = new AjaxDownloadBehavior(resource)
+		{
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onBeforeDownload(AjaxRequestTarget target)
+			protected void onBeforeDownload(IPartialPageRequestHandler handler)
 			{
 				downloadingContainer.setVisible(true);
-				target.add(downloadingContainer);
+				handler.add(downloadingContainer);
 			}
 
 			@Override
@@ -24,7 +26,7 @@
 			{
 				downloadingContainer.setVisible(false);
 				target.add(downloadingContainer);
-				
+
 				target.appendJavaScript("alert('Download failed');");
 			}
 
@@ -40,6 +42,8 @@
 
 		add(new AjaxLink<Void>("downloadInNewWindow")
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{

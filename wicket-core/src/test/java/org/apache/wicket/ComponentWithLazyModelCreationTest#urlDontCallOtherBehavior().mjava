@@ -3,7 +3,7 @@
 	 * URL invoking the wrong component behavior
 	 */
 	@Test
-	public void urlDontCallOtherBehavior()
+	void urlDontCallOtherBehavior()
 	{
 		TestPage page = new TestPage(new CompoundPropertyModel<ComponentWithLazyModelCreationTest>(
 			this));
@@ -12,7 +12,7 @@
 		tester.executeUrl(page.brotherCallbackBehavior.statefullUrl);
 
 		tester.assertLabel("label", LABEL_VALUE);
-		assertTrue("brotherCallbackBehavior was requested", page.brotherCallbackBehavior.requested);
-		assertFalse("mainCallbackBehavior was not requested", page.mainCallbackBehavior.requested);
+		assertTrue(page.brotherCallbackBehavior.requested, "brotherCallbackBehavior was requested");
+		assertFalse(page.mainCallbackBehavior.requested, "mainCallbackBehavior was not requested");
 	}
 

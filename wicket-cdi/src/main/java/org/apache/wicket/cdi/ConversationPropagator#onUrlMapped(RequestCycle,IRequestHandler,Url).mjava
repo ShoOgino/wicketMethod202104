@@ -1,7 +1,8 @@
 	@Override
 	public void onUrlMapped(RequestCycle cycle, IRequestHandler handler, Url url)
 	{
-		// no need to propagate the conversation to packaged resources, they should never change
+		// no need to propagate the conversation to packaged resources, they
+		// should never change
 		if (handler instanceof ResourceReferenceRequestHandler)
 		{
 			if (((ResourceReferenceRequestHandler)handler).getResourceReference() instanceof PackageResourceReference)
@@ -10,20 +11,16 @@
 			}
 		}
 
-		Conversation conversation = getConversation(cycle);
-
-		if (conversation == null || conversation.isTransient())
+		if (conversation.isTransient())
 		{
 			return;
 		}
 
-		if (propagation.propagatesViaParameters(handler))
+		if (propagation.propagatesVia(handler, getPage(handler)))
 		{
-			// propagate cid to bookmarkable pages via urls
-
 			logger.debug("Propagating non-transient conversation {} via url", conversation.getId());
-
 			url.setQueryParameter(CID, conversation.getId());
+			markPageWithConversationId(handler, conversation.getId());
 		}
 	}
 

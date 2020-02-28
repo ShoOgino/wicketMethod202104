@@ -2,10 +2,12 @@
 	 * Assert that a stored page is available to be read
 	 */
 	@Test
-	public void storePage()
+	void storePage()
 	{
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		IPageContext context = new MockPageContext(sessionId);
+		
+		pageStore.addPage(context, new SerializedPage(pageId, pageData));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 	}
 

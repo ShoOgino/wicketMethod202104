@@ -1,0 +1,37 @@
+	/**
+	 * Check whether the content is loaded.
+	 * <p>
+	 * If not loaded already and the content is ready, replaces the lazy loading component with 
+	 * the lazily loaded content. 
+	 * 
+	 * @return {@code true} if content is loaded
+	 * 
+	 * @see #isContentReady()
+	 */
+	protected final boolean isLoaded() {
+		if (loaded == false)
+		{
+			if (isContentReady())
+			{
+				loaded = true;
+
+				// create the lazy load component
+				T content = getLazyLoadComponent(CONTENT_ID);
+
+				// replace the loading component with the new component
+				AjaxLazyLoadPanel.this.replace(content);
+
+				Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+
+				// notify our subclasses of the updated component
+				onContentLoaded(content, target);
+
+				// repaint our selves if there's an AJAX request in play, otherwise let the page
+				// redraw itself
+				target.ifPresent(t -> t.add(AjaxLazyLoadPanel.this));
+			}
+		}
+		
+		return loaded;
+	}
+

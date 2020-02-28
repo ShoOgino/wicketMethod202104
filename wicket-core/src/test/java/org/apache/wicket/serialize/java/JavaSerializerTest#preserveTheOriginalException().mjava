@@ -2,7 +2,7 @@
 	 * https://issues.apache.org/jira/browse/WICKET-5667
 	 */
 	@Test
-	public void preserveTheOriginalException()
+	void preserveTheOriginalException()
 	{
 		JavaSerializer serializer = new JavaSerializer("JavaSerializerTest-aa")
 		{
@@ -48,15 +48,15 @@
 		catch (Exception x)
 		{
 			Throwable cause0 = x.getCause();
-			assertThat(cause0, is(instanceOf(WicketRuntimeException.class)));
+			assertThat(cause0, instanceOf(WicketRuntimeException.class));
 			WicketRuntimeException wrx = (WicketRuntimeException) cause0;
 
 			Throwable cause1 = wrx.getCause();
-			assertThat(cause1, is(instanceOf(IllegalStateException.class)));
-			assertThat(cause1.getMessage(), is(equalTo("Cannot serialize me twice!")));
+			assertThat(cause1, instanceOf(IllegalStateException.class));
+			assertEquals("Cannot serialize me twice!", cause1.getMessage());
 
 			Throwable cause2 = cause1.getCause();
-			assertThat(cause2, is(instanceOf(NotSerializableException.class)));
+			assertThat(cause2, instanceOf(NotSerializableException.class));
 		}
 	}
 

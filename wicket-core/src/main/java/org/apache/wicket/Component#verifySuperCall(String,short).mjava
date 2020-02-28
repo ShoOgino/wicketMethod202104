@@ -1,0 +1,13 @@
+	/**
+	 * Verify super calls of an overridden hook method.
+	 */
+	private final void verifySuperCall(String method, short flag)
+	{
+		if (!getRequestFlag(flag))
+		{
+			throw new IllegalStateException(String.format("%s() in the hierarchy of %s has not called super.%s()", method, getClass().getName(), method));
+		}
+		
+		setRequestFlag(flag, false);
+	}
+

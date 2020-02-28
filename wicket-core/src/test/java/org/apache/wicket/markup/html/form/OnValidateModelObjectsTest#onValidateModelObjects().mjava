@@ -3,7 +3,7 @@
 	 * for both the outer form and the inner form(s)
 	 */
 	@Test
-	public void onValidateModelObjects()
+	void onValidateModelObjects()
 	{
 		tester.startPage(OnFormValidateModelObjectsPage.class);
 		FormTester formTester = tester.newFormTester("parentForm");
@@ -11,9 +11,9 @@
 
 		Page page = tester.getLastRenderedPage();
 		OnFormValidateModelObjectsPage.ParentModel parentModel = (OnFormValidateModelObjectsPage.ParentModel) page.getDefaultModelObject();
-		assertThat(parentModel.isParentValidated(), is(true));
+		assertEquals(true, parentModel.isParentValidated());
 
 		AddressFormPanel.ChildModel childPanel = (AddressFormPanel.ChildModel) page.get("parentForm:addressInfo").getDefaultModelObject();
-		assertThat(childPanel.isChildValidated(), is(true));
+		assertEquals(true, childPanel.isChildValidated());
 	}
 

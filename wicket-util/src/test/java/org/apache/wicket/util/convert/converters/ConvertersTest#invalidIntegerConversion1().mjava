@@ -1,7 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidIntegerConversion1()
 	{
 		IntegerConverter converter = new IntegerConverter();
-		converter.convertToObject("whatever", Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("whatever", Locale.US);
+		});
 	}
 

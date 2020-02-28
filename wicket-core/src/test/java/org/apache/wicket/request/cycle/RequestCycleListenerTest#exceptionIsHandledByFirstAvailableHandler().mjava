@@ -1,13 +1,13 @@
 	/** */
 	@Test
-	public void exceptionIsHandledByFirstAvailableHandler()
+	void exceptionIsHandledByFirstAvailableHandler()
 	{
 		// when two listeners return a handler
 		Application.get().getRequestCycleListeners().add(new ErrorCodeListener(401));
 		Application.get().getRequestCycleListeners().add(new ErrorCodeListener(402));
 
-		RequestCycle cycle = newRequestCycle(new RuntimeException("testing purposes only"));
-		cycle.processRequestAndDetach();
+		RequestCycle cycle = newRequestCycle(rc -> { throw new RuntimeException("testing purposes only"); });
+		assertTrue(cycle.processRequestAndDetach());
 
 		// the first handler returned is used to handle the exception
 		assertEquals(401, errorCode);

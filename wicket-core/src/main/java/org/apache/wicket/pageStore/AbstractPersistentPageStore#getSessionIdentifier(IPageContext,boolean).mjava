@@ -1,0 +1,26 @@
+	/**
+	 * Get the distinct and stable identifier for the given context.
+	 * 
+	 * @param context the context to identify
+	 * @param create should a new identifier be created if not there already
+	 */
+	private String getSessionIdentifier(IPageContext context, boolean create)
+	{
+		String key = KEY_PREFIX + Classes.simpleName(getClass());
+		
+		SessionAttribute attribute = context.getSessionAttribute(key, () -> {
+			if (create)
+			{
+				return new SessionAttribute(storeKey, createSessionIdentifier(context));
+			}
+			
+			return null;
+		});
+		
+		if (attribute == null)
+		{
+			return null;
+		}
+		return attribute.sessionIdentifier;
+	}
+

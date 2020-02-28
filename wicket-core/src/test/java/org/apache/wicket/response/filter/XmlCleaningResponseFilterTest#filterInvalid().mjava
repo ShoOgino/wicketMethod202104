@@ -3,7 +3,7 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void filterInvalid() throws Exception
+	void filterInvalid() throws Exception
 	{
 		XmlCleaningResponseFilter filter = new XmlCleaningResponseFilter();
 		int[] invalidChars = new int[] {0x0008, 0x0010, 0xD800, 0xDDDD, 0xFFFE};
@@ -13,8 +13,7 @@
 			CharSequence text = createText(invalidChar);
 
 			AppendingStringBuffer filtered = filter.filter(new AppendingStringBuffer(text));
-			assertEquals(String.format("checking Unicode codepoint 0x%X:", invalidChar),
-					START_ROOT_ELEMENT+END_ROOT_ELEMENT, filtered.toString());
+			assertEquals(START_ROOT_ELEMENT+END_ROOT_ELEMENT, filtered.toString(), String.format("checking Unicode codepoint 0x%X:", invalidChar));
 		}
 	}
 

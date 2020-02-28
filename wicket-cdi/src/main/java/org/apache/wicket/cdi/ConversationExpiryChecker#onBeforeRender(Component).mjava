@@ -4,12 +4,12 @@
 		if (component instanceof Page || RequestCycle.get().find(IPartialPageRequestHandler.class).isPresent())
 		{
 			Page page = component.getPage();
-			String cid = container.getConversationMarker(page);
+			String cid = ConversationPropagator.getConversationIdFromPage(page);
 			if (cid != null && !Objects.isEqual(conversation.getId(), cid))
 			{
 				logger.info("Conversation {} has expired for {}", cid, page);
 				throw new ConversationExpiredException(null, cid, page, RequestCycle.get()
-					.getActiveRequestHandler());
+						.getActiveRequestHandler());
 			}
 		}
 	}

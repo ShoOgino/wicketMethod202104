@@ -18,21 +18,16 @@
 			@Override
 			protected IPageManagerProvider newTestPageManagerProvider()
 			{
-				return new IPageManagerProvider()
-				{
-					@Override
-					public IPageManager apply(IPageManagerContext context)
+				return () -> {
+					return new MockPageManager()
 					{
-						return new MockPageManager()
+						@Override
+						public void touchPage(IManageablePage page)
 						{
-							@Override
-							public void touchPage(IManageablePage page)
-							{
-								Assert.assertFalse("PageB should not be touched!", page instanceof PageB);
-								super.touchPage(page);
-							}
-						};
-					}
+							assertFalse(page instanceof PageB, "PageB should not be touched!");
+							super.touchPage(page);
+						}
+					};
 				};
 			}
 		};

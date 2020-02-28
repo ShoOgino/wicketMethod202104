@@ -1,0 +1,34 @@
+	/**
+	 *
+	 * @param response
+	 *      the response to write to
+	 * @param js
+	 *      the JavaScript to evaluate
+	 */
+	protected void writeEvaluations(final Response response, Collection<CharSequence> scripts)
+	{
+		if (scripts.size() > 0)
+		{
+			StringBuilder combinedScript = new StringBuilder(1024);
+			for (CharSequence script : scripts)
+			{
+				combinedScript.append("(function(){").append(script).append("})();");
+			}
+
+			StringResponse stringResponse = new StringResponse();
+			IHeaderResponse headerResponse = Application.get().decorateHeaderResponse(new HeaderResponse()
+			{
+				@Override
+				protected Response getRealResponse()
+				{
+					return stringResponse;
+				}
+			});
+			
+			headerResponse.render(JavaScriptHeaderItem.forScript(combinedScript, null));
+			headerResponse.close();
+			
+			writeHeaderContribution(response, stringResponse.getBuffer());
+		}
+	}
+

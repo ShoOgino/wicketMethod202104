@@ -4,14 +4,13 @@
      * WICKET-3909
      */
     @Test
-    public void charsetSetJavaScriptReference()
+    void charsetSetJavaScriptReference()
     {
         String charset = "foo";
-        headerResponse.render(JavaScriptHeaderItem.forUrl("js-resource.js", "some-id", false,
-            charset));
+        headerResponse.render(JavaScriptHeaderItem.forUrl("js-resource.js", "some-id").setCharset(charset));
         String expected = "<script type=\"text/javascript\" id=\"some-id\" charset=\"" + charset +
             "\" src=\"" + RESOURCE_NAME + "\"></script>\n";
         String actual = headerResponse.getResponse().toString();
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 

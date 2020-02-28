@@ -2,9 +2,10 @@
 	 * Tests that mounted pages are still accessible through their mounted URL.
 	 */
 	@Test
-	public void mountedPage()
+	void mountedPage()
 	{
-		IRequestHandler requestHandler = new RenderPageRequestHandler(new PageProvider(Page1.class));
+		IRequestHandler requestHandler = new RenderPageRequestHandler(
+			new PageProvider(Page1.class));
 
 		assertEquals(MOUNTED_URL, mapper.mapHandler(requestHandler).toString());
 
@@ -14,8 +15,8 @@
 
 		requestHandler = unwrapRequestHandlerDelegate(requestHandler);
 
-		assertThat(requestHandler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(requestHandler).isInstanceOf(RenderPageRequestHandler.class);
 
-		assertEquals(Page1.class, ((RenderPageRequestHandler) requestHandler).getPageClass());
+		assertEquals(Page1.class, ((RenderPageRequestHandler)requestHandler).getPageClass());
 	}
 

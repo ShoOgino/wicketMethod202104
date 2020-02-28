@@ -1,0 +1,28 @@
+	private void saveIndex()
+	{
+		File storeFolder = folders.getBase();
+		if (storeFolder.exists())
+		{
+			File index = new File(storeFolder, INDEX_FILE_NAME);
+			Files.remove(index);
+			try (OutputStream stream = new FileOutputStream(index))
+			{
+				ObjectOutputStream oos = new ObjectOutputStream(stream);
+				
+				List<DiskData> list = new ArrayList<>(diskDatas.size());
+				for (DiskData diskData : diskDatas.values())
+				{
+					if (diskData.sessionIdentifier != null)
+					{
+						list.add(diskData);
+					}
+				}
+				oos.writeObject(list);
+			}
+			catch (Exception e)
+			{
+				log.error("Couldn't write DiskPageStore index to file " + index + ".", e);
+			}
+		}
+	}
+

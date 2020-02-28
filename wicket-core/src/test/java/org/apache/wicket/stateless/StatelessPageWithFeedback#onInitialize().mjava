@@ -1,0 +1,21 @@
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+
+		setStatelessHint(true);
+
+		error("error in onInitialize");
+
+		add(new FeedbackPanel("feedback"));
+		StatelessForm<Void> form = new StatelessForm<Void>("form");
+		add(form);
+		form.add(new SubmitLink("submit") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onSubmit() {
+				StatelessPageWithFeedback.this.error("error in onSubmit");
+			}
+		});
+	}
+

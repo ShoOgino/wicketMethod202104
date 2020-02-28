@@ -1,0 +1,21 @@
+	@Override
+	public void removePage(IPageContext context, IManageablePage page)
+	{
+		String sessionId = context.getSessionId(false);
+		if (sessionId == null) {
+			return;
+		}
+
+		String key = getKey(sessionId, page.getPageId());
+		if (key != null)
+		{
+			PendingAdd entry = queueMap.remove(key);
+			if (entry != null)
+			{
+				queue.remove(entry);
+			}
+		}
+
+		getDelegate().removePage(context, page);
+	}
+

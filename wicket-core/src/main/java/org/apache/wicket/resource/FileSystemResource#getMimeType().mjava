@@ -8,14 +8,15 @@
 	 */
 	protected String getMimeType() throws IOException
 	{
+		final Path _path = getPath();
 		String mimeType = null;
 		if (Application.exists())
 		{
-			mimeType = Application.get().getMimeType(path.getFileName().toString());
+			mimeType = Application.get().getMimeType(_path.getFileName().toString());
 		}
 		if (mimeType == null)
 		{
-			mimeType = Files.probeContentType(path);
+			mimeType = Files.probeContentType(_path);
 		}
 		return mimeType;
 	}

@@ -1,14 +1,13 @@
 	/**
-	 * @see org.apache.wicket.Component#onBeforeRender()
+	 * Installs a page-global timer if not already present.
 	 */
 	@Override
 	protected void onBeforeRender()
 	{
-		if (state == 0)
-		{
-			add(getLoadingComponent(LAZY_LOAD_COMPONENT_ID));
-			setState((byte)1);
-		}
 		super.onBeforeRender();
+
+		if (loaded == false) {
+			initTimer();
+		}
 	}
 

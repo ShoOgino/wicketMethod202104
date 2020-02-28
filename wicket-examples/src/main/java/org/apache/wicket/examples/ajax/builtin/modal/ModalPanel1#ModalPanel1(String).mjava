@@ -4,6 +4,17 @@
 	public ModalPanel1(String id)
 	{
 		super(id);
-		add(new LocalDateTimeField("dateTimeField"));
+		
+		AutoCompleteSettings settings = new AutoCompleteSettings();
+		settings.setShowListOnEmptyInput(true);
+		
+		add(new AutoCompleteTextField<String>("edit", new Model<>(), settings)
+		{
+			@Override
+			protected Iterator<String> getChoices(String input)
+			{
+				return Arrays.asList("A", "B", "C").iterator();
+			}
+		});
 	}
 

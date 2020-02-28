@@ -8,7 +8,12 @@
 	{
 		Args.notEmpty(event, "event");
 
-		onCheckEvent(event);
+		if ("inputchange".equals(event))
+		{
+			// TODO Wicket 10 remove (see WICKET-6667)
+			event = "input";
+			LOGGER.warn("Since version 9.0.0 Wicket no longer supports 'inputchange' events, please use 'input' instead");
+		}
 
 		this.event = event;
 	}

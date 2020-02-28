@@ -1,16 +1,18 @@
 	/**
 	 * bundle {a, b->a} and {a, c->a}, should give exception
 	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testTwoBundlesProvidingSameResource()
+	@Test
+	void testTwoBundlesProvidingSameResource()
 	{
-		Application.get()
-			.getResourceBundles()
-			.addJavaScriptBundle(Application.class, "ab.js", new ResourceReferenceA(),
-				new ResourceReferenceB());
-		Application.get()
-			.getResourceBundles()
-			.addJavaScriptBundle(Application.class, "ac.js", new ResourceReferenceA(),
-				new ResourceReferenceC());
+		assertThrows(IllegalArgumentException.class, () -> {
+			Application.get()
+					.getResourceBundles()
+					.addJavaScriptBundle(Application.class, "ab.js", new ResourceReferenceA(),
+										 new ResourceReferenceB());
+			Application.get()
+					.getResourceBundles()
+					.addJavaScriptBundle(Application.class, "ac.js", new ResourceReferenceA(),
+										 new ResourceReferenceC());
+		});
 	}
 

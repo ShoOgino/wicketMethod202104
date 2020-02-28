@@ -1,0 +1,27 @@
+	/**
+	 * WICKET-4988 nbsp between digits only
+	 */
+	@Test
+	public void thousandSeparatorWithCurrency()
+	{
+		FloatConverter fc = new FloatConverter()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected NumberFormat newNumberFormat(Locale locale)
+			{
+				return NumberFormat.getCurrencyInstance(locale);
+			}
+		};
+		final Locale locale = Locale.FRENCH;
+		final DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
+		char groupingSeparator = decimalFormatSymbols.getGroupingSeparator();
+		String currencySymbol = decimalFormatSymbols.getCurrencySymbol();
+
+		String expected = format("1%s234,00\u00A0%s", groupingSeparator, currencySymbol);
+
+		assertEquals(expected, fc.convertToString(1234f, locale));
+		assertEquals(Float.valueOf(1234f), fc.convertToObject(expected, locale));
+	}
+

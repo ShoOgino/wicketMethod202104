@@ -1,8 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidCharacterConversion1()
 	{
 		CharacterConverter converter = new CharacterConverter();
-		converter.convertToObject("AA", Locale.US);
-		fail("Conversion should have thrown an exception");
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("AA", Locale.US);
+		});
 	}
 

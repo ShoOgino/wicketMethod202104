@@ -1,5 +1,5 @@
 	@Test
-	public void exactMountGetsBetterScore_ThanParameterOne_ThenOptionalOne() throws Exception
+	void exactMountGetsBetterScore_ThanParameterOne_ThenOptionalOne() throws Exception
 	{
 		final Url url = Url.parse("all/sindex");
 		final MountedMapper exactMount = new MountedMapper("/all/sindex", MockPage.class);
@@ -13,24 +13,28 @@
 		final int requiredParamScore = requiredParam.getCompatibilityScore(request);
 		final int optCompatScore = optionalParameter.getCompatibilityScore(request);
 		final int requiredOptCompatScore = requiredOptionalParam.getCompatibilityScore(request);
-		
-		//all the mappers above must be eligible for the give URL (i.e. their score must be > 0)
-		assertTrue("exactMount mapper must be eligible to handle the request", exactCompatScore > 0);
-		assertTrue("requiredParam mapper must be eligible to handle the request", requiredParamScore > 0);
-		assertTrue("optionalParameter mapper must be eligible to handle the request", optCompatScore > 0);
-		assertTrue("requiredOptionalParam mapper must be eligible to handle the request", requiredOptCompatScore > 0);
-		
-		assertTrue("exactCompatScore should have greater compatibility score than required one"
-			+ " got exact = " + exactCompatScore + " and required= " + requiredParamScore,
-			exactCompatScore > requiredParamScore);
 
-		assertTrue(
-			"exactCompatScore should have greater compatibility score than required+optional one"
-				+ " got exact = " + exactCompatScore + " and requiredOptional= "
-				+ requiredOptCompatScore, exactCompatScore > requiredOptCompatScore);
+		// all the mappers above must be eligible for the give URL (i.e. their score must be > 0)
+		assertTrue(exactCompatScore > 0,
+			"exactMount mapper must be eligible to handle the request");
+		assertTrue(requiredParamScore > 0,
+			"requiredParam mapper must be eligible to handle the request");
+		assertTrue(optCompatScore > 0,
+			"optionalParameter mapper must be eligible to handle the request");
+		assertTrue(requiredOptCompatScore > 0,
+			"requiredOptionalParam mapper must be eligible to handle the request");
 
-		assertTrue("exactCompatScore should have greater compatibility score than optional one"
-			+ " got exact = " + exactCompatScore + " and optional = " + optCompatScore,
-			requiredParamScore > optCompatScore);
+		assertTrue(exactCompatScore > requiredParamScore,
+			"exactCompatScore should have greater compatibility score than required one" +
+				" got exact = " + exactCompatScore + " and required= " + requiredParamScore);
+
+		assertTrue(exactCompatScore > requiredOptCompatScore,
+			"exactCompatScore should have greater compatibility score than required+optional one" +
+				" got exact = " + exactCompatScore + " and requiredOptional= " +
+				requiredOptCompatScore);
+
+		assertTrue(requiredParamScore > optCompatScore,
+			"exactCompatScore should have greater compatibility score than optional one" +
+				" got exact = " + exactCompatScore + " and optional = " + optCompatScore);
 	}
 

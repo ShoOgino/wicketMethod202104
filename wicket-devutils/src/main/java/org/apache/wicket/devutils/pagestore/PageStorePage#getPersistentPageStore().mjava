@@ -1,0 +1,17 @@
+	public static IPersistentPageStore getPersistentPageStore() {
+		IPageStore store = Session.get().getPageManager().getPageStore();
+		while (true) {
+			if (store instanceof IPersistentPageStore) {
+				return (IPersistentPageStore)store;
+			}
+			
+			if (store instanceof DelegatingPageStore) {
+				store = ((DelegatingPageStore)store).getDelegate();
+			} else {
+				break;
+			}
+		}
+		
+		return null;
+	}
+

@@ -1,0 +1,24 @@
+	/**
+	 * Get bytes.
+	 */
+	protected byte[] getBytes(IStaticCacheableResource cacheableResource, Url baseUrl)
+		throws IOException, ResourceStreamNotFoundException
+	{
+		byte[] bytes;
+
+		// base url has to be adjusted for relative images in CSS
+		RequestCycle cycle = RequestCycle.get();
+		Url originalBaseUrl = cycle.getUrlRenderer().setBaseUrl(baseUrl);
+
+		try (IResourceStream stream = cacheableResource.getResourceStream())
+		{
+			bytes = IOUtils.toByteArray(stream.getInputStream());
+		}
+		finally
+		{
+			cycle.getUrlRenderer().setBaseUrl(originalBaseUrl);
+		}
+
+		return bytes;
+	}
+

@@ -1,46 +1,40 @@
 	/**
-	 * Called for every component when the page is getting to be rendered. it will call
-	 * {@link #configure()} and {@link #onBeforeRender()} for this component and all the child
-	 * components
+	 * THIS METHOD IS NOT PART OF THE WICKET PUBLIC API. DO NOT USE IT!
+	 * 
+	 * Called on all components before any component is rendered. Calls hooks
+	 * {@link #configure()} and (if visible) {@link #onBeforeRender()}
+	 * and delegates to {@link #beforeRender()} of all child components.
 	 */
 	public final void beforeRender()
 	{
 		if (this instanceof IFeedback)
 		{
-			// this component is a feedback. Feedback must be initialized last, so that
-			// they can collect messages from other components
-			List<Component> feedbacks = getRequestCycle().getMetaData(FEEDBACK_LIST);
-			if (feedbacks == null)
-			{
-				feedbacks = new ArrayList<>();
-				getRequestCycle().setMetaData(FEEDBACK_LIST, feedbacks);
-			}
-
-			if (this instanceof MarkupContainer)
-			{
-				((MarkupContainer)this).visitChildren(IFeedback.class,
-					new IVisitor<Component, Void>()
-					{
-						@Override
-						public void component(Component feedback, IVisit<Void> visit)
-						{
-							feedback.beforeRender();
-
-							// don't need to go deeper,
-							// as the feedback will visit its children on its own
-							visit.dontGoDeeper();
-						}
-					});
-			}
-
-			if (!feedbacks.contains(this))
-			{
-				feedbacks.add(this);
+			Optional<FeedbackDelay> delay = FeedbackDelay.get(getRequestCycle());
+			if (delay.isPresent()) {
+				delay.get().postpone((IFeedback)this);
+				return;
 			}
 		}
-		else
+
+		configure();
+
+		if ((determineVisibility()) && !getRequestFlag(RFLAG_RENDERING) &&
+			!getRequestFlag(RFLAG_PREPARED_FOR_RENDER))
 		{
-			internalBeforeRender();
+			try {
+				setRequestFlag(RFLAG_BEFORE_RENDER_SUPER_CALL_VERIFIED, false);
+
+				Application application = getApplication();
+				application.getComponentPreOnBeforeRenderListeners().onBeforeRender(this);
+
+				onBeforeRender();
+				application.getComponentPostOnBeforeRenderListeners().onBeforeRender(this);
+
+				verifySuperCall("onBeforeRender", RFLAG_BEFORE_RENDER_SUPER_CALL_VERIFIED);
+			} catch (RuntimeException ex) {
+				setRequestFlag(RFLAG_PREPARED_FOR_RENDER, false);
+				throw ex;
+			}
 		}
 	}
 

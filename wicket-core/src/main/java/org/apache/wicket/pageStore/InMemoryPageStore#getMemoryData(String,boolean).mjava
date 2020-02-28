@@ -1,0 +1,12 @@
+	private MemoryData getMemoryData(String sessionIdentifier, boolean create)
+	{
+		if (!create)
+		{
+			return datas.get(sessionIdentifier);
+		}
+
+		MemoryData data = dataCreator.get();
+		MemoryData existing = datas.putIfAbsent(sessionIdentifier, data);
+		return existing != null ? existing : data;
+	}
+

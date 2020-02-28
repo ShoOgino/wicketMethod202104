@@ -7,16 +7,20 @@
 		setWicketTester(new WicketTester(new TestWicketJavaEEApplication()));
 		assertNotNull(getWicketTester().getApplication());
 		log.info("Using mock servletcontext.");
-		log.info("WebApplication MOCK after wicketTester Name: " + getWicketTester().getApplication().getName());
-		log.info("ServletContext MOCK after wicketTester Name: " + getWicketTester().getServletContext().getServletContextName());
+		log.info("WebApplication MOCK after wicketTester Name: " +
+			getWicketTester().getApplication().getName());
+		log.info("ServletContext MOCK after wicketTester Name: " +
+			getWicketTester().getServletContext().getServletContextName());
 		log.info("Server info: " + getWicketTester().getServletContext().getServerInfo());
-		assertEquals("Wicket Mock Test Environment v1.0", getWicketTester().getServletContext().getServerInfo());
+		assertEquals("Wicket Mock Test Environment v1.0",
+			getWicketTester().getServletContext().getServerInfo());
 
 		// USING MOCK.
 		try
 		{
 			findResourcesServletContext();
-			fail("Should not be able to find '/pages/InsertContact.html' in the mocked servlet context");
+			fail(
+				"Should not be able to find '/pages/InsertContact.html' in the mocked servlet context");
 		}
 		catch (IllegalStateException isx)
 		{

@@ -1,5 +1,11 @@
 	private void clearTimeout(IHeaderResponse headerResponse)
 	{
-		headerResponse.render(OnLoadHeaderItem.forScript("Wicket.Timer.clear('" + getComponent().getMarkupId() + "');"));
+		if (timerId != null)
+		{
+			headerResponse
+				.render(OnLoadHeaderItem.forScript("Wicket.Timer.clear('" + timerId + "');"));
+
+			timerId = null;
+		}
 	}
 

@@ -2,7 +2,7 @@
 	 * https://issues.apache.org/jira/browse/WICKET-4323
 	 */
 	@Test
-	public void detachSubstituteModelFromAssignmentWrapper()
+	void detachSubstituteModelFromAssignmentWrapper()
 	{
 		IModel<WeatherStation> nullOnDetachModel = new Model<WeatherStation>()
 		{
@@ -16,16 +16,16 @@
 		};
 
 		nullOnDetachModel.setObject(ws);
-		Label label1 = new Label("resourceModelWithComponent", new StringResourceModel(
-			"wrappedOnAssignment.text", page, nullOnDetachModel));
+		Label label1 = new Label("resourceModelWithComponent",
+			new StringResourceModel("wrappedOnAssignment.text", page, nullOnDetachModel));
 		page.add(label1);
 		label1.getDefaultModelObject();
 		label1.detach();
 		assertNull(nullOnDetachModel.getObject());
 
 		nullOnDetachModel.setObject(ws);
-		Label label2 = new Label("resourceModelWithoutComponent", new StringResourceModel(
-			"wrappedOnAssignment.text").setModel(nullOnDetachModel));
+		Label label2 = new Label("resourceModelWithoutComponent",
+			new StringResourceModel("wrappedOnAssignment.text").setModel(nullOnDetachModel));
 		page.add(label2);
 		label2.getDefaultModelObject();
 		label2.detach();

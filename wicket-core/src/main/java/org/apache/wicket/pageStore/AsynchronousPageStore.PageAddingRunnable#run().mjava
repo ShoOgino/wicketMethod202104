@@ -1,0 +1,25 @@
+		@Override
+		public void run()
+		{
+			while (!Thread.interrupted())
+			{
+				PendingAdd add = null;
+				try
+				{
+					add = entries.poll(POLL_WAIT, TimeUnit.MILLISECONDS);
+				}
+				catch (InterruptedException e)
+				{
+					Thread.currentThread().interrupt();
+				}
+
+				if (add != null)
+				{
+					log.debug("Saving asynchronously: {}...", add);
+					add.asynchronous = true;					
+					delegate.addPage(add, add.page);
+					addQueue.remove(add.getKey());
+				}
+			}
+		}
+

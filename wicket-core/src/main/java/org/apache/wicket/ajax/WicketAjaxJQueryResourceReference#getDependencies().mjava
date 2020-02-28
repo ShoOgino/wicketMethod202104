@@ -1,17 +1,17 @@
 	@Override
 	public List<HeaderItem> getDependencies()
 	{
-		final ResourceReference wicketEventReference;
+		final ResourceReference jqueryReference;
 		if (Application.exists())
 		{
-			wicketEventReference = Application.get().getJavaScriptLibrarySettings().getWicketEventReference();
+			jqueryReference = Application.get().getJavaScriptLibrarySettings().getJQueryReference();
 		}
 		else
 		{
-			wicketEventReference = WicketEventJQueryResourceReference.get();
+			jqueryReference = JQueryResourceReference.getV3();
 		}
 		List<HeaderItem> dependencies = super.getDependencies();
-		dependencies.add(JavaScriptHeaderItem.forReference(wicketEventReference));
+		dependencies.add(JavaScriptHeaderItem.forReference(jqueryReference));
 		return dependencies;
 	}
 

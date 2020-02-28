@@ -1,0 +1,21 @@
+	@Test
+	void test()
+	{
+		CryptingPageStore store =
+			new CryptingPageStore(new MockPageStore(), tester.getApplication());
+		JavaSerializer serializer = new JavaSerializer("test");
+
+		IPageContext context = new MockPageContext();
+
+		for (int p = 0; p < 10; p++)
+		{
+			MockPage add = new MockPage(p);
+			SerializedPage serializedAdd = new SerializedPage(p, "foo", serializer.serialize(add));
+			store.addPage(context, serializedAdd);
+
+			SerializedPage serializedGot = (SerializedPage) store.getPage(context, p);
+			MockPage got = (MockPage) serializer.deserialize(serializedGot.getData());
+			assertEquals(p, got.getPageId());
+		}
+	}
+

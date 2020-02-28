@@ -1,0 +1,14 @@
+	@Override
+	protected void removeAllPersistedPages(String sessionIdentifier)
+	{
+		DiskData diskData = getDiskData(sessionIdentifier, false);
+		if (diskData != null)
+		{
+			synchronized (diskDatas)
+			{
+				diskDatas.remove(diskData.sessionIdentifier);
+				diskData.unbind();
+			}
+		}
+	}
+

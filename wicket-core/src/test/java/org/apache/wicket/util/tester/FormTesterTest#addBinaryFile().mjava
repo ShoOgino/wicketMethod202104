@@ -4,7 +4,7 @@
 	 * upload to a FileUploadField works.
 	 */
 	@Test
-	public void addBinaryFile()
+	void addBinaryFile()
 	{
 		tester.startPage(MockFormFileUploadPage.class);
 		MockFormFileUploadPage page = (MockFormFileUploadPage)tester.getLastRenderedPage();
@@ -16,8 +16,9 @@
 
 
 		FormTester formTester = tester.newFormTester("form");
-		formTester.setFile("file", new File(getBasedir() +
-			"src/test/java/org/apache/wicket/util/tester/bg.jpg"), "image/jpeg");
+		formTester.setFile("file",
+			new File(getBasedir() + "src/test/java/org/apache/wicket/util/tester/bg.jpg"),
+			"image/jpeg");
 		formTester.setValue("text", "Mock value");
 		formTester.submit();
 
@@ -29,9 +30,9 @@
 		FileUpload fileUpload = page.getFileUpload();
 		assertNotNull(fileUpload);
 
-		assertTrue(
+		assertTrue(fileUpload.getBytes().length == 428,
 			"uploaded content does not have the right size, expected 428, got " +
-				fileUpload.getBytes().length, fileUpload.getBytes().length == 428);
+				fileUpload.getBytes().length);
 		assertEquals("bg.jpg", fileUpload.getClientFileName());
 		assertEquals("image/jpeg", fileUpload.getContentType());
 	}

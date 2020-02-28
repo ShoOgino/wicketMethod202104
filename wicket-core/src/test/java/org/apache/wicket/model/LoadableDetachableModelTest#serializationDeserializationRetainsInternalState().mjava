@@ -4,20 +4,20 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void serializationDeserializationRetainsInternalState() throws Exception
+	void serializationDeserializationRetainsInternalState() throws Exception
 	{
 		SerializedLoad ldm = new SerializedLoad();
-		assertThat(ldm.getObject(), is(1));
+		assertThat(ldm.getObject()).isEqualTo(1);
 		ldm.detach();
 
 		byte[] serialized = serialize(ldm);
 
 		LoadableDetachableModel<Integer> deserialized = deserialize(serialized);
 
-		assertThat(deserialized.isAttached(), is(false));
-		assertThat(deserialized.getObject(), is(2));
-		assertThat(deserialized.isAttached(), is(true));
+		assertEquals(false, deserialized.isAttached());
+		assertThat(deserialized.getObject()).isEqualTo(2);
+		assertEquals(true, deserialized.isAttached());
 		deserialized.detach();
-		assertThat(deserialized.isAttached(), is(false));
+		assertEquals(false, deserialized.isAttached());
 	}
 

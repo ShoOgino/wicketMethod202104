@@ -5,7 +5,11 @@
 	 */
 	public final IPageManager getPageManager()
 	{
-		IPageManager pageManager = Application.get().internalGetPageManager();
-		return pageAccessSynchronizer.get().adapt(pageManager);
+		if (Boolean.TRUE.equals(RequestCycle.get().getMetaData(PAGES_UNLOCKED))) {
+			throw new WicketRuntimeException("The request has been processed. Access to pages is no longer allowed");
+		}
+		
+		IPageManager manager = Application.get().internalGetPageManager();
+		return pageAccessSynchronizer.get().adapt(manager);
 	}
 

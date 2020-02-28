@@ -26,16 +26,16 @@
 		};
 
 		// assert and reset
-		assertThat(beginRequestCalled.compareAndSet(true, false), is(true));
-		assertThat(endRequestCalled.compareAndSet(true, false), is(true));
-		assertThat(detachCalled.compareAndSet(true, false), is(true));
+		assertTrue(beginRequestCalled.compareAndSet(true, false));
+		assertTrue(endRequestCalled.compareAndSet(true, false));
+		assertTrue(detachCalled.compareAndSet(true, false));
 
 		// broadcasts WebSocket.TextMessage and notifies the listeners
 		webSocketTester.sendMessage(expectedMessage);
 
-		assertThat(beginRequestCalled.get(), is(true));
-		assertThat(endRequestCalled.get(), is(true));
-		assertThat(detachCalled.get(), is(true));
+		assertTrue(beginRequestCalled.get());
+		assertTrue(endRequestCalled.get());
+		assertTrue(detachCalled.get());
 
 		webSocketTester.destroy();
 	}

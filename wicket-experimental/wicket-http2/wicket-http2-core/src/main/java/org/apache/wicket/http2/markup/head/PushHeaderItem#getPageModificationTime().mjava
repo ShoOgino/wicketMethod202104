@@ -15,7 +15,7 @@
 	 * 
 	 * @return the time the page of this header item has been modified
 	 */
-	protected Time getPageModificationTime()
+	protected Instant getPageModificationTime()
 	{
 		URL resource = page.getClass().getResource(page.getClass().getSimpleName() + ".html");
 		if (resource == null)
@@ -25,7 +25,7 @@
 		}
 		try
 		{
-			return Time.valueOf(new Date(resource.openConnection().getLastModified()));
+			return Instant.ofEpochMilli(resource.openConnection().getLastModified());
 		}
 		catch (IOException e)
 		{

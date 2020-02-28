@@ -1,0 +1,19 @@
+	protected final void internalRenderCSSReference(Response response, String url)
+	{
+		Args.notEmpty(url, "url");
+
+		AttributeMap attributes = new AttributeMap();
+		attributes.putAttribute(CssUtils.ATTR_LINK_REL, getRel() == null ? "stylesheet" : getRel());
+		attributes.putAttribute(CssUtils.ATTR_TYPE, "text/css");
+		attributes.putAttribute(CssUtils.ATTR_LINK_HREF, url);
+		attributes.putAttribute(CssUtils.ATTR_ID, getId());
+		attributes.putAttribute(CssUtils.ATTR_LINK_MEDIA, getMedia());
+		attributes.putAttribute(CssUtils.ATTR_CROSS_ORIGIN,
+			crossOrigin == null ? null : crossOrigin.getRealName());
+		attributes.putAttribute(CssUtils.ATTR_INTEGRITY, integrity);
+		attributes.putAttribute(CssUtils.ATTR_CSP_NONCE, getNonce());
+		CssUtils.writeLink(response, attributes);
+
+		response.write("\n");
+	}
+

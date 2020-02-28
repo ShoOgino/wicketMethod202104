@@ -1,5 +1,5 @@
 	@Test
-	public void mapHandler()
+	void mapHandler()
 	{
 		IRequestMapper delegate = mock(IRequestMapper.class);
 		HttpsMapper mapper = new HttpsMapper(delegate, new HttpsConfig());
@@ -14,8 +14,8 @@
 		when(delegate.mapHandler(handler)).thenReturn(url);
 		when(req.getScheme()).thenReturn("http");
 		mapper.mapHandler(handler, request);
-		assertThat(url.getProtocol(), is("https"));
-		assertThat(url.getPort(), is(443));
+		assertEquals("https", url.getProtocol());
+		assertEquals(Integer.valueOf(443), url.getPort());
 
 		// render url to http page on http, ignore protocol
 		handler = new RenderPageRequestHandler(new PageProvider(InsecurePage.class));
@@ -24,7 +24,7 @@
 		when(delegate.mapHandler(handler)).thenReturn(url);
 		when(req.getScheme()).thenReturn("http");
 		mapper.mapHandler(handler, request);
-		assertThat(url.getProtocol(), is(nullValue()));
+		assertNull(url.getProtocol());
 
 		// render url to http page on https, set protocol
 		handler = new RenderPageRequestHandler(new PageProvider(InsecurePage.class));
@@ -33,7 +33,7 @@
 		when(delegate.mapHandler(handler)).thenReturn(url);
 		when(req.getScheme()).thenReturn("https");
 		mapper.mapHandler(handler, request);
-		assertThat(url.getProtocol(), is("http"));
-		assertThat(url.getPort(), is(80));
+		assertEquals("http", url.getProtocol());
+		assertEquals(Integer.valueOf(80), url.getPort());
 	}
 

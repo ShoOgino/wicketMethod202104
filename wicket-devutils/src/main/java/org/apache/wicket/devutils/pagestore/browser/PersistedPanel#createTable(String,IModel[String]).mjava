@@ -1,0 +1,44 @@
+	private DataTable<IPersistedPage, String> createTable(String id, IModel<String> sessionId)
+	{
+		PersistedPagesProvider provider = new PersistedPagesProvider(sessionId, getModel());
+
+		List<IColumn<IPersistedPage, String>> columns = new ArrayList<>();
+
+		columns.add(new AbstractColumn<IPersistedPage, String>(Model.of("Id"), "pageId")
+		{
+			@Override
+			public void populateItem(Item<ICellPopulator<IPersistedPage>> cellItem, String componentId, IModel<IPersistedPage> rowModel)
+			{
+				cellItem.add(new Link<IPersistedPage>(componentId, rowModel)
+				{
+					@Override
+					protected void onComponentTag(ComponentTag tag)
+					{
+						tag.setName("a");
+						
+						super.onComponentTag(tag);
+					}
+					
+					@Override
+					public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+					{
+						replaceComponentTagBody(markupStream, openTag, "" + getModelObject().getPageId());
+					}
+					
+					@Override
+					public void onClick()
+					{
+						setResponsePage(new InspectorPage(new PageReference(getModelObject().getPageId())));
+					}
+				});
+			}
+		});
+		columns.add(new PropertyColumn<>(Model.of("Type"), "pageType", "pageType"));
+		columns.add(new PropertyColumn<>(Model.of("Size"), "pageSize", "pageSize"));
+
+		DefaultDataTable<IPersistedPage, String> browserTable = new DefaultDataTable<>(id, columns, provider, 20);
+		browserTable.setOutputMarkupId(true);
+
+		return browserTable;
+	}
+

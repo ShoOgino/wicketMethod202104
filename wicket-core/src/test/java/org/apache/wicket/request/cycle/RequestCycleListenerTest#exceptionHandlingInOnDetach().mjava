@@ -2,11 +2,11 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void exceptionHandlingInOnDetach() throws Exception
+	void exceptionHandlingInOnDetach() throws Exception
 	{
 		// this test is a little flaky because it depends on the ordering of listeners which is not
 		// guaranteed
-		RequestCycle cycle = newRequestCycle((RuntimeException)null);
+		RequestCycle cycle = newRequestCycle(rc -> {});
 		IncrementingListener incrementingListener = new IncrementingListener()
 		{
 			@Override
@@ -19,7 +19,7 @@
 		cycle.getListeners().add(incrementingListener);
 		cycle.getListeners().add(incrementingListener);
 		cycle.getListeners().add(incrementingListener);
-		cycle.processRequestAndDetach();
+		assertTrue(cycle.processRequestAndDetach());
 
 		incrementingListener.assertValues(3, 3, 3, 3, 0, 3);
 		assertValues(0, 1, 1);

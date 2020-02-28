@@ -4,24 +4,22 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void lenientPackageResourceMatching() throws Exception
+	void lenientPackageResourceMatching() throws Exception
 	{
 		ResourceReference invalidResource = new PackageResourceReference(PackageResourceTest.class,
 			"i_do_not_exist.txt", Locale.ENGLISH, null, null);
-		assertNotNull(
-			"resource i_do_not_exist.txt SHOULD be available as a packaged resource even if it doesn't exist",
-			invalidResource.getResource());
+		assertNotNull(invalidResource.getResource(), "resource i_do_not_exist.txt SHOULD be available as a packaged resource even if it doesn't exist");
 
-		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1.txt", null, null,
-			null));
+		assertTrue(
+			PackageResource.exists(PackageResourceTest.class, "packaged1.txt", null, null, null));
 		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1.txt", Locale.CHINA,
 			null, null));
 		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1.txt", Locale.CHINA,
 			"foo", null));
-		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1.txt", null, "foo",
+		assertTrue(
+			PackageResource.exists(PackageResourceTest.class, "packaged1.txt", null, "foo", null));
+		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1_en.txt", null, null,
 			null));
-		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1_en.txt", null,
-			null, null));
 		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1_en_US.txt", null,
 			null, null));
 		assertTrue(PackageResource.exists(PackageResourceTest.class, "packaged1_en_US.txt", null,

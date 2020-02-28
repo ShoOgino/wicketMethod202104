@@ -1,0 +1,35 @@
+	@Override
+	public void addPage(IPageContext context, IManageablePage page)
+	{
+		PendingAdd add = new PendingAdd(context, page);
+		if (getDelegate().canBeAsynchronous(add))
+		{
+			String key = add.getKey();
+			queueMap.put(key, add);
+			try
+			{
+				if (queue.offer(add, OFFER_WAIT, TimeUnit.MILLISECONDS))
+				{
+					log.debug("Offered for storing asynchronously page with id '{}'", page.getPageId());
+					return;
+				}
+				else
+				{
+					log.debug("Storing synchronously page with id '{}'", page.getPageId());
+					queueMap.remove(key);
+				}
+			}
+			catch (InterruptedException e)
+			{
+				log.error(e.getMessage(), e);
+				queueMap.remove(key);
+			}
+		}
+		else
+		{
+			log.warn("Delegated page store '{}' can not be asynchronous", getDelegate().getClass().getName());
+		}
+		
+		getDelegate().addPage(context, page);
+	}
+

@@ -1,0 +1,15 @@
+    /**
+     * Tests setting of subresource attributes
+     */
+    @Test
+    void subresourceJavaScriptReference()
+    {
+        headerResponse.render(JavaScriptHeaderItem.forUrl("js-resource.js", "some-id")
+        	.setCrossOrigin(CrossOrigin.ANONYMOUS)
+        	.setIntegrity("XXXX"));
+        String expected = "<script type=\"text/javascript\" id=\"some-id\" src=\"" +
+            RESOURCE_NAME + "\" crossOrigin=\"anonymous\" integrity=\"XXXX\"></script>\n";
+        String actual = headerResponse.getResponse().toString();
+        assertEquals(expected, actual);
+    }
+

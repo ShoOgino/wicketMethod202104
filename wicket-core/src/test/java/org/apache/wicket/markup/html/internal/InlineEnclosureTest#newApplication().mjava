@@ -1,7 +1,7 @@
 	@Override
 	protected WebApplication newApplication()
 	{
-		return new WebApplication()
+		return new MockApplication()
 		{
 			@Override
 			public Class<? extends Page> getHomePage()
@@ -13,6 +13,7 @@
 			protected void init()
 			{
 				getMarkupSettings().setStripWicketTags(true);
+				getResourceSettings().setCachingStrategy(NoOpResourceCachingStrategy.INSTANCE);
 			}
 		};
 	}

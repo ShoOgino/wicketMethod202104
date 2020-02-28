@@ -3,13 +3,13 @@
 	 * should pass when run using JDK 1.5 or newer.
 	 */
 	@Test
-	public void setWithNullPathFinalJdk15()
+	void setWithNullPathFinalJdk15()
 	{
 		Person person = new Person();
 		PropertyModel<String> model = new PropertyModel<String>(person, "finalAddress.street");
 
 		model.setObject("foo");
-		assertThat(person.finalAddress, instanceOf(ConcreteAddress.class));
+		assertThat(person.finalAddress).isInstanceOf(ConcreteAddress.class);
 		assertEquals("foo", person.finalAddress.street);
 	}
 

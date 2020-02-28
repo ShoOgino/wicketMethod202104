@@ -1,0 +1,18 @@
+	/**
+	 */
+	@Test
+	public void writeInlineScript()
+	{
+		StringResponse response = new StringResponse();
+		AttributeMap attributes = new AttributeMap();
+		attributes.putAttribute(JavaScriptUtils.ATTR_TYPE, "text/javascript");
+		JavaScriptUtils.writeInlineScript(response,
+			"var message = 'Scripts are written to the <script></script> tag'", attributes);
+
+		assertEquals("<script type=\"text/javascript\">\n" //
+			+ "/*<![CDATA[*/\n" //
+			+ "var message = 'Scripts are written to the <script><\\/script> tag'\n" //
+			+ "/*]]>*/\n"//
+			+ "</script>\n", response.toString());
+	}
+

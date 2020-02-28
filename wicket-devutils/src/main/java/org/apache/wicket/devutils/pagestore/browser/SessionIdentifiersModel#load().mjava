@@ -1,0 +1,23 @@
+	@Override
+	protected List<String> load()
+	{
+		IPersistentPageStore store = this.store.getObject();
+		if (store == null)
+		{
+			return Collections.emptyList();
+		}
+
+		ArrayList<String> identifiers = new ArrayList<>(store.getSessionIdentifiers());
+
+		IPageContext context = new DefaultPageContext();
+		String current = store.getSessionIdentifier(context);
+		if (identifiers.contains(current) == false)
+		{
+			// identifiers of the store seem no to match their sessions ids,
+			// thus add the default identifier so the select works properly  
+			identifiers.add(current);
+		}
+
+		return identifiers;
+	}
+

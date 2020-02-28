@@ -1,0 +1,10 @@
+	/** */
+	@Test
+	void exceptionExceeded()
+	{
+		Application.get().getRequestCycleListeners().add(new RepeatListener());
+
+		RequestCycle cycle = newRequestCycle(requestCycle -> { throw new RuntimeException("testing purposes only"); });
+		assertFalse(cycle.processRequestAndDetach());
+	}
+

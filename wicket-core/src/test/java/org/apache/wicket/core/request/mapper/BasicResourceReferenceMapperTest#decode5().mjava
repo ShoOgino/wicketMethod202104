@@ -2,16 +2,16 @@
 	 *
 	 */
 	@Test
-	public void decode5()
+	void decode5()
 	{
 		Url url = Url.parse("wicket/resource/" + CLASS_NAME + "/reference3?-style");
 		IRequestHandler handler = encoder.mapRequest(getRequest(url));
-		assertThat(handler, instanceOf(ResourceReferenceRequestHandler.class));
+		assertThat(handler).isInstanceOf(ResourceReferenceRequestHandler.class);
 		ResourceReferenceRequestHandler h = (ResourceReferenceRequestHandler)handler;
 		assertEquals(resource3, h.getResource());
-		assertEquals(null, h.getLocale());
+		assertNull(h.getLocale());
 		assertEquals("style", h.getStyle());
-		assertEquals(null, h.getVariation());
+		assertNull(h.getVariation());
 		assertEquals(0, h.getPageParameters().getIndexedCount());
 		assertEquals(0, h.getPageParameters().getNamedKeys().size());
 	}

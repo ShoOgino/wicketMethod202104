@@ -5,14 +5,14 @@
 	 *             If test fails
 	 */
 	@Test
-	public final void messageAndCauseConstructor() throws Exception
+	final void messageAndCauseConstructor() throws Exception
 	{
 		NullPointerException npe = new NullPointerException();
 		Class<?> c = Class.forName(getExceptionClassName());
 		Constructor<?> constructor = c.getConstructor(new Class[] { String.class, Throwable.class });
 		Exception e = (Exception)constructor.newInstance("test message", npe);
-		Assert.assertNotNull("Exception should be created", e);
-		Assert.assertEquals("test message", e.getMessage());
-		Assert.assertSame(npe, e.getCause());
+		assertNotNull(e, "Exception should be created");
+		assertEquals("test message", e.getMessage());
+		assertSame(npe, e.getCause());
 	}
 

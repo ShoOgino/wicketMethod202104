@@ -1,0 +1,26 @@
+	/**
+	 * Get all files inside.
+	 * 
+	 * @return files
+	 */
+	public Set<File> getAll()
+	{
+		Set<File> files = new HashSet<>();
+		
+		if (base.exists())
+		{
+			for (File low : Files.list(base))
+			{
+				for (File high: Files.list(low))
+				{
+					for (File file : Files.list(high))
+					{
+						files.add(file);
+					}
+				}
+			}
+		}
+		
+		return files;
+	}
+

@@ -1,17 +1,13 @@
 	/** */
 	@Test
-	public void getPropertySubstitutedResource()
+	void getPropertySubstitutedResource()
 	{
 		tester.getSession().setLocale(Locale.ENGLISH);
 		StringResourceModel model = new StringResourceModel("weather.message", page, wsModel);
-		assertEquals(
-			"Text should be as expected",
-			"Weather station \"Europe's main weather station\" reports that the temperature is 25.7 \u00B0C",
-			model.getString());
+		assertEquals("Weather station \"Europe's main weather station\" reports that the temperature is 25.7 \u00B0C",
+			model.getString(), "Text should be as expected");
 		ws.setCurrentTemperature(11.5);
-		assertEquals(
-			"Text should be as expected",
-			"Weather station \"Europe's main weather station\" reports that the temperature is 11.5 \u00B0C",
-			model.getString());
+		assertEquals("Weather station \"Europe's main weather station\" reports that the temperature is 11.5 \u00B0C",
+			model.getString(), "Text should be as expected");
 	}
 

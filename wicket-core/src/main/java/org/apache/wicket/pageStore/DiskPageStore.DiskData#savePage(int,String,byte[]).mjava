@@ -1,0 +1,46 @@
+		/**
+		 * Saves the serialized page to appropriate file.
+		 * 
+		 * @param pageId
+		 * @param pageType
+		 * @param data
+		 */
+		public synchronized void savePage(int pageId, String pageType, byte data[])
+		{
+			if (sessionIdentifier == null)
+			{
+				return;
+			}
+
+			// only save page that has some data
+			if (data != null)
+			{
+				// allocate window for page
+				FileWindow window = getManager().createPageWindow(pageId, pageType, data.length);
+
+				FileChannel channel = getFileChannel(true);
+				if (channel != null)
+				{
+					try
+					{
+						// write the content
+						channel.write(ByteBuffer.wrap(data), window.getFilePartOffset());
+					}
+					catch (IOException e)
+					{
+						log.error("Error writing to a channel " + channel, e);
+					}
+					finally
+					{
+						IOUtils.closeQuietly(channel);
+					}
+				}
+				else
+				{
+					log.warn(
+						"Cannot save page with id '{}' because the data file cannot be opened.",
+						pageId);
+				}
+			}
+		}
+

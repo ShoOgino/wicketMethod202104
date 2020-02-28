@@ -1,9 +1,10 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidBooleanConversion()
 	{
 		BooleanConverter converter = new BooleanConverter();
 
-		// should throw an exception
-		converter.convertToObject("whatever", Locale.getDefault(Locale.Category.FORMAT));
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("whatever", Locale.getDefault(Locale.Category.FORMAT));
+		});
 	}
 

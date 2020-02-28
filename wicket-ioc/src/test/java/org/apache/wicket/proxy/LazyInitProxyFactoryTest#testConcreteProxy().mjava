@@ -8,8 +8,8 @@
 			ConcreteObject.class, concreteObjectLocator);
 
 		// test proxy implements ILazyInitProxy
-		assertThat(proxy, instanceOf(ILazyInitProxy.class));
-		assertTrue(((ILazyInitProxy)proxy).getObjectLocator() == concreteObjectLocator);
+		assertTrue(proxy instanceof ILazyInitProxy);
+		assertSame(((ILazyInitProxy) proxy).getObjectLocator(), concreteObjectLocator);
 
 		// test we do not have a jdk dynamic proxy
 		assertFalse(Proxy.isProxyClass(proxy.getClass()));
@@ -19,7 +19,7 @@
 
 		// test serialization
 		ConcreteObject proxy2 = WicketObjects.cloneObject(proxy);
-		assertTrue(proxy != proxy2);
+		assertNotSame(proxy, proxy2);
 		assertEquals(proxy2.getMessage(), "concrete");
 
 		// test equals/hashcode method interception

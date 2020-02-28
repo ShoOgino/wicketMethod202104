@@ -4,8 +4,11 @@
 		CharSequence js = getJavaScript();
 		if (Strings.isEmpty(js) == false)
 		{
-			JavaScriptUtils.writeJavaScript(response, "Wicket.Event.add(window, \"load\", " +
-				"function(event) { " + js + ";});");
+			AttributeMap attributes = new AttributeMap();
+			attributes.putAttribute(JavaScriptUtils.ATTR_TYPE, "text/javascript");
+			attributes.putAttribute(JavaScriptUtils.ATTR_CSP_NONCE, getNonce());
+			JavaScriptUtils.writeInlineScript(response, "Wicket.Event.add(window, \"load\", " +
+					"function(event) { " + js + ";});", attributes);
 		}
 	}
 

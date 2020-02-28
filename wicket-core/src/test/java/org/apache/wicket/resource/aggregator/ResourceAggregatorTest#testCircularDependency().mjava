@@ -1,9 +1,11 @@
 	/**
 	 * render [circ1->circ2->circ1->...], should give exception
 	 */
-	@Test(expected = CircularDependencyException.class)
-	public void testCircularDependency()
+	@Test
+	void testCircularDependency()
 	{
-		aggregator.render(forReference(new ResourceReferenceCirc1()));
+		assertThrows(CircularDependencyException.class, () -> {
+			aggregator.render(forReference(new ResourceReferenceCirc1()));
+		});
 	}
 

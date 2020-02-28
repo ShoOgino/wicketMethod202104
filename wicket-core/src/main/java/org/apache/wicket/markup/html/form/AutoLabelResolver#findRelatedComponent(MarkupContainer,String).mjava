@@ -1,14 +1,14 @@
 	/**
 	 * 
-	 * @param container
-	 * @param id
+	 * @param container The container
+	 * @param path The relative path to the component
 	 * @return Component
 	 */
-	static Component findRelatedComponent(MarkupContainer container, final String id)
+	static Component findRelatedComponent(MarkupContainer container, final String path)
 	{
 		// try the quick and easy route first
 
-		Component component = container.get(id);
+		Component component = container.get(path);
 		if (component != null)
 		{
 			return component;
@@ -31,7 +31,7 @@
 							visit.dontGoDeeper();
 							return;
 						}
-						if (id.equals(child.getId()))
+						if (path.equals(child.getId()))
 						{
 							visit.stop(child);
 							return;

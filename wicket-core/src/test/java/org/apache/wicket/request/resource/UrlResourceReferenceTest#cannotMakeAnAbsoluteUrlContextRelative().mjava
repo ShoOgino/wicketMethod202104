@@ -1,8 +1,11 @@
-	@Test(expected = IllegalStateException.class)
-	public void cannotMakeAnAbsoluteUrlContextRelative()
+	@Test
+	void cannotMakeAnAbsoluteUrlContextRelative()
 	{
 		Url url = Url.parse("http://www.example.com/some/path.ext");
 		UrlResourceReference reference = new UrlResourceReference(url);
-		reference.setContextRelative(true);
+
+		assertThrows(IllegalStateException.class, () -> {
+			reference.setContextRelative(true);
+		});
 	}
 

@@ -1,7 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidFloatConversion3()
 	{
 		FloatConverter converter = new FloatConverter();
-		converter.convertToObject("1" + Float.MAX_VALUE, Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("1" + Float.MAX_VALUE, Locale.US);
+		});
 	}
 

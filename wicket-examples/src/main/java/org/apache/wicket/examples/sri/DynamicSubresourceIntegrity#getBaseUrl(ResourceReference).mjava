@@ -1,0 +1,14 @@
+	private Url getBaseUrl(ResourceReference reference)
+	{
+		RequestCycle cycle = RequestCycle.get();
+		Url url = Url.parse(cycle.urlFor(reference, null));
+		if (url.getSegments().get(0).equals("."))
+		{
+			// not sure why this is needed but leading dot must be removed,
+			// otherwise relative urls will differ from the actually served css
+			url.removeLeadingSegments(1);
+		}
+		
+		return url;
+	}
+

@@ -1,5 +1,5 @@
 	@Test
-	public void testShouldRenderPageAndWriteResponseCondition() {
+	void testShouldRenderPageAndWriteResponseCondition() {
 
 		TestPageRenderer renderer = new TestPageRenderer(handler);
 		// if
@@ -12,7 +12,7 @@
 		renderer.newPageInstance = true;
 		renderer.pageStateless = true;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test"), Url.parse("test")));
 
 		renderer.ajax = false;
@@ -22,7 +22,7 @@
 		renderer.newPageInstance = false;
 		renderer.pageStateless = false;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test1"), Url.parse("test2")));
 
 		// 	or
@@ -34,7 +34,7 @@
 		renderer.ajax = false;
 		renderer.onePassRender = true;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test1"), Url.parse("test2")));
 
 		renderer.redirectPolicy = RedirectPolicy.ALWAYS_REDIRECT;
@@ -43,21 +43,21 @@
 		renderer.newPageInstance = false;
 		renderer.pageStateless = false;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test"), Url.parse("test")));
 
 		//	or
 		//		the targetUrl matches current url and it's redirect-to-render
 		renderer.redirectToRender = true;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test"), Url.parse("test")));
 
 		renderer.pageStateless = true;
 		renderer.newPageInstance = true;
 		renderer.redirectToRender = true;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test"), Url.parse("test")));
 
 		//	or
@@ -72,7 +72,7 @@
 		renderer.newPageInstance = true;
 		renderer.pageStateless = true;
 
-		Assert.assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
+		assertTrue(renderer.shouldRenderPageAndWriteResponse(requestCycle,
 			Url.parse("test1"), Url.parse("test2")));
 
 	}

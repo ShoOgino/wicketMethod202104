@@ -1,0 +1,16 @@
+	/**
+	 * Close this dialog on click outside.
+	 * 
+	 * @return this
+	 */
+	public ModalDialog closeOnClick()
+	{
+		overlay.add(new CloseBehavior("click") {
+			protected CharSequence getPrecondition()
+			{
+				return String.format("return attrs.event.target.id == '%s';", overlay.getMarkupId());
+			}
+		});
+		return this;
+	}
+

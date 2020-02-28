@@ -1,0 +1,10 @@
+	@Override
+	public void addPage(IPageContext context, IManageablePage page)
+	{
+		if (page instanceof SerializedPage == false)
+		{
+			page = new SerializedPage(page.getPageId(), Classes.name(page.getClass()), serializer.serialize(page));
+		}
+		getDelegate().addPage(context, page);
+	}
+

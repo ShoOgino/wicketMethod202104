@@ -1,8 +1,11 @@
-	private void fail(Entry<String, List<Project>> entry) {
+	private void fail(Entry<String, List<Project>> entry)
+	{
 		StringBuilder builder = new StringBuilder();
 		String packageName = entry.getKey();
-		builder.append("Package '").append(packageName).append("' has files in two or more modules: ");
-		for (Project conflict : entry.getValue()) {
+		builder.append("Package '").append(packageName).append(
+			"' has files in two or more modules: ");
+		for (Project conflict : entry.getValue())
+		{
 			builder.append(conflict.getName()).append(", ");
 		}
 		try
@@ -14,10 +17,11 @@
 				URL resource = resources.nextElement();
 				builder.append("\n\t").append(resource.toExternalForm());
 			}
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		fail(builder.toString());
+		Assertions.fail(builder.toString());
 	}
 

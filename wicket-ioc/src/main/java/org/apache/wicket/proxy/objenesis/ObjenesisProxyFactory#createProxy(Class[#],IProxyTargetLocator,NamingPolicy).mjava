@@ -7,10 +7,13 @@
 		e.setSuperclass(type);
 		e.setCallbackType(handler.getClass());
 		e.setNamingPolicy(namingPolicy);
-		e.setUseCache(false);
-
 		Class<?> proxyClass = e.createClass();
-		Enhancer.registerCallbacks(proxyClass, new Callback[]{handler});
-		return OBJENESIS.newInstance(proxyClass);
+		
+		Object instance = OBJENESIS.newInstance(proxyClass);
+
+		// set callbacks directly (WICKET-6607) 
+		((Factory) instance).setCallbacks(new Callback[]{handler});
+		
+		return instance;
 	}
 

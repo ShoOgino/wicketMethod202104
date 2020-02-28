@@ -9,14 +9,14 @@
 	@Override
 	public final long getItemCount()
 	{
-		if (isItemCountCached())
+		if (cachedItemCount != null)
 		{
-			return getCachedItemCount();
+			return cachedItemCount;
 		}
 
 		long count = internalGetItemCount();
 
-		setCachedItemCount(count);
+		cachedItemCount = count;
 		return count;
 	}
 

@@ -1,0 +1,82 @@
+	/**
+	 * Store does not allow modifications when pages are added asynchronously.
+	 */
+	@Test
+	public void storeAsynchronousContextClosed() throws Throwable
+	{
+		final AtomicReference<Throwable> asyncFail = new AtomicReference<>();
+		
+		IPageStore store = new MockPageStore() {
+			
+			@Override
+			public boolean canBeAsynchronous(IPageContext context)
+			{
+				// can get session id
+				context.getSessionId(true);
+				
+				// can access request data
+				assertEquals("value1", context.getRequestData(KEY1, () -> "value1"));
+
+				// can access session data
+				assertEquals("value1", context.getSessionData(KEY1, () -> "value1"));
+
+				// can access session
+				context.getSessionAttribute("key1", () -> "value1");
+
+				return true;
+			}
+			
+			@Override
+			public synchronized void addPage(IPageContext context, IManageablePage page)
+			{
+				// can get session id
+				context.getSessionId(true);
+				
+				// cannot access request
+				try {
+					context.getRequestData(KEY1, () -> null);
+					asyncFail.set(new Exception().fillInStackTrace());
+				} catch (WicketRuntimeException expected) {
+				}
+				try {
+					context.getRequestData(KEY2, () -> null);
+					asyncFail.set(new Exception().fillInStackTrace());
+				} catch (WicketRuntimeException expected) {
+				}
+
+				// can read session data 
+				assertEquals("value1", context.getSessionData(KEY1, () -> "value2"));
+				assertEquals(null, context.getSessionData(KEY2, () -> null));
+				// .. but cannot set
+				try {
+					context.getSessionData(KEY2, () -> "value2");
+					asyncFail.set(new Exception().fillInStackTrace());
+				} catch (WicketRuntimeException expected) {
+				}
+				
+				// can read session attribute already read
+				assertEquals("value1", context.getSessionAttribute("key1", () -> null));
+				// .. but nothing new
+				try {
+					context.getSessionAttribute("key2", () -> null);
+					asyncFail.set(new Exception().fillInStackTrace());
+				} catch (WicketRuntimeException expected) {
+				}
+			}
+		};
+
+		IPageStore asyncPageStore = new AsynchronousPageStore(store, 100);
+
+		MockPage page = new MockPage();
+		
+		IPageContext context = new MockPageContext();
+		
+		asyncPageStore.addPage(context , page);
+		
+		store.destroy();
+		
+		if (asyncFail.get() != null) {
+			throw asyncFail.get();
+		}
+	}
+

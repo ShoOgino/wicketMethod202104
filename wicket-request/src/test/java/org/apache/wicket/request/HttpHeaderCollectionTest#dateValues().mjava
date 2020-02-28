@@ -3,8 +3,8 @@
 	{
 		final HttpHeaderCollection headers = new HttpHeaderCollection();
 
-		final Time time1 = Time.millis(1000000);
-		final Time time2 = Time.millis(2000000);
+		final Instant time1 = Instant.ofEpochMilli(1000000);
+		final Instant time2 = Instant.ofEpochMilli(2000000);
 
 		headers.setDateHeader("date", time1);
 		headers.addDateHeader("date", time2);
@@ -36,12 +36,13 @@
 		}
 
 		assertArrayEquals(new String[] { "Thu, 01 Jan 1970 00:16:40 GMT",
-				"Thu, 01 Jan 1970 00:33:20 GMT", "not-a-date" }, headers.getHeaderValues("date"));
+				"Thu, 01 Jan 1970 00:33:20 GMT", "not-a-date" },
+			headers.getHeaderValues("date"));
 
 		headers.setHeader("date", "foobar");
 		try
 		{
-			Time date = headers.getDateHeader("date");
+			Instant date = headers.getDateHeader("date");
 			fail();
 		}
 		catch (IllegalStateException e)

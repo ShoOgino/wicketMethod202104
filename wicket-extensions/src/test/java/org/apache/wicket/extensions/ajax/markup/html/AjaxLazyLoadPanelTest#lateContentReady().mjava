@@ -1,0 +1,29 @@
+	@Test
+	public void lateContentReady() {
+		
+		AjaxLazyLoadPanelPage page = new AjaxLazyLoadPanelPage();
+		page.contentReady = false;
+		
+		tester.startPage(page);
+
+		// no content, timer set
+		tester.assertContains("LOADING");
+		tester.assertContainsNot("LOADED");
+		tester.assertContains("Wicket.Timer.set\\(");
+		
+		AjaxLazyLoadPanelTester.executeAjaxLazyLoadPanel(tester);
+
+		// no change, timer re-set
+		tester.assertContainsNot("LOADING");
+		tester.assertContainsNot("LOADED");
+		tester.assertContains("Wicket.Timer.set\\(");
+
+		page.contentReady = true;
+		AjaxLazyLoadPanelTester.executeAjaxLazyLoadPanel(tester);
+
+		// content, no timer
+		tester.assertContainsNot("LOADING");
+		tester.assertContains("LOADED");
+		tester.assertContainsNot("Wicket.Timer.set\\(");
+	}
+

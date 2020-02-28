@@ -2,8 +2,16 @@
 	 * @see IWizardModel#stepIterator()
 	 */
 	@Override
-	public final Iterator<IWizardStep> stepIterator()
+	public Iterator<IWizardStep> stepIterator()
 	{
-		return steps.iterator();
+		List<IWizardStep> filtered = new ArrayList<>();
+		
+		for (int s = 0; s < steps.size(); s++) {
+			if (conditions.get(s).evaluate()) {
+				filtered.add(steps.get(s));
+			}
+		}
+		
+		return filtered.iterator();
 	}
 

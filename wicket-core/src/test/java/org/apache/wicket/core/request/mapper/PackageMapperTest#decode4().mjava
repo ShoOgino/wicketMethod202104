@@ -1,26 +1,22 @@
 	/**
-	 * The tests resolves pages by id as if they were existed in the page store.
-	 * These pages have no page parameters (i.e. page.getPageParameters() == null).
+	 * The tests resolves pages by id as if they were existed in the page store. These pages have no
+	 * page parameters (i.e. page.getPageParameters() == null).
 	 *
-	 * Since Wicket 7.0.0 (WICKET-4441) if a new request to hybrid url
-	 * (a url with both mount path and pageId) has different page parameters
-	 * than the resolved page then a new page instance with the new parameters
-	 * is created.
-	 * This way if a user manipulates manually the product id in url like:
-	 * /mount/path/Products/23?3
-	 * to
-	 * /mount/path/Products/24?3
-	 * then Wicket will create a new page that will show product=24
+	 * Since Wicket 7.0.0 (WICKET-4441) if a new request to hybrid url (a url with both mount path
+	 * and pageId) has different page parameters than the resolved page then a new page instance
+	 * with the new parameters is created. This way if a user manipulates manually the product id in
+	 * url like: /mount/path/Products/23?3 to /mount/path/Products/24?3 then Wicket will create a
+	 * new page that will show product=24
 	 */
 	@Test
-	public void decode4()
+	void decode4()
 	{
 		Url url = Url.parse(MOUNT_PATH + '/' + PAGE_CLASS_NAME + "/i1/i2?15&a=b&b=c");
 		IRequestHandler handler = encoder.mapRequest(getRequest(url));
 
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
-		RenderPageRequestHandler h = (RenderPageRequestHandler) handler;
-		((PageProvider) h.getPageProvider()).setPageSource(context);
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
+		RenderPageRequestHandler h = (RenderPageRequestHandler)handler;
+		((PageProvider)h.getPageProvider()).setPageSource(context);
 		IRequestablePage page = h.getPage();
 		checkPage(page, 1);
 

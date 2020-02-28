@@ -1,11 +1,14 @@
 	/**
 	 * Loading of page markup resource should not be allowed
 	 */
-	@Test(expected = PackageResourceBlockedException.class)
-	public void loadPageMarkupTemplate()
+	@Test
+	void loadPageMarkupTemplate()
 	{
 		String url = "wicket/resource/" + BlockedResourceLinkPage.class.getName() + "/" +
 			BlockedResourceLinkPage.class.getSimpleName() + ".html";
-		tester.executeUrl(url);
+
+		assertThrows(PackageResourceBlockedException.class, () -> {
+			tester.executeUrl(url);
+		});
 	}
 

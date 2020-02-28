@@ -1,0 +1,16 @@
+	@Override
+	public void render(HeaderItem item)
+	{
+		while (item instanceof IWrappedHeaderItem)
+		{
+			item = ((IWrappedHeaderItem)item).getWrapped();
+		}
+
+		if (item instanceof ISubresourceHeaderItem)
+		{
+			configure((ISubresourceHeaderItem)item);
+		}
+		
+		super.render(item);
+	}
+

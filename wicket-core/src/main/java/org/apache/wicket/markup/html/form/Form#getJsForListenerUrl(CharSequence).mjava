@@ -1,5 +1,5 @@
 	/**
-	 * Generate a piece of JavaScript that submits the form to the given URL.
+	 * Generate a piece of JavaScript that submits the form to the given URL of an {@link IRequestListener}.
 	 * 
 	 * Warning: This code should only be called in the rendering phase for form components inside
 	 * the form because it uses the css/javascript id of the form which can be stored in the markup.
@@ -11,6 +11,28 @@
 	public final CharSequence getJsForListenerUrl(CharSequence url)
 	{
 		Form<?> root = getRootForm();
-		return String.format("var f = document.getElementById('%s'); f.action='%s';f.submit();", root.getMarkupId(), url);
+
+		AppendingStringBuffer buffer = new AppendingStringBuffer();
+		
+		String action = url.toString();
+		if (root.encodeUrlInHiddenFields()) {
+			buffer.append(String.format("document.getElementById('%s').innerHTML = '",
+				root.getHiddenFieldsId(HIDDEN_FIELDS_PARAMS_IDX)));
+			
+			// parameter must be sent as hidden field, as it would be ignored in the action URL
+			int i = action.indexOf('?');
+			if (i != -1)
+			{
+				writeParamsAsHiddenFields(Strings.split(action.substring(i + 1), '&'), buffer);
+				
+				action = action.substring(0, i);
+			}
+			
+			buffer.append("';");
+		}
+		buffer.append(String.format("var f = document.getElementById('%s');", root.getMarkupId()));
+		buffer.append(String.format("f.action='%s';", action));
+		buffer.append("Wicket.Event.fire(f, 'submit');");
+		return buffer;
 	}
 

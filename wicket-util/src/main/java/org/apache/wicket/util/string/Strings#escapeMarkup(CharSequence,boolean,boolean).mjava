@@ -9,7 +9,7 @@
 	 * @param escapeSpaces
 	 *            True to replace ' ' with nonbreaking space
 	 * @param convertToHtmlUnicodeEscapes
-	 *            True to convert non-7 bit characters to unicode HTML (&#...)
+	 *            True to convert non-7 bit characters to unicode HTML (&amp;#...)
 	 * @return The escaped string
 	 */
 	public static CharSequence escapeMarkup(final CharSequence s, final boolean escapeSpaces,
@@ -27,6 +27,10 @@
 		{
 			final char c = s.charAt(i);
 
+			if (NONCHARACTERS.contains(c))
+			{
+				continue;
+			}
 			switch (c)
 			{
 				case '\t' :

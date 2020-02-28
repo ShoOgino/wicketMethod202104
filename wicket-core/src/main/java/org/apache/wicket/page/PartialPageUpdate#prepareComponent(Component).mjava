@@ -1,0 +1,41 @@
+	/**
+	 * Prepare a single component
+	 *
+	 * @param component
+	 *      the component to prepare
+	 * @return wether the component was prepared
+	 */
+	protected boolean prepareComponent(Component component)
+	{
+		if (component.getRenderBodyOnly() == true)
+		{
+			throw new IllegalStateException(
+					"A partial update is not possible for a component that has renderBodyOnly enabled. Component: " +
+							component.toString());
+		}
+
+		component.setOutputMarkupId(true);
+
+		// Initialize temporary variables
+		final Page page = component.findParent(Page.class);
+		if (page == null)
+		{
+			// dont throw an exception but just ignore this component, somehow
+			// it got removed from the page.
+			LOG.warn("Component '{}' not rendered because it was already removed from page", component);
+			return false;
+		}
+
+		try
+		{
+			component.beforeRender();
+		}
+		catch (RuntimeException e)
+		{
+			bodyBuffer.reset();
+			throw e;
+		}
+		
+		return true;
+	}
+

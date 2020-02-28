@@ -12,7 +12,7 @@
 	 * <pre>
 	 * final WebMarkupContainer source=new WebMarkupContainer("a") {
 	 * 	protected void onConfigure() {
-	 *    setVisible(Math.rand()>0.5f);
+	 *    setVisible(Math.rand()&gt;0.5f);
 	 *  }
 	 * };
 	 * 
@@ -32,7 +32,11 @@
 		{
 			clearEnabledInHierarchyCache();
 			clearVisibleInHierarchyCache();
+			
+			setRequestFlag(RFLAG_ON_CONFIGURE_SUPER_CALL_VERIFIED, false);
 			onConfigure();
+			verifySuperCall("onConfigure", RFLAG_ON_CONFIGURE_SUPER_CALL_VERIFIED);
+			
 			for (Behavior behavior : getBehaviors())
 			{
 				if (isBehaviorAccepted(behavior))

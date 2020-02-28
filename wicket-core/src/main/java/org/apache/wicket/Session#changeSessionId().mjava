@@ -1,0 +1,17 @@
+	/**
+	 * Change the id of the underlying (Web)Session if this last one is permanent.
+	 * <p>
+	 * Call upon login to protect against session fixation.
+	 * 
+	 * @see "http://www.owasp.org/index.php/Session_Fixation"
+	 */
+	public void changeSessionId()
+	{
+		if (isTemporary())
+		{
+			return;
+		}
+		
+		id = generateNewSessionId();
+	}
+

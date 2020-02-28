@@ -1,0 +1,40 @@
+	/**
+	 * Returns last n saved page windows.
+	 * 
+	 * @return list of page windows
+	 */
+	public synchronized List<FileWindow> getFileWindows()
+	{
+		List<FileWindow> result = new ArrayList<FileWindow>();
+
+		// start from current index to 0
+		int currentIndex = indexPointer;
+
+		do
+		{
+			if (currentIndex == -1)
+			{
+				break;
+			}
+
+			if (currentIndex < windows.size())
+			{
+				FileWindow window = windows.get(currentIndex);
+				if (window.id != -1)
+				{
+					result.add(window);
+				}
+			}
+
+			--currentIndex;
+			if (currentIndex == -1)
+			{
+				// rewind to the last entry and collect all entries until current index
+				currentIndex = windows.size() - 1;
+			}
+		}
+		while (currentIndex != indexPointer);
+
+		return result;
+	}
+

@@ -1,0 +1,14 @@
+	@Test
+	void rendersRelativeUrl()
+	{
+		Url contextRelativeUrl = new Url();
+		contextRelativeUrl.setProtocol("http");
+		contextRelativeUrl.setHost("localshot");
+		contextRelativeUrl.setPort(8080);
+		contextRelativeUrl.setContextRelative(true);
+		contextRelativeUrl.getSegments().addAll(asList("", ""));
+
+		UrlRenderer r1 = new UrlRenderer(new MockWebRequest(contextRelativeUrl));
+		assertEquals("../foo", r1.renderRelativeUrl(Url.parse("foo")));
+	}
+

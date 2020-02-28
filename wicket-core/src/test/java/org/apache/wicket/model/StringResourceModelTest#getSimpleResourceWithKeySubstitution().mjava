@@ -1,15 +1,14 @@
 	/** */
 	@Test
-	public void getSimpleResourceWithKeySubstitution()
+	void getSimpleResourceWithKeySubstitution()
 	{
-		StringResourceModel model = new StringResourceModel("weather.${currentStatus}", page, wsModel);
-		assertEquals("Text should be as expected", "It's sunny, wear sunscreen",
-			model.getString());
+		StringResourceModel model = new StringResourceModel("weather.${currentStatus}", page,
+			wsModel);
+		assertEquals("It's sunny, wear sunscreen", model.getString(), "Text should be as expected");
 		ws.setCurrentStatus("raining");
-		assertEquals("Text should be as expected", "It's raining, take an umbrella",
-			model.getString());
+		assertEquals("It's raining, take an umbrella",
+			model.getString(), "Text should be as expected");
 		ws.setCurrentStatus(null);
-		assertEquals("Text should be as expected", "It's ... i don't know",
-			model.getString());
+		assertEquals("It's ... i don't know", model.getString(), "Text should be as expected");
 	}
 

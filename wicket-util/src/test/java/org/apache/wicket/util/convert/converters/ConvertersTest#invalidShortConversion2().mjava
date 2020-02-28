@@ -1,7 +1,9 @@
-	@Test(expected = ConversionException.class)
+	@Test
 	public void invalidShortConversion2()
 	{
 		ShortConverter converter = new ShortConverter();
-		converter.convertToObject("10whatever", Locale.US);
+		assertThrows(ConversionException.class, () -> {
+			converter.convertToObject("10whatever", Locale.US);
+		});
 	}
 

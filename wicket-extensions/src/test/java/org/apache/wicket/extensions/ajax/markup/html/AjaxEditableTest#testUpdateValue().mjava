@@ -21,8 +21,10 @@
 
 		FormComponent<?> editor = (FormComponent<?>)ajaxLabel.get("editor");
 		// set some new value and submit it
-		tester.getRequest().setParameter(editor.getInputName(), "something");
-		tester.getRequest().setParameter("save", "true");
+		final MockHttpServletRequest request = tester.getRequest();
+		request.setParameter(editor.getInputName(), "something");
+		request.setParameter("save", "true");
+		request.setMethod(Form.METHOD_GET);
 		tester.executeBehavior((AbstractAjaxBehavior)editor.getBehaviorById(0));
 
 		tester.assertInvisible("ajaxLabel:editor");

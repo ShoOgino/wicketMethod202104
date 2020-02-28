@@ -1,0 +1,14 @@
+	/**
+	 * If {@code 'none'} is used for any of the -src directives, it must be the only value for that
+	 * directive.
+	 */
+	@Test
+	public void testMultipleSrcInputWithNoneIsRejected2()
+	{
+		ContentSecurityPolicyEnforcer cspListener =
+			new ContentSecurityPolicyEnforcer(tester.getApplication());
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			cspListener.blocking().add(DEFAULT_SRC, NONE, SELF);
+		});
+	}
+

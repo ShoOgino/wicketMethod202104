@@ -3,7 +3,7 @@
 			 * directly
 			 */
 	@Test
-	public void testRedirectToBufferStatefulPageAndSameUrls()
+	void testRedirectToBufferStatefulPageAndSameUrls()
 	{
 		final AtomicBoolean stored = new AtomicBoolean(false);
 
@@ -22,7 +22,7 @@
 			}
 		};
 
-		when(provider.isNewPageInstance()).thenReturn(true);
+		when(!provider.hasPageInstance()).thenReturn(true);
 
 		Url sameUrl = Url.parse("same");
 
@@ -34,6 +34,6 @@
 
 		verify(response).write(any(byte[].class));
 		verify(response, never()).sendRedirect(anyString());
-		Assert.assertFalse(stored.get());
+		assertFalse(stored.get());
 	}
 

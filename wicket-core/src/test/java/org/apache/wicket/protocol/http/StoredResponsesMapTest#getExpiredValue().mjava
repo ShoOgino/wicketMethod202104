@@ -4,16 +4,19 @@
 	 * @throws Exception
 	 */
 	@Test
-	public void getExpiredValue() throws Exception
+	void getExpiredValue() throws Exception
 	{
-		Time start = Time.now();
-		Duration timeout = Duration.milliseconds(50);
+		Instant start = Instant.now();
+		Duration timeout = Duration.ofMillis(50);
 		StoredResponsesMap map = new StoredResponsesMap(1000, timeout);
 		assertEquals(0, map.size());
 		map.put("1", new BufferedWebResponse(null));
 		assertEquals(1, map.size());
-		TimeUnit.MILLISECONDS.sleep(timeout.getMilliseconds() * 2); // sleep for twice longer than the timeout
-		assertTrue("The timeout has passed.", Time.now().subtract(start).compareTo(timeout) == 1);
+		TimeUnit.MILLISECONDS.sleep(timeout.toMillis() * 2); // sleep for twice longer than the timeout
+		Duration elapsedTime = Duration.between(start, Instant.now());
+		elapsedTime = elapsedTime.truncatedTo(ChronoUnit.MILLIS);
+		
+		assertTrue(elapsedTime.compareTo(timeout) > 0, "The timeout has passed.");
 		Object value = map.get("1");
 		assertNull(value);
 	}

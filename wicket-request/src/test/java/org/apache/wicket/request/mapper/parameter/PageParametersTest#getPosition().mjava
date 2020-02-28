@@ -2,23 +2,22 @@
 	 * https://issues.apache.org/jira/browse/WICKET-3906
 	 */
 	@Test
-	public void getPosition()
+	void getPosition()
 	{
 		PageParameters parameters = new PageParameters();
 		parameters.set("named1", "value1", 3, INamedParameters.Type.MANUAL);
-		assertEquals(
-			"Adding a parameter at position out of the size of the list will just append it", 0,
-			parameters.getPosition("named1"));
+		assertEquals(0, parameters.getPosition("named1"),
+			"Adding a parameter at position out of the size of the list will just append it");
 
 		parameters.set("named2", "value2", 0, INamedParameters.Type.MANUAL);
 		assertEquals(0, parameters.getPosition("named2"));
-		assertEquals("'named1' should be moved back", 1, parameters.getPosition("named1"));
+		assertEquals(1, parameters.getPosition("named1"), "'named1' should be moved back");
 
 
 		parameters.set("named3", "value3", -100, INamedParameters.Type.MANUAL);
 		assertEquals(0, parameters.getPosition("named2"));
 		assertEquals(1, parameters.getPosition("named1"));
-		assertEquals("Adding a parameter with negative position will just append it.", 2,
-			parameters.getPosition("named3"));
+		assertEquals(2, parameters.getPosition("named3"),
+			"Adding a parameter with negative position will just append it.");
 	}
 

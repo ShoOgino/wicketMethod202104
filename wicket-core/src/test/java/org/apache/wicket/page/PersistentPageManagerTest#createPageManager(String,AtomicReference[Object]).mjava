@@ -1,0 +1,29 @@
+	/**
+	 * Create a manager that stores session data in the given atomic reference.
+	 */
+	private IPageManager createPageManager(String appName, AtomicReference<Object> sessionData)
+	{
+		IPageStore store = new InSessionPageStore(new NoopPageStore(), Integer.MAX_VALUE, new JavaSerializer(APP_NAME));
+		
+		return new PageManager(store) {
+			@Override
+			protected IPageContext createPageContext()
+			{
+				return new MockPageContext() {
+					@Override
+					public <T extends Serializable> T getSessionData(MetaDataKey<T> key, Supplier<T> defaultValue)
+					{
+						T value = (T)sessionData.get();
+						if (value == null) {
+							value = defaultValue.get();
+							if (value != null) {
+								sessionData.set(value);
+							}
+						}
+						return value;
+					}
+				};
+			}
+		};
+	}
+

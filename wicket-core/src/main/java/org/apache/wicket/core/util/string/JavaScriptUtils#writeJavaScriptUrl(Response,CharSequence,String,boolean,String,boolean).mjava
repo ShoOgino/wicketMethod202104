@@ -14,32 +14,22 @@
 	 *            a non null value specifies the charset attribute of the script tag
 	 * @param async
 	 *            specifies that the script can be loaded asynchronously by the browser
+	 * @deprecated please use {@link #writeScript(Response, AttributeMap)} instead
 	 */
+	@Deprecated
 	public static void writeJavaScriptUrl(final Response response, final CharSequence url,
 		final String id, boolean defer, String charset, boolean async)
 	{
-		response.write("<script type=\"text/javascript\" ");
-		if (id != null)
-		{
-			response.write("id=\"" + Strings.escapeMarkup(id) + "\" ");
-		}
-		if (defer)
-		{
-			response.write("defer=\"defer\" ");
-		}
-
-		if (async)
-		{
-			response.write("async=\"async\" ");
-		}
-
-		if (charset != null)
-		{
-			response.write("charset=\"" + Strings.escapeMarkup(charset) + "\" ");
-		}
-		response.write("src=\"");
-		response.write(url);
-		response.write("\"></script>");
-		response.write("\n");
+		AttributeMap attributes = new AttributeMap();
+		// XXX JS mimetype can be omitted (also see below)
+		attributes.putAttribute(ATTR_TYPE, "text/javascript");
+		attributes.putAttribute(ATTR_SCRIPT_SRC, url);
+		attributes.putAttribute(ATTR_ID, id);
+		attributes.putAttribute(ATTR_SCRIPT_DEFER, defer);
+		attributes.putAttribute(ATTR_SCRIPT_ASYNC, async);
+		// FIXME charset attr is deprecated
+		// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Deprecated_attributes
+		attributes.putAttribute("charset", charset);
+		writeScript(response, attributes);
 	}
 

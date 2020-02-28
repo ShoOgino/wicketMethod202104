@@ -1,0 +1,33 @@
+	private byte[] readFile(String sessionIdentifier, int id)
+	{
+		File file = getPageFile(sessionIdentifier, id, false);
+		if (file.exists() == false)
+		{
+			return null;
+		}
+
+		byte[] data = null;
+
+		try
+		{
+			FileChannel channel = FileChannel.open(file.toPath());
+			try
+			{
+				int size = (int)channel.size();
+				MappedByteBuffer buf = channel.map(MapMode.READ_ONLY, 0, size);
+				data = new byte[size];
+				buf.get(data);
+			}
+			finally
+			{
+				IOUtils.closeQuietly(channel);
+			}
+		}
+		catch (IOException ex)
+		{
+			log.warn("cannot read page data for session {} page {}", sessionIdentifier, id, ex);
+		}
+
+		return data;
+	}
+

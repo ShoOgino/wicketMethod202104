@@ -1,11 +1,11 @@
 	/**	 */
 	@Test
-	public void placeholderDecodeWithIndexedParameters()
+	void placeholderDecodeWithIndexedParameters()
 	{
 		Url url = Url.parse("some/p1/path/p2/p3/p4");
 		IRequestHandler handler = placeholderEncoder.mapRequest(getRequest(url));
 
-		assertThat(handler, instanceOf(RenderPageRequestHandler.class));
+		assertThat(handler).isInstanceOf(RenderPageRequestHandler.class);
 		IRequestablePage page = ((RenderPageRequestHandler)handler).getPage();
 
 		assertEquals(2, page.getPageParameters().getIndexedCount());

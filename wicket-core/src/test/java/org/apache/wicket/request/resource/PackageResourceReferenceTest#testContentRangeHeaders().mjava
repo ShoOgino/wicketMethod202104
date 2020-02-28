@@ -2,7 +2,7 @@
 	 * See WICKET-5819 - Media tags
 	 */
 	@Test
-	public void testContentRangeHeaders()
+	void testContentRangeHeaders()
 	{
 		// Test header fields
 		ResourceReference reference = new PackageResourceReference(scope, "resource.txt",
@@ -12,7 +12,7 @@
 		MockHttpServletResponse mockHttpServletResponse = (MockHttpServletResponse)response.getContainerResponse();
 		Attributes mockAttributes = new Attributes(request, response);
 		reference.getResource().respond(mockAttributes);
-		Assert.assertEquals(ContentRangeType.BYTES.getTypeName(),
+		assertEquals(ContentRangeType.BYTES.getTypeName(),
 			mockHttpServletResponse.getHeader("Accept-Range"));
 		// For normal: If a resource supports content range no content is delivered
 		// if no "Range" header is given, but we have to deliver it, because
@@ -20,7 +20,7 @@
 		// detecting media requests and automatically add the "Range" header for
 		// partial content and they don't make an initial request to detect if a media
 		// resource supports Content-Range (by the Accept-Range header)
-		Assert.assertEquals("resource_var_style_en.txt",
+		assertEquals("resource_var_style_en.txt",
 			new String(mockHttpServletResponse.getBinaryContent()));
 	}
 

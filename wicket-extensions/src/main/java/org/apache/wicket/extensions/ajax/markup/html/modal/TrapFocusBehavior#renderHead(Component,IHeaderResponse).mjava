@@ -1,0 +1,12 @@
+	@Override
+	public void renderHead(Component component, IHeaderResponse response)
+	{
+		response.render(JavaScriptHeaderItem.forReference(JS));
+		
+		String styleClass = component.getString(CSS_CURRENT_KEY, null, "current-focus-trap");
+		
+		CharSequence script = String.format("Wicket.trapFocus('%s', '%s');", component.getMarkupId(), styleClass);
+		
+		response.render(new PriorityHeaderItem(OnDomReadyHeaderItem.forScript(script)));
+	}
+

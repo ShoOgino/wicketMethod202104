@@ -11,26 +11,13 @@
 		long timeTaken = System.currentTimeMillis() - RequestCycle.get().getStartTime();
 		if (headIndex != -1 && bodyIndex != -1)
 		{
-			AppendingStringBuffer endScript = new AppendingStringBuffer(150);
-			endScript.append("\n").append(JavaScriptUtils.SCRIPT_OPEN_TAG);
-			endScript.append("\nwindow.defaultStatus='");
-			endScript.append(getStatusString(timeTaken, "ServerAndClientTimeFilter.statustext"));
-			endScript.append("';\n").append(JavaScriptUtils.SCRIPT_CLOSE_TAG).append("\n");
-			responseBuffer.insert(bodyIndex - 1, endScript);
-			responseBuffer.insert(headIndex + 6, "\n" + JavaScriptUtils.SCRIPT_OPEN_TAG +
-				"\nvar clientTimeVariable = new Date().getTime();\n" +
-				JavaScriptUtils.SCRIPT_CLOSE_TAG + "\n");
+			responseBuffer.insert(bodyIndex, scriptTag("window.defaultStatus=" + getStatusString(timeTaken, "ServerAndClientTimeFilter.statustext") + ";"));
+			responseBuffer.insert(headIndex + 6, scriptTag("clientTimeVariable = new Date().getTime();"));
 		}
 		else if (ajaxStart != -1 && ajaxEnd != -1)
 		{
-			AppendingStringBuffer startScript = new AppendingStringBuffer(250);
-			startScript.append("<evaluate><![CDATA[window.defaultStatus='");
-			startScript.append(getStatusString(timeTaken,
-				"ajax.ServerAndClientTimeFilter.statustext"));
-			startScript.append("';]]></evaluate>");
-			responseBuffer.insert(ajaxEnd, startScript.toString());
-			responseBuffer.insert(ajaxStart + 15,
-				"<priority-evaluate><![CDATA[clientTimeVariable = new Date().getTime();]]></priority-evaluate>");
+			responseBuffer.insert(ajaxEnd, headerContribution("window.defaultStatus=" + getStatusString(timeTaken, "ajax.ServerAndClientTimeFilter.statustext") + ";"));
+			responseBuffer.insert(ajaxStart + 15, headerContribution("clientTimeVariable = new Date().getTime();"));
 		}
 		log.info(timeTaken + "ms server time taken for request " +
 			RequestCycle.get().getRequest().getUrl() + " response size: " + responseBuffer.length());

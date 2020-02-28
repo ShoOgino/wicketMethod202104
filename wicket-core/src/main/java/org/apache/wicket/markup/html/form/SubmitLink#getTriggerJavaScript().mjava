@@ -11,9 +11,11 @@
 			// find the root form - the one we are really going to submit
 			Form<?> root = getForm().getRootForm();
 
-			CharSequence url = urlForListener(new PageParameters());
-
-			return root.getJsForListenerUrl(url);
+			StringBuilder script = new StringBuilder();
+			script.append(root.getJsForSubmitter(this, shouldTriggerJavaScriptSubmitEvent()));
+			script.append("return false;");
+			
+			return script;
 		}
 		else
 		{

@@ -1,12 +1,17 @@
 	@Test
-	public void removePage()
+	void removePage()
 	{
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		IPageContext context = new MockPageContext(sessionId);
+		
+		pageStore.addPage(context, new SerializedPage(pageId, pageData));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 
-		pageStore.removePage(sessionId, pageId);
+		pageStore.removePage(context, new SerializedPage(pageId, pageData));
 
-		assertNull(pageStore.getPage(sessionId, pageId));
+		assertNull(pageStore.getPage(context, pageId));
+		
+		int pageId2 = 234;
+		pageStore.removePage(context, new SerializedPage(pageId2, pageData));
 	}
 

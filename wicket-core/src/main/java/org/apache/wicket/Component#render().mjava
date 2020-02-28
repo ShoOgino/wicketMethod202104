@@ -1,20 +1,21 @@
 	/**
-	 * Render the Component.
+	 * Render this component and all its children. Always calls hook {@link #onAfterRender()}
+	 * regardless of any exception.
 	 */
 	public final void render()
 	{
-		RuntimeException exception = null;
+		if (isAuto())
+		{
+			// auto components are prepared when rendered
+			beforeRender();
+		}
 
+		// Do the render
+		RuntimeException exception = null;
 		try
 		{
-			// Invoke prepareForRender only if this is the root component to be rendered
-			MarkupContainer parent = getParent();
-			if ((parent == null) || (parent.getFlag(FLAG_RENDERING) == false) || isAuto())
-			{
-				internalPrepareForRender(true);
-			}
-
-			// Do the render
+			setRequestFlag(RFLAG_RENDERING, true);
+			
 			internalRender();
 		}
 		catch (final RuntimeException ex)

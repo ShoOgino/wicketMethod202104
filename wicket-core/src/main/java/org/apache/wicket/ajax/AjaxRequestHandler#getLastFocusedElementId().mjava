@@ -4,8 +4,11 @@
 	@Override
 	public String getLastFocusedElementId()
 	{
-		WebRequest request = (WebRequest)page.getRequest();
+		WebRequest request = (WebRequest)getPage().getRequest();
+
 		String id = request.getHeader("Wicket-FocusedElementId");
-		return Strings.isEmpty(id) ? null : id;
+		
+		// WICKET-6568 might contain non-ASCII
+		return Strings.isEmpty(id) ? null : UrlDecoder.QUERY_INSTANCE.decode(id, request.getCharset());
 	}
 

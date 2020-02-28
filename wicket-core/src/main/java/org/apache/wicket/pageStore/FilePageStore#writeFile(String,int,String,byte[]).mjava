@@ -1,0 +1,25 @@
+	private void writeFile(String sessionIdentifier, int pageId, String pageType, byte[] data)
+	{
+		File file = getPageFile(sessionIdentifier, pageId, true);
+		try
+		{
+			FileChannel channel = FileChannel.open(file.toPath(), StandardOpenOption.CREATE,
+				StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+			try
+			{
+				ByteBuffer buffer = ByteBuffer.wrap(data);
+				channel.write(buffer);
+			}
+			finally
+			{
+				IOUtils.closeQuietly(channel);
+			}
+		}
+		catch (IOException ex)
+		{
+			log.warn("cannot store page data for session {} page {}", sessionIdentifier, pageId, ex);
+		}
+
+		setPageType(file, pageType);
+	}
+

@@ -11,6 +11,27 @@
 	 */
 	public final void onFormSubmitted(IFormSubmitter submitter)
 	{
+		// check methods match
+		if (getRequest().getContainerRequest() instanceof HttpServletRequest)
+		{
+			String desiredMethod = getMethod();
+			String actualMethod = ((HttpServletRequest)getRequest().getContainerRequest()).getMethod();
+			if (!actualMethod.equalsIgnoreCase(desiredMethod))
+			{
+				MethodMismatchResponse response = onMethodMismatch();
+				switch (response)
+				{
+					case ABORT :
+						return;
+					case CONTINUE :
+						break;
+					default :
+						throw new IllegalStateException("Invalid " +
+								MethodMismatchResponse.class.getName() + " value: " + response);
+				}
+			}
+		}
+
 		markFormsSubmitted(submitter);
 
 		if (handleMultiPart())
@@ -18,10 +39,10 @@
 			// Tells FormComponents that a new user input has come
 			inputChanged();
 
-			// First, see if the processing was triggered by a Wicket IFormSubmittingComponent
+			// First, see if the processing was triggered by a IFormSubmittingComponent
 			if (submitter == null)
 			{
-				submitter = findSubmittingButton();
+				submitter = findSubmitter();
 
 				if (submitter instanceof IFormSubmittingComponent)
 				{

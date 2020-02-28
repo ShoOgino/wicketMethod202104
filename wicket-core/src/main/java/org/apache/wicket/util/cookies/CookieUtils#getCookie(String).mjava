@@ -1,29 +1,27 @@
 	/**
 	 * Gets the cookie with 'name' attached to the latest WebRequest.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the cookie to be looked up
-	 * 
+	 *
 	 * @return Any cookies for this request
 	 */
 	public Cookie getCookie(final String name)
 	{
-		String key = getSaveKey(name);
-
 		try
 		{
 			WebRequest webRequest = getWebRequest();
-			Cookie cookie = webRequest.getCookie(key);
+			Cookie cookie = webRequest.getCookie(name);
 			if (log.isDebugEnabled())
 			{
 				if (cookie != null)
 				{
-					log.debug("Found Cookie with name=" + key + " and request URI=" +
+					log.debug("Found Cookie with name=" + name + " and request URI=" +
 							webRequest.getUrl().toString());
 				}
 				else
 				{
-					log.debug("Unable to find Cookie with name=" + key + " and request URI=" +
+					log.debug("Unable to find Cookie with name=" + name + " and request URI=" +
 							webRequest.getUrl().toString());
 				}
 			}

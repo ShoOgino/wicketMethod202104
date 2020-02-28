@@ -1,0 +1,21 @@
+	/**
+	 * Wicket should trigger an exception signaling the
+	 * error on the developers part that a component that is part of another page is being refreshed
+	 * in the AJAX response.
+	 */
+	@Test
+	public void componentOnOtherPageShouldFail()
+	{
+		Label notOnPage = new Label("label");
+
+		ComponentNotOnPage otherPage = new ComponentNotOnPage(notOnPage);
+		otherPage.add(notOnPage);
+		
+		ComponentNotOnPage page = tester.startPage(new ComponentNotOnPage(notOnPage));
+		tester.startPage(page);
+
+                assertThrows(IllegalArgumentException.class, () -> {
+                        tester.clickLink("refresher", true);
+                });
+	}
+

@@ -1,0 +1,12 @@
+	@Override
+	protected IManageablePage getPersistedPage(String sessionIdentifier, int id)
+	{
+		byte[] data = readFile(sessionIdentifier, id);
+		if (data == null)
+		{
+			return null;
+		}
+		
+		return new SerializedPage(id, "unknown", data);
+	}
+

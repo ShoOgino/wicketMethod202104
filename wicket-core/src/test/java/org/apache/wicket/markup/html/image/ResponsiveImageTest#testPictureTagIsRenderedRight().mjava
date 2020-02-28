@@ -1,14 +1,14 @@
 	@Test
-	public void testPictureTagIsRenderedRight()
+	void testPictureTagIsRenderedRight()
 	{
 		tester.startPage(ImagePictureTestPage.class);
 		String lastResponseAsString = tester.getLastResponse().getDocument();
-		TagTester pictureTagTester = TagTester.createTagByAttribute(lastResponseAsString, "picture");
-		Assert.assertTrue(pictureTagTester.hasChildTag("img"));
-		Assert.assertTrue(pictureTagTester.hasChildTag("source"));
-		TagTester sourceTagTester = TagTester.createTagByAttribute(lastResponseAsString, "source");
-		Assert.assertTrue(sourceTagTester.hasAttribute("media"));
-		Assert.assertEquals("(min-width: 650px)", sourceTagTester.getAttribute("media"));
-		Assert.assertEquals("(min-width: 50em) 33vw", sourceTagTester.getAttribute("sizes"));
+		TagTester pictureTagTester = TagTester.createTagByName(lastResponseAsString, "picture");
+		assertTrue(pictureTagTester.hasChildTag("img"));
+		assertTrue(pictureTagTester.hasChildTag("source"));
+		TagTester sourceTagTester = TagTester.createTagByName(lastResponseAsString, "source");
+		assertTrue(sourceTagTester.hasAttribute("media"));
+		assertEquals("(min-width: 650px)", sourceTagTester.getAttribute("media"));
+		assertEquals("(min-width: 50em) 33vw", sourceTagTester.getAttribute("sizes"));
 	}
 

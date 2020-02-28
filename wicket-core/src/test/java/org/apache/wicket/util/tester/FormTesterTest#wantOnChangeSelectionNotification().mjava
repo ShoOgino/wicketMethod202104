@@ -1,22 +1,24 @@
 	@Test
-	public void wantOnChangeSelectionNotification()
+	void wantOnChangeSelectionNotification()
 	{
 		class TestPage extends WebPage implements IMarkupResourceStreamProvider
 		{
 			private String selection;
 
-			public TestPage()
+			TestPage()
 			{
 				Form<Object> form = new Form<>("form");
 				add(form);
 				List<String> choices = Arrays.asList("opt 1", "opt 2");
-				form.add(new DropDownChoice<String>("selector", Model.of(""), choices).add(new FormComponentUpdatingBehavior() {
-					@Override
-					protected void onUpdate()
+				form.add(new DropDownChoice<String>("selector", Model.of(""), choices)
+					.add(new FormComponentUpdatingBehavior()
 					{
-						selection = (String)getFormComponent().getDefaultModelObject();
-					}
-				}));
+						@Override
+						protected void onUpdate()
+						{
+							selection = (String)getFormComponent().getDefaultModelObject();
+						}
+					}));
 			}
 
 			@Override

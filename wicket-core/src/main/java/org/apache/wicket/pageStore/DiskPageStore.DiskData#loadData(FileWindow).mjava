@@ -1,0 +1,33 @@
+		/**
+		 * Loads the part of pagemap file specified by the given PageWindow.
+		 * 
+		 * @param window
+		 * @return serialized page data
+		 */
+		public byte[] loadData(FileWindow window)
+		{
+			byte[] result = null;
+			FileChannel channel = getFileChannel(false);
+			if (channel != null)
+			{
+				ByteBuffer buffer = ByteBuffer.allocate(window.getFilePartSize());
+				try
+				{
+					channel.read(buffer, window.getFilePartOffset());
+					if (buffer.hasArray())
+					{
+						result = buffer.array();
+					}
+				}
+				catch (IOException e)
+				{
+					log.error("Error reading from file channel " + channel, e);
+				}
+				finally
+				{
+					IOUtils.closeQuietly(channel);
+				}
+			}
+			return result;
+		}
+

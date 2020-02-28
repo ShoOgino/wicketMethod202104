@@ -1,20 +1,20 @@
 	/**
 	 * Tests for {@link Files#removeFolderAsync(java.io.File, IFileCleaner)}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
-	@Ignore // the test is unreliable on the CI server
+	@Disabled // the test is unreliable on the CI server
 	public void removeFolderAsync() throws Exception
 	{
-		assertFalse("'null' folders are not deleted.", Files.removeFolderAsync(null, null));
+		assertFalse(Files.removeFolderAsync(null, null), "'null' folders are not deleted.");
 
 		IFileCleaner fileCleaner = new FileCleaner();
 
 		File nonExistingFolder = new File(
 			"/somethingThatDoesntExistsOnMostMachines-111111111111111111111111111111");
-		assertTrue("Even non existing folders are scheduled for deletion.",
-			Files.removeFolderAsync(nonExistingFolder, fileCleaner));
+		assertTrue(Files.removeFolderAsync(nonExistingFolder, fileCleaner),
+			"Even non existing folders are scheduled for deletion.");
 		assertFalse(nonExistingFolder.exists());
 
 		java.io.File folder = getFolder();
@@ -24,8 +24,8 @@
 		file.createNewFile();
 		assertTrue(file.exists());
 
-		assertTrue("The folder is scheduled for deletion.",
-			Files.removeFolderAsync(folder, fileCleaner));
+		assertTrue(Files.removeFolderAsync(folder, fileCleaner),
+			"The folder is scheduled for deletion.");
 
 		// remove the reference to the folder to be deleted
 		// this way the FileCleaningTracker's ReferenceQueue will mark it as eligible for GC
@@ -35,6 +35,6 @@
 		System.gc();
 		Thread.sleep(5);
 		java.io.File newFolderReference = getFolder();
-		assertFalse("The folder still exists", newFolderReference.exists());
+		assertFalse(newFolderReference.exists(), "The folder still exists");
 	}
 

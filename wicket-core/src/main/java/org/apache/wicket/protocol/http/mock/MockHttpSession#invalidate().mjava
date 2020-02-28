@@ -4,6 +4,11 @@
 	@Override
 	public void invalidate()
 	{
+		Session session = (Session) attributes.get("wicket:" + BaseWicketTester.TestFilterConfig.class.getName() + ":session");
+		if (session != null)
+		{
+			session.onInvalidate();
+		}
 		attributes.clear();
 		id = generateSessionId();
 	}

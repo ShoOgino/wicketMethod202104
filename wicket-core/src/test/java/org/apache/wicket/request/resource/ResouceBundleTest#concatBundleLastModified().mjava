@@ -1,0 +1,63 @@
+	/**
+	 * WICKET-6720 do not concat eagerly
+	 */
+	@Test
+	void concatBundleLastModified()
+	{
+		final Instant lastModified = Instant.now();
+		
+		ConcatBundleResource bundle = new ConcatBundleResource(Arrays.asList(
+			JavaScriptHeaderItem.forReference(new ResourceReference("foo") {
+				public IResource getResource() {
+					return new IStaticCacheableResource()
+					{
+						@Override
+						public void respond(Attributes attributes)
+						{
+							fail();
+						}
+
+						@Override
+						public boolean isCachingEnabled()
+						{
+							return true;
+						}
+
+						@Override
+						public Serializable getCacheKey()
+						{
+							return "";
+						}
+
+						@Override
+						public IResourceStream getResourceStream()
+						{
+							return new AbstractResourceStream()
+							{
+								
+								@Override
+								public Instant lastModifiedTime()
+								{
+									return lastModified;
+								}
+								
+								@Override
+								public InputStream getInputStream() throws ResourceStreamNotFoundException
+								{
+									return fail();
+								}
+								
+								@Override
+								public void close() throws IOException
+								{
+									fail();
+								}
+							};
+						}
+					};
+				}
+			})));
+
+		assertEquals(lastModified, bundle.getResourceStream().lastModifiedTime());
+	}
+

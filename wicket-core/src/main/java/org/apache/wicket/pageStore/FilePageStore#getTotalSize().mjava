@@ -1,0 +1,20 @@
+	@Override
+	public Bytes getTotalSize()
+	{
+		long total = 0;
+
+		for (File folder : folders.getAll())
+		{
+			for (File file : folder.listFiles())
+			{
+				String name = file.getName();
+				if (name.endsWith(FILE_SUFFIX))
+				{
+					total += file.length();
+				}
+			}
+		}
+
+		return Bytes.bytes(total);
+	}
+

@@ -2,12 +2,13 @@
 	 * Test that the executeAjaxEvent "submits" the form if the event is a AjaxFormSubmitBehavior.
 	 */
 	@Test
-	public void executeAjaxEvent_ajaxFormSubmitLink()
+	void executeAjaxEvent_ajaxFormSubmitLink()
 	{
 		tester.startPage(MockPageWithFormAndAjaxFormSubmitBehavior.class);
 
 		// Get the page
-		MockPageWithFormAndAjaxFormSubmitBehavior page = (MockPageWithFormAndAjaxFormSubmitBehavior)tester.getLastRenderedPage();
+		MockPageWithFormAndAjaxFormSubmitBehavior page = (MockPageWithFormAndAjaxFormSubmitBehavior)tester
+			.getLastRenderedPage();
 
 		Pojo pojo = page.getPojo();
 
@@ -22,8 +23,9 @@
 		// Execute the ajax event
 		tester.executeAjaxEvent(MockPageWithFormAndAjaxFormSubmitBehavior.EVENT_COMPONENT, "click");
 
-		assertTrue("AjaxFormSubmitBehavior.onSubmit() has not been executed in " +
-			MockPageWithFormAndAjaxFormSubmitBehavior.class, page.isExecuted());
+		assertTrue(page.isExecuted(),
+			"AjaxFormSubmitBehavior.onSubmit() has not been executed in " +
+				MockPageWithFormAndAjaxFormSubmitBehavior.class);
 
 		assertEquals("Mock name",
 			((TextField<?>)tester.getComponentFromLastRenderedPage("form:name")).getValue());

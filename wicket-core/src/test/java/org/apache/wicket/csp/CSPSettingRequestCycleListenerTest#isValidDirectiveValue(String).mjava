@@ -1,0 +1,25 @@
+	// @see: http://content-security-policy.com/#source_list
+	private boolean isValidDirectiveValue(String directiveValue)
+	{
+		if ("*".equals(directiveValue))
+			return true;
+		else if ("data:".equals(directiveValue) || "https:".equals(directiveValue))
+			return true;
+
+		// strip off "*." for "*.example.com" so we can check "example.com" to be a valid
+		// URI.
+		if (directiveValue.startsWith("*."))
+			directiveValue = directiveValue.substring(2);
+		try
+		{
+			new URI(directiveValue);
+			return true;
+		}
+		catch (URISyntaxException ignored)
+		{
+			// fall through
+		}
+
+		return false;
+	}
+

@@ -1,0 +1,37 @@
+	@Override
+	public List<IPersistedPage> getPersistedPages(String sessionIdentifier)
+	{
+		List<IPersistedPage> pages = new ArrayList<>();
+
+		File folder = folders.get(sessionIdentifier, false);
+		if (folder.exists())
+		{
+			File[] files = folder.listFiles();
+			Arrays.sort(files, new LastModifiedComparator());
+			for (File file : files)
+			{
+				String name = file.getName();
+				if (name.endsWith(FILE_SUFFIX))
+				{
+					int pageId;
+					try
+					{
+						pageId = Integer
+							.valueOf(name.substring(0, name.length() - FILE_SUFFIX.length()));
+					}
+					catch (Exception ex)
+					{
+						log.debug("unexpected file {}", file.getAbsolutePath());
+						continue;
+					}
+
+					String pageType = getPageType(file);
+
+					pages.add(new PersistedPage(pageId, pageType, file.length()));
+				}
+			}
+		}
+
+		return pages;
+	}
+

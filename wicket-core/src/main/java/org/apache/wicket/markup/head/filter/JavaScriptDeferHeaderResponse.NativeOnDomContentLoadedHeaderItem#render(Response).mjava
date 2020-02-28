@@ -1,0 +1,13 @@
+		/**
+		 * Overriden to use native {@code addEventListener('DOMContentLoaded')} instead.
+		 */
+		@Override
+		public void render(Response response)
+		{
+			CharSequence js = getJavaScript();
+			if (Strings.isEmpty(js) == false)
+			{
+				JavaScriptUtils.writeJavaScript(response, "document.addEventListener('DOMContentLoaded', function() { " + js + "; });");
+			}
+		}
+

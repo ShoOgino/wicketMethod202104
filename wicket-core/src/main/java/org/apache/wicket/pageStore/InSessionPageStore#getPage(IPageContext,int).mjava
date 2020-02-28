@@ -1,0 +1,16 @@
+	@Override
+	public IManageablePage getPage(IPageContext context, int id)
+	{
+		SessionData data = getSessionData(context, false);
+		if (data != null)
+		{
+			IManageablePage page = data.get(id);
+			if (page != null)
+			{
+				return page;
+			}
+		}
+
+		return getDelegate().getPage(context, id);
+	}
+
