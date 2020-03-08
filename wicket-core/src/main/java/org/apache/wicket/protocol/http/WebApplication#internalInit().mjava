@@ -33,12 +33,12 @@
 
 		getResourceSettings().setFileCleaner(new FileCleaner());
 
-		cspEnforcer = newCspEnforcer();
-		getRequestCycleListeners().add(getCsp());
+		cspSettings = newCspEnforcer();
+		getRequestCycleListeners().add(getCspSettings());
 		getHeaderResponseDecorators()
-			.add(response -> new CSPNonceHeaderResponseDecorator(response, getCsp()));
-		mount(new ReportCSPViolationMapper(getCsp()));
-		getCsp().blocking().strict();
+			.add(response -> new CSPNonceHeaderResponseDecorator(response, getCspSettings()));
+		mount(new ReportCSPViolationMapper(getCspSettings()));
+		getCspSettings().blocking().strict();
 		
 		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT)
 		{
@@ -48,7 +48,7 @@
 			{
 				getResourceSettings().getResourceFinders().add(new Path(resourceFolder));
 			}
-			getCsp().blocking().reportBack();
+			getCspSettings().blocking().reportBack();
 		}
 		setPageRendererProvider(WebPageRenderer::new);
 		setSessionStoreProvider(HttpSessionStore::new);

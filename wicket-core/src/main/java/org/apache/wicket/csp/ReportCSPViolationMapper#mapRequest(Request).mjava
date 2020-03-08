@@ -12,7 +12,10 @@
 					{
 						HttpServletRequest httpRequest =
 							((ServletWebRequest) requestCycle.getRequest()).getContainerRequest();
-						log.error(reportToString(httpRequest));
+						if (log.isErrorEnabled())
+						{
+							log.error(reportToString(httpRequest));
+						}
 					}
 					catch (IOException e)
 					{
@@ -25,7 +28,7 @@
 					try (StringWriter sw = new StringWriter())
 					{
 						char[] buffer = new char[MAX_LOG_SIZE];
-						int n = 0;
+						int n;
 						if (-1 != (n = httpRequest.getReader().read(buffer)))
 						{
 							sw.write(buffer, 0, n);
