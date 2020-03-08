@@ -5,7 +5,7 @@
 		Optional<Component> first = loginPage.stream()
 			.filter(c -> c.getId().equals("form"))
 			.findFirst();
-		assertEquals(false, first.isPresent());
+		assertFalse(first.isPresent());
 
 		Form<Object> form = new Form<>("form");
 		loginPage.add(form);
@@ -13,19 +13,13 @@
 		form.add(new TextField<>("field"));
 
 		assertTrue(loginPage.streamChildren()
-			.filter(c -> c.getId().equals("form"))
-			.findFirst()
-			.isPresent());
+		                    .anyMatch(c -> c.getId().equals("form")));
 
 		assertTrue(loginPage.streamChildren()
-			.filter(c -> c.getId().equals("field"))
-			.findFirst()
-			.isPresent());
+		                    .anyMatch(c -> c.getId().equals("field")));
 
 		assertTrue(loginPage.streamChildren()
-			.filter(TextField.class::isInstance)
-			.filter(c -> c.getId().equals("field"))
-			.findFirst()
-			.isPresent());
+		                    .filter(TextField.class::isInstance)
+		                    .anyMatch(c -> c.getId().equals("field")));
 	}
 
