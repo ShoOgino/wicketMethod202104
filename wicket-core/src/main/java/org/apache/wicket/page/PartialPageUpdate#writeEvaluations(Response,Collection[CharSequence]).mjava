@@ -2,12 +2,12 @@
 	 *
 	 * @param response
 	 *      the response to write to
-	 * @param js
-	 *      the JavaScript to evaluate
+	 * @param scripts
+	 *      the JavaScripts to evaluate
 	 */
 	protected void writeEvaluations(final Response response, Collection<CharSequence> scripts)
 	{
-		if (scripts.size() > 0)
+		if (!scripts.isEmpty())
 		{
 			StringBuilder combinedScript = new StringBuilder(1024);
 			for (CharSequence script : scripts)
@@ -16,7 +16,7 @@
 			}
 
 			StringResponse stringResponse = new StringResponse();
-			IHeaderResponse headerResponse = Application.get().decorateHeaderResponse(new HeaderResponse()
+			IHeaderResponse decoratedHeaderResponse = Application.get().decorateHeaderResponse(new HeaderResponse()
 			{
 				@Override
 				protected Response getRealResponse()
@@ -25,8 +25,8 @@
 				}
 			});
 			
-			headerResponse.render(JavaScriptHeaderItem.forScript(combinedScript, null));
-			headerResponse.close();
+			decoratedHeaderResponse.render(JavaScriptHeaderItem.forScript(combinedScript, null));
+			decoratedHeaderResponse.close();
 			
 			writeHeaderContribution(response, stringResponse.getBuffer());
 		}

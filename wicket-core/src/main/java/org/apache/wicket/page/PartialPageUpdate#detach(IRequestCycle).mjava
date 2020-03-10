@@ -6,13 +6,9 @@
 	 */
 	public void detach(IRequestCycle requestCycle)
 	{
-		Iterator<Component> iterator = markupIdToComponent.values().iterator();
-		while (iterator.hasNext())
-		{
-			final Component component = iterator.next();
+		for (final Component component : markupIdToComponent.values()) {
 			final Page parentPage = component.findParent(Page.class);
-			if (parentPage != null)
-			{
+			if (parentPage != null) {
 				parentPage.detach();
 				break;
 			}

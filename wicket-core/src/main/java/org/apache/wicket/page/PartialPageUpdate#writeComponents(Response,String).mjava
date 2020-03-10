@@ -17,11 +17,8 @@
 		try (FeedbackDelay delay = new FeedbackDelay(RequestCycle.get())) {
 			for (Component component : markupIdToComponent.values())
 			{
-				if (!containsAncestorFor(component))
-				{
-					if (prepareComponent(component)) {
-						toBeWritten.add(component);
-					}
+				if (!containsAncestorFor(component) && prepareComponent(component)) {
+					toBeWritten.add(component);
 				}
 			}
 
