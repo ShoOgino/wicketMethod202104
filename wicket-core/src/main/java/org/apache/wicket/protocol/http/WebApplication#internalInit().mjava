@@ -33,23 +33,6 @@
 
 		getResourceSettings().setFileCleaner(new FileCleaner());
 
-		cspSettings = newCspEnforcer();
-		getRequestCycleListeners().add(getCspSettings());
-		getHeaderResponseDecorators()
-			.add(response -> new CSPNonceHeaderResponseDecorator(response, getCspSettings()));
-		mount(new ReportCSPViolationMapper(getCspSettings()));
-		getCspSettings().blocking().strict();
-		
-		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT)
-		{
-			// Add optional sourceFolder for resources.
-			String resourceFolder = getInitParameter("sourceFolder");
-			if (resourceFolder != null)
-			{
-				getResourceSettings().getResourceFinders().add(new Path(resourceFolder));
-			}
-			getCspSettings().blocking().reportBack();
-		}
 		setPageRendererProvider(WebPageRenderer::new);
 		setSessionStoreProvider(HttpSessionStore::new);
 		setAjaxRequestTargetProvider(AjaxRequestHandler::new);
@@ -62,7 +45,20 @@
 			});
 		});
 
+		getContentSecurityPolicySettings().enforce(this);
+		
 		// Configure the app.
 		configure();
+		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT)
+		{
+			// Add optional sourceFolder for resources.
+			String resourceFolder = getInitParameter("sourceFolder");
+			if (resourceFolder != null)
+			{
+				getResourceSettings().getResourceFinders().add(new Path(resourceFolder));
+			}
+			getContentSecurityPolicySettings().blocking().reportBack();
+		}
+		getContentSecurityPolicySettings().blocking().strict();
 	}
 

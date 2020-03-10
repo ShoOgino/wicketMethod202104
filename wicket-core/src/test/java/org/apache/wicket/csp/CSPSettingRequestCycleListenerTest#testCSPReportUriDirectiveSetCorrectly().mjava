@@ -1,12 +1,11 @@
 	@Test
 	public void testCSPReportUriDirectiveSetCorrectly()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
-		cspListener.blocking().add(REPORT_URI, "http://report.example.com");
-		cspListener.reporting().add(REPORT_URI, "/example-report-uri");
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
+		settings.blocking().add(REPORT_URI, "http://report.example.com");
+		settings.reporting().add(REPORT_URI, "/example-report-uri");
 
-		List<String> headerErrors = checkHeaders(cspListener);
+		List<String> headerErrors = checkHeaders();
 
 		if (!headerErrors.isEmpty())
 		{

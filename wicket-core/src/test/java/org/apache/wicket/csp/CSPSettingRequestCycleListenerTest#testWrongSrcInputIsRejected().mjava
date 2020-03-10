@@ -1,10 +1,9 @@
 	@Test
 	public void testWrongSrcInputIsRejected()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(DEFAULT_SRC, ALLOW_FORMS);
+			settings.blocking().add(DEFAULT_SRC, ALLOW_FORMS);
 		});
 	}
 

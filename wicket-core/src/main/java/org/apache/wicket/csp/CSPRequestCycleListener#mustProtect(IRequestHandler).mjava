@@ -1,0 +1,21 @@
+	/**
+	 * Must the given handler be protected.
+	 * 
+	 * @param handler
+	 *            handler
+	 * @return <code>true</code> if must protected
+	 * @see ContentSecurityPolicySettings#mustProtectPageRequest(IPageClassRequestHandler)
+	 */
+	protected boolean mustProtect(IRequestHandler handler)
+	{
+		if (handler instanceof IRequestHandlerDelegate)
+		{
+			return mustProtect(((IRequestHandlerDelegate)handler).getDelegateHandler());
+		}
+		if (handler instanceof IPageClassRequestHandler)
+		{
+			return settings.mustProtectPageRequest((IPageClassRequestHandler)handler);
+		}
+		return !(handler instanceof BufferedResponseRequestHandler);
+	}
+

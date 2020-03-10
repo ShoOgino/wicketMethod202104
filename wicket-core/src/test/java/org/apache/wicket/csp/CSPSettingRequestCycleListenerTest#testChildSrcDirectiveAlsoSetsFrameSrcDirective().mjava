@@ -5,11 +5,10 @@
 	@Test
 	public void testChildSrcDirectiveAlsoSetsFrameSrcDirective()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
-		cspListener.blocking().add(CHILD_SRC, SELF);
-		cspListener.reporting().add(CHILD_SRC, SELF);
-		List<String> headerErrors = checkHeaders(cspListener);
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
+		settings.blocking().add(CHILD_SRC, SELF);
+		settings.reporting().add(CHILD_SRC, SELF);
+		List<String> headerErrors = checkHeaders();
 
 		if (!headerErrors.isEmpty())
 		{

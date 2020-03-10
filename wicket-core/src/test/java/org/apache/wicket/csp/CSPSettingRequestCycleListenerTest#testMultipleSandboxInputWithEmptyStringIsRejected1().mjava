@@ -1,11 +1,10 @@
 	@Test
 	public void testMultipleSandboxInputWithEmptyStringIsRejected1()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
-		cspListener.blocking().add(SANDBOX, ALLOW_FORMS);
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
+		settings.blocking().add(SANDBOX, ALLOW_FORMS);
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(SANDBOX, EMPTY);
+			settings.blocking().add(SANDBOX, EMPTY);
 		});
 	}
 

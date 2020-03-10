@@ -5,11 +5,10 @@
 	@Test
 	public void testMultipleSrcInputWithStarIsRejected1()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
-		cspListener.blocking().add(DEFAULT_SRC, SELF);
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
+		settings.blocking().add(DEFAULT_SRC, SELF);
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(DEFAULT_SRC, WILDCARD);
+			settings.blocking().add(DEFAULT_SRC, WILDCARD);
 		});
 	}
 

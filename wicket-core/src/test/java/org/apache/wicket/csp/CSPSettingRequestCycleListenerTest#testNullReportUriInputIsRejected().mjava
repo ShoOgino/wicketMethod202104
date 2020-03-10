@@ -1,10 +1,9 @@
 	@Test
 	public void testNullReportUriInputIsRejected()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(REPORT_URI, (String) null);
+			settings.blocking().add(REPORT_URI, (String) null);
 		});
 	}
 

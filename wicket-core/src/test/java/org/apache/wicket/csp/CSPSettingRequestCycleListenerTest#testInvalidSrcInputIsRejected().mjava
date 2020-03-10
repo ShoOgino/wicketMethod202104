@@ -5,10 +5,9 @@
 	@Test
 	public void testInvalidSrcInputIsRejected()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(DEFAULT_SRC, "abc?^()-_\'xyz");
+			settings.blocking().add(DEFAULT_SRC, "abc?^()-_\'xyz");
 		});
 	}
 

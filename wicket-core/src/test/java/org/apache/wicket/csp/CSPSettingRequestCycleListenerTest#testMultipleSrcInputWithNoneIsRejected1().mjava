@@ -5,10 +5,9 @@
 	@Test
 	public void testMultipleSrcInputWithNoneIsRejected1()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(DEFAULT_SRC, SELF, NONE);
+			settings.blocking().add(DEFAULT_SRC, SELF, NONE);
 		});
 	}
 

@@ -1,12 +1,11 @@
-	private List<String> checkHeaders(ContentSecurityPolicySettings cspListener)
+	private List<String> checkHeaders()
 	{
 		List<String> headerErrors = new ArrayList<>();
-		wicketTester.getRequestCycle().getListeners().add(cspListener);
-		wicketTester.executeUrl("/");
+		tester.executeUrl("/");
 		String cspHeaderValue =
-			wicketTester.getLastResponse().getHeader(CSPHeaderMode.BLOCKING.getHeader());
+			tester.getLastResponse().getHeader(CSPHeaderMode.BLOCKING.getHeader());
 		String cspReportingHeaderValue =
-			wicketTester.getLastResponse().getHeader(CSPHeaderMode.REPORT_ONLY.getHeader());
+			tester.getLastResponse().getHeader(CSPHeaderMode.REPORT_ONLY.getHeader());
 
 		if (cspHeaderValue == null)
 		{

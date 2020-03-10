@@ -1,0 +1,14 @@
+	/**
+	 * Enforce CSP settings on an application.
+	 * 
+	 * @param application
+	 *            application
+	 */
+	public void enforce(WebApplication application)
+	{
+		application.getRequestCycleListeners().add(new CSPRequestCycleListener(this));
+		application.getHeaderResponseDecorators()
+			.add(response -> new CSPNonceHeaderResponseDecorator(response, this));
+		application.mount(new ReportCSPViolationMapper(this));
+	}
+

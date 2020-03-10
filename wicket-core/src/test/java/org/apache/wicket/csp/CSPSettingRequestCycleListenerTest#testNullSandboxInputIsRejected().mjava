@@ -1,10 +1,9 @@
 	@Test
 	public void testNullSandboxInputIsRejected()
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			cspListener.blocking().add(SANDBOX, (String) null);
+			settings.blocking().add(SANDBOX, (String) null);
 		});
 	}
 

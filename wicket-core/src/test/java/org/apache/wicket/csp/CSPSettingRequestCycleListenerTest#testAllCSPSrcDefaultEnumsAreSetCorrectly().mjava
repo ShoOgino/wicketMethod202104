@@ -1,8 +1,7 @@
 	@Test
 	public void testAllCSPSrcDefaultEnumsAreSetCorrectly() throws NoSuchAlgorithmException
 	{
-		ContentSecurityPolicySettings cspListener =
-			new ContentSecurityPolicySettings(tester.getApplication());
+		ContentSecurityPolicySettings settings = tester.getApplication().getContentSecurityPolicySettings();
 
 		final int cspDirectiveCount = CSPDirective.values().length;
 		final int cspDirectiveSrcValueCount = CSPDirectiveSrcValue.values().length;
@@ -14,13 +13,13 @@
 			{
 				final CSPDirectiveSrcValue cspDirectiveValue =
 					CSPDirectiveSrcValue.values()[i % cspDirectiveSrcValueCount];
-				cspListener.blocking().add(cspDirective, cspDirectiveValue);
+				settings.blocking().add(cspDirective, cspDirectiveValue);
 
-				cspListener.reporting().add(cspDirective, cspDirectiveValue);
+				settings.reporting().add(cspDirective, cspDirectiveValue);
 			}
 		}
 
-		List<String> headerErrors = checkHeaders(cspListener);
+		List<String> headerErrors = checkHeaders();
 
 		if (!headerErrors.isEmpty())
 		{
