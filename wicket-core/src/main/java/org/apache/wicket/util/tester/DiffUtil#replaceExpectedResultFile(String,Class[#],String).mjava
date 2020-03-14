@@ -1,6 +1,6 @@
 	/**
 	 * Replace the expected result file with the current output.
-	 * 
+	 *
 	 * @param document
 	 *            How the expected result should look like
 	 * @param clazz
@@ -16,9 +16,17 @@
 		filename = filename.replace('.', '/');
 		filename += "/" + file;
 
-		final URL url = clazz.getClassLoader().getResource(filename);
-		filename = url.getFile();
-		filename = filename.replaceAll("/target/test-classes/", "/src/test/java/");
+		try
+		{
+			final URL url = clazz.getClassLoader().getResource(filename);
+			filename = new File(url.toURI()).getAbsolutePath();
+		}
+		catch (URISyntaxException ex)
+		{
+			throw new IOException(ex);
+		}
+
+		filename = filename.replaceAll("([/\\\\])target\\1test-classes\\1", "$1src$1test$1java$1");
 		PrintWriter out = new PrintWriter(new FileOutputStream(filename));
 		out.print(document);
 		out.close();
