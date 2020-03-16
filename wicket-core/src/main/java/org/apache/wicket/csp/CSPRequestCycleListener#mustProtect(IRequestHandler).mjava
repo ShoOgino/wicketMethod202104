@@ -4,7 +4,7 @@
 	 * @param handler
 	 *            handler
 	 * @return <code>true</code> if must protected
-	 * @see ContentSecurityPolicySettings#mustProtectPageRequest(IPageClassRequestHandler)
+	 * @see ContentSecurityPolicySettings#mustProtectRequest(IRequestHandler)
 	 */
 	protected boolean mustProtect(IRequestHandler handler)
 	{
@@ -12,10 +12,7 @@
 		{
 			return mustProtect(((IRequestHandlerDelegate)handler).getDelegateHandler());
 		}
-		if (handler instanceof RenderPageRequestHandler)
-		{
-			return settings.mustProtectPageRequest((RenderPageRequestHandler)handler);
-		}
-		return false;
+		
+		return settings.mustProtectRequest(handler);
 	}
 
