@@ -1,18 +1,18 @@
 	private void internalUnlockPages(final Integer pageId)
 	{
 		final Thread thread = Thread.currentThread();
-		final Iterator<PageAccessSynchronizer.PageLock> locks = this.locks.get().values().iterator();
+		final Iterator<PageAccessSynchronizer.PageLock> pageLockIterator = this.locks.get().values().iterator();
 
 		final boolean isDebugEnabled = logger.isDebugEnabled();
 
-		while (locks.hasNext())
+		while (pageLockIterator.hasNext())
 		{
 			// remove all locks held by this thread if 'pageId' is not specified
 			// otherwise just the lock for this 'pageId'
-			final PageAccessSynchronizer.PageLock lock = locks.next();
+			final PageAccessSynchronizer.PageLock lock = pageLockIterator.next();
 			if ((pageId == null || pageId == lock.getPageId()) && lock.getThread() == thread)
 			{
-				locks.remove();
+				pageLockIterator.remove();
 				if (isDebugEnabled)
 				{
 					logger.debug("'{}' released lock to page with id '{}'", thread.getName(),

@@ -11,9 +11,9 @@
 
 		PageAccessSynchronizer.PageLock previous = null;
 
-		Duration timeout = getTimeout(pageId);
+		Duration pageTimeout = getTimeout(pageId);
 
-		while (!locked && Durations.elapsedSince(start).compareTo(timeout) < 0)
+		while (!locked && Durations.elapsedSince(start).compareTo(pageTimeout) < 0)
 		{
 			if (isDebugEnabled)
 			{
@@ -31,7 +31,7 @@
 			else
 			{
 				// wait for a lock to become available
-				long remaining = remaining(start, timeout);
+				long remaining = remaining(start, pageTimeout);
 				if (remaining > 0)
 				{
 					previous.waitForRelease(remaining, isDebugEnabled);
@@ -50,11 +50,11 @@
 		{
 			if (logger.isWarnEnabled())
 			{
+				final String previousThreadName = previous != null ? previous.getThread().getName() : "N/A";
 				logger.warn(
 						"Thread '{}' failed to acquire lock to page with id '{}', attempted for {} out of allowed {}." +
 								" The thread that holds the lock has name '{}'.",
-						thread.getName(), pageId, Duration.between(start, Instant.now()), timeout,
-						previous.getThread().getName());
+						thread.getName(), pageId, Duration.between(start, Instant.now()), pageTimeout, previousThreadName);
 				if (Application.exists())
 				{
 					ExceptionSettings.ThreadDumpStrategy strategy = Application.get()
@@ -66,7 +66,15 @@
 							Threads.dumpAllThreads(logger);
 							break;
 						case THREAD_HOLDING_LOCK :
-							Threads.dumpSingleThread(logger, previous.getThread());
+							final Thread previousThread = previous != null ? previous.getThread() : null;
+							if (previousThread != null)
+							{
+								Threads.dumpSingleThread(logger, previousThread);
+							}
+							else
+							{
+								logger.warn("Cannot dump the stack of the previous thread because it is not available.");
+							}
 							break;
 						case NO_THREADS :
 						default :
@@ -74,7 +82,7 @@
 					}
 				}
 			}
-			throw new CouldNotLockPageException(pageId, thread.getName(), timeout);
+			throw new CouldNotLockPageException(pageId, thread.getName(), pageTimeout);
 		}
 	}
 
