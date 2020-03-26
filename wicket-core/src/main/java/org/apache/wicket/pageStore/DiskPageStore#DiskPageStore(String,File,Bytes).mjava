@@ -12,6 +12,30 @@
 	 */
 	public DiskPageStore(String applicationName, File fileStoreFolder, Bytes maxSizePerSession)
 	{
-		this(applicationName, fileStoreFolder, maxSizePerSession, null);
+		super(applicationName);
+		
+		this.folders = new NestedFolders(new File(fileStoreFolder, applicationName + "-filestore"));
+		this.maxSizePerSession = Args.notNull(maxSizePerSession, "maxSizePerSession");
+
+		this.diskDatas = new ConcurrentHashMap<>();
+
+		try
+		{
+			if (folders.getBase().exists() || folders.getBase().mkdirs())
+			{
+				loadIndex();
+			}
+			else
+			{
+				log.warn("Cannot create file store folder for some reason.");
+			}
+		}
+		catch (SecurityException e)
+		{
+			throw new WicketRuntimeException(
+				"SecurityException occurred while creating DiskPageStore. Consider using a non-disk based IPageStore implementation. "
+					+ "See org.apache.wicket.Application.setPageManagerProvider(IPageManagerProvider)",
+				e);
+		}
 	}
 

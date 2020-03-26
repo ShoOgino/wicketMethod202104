@@ -5,15 +5,14 @@
 			if (create || file.exists())
 			{
 				String mode = create ? "rw" : "r";
-				try
+				try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, mode))
 				{
-					RandomAccessFile randomAccessFile = new RandomAccessFile(file, mode);
 					channel = randomAccessFile.getChannel();
 				}
-				catch (FileNotFoundException fnfx)
+				catch (IOException iox)
 				{
 					// can happen if the file is locked. WICKET-4176
-					log.error(fnfx.getMessage(), fnfx);
+					log.error(iox.getMessage(), iox);
 				}
 			}
 			return channel;

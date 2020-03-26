@@ -7,13 +7,10 @@
 		}
 
 		String key = getKey(sessionId, page.getPageId());
-		if (key != null)
+		PendingAdd entry = queueMap.remove(key);
+		if (entry != null)
 		{
-			PendingAdd entry = queueMap.remove(key);
-			if (entry != null)
-			{
-				queue.remove(entry);
-			}
+			queue.remove(entry);
 		}
 
 		getDelegate().removePage(context, page);

@@ -5,17 +5,8 @@
 		if (sessionId == null) {
 			return;
 		}
-		
-		Iterator<PendingAdd> iterator = queue.iterator();
-		while (iterator.hasNext())
-		{
-			PendingAdd add = iterator.next(); 
-		
-			if (add.sessionId.equals(sessionId))
-			{
-				iterator.remove();
-			}
-		}
+
+		queue.removeIf(add -> add.sessionId.equals(sessionId));
 		
 		getDelegate().removeAllPages(context);
 	}

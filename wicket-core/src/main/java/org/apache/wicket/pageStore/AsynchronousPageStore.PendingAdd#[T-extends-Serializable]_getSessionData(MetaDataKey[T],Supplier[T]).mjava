@@ -9,12 +9,9 @@
 			if (asynchronous)
 			{
 				value = context.getSessionData(key, () -> null);
-				if (value == null )
+				if (value == null && defaultValue.get() != null)
 				{
-					if (defaultValue.get() != null)
-					{
 						throw new WicketRuntimeException("session data can not be changed asynchronuously");
-					}
 				}
 			}
 			else

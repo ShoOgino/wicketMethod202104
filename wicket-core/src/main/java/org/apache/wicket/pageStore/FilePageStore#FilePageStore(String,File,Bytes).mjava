@@ -12,6 +12,9 @@
 	 */
 	public FilePageStore(String applicationName, File fileStoreFolder, Bytes maxSizePerSession)
 	{
-		this(applicationName, fileStoreFolder, maxSizePerSession, null);
+		super(applicationName);
+		
+		this.folders = new NestedFolders(new File(fileStoreFolder, applicationName + "-filestore"));
+		this.maxSizePerSession = Args.notNull(maxSizePerSession, "maxSizePerSession");
 	}
 

@@ -4,18 +4,15 @@
 		Arrays.sort(files, new LastModifiedComparator());
 
 		long total = 0;
-		for (int f = 0; f < files.length; f++)
+		for (File candidate : files)
 		{
-			File candidate = files[f];
-
 			total += candidate.length();
 
 			if (total > maxSizePerSession.bytes())
 			{
 				if (!Files.remove(candidate))
 				{
-					log.warn("cannot remove page data for session {} page {}", sessionIdentifier,
-						candidate.getName());
+					log.warn("cannot remove page data for session {} page {}", sessionIdentifier, candidate.getName());
 				}
 			}
 		}
