@@ -19,7 +19,8 @@
 				{
 					InMemoryPageStore inMemory = new InMemoryPageStore("test", Integer.MAX_VALUE);
 					SerializingPageStore serializing = new SerializingPageStore(inMemory, new JavaSerializer("test"));
-					final IPageStore store = new InSessionPageStore(serializing, Integer.MAX_VALUE);
+					InSessionPageStore session = new InSessionPageStore(Integer.MAX_VALUE);
+					final IPageStore store = new CachingPageStore(serializing, session);
 					return new PageManager(store);
 				};
 			}

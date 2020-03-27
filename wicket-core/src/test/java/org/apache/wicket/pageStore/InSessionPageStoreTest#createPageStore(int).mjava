@@ -1,6 +1,13 @@
 	@Override
 	protected IPageStore createPageStore(int maxEntries)
 	{
-		return new InSessionPageStore(new NoopPageStore(), maxEntries);
+		return new InSessionPageStore(maxEntries) {
+			
+			@Override
+			protected MetaDataKey<SessionData> getKey()
+			{
+				return KEY;
+			}
+		};
 	}
 

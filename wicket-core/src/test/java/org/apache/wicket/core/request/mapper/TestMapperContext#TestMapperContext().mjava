@@ -8,7 +8,8 @@
 		pageContext = new MockPageContext();
 		
 		InMemoryPageStore inMemoryPageStore = new InMemoryPageStore(appName, Integer.MAX_VALUE);
-		pageStore = new InSessionPageStore(inMemoryPageStore, 4, new JavaSerializer(appName));
+		InSessionPageStore inSessionPageStore = new InSessionPageStore(4, new JavaSerializer(appName));
+		pageStore = new CachingPageStore(inMemoryPageStore, inSessionPageStore);
 		pageManager = new PageManager(new RequestPageStore(pageStore)) {
 			@Override
 			protected IPageContext createPageContext()
