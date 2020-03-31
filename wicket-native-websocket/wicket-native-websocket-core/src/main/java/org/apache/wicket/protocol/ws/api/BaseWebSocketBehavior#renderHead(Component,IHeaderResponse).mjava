@@ -5,52 +5,8 @@
 
 		response.render(JavaScriptHeaderItem.forReference(WicketWebSocketJQueryResourceReference.get()));
 
-		PackageTextTemplate webSocketSetupTemplate =
-				new PackageTextTemplate(WicketWebSocketJQueryResourceReference.class,
-						"res/js/wicket-websocket-setup.js.tmpl");
-
-		Map<String, Object> variables = Generics.newHashMap();
-
-
-		// set falsy JS values for the non-used parameter
-		if (Strings.isEmpty(resourceName))
-		{
-			int pageId = component.getPage().getPageId();
-			variables.put("pageId", pageId);
-			variables.put("resourceName", "");
-		}
-		else
-		{
-			variables.put("resourceName", resourceName);
-			variables.put("pageId", false);
-		}
-
-		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(component.getApplication());
-
-		CharSequence baseUrl = getBaseUrl(webSocketSettings);
-		Args.notNull(baseUrl, "baseUrl");
-		variables.put("baseUrl", baseUrl);
-
-		Integer port = getPort(webSocketSettings);
-		variables.put("port", port);
-		Integer securePort = getSecurePort(webSocketSettings);
-		variables.put("securePort", securePort);
-
-		CharSequence contextPath = getContextPath(webSocketSettings);
-		Args.notNull(contextPath, "contextPath");
-		variables.put("contextPath", contextPath);
-
-		// preserve the application name for JSR356 based impl
-		variables.put("applicationName", component.getApplication().getName());
-
-		CharSequence filterPrefix = getFilterPrefix(webSocketSettings);
-		Args.notNull(filterPrefix, "filterPrefix");
-		variables.put("filterPrefix", filterPrefix);
-
-		final CharSequence sessionId = getSessionId(component);
-		variables.put("sessionId", sessionId);
-
-		String webSocketSetupScript = webSocketSetupTemplate.asString(variables);
+		Map<String, Object> parameters = getParameters(component);
+		String webSocketSetupScript = getWebSocketSetupScript(parameters);
 
 		response.render(OnDomReadyHeaderItem.forScript(webSocketSetupScript));
 	}
