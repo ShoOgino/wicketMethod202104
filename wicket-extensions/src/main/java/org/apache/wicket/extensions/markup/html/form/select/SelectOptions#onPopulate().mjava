@@ -11,20 +11,35 @@
 			removeAll();
 
 			Collection<? extends T> modelObject = (Collection<? extends T>)getDefaultModelObject();
-
 			if (modelObject != null)
 			{
+				// TODO remove in Wicket 10
+				boolean option = "option".equalsIgnoreCase(getMarkupTag().getName());
+				if (option == false)
+				{
+					log.warn("Since version 9.0.0 you should use an option tag");
+				}
+
 				for (T value : modelObject)
 				{
-					// we need a container to represent a row in repeater
-					WebMarkupContainer row = new WebMarkupContainer(newChildId());
-					row.setRenderBodyOnly(true);
-					add(row);
-
 					// we add our actual SelectOption component to the row
 					String text = renderer.getDisplayValue(value);
 					IModel<T> model = renderer.getModel(value);
-					row.add(newOption(text, model));
+
+					if (option)
+					{
+						add(newOption(newChildId(), text, model));
+					}
+					else
+					{
+						// pre Wicket 9 a container is used to represent a row in repeater
+						WebMarkupContainer row = new WebMarkupContainer(newChildId());
+						row.setRenderBodyOnly(true);
+						add(row);
+
+						// we add our actual SelectOption component to the row
+						row.add(newOption(text, model));
+					}
 				}
 			}
 		}
