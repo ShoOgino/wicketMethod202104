@@ -1,8 +1,8 @@
 	/**
 	 * Keep page up to {@code maxBytes} for each session.
 	 * <p>
-	 * All pages added to this store <em>must</em> be {@code SerializedPage}s. You can achieve this by letting
-	 * a {@link SerializingPageStore} delegate to this store.
+	 * All pages added to this store <em>must</em> be {@code SerializedPage}s. You can achieve this
+	 * by letting a {@link SerializingPageStore} delegate to this store.
 	 * 
 	 * @param applicationName
 	 *            {@link Application#getName()}
@@ -11,6 +11,6 @@
 	 */
 	public InMemoryPageStore(String applicationName, Bytes maxBytes)
 	{
-		this(applicationName, () -> new SizeLimitedData(maxBytes));
+		this(applicationName, () -> new SizeLimitedData(maxBytes), new ConcurrentHashMap<>());
 	}
 
