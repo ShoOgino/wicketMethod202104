@@ -20,22 +20,22 @@
 
 		WebResponse response = (WebResponse)requestCycle.getResponse();
 
-		if (status == HttpServletResponse.SC_MOVED_TEMPORARILY)
+		if (mode == Mode.REDIRECT)
+		{
+			response.sendRedirect(location);
+		}
+		else if (mode == Mode.STATUS)
+		{
+			setStatus(response, requestCycle, location);
+		}
+		// Mode.AUTO
+		else if (status == HttpServletResponse.SC_MOVED_TEMPORARILY)
 		{
 			response.sendRedirect(location);
 		}
 		else
 		{
-			response.setStatus(status);
-
-			if (((WebRequest)requestCycle.getRequest()).isAjax())
-			{
-				response.setHeader("Ajax-Location", location);
-			}
-			else
-			{
-				response.setHeader("Location", location);
-			}
+			setStatus(response, requestCycle, location);
 		}
 	}
 

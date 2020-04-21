@@ -1,0 +1,12 @@
+	@Test
+	void permanentlyMovedShouldSetLocationHeader()
+	{
+		RedirectRequestHandler handler = new RedirectRequestHandler(REDIRECT_URL,
+			HttpServletResponse.SC_MOVED_PERMANENTLY);
+
+		handler.respond(requestCycle);
+
+		verify(webResponse).setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+		verify(webResponse).setHeader("Location", REDIRECT_URL);
+	}
+

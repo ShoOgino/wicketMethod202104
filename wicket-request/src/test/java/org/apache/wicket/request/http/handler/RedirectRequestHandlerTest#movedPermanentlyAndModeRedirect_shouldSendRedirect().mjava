@@ -1,0 +1,15 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6764
+	 */
+	@Test
+	void movedPermanentlyAndModeRedirect_shouldSendRedirect()
+	{
+		RedirectRequestHandler handler = new RedirectRequestHandler(REDIRECT_URL,
+		                                                            HttpServletResponse.SC_MOVED_PERMANENTLY);
+		handler.mode(RedirectRequestHandler.Mode.REDIRECT);
+
+		handler.respond(requestCycle);
+
+		verify(webResponse).sendRedirect(REDIRECT_URL);
+	}
+
