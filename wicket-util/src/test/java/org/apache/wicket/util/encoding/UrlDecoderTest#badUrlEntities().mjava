@@ -5,15 +5,15 @@
 	public void badUrlEntities() throws Exception
 	{
 		String url = "http://localhost/test?a=%%%";
-		String decoded = UrlDecoder.QUERY_INSTANCE.decode(url, "UTF-8");
+		String decoded = UrlDecoder.QUERY_INSTANCE.decode(url, StandardCharsets.UTF_8);
 		assertEquals("http://localhost/test?a=", decoded);
 
 		url = "http://localhost/test?%%%";
-		decoded = UrlDecoder.QUERY_INSTANCE.decode(url, "UTF-8");
+		decoded = UrlDecoder.QUERY_INSTANCE.decode(url, StandardCharsets.UTF_8);
 		assertEquals("http://localhost/test?", decoded);
 
 		url = "http://localhost/test?%a=%b%";
-		decoded = UrlDecoder.QUERY_INSTANCE.decode(url, "UTF-8");
+		decoded = UrlDecoder.QUERY_INSTANCE.decode(url, StandardCharsets.UTF_8);
 		assertEquals("http://localhost/test?a=b", decoded);
 	}
 

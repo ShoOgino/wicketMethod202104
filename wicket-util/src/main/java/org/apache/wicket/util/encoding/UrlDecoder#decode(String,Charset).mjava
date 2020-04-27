@@ -1,13 +1,93 @@
 	/**
 	 * @param s
 	 *            string to decode
-	 * @param enc
+	 * @param charset
 	 *            encoding to decode with
 	 * @return decoded string
 	 * @see java.net.URLDecoder#decode(String, String)
 	 */
-	public String decode(final String s, final Charset enc)
+	public String decode(final String s, final Charset charset)
 	{
-		return decode(s, enc.name());
+		if (Strings.isEmpty(s))
+		{
+			return s;
+		}
+
+		int numChars = s.length();
+		StringBuilder sb = new StringBuilder(numChars > 500 ? numChars / 2 : numChars);
+		int i = 0;
+
+		Args.notNull(charset, "charset");
+
+		char c;
+		byte[] bytes = null;
+		while (i < numChars)
+		{
+			c = s.charAt(i);
+			switch (c)
+			{
+				case '+' :
+					sb.append(decodePlus ? ' ' : '+');
+					i++;
+					break;
+
+				case '%' :
+					/*
+					 * Starting with this instance of %, process all consecutive substrings of the
+					 * form %xy. Each substring %xy will yield a byte. Convert all consecutive bytes
+					 * obtained this way to whatever character(s) they represent in the provided
+					 * encoding.
+					 */
+					try
+					{
+						// (numChars-i)/3 is an upper bound for the number
+						// of remaining bytes
+						if (bytes == null)
+						{
+							bytes = new byte[(numChars - i) / 3];
+						}
+						int pos = 0;
+
+						while (((i + 2) < numChars) && (c == '%'))
+						{
+							bytes[pos++] = (byte)Integer.parseInt(s.substring(i + 1, i + 3), 16);
+							i += 3;
+							if (i < numChars)
+							{
+								c = s.charAt(i);
+							}
+						}
+
+						// A trailing, incomplete byte encoding such as
+						// "%x" will cause an exception to be thrown
+						if ((i < numChars) && (c == '%'))
+						{
+							LOG.info("Incomplete trailing escape (%) pattern in '%s'. The escape character (%) will be ignored.",
+									s);
+							i++;
+							break;
+						}
+
+						sb.append(new String(bytes, 0, pos, charset));
+					}
+					catch (NumberFormatException e)
+					{
+						LOG.info("Illegal hex characters in escape (%) pattern in '{}'. " +
+								"The escape character (%) will be ignored. NumberFormatException: {} ",
+							s, e.getMessage());
+						i++;
+					}
+					break;
+
+				default :
+					sb.append(c);
+					i++;
+					break;
+			}
+		}
+
+		// no trying to filter out bad escapes beforehand, just kill all null bytes here at the end,
+		// that way none will come through
+		return sb.toString().replace("\0", "NULL");
 	}
 

@@ -1,15 +1,16 @@
 	private static Charset getDefaultCharset()
 	{
 		String charsetName = null;
-
 		if (Application.exists())
 		{
 			charsetName = Application.get().getRequestCycleSettings().getResponseRequestEncoding();
 		}
+		
 		if (Strings.isEmpty(charsetName))
 		{
-			charsetName = "UTF-8";
+			return StandardCharsets.UTF_8;
 		}
+		
 		return Charset.forName(charsetName);
 	}
 
