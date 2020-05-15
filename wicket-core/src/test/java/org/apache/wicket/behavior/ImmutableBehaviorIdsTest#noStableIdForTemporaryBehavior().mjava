@@ -1,0 +1,12 @@
+	@Test
+	void noStableIdForTemporaryBehavior()
+	{
+		MyPage page = new MyPage();
+		TestTemporaryBehavior tempBehavior = new TestTemporaryBehavior();
+		page.getContainer().add(tempBehavior);
+
+		assertThrows(IllegalArgumentException.class, () -> {
+			page.getContainer().getBehaviorId(tempBehavior);
+		});
+	}
+
