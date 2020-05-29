@@ -1,0 +1,15 @@
+		/**
+		 * For non-http worker threads pushes the WebSocket runnable in the same request.
+		 * For http worker threads uses an elastic thread pool of 1-8 threads.
+		 *
+		 * Use {@link WebSocketPushMessageExecutor#WebSocketPushMessageExecutor(java.util.concurrent.Executor, java.util.concurrent.Executor)}
+		 * for custom behavior and/or settings
+		 */
+		public WebSocketPushMessageExecutor()
+		{
+			this(Runnable::run, new ThreadPoolExecutor(1, 8,
+			                                           60L, TimeUnit.SECONDS,
+			                                           new SynchronousQueue<>(),
+			                                           new ThreadFactory()));
+		}
+
