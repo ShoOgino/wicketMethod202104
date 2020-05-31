@@ -2,11 +2,13 @@
 	public void queryStringUnencoded()  {
 		String unencoded = "azAZ09.-_~!$*,:@/";
 		
-		assertEquals(unencoded, UrlEncoder.QUERY_INSTANCE.encode(unencoded, StandardCharsets.UTF_8));
+		assertEquals(unencoded, UrlEncoder.QUERY_INSTANCE.encode(unencoded, CHARSET));
 
-		for (char candidate : encodingCandidates) {
+		for (char candidate : ENCODING_CANDIDATES)
+		{
 			if (unencoded.indexOf(candidate) == -1) {
-				assertNotEquals("" + candidate, UrlEncoder.QUERY_INSTANCE.encode("" + candidate, StandardCharsets.UTF_8));
+				assertNotEquals("" + candidate,
+					UrlEncoder.QUERY_INSTANCE.encode("" + candidate, CHARSET));
 			}
 		}
 	}
