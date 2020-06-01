@@ -4,15 +4,16 @@
 	 */
 	public String getEvent()
 	{
-		if (event.indexOf(' ') == -1)
+		if (event.indexOf(EVENT_NAME_SEPARATOR) == -1)
 		{
 			return event;
 		}
 
-		String[] splitEvents = event.split("\\s+");
+		String[] splitEvents = Strings.split(event, EVENT_NAME_SEPARATOR);
 		List<String> cleanedEvents = new ArrayList<>(splitEvents.length);
 		for (String evt : splitEvents)
 		{
+			evt = evt.trim();
 			if (!Strings.isEmpty(evt))
 			{
 				cleanedEvents.add(evt);
