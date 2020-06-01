@@ -6,7 +6,7 @@
 				PendingAdd add = null;
 				try
 				{
-					add = entries.poll(POLL_WAIT, TimeUnit.MILLISECONDS);
+					add = queue.poll(POLL_WAIT, TimeUnit.MILLISECONDS);
 				}
 				catch (InterruptedException e)
 				{
@@ -18,7 +18,7 @@
 					log.debug("Saving asynchronously: {}...", add);
 					add.asynchronous = true;					
 					delegate.addPage(add, add.page);
-					addQueue.remove(add.getKey());
+					map.remove(add.getKey());
 				}
 			}
 		}

@@ -1,28 +1,32 @@
 	/**
-	 * Store returns the restored page instance from wrapped store when there is a distant request
-	 * for it back again.
+	 * WICKET-6793
 	 *
 	 * @throws InterruptedException
 	 */
 	@Test
-	void storeReturnsRestoredInstanceOnDistantPageRequest() throws InterruptedException
+	void dontKeepPendingPagesInMapIfSessionExpires() throws InterruptedException
 	{
+
 		final Semaphore semaphore = new Semaphore(0);
 		
-		IPageStore store = new MockPageStore() {
+		IPageStore store = new NoopPageStore() {
 			
 			@Override
 			public synchronized void addPage(IPageContext context, IManageablePage page)
 			{
-				super.addPage(context, page);
-				
-				semaphore.release();
+				try
+				{
+					semaphore.acquire();
+				}
+				catch (InterruptedException e)
+				{
+				}
 			}
 			
 			@Override
 			public IManageablePage getPage(IPageContext context, int id)
 			{
-				return super.getPage(context, id);
+				return null;
 			}
 		};
 
@@ -35,22 +39,18 @@
 		IPageContext context = new MockPageContext(sessionId);
 
 		SerializedPage page = new SerializedPage(pageId, "", new byte[0]);
+		// add twice so the first one clogs the queue and the second
+		// is still present in the queue
+		asyncPageStore.addPage(context, page);
 		asyncPageStore.addPage(context, page);
 
-		try
-		{
-			semaphore.acquire();
-		}
-		catch (InterruptedException e)
-		{
-		}
-
-		IManageablePage pageBack = asyncPageStore.getPage(context, pageId);
-
-		semaphore.release();
-
-		assertEquals(page, pageBack);
+		// clear the queue
+		asyncPageStore.removeAllPages(context);
+		
+		assertEquals(null, asyncPageStore.getPage(context, pageId));
 		
 		store.destroy();
+
+		semaphore.release();
 	}
 

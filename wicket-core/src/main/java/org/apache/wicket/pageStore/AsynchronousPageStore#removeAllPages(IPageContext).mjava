@@ -6,7 +6,14 @@
 			return;
 		}
 
-		queue.removeIf(add -> add.sessionId.equals(sessionId));
+		queue.removeIf(add -> {
+			if (add.sessionId.equals(sessionId)) {
+				queueMap.remove(add.getKey());
+				return true;
+			}
+			
+			return false;
+		});
 		
 		getDelegate().removeAllPages(context);
 	}
