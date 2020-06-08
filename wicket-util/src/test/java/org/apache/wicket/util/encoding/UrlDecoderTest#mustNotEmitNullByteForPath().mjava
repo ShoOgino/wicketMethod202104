@@ -1,8 +1,8 @@
 	@Test
-	public void mustNotEmitNullByteForPath() throws Exception
+	public void mustNotEmitNullByteForPath()
 	{
 		String evil = "http://www.devil.com/highway/to%00hell";
-		String decoded = UrlDecoder.PATH_INSTANCE.decode(evil, StandardCharsets.UTF_8);
+		String decoded = UrlDecoder.PATH_INSTANCE.decode(evil, CHARSET);
 		assertEquals(-1, decoded.indexOf('\0'));
 		assertEquals("http://www.devil.com/highway/toNULLhell", decoded);
 	}

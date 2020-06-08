@@ -1,8 +1,8 @@
 	@Test
-	public void mustNotEmitNullByteForQuery() throws Exception
+	public void mustNotEmitNullByteForQuery()
 	{
 		String evil = "http://www.devil.com/highway?destination=%00hell";
-		String decoded = UrlDecoder.QUERY_INSTANCE.decode(evil, StandardCharsets.UTF_8);
+		String decoded = UrlDecoder.QUERY_INSTANCE.decode(evil, CHARSET);
 		assertEquals(-1, decoded.indexOf('\0'));
 		assertEquals("http://www.devil.com/highway?destination=NULLhell", decoded);
 	}

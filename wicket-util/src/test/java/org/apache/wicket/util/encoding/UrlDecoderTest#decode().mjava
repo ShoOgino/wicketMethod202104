@@ -1,0 +1,14 @@
+	@Test
+	public void decode()
+	{
+		assertEquals("", UrlDecoder.QUERY_INSTANCE.decode("", CHARSET));
+		assertEquals("foobar", UrlDecoder.QUERY_INSTANCE.decode("foobar", CHARSET));
+		assertEquals("foo bar", UrlDecoder.QUERY_INSTANCE.decode("foo%20bar", CHARSET));
+		assertEquals("foo+bar", UrlDecoder.QUERY_INSTANCE.decode("foo%2bbar", CHARSET));
+		assertEquals("T\u014dky\u014d",
+			UrlDecoder.QUERY_INSTANCE.decode("T%C5%8Dky%C5%8D", CHARSET));
+		assertEquals("/Z\u00fcrich", UrlDecoder.QUERY_INSTANCE.decode("/Z%C3%BCrich", CHARSET));
+		assertEquals("T\u014dky\u014d",
+			UrlDecoder.QUERY_INSTANCE.decode("T\u014dky\u014d", CHARSET));
+	}
+
