@@ -1,0 +1,16 @@
+  @Override
+  public boolean isRequestAllowed(HttpServletRequest request) {
+    String site = request.getHeader(SEC_FETCH_SITE_HEADER);
+
+    // TODO: Is this needed?
+    site = site.toLowerCase();
+
+    // Allow same-site and browser-initiated requests
+    if (SAME_ORIGIN.equals(site) || SAME_SITE.equals(site) || NONE.equals(site)) {
+      return true;
+    }
+
+    // Allow simple top-level navigations except <object> and <embed>
+    return isAllowedTopLevelNavigation(request);
+  }
+

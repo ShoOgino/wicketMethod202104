@@ -1,0 +1,12 @@
+  private boolean isAllowedTopLevelNavigation(HttpServletRequest request) {
+    // TODO: Assert these headers are never null at this point?
+    String mode = request.getHeader(SEC_FETCH_MODE_HEADER);
+    String dest = request.getHeader(SEC_FETCH_DEST_HEADER);
+
+    // TODO: Does the method need to be upper cased?
+    boolean isSimpleTopLevelNavigation = MODE_NAVIGATE.equals(mode) || "GET".equals(request.getMethod());
+    boolean isNotObjectOrEmbedRequest = !DEST_EMBED.equals(dest) && !DEST_OBJECT.equals(dest);
+
+    return isSimpleTopLevelNavigation && isNotObjectOrEmbedRequest;
+  }
+
