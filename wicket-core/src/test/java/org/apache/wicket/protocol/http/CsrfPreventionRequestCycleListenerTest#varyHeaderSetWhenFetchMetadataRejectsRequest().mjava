@@ -1,0 +1,26 @@
+	/** Tests that requests rejected by fetch metadata have the Vary header set */
+	@Test
+	void varyHeaderSetWhenFetchMetadataRejectsRequest()
+	{
+		csrfListener.setConflictingOriginAction(CsrfAction.ABORT);
+		csrfListener.setNoOriginAction(CsrfAction.ALLOW);
+		tester.addRequestHeader(SEC_FETCH_SITE_HEADER, CROSS_SITE);
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestAborted();
+
+		String vary = tester.getLastResponse().getHeader("Vary");
+
+		if (vary == null)
+		{
+			throw new AssertionError("Vary header should not be null");
+		}
+
+		if (!vary.contains(SEC_FETCH_DEST_HEADER) || !vary.contains(SEC_FETCH_MODE_HEADER)
+			|| !vary.contains(SEC_FETCH_SITE_HEADER))
+		{
+			throw new AssertionError("Unexpected vary header: " + vary);
+		}
+	}
+

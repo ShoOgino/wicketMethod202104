@@ -1,0 +1,13 @@
+	/** Tests whether a request with Sec-Fetch-Site = cross-site is suppressed*/
+	@Test
+	void crossSiteFMSuppressed()
+	{
+		csrfListener.setConflictingOriginAction(CsrfAction.SUPPRESS);
+		csrfListener.setNoOriginAction(CsrfAction.ALLOW);
+		tester.addRequestHeader(SEC_FETCH_SITE_HEADER, CROSS_SITE);
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestSuppressed();
+	}
+

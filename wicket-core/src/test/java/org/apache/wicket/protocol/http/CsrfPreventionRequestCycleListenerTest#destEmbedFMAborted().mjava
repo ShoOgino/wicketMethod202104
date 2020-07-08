@@ -1,0 +1,14 @@
+	/** Tests whether embed requests are aborted by fetch metadata checks*/
+	@Test
+	void destEmbedFMAborted()
+	{
+		csrfListener.setConflictingOriginAction(CsrfAction.ABORT);
+		csrfListener.setNoOriginAction(CsrfAction.ALLOW);
+		tester.addRequestHeader(SEC_FETCH_SITE_HEADER, CROSS_SITE);
+		tester.addRequestHeader(SEC_FETCH_DEST_HEADER, DEST_EMBED);
+
+		tester.clickLink("link");
+
+		assertConflictingOriginsRequestAborted();
+	}
+

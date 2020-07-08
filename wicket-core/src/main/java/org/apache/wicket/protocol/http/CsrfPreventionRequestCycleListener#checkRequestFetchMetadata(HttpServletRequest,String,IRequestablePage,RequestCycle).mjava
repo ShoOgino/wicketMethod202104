@@ -1,0 +1,54 @@
+	/**
+	 * Performs the check of the {@code Sec-Fetch-*} headers that are targeted at the {@code page}.
+	 * 
+	 * @param request
+	 *            the current container request
+	 * @param sourceUri
+	 *            the source URI
+	 * @param page
+	 *            the page that is the target of the request
+	 * @param cycle
+	 *            the current request cycle to set vary headers after white list check
+	 */
+	protected void checkRequestFetchMetadata(HttpServletRequest request, String sourceUri,
+		IRequestablePage page, RequestCycle cycle)
+	{
+		// check if sourceUri exists before checking for whitelisted hosts,
+		// if not set sourceUri to no origin for logging purposes
+		if (Strings.isEmpty(sourceUri))
+		{
+			sourceUri = "no origin";
+		}
+		else
+		{
+			// if the origin is a know and trusted origin, don't check any further but allow the
+			// request
+			if (isWhitelistedHost(sourceUri))
+			{
+				whitelistedHandler(request, sourceUri, page);
+				return;
+			}
+		}
+
+		if (fetchMetadataPolicy.isRequestAllowed(request))
+		{
+			matchingOrigin(request, sourceUri, page);
+			return;
+		}
+
+		log.debug("Request is not allowed by the resource isolation policy, {}",
+			conflictingOriginAction);
+		switch (conflictingOriginAction)
+		{
+			case ALLOW :
+				allowHandler(request, sourceUri, page);
+				break;
+			case SUPPRESS :
+				suppressHandler(request, sourceUri, page);
+				break;
+			case ABORT :
+				abortHandler(request, sourceUri, page);
+				break;
+		}
+	}
+
