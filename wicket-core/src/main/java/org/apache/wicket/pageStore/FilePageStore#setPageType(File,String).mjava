@@ -10,11 +10,11 @@
 	{
 		try
 		{
-			UserDefinedFileAttributeView view = java.nio.file.Files
-				.getFileAttributeView(file.toPath(), UserDefinedFileAttributeView.class);
+			UserDefinedFileAttributeView view = getAttributeView(file);
+			
 			view.write(ATTRIBUTE_PAGE_TYPE, Charset.defaultCharset().encode(pageType));
 		}
-		catch (IOException ex)
+		catch (Exception ex)
 		{
 			log.debug("cannot set pageType for {}", file, ex);
 		}
