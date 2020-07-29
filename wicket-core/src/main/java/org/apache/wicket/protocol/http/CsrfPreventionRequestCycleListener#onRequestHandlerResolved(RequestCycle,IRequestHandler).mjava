@@ -21,16 +21,7 @@
 			// Check if the page should be CSRF protected
 			if (isChecked(targetedPage))
 			{
-				// check sec-fetch-site header and call the fetch metadata check if present
-				if (hasFetchMetadataHeaders(containerRequest))
-				{
-					checkRequestFetchMetadata(containerRequest, sourceUri, targetedPage, cycle);
-				}
-				else
-				{
-					// if not check the Origin HTTP header
-					checkRequestOriginReferer(containerRequest, sourceUri, targetedPage);
-				}
+				checkRequest(containerRequest, sourceUri, targetedPage);
 			}
 			else
 			{
