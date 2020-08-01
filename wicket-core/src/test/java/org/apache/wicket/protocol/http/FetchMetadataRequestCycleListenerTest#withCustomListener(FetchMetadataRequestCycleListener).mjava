@@ -1,0 +1,10 @@
+  void withCustomListener(FetchMetadataRequestCycleListener fetchMetadataListener) {
+    WebApplication application = tester.getApplication();
+
+    this.fetchMetadataListener = fetchMetadataListener;
+    application.getRequestCycleListeners().add(fetchMetadataListener);
+
+    tester.startPage(FirstPage.class);
+    tester.assertRenderedPage(FirstPage.class);
+  }
+

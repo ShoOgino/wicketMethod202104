@@ -1,5 +1,6 @@
 	/**
-	 * Created to preserve the API after adding Fetch Metadata checks (WICKET-6786)
+	 * Performs the check of the {@code Origin} or {@code Referer} header that is targeted at the
+	 * {@code page}.
 	 *
 	 * @param request
 	 *            the current container request
@@ -10,16 +11,52 @@
 	 */
 	protected void checkRequest(HttpServletRequest request, String sourceUri, IRequestablePage page)
 	{
-		RequestCycle cycle = RequestCycle.get();
-		// check sec-fetch-site header and call the fetch metadata check if present
-		if (hasFetchMetadataHeaders(request))
+		if (sourceUri == null || sourceUri.isEmpty())
 		{
-			checkRequestFetchMetadata(request, sourceUri, page, cycle);
+			log.debug("Source URI not present in request, {}", noOriginAction);
+			switch (noOriginAction)
+			{
+				case ALLOW :
+					allowHandler(request, sourceUri, page);
+					break;
+				case SUPPRESS :
+					suppressHandler(request, sourceUri, page);
+					break;
+				case ABORT :
+					abortHandler(request, sourceUri, page);
+					break;
+			}
+			return;
+		}
+		sourceUri = sourceUri.toLowerCase(Locale.ROOT);
+
+		// if the origin is a know and trusted origin, don't check any further but allow the request
+		if (isWhitelistedHost(sourceUri))
+		{
+			whitelistedHandler(request, sourceUri, page);
+			return;
+		}
+
+		// check if the origin HTTP header matches the request URI
+		if (!isLocalOrigin(request, sourceUri))
+		{
+			log.debug("Source URI conflicts with request origin, {}", conflictingOriginAction);
+			switch (conflictingOriginAction)
+			{
+				case ALLOW :
+					allowHandler(request, sourceUri, page);
+					break;
+				case SUPPRESS :
+					suppressHandler(request, sourceUri, page);
+					break;
+				case ABORT :
+					abortHandler(request, sourceUri, page);
+					break;
+			}
 		}
 		else
 		{
-			// if not check the Origin HTTP header
-			checkRequestOriginReferer(request, sourceUri, page);
+			matchingOrigin(request, sourceUri, page);
 		}
 	}
 

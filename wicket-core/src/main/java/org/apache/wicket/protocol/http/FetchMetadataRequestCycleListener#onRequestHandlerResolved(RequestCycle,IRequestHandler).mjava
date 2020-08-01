@@ -1,0 +1,31 @@
+  @Override
+  public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
+  {
+    handler = unwrap(handler);
+    Optional<IPageRequestHandler> pageRequestHandler = getPageRequestHandler(handler);
+    if (pageRequestHandler.isEmpty()) {
+      return;
+    }
+
+    IRequestablePage targetedPage = pageRequestHandler.get().getPage();
+    HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest()
+        .getContainerRequest();
+
+    String pathInfo = containerRequest.getPathInfo();
+    if (exemptedPaths.contains(pathInfo)) {
+      logAtDebug("Allowing request to {} because it matches an exempted path", pathInfo);
+      return;
+    }
+
+    for (ResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies) {
+      if (!resourceIsolationPolicy.isRequestAllowed(containerRequest, targetedPage)) {
+        logAtDebug(
+            "Isolation policy {} has rejected a request to {}",
+            resourceIsolationPolicy.getClass().getSimpleName(),
+            pathInfo
+        );
+        throw new AbortWithHttpErrorCodeException(ERROR_CODE, ERROR_MESSAGE);
+      }
+    }
+  }
+

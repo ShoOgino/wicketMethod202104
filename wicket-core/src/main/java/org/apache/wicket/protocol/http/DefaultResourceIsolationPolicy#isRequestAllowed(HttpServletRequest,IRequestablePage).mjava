@@ -1,6 +1,12 @@
 	@Override
-	public boolean isRequestAllowed(HttpServletRequest request)
+	public boolean isRequestAllowed(HttpServletRequest request,
+			IRequestablePage targetPage)
 	{
+		// request made by a legacy browser with no support for Fetch Metadata
+		if (!hasFetchMetadataHeaders(request)) {
+			return true;
+		}
+
 		String site = request.getHeader(SEC_FETCH_SITE_HEADER);
 
 		// Allow same-site and browser-initiated requests
