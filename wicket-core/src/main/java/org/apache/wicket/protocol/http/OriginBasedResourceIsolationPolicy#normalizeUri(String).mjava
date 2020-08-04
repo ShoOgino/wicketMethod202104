@@ -1,0 +1,61 @@
+  /**
+   * Creates a RFC-6454 comparable URI from the {@code uri} string.
+   *
+   * @param uri
+   *            the contents of the Origin or Referer HTTP header
+   * @return only the scheme://host[:port] part, or {@code null} when the URI string is not
+   *         compliant
+   */
+  protected final String normalizeUri(String uri)
+  {
+    // the request comes from a privacy sensitive context, flag as non-local origin. If
+    // alternative action is required, an implementor can override any of the onAborted,
+    // onSuppressed or onAllowed and implement such needed action.
+
+    if (Strings.isEmpty(uri) || "null".equals(uri))
+      return null;
+
+    StringBuilder target = new StringBuilder();
+
+    try
+    {
+      URI originUri = new URI(uri);
+      String scheme = originUri.getScheme();
+      if (scheme == null)
+      {
+        return null;
+      }
+      else
+      {
+        scheme = scheme.toLowerCase(Locale.ROOT);
+      }
+
+      target.append(scheme);
+      target.append("://");
+
+      String host = originUri.getHost();
+      if (host == null)
+      {
+        return null;
+      }
+      target.append(host);
+
+      int port = originUri.getPort();
+      boolean portIsSpecified = port != -1;
+      boolean isAlternateHttpPort = "http".equals(scheme) && port != 80;
+      boolean isAlternateHttpsPort = "https".equals(scheme) && port != 443;
+
+      if (portIsSpecified && (isAlternateHttpPort || isAlternateHttpsPort))
+      {
+        target.append(':');
+        target.append(port);
+      }
+      return target.toString();
+    }
+    catch (URISyntaxException e)
+    {
+      log.debug("Invalid URI provided: {}, marked conflicting", uri);
+      return null;
+    }
+  }
+
