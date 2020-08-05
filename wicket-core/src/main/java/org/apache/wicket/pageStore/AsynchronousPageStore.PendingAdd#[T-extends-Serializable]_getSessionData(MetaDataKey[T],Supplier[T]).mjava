@@ -8,15 +8,19 @@
 			
 			if (asynchronous)
 			{
-				value = context.getSessionData(key, () -> null);
+				value = (T)dataCache.get(key);
 				if (value == null && defaultValue.get() != null)
 				{
-						throw new WicketRuntimeException("session data can not be changed asynchronuously");
+					throw new WicketRuntimeException("session data can not be changed asynchronuously");
 				}
 			}
 			else
 			{
 				value = context.getSessionData(key, defaultValue);
+				if (value != null)
+				{
+					dataCache.put(key, value);
+				}
 			}
 			
 			return value;
