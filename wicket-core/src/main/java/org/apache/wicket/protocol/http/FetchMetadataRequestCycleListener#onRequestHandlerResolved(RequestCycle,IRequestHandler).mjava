@@ -22,10 +22,8 @@
 
     for (ResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies) {
       if (!resourceIsolationPolicy.isRequestAllowed(containerRequest, targetedPage)) {
-        if (log.isDebugEnabled()) {
           log.debug("Isolation policy {} has rejected a request to {}",
-              new Object[]{Classes.simpleName(resourceIsolationPolicy.getClass()), pathInfo});
-        }
+              Classes.simpleName(resourceIsolationPolicy.getClass()), pathInfo);
         throw new AbortWithHttpErrorCodeException(ERROR_CODE, ERROR_MESSAGE);
       }
     }
