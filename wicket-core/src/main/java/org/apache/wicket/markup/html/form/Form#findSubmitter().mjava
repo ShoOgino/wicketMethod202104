@@ -8,6 +8,8 @@
 	 */
 	public final IFormSubmittingComponent findSubmitter()
 	{
+		final IRequestParameters parameters = getRequestParameters(this);
+
 		IFormSubmittingComponent submittingComponent = getPage().visitChildren(
 			IFormSubmittingComponent.class, new IVisitor<Component, IFormSubmittingComponent>()
 			{
@@ -23,7 +25,6 @@
 					if ((form != null) && (form.getRootForm() == Form.this))
 					{
 						String name = submittingComponent.getInputName();
-						IRequestParameters parameters = getRequest().getRequestParameters();
 						if ((!parameters.getParameterValue(name).isNull()) ||
 							!parameters.getParameterValue(name + ".x").isNull())
 						{

@@ -19,20 +19,11 @@
 
 		AppendingStringBuffer buffer = new AppendingStringBuffer();
 		buffer.append(String.format("var f = document.getElementById('%s');", root.getMarkupId()));
-		if (root.encodeUrlInHiddenFields())
-		{
-			buffer.append(String.format("document.getElementById('%s').innerHTML += '",
-				root.getHiddenFieldsId(HIDDEN_FIELDS_PARAMS_IDX)));
-			
-			writeParamsAsHiddenFields(new String[] {param}, buffer);
-			
-			buffer.append("';");
-		}
-		else
-		{
-			String action = root.getActionUrl().toString();
-			buffer.append("f.action += '" + (action.indexOf('?') > -1 ? '&' : '?') + param + "';");
-		}
+		buffer.append(String.format("document.getElementById('%s').innerHTML += '",
+			root.getHiddenFieldsId(HIDDEN_FIELDS_PARAMS_IDX)));
+		writeParamsAsHiddenFields(new String[] {param}, buffer);
+		buffer.append("';");
+
 		if (triggerEvent)
 		{
 			buffer.append("Wicket.Event.fire(f, 'submit');");

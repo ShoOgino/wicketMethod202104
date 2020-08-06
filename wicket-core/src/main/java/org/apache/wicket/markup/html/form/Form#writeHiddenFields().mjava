@@ -4,14 +4,12 @@
 	 */
 	public final void writeHiddenFields()
 	{
-		// if it's a get, did put the parameters in the action attribute,
-		// and have to write the url parameters as hidden fields
+		getResponse().write(String.format("<div id=\"%s\" hidden=\"\" class=\"%s\">",
+			getHiddenFieldsId(HIDDEN_FIELDS_PARAMS_IDX),
+			getString(HIDDEN_FIELDS_CSS_CLASS_KEY)));
+		// if the parameters are not in the action attribute, they have to be written as hidden fields
 		if (encodeUrlInHiddenFields())
 		{
-			getResponse().write(String.format("<div id=\"%s\" hidden=\"\" class=\"%s\">",
-				getHiddenFieldsId(HIDDEN_FIELDS_PARAMS_IDX),
-				getString(HIDDEN_FIELDS_CSS_CLASS_KEY)));
-
 			AppendingStringBuffer buffer = new AppendingStringBuffer();				
 
 			String url = getActionUrl().toString();
@@ -22,10 +20,9 @@
 			writeParamsAsHiddenFields(params, buffer);
 
 			getResponse().write(buffer);
-			
-			getResponse().write("</div>");
 		}
-
+		getResponse().write("</div>");
+		
 		// if a default submitting component was set, handle the rendering of that
 		if (hasDefaultSubmittingComponent())
 		{

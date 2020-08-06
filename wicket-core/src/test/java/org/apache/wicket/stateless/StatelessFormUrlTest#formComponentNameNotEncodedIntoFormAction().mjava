@@ -4,7 +4,9 @@
 	@Test
 	void formComponentNameNotEncodedIntoFormAction()
 	{
-		tester.executeUrl("?0-1.IFormSubmitListener-form&text=newValue");
-		assertFalse(tester.getLastResponseAsString().contains("text=newValue"));
+		tester.getRequest().getPostParameters().setParameterValue("text", "newValue");
+		tester.executeUrl("?0-1.-form");
+		assertEquals("newValue", tester.getTagById("text3").getAttribute("value"));
+		assertEquals("./?-1.-form", tester.getTagById("form1").getAttribute("action"));
 	}
 
