@@ -1,0 +1,15 @@
+	/**
+	 * Aborts the request because the outcome results in {@link CsrfAction#ABORT}.
+	 *
+	 * @param request
+	 *            the request
+	 * @param page
+	 *            the page that is targeted with this request
+	 */
+	protected void abortHandler(HttpServletRequest request, IRequestablePage page)
+	{
+		log.info("Possible CSRF attack, request URL: {}, action: aborted with error {} {}",
+			request.getRequestURL(), errorCode, errorMessage);
+		throw new AbortWithHttpErrorCodeException(errorCode, errorMessage);
+	}
+
