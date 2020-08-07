@@ -1,0 +1,63 @@
+	@Override
+	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
+	{
+		if (!isEnabled())
+		{
+			log.trace("CSRF listener is disabled, no checks performed");
+			return;
+		}
+
+		handler = unwrap(handler);
+		if (isChecked(handler))
+		{
+			IPageRequestHandler pageRequestHandler = (IPageRequestHandler)handler;
+			IRequestablePage targetedPage = pageRequestHandler.getPage();
+			HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest()
+				.getContainerRequest();
+
+			if (!isChecked(targetedPage))
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("Targeted page {} was opted out of the CSRF origin checks, allowed",
+						targetedPage.getClass().getName());
+				}
+				return;
+			}
+
+			String pathInfo = containerRequest.getPathInfo();
+			if (exemptedPaths.contains(pathInfo))
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("Allowing request to {} because it matches an exempted path",
+						new Object[] { pathInfo });
+				}
+				return;
+			}
+
+			for (ResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies)
+			{
+				ResourceIsolationOutcome outcome = resourceIsolationPolicy
+					.isRequestAllowed(containerRequest, targetedPage);
+				if (ResourceIsolationOutcome.DISALLOWED.equals(outcome))
+				{
+					log.debug("Isolation policy {} has rejected a request to {}",
+						Classes.simpleName(resourceIsolationPolicy.getClass()), pathInfo);
+					triggerAction(disallowedOutcomeAction, containerRequest, targetedPage);
+				}
+				else if (ResourceIsolationOutcome.ALLOWED.equals(outcome))
+				{
+					return;
+				}
+			}
+			triggerAction(unknownOutcomeAction, containerRequest, targetedPage);
+		}
+		else
+		{
+			if (log.isTraceEnabled())
+				log.trace("Resolved handler {} is not checked, no CSRF check performed",
+					handler.getClass().getName());
+		}
+	}
+

@@ -1,0 +1,17 @@
+	/**
+	 * Resolves the source URI from the request headers ({@code Origin} or {@code Referer}).
+	 *
+	 * @param containerRequest
+	 *            the current container request
+	 * @return the normalized source URI.
+	 */
+	private String getSourceUri(HttpServletRequest containerRequest)
+	{
+		String sourceUri = containerRequest.getHeader(WebRequest.HEADER_ORIGIN);
+		if (Strings.isEmpty(sourceUri))
+		{
+			sourceUri = containerRequest.getHeader(WebRequest.HEADER_REFERER);
+		}
+		return normalizeUri(sourceUri);
+	}
+

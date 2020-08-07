@@ -1,0 +1,11 @@
+	@Test
+	void whenAtFirstNotUnkownRejectsRequest_thenRequestRejected()
+	{
+		withCustomListener(new FetchMetadataRequestCycleListener(
+			(request, page) -> ResourceIsolationOutcome.UNKNOWN,
+			(request, page) -> ResourceIsolationOutcome.UNKNOWN,
+			(request, page) -> ResourceIsolationOutcome.DISALLOWED,
+			(request, page) -> ResourceIsolationOutcome.ALLOWED));
+		assertRequestAborted();
+	}
+

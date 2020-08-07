@@ -1,0 +1,22 @@
+	/**
+	 * Tests that requests accepted by fetch metadata have the Vary header set
+	 */
+	@Test
+	void varyHeaderSetWhenFetchMetadataAcceptsRequest()
+	{
+		tester.addRequestHeader(SEC_FETCH_SITE_HEADER, SAME_SITE);
+		assertRequestAccepted();
+
+		String vary = tester.getLastResponse().getHeader(VARY_HEADER);
+		if (vary == null)
+		{
+			throw new AssertionError("Vary header should not be null");
+		}
+
+		if (!vary.contains(SEC_FETCH_DEST_HEADER) || !vary.contains(SEC_FETCH_MODE_HEADER)
+			|| !vary.contains(SEC_FETCH_SITE_HEADER))
+		{
+			throw new AssertionError("Unexpected vary header: " + vary);
+		}
+	}
+

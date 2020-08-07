@@ -1,0 +1,16 @@
+	/**
+	 * Supresses the execution of the listener in the request because the outcome results in
+	 * {@link CsrfAction#SUPPRESS}.
+	 *
+	 * @param request
+	 *            the request
+	 * @param page
+	 *            the page that is targeted with this request
+	 */
+	protected void suppressHandler(HttpServletRequest request, IRequestablePage page)
+	{
+		log.info("Possible CSRF attack, request URL: {}, action: suppressed",
+			request.getRequestURL());
+		throw new RestartResponseException(page);
+	}
+

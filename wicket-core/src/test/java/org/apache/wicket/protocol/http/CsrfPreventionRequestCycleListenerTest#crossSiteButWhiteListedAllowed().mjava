@@ -1,0 +1,14 @@
+	/** Tests whether a cross origin request by a white listed origin is allowed*/
+	@Test
+	void crossSiteButWhiteListedAllowed()
+	{
+		csrfListener.addAcceptedOrigin("example.com");
+		tester.addRequestHeader(WebRequest.HEADER_ORIGIN, "http://example.com/");
+		tester.addRequestHeader(SEC_FETCH_SITE_HEADER, CROSS_SITE);
+
+		tester.clickLink("link");
+
+		assertOriginsWhitelisted();
+		tester.assertRenderedPage(SecondPage.class);
+	}
+

@@ -1,0 +1,11 @@
+	@Test
+	void whenFirstNotUnknownPolicieAcceptRequest_thenRequestAccepted()
+	{
+		withCustomListener(new FetchMetadataRequestCycleListener(
+			(request, page) -> ResourceIsolationOutcome.UNKNOWN,
+			(request, page) -> ResourceIsolationOutcome.ALLOWED,
+			(request, page) -> ResourceIsolationOutcome.ALLOWED,
+			(request, page) -> ResourceIsolationOutcome.ALLOWED));
+		assertRequestAccepted();
+	}
+

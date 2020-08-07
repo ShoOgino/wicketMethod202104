@@ -1,0 +1,24 @@
+	@Override
+	public ResourceIsolationOutcome isRequestAllowed(HttpServletRequest request,
+		IRequestablePage targetPage)
+	{
+		// request made by a legacy browser with no support for Fetch Metadata
+		if (!hasFetchMetadataHeaders(request))
+		{
+			return ResourceIsolationOutcome.UNKNOWN;
+		}
+
+		String site = request.getHeader(SEC_FETCH_SITE_HEADER);
+
+		// Allow same-site and browser-initiated requests
+		if (SAME_ORIGIN.equals(site) || SAME_SITE.equals(site) || NONE.equals(site))
+		{
+			return ResourceIsolationOutcome.ALLOWED;
+		}
+
+		// Allow simple top-level navigations except <object> and <embed>
+		return isAllowedTopLevelNavigation(request)
+			? ResourceIsolationOutcome.ALLOWED
+			: ResourceIsolationOutcome.DISALLOWED;
+	}
+
