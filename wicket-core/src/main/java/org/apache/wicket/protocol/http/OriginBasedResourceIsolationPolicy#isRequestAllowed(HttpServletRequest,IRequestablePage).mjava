@@ -1,32 +1,35 @@
-  /**
-   * This origin-based listener can be used in combination with the {@link FetchMetadataRequestCycleListener}
-   * to add support for legacy browsers that don't send Sec-Fetch-* headers yet.
-   * @return whether the request is allowed based on its origin
-   */
-  @Override
-  public boolean isRequestAllowed(HttpServletRequest request, IRequestablePage targetPage) {
-    String sourceUri = getSourceUri(request);
+	/**
+	 * This origin-based listener can be used in combination with the
+	 * {@link FetchMetadataRequestCycleListener} to add support for legacy browsers that don't send
+	 * Sec-Fetch-* headers yet.
+	 * 
+	 * @return whether the request is allowed based on its origin
+	 */
+	@Override
+	public boolean isRequestAllowed(HttpServletRequest request, IRequestablePage targetPage)
+	{
+		String sourceUri = getSourceUri(request);
 
-    if (sourceUri == null || sourceUri.isEmpty())
-    {
-      log.debug("Source URI not present in request to {}", request.getPathInfo());
-      return true;
-    }
-    sourceUri = sourceUri.toLowerCase(Locale.ROOT);
+		if (sourceUri == null || sourceUri.isEmpty())
+		{
+			log.debug("Source URI not present in request to {}", request.getPathInfo());
+			return true;
+		}
+		sourceUri = sourceUri.toLowerCase(Locale.ROOT);
 
-    // if the origin is a know and trusted origin, don't check any further but allow the request
-    if (isWhitelistedHost(sourceUri))
-    {
-      return true;
-    }
+		// if the origin is a know and trusted origin, don't check any further but allow the request
+		if (isWhitelistedHost(sourceUri))
+		{
+			return true;
+		}
 
-    // check if the origin HTTP header matches the request URI
-    if (!isLocalOrigin(request, sourceUri))
-    {
-      log.debug("Source URI conflicts with request origin");
-      return false;
-    }
+		// check if the origin HTTP header matches the request URI
+		if (!isLocalOrigin(request, sourceUri))
+		{
+			log.debug("Source URI conflicts with request origin");
+			return false;
+		}
 
-    return true;
-  }
+		return true;
+	}
 

@@ -1,31 +1,36 @@
-  @Override
-  public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
-  {
-    handler = unwrap(handler);
-    IPageRequestHandler pageRequestHandler = getPageRequestHandler(handler);
-    if (pageRequestHandler == null) {
-      return;
-    }
+	@Override
+	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
+	{
+		handler = unwrap(handler);
+		IPageRequestHandler pageRequestHandler = getPageRequestHandler(handler);
+		if (pageRequestHandler == null)
+		{
+			return;
+		}
 
-    IRequestablePage targetedPage = pageRequestHandler.getPage();
-    HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest()
-        .getContainerRequest();
+		IRequestablePage targetedPage = pageRequestHandler.getPage();
+		HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest()
+			.getContainerRequest();
 
-    String pathInfo = containerRequest.getPathInfo();
-    if (exemptedPaths.contains(pathInfo)) {
-      if (log.isDebugEnabled()) {
-        log.debug("Allowing request to {} because it matches an exempted path",
-            new Object[]{pathInfo});
-      }
-      return;
-    }
+		String pathInfo = containerRequest.getPathInfo();
+		if (exemptedPaths.contains(pathInfo))
+		{
+			if (log.isDebugEnabled())
+			{
+				log.debug("Allowing request to {} because it matches an exempted path",
+					new Object[] { pathInfo });
+			}
+			return;
+		}
 
-    for (ResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies) {
-      if (!resourceIsolationPolicy.isRequestAllowed(containerRequest, targetedPage)) {
-          log.debug("Isolation policy {} has rejected a request to {}",
-              Classes.simpleName(resourceIsolationPolicy.getClass()), pathInfo);
-        throw new AbortWithHttpErrorCodeException(ERROR_CODE, ERROR_MESSAGE);
-      }
-    }
-  }
+		for (ResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies)
+		{
+			if (!resourceIsolationPolicy.isRequestAllowed(containerRequest, targetedPage))
+			{
+				log.debug("Isolation policy {} has rejected a request to {}",
+					Classes.simpleName(resourceIsolationPolicy.getClass()), pathInfo);
+				throw new AbortWithHttpErrorCodeException(ERROR_CODE, ERROR_MESSAGE);
+			}
+		}
+	}
 

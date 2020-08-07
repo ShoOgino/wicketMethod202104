@@ -1,13 +1,10 @@
-  @Test
-  void whenAtLeastOnePolicyRejectsRequest_thenRequestRejected() {
-    fetchMetadataListener = new FetchMetadataRequestCycleListener(
-        (request, page) -> true,
-        (request, page) -> true,
-        (request, page) -> false,
-        (request, page) -> true
-    );
+	@Test
+	void whenAtLeastOnePolicyRejectsRequest_thenRequestRejected()
+	{
+		fetchMetadataListener = new FetchMetadataRequestCycleListener((request, page) -> true,
+			(request, page) -> true, (request, page) -> false, (request, page) -> true);
 
-    withCustomListener(fetchMetadataListener);
-    assertRequestAborted();
-  }
+		withCustomListener(fetchMetadataListener);
+		assertRequestAborted();
+	}
 
