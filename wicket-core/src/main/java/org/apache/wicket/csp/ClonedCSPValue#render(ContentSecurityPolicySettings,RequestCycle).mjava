@@ -1,0 +1,12 @@
+	@Override
+	public String render(ContentSecurityPolicySettings settings, RequestCycle cycle)
+	{
+		List<CSPRenderable> values = headerConfiguration.getDirectives().get(sourceDirective);
+		if (values == null)
+		{
+			throw new IllegalStateException(
+				"CSP directive " + sourceDirective + " not set, cannot clone its value.");
+		}
+		return values.stream().map(r -> r.render(settings, cycle)).collect(Collectors.joining(" "));
+	}
+

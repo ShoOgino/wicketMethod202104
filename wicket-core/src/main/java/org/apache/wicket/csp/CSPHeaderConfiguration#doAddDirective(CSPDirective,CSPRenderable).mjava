@@ -5,7 +5,8 @@
 		if (CSPDirective.CHILD_SRC.equals(directive)
 			&& !directives.containsKey(CSPDirective.FRAME_SRC))
 		{
-			doAddDirective(CSPDirective.FRAME_SRC, value);
+			doAddDirective(CSPDirective.FRAME_SRC,
+				new ClonedCSPValue(this, CSPDirective.CHILD_SRC));
 		}
 		List<CSPRenderable> values = directives.computeIfAbsent(directive, x -> new ArrayList<>());
 		directive.checkValueForDirective(value, values);
