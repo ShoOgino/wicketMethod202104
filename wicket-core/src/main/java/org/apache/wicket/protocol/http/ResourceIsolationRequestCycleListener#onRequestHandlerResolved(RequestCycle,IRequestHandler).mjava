@@ -19,7 +19,7 @@
 			{
 				if (log.isDebugEnabled())
 				{
-					log.debug("Targeted page {} was opted out of the CSRF origin checks, allowed",
+					log.debug("Targeted page {} was opted out of resource isolation, allowed",
 						targetedPage.getClass().getName());
 				}
 				return;
@@ -36,22 +36,23 @@
 				return;
 			}
 
-			for (ResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies)
+			for (IResourceIsolationPolicy policy : resourceIsolationPolicies)
 			{
-				ResourceIsolationOutcome outcome = resourceIsolationPolicy
+				ResourceIsolationOutcome outcome = policy
 					.isRequestAllowed(containerRequest, targetedPage);
 				if (ResourceIsolationOutcome.DISALLOWED.equals(outcome))
 				{
 					log.debug("Isolation policy {} has rejected a request to {}",
-						Classes.simpleName(resourceIsolationPolicy.getClass()), pathInfo);
-					triggerAction(disallowedOutcomeAction, containerRequest, targetedPage);
+						Classes.simpleName(policy.getClass()), pathInfo);
+					disallowedOutcomeAction.apply(this, containerRequest, targetedPage);
+					return;
 				}
 				else if (ResourceIsolationOutcome.ALLOWED.equals(outcome))
 				{
 					return;
 				}
 			}
-			triggerAction(unknownOutcomeAction, containerRequest, targetedPage);
+			unknownOutcomeAction.apply(this, containerRequest, targetedPage);
 		}
 		else
 		{

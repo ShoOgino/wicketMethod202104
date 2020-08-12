@@ -3,13 +3,12 @@
 		IRequestablePage targetPage)
 	{
 		// request made by a legacy browser with no support for Fetch Metadata
-		if (!hasFetchMetadataHeaders(request))
+		String site = request.getHeader(SEC_FETCH_SITE_HEADER);
+		if (Strings.isEmpty(site))
 		{
 			return ResourceIsolationOutcome.UNKNOWN;
 		}
-
-		String site = request.getHeader(SEC_FETCH_SITE_HEADER);
-
+		
 		// Allow same-site and browser-initiated requests
 		if (SAME_ORIGIN.equals(site) || SAME_SITE.equals(site) || NONE.equals(site))
 		{

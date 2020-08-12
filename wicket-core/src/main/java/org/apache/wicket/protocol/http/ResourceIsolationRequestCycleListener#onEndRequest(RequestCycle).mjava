@@ -1,0 +1,22 @@
+	/**
+	 * Allow isolation policy to add headers.
+	 * 
+	 * @see IResourceIsolationPolicy#setHeaders(HttpServletResponse)
+	 */
+	@Override
+	public void onEndRequest(RequestCycle cycle)
+	{
+		if (cycle.getResponse() instanceof WebResponse)
+		{
+			WebResponse webResponse = (WebResponse)cycle.getResponse();
+			if (webResponse.isHeaderSupported())
+			{
+				for (IResourceIsolationPolicy resourceIsolationPolicy : resourceIsolationPolicies)
+				{
+					resourceIsolationPolicy
+						.setHeaders((HttpServletResponse)webResponse.getContainerResponse());
+				}
+			}
+		}
+	}
+

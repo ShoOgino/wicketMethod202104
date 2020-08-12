@@ -1,0 +1,19 @@
+	/**
+	 * Create a new listener with the given policies. If no policies are given,
+	 * {@link FetchMetadataResourceIsolationPolicy} and {@link OriginResourceIsolationPolicy} will
+	 * be used. The policies are checked in order. The first outcome that's not
+	 * {@link ResourceIsolationOutcome#UNKNOWN} will be used.
+	 * 
+	 * @param policies
+	 *            the policies to check requests against.
+	 */
+	public ResourceIsolationRequestCycleListener(IResourceIsolationPolicy... policies)
+	{
+		this.resourceIsolationPolicies.addAll(asList(policies));
+		if (policies.length == 0)
+		{
+			this.resourceIsolationPolicies.addAll(asList(new FetchMetadataResourceIsolationPolicy(),
+				new OriginResourceIsolationPolicy()));
+		}
+	}
+

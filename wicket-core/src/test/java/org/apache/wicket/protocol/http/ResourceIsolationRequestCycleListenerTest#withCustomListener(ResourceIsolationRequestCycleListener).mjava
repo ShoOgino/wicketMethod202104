@@ -1,0 +1,15 @@
+	void withCustomListener(ResourceIsolationRequestCycleListener fetchMetadataListener)
+	{
+		WebApplication application = tester.getApplication();
+
+		if (this.listener != null)
+		{
+			application.getRequestCycleListeners().remove(this.listener);
+		}
+		this.listener = fetchMetadataListener;
+		application.getRequestCycleListeners().add(fetchMetadataListener);
+
+		tester.startPage(FirstPage.class);
+		tester.assertRenderedPage(FirstPage.class);
+	}
+
