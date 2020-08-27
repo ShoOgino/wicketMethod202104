@@ -1,0 +1,23 @@
+	@Override
+	protected void validateInit()
+	{
+		super.validateInit();
+
+		// enable coop and coep listeners if specified in security settings
+		CrossOriginOpenerPolicyConfiguration coopConfig = getSecuritySettings()
+			.getCrossOriginOpenerPolicyConfiguration();
+		if (coopConfig.isEnabled())
+		{
+			getRequestCycleListeners()
+				.add(new CrossOriginOpenerPolicyRequestCycleListener(coopConfig));
+		}
+
+		CrossOriginEmbedderPolicyConfiguration coepConfig = getSecuritySettings()
+			.getCrossOriginEmbedderPolicyConfiguration();
+		if (coepConfig.isEnabled())
+		{
+			getRequestCycleListeners()
+				.add(new CrossOriginEmbedderPolicyRequestCycleListener(coepConfig));
+		}
+	}
+

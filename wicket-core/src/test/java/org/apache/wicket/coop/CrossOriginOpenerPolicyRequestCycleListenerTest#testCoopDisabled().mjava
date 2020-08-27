@@ -1,0 +1,11 @@
+	@Test
+	void testCoopDisabled()
+	{
+		mode = CoopMode.DISABLED;
+		buildApp();
+		tester.executeUrl("/");
+		String coopHeaderValue = tester.getLastResponse().getHeader(COOP_HEADER);
+
+		assertNull(coopHeaderValue, "COOP header should be null on DISABLED");
+	}
+

@@ -1,0 +1,26 @@
+	@Override
+	public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler)
+	{
+		final Object containerRequest = cycle.getRequest().getContainerRequest();
+		if (containerRequest instanceof HttpServletRequest)
+		{
+			HttpServletRequest request = (HttpServletRequest) containerRequest;
+			String path = request.getContextPath();
+
+			if (coopConfig.getExemptions().contains(path))
+			{
+				log.debug("Request path {} is exempted from COOP, no {} header added", path, COOP_HEADER);
+				return;
+			}
+
+			if (cycle.getResponse() instanceof WebResponse)
+			{
+				WebResponse webResponse = (WebResponse) cycle.getResponse();
+				if (webResponse.isHeaderSupported())
+				{
+					webResponse.setHeader(COOP_HEADER, coopConfig.getHeaderValue());
+				}
+			}
+		}
+	}
+

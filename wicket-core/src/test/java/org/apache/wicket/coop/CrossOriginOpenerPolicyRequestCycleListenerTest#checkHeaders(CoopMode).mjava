@@ -1,0 +1,10 @@
+	private void checkHeaders(CoopMode mode)
+	{
+		tester.executeUrl("/");
+		String coopHeaderValue = tester.getLastResponse().getHeader(COOP_HEADER);
+
+		assertNotNull(coopHeaderValue, "COOP header should not be null");
+
+		assertEquals(mode.keyword, coopHeaderValue, "Unexpected COOP header: " + coopHeaderValue);
+	}
+

@@ -1,0 +1,12 @@
+	@Test
+	void testCoopHeadersNotSetExemptedPath()
+	{
+		mode = CoopMode.DISABLED;
+		exemptions = "exempt";
+		buildApp();
+		tester.executeUrl("exempt");
+		String coopHeaderValue = tester.getLastResponse().getHeader(COOP_HEADER);
+
+		assertNull(coopHeaderValue, "COOP header should be null on exempted path");
+	}
+

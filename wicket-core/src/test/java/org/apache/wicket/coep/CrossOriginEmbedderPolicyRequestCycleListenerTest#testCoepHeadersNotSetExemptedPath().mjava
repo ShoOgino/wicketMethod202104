@@ -1,0 +1,12 @@
+	@Test
+	void testCoepHeadersNotSetExemptedPath()
+	{
+		mode = CoepMode.DISABLED;
+		exemptions = "exempt";
+		buildApp();
+		tester.executeUrl("exempt");
+		String coepHeaderValue = tester.getLastResponse().getHeader(CoepMode.REPORTING.header);
+
+		assertNull(coepHeaderValue, "COOP header should be null on exempted path");
+	}
+

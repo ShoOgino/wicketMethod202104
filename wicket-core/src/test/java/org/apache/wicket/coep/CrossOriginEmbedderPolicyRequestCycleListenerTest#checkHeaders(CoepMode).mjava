@@ -1,0 +1,10 @@
+	private void checkHeaders(CoepMode mode)
+	{
+		tester.executeUrl("/");
+		String coepHeaderValue = tester.getLastResponse().getHeader(mode.header);
+
+		assertNotNull(coepHeaderValue, "COEP " + mode + " header should not be null");
+
+		assertEquals(REQUIRE_CORP, coepHeaderValue, "Unexpected COEP header: " + coepHeaderValue);
+	}
+

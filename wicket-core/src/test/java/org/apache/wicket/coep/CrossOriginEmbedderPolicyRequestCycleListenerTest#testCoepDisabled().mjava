@@ -1,0 +1,10 @@
+	@Test
+	void testCoepDisabled()
+	{
+		mode = CoepMode.DISABLED;
+		buildApp();
+		tester.executeUrl("exempt");
+		String coepHeaderValue = tester.getLastResponse().getHeader(CoepMode.REPORTING.header);
+		assertNull(coepHeaderValue, "COOP header should be null on DISABLED");
+	}
+
