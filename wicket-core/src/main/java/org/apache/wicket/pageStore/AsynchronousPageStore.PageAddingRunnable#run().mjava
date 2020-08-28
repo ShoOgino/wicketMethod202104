@@ -10,15 +10,26 @@
 				}
 				catch (InterruptedException e)
 				{
+					log.debug("PageAddingRunnable:: Interrupted...");
 					Thread.currentThread().interrupt();
 				}
 
 				if (add != null)
 				{
-					log.debug("Saving asynchronously: {}...", add);
-					add.asynchronous = true;					
-					delegate.addPage(add, add.page);
-					map.remove(add.getKey());
+					try
+					{
+						log.debug("Saving asynchronously: {}...", add);
+						add.asynchronous = true;
+						delegate.addPage(add, add.page);
+					}
+					catch (Exception x)
+					{
+						log.error("An error occurred while saving asynchronously '{}'", add, x);
+					}
+					finally
+					{
+						map.remove(add.getKey());
+					}
 				}
 			}
 		}
