@@ -1,0 +1,26 @@
+	/**
+	 * https://issues.apache.org/jira/browse/WICKET-6808
+	 */
+	@Test
+	void addPage()
+	{
+		final MockPageWithLink page1 = new MockPageWithLink();
+		page1.add(new AjaxLink<Void>(MockPageWithLink.LINK_ID) {
+
+			@Override
+			public void onClick(final AjaxRequestTarget target) {
+				target.add(page1);
+			}
+		});
+
+		assertEquals(0, page1.getRenderCount());
+
+		tester.startPage(page1);
+
+		assertEquals(1, page1.getRenderCount());
+
+		tester.clickLink(MockPageWithLink.LINK_ID);
+
+		assertEquals(2, page1.getRenderCount());
+	}
+
