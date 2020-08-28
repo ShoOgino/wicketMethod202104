@@ -1,0 +1,22 @@
+	@Test
+	void addAnotherPage()
+	{
+		final MockPageWithLink currentPage = new MockPageWithLink();
+		final MockPageWithLink anotherPage = new MockPageWithLink();
+		currentPage.add(new AjaxLink<Void>(MockPageWithLink.LINK_ID) {
+
+			@Override
+			public void onClick(final AjaxRequestTarget target) {
+				target.add(anotherPage);
+			}
+		});
+
+		tester.startPage(currentPage);
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+			tester.clickLink(MockPageWithLink.LINK_ID);
+		});
+
+		assertEquals(exception.getMessage(), "Cannot add another page");
+	}
+
