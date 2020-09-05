@@ -1,0 +1,20 @@
+	@Override
+	protected WebApplication newApplication()
+	{
+		return new MockApplication()
+		{
+			@Override
+			protected void init()
+			{
+				setCspSettings(new ContentSecurityPolicySettings(this)
+				{
+					@Override
+					public boolean isEnabled()
+					{
+						return true;
+					}
+				});
+			}
+		};
+	}
+

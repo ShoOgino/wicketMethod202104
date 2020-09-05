@@ -3,6 +3,10 @@
 	{
 		super.validateInit();
 
+		if (getCspSettings().isEnabled()) {
+			getCspSettings().enforce(this);
+		}
+
 		// enable coop and coep listeners if specified in security settings
 		CrossOriginOpenerPolicyConfiguration coopConfig = getSecuritySettings()
 			.getCrossOriginOpenerPolicyConfiguration();

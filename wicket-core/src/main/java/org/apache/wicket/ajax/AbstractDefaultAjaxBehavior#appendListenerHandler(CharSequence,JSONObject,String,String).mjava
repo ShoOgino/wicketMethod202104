@@ -1,5 +1,5 @@
 	private void appendListenerHandler(final CharSequence handler, final JSONObject attributesJson,
-		final String propertyName, final String functionTemplate) throws JSONException
+		final String propertyName, final String signature) throws JSONException
 	{
 		if (Strings.isEmpty(handler) == false)
 		{
@@ -10,8 +10,7 @@
 			}
 			else
 			{
-				String func = String.format(functionTemplate, handler);
-				function = new JSONFunction(func);
+				function = getJsonFunction(signature, handler);
 			}
 			attributesJson.append(propertyName, function);
 		}
