@@ -1,28 +1,40 @@
 	@SuppressWarnings("unchecked")
 	public <M extends Behavior> List<M> getBehaviors(Class<M> type)
 	{
-		final int len = component.data_length();
-		final int start = component.data_start();
+		int len = component.data_length();
+		if (len == 0)
+		{
+			return Collections.emptyList();
+		}
+		int start = component.data_start();
 		if (len < start)
 		{
 			return Collections.emptyList();
 		}
 
-		List<M> subset = new ArrayList<>(len);
-		for (int i = component.data_start(); i < len; i++)
+		List<M> subset = null;
+		for (int i = start; i < len; i++)
 		{
 			Object obj = component.data_get(i);
-			if (obj != null && obj instanceof Behavior)
+			if (obj instanceof Behavior)
 			{
 				if (type == null || type.isAssignableFrom(obj.getClass()))
 				{
+					if (subset == null)
+					{
+						subset = new ArrayList<>(len);
+					}
 					subset.add((M)obj);
 				}
 			}
 		}
-		if (subset.isEmpty()) {
+		if (subset == null || subset.isEmpty())
+		{
 			return Collections.emptyList();
 		}
-		return Collections.unmodifiableList(subset);
+		else
+		{
+			return Collections.unmodifiableList(subset);
+		}
 	}
 

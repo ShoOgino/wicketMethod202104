@@ -7,11 +7,20 @@
 	 */
 	public void onRemove(Component component)
 	{
-		final int len = component.data_length();
-		for (int i = component.data_start(); i < len; i++)
+		int len = component.data_length();
+		if (len == 0)
+		{
+			return;
+		}
+		int start = component.data_start();
+		if (len < start)
+		{
+			return;
+		}
+		for (int i = start; i < len; i++)
 		{
 			Object obj = component.data_get(i);
-			if (obj != null && obj instanceof Behavior)
+			if (obj instanceof Behavior)
 			{
 				final Behavior behavior = (Behavior)obj;
 
