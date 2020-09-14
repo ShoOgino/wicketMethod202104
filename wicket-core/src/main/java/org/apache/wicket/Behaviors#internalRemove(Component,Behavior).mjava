@@ -1,4 +1,4 @@
-	private boolean internalRemove(final Behavior behavior)
+	private static boolean internalRemove(Component component, Behavior behavior)
 	{
 		final int len = component.data_length();
 		for (int i = component.data_start(); i < len; i++)
@@ -10,7 +10,7 @@
 				behavior.unbind(component);
 
 				// remove behavior from behavior-ids
-				ArrayList<Behavior> ids = getBehaviorsIdList(false);
+				ArrayList<Behavior> ids = getBehaviorsIdList(component, false);
 				if (ids != null)
 				{
 					int idx = ids.indexOf(behavior);
@@ -26,7 +26,7 @@
 
 					if (ids.isEmpty())
 					{
-						removeBehaviorsIdList();
+						removeBehaviorsIdList(component);
 					}
 
 				}

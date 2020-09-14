@@ -6,8 +6,7 @@
 	 * component's behaviors after header contribution has been done (which is separated from
 	 * component render).
 	 */
-	@Override
-	public final void detach()
+	public static void detach(Component component)
 	{
 		int len = component.data_length();
 		if (len == 0)
@@ -30,7 +29,7 @@
 
 				if (behavior.isTemporary(component))
 				{
-					internalRemove(behavior);
+					internalRemove(component, behavior);
 					i--;
 					len--;
 				}
