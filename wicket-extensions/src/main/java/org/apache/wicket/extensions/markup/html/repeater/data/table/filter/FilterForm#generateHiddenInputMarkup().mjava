@@ -1,0 +1,15 @@
+	/**
+	 * Generates the Markup for the hidden input. Can be overridden by subclasses if necessary.
+	 *
+	 * @return The markup to be appended to the response
+	 */
+	protected String generateHiddenInputMarkup() {
+		String id = Strings.escapeMarkup(getFocusTrackerFieldCssId()).toString();
+		String value = getRequest().getPostParameters().getParameterValue(id).toString("");
+		String cssClass = getString(Form.HIDDEN_FIELDS_CSS_CLASS_KEY);
+
+		return String.format(
+				"<div hidden='' class='%s'><input type='hidden' name='%s' id='%s' value='%s'/><input type='submit'/></div>",
+				cssClass, id, id, Strings.escapeMarkup(value));
+	}
+
