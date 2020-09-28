@@ -4,34 +4,15 @@
 		Args.notEmpty(name, "name");
 		Args.notNull(value, "value");
 
-		if (namedParameters == null)
-		{
-			namedParameters = new ArrayList<>(1);
-		}
-
-		List<String> values = new ArrayList<>();
 		if (value instanceof String[])
 		{
-			values.addAll(Arrays.asList((String[])value));
+			addNamed(name, (String[]) value, index, type);
 		}
 		else
 		{
-			values.add(value.toString());
+			addNamed(name, value.toString(), index, type);
 		}
 
-		for (String val : values)
-		{
-			NamedPair entry = new NamedPair(name, val, type);
-
-			if (index < 0 || index > namedParameters.size())
-			{
-				namedParameters.add(entry);
-			}
-			else
-			{
-				namedParameters.add(index, entry);
-			}
-		}
 		return this;
 	}
 
