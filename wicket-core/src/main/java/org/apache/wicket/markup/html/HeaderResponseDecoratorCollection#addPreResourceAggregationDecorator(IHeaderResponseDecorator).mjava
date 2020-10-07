@@ -1,0 +1,27 @@
+	/**
+	 * Adds a new {@link IHeaderResponseDecorator} that decorates immediately prior to resource
+	 * aggregation.
+	 * 
+	 * @param decorator
+	 *            The decorator to add, cannot be null.
+	 * @return {@code this} for chaining.
+	 * 
+	 * @see ResourceAggregator
+	 */
+	public HeaderResponseDecoratorCollection addPreResourceAggregationDecorator(
+		IHeaderResponseDecorator decorator)
+	{
+		Args.notNull(decorator, "decorator");
+
+		for (int i = 0; i < decorators.size(); i++)
+		{
+			if (decorators.get(i) == resourceAggregation)
+			{
+				decorators.add(i, decorator);
+				return this;
+			}
+		}
+
+		throw new IllegalStateException("no resource aggregation");
+	}
+
