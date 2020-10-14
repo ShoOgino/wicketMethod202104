@@ -1,0 +1,20 @@
+	/**
+	 * Remove a possibly remaining indicator on partial updates of the page,
+	 * since a new indicator will be rendered anyways.
+	 * <p> 
+	 * Note: JavaScripts can not be prepended from {@link #beforeRender(Component)}, since
+	 * at that time the prepend JavaScripts are already rendered.  
+	 * 
+	 * @see PartialPageUpdate
+	 */
+	@Override
+	public void onConfigure(Component component)
+	{
+		component.getRequestCycle().find(IPartialPageRequestHandler.class).ifPresent(target -> {
+			final String javascript = "var e = Wicket.$('" + getMarkupId() +
+				"'); if (e != null && typeof(e.parentNode) != 'undefined') e.parentNode.removeChild(e);";
+
+			target.prependJavaScript(javascript);
+		});
+	}
+

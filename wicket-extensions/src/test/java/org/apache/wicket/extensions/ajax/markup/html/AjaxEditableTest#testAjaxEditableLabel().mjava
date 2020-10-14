@@ -22,5 +22,9 @@
 		tester.executeBehavior(editorBehavior);
 		tester.assertInvisible("ajaxLabel:editor");
 		tester.assertVisible("ajaxLabel:label");
+		
+		// WICKET-6840 prepended JavaScript comes before component replacement
+		String response = tester.getLastResponseAsString();
+		assertTrue(response.indexOf("<header-contribution") < response.indexOf("<component"), "prepend before component");
 	}
 
