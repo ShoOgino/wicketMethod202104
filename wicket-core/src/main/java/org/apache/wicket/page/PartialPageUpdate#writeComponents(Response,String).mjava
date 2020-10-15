@@ -7,10 +7,24 @@
 	 * @param encoding
 	 *      the encoding for the response
 	 */
-	private void writeComponents(List<Component> toBeWritten, Response response, String encoding)
+	private void writeComponents(Response response, String encoding)
 	{
 		componentsFrozen = true;
 
+		List<Component> toBeWritten = new ArrayList<>(markupIdToComponent.size());
+		
+		// delay preparation of feedbacks after all other components
+		try (FeedbackDelay delay = new FeedbackDelay(RequestCycle.get())) {
+			for (Component component : markupIdToComponent.values())
+			{
+				if (!containsAncestorFor(component) && prepareComponent(component)) {
+					toBeWritten.add(component);
+				}
+			}
+
+			// .. now prepare all postponed feedbacks
+			delay.beforeRender();
+		}
 
 		// write components
 		for (Component component : toBeWritten)
