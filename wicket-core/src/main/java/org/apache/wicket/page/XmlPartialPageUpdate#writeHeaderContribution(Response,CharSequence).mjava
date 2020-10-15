@@ -1,16 +1,6 @@
 	@Override
 	protected void writeHeaderContribution(Response response, CharSequence contents)
 	{
-		if (Strings.isEmpty(contents) == false)
-		{
-			response.write("<header-contribution>");
-
-			// we need to write response as CDATA and parse it on client,
-			// because konqueror crashes when there is a <script> element
-			response.write("<![CDATA[<head xmlns:wicket=\"http://wicket.apache.org\">");
-			response.write(encode(contents));
-			response.write("</head>]]>");
-			response.write("</header-contribution>");
-		}
+		writeHeaderContribution(response, "header-contribution", contents);
 	}
 

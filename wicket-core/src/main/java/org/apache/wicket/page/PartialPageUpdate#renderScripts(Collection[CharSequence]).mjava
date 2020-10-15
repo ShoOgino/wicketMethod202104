@@ -1,0 +1,23 @@
+	private CharSequence renderScripts(Collection<CharSequence> scripts) {
+		StringBuilder combinedScript = new StringBuilder(1024);
+		for (CharSequence script : scripts)
+		{
+			combinedScript.append("(function(){").append(script).append("})();");
+		}
+
+		StringResponse stringResponse = new StringResponse();
+		IHeaderResponse decoratedHeaderResponse = Application.get().decorateHeaderResponse(new HeaderResponse()
+		{
+			@Override
+			protected Response getRealResponse()
+			{
+				return stringResponse;
+			}
+		});
+		
+		decoratedHeaderResponse.render(JavaScriptHeaderItem.forScript(combinedScript, null));
+		decoratedHeaderResponse.close();
+		
+		return stringResponse.getBuffer();
+	}
+

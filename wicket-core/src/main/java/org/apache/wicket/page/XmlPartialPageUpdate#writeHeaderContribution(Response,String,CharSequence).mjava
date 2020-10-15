@@ -1,0 +1,14 @@
+	private void writeHeaderContribution(Response response, String elementName, CharSequence contents)
+	{
+		if (Strings.isEmpty(contents) == false)
+		{
+			response.write("<" + elementName + ">");
+
+			// we need to write response as CDATA and parse it on client,
+			response.write("<![CDATA[<head xmlns:wicket=\"http://wicket.apache.org\">");
+			response.write(encode(contents));
+			response.write("</head>]]>");
+			response.write("</" + elementName + ">");
+		}
+	}
+

@@ -13,12 +13,12 @@
 
 			onBeforeRespond(response);
 
-			// queue up prepend javascripts. unlike other steps these are executed out of order so that
-			// components can contribute them from inside their onbeforerender methods.
-			writeEvaluations(response, prependJavaScripts);
-
 			// process added components
 			writeComponents(response, encoding);
+
+			// queue up prepend javascripts. unlike other steps these are executed out of order so that
+			// components can contribute them from during rendering.
+			writePriorityEvaluations(response, prependJavaScripts);
 
 			onAfterRespond(response);
 
