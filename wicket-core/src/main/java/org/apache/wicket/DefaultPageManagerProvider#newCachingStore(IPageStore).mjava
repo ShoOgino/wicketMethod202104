@@ -1,10 +1,13 @@
 	/**
-	 * Cache last page in the session for fast access.
+	 * Cache last page non-serialized in the session for fast access.
+	 * <p>
+	 * On session serialization the cached page will be dropped and re-acquired from
+	 * a persistent store. 
 	 * 
 	 * @see InSessionPageStore
 	 */
 	protected IPageStore newCachingStore(IPageStore pageStore)
 	{
-		return new CachingPageStore(pageStore, new InSessionPageStore(1, getSerializer()));
+		return new CachingPageStore(pageStore, new InSessionPageStore(1));
 	}
 
