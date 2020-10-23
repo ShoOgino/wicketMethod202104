@@ -5,14 +5,24 @@
 	 */
 	public final boolean isVisibleInHierarchy()
 	{
+		if (getRequestFlag(RFLAG_VISIBLE_IN_HIERARCHY_SET))
+		{
+			return getRequestFlag(RFLAG_VISIBLE_IN_HIERARCHY_VALUE);
+		}
+
+		final boolean state;
 		Component parent = getParent();
 		if (parent != null && !parent.isVisibleInHierarchy())
 		{
-			return false;
+			state = false;
 		}
 		else
 		{
-			return determineVisibility();
+			state = determineVisibility();
 		}
+
+		setRequestFlag(RFLAG_VISIBLE_IN_HIERARCHY_SET, true);
+		setRequestFlag(RFLAG_VISIBLE_IN_HIERARCHY_VALUE, state);
+		return state;
 	}
 
