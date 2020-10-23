@@ -1,0 +1,16 @@
+	@Test
+	void isVisibleInHierarchyCachesResult()
+	{
+		final SpyComponent c = new SpyComponent("test");
+		
+		c.isVisibleInHierarchy();
+		c.isVisibleInHierarchy();
+		assertEquals(1, c.isVisibleCallCount);
+		
+		c.setVisible(false);
+		
+		c.isVisibleInHierarchy();
+		c.isVisibleInHierarchy();
+		assertEquals(2, c.isVisibleCallCount);
+	}
+

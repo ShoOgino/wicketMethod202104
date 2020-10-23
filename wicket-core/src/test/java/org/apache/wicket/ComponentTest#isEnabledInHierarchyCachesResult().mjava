@@ -1,0 +1,16 @@
+	@Test
+	void isEnabledInHierarchyCachesResult()
+	{
+		final SpyComponent c = new SpyComponent("test");
+
+		c.isEnabledInHierarchy();
+		c.isEnabledInHierarchy();
+		assertEquals(1, c.isEnabledCallCount);
+
+		c.setEnabled(false);
+
+		c.isEnabledInHierarchy();
+		c.isEnabledInHierarchy();
+		assertEquals(2, c.isEnabledCallCount);
+	}
+
