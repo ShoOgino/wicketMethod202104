@@ -15,11 +15,13 @@
 		final FilterChain chain) throws IOException, ServletException
 	{
 		boolean reqProcessed;
+		boolean respFlushed = false;
 		try
 		{
 			reqProcessed = requestCycle.processRequest();
-			if (reqProcessed)
+			if (reqProcessed && !Session.isSessionInvalidated(requestCycle))
 			{
+				respFlushed = true;
 				webResponse.flush();
 			}
 		}
@@ -35,6 +37,10 @@
 				// invoke next filter from within Wicket context
 				chain.doFilter(httpServletRequest, httpServletResponse);
 			}
+		}
+		else if (!respFlushed)
+		{
+			webResponse.flush();
 		}
 		return reqProcessed;
 	}
