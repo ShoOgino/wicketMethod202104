@@ -1,0 +1,14 @@
+	@Override
+	public void end(IPageContext context)
+	{
+		RequestData requestData = getRequestData(context);
+		for (IManageablePage page : requestData.pages())
+		{
+			if (isPageStateless(page) == false)
+			{
+				// last opportunity to create a session
+				context.getSessionId(true);
+			}
+		}
+	}
+

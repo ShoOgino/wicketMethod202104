@@ -31,6 +31,16 @@
 		}
 		finally
 		{
+			try
+			{
+				onEndRequest();
+				listeners.onEndRequest(this);
+			}
+			catch (RuntimeException e)
+			{
+				log.error("Exception occurred during onEndRequest", e);
+			}
+
 			set(null);
 		}
 
