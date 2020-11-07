@@ -1,0 +1,15 @@
+	/**
+	 * End the current request.
+	 */
+	public void endRequest() {
+		if (isSessionInvalidated())
+		{
+			invalidateNow();
+		}
+		else if (!isTemporary())
+		{
+			// WICKET-5103 container might have changed id
+			updateId();
+		}
+	}
+
