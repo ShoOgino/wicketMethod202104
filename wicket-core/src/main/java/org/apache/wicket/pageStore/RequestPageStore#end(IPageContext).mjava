@@ -1,6 +1,8 @@
 	@Override
 	public void end(IPageContext context)
 	{
+		getDelegate().end(context);
+		
 		RequestData requestData = getRequestData(context);
 		for (IManageablePage page : requestData.pages())
 		{
@@ -8,6 +10,7 @@
 			{
 				// last opportunity to create a session
 				context.getSessionId(true);
+				break;
 			}
 		}
 	}
