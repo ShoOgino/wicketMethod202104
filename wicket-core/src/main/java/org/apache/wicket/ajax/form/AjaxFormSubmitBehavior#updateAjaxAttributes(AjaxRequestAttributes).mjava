@@ -24,5 +24,19 @@
 			String submittingComponentName = submittingComponent.getInputName();
 			attributes.setSubmittingComponentName(submittingComponentName);
 		}
+		
+		if (shouldTriggerJavaScriptSubmitEvent()) {
+			attributes.getAjaxCallListeners().add(new AjaxCallListener() {
+				@Override
+				public CharSequence getPrecondition(Component component)
+				{
+					return String.format("var p, f = jQuery('#%s'), fn = function(e) { p = e.isDefaultPrevented(); e.preventDefault(); };" //
+						+ "f.on('submit',fn);" //
+						+ "f.trigger('submit');" //
+						+ "f.off('submit',fn);" //
+						+ "return !p;", form.getMarkupId());
+				}
+			});
+		}
 	}
 
