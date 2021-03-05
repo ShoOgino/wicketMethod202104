@@ -5,7 +5,9 @@
 	void testExtractFromContainerRequestNoXForwardedFor()
 	{
 		String expected = "10.17.37.8";
+		String invalid = "10.17.9.55";
 		when(servletRequest.getRemoteAddr()).thenReturn(expected);
+		when(webRequest.getHeader("X-Forwarded-For")).thenReturn(invalid);
 		WebClientInfo clientInfo = new WebClientInfo(requestCycleMock, "No user agent");
 		String actual = clientInfo.getRemoteAddr(requestCycleMock);
 		assertEquals(expected, actual);
