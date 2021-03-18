@@ -1,0 +1,26 @@
+	@Override
+	protected byte[] encrypt(byte[] plainBytes)
+	{
+		try
+		{
+			Cipher cipher = Cipher.getInstance(algorithm);
+			int ivSize = cipher.getBlockSize();
+			byte[] iv = randomSupplier.getRandomBytes(ivSize);
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+			byte[] ciphertext = cipher.doFinal(plainBytes);
+			byte[] finalRes = new byte[ciphertext.length + ivSize];
+			
+			System.arraycopy(iv, 0, finalRes, 0, ivSize);
+			System.arraycopy(ciphertext, 0, finalRes, ivSize, ciphertext.length);
+			
+			return finalRes;
+		}
+		catch (IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException 
+			| InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			throw new RuntimeException(e);
+		}
+
+	}
+

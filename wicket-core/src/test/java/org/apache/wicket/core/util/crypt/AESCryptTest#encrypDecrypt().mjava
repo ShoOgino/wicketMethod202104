@@ -1,0 +1,24 @@
+	@Test
+	public void encrypDecrypt() throws GeneralSecurityException
+	{
+		DefaultSecureRandomSupplier randomSupplier = new DefaultSecureRandomSupplier();
+		
+		SecretKey secretKey = CipherUtils.generatePBEKey(
+			"myWeakPassword", "PBKDF2WithHmacSHA1", "AES", 
+			randomSupplier.getRandomBytes(16), 65536, 256);
+		
+		AbstractJceCrypt crypt = new AESCrypt(secretKey, randomSupplier);
+
+		String inputTest = "inputTest";
+		String encrypted = crypt.encryptUrlSafe(inputTest);
+
+		String japFlowerBirdsWindMoon = "花鳥風月";
+		String encrypted2 = crypt.encryptUrlSafe(japFlowerBirdsWindMoon);
+
+		String decrypted = crypt.decryptUrlSafe(encrypted);
+		assertEquals(decrypted, inputTest);
+
+		String decrypted2 = crypt.decryptUrlSafe(encrypted2);
+		assertEquals(decrypted2, japFlowerBirdsWindMoon);
+	}
+

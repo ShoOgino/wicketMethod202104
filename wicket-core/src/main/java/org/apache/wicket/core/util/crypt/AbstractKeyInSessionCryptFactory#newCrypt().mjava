@@ -1,0 +1,26 @@
+	/**
+	 * Creates a new crypt for the current user session. If no user session is available, a new one
+	 * is created.
+	 * 
+	 * @return
+	 */
+	@Override
+	public ICrypt newCrypt()
+	{
+		Session session = Session.get();
+		session.bind();
+
+		// retrieve or generate encryption key from session
+		T key = session.getMetaData(KEY);
+		if (key == null)
+		{
+			// generate new key
+			key = generateKey(session);
+			session.setMetaData(KEY, key);
+		}
+
+		// build the crypt based on session key
+		ICrypt crypt = createCrypt(key);
+		return crypt;
+	}
+

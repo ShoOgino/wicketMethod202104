@@ -1,0 +1,24 @@
+	/**
+	 * Generate a new {@link SecretKey} based on the given algorithm and with the given length.
+	 * 
+	 * @param algorithm
+	 *              the algorithm that will be used to build the key.
+	 * @param keyLength
+	 *              the key length
+	 * @return a new {@link SecretKey}
+	 */
+	public static SecretKey generateKey(String algorithm, int keyLength, SecureRandom secureRandom)
+	{
+		try
+		{
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
+			keyGenerator.init(keyLength, secureRandom);
+			SecretKey key = keyGenerator.generateKey();
+			return key;
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+

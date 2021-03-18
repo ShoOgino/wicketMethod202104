@@ -1,0 +1,19 @@
+	/**
+	 * Constructor that uses a custom encryption method (cipher).
+	 * You may need to override {@link #createKeySpec()} and/or
+	 * {@link #createParameterSpec()} for the custom cipher.
+	 *
+	 * @param cryptMethod
+	 *              the name of encryption method (the cipher)
+	 * @param salt
+	 *              salt for encryption
+	 * @param iterationCount
+	 * 				iteration count
+	 */
+	public SunJceCrypt(String cryptMethod, byte[] salt, int iterationCount)
+	{
+		this.cryptMethod = Args.notNull(cryptMethod, "Crypt method");
+		this.salt = Args.notNull(salt, "salt");
+		this.iterationCount = Args.withinRange(1, Integer.MAX_VALUE,  iterationCount, "iterationCount");
+	}
+

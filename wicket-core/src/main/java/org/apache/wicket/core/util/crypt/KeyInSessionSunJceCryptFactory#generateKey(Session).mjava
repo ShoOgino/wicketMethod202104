@@ -1,0 +1,12 @@
+	@Override
+	protected CryptData generateKey(Session session)
+	{
+	    // generate new salt
+        byte[] salt = SunJceCrypt.randomSalt();
+        
+	    // generate new key
+        String key = session.getId() + "." + UUID.randomUUID().toString();
+        
+        return new CryptData(key, salt);
+	}
+

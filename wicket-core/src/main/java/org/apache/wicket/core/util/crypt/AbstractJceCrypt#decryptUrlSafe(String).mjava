@@ -1,0 +1,22 @@
+	/**
+	 * Decrypts a string into a string.
+	 * 
+	 * @param text
+	 *            text to decrypt
+	 * @return the decrypted text
+	 */
+	@Override
+	public final String decryptUrlSafe(final String text)
+	{
+		try
+		{
+			byte[] decoded = java.util.Base64.getUrlDecoder().decode(text);
+			return new String(decrypt(decoded), StandardCharsets.UTF_8);
+		}
+		catch (Exception ex)
+		{
+			log.debug("Error decoding text: {}", text, ex);
+			return null;
+		}
+	}
+

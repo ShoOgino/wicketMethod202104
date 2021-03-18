@@ -1,0 +1,16 @@
+	/**
+	 * Encrypt a string into a string using URL safe Base64 encoding.
+	 * 
+	 * @param plainText
+	 *            text to encrypt
+	 * @return encrypted string
+	 */
+	@Override
+	public final String encryptUrlSafe(final String plainText)
+	{
+		byte[] encrypted = encrypt(plainText.getBytes(StandardCharsets.UTF_8));
+		Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+		byte[] encoded = encoder.encode(encrypted);
+		return new String(encoded, StandardCharsets.UTF_8);
+	}
+
