@@ -1,32 +1,12 @@
 	protected byte[] readAllResources(List<IResourceStream> resources) throws IOException,
 		ResourceStreamNotFoundException
 	{
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		for (IResourceStream curStream : resources)
-		{
-			IOUtils.copy(curStream.getInputStream(), output);
-		}
-
-		byte[] bytes = output.toByteArray();
-
-		final ITextResourceCompressor textResourceCompressor = getCompressor();
-		if (textResourceCompressor != null)
-		{
-			String nonCompressed = new String(bytes, StandardCharsets.UTF_8);
-
-			if (textResourceCompressor instanceof IScopeAwareTextResourceProcessor)
-			{
-				final ResourceReference reference = providedResources.get(0).getReference();
-				final Class<?> scope = reference.getScope();
-				final String name = reference.getName();
-				bytes = ((IScopeAwareTextResourceProcessor) textResourceCompressor).process(nonCompressed, scope, name).getBytes(StandardCharsets.UTF_8);
+		try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			for (IResourceStream curStream : resources) {
+				IOUtils.copy(curStream.getInputStream(), output);
 			}
-			else
-			{
-				bytes = textResourceCompressor.compress(nonCompressed).getBytes(StandardCharsets.UTF_8);
-			}
-		}
 
-		return bytes;
+			return output.toByteArray();
+		}
 	}
 
